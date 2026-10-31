@@ -147,7 +147,18 @@
   .ciente input{width:20px;height:20px;padding:0;margin:0;appearance:auto;-webkit-appearance:checkbox;flex:0 0 auto}
   .kc.fin{opacity:.85;cursor:default}
   .ed-et select{flex:0 0 76px;padding:9px 6px}
-  .pv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+  .ptiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .pt{background:#fff;border-radius:12px;padding:9px 9px 8px;box-shadow:0 1px 2px rgba(16,24,40,.06);cursor:pointer;min-width:0}
+  .pt .nm{font-size:12px;font-weight:800;color:var(--navy);line-height:1.25;margin-bottom:5px;word-break:break-word}
+  .pt .ln{display:flex;justify-content:space-between;gap:4px;font-size:11.5px;padding:2px 0;font-variant-numeric:tabular-nums}
+  .pt .ln span:first-child{color:var(--muted)}
+  .pt .ln b{font-weight:700}
+  .pt .ln b.ok{color:var(--ok)}.pt .ln b.warn{color:var(--warn)}.pt .ln b.err{color:var(--err)}
+  .pt .qt{font-size:10.5px;color:var(--muted);margin-top:4px}
+  .ckbox .ck .n{font-size:13.5px}
+  .consulta{background:#F5F7FB;border-radius:10px;padding:10px 12px;margin-top:8px}
+  .consulta .btn{margin:8px 0 4px;padding:11px;font-size:14.5px}
+  .pv{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:4px}
   .pv div{background:#F5F7FB;border-radius:10px;padding:10px 6px;text-align:center}
   .pv .k{font-size:11.5px;color:var(--muted);font-weight:600}
   .pv .v{font-size:16px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
@@ -161,10 +172,10 @@
   .item .pr small{display:block;font-size:12px;color:var(--muted);font-weight:600}
   .item .det{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;cursor:default}
   .cls{font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:2px}
-  .c-Bom{background:#eceff3;color:#4a5566}.c-Ótimo{background:#e3ecf8;color:#1F3864}.c-Excelente{background:var(--ok-bg);color:var(--ok)}
+  .c-Bom{background:#eceff3;color:#4a5566}.c-Ótimo{background:#e3ecf8;color:#1F3864}.c-Excelente{background:var(--ok-bg);color:var(--ok)}.c-Recondicionado{background:#efe7fb;color:#5b2d9c}
   .cont{font-size:13px;color:var(--muted);margin:0 2px 8px}
   /* venda */
-  .vrow{display:grid;grid-template-columns:78px 1fr 1fr 1fr;gap:6px;align-items:center;font-size:13.5px;padding:8px 0;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+  .vrow{display:grid;grid-template-columns:62px repeat(4,1fr);gap:5px;align-items:center;font-size:12.5px;padding:8px 0;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
   .vrow.h{color:var(--muted);font-size:11.5px;font-weight:600;border-top:0;padding-top:0}
   .vrow div:not(:first-child){text-align:right}
   .st{font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 6px;display:inline-block}
@@ -217,12 +228,18 @@
         <select id="modelo"></select>
         <div class="hint">Modelo fora da lista? Avise o gerente para incluir na aba Venda.</div>
         <label for="cor">Cor <span class="req">*</span></label>
-        <input id="cor" autocomplete="off" placeholder="Ex.: Preto">
-        <div class="chips" id="cores"></div>
+        <select id="cor"></select>
         <label for="imei">IMEI <span class="req">*</span></label>
         <input id="imei" class="imei" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="15 números">
         <div class="hint">Disque <b>*#06#</b> no aparelho para ver o IMEI.</div>
         <div class="status" id="imeiStatus"></div>
+        <div class="consulta hide" id="cBox">
+          <div style="font-size:13.5px;font-weight:600">Consulta de restrição do IMEI (roubo, furto, perda) <span class="req">*</span></div>
+          <button type="button" class="btn ghost" id="cAbrir">Copiar IMEI e abrir a consulta oficial</button>
+          <div class="hint" style="margin-bottom:6px">Cole o IMEI no site, faça a consulta e marque o resultado aqui:</div>
+          <div class="seg" id="cRes"></div>
+          <div class="status" id="cStatus"></div>
+        </div>
         <div class="row">
           <div>
             <label for="bateria">Bateria <span class="req">*</span></label>
@@ -242,6 +259,16 @@
         <div class="seg" id="tipo"></div>
         <label for="obs">Observação</label>
         <textarea id="obs" placeholder="Ex.: tela com risco leve, sem caixa"></textarea>
+      </div>
+      <div class="card ckbox">
+        <h2>Checklist de testes <span style="text-transform:none;font-weight:500;letter-spacing:0">(opcional)</span></h2>
+        <button type="button" class="btn ghost" id="ckAbrir">Fazer checklist</button>
+        <div class="hide" id="ckArea">
+          <div class="prog" id="ckProg"></div>
+          <div id="ckLista"></div>
+          <div class="alerta hide" id="ckAlerta"></div>
+          <button type="button" class="lnk" id="ckLimpar">Limpar respostas</button>
+        </div>
       </div>
       <button class="btn" id="enviar" type="submit">Cadastrar aparelho</button>
     </form>
@@ -369,10 +396,11 @@
       <h2>Incluir modelo</h2>
       <label class="first" for="nModelo">Modelo</label>
       <input id="nModelo" placeholder="Ex.: IPHONE 15 128GB" autocomplete="off" style="text-transform:uppercase">
-      <div class="row3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div class="row3" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
         <div><label for="nBom">Bom</label><input id="nBom" inputmode="decimal" placeholder="R$"></div>
         <div><label for="nOtimo">Ótimo</label><input id="nOtimo" inputmode="decimal" placeholder="R$"></div>
         <div><label for="nExc">Excelente</label><input id="nExc" inputmode="decimal" placeholder="R$"></div>
+        <div><label for="nRec">Recond.</label><input id="nRec" inputmode="decimal" placeholder="R$"></div>
       </div>
       <div class="msg" id="nMsg"></div>
       <div class="acoes"><button type="button" class="btn" id="nSalvar">Incluir</button><button type="button" class="btn ghost" id="nCancelar">Cancelar</button></div>
@@ -393,9 +421,10 @@
     set: function (k, v) { try { localStorage.setItem('tc_' + k, JSON.stringify(v)); } catch (e) {} },
     del: function (k) { try { localStorage.removeItem('tc_' + k); } catch (e) {} }
   };
-  var S = { token: LS.get('token', ''), u: null, view: '', disp: null, venda: null, classificacao: '', tipo: '', imeiCheck: 0,
+  var S = { token: LS.get('token', ''), u: null, view: '', disp: null, venda: null, classificacao: '', tipo: '', imeiCheck: 0, consulta: '', ck: {}, imeiConsultado: '',
             av: { bat: '85% ou mais', marcas: 'Não', tela: 'Não', vidro: 'Não', gar: 'Não tem' }, origem: 'Recompra' };
-  var CORES = ['Preto','Branco','Azul','Verde','Rosa','Roxo','Vermelho','Amarelo','Dourado','Prata','Grafite','Meia-noite','Estelar','Titânio'];
+  var CORES = ['Preto','Branco','Azul','Azul-claro','Azul-profundo','Verde','Verde-acinzentado','Rosa','Roxo','Lavanda','Vermelho','Amarelo','Laranja','Laranja-cósmico','Dourado','Prata','Grafite','Meia-noite','Estelar','Sálvia','Titânio Natural','Titânio Preto','Titânio Branco','Titânio Azul','Titânio Deserto','Ultramarino','Cinza','Bege','Outra'];
+  var CONSULTA_URL = 'https://www.consultaserialaparelho.com.br/public-web/homeSiga?token=20260618';
   var VIEWS = [
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos' },
@@ -539,18 +568,55 @@
     opts($('modelo'), d.modelos, $('modelo').value, 'Selecione…');
     seg($('classif'), d.classificacoes, S.classificacao, function (v) { S.classificacao = v; });
     seg($('tipo'), d.tipos, S.tipo, function (v) { S.tipo = v; });
-    var cx = $('cores'); cx.innerHTML = '';
-    CORES.forEach(function (c) {
-      var b = el('button', 'chip', c); b.type = 'button';
-      b.onclick = function () { $('cor').value = c; marcarCor(); };
-      cx.appendChild(b);
+    opts($('cor'), CORES, $('cor').value, 'Selecione a cor…');
+    seg($('cRes'), ['Nada consta', 'Consta restrição'], S.consulta, marcarConsulta);
+    montarCkCadastro();
+  }
+
+  // consulta oficial de IMEI (feita pelo vendedor no site; o resultado fica registrado no cadastro)
+  function marcarConsulta(v) {
+    S.consulta = v;
+    var st = $('cStatus');
+    if (v === 'Consta restrição') { st.className = 'status show err'; st.textContent = 'Aparelho com restrição: NÃO compre e NÃO cadastre.'; }
+    else if (v === 'Nada consta') { st.className = 'status show ok'; st.textContent = '✓ Consulta registrada em seu nome: nada consta.'; }
+    else { st.className = 'status'; st.textContent = ''; }
+    $('enviar').disabled = v === 'Consta restrição';
+  }
+  function resetConsulta() {
+    S.consulta = ''; marcarConsulta('');
+    Array.prototype.forEach.call($('cRes').children, function (c) { c.classList.remove('on'); });
+  }
+  $('cAbrir').onclick = function () {
+    var imei = $('imei').value.replace(/\D/g, '');
+    if (navigator.clipboard) navigator.clipboard.writeText(imei).then(function () { $('cAbrir').textContent = 'IMEI copiado ✓ — abrindo consulta…'; }).catch(function () {});
+    window.open(CONSULTA_URL, '_blank', 'noopener');
+  };
+
+  // checklist opcional do cadastro
+  function montarCkCadastro() {
+    var itens = S.u.checklist || [], box = $('ckLista'); box.innerHTML = '';
+    if (!itens.length) { $('ckAbrir').textContent = 'Checklist indisponível'; $('ckAbrir').disabled = true; return; }
+    itens.forEach(function (it) {
+      var row = el('div', 'ck'), n = el('div', 'n', it.item);
+      if (it.ok === 'NÃO') n.appendChild(el('small', '', 'esperado: NÃO'));
+      var yn = el('div', 'yn'), bs = el('button', 's', 'SIM'), bn = el('button', 'n', 'NÃO'); bs.type = bn.type = 'button';
+      function pinta() { var v = S.ck[it.item]; bs.classList.toggle('on', v === 'SIM'); bn.classList.toggle('on', v === 'NÃO'); row.classList.toggle('bad', !!v && v !== it.ok); }
+      bs.onclick = function () { S.ck[it.item] = S.ck[it.item] === 'SIM' ? undefined : 'SIM'; pinta(); ckProg(); };
+      bn.onclick = function () { S.ck[it.item] = S.ck[it.item] === 'NÃO' ? undefined : 'NÃO'; pinta(); ckProg(); };
+      pinta(); yn.appendChild(bs); yn.appendChild(bn); row.appendChild(n); row.appendChild(yn); box.appendChild(row);
     });
+    ckProg();
   }
-  function marcarCor() {
-    var v = $('cor').value.trim().toLowerCase();
-    Array.prototype.forEach.call($('cores').children, function (c) { c.classList.toggle('on', c.textContent.toLowerCase() === v); });
+  function ckProg() {
+    var itens = S.u.checklist || [];
+    var feitos = itens.filter(function (it) { return S.ck[it.item]; });
+    var fora = feitos.filter(function (it) { return S.ck[it.item] !== it.ok; });
+    $('ckProg').textContent = feitos.length + ' de ' + itens.length + ' itens testados';
+    $('ckAlerta').classList.toggle('hide', !fora.length);
+    $('ckAlerta').textContent = fora.length ? 'Fora do esperado: ' + fora.map(function (it) { return it.item + ' (' + S.ck[it.item] + ')'; }).join(', ') : '';
   }
-  $('cor').addEventListener('input', marcarCor);
+  $('ckAbrir').onclick = function () { var ab = $('ckArea').classList.contains('hide'); show('ckArea', ab); this.textContent = ab ? 'Esconder checklist' : 'Fazer checklist'; };
+  $('ckLimpar').onclick = function () { S.ck = {}; montarCkCadastro(); };
   $('loja').addEventListener('change', function () { LS.set('loja', this.value); });
 
   function luhn(s) {
@@ -563,6 +629,8 @@
   $('imei').addEventListener('input', function () {
     var d = this.value.replace(/\D/g, '').slice(0, 15);
     if (this.value !== d) this.value = d;
+    show('cBox', d.length === 15 && luhn(d));
+    if (d !== S.imeiConsultado) { resetConsulta(); S.imeiConsultado = d; $('cAbrir').textContent = 'Copiar IMEI e abrir a consulta oficial'; }
     if (!d) return imeiStatus('', '');
     if (d.length < 15) return imeiStatus('info', d.length + ' de 15 números');
     if (!luhn(d)) return imeiStatus('err', 'IMEI inválido: algum número foi digitado errado. Confira com *#06#.');
@@ -580,13 +648,16 @@
   $('form').addEventListener('submit', function (e) {
     e.preventDefault(); msg('formMsg', '');
     var d = { loja: $('loja').value, modelo: $('modelo').value, cor: $('cor').value.trim(), imei: $('imei').value.replace(/\D/g, ''),
-              bateria: $('bateria').value.trim(), custo: $('custo').value.trim(), classificacao: S.classificacao, tipo: S.tipo, obs: $('obs').value.trim() };
+              bateria: $('bateria').value.trim(), custo: $('custo').value.trim(), classificacao: S.classificacao, tipo: S.tipo, obs: $('obs').value.trim(),
+              consultaImei: S.consulta, checklist: S.ck };
     var falta = [];
     if (!d.loja) falta.push('loja'); if (!d.modelo) falta.push('modelo'); if (!d.cor) falta.push('cor');
     if (!d.imei) falta.push('IMEI'); if (d.bateria === '') falta.push('bateria');
     if (!d.classificacao) falta.push('classificação'); if (!d.tipo) falta.push('tipo de compra');
     if (falta.length) { msg('formMsg', 'Preencha: ' + falta.join(', ') + '.'); window.scrollTo(0, 0); return; }
     if (!luhn(d.imei)) { msg('formMsg', 'IMEI inválido. Confira os 15 números.'); window.scrollTo(0, 0); return; }
+    if (S.consulta === 'Consta restrição') { msg('formMsg', 'IMEI com restrição: o aparelho não pode ser cadastrado.'); window.scrollTo(0, 0); return; }
+    if (S.consulta !== 'Nada consta') { msg('formMsg', 'Faça a consulta oficial do IMEI e marque o resultado.'); window.scrollTo(0, 0); return; }
     var b = +d.bateria; if (isNaN(b) || b < 0 || b > 100) { msg('formMsg', 'Bateria deve ser de 0 a 100.'); window.scrollTo(0, 0); return; }
     var btn = $('enviar'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Salvando…';
     call('registrarAparelho', [S.token, d]).then(function (r) {
@@ -601,7 +672,7 @@
   });
   $('outro').onclick = function () {
     ['modelo', 'cor', 'imei', 'bateria', 'custo', 'obs'].forEach(function (k) { $(k).value = ''; });
-    S.classificacao = ''; S.tipo = '';
+    S.classificacao = ''; S.tipo = ''; S.ck = {}; resetConsulta(); S.imeiConsultado = ''; show('cBox', false); montarCkCadastro();
     Array.prototype.forEach.call(document.querySelectorAll('#classif button,#tipo button,.chip'), function (c) { c.classList.remove('on'); });
     imeiStatus('', ''); show('sucesso', false); show('form', true); window.scrollTo(0, 0);
   };
@@ -806,7 +877,10 @@
   // =========================================================
   //  PREÇOS (vendedor vê preço; gerente vê tudo e edita)
   // =========================================================
-  var CL = [['bom', 'Bom'], ['otimo', 'Ótimo'], ['excelente', 'Excelente']];
+  var CL = [['bom', 'Bom'], ['otimo', 'Ótimo'], ['excelente', 'Excelente'], ['recond', 'Recond.']];
+  var fmt0 = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 });
+  function nc(v) { return v === null || v === undefined || isNaN(v) ? '—' : fmt0.format(Math.round(v)); }
+  function vz(b) { return b || { preco: null, qtd: 0, custo: null, lucro: null, pct: null, status: '' }; }
   function carregarVenda(forcar) {
     var g = S.u && S.u.gerente;
     show('vNovoBtn', g && $('vNovo').classList.contains('hide'));
@@ -826,12 +900,12 @@
 
   // incluir modelo (gerente)
   $('vNovoBtn').onclick = function () { show('vNovo', true); show('vNovoBtn', false); msg('nMsg', ''); $('nModelo').focus(); };
-  $('nCancelar').onclick = function () { show('vNovo', false); show('vNovoBtn', true); ['nModelo', 'nBom', 'nOtimo', 'nExc'].forEach(function (k) { $(k).value = ''; }); };
+  $('nCancelar').onclick = function () { show('vNovo', false); show('vNovoBtn', true); ['nModelo', 'nBom', 'nOtimo', 'nExc', 'nRec'].forEach(function (k) { $(k).value = ''; }); };
   $('nSalvar').onclick = function () {
     var b = this, mod = $('nModelo').value.trim();
     if (mod.length < 3) { $('nMsg').className = 'msg err'; msg('nMsg', 'Informe o nome do modelo.'); return; }
     b.disabled = true; b.textContent = 'Incluindo…';
-    call('adicionarModelo', [S.token, mod, { bom: $('nBom').value, otimo: $('nOtimo').value, excelente: $('nExc').value }]).then(function (l) {
+    call('adicionarModelo', [S.token, mod, { bom: $('nBom').value, otimo: $('nOtimo').value, excelente: $('nExc').value, recond: $('nRec').value }]).then(function (l) {
       aposSalvar(l); b.disabled = false; b.textContent = 'Incluir';
       $('vBusca').value = mod; $('vSoEstoque').checked = false; $('nCancelar').click(); renderVenda();
     }).catch(function (e) { b.disabled = false; b.textContent = 'Incluir'; $('nMsg').className = 'msg err'; msg('nMsg', e); });
@@ -844,12 +918,39 @@
     var l = S.venda.filter(function (x) {
       var m = x.modelo.toLowerCase();
       if (!termos.every(function (t) { return m.indexOf(t) > -1; })) return false;
-      if (so && !(x.bom.qtd || x.otimo.qtd || x.excelente.qtd)) return false;
+      if (so && !CL.some(function (k) { return vz(x[k[0]]).qtd; })) return false;
       return true;
     });
     var box = $('vLista'); box.innerHTML = '';
     if (!l.length) { box.appendChild(el('div', 'empty', so ? 'Nenhum modelo com estoque. Desmarque "Só modelos com estoque" para ver todos.' : 'Nenhum modelo encontrado.')); return; }
-    l.forEach(function (x) { box.appendChild(g ? cardGerente(x) : cardVendedor(x)); });
+    var grid = el('div', 'ptiles');
+    l.forEach(function (x) { grid.appendChild(tilePreco(x, g)); });
+    box.appendChild(grid);
+  }
+
+  // cartão pequeno (3 por fileira); toque abre o detalhe
+  function tilePreco(x, g) {
+    var t = el('div', 'pt'); t.appendChild(el('div', 'nm', x.modelo));
+    var tot = 0;
+    CL.forEach(function (k) {
+      var b = vz(x[k[0]]); tot += b.qtd;
+      var ln = el('div', 'ln'); ln.appendChild(el('span', '', k[1]));
+      var cls = g ? (/DENTRO/.test(b.status) ? 'ok' : /ABAIXO/.test(b.status) ? 'warn' : /PREJU/.test(b.status) ? 'err' : '') : '';
+      ln.appendChild(el('b', cls, b.preco ? fmt0.format(b.preco) : '—')); t.appendChild(ln);
+    });
+    t.appendChild(el('div', 'qt', tot ? tot + ' em estoque' : 'sem estoque'));
+    t.onclick = function () { abrirPreco(x.modelo); };
+    return t;
+  }
+  function abrirPreco(modelo) {
+    var x = (S.venda || []).filter(function (v) { return v.modelo === modelo; })[0];
+    if (!x) return;
+    var sh = $('fSheet'); sh.innerHTML = '';
+    var fechar = function () { $('fModal').classList.add('hide'); document.body.style.overflow = ''; };
+    sh.appendChild(S.u.gerente ? cardGerente(x, function () { renderVenda(); abrirPreco(modelo); }) : cardVendedor(x));
+    var f = el('button', 'btn ghost', 'Fechar'); f.type = 'button'; f.onclick = fechar; sh.appendChild(f);
+    $('fModal').onclick = function (e) { if (e.target === $('fModal')) fechar(); };
+    $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; sh.scrollTop = 0;
   }
 
   function cardVendedor(x) {
@@ -857,8 +958,8 @@
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     var pv = el('div', 'pv');
     CL.forEach(function (k) {
-      var b = x[k[0]], d = el('div');
-      d.appendChild(el('div', 'k', k[1]));
+      var b = vz(x[k[0]]), d = el('div');
+      d.appendChild(el('div', 'k', k[1] === 'Recond.' ? 'Recondicionado' : k[1]));
       d.appendChild(el('div', 'v', b.preco ? brl(b.preco) : '—'));
       if (b.preco && t12) d.appendChild(el('small', '', '12x ' + brl(b.preco / (1 - t12.taxa) / 12)));
       d.appendChild(el('div', 'q', b.qtd ? b.qtd + ' em estoque' : 'sem estoque'));
@@ -868,16 +969,17 @@
     return c;
   }
 
-  function cardGerente(x) {
+  function cardGerente(x, depois) {
+    depois = depois || renderVenda;
     var c = el('div', 'card'), h2 = el('h2', '', x.modelo);
     var ed = el('button', 'atualizar', 'Editar preços'); ed.type = 'button'; h2.appendChild(ed); c.appendChild(h2);
-    var h = el('div', 'vrow h'); ['', 'Bom', 'Ótimo', 'Excelente'].forEach(function (t) { h.appendChild(el('div', '', t)); }); c.appendChild(h);
-    var B = CL.map(function (k) { return x[k[0]]; });
+    var h = el('div', 'vrow h'); [''].concat(CL.map(function (k) { return k[1]; })).forEach(function (t) { h.appendChild(el('div', '', t)); }); c.appendChild(h);
+    var B = CL.map(function (k) { return vz(x[k[0]]); });
     var rowPreco = el('div', 'vrow'); rowPreco.appendChild(el('div', '', 'Preço'));
-    B.forEach(function (b) { rowPreco.appendChild(el('div', '', brl(b.preco))); }); c.appendChild(rowPreco);
+    B.forEach(function (b) { rowPreco.appendChild(el('div', '', nc(b.preco))); }); c.appendChild(rowPreco);
     var R = {};
     [['qtd', 'Estoque', function (b) { return String(b.qtd); }],
-     ['custo', 'Custo médio', function (b) { return b.qtd ? brl(b.custo) : '—'; }], ['lucro', 'Lucro', function (b) { return b.lucro === null ? '—' : brl(b.lucro); }],
+     ['custo', 'Custo méd.', function (b) { return b.qtd ? nc(b.custo) : '—'; }], ['lucro', 'Lucro', function (b) { return nc(b.lucro); }],
      ['pct', 'Margem', function (b) { return b.pct === null ? '—' : pct(b.pct); }]].forEach(function (r) {
       var d = el('div', 'vrow'); d.appendChild(el('div', '', r[1])); B.forEach(function (b) { d.appendChild(el('div', '', r[2](b))); }); c.appendChild(d); R[r[0]] = d;
     });
@@ -897,7 +999,7 @@
     }
     function mostrarSim(i, r) {
       var cl = r.status;
-      R.lucro.children[i + 1].textContent = r.lucro === null ? '—' : brl(r.lucro);
+      R.lucro.children[i + 1].textContent = nc(r.lucro);
       R.pct.children[i + 1].textContent = r.pct === null ? '—' : pct(r.pct);
       [R.lucro, R.pct].forEach(function (row) { row.children[i + 1].className = 'ao'; row.children[i + 1].style.color = /DENTRO/.test(cl) ? 'var(--ok)' : /ABAIXO/.test(cl) ? 'var(--warn)' : /PREJU/.test(cl) ? 'var(--err)' : ''; });
       var dv = R.status.children[i + 1]; dv.innerHTML = ''; var t = stTxt(cl); if (t) dv.appendChild(el('span', stCls(cl), t));
@@ -917,7 +1019,7 @@
       var sv = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Cancelar'); sv.type = cc.type = 'button';
       ac.appendChild(sv); ac.appendChild(cc); c.appendChild(m); c.appendChild(ac);
       ins.forEach(function (inp) { inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') sv.click(); }); });
-      cc.onclick = function () { renderVenda(); };
+      cc.onclick = function () { depois(); };
       sv.onclick = function () {
         var p = {}, erro = '';
         CL.forEach(function (k, i) {
@@ -927,7 +1029,7 @@
         });
         if (erro) { m.textContent = erro; m.classList.add('show'); return; }
         sv.disabled = true; sv.textContent = 'Salvando…';
-        call('salvarPrecos', [S.token, x.modelo, p]).then(function (l) { aposSalvar(l); renderVenda(); })
+        call('salvarPrecos', [S.token, x.modelo, p]).then(function (l) { aposSalvar(l); depois(); })
           .catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
       };
     };
@@ -1128,7 +1230,7 @@
     if (nomes.some(function (x, i) { return nomes.indexOf(x) !== i; })) { msg('mCkMsg', 'Há itens repetidos.'); return; }
     b.disabled = true; b.textContent = 'Salvando…';
     call('manutChecklist', [S.token, l]).then(function (d) {
-      S.manut = d; b.disabled = false; b.textContent = 'Salvar checklist'; $('mCkCancelar').click(); renderManut();
+      S.manut = d; S.u.checklist = d.checklist; S.ck = {}; montarCkCadastro(); b.disabled = false; b.textContent = 'Salvar checklist'; $('mCkCancelar').click(); renderManut();
     }).catch(function (e) { b.disabled = false; b.textContent = 'Salvar checklist'; msg('mCkMsg', e); });
   };
 
