@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta name="theme-color" content="#1F3864">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tec-Cell">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231F3864'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='26' text-anchor='middle' fill='white'%3ETC%3C/text%3E%3C/svg%3E">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tec-Cell | Cadastro de Aparelhos</title>
+<style>
+  :root{
+    --navy:#1F3864; --navy-2:#2b4a80; --ink:#16202e; --muted:#5d6b80; --line:#dde3ec;
+    --bg:#f3f5f9; --card:#ffffff; --ok:#137a3a; --ok-bg:#e3f4e8; --warn:#9c5700; --warn-bg:#fff3d6;
+    --err:#b3261e; --err-bg:#fde7e5; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  header{background:var(--navy);color:#fff;padding:18px 16px 22px;padding-top:calc(18px + env(safe-area-inset-top))}
+  header .brand{font-weight:800;letter-spacing:.3px;font-size:20px}
+  header .sub{opacity:.8;font-size:14px;margin-top:2px}
+  header .who{margin-top:10px;font-size:13px;opacity:.9;display:flex;justify-content:space-between;gap:8px;align-items:center}
+  header button.link{background:none;border:0;color:#fff;text-decoration:underline;font:inherit;padding:0;cursor:pointer;opacity:.9}
+  main{max-width:560px;margin:-12px auto 0;padding:0 12px 40px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:0 1px 3px rgba(16,32,56,.08);padding:16px;margin-bottom:12px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 12px}
+  label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+  label:first-of-type{margin-top:0}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:5px}
+  input,select,textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;
+    border:1.5px solid var(--line);border-radius:10px;padding:12px;outline:none;appearance:none;-webkit-appearance:none}
+  select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+    background-position:calc(100% - 18px) 52%,calc(100% - 12px) 52%;background-size:6px 6px;background-repeat:no-repeat;padding-right:34px}
+  input:focus,select:focus,textarea:focus{border-color:var(--navy-2);box-shadow:0 0 0 3px rgba(43,74,128,.15)}
+  textarea{min-height:70px;resize:vertical}
+  .row{display:flex;gap:10px}.row>div{flex:1;min-width:0}
+  .suffix{position:relative}.suffix span{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+  .prefix{position:relative}.prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+  .prefix input{padding-left:40px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 11px;font-size:13px;cursor:pointer;color:var(--ink)}
+  .chip.on{border-color:var(--navy);background:var(--navy);color:#fff}
+  .seg{display:flex;gap:8px}
+  .seg button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:12px 6px;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
+  .seg button.on{border-color:var(--navy);background:var(--navy);color:#fff}
+  .imei{font-variant-numeric:tabular-nums;letter-spacing:1.5px;font-size:18px}
+  .status{margin-top:8px;font-size:13.5px;border-radius:8px;padding:8px 10px;display:none}
+  .status.show{display:block}
+  .status.ok{background:var(--ok-bg);color:var(--ok)} .status.warn{background:var(--warn-bg);color:var(--warn)}
+  .status.err{background:var(--err-bg);color:var(--err)} .status.info{background:#eef2f8;color:var(--muted)}
+  .btn{display:block;width:100%;border:0;border-radius:12px;background:var(--navy);color:#fff;font:inherit;font-weight:700;
+    font-size:17px;padding:15px;cursor:pointer;margin-top:4px}
+  .btn:disabled{opacity:.55;cursor:default}
+  .btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+  .msg{border-radius:10px;padding:12px;margin:0 0 12px;font-size:14.5px;display:none}
+  .msg.show{display:block} .msg.err{background:var(--err-bg);color:var(--err)}
+  .done{text-align:center;padding:28px 16px}
+  .done .ico{width:64px;height:64px;border-radius:50%;background:var(--ok-bg);color:var(--ok);display:grid;place-items:center;margin:0 auto 12px;font-size:34px;font-weight:800}
+  .done h3{margin:0 0 6px;font-size:20px} .done p{margin:0 0 16px;color:var(--muted)}
+  .hist{list-style:none;margin:0;padding:0}
+  .hist li{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:10px 0;font-size:14px}
+  .hist li:first-child{border-top:0;padding-top:0}
+  .hist small{color:var(--muted);display:block;font-size:12.5px}
+  .hist .t{color:var(--muted);font-size:12.5px;white-space:nowrap}
+  .empty{color:var(--muted);font-size:14px}
+  .hide{display:none!important}
+  .spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;
+    animation:r .8s linear infinite;vertical-align:-3px;margin-right:8px}
+  @keyframes r{to{transform:rotate(360deg)}}
+  .req{color:var(--err)}
+  .eu{font-size:18px;font-weight:700;margin-bottom:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Tec-Cell</div>
+  <div class="sub">Cadastro de aparelhos no estoque</div>
+  <div class="who hide" id="who"><span id="whoTxt"></span><button class="link" id="sair">Sair</button></div>
+</header>
+
+<main>
+  <!-- ACESSO -->
+  <section id="telaPin" class="card">
+    <h2>Acesso</h2>
+    <div class="msg err" id="pinMsg"></div>
+    <label for="pin">Sua senha pessoal</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="6 números">
+    <div class="hint">Cada funcionário tem a sua senha. Não passe para ninguém: tudo o que for cadastrado fica no seu nome.</div>
+    <div style="height:14px"></div>
+    <button class="btn" id="entrar">Entrar</button>
+  </section>
+
+  <section id="carregando" class="card hide"><div class="empty">Carregando…</div></section>
+
+  <!-- FORMULÁRIO -->
+  <form id="form" class="hide" novalidate>
+    <div class="msg err" id="formMsg"></div>
+
+    <div class="card">
+      <h2>Quem está cadastrando</h2>
+      <div class="eu" id="eu"></div>
+      <label for="loja">Loja <span class="req">*</span></label>
+      <select id="loja"><option value="">Selecione…</option></select>
+    </div>
+
+    <div class="card">
+      <h2>Aparelho</h2>
+      <label for="modelo">Modelo <span class="req">*</span></label>
+      <select id="modelo"><option value="">Selecione…</option></select>
+      <div class="hint">Modelo fora da lista? Avise o gerente para incluir na aba Venda.</div>
+
+      <label for="cor">Cor <span class="req">*</span></label>
+      <input id="cor" autocomplete="off" placeholder="Ex.: Preto">
+      <div class="chips" id="cores"></div>
+
+      <label for="imei">IMEI <span class="req">*</span></label>
+      <input id="imei" class="imei" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="15 números">
+      <div class="hint">Disque <b>*#06#</b> no aparelho para ver o IMEI.</div>
+      <div class="status" id="imeiStatus"></div>
+
+      <div class="row">
+        <div>
+          <label for="bateria">Bateria <span class="req">*</span></label>
+          <div class="suffix"><input id="bateria" type="number" inputmode="numeric" min="0" max="100" placeholder="Ex.: 87"><span>%</span></div>
+        </div>
+        <div>
+          <label for="custo">Valor pago</label>
+          <div class="prefix"><span>R$</span><input id="custo" inputmode="decimal" placeholder="0,00"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Avaliação</h2>
+      <label>Classificação <span class="req">*</span></label>
+      <div class="seg" id="classif"></div>
+      <label>Tipo de compra <span class="req">*</span></label>
+      <div class="seg" id="tipo"></div>
+      <label for="obs">Observação</label>
+      <textarea id="obs" placeholder="Ex.: tela com risco leve, sem caixa"></textarea>
+    </div>
+
+    <button class="btn" id="enviar" type="submit">Cadastrar aparelho</button>
+  </form>
+
+  <!-- SUCESSO -->
+  <section id="sucesso" class="card done hide">
+    <div class="ico">✓</div>
+    <h3>Aparelho cadastrado</h3>
+    <p id="sucessoTxt"></p>
+    <button class="btn" id="outro">Cadastrar outro</button>
+  </section>
+
+  <!-- HISTÓRICO -->
+  <section id="histCard" class="card hide">
+    <h2>Últimos cadastros neste celular</h2>
+    <ul class="hist" id="hist"></ul>
+  </section>
+</main>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var LS = {
+    get: function (k, d) { try { var v = localStorage.getItem('tc_' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem('tc_' + k, JSON.stringify(v)); } catch (e) {} },
+    del: function (k) { try { localStorage.removeItem('tc_' + k); } catch (e) {} }
+  };
+  var CORES = ['Preto','Branco','Azul','Verde','Rosa','Roxo','Vermelho','Amarelo','Dourado','Prata','Grafite','Meia-noite','Estelar','Titânio'];
+  var state = { pin: LS.get('senha', ''), nome: '', id: '', classificacao: '', tipo: '', imeiOk: false, imeiCheck: 0 };
+
+  function show(id, on) { $(id).classList.toggle('hide', !on); }
+  function msg(id, text) { var m = $(id); m.textContent = text || ''; m.classList.toggle('show', !!text); }
+  var API = 'https://script.google.com/macros/s/AKfycbzkAQ35nZ1m3S89rHYZ-LQqwD7VH5hw443l3WzE_637ArBN9EdSyFTBcjwSpk8spNweBA/exec';
+  function call(fn, args, ok, fail) {
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 45000);
+    fetch(API, {
+      method: 'POST', credentials: 'omit', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ acao: fn, args: args }),
+      signal: ctl ? ctl.signal : undefined
+    }).then(function (r) { return r.json(); })
+      .then(function (j) { clearTimeout(timer); if (j && j.ok) ok(j.dados); else fail(String((j && j.erro) || 'Erro no servidor.').replace(/^(Exception|Error):\s*/, '')); })
+      .catch(function () { clearTimeout(timer); fail('Sem conexão com o servidor. Verifique a internet e tente de novo.'); });
+  }
+
+  // ---------- acesso ----------
+  function entrar(pin) {
+    msg('pinMsg', '');
+    show('telaPin', false); show('carregando', true);
+    call('entrar', [pin], function (dados) {
+      state.pin = pin; LS.set('senha', pin); LS.del('pin'); state.nome = dados.nome; state.id = dados.id;
+      montar(dados);
+      show('carregando', false); show('form', true); show('who', true);
+      renderHist();
+    }, function (err) {
+      LS.del('senha'); state.pin = '';
+      show('carregando', false); show('telaPin', true);
+      msg('pinMsg', err);
+    });
+  }
+  $('entrar').onclick = function () { var p = $('pin').value.trim(); if (p) entrar(p); };
+  $('pin').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('entrar').click(); });
+  $('sair').onclick = function () {
+    LS.del('senha'); LS.del('loja'); LS.del('hist'); state.pin = '';
+    show('form', false); show('sucesso', false); show('histCard', false); show('who', false);
+    $('pin').value = ''; show('telaPin', true);
+  };
+
+  // ---------- montagem ----------
+  function opts(sel, list, keep) {
+    var cur = keep || sel.value;
+    sel.innerHTML = '<option value="">Selecione…</option>';
+    list.forEach(function (v) { var o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o); });
+    if (cur && list.indexOf(cur) > -1) sel.value = cur;
+  }
+  function seg(box, list, key) {
+    box.innerHTML = '';
+    list.forEach(function (v) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = v;
+      b.onclick = function () { state[key] = v; Array.prototype.forEach.call(box.children, function (c) { c.classList.toggle('on', c === b); }); };
+      box.appendChild(b);
+    });
+  }
+  function montar(d) {
+    opts($('loja'), d.lojas, LS.get('loja', '') || d.loja);
+    $('eu').textContent = d.nome + ' (' + d.id + ')';
+    opts($('modelo'), d.modelos);
+    seg($('classif'), d.classificacoes, 'classificacao');
+    seg($('tipo'), d.tipos, 'tipo');
+    var cx = $('cores'); cx.innerHTML = '';
+    CORES.forEach(function (c) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = c;
+      b.onclick = function () { $('cor').value = c; marcarCor(); };
+      cx.appendChild(b);
+    });
+    atualizarWho();
+  }
+  function marcarCor() {
+    var v = $('cor').value.trim().toLowerCase();
+    Array.prototype.forEach.call($('cores').children, function (c) { c.classList.toggle('on', c.textContent.toLowerCase() === v); });
+  }
+  $('cor').addEventListener('input', marcarCor);
+  function atualizarWho() {
+    var n = state.nome, l = $('loja').value;
+    $('whoTxt').textContent = [n, l].filter(Boolean).join(' · ') || 'Conectado';
+  }
+  $('loja').addEventListener('change', function () { LS.set('loja', this.value); atualizarWho(); });
+
+  // ---------- IMEI ----------
+  function luhn(s) {
+    if (!/^\d{15}$/.test(s)) return false;
+    var soma = 0;
+    for (var i = 0; i < 15; i++) { var d = +s[i]; if (i % 2 === 1) { d *= 2; if (d > 9) d -= 9; } soma += d; }
+    return soma % 10 === 0;
+  }
+  function imeiStatus(cls, text) { var s = $('imeiStatus'); s.className = 'status ' + (text ? 'show ' + cls : ''); s.textContent = text || ''; }
+  $('imei').addEventListener('input', function () {
+    var d = this.value.replace(/\D/g, '').slice(0, 15);
+    if (this.value !== d) this.value = d;
+    state.imeiOk = false;
+    if (!d) return imeiStatus('', '');
+    if (d.length < 15) return imeiStatus('info', d.length + ' de 15 números');
+    if (!luhn(d)) return imeiStatus('err', 'IMEI inválido: algum número foi digitado errado. Confira com *#06#.');
+    imeiStatus('info', 'Verificando no estoque…');
+    var n = ++state.imeiCheck;
+    call('consultarImei', [state.pin, d], function (r) {
+      if (n !== state.imeiCheck) return;
+      var ex = r.existente;
+      if (ex && ex.status !== 'Vendido') {
+        imeiStatus('err', 'Já está no estoque como "' + ex.status + '" — ' + ex.loja + (ex.modelo ? ' · ' + ex.modelo : '') + '. Não cadastre de novo.');
+      } else if (ex) {
+        state.imeiOk = true;
+        imeiStatus('warn', 'Este aparelho já foi vendido antes. Será registrado como recompra.');
+      } else {
+        state.imeiOk = true;
+        imeiStatus('ok', '✓ IMEI válido e novo no estoque');
+      }
+    }, function (err) { if (n === state.imeiCheck) imeiStatus('err', err); });
+  });
+
+  // ---------- envio ----------
+  $('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    msg('formMsg', '');
+    var d = {
+      loja: $('loja').value, modelo: $('modelo').value,
+      cor: $('cor').value.trim(), imei: $('imei').value.replace(/\D/g, ''), bateria: $('bateria').value.trim(),
+      custo: $('custo').value.trim(), classificacao: state.classificacao, tipo: state.tipo, obs: $('obs').value.trim()
+    };
+    var falta = [];
+    if (!d.loja) falta.push('loja'); if (!d.modelo) falta.push('modelo');
+    if (!d.cor) falta.push('cor'); if (!d.imei) falta.push('IMEI'); if (d.bateria === '') falta.push('bateria');
+    if (!d.classificacao) falta.push('classificação'); if (!d.tipo) falta.push('tipo de compra');
+    if (falta.length) { msg('formMsg', 'Preencha: ' + falta.join(', ') + '.'); window.scrollTo(0, 0); return; }
+    if (!luhn(d.imei)) { msg('formMsg', 'IMEI inválido. Confira os 15 números.'); window.scrollTo(0, 0); return; }
+    var b = +d.bateria; if (isNaN(b) || b < 0 || b > 100) { msg('formMsg', 'Bateria deve ser de 0 a 100.'); window.scrollTo(0, 0); return; }
+
+    var btn = $('enviar'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Salvando…';
+    call('registrarAparelho', [state.pin, d], function (r) {
+      btn.disabled = false; btn.textContent = 'Cadastrar aparelho';
+      LS.set('loja', d.loja);
+      var h = LS.get('hist', []);
+      h.unshift({ m: d.modelo, c: d.cor.toUpperCase(), i: d.imei, l: d.loja, t: new Date().toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) });
+      LS.set('hist', h.slice(0, 10));
+      $('sucessoTxt').textContent = r.modelo + ' · IMEI ' + r.imei + ' entrou no estoque como Disponível.' +
+        (r.avisos && r.avisos.length ? ' (' + r.avisos.join('; ') + ')' : '');
+      show('form', false); show('sucesso', true); renderHist(); window.scrollTo(0, 0);
+    }, function (err) {
+      btn.disabled = false; btn.textContent = 'Cadastrar aparelho';
+      if (/senha incorreta|desativado/i.test(err)) { $('sair').click(); msg('pinMsg', err); return; }
+      msg('formMsg', err); window.scrollTo(0, 0);
+    });
+  });
+
+  $('outro').onclick = function () {
+    ['modelo', 'cor', 'imei', 'bateria', 'custo', 'obs'].forEach(function (k) { $(k).value = ''; });
+    state.classificacao = ''; state.tipo = ''; state.imeiOk = false;
+    Array.prototype.forEach.call(document.querySelectorAll('.seg button,.chip'), function (c) { c.classList.remove('on'); });
+    imeiStatus('', '');
+    show('sucesso', false); show('form', true); window.scrollTo(0, 0);
+  };
+
+  function renderHist() {
+    var h = LS.get('hist', []), ul = $('hist');
+    ul.innerHTML = '';
+    if (!h.length) { show('histCard', false); return; }
+    h.forEach(function (x) {
+      var li = document.createElement('li');
+      var a = document.createElement('div'); a.textContent = x.m + ' · ' + x.c;
+      var s = document.createElement('small'); s.textContent = 'IMEI ' + x.i + ' · ' + x.l; a.appendChild(s);
+      var t = document.createElement('div'); t.className = 't'; t.textContent = x.t;
+      li.appendChild(a); li.appendChild(t); ul.appendChild(li);
+    });
+    show('histCard', true);
+  }
+
+  if (state.pin) entrar(state.pin);
+})();
+</script>
+</body>
+</html>

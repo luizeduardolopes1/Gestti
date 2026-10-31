@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta name="theme-color" content="#1F3864">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tec-Cell">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231F3864'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='26' text-anchor='middle' fill='white'%3ETC%3C/text%3E%3C/svg%3E">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tec-Cell | Funcionários</title>
+<style>
+  :root{
+    --navy:#1F3864; --navy-2:#2b4a80; --ink:#16202e; --muted:#5d6b80; --line:#dde3ec;
+    --bg:#f3f5f9; --card:#fff; --ok:#137a3a; --ok-bg:#e3f4e8; --warn:#9c5700; --warn-bg:#fff3d6;
+    --err:#b3261e; --err-bg:#fde7e5;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  header{background:var(--navy);color:#fff;padding:18px 16px 22px;padding-top:calc(18px + env(safe-area-inset-top))}
+  header .brand{font-weight:800;font-size:20px}
+  header .sub{opacity:.8;font-size:14px;margin-top:2px}
+  header .who{margin-top:10px;font-size:13px;display:flex;justify-content:space-between}
+  header button.link{background:none;border:0;color:#fff;text-decoration:underline;font:inherit;padding:0;cursor:pointer}
+  main{max-width:640px;margin:-12px auto 0;padding:0 12px 40px}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(16,32,56,.08);padding:16px;margin-bottom:12px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 12px}
+  label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+  label.first{margin-top:0}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+  input,select,textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;
+    border:1.5px solid var(--line);border-radius:10px;padding:12px;outline:none;appearance:none;-webkit-appearance:none}
+  select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+    background-position:calc(100% - 18px) 52%,calc(100% - 12px) 52%;background-size:6px 6px;background-repeat:no-repeat;padding-right:34px}
+  input:focus,select:focus,textarea:focus{border-color:var(--navy-2);box-shadow:0 0 0 3px rgba(43,74,128,.15)}
+  .btn{display:block;width:100%;border:0;border-radius:12px;background:var(--navy);color:#fff;font:inherit;font-weight:700;
+    font-size:16px;padding:14px;cursor:pointer;margin-top:16px}
+  .btn:disabled{opacity:.55;cursor:default}
+  .msg{border-radius:10px;padding:12px;margin:0 0 12px;font-size:14.5px;display:none}
+  .msg.show{display:block} .msg.err{background:var(--err-bg);color:var(--err)} .msg.ok{background:var(--ok-bg);color:var(--ok)}
+  .hide{display:none!important}
+  .lista{list-style:none;margin:0;padding:0}
+  .func{border-top:1px solid var(--line);padding:14px 0}
+  .func:first-child{border-top:0;padding-top:0}
+  .func .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .func .nome{font-weight:700;font-size:16px}
+  .func .meta{color:var(--muted);font-size:13px;margin-top:3px}
+  .badge{font-size:12px;font-weight:700;border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .badge.on{background:var(--ok-bg);color:var(--ok)} .badge.off{background:#eceff3;color:var(--muted)}
+  .acoes{display:flex;gap:8px;margin-top:10px}
+  .acoes button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 6px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;color:var(--ink)}
+  .acoes button.danger{color:var(--err)}
+  .acoes button.okb{color:var(--ok)}
+  .confirm{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:10px;margin-top:10px;font-size:14px}
+  .confirm .acoes button{background:#fff}
+  .senha{font-size:38px;font-weight:800;letter-spacing:8px;text-align:center;font-variant-numeric:tabular-nums;
+    background:#eef2f8;border-radius:12px;padding:14px;margin:10px 0}
+  textarea{min-height:120px;font-size:14px}
+  .vazio{color:var(--muted);font-size:14px}
+  .linkbox{word-break:break-all;font-size:13px;color:var(--navy-2)}
+  .spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;
+    animation:r .8s linear infinite;vertical-align:-3px;margin-right:8px}
+  @keyframes r{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Tec-Cell</div>
+  <div class="sub">Administração de funcionários</div>
+  <div class="who hide" id="who"><span>Administrador</span><button class="link" id="sair">Sair</button></div>
+</header>
+<main>
+  <!-- LOGIN -->
+  <section class="card" id="telaLogin">
+    <h2>Acesso do administrador</h2>
+    <div class="msg err" id="loginMsg"></div>
+    <label class="first" for="senhaAdm">Senha de administrador</label>
+    <input id="senhaAdm" type="password" autocomplete="current-password">
+    <button class="btn" id="entrar">Entrar</button>
+  </section>
+
+  <!-- TROCAR SENHA INICIAL -->
+  <section class="card hide" id="telaTroca">
+    <h2>Crie sua senha de administrador</h2>
+    <div class="msg err" id="trocaMsg"></div>
+    <p class="hint" style="margin-top:0">Primeiro acesso: troque a senha inicial por uma só sua. Ela não é mostrada para ninguém.</p>
+    <label for="nova1">Nova senha (mínimo 6 caracteres)</label>
+    <input id="nova1" type="password" autocomplete="new-password">
+    <label for="nova2">Repita a nova senha</label>
+    <input id="nova2" type="password" autocomplete="new-password">
+    <button class="btn" id="salvarSenha">Salvar senha</button>
+  </section>
+
+  <!-- PAINEL -->
+  <div id="painel" class="hide">
+    <div class="msg ok" id="okMsg"></div>
+    <div class="msg err" id="errMsg"></div>
+
+    <section class="card hide" id="cardSenha">
+      <h2 id="senhaTitulo">Senha criada</h2>
+      <div class="senha" id="senhaNum"></div>
+      <p class="hint" style="margin-top:0"><b>Anote ou envie agora.</b> Por segurança, essa senha não aparece de novo. Se perder, gere uma nova.</p>
+      <label for="mensagem">Mensagem pronta para enviar no WhatsApp</label>
+      <textarea id="mensagem" readonly></textarea>
+      <button class="btn" id="copiar" type="button">Copiar mensagem</button>
+      <button class="btn" id="fecharSenha" type="button" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy)">Fechar</button>
+    </section>
+
+    <section class="card">
+      <h2>Novo funcionário</h2>
+      <label class="first" for="nome">Nome</label>
+      <input id="nome" autocomplete="off" placeholder="Ex.: Ana Souza">
+      <label for="loja">Loja</label>
+      <select id="loja"><option value="">Selecione…</option></select>
+      <button class="btn" id="criar">Cadastrar e gerar senha</button>
+    </section>
+
+    <section class="card">
+      <h2>Funcionários</h2>
+      <ul class="lista" id="lista"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Link para os vendedores</h2>
+      <div class="linkbox" id="linkVend"></div>
+      <p class="hint">Todo cadastro mostra quem fez na coluna <b>Cadastrado por</b> do Estoque e fica registrado na aba <b>Histórico</b> da planilha.</p>
+    </section>
+  </div>
+</main>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var S = { senha: '', dados: null, confirmando: '' };
+  var SITE = location.href.replace(/[?#].*$/, '').replace(/admin\.html$/, '');
+
+  function show(id, on) { $(id).classList.toggle('hide', !on); }
+  function msg(id, t) { var m = $(id); m.textContent = t || ''; m.classList.toggle('show', !!t); }
+  var API = 'https://script.google.com/macros/s/AKfycbzkAQ35nZ1m3S89rHYZ-LQqwD7VH5hw443l3WzE_637ArBN9EdSyFTBcjwSpk8spNweBA/exec';
+  function call(fn, args, ok, fail) {
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 45000);
+    fetch(API, {
+      method: 'POST', credentials: 'omit', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ acao: fn, args: args }),
+      signal: ctl ? ctl.signal : undefined
+    }).then(function (r) { return r.json(); })
+      .then(function (j) { clearTimeout(timer); if (j && j.ok) ok(j.dados); else fail(String((j && j.erro) || 'Erro no servidor.').replace(/^(Exception|Error):\s*/, '')); })
+      .catch(function () { clearTimeout(timer); fail('Sem conexão com o servidor. Verifique a internet e tente de novo.'); });
+  }
+  function busy(btn, on, txt) { btn.disabled = on; btn.innerHTML = on ? '<span class="spin"></span>Aguarde…' : txt; }
+
+  // ---------- login ----------
+  $('entrar').onclick = function () {
+    var s = $('senhaAdm').value; if (!s) return;
+    msg('loginMsg', ''); busy(this, true);
+    var b = this;
+    call('adminEntrar', [s], function (r) {
+      busy(b, false, 'Entrar'); S.senha = s;
+      if (r.precisaTrocar) { show('telaLogin', false); show('telaTroca', true); return; }
+      abrir(r);
+    }, function (e) { busy(b, false, 'Entrar'); msg('loginMsg', e); });
+  };
+  $('senhaAdm').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('entrar').click(); });
+
+  $('salvarSenha').onclick = function () {
+    var a = $('nova1').value, b2 = $('nova2').value;
+    msg('trocaMsg', '');
+    if (a.length < 6) return msg('trocaMsg', 'A senha precisa ter pelo menos 6 caracteres.');
+    if (a !== b2) return msg('trocaMsg', 'As duas senhas não são iguais.');
+    var b = this; busy(b, true);
+    call('adminTrocarSenha', [S.senha, a], function (r) {
+      busy(b, false, 'Salvar senha'); S.senha = a; show('telaTroca', false); abrir(r);
+      msg('okMsg', 'Senha de administrador criada. Guarde-a em lugar seguro.');
+    }, function (e) { busy(b, false, 'Salvar senha'); msg('trocaMsg', e); });
+  };
+
+  $('sair').onclick = function () {
+    S.senha = ''; S.dados = null; $('senhaAdm').value = '';
+    show('painel', false); show('who', false); show('telaTroca', false); show('telaLogin', true);
+  };
+
+  // ---------- painel ----------
+  function abrir(d) {
+    show('telaLogin', false); show('painel', true); show('who', true);
+    var sel = $('loja'); sel.innerHTML = '<option value="">Selecione…</option>';
+    d.lojas.forEach(function (l) { var o = document.createElement('option'); o.value = l; o.textContent = l; sel.appendChild(o); });
+    $('linkVend').textContent = SITE;
+    render(d);
+  }
+
+  function render(d) {
+    S.dados = d;
+    var ul = $('lista'); ul.innerHTML = '';
+    if (!d.funcionarios.length) { var v = document.createElement('li'); v.className = 'vazio'; v.textContent = 'Nenhum funcionário cadastrado ainda.'; ul.appendChild(v); return; }
+    var lista = d.funcionarios.slice().sort(function (a, b) { return (b.ativo - a.ativo) || a.nome.localeCompare(b.nome); });
+    lista.forEach(function (f) {
+      var li = document.createElement('li'); li.className = 'func';
+      var top = document.createElement('div'); top.className = 'top';
+      var l = document.createElement('div');
+      var n = document.createElement('div'); n.className = 'nome'; n.textContent = f.nome;
+      var m = document.createElement('div'); m.className = 'meta';
+      m.textContent = f.id + ' · ' + f.loja + ' · ' + f.cadastros + ' cadastro' + (f.cadastros === 1 ? '' : 's') +
+        ' · último acesso: ' + (f.ultimo || 'nunca');
+      l.appendChild(n); l.appendChild(m);
+      var bd = document.createElement('span'); bd.className = 'badge ' + (f.ativo ? 'on' : 'off'); bd.textContent = f.ativo ? 'Ativo' : 'Desativado';
+      top.appendChild(l); top.appendChild(bd); li.appendChild(top);
+
+      if (S.confirmando && S.confirmando.id === f.id) {
+        var c = document.createElement('div'); c.className = 'confirm';
+        c.textContent = S.confirmando.acao === 'senha'
+          ? 'Gerar nova senha para ' + f.nome + '? A senha atual deixa de funcionar.'
+          : 'Desativar o acesso de ' + f.nome + '? Ele não consegue mais cadastrar.';
+        var ac = document.createElement('div'); ac.className = 'acoes';
+        ac.appendChild(botao('Cancelar', '', function () { S.confirmando = ''; render(S.dados); }));
+        ac.appendChild(botao('Confirmar', S.confirmando.acao === 'senha' ? '' : 'danger', function (ev) {
+          var acao = S.confirmando.acao; S.confirmando = '';
+          if (acao === 'senha') novaSenha(f, ev.target); else ativar(f, false, ev.target);
+        }));
+        c.appendChild(ac); li.appendChild(c);
+      } else {
+        var a = document.createElement('div'); a.className = 'acoes';
+        if (f.ativo) {
+          a.appendChild(botao('Nova senha', '', function () { S.confirmando = { id: f.id, acao: 'senha' }; render(S.dados); }));
+          a.appendChild(botao('Desativar', 'danger', function () { S.confirmando = { id: f.id, acao: 'desativar' }; render(S.dados); }));
+        } else {
+          a.appendChild(botao('Reativar', 'okb', function (ev) { ativar(f, true, ev.target); }));
+        }
+        li.appendChild(a);
+      }
+      ul.appendChild(li);
+    });
+  }
+  function botao(txt, cls, fn) { var b = document.createElement('button'); b.type = 'button'; b.textContent = txt; if (cls) b.className = cls; b.onclick = fn; return b; }
+
+  function limparMsgs() { msg('okMsg', ''); msg('errMsg', ''); }
+
+  $('criar').onclick = function () {
+    limparMsgs();
+    var nome = $('nome').value.trim(), loja = $('loja').value;
+    if (nome.length < 2) return msg('errMsg', 'Informe o nome do funcionário.');
+    if (!loja) return msg('errMsg', 'Escolha a loja do funcionário.');
+    var b = this; busy(b, true);
+    call('adminCriar', [S.senha, nome, loja], function (r) {
+      busy(b, false, 'Cadastrar e gerar senha'); $('nome').value = ''; $('loja').value = '';
+      mostrarSenha(r, 'Senha criada para ' + r.nome); render(r.dados);
+    }, function (e) { busy(b, false, 'Cadastrar e gerar senha'); erro(e); });
+  };
+
+  function novaSenha(f, b) {
+    limparMsgs(); b.disabled = true;
+    call('adminNovaSenha', [S.senha, f.id], function (r) { mostrarSenha(r, 'Nova senha de ' + r.nome); render(r.dados); },
+      function (e) { erro(e); render(S.dados); });
+  }
+  function ativar(f, on, b) {
+    limparMsgs(); b.disabled = true;
+    call('adminAtivar', [S.senha, f.id, on], function (d) {
+      msg('okMsg', f.nome + (on ? ' foi reativado.' : ' foi desativado. A senha dele não funciona mais.')); render(d);
+    }, function (e) { erro(e); render(S.dados); });
+  }
+  function erro(e) {
+    if (/administrador incorreta|Troque a senha/i.test(e)) { $('sair').click(); msg('loginMsg', e); return; }
+    msg('errMsg', e); window.scrollTo(0, 0);
+  }
+
+  function mostrarSenha(r, titulo) {
+    $('senhaTitulo').textContent = titulo;
+    $('senhaNum').textContent = r.pin;
+    $('mensagem').value = 'Olá, ' + r.nome.split(' ')[0] + '! Seu acesso ao cadastro de aparelhos da Tec-Cell:\n\n' +
+      'Link: ' + SITE + '\nSua senha: ' + r.pin + '\n\n' +
+      'A senha é pessoal: não passe para ninguém. Tudo o que você cadastrar fica registrado no seu nome.';
+    show('cardSenha', true); window.scrollTo(0, 0);
+  }
+  $('copiar').onclick = function () {
+    var t = $('mensagem'); t.focus(); t.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    if (!ok && navigator.clipboard) { navigator.clipboard.writeText(t.value).then(function () { $('copiar').textContent = 'Copiado!'; }); return; }
+    $('copiar').textContent = ok ? 'Copiado!' : 'Selecione o texto e copie';
+    setTimeout(function () { $('copiar').textContent = 'Copiar mensagem'; }, 2500);
+  };
+  $('fecharSenha').onclick = function () { show('cardSenha', false); $('senhaNum').textContent = ''; $('mensagem').value = ''; };
+})();
+</script>
+</body>
+</html>
