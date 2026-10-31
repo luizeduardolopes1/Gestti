@@ -96,6 +96,19 @@
   /* disponíveis */
   .filtros{display:flex;gap:8px;margin-bottom:10px}
   .filtros input{flex:1.3}.filtros select{flex:1}
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+  .fgrid .full{grid-column:1/-1}
+  .fbar{display:flex;justify-content:space-between;align-items:center;margin:0 2px 8px}
+  .fbar .cont{margin:0}
+  .lnk{background:none;border:0;color:var(--navy);font:inherit;font-size:13px;font-weight:600;padding:4px 0;cursor:pointer}
+  .vrow input{padding:7px 6px;font-size:15px;text-align:right}
+  .acoes{display:flex;gap:8px;margin-top:12px}.acoes .btn{padding:11px}
+  .pv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+  .pv div{background:#F5F7FB;border-radius:10px;padding:10px 6px;text-align:center}
+  .pv .k{font-size:11.5px;color:var(--muted);font-weight:600}
+  .pv .v{font-size:16px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+  .pv small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+  .pv .q{font-size:11px;color:var(--muted);margin-top:4px}
   .item{background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(16,32,56,.08);padding:14px;margin-bottom:10px;cursor:pointer}
   .item .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
   .item .m{font-weight:800;font-size:16px}
@@ -196,13 +209,16 @@
     </section>
   </section>
 
-  <!-- DISPONÍVEIS -->
+  <!-- PRODUTOS -->
   <section id="vDisp" class="hide">
-    <div class="filtros">
-      <input id="dBusca" placeholder="Buscar modelo, cor, IMEI" autocomplete="off">
+    <div class="fgrid">
+      <input id="dBusca" class="full" placeholder="Modelo (ex.: 13 128)" autocomplete="off">
+      <select id="dClassif"></select>
       <select id="dLoja"></select>
+      <select id="dCor"></select>
+      <input id="dImei" inputmode="numeric" placeholder="IMEI (qualquer parte)" autocomplete="off">
     </div>
-    <div class="cont" id="dCont"></div>
+    <div class="fbar"><div class="cont" id="dCont"></div><button type="button" class="lnk" id="dLimpar">Limpar filtros</button></div>
     <div id="dLista"></div>
   </section>
 
@@ -228,22 +244,6 @@
       <div class="lines" id="aLinhas"></div>
       <div class="big good"><div class="k">OFERTA SUGERIDA</div><div class="v" id="aOferta">—</div></div>
       <div class="status" id="aAlerta"></div>
-    </div>
-    <div class="card">
-      <h2>Conferência da margem</h2>
-      <div class="row">
-        <div>
-          <label class="first" for="aVenda">Vou vender por</label>
-          <div class="prefix"><span>R$</span><input id="aVenda" inputmode="decimal" placeholder="da tabela"></div>
-        </div>
-        <div>
-          <label class="first" for="aReparo">Reparo previsto</label>
-          <div class="prefix"><span>R$</span><input id="aReparo" inputmode="decimal" placeholder="0,00"></div>
-        </div>
-      </div>
-      <div class="hint" id="aVendaHint"></div>
-      <div class="lines" id="aConf"></div>
-      <div class="decisao" id="aDecisao">—</div>
     </div>
   </section>
 
@@ -290,9 +290,22 @@
     </div>
   </section>
 
-  <!-- VENDA (gerente) -->
+  <!-- PREÇOS -->
   <section id="vVenda" class="hide">
     <div class="filtros"><input id="vBusca" placeholder="Buscar modelo" autocomplete="off"></div>
+    <div class="card hide" id="vNovo">
+      <h2>Incluir modelo</h2>
+      <label class="first" for="nModelo">Modelo</label>
+      <input id="nModelo" placeholder="Ex.: IPHONE 15 128GB" autocomplete="off" style="text-transform:uppercase">
+      <div class="row3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <div><label for="nBom">Bom</label><input id="nBom" inputmode="decimal" placeholder="R$"></div>
+        <div><label for="nOtimo">Ótimo</label><input id="nOtimo" inputmode="decimal" placeholder="R$"></div>
+        <div><label for="nExc">Excelente</label><input id="nExc" inputmode="decimal" placeholder="R$"></div>
+      </div>
+      <div class="msg" id="nMsg"></div>
+      <div class="acoes"><button type="button" class="btn" id="nSalvar">Incluir</button><button type="button" class="btn ghost" id="nCancelar">Cancelar</button></div>
+    </div>
+    <button type="button" class="btn ghost hide" id="vNovoBtn" style="margin-bottom:10px">+ Incluir modelo</button>
     <label class="check"><input type="checkbox" id="vSoEstoque" checked> Só modelos com estoque</label>
     <div id="vLista"></div>
   </section>
@@ -312,11 +325,11 @@
   var CORES = ['Preto','Branco','Azul','Verde','Rosa','Roxo','Vermelho','Amarelo','Dourado','Prata','Grafite','Meia-noite','Estelar','Titânio'];
   var VIEWS = [
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro' },
-    { id: 'disp', sec: 'vDisp', nome: 'Disponíveis' },
+    { id: 'disp', sec: 'vDisp', nome: 'Produtos' },
     { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone' },
     { id: 'cartao', sec: 'vCartao', nome: 'Cartão' },
     { id: 'compra', sec: 'vCompra', nome: 'Calc. de compra', gerente: true },
-    { id: 'venda', sec: 'vVenda', nome: 'Venda', gerente: true }
+    { id: 'venda', sec: 'vVenda', nome: 'Preços' }
   ];
 
   // ---------- utilidades ----------
@@ -526,13 +539,17 @@
     $('dLista').innerHTML = ''; $('dLista').appendChild(el('div', 'empty', 'Carregando estoque…')); $('dCont').textContent = '';
     call('disponiveis', [S.token]).then(function (l) {
       S.disp = l;
-      var lojas = []; l.forEach(function (x) { if (lojas.indexOf(x.loja) < 0) lojas.push(x.loja); }); lojas.sort();
-      opts($('dLoja'), lojas, $('dLoja').value, 'Todas as lojas');
+      var uniq = function (k) { var u = []; l.forEach(function (x) { var v = String(x[k] || '').trim(); if (v && u.indexOf(v) < 0) u.push(v); }); return u.sort(); };
+      opts($('dLoja'), uniq('loja'), $('dLoja').value, 'Todas as lojas');
+      opts($('dCor'), uniq('cor'), $('dCor').value, 'Todas as cores');
+      var cl = (S.u.classificacoes || ['Bom', 'Ótimo', 'Excelente']);
+      opts($('dClassif'), cl, $('dClassif').value, 'Todas as classificações');
       renderDisp();
     }).catch(function (e) { $('dLista').innerHTML = ''; $('dLista').appendChild(el('div', 'empty', e)); });
   }
-  $('dBusca').addEventListener('input', renderDisp);
-  $('dLoja').addEventListener('change', renderDisp);
+  ['dBusca', 'dImei'].forEach(function (k) { $(k).addEventListener('input', renderDisp); });
+  ['dLoja', 'dCor', 'dClassif'].forEach(function (k) { $(k).addEventListener('change', renderDisp); });
+  $('dLimpar').onclick = function () { ['dBusca', 'dImei', 'dLoja', 'dCor', 'dClassif'].forEach(function (k) { $(k).value = ''; }); renderDisp(); };
   function linhasCartao(valor) {
     var t = el('table', 't');
     var h = el('tr'); ['Opção', 'Total', 'Parcela'].forEach(function (x) { h.appendChild(el('th', '', x)); }); t.appendChild(h);
@@ -546,11 +563,16 @@
   }
   function renderDisp() {
     if (!S.disp) return;
-    var q = $('dBusca').value.trim().toLowerCase(), loja = $('dLoja').value;
+    var termos = $('dBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    var loja = $('dLoja').value, cor = $('dCor').value, cls = $('dClassif').value;
+    var imei = $('dImei').value.replace(/\D/g, '');
     var l = S.disp.filter(function (x) {
       if (loja && x.loja !== loja) return false;
-      if (!q) return true;
-      return (x.modelo + ' ' + x.cor + ' ' + x.imei + ' ' + x.classif).toLowerCase().indexOf(q) > -1;
+      if (cor && String(x.cor).trim() !== cor) return false;
+      if (cls && x.classif !== cls) return false;
+      if (imei && String(x.imei).replace(/\D/g, '').indexOf(imei) < 0) return false;
+      var m = x.modelo.toLowerCase();
+      return termos.every(function (t) { return m.indexOf(t) > -1; });
     }).sort(function (a, b) { return a.modelo.localeCompare(b.modelo) || (a.preco || 0) - (b.preco || 0); });
     $('dCont').textContent = l.length + ' aparelho' + (l.length === 1 ? '' : 's') + ' disponíve' + (l.length === 1 ? 'l' : 'is');
     var box = $('dLista'); box.innerHTML = '';
@@ -560,7 +582,7 @@
       var m = el('div', 'm', x.modelo); var c = el('span', 'cls c-' + x.classif, x.classif); m.appendChild(c); a.appendChild(m);
       var bat = (typeof x.bateria === 'number') ? x.bateria + '%' : x.bateria;
       a.appendChild(el('div', 'd', [x.cor, 'bateria ' + bat, x.loja].filter(Boolean).join(' · ')));
-      a.appendChild(el('div', 'd', 'IMEI final ' + String(x.imei).slice(-4) + (x.tipo ? ' · ' + x.tipo : '') + (x.obs ? ' · ' + x.obs : '')));
+      a.appendChild(el('div', 'd', 'IMEI ' + x.imei + (x.tipo ? ' · ' + x.tipo : '') + (x.obs ? ' · ' + x.obs : '')));
       var p = el('div', 'pr', x.preco ? brl(x.preco) : 'Consultar');
       if (x.preco && S.u.taxas && S.u.taxas.length) {
         var t12 = S.u.taxas.filter(function (t) { return t.nome === '12x'; })[0] || S.u.taxas[S.u.taxas.length - 1];
@@ -603,13 +625,11 @@
     seg($('aGar'), ['Não tem', '+6 meses', '+3 meses'], S.av.gar, function (v) { S.av.gar = v; calcAval(); });
     calcAval();
   }
-  $('aModelo').addEventListener('change', function () { $('aVenda').value = ''; calcAval(); });
-  $('aVenda').addEventListener('input', calcAval);
-  $('aReparo').addEventListener('input', calcAval);
+  $('aModelo').addEventListener('change', calcAval);
   function setDecisao(box, txt, cls) { box.textContent = txt; box.className = 'decisao ' + (cls || 'info'); }
   function calcAval() {
     var P = S.u.params, m = (S.u.iphones || []).filter(function (x) { return x.modelo === $('aModelo').value; })[0];
-    if (!m) { lines($('aLinhas'), []); $('aOferta').textContent = '—'; lines($('aConf'), []); setDecisao($('aDecisao'), 'Escolha o modelo'); $('aVendaHint').textContent = ''; $('aAlerta').className = 'status'; return; }
+    if (!m) { lines($('aLinhas'), []); $('aOferta').textContent = '—'; $('aAlerta').className = 'status'; return; }
     var alerta = '';
     var ab = function (v) { return v === null ? 0 : v; };
     var semTabela = m.bat8480 === null && m.bat80 === null && m.marcas === null && m.tela === null;
@@ -629,21 +649,6 @@
     $('aOferta').textContent = brl(oferta);
     var al = $('aAlerta'); al.className = 'status' + (alerta ? ' show err' : ''); al.textContent = alerta;
 
-    var vendaDigitada = num($('aVenda').value);
-    var venda = vendaDigitada !== null ? vendaDigitada : (m.venda || 0);
-    $('aVendaHint').textContent = m.venda ? 'Preço de venda da tabela: ' + brl(m.venda) + (vendaDigitada !== null ? ' (você está usando outro valor)' : '') : 'Este modelo ainda não tem preço de venda na Tabela iPhones. Digite o valor de venda.';
-    var reparo = num($('aReparo').value) || 0;
-    var teto = Math.max(0, venda * P.fatorRecompra - P.preparo - reparo);
-    var imp = venda * P.impRecompra, outros = venda * (P.cartao + P.despesas) + P.preparo;
-    var lucro = venda - imp - outros - oferta - reparo, margem = venda ? lucro / venda : 0;
-    var rows = [['Preço de venda considerado', brl(venda)], ['Teto de compra para a meta', brl(teto), 'tot']];
-    if (S.u.gerente) rows.push(['Impostos (recompra)', brl(imp)], ['Cartão, despesas e preparação', brl(outros)], ['Reparo previsto', brl(reparo)], ['Lucro líquido previsto', brl(lucro), 'tot'], ['Margem líquida', pct(margem), 'tot']);
-    lines($('aConf'), rows);
-    if (alerta) setDecisao($('aDecisao'), 'CONSULTAR GERENTE', 'err');
-    else if (!venda) setDecisao($('aDecisao'), 'Informe o preço de venda', 'info');
-    else if (margem >= P.margem) setDecisao($('aDecisao'), 'PODE COMPRAR', 'ok');
-    else if (margem > 0) setDecisao($('aDecisao'), 'NEGOCIAR — oferecer até ' + brl(Math.floor(teto)), 'warn');
-    else setDecisao($('aDecisao'), 'NÃO COMPRAR', 'err');
   }
 
   // =========================================================
@@ -709,11 +714,14 @@
   }
 
   // =========================================================
-  //  VENDA (gerente)
+  //  PREÇOS (vendedor vê preço; gerente vê tudo e edita)
   // =========================================================
+  var CL = [['bom', 'Bom'], ['otimo', 'Ótimo'], ['excelente', 'Excelente']];
   function carregarVenda(forcar) {
+    var g = S.u && S.u.gerente;
+    show('vNovoBtn', g && $('vNovo').classList.contains('hide'));
     if (S.venda && !forcar) return renderVenda();
-    $('vLista').innerHTML = ''; $('vLista').appendChild(el('div', 'empty', 'Carregando tabela de venda…'));
+    $('vLista').innerHTML = ''; $('vLista').appendChild(el('div', 'empty', 'Carregando preços…'));
     call('tabelaVenda', [S.token]).then(function (l) { S.venda = l; renderVenda(); })
       .catch(function (e) { $('vLista').innerHTML = ''; $('vLista').appendChild(el('div', 'empty', e)); });
   }
@@ -723,29 +731,95 @@
     if (/DENTRO/.test(s)) return 'st st-ok'; if (/ABAIXO/.test(s)) return 'st st-warn'; if (/PREJU/.test(s)) return 'st st-err'; return 'st st-off';
   }
   function stTxt(s) { return /DENTRO/.test(s) ? 'Na meta' : /ABAIXO/.test(s) ? 'Abaixo' : /PREJU/.test(s) ? 'Prejuízo' : s === 'Sem preço' ? 'Sem preço' : s ? 'Sem estoque' : ''; }
+  function precoTxt(v) { return v === null || v === undefined ? '' : String(v).replace('.', ','); }
+  function aposSalvar(l) { S.venda = l; S.disp = null; }
+
+  // incluir modelo (gerente)
+  $('vNovoBtn').onclick = function () { show('vNovo', true); show('vNovoBtn', false); msg('nMsg', ''); $('nModelo').focus(); };
+  $('nCancelar').onclick = function () { show('vNovo', false); show('vNovoBtn', true); ['nModelo', 'nBom', 'nOtimo', 'nExc'].forEach(function (k) { $(k).value = ''; }); };
+  $('nSalvar').onclick = function () {
+    var b = this, mod = $('nModelo').value.trim();
+    if (mod.length < 3) { $('nMsg').className = 'msg err'; msg('nMsg', 'Informe o nome do modelo.'); return; }
+    b.disabled = true; b.textContent = 'Incluindo…';
+    call('adicionarModelo', [S.token, mod, { bom: $('nBom').value, otimo: $('nOtimo').value, excelente: $('nExc').value }]).then(function (l) {
+      aposSalvar(l); b.disabled = false; b.textContent = 'Incluir';
+      $('vBusca').value = mod; $('vSoEstoque').checked = false; $('nCancelar').click(); renderVenda();
+    }).catch(function (e) { b.disabled = false; b.textContent = 'Incluir'; $('nMsg').className = 'msg err'; msg('nMsg', e); });
+  };
+
   function renderVenda() {
     if (!S.venda) return;
-    var q = $('vBusca').value.trim().toLowerCase(), so = $('vSoEstoque').checked;
+    var g = S.u.gerente;
+    var termos = $('vBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean), so = $('vSoEstoque').checked;
     var l = S.venda.filter(function (x) {
-      if (q && x.modelo.toLowerCase().indexOf(q) < 0) return false;
+      var m = x.modelo.toLowerCase();
+      if (!termos.every(function (t) { return m.indexOf(t) > -1; })) return false;
       if (so && !(x.bom.qtd || x.otimo.qtd || x.excelente.qtd)) return false;
       return true;
     });
     var box = $('vLista'); box.innerHTML = '';
     if (!l.length) { box.appendChild(el('div', 'empty', so ? 'Nenhum modelo com estoque. Desmarque "Só modelos com estoque" para ver todos.' : 'Nenhum modelo encontrado.')); return; }
-    l.forEach(function (x) {
-      var c = el('div', 'card'); c.appendChild(el('h2', '', x.modelo));
-      var h = el('div', 'vrow h'); ['', 'Bom', 'Ótimo', 'Excelente'].forEach(function (t) { h.appendChild(el('div', '', t)); }); c.appendChild(h);
-      var B = [x.bom, x.otimo, x.excelente];
-      [['Preço', function (b) { return brl(b.preco); }], ['Estoque', function (b) { return String(b.qtd); }],
-       ['Custo médio', function (b) { return b.qtd ? brl(b.custo) : '—'; }], ['Lucro', function (b) { return b.lucro === null ? '—' : brl(b.lucro); }],
-       ['Margem', function (b) { return b.pct === null ? '—' : pct(b.pct); }]].forEach(function (r) {
-        var d = el('div', 'vrow'); d.appendChild(el('div', '', r[0])); B.forEach(function (b) { d.appendChild(el('div', '', r[1](b))); }); c.appendChild(d);
-      });
-      var s = el('div', 'vrow'); s.appendChild(el('div', '', 'Status'));
-      B.forEach(function (b) { var dv = el('div'); var t = stTxt(b.status); if (t) dv.appendChild(el('span', stCls(b.status), t)); s.appendChild(dv); });
-      c.appendChild(s); box.appendChild(c);
+    l.forEach(function (x) { box.appendChild(g ? cardGerente(x) : cardVendedor(x)); });
+  }
+
+  function cardVendedor(x) {
+    var c = el('div', 'card'); c.appendChild(el('h2', '', x.modelo));
+    var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
+    var pv = el('div', 'pv');
+    CL.forEach(function (k) {
+      var b = x[k[0]], d = el('div');
+      d.appendChild(el('div', 'k', k[1]));
+      d.appendChild(el('div', 'v', b.preco ? brl(b.preco) : '—'));
+      if (b.preco && t12) d.appendChild(el('small', '', '12x ' + brl(b.preco / (1 - t12.taxa) / 12)));
+      d.appendChild(el('div', 'q', b.qtd ? b.qtd + ' em estoque' : 'sem estoque'));
+      pv.appendChild(d);
     });
+    c.appendChild(pv);
+    return c;
+  }
+
+  function cardGerente(x) {
+    var c = el('div', 'card'), h2 = el('h2', '', x.modelo);
+    var ed = el('button', 'atualizar', 'Editar preços'); ed.type = 'button'; h2.appendChild(ed); c.appendChild(h2);
+    var h = el('div', 'vrow h'); ['', 'Bom', 'Ótimo', 'Excelente'].forEach(function (t) { h.appendChild(el('div', '', t)); }); c.appendChild(h);
+    var B = CL.map(function (k) { return x[k[0]]; });
+    var rowPreco = el('div', 'vrow'); rowPreco.appendChild(el('div', '', 'Preço'));
+    B.forEach(function (b) { rowPreco.appendChild(el('div', '', brl(b.preco))); }); c.appendChild(rowPreco);
+    [['Estoque', function (b) { return String(b.qtd); }],
+     ['Custo médio', function (b) { return b.qtd ? brl(b.custo) : '—'; }], ['Lucro', function (b) { return b.lucro === null ? '—' : brl(b.lucro); }],
+     ['Margem', function (b) { return b.pct === null ? '—' : pct(b.pct); }]].forEach(function (r) {
+      var d = el('div', 'vrow'); d.appendChild(el('div', '', r[0])); B.forEach(function (b) { d.appendChild(el('div', '', r[1](b))); }); c.appendChild(d);
+    });
+    var s = el('div', 'vrow'); s.appendChild(el('div', '', 'Status'));
+    B.forEach(function (b) { var dv = el('div'); var t = stTxt(b.status); if (t) dv.appendChild(el('span', stCls(b.status), t)); s.appendChild(dv); });
+    c.appendChild(s);
+
+    ed.onclick = function () {
+      ed.classList.add('hide');
+      var ins = CL.map(function (k, i) {
+        var inp = el('input'); inp.inputMode = 'decimal'; inp.placeholder = 'R$'; inp.value = precoTxt(B[i].preco);
+        rowPreco.children[i + 1].innerHTML = ''; rowPreco.children[i + 1].appendChild(inp); return inp;
+      });
+      ins[0].focus(); ins[0].select();
+      var m = el('div', 'msg err'), ac = el('div', 'acoes');
+      var sv = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Cancelar'); sv.type = cc.type = 'button';
+      ac.appendChild(sv); ac.appendChild(cc); c.appendChild(m); c.appendChild(ac);
+      ins.forEach(function (inp) { inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') sv.click(); }); });
+      cc.onclick = function () { renderVenda(); };
+      sv.onclick = function () {
+        var p = {}, erro = '';
+        CL.forEach(function (k, i) {
+          var t = ins[i].value.trim();
+          if (!t) { p[k[0]] = ''; return; }
+          var n = num(t); if (n === null || n < 0) erro = 'Preço inválido em ' + k[1] + '.'; else p[k[0]] = n;
+        });
+        if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+        sv.disabled = true; sv.textContent = 'Salvando…';
+        call('salvarPrecos', [S.token, x.modelo, p]).then(function (l) { aposSalvar(l); renderVenda(); })
+          .catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
+      };
+    };
+    return c;
   }
 
   iniciar();
