@@ -103,6 +103,27 @@
   .lnk{background:none;border:0;color:var(--navy);font:inherit;font-size:13px;font-weight:600;padding:4px 0;cursor:pointer}
   .vrow input{padding:7px 6px;font-size:15px;text-align:right}
   .acoes{display:flex;gap:8px;margin-top:12px}.acoes .btn{padding:11px}
+  .vrow .ao{font-weight:700}
+  .kbar{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+  .kbar input{flex:1}
+  .kbar .btn{width:auto;padding:12px 14px;white-space:nowrap;font-size:14px}
+  .board{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;margin:0 -16px;padding-left:16px;padding-right:16px}
+  .col{flex:0 0 82%;max-width:330px;scroll-snap-align:start;background:#E9EDF5;border-radius:14px;padding:10px;min-height:120px}
+  .col.drop{outline:2px dashed var(--navy)}
+  .col h3{display:flex;justify-content:space-between;align-items:center;margin:2px 4px 10px;font-size:14px;color:var(--navy)}
+  .col h3 span{background:#fff;border-radius:20px;padding:2px 9px;font-size:12px}
+  .kc{background:#fff;border-radius:12px;padding:11px 12px;margin-bottom:8px;box-shadow:0 1px 2px rgba(16,24,40,.06);cursor:grab}
+  .kc .m{font-weight:700;font-size:14.5px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .kc .d{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .kc .t{font-size:12px;margin-top:6px;font-weight:600}
+  .kc .t.velho{color:var(--err)}
+  .kc .nota{font-size:13px;background:#FFF8E6;border-radius:8px;padding:7px 9px;margin-top:7px;white-space:pre-wrap}
+  .kc select{margin-top:9px;padding:9px 10px;font-size:14px}
+  .kc textarea{margin-top:8px;min-height:64px;font-size:14px}
+  .kc .acoes .btn{padding:9px;font-size:14px}
+  .ed-et{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+  .ed-et input{flex:1}
+  .ed-et button{border:1px solid var(--line);background:#fff;border-radius:9px;width:38px;height:42px;font-size:16px;cursor:pointer;color:var(--navy)}
   .pv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
   .pv div{background:#F5F7FB;border-radius:10px;padding:10px 6px;text-align:center}
   .pv .k{font-size:11.5px;color:var(--muted);font-weight:600}
@@ -290,6 +311,25 @@
     </div>
   </section>
 
+  <!-- MANUTENÇÃO -->
+  <section id="vManut" class="hide">
+    <div class="kbar">
+      <input id="mBusca" placeholder="Buscar modelo ou IMEI" autocomplete="off">
+      <button type="button" class="btn ghost" id="mAtualizar">Atualizar</button>
+    </div>
+    <div class="fbar"><div class="cont" id="mCont"></div><button type="button" class="lnk hide" id="mEditar">Editar colunas</button></div>
+    <div class="card hide" id="mEtapasBox">
+      <h2>Colunas do quadro</h2>
+      <div id="mEtapas"></div>
+      <button type="button" class="lnk" id="mAddEt">+ Nova coluna</button>
+      <div class="hint">Aparelhos de uma coluna excluída vão para a primeira coluna.</div>
+      <div class="msg err" id="mEtMsg"></div>
+      <div class="acoes"><button type="button" class="btn" id="mEtSalvar">Salvar colunas</button><button type="button" class="btn ghost" id="mEtCancelar">Cancelar</button></div>
+    </div>
+    <div class="msg err" id="mMsg"></div>
+    <div class="board" id="mBoard"></div>
+  </section>
+
   <!-- PREÇOS -->
   <section id="vVenda" class="hide">
     <div class="filtros"><input id="vBusca" placeholder="Buscar modelo" autocomplete="off"></div>
@@ -329,6 +369,7 @@
     { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone' },
     { id: 'cartao', sec: 'vCartao', nome: 'Cartão' },
     { id: 'compra', sec: 'vCompra', nome: 'Calc. de compra', gerente: true },
+    { id: 'manut', sec: 'vManut', nome: 'Manutenção' },
     { id: 'venda', sec: 'vVenda', nome: 'Preços' }
   ];
 
@@ -410,7 +451,7 @@
   $('lUser').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('lPass').focus(); });
 
   function sairLocal(motivo) {
-    S.token = ''; S.u = null; S.disp = null; S.venda = null;
+    S.token = ''; S.u = null; S.disp = null; S.venda = null; S.manut = null;
     LS.del('token'); LS.del('loja'); LS.del('hist');
     VIEWS.forEach(function (v) { show(v.sec, false); });
     show('nav', false); show('who', false); show('vCarregando', false); show('vLogin', true);
@@ -441,6 +482,7 @@
     Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.v === id); if (b.dataset.v === id && b.scrollIntoView) b.scrollIntoView({ inline: 'center', block: 'nearest' }); });
     if (id === 'disp') carregarDisp(false);
     if (id === 'venda') carregarVenda(false);
+    if (id === 'manut') carregarManut(false);
     window.scrollTo(0, 0);
   }
 
@@ -785,20 +827,42 @@
     var B = CL.map(function (k) { return x[k[0]]; });
     var rowPreco = el('div', 'vrow'); rowPreco.appendChild(el('div', '', 'Preço'));
     B.forEach(function (b) { rowPreco.appendChild(el('div', '', brl(b.preco))); }); c.appendChild(rowPreco);
-    [['Estoque', function (b) { return String(b.qtd); }],
-     ['Custo médio', function (b) { return b.qtd ? brl(b.custo) : '—'; }], ['Lucro', function (b) { return b.lucro === null ? '—' : brl(b.lucro); }],
-     ['Margem', function (b) { return b.pct === null ? '—' : pct(b.pct); }]].forEach(function (r) {
-      var d = el('div', 'vrow'); d.appendChild(el('div', '', r[0])); B.forEach(function (b) { d.appendChild(el('div', '', r[1](b))); }); c.appendChild(d);
+    var R = {};
+    [['qtd', 'Estoque', function (b) { return String(b.qtd); }],
+     ['custo', 'Custo médio', function (b) { return b.qtd ? brl(b.custo) : '—'; }], ['lucro', 'Lucro', function (b) { return b.lucro === null ? '—' : brl(b.lucro); }],
+     ['pct', 'Margem', function (b) { return b.pct === null ? '—' : pct(b.pct); }]].forEach(function (r) {
+      var d = el('div', 'vrow'); d.appendChild(el('div', '', r[1])); B.forEach(function (b) { d.appendChild(el('div', '', r[2](b))); }); c.appendChild(d); R[r[0]] = d;
     });
     var s = el('div', 'vrow'); s.appendChild(el('div', '', 'Status'));
     B.forEach(function (b) { var dv = el('div'); var t = stTxt(b.status); if (t) dv.appendChild(el('span', stCls(b.status), t)); s.appendChild(dv); });
-    c.appendChild(s);
+    c.appendChild(s); R.status = s;
+
+    // Mesma conta da aba Venda, refeita a cada número digitado
+    function simular(b, preco) {
+      var P = S.u.params;
+      if (!preco || preco <= 0) return { lucro: null, pct: null, status: 'Sem preço' };
+      if (!b.qtd || b.custo === null) return { lucro: null, pct: null, status: 'Sem custo no estoque' };
+      var fracIcms = (b.qtd - (b.distrib || 0)) / b.qtd;
+      var lucro = preco - preco * (P.pis + P.cofins + P.irpj + P.cartao + P.despesas) - preco * P.icms * fracIcms - P.preparo - b.custo;
+      var mg = lucro / preco;
+      return { lucro: lucro, pct: mg, status: mg >= P.margem ? 'DENTRO DA MARGEM' : mg > 0 ? 'ABAIXO DA MARGEM' : 'PREJUÍZO' };
+    }
+    function mostrarSim(i, r) {
+      var cl = r.status;
+      R.lucro.children[i + 1].textContent = r.lucro === null ? '—' : brl(r.lucro);
+      R.pct.children[i + 1].textContent = r.pct === null ? '—' : pct(r.pct);
+      [R.lucro, R.pct].forEach(function (row) { row.children[i + 1].className = 'ao'; row.children[i + 1].style.color = /DENTRO/.test(cl) ? 'var(--ok)' : /ABAIXO/.test(cl) ? 'var(--warn)' : /PREJU/.test(cl) ? 'var(--err)' : ''; });
+      var dv = R.status.children[i + 1]; dv.innerHTML = ''; var t = stTxt(cl); if (t) dv.appendChild(el('span', stCls(cl), t));
+    }
 
     ed.onclick = function () {
       ed.classList.add('hide');
       var ins = CL.map(function (k, i) {
         var inp = el('input'); inp.inputMode = 'decimal'; inp.placeholder = 'R$'; inp.value = precoTxt(B[i].preco);
         rowPreco.children[i + 1].innerHTML = ''; rowPreco.children[i + 1].appendChild(inp); return inp;
+      });
+      ins.forEach(function (inp, i) {
+        inp.addEventListener('input', function () { var v = inp.value.trim(); mostrarSim(i, simular(B[i], v ? num(v) : null)); });
       });
       ins[0].focus(); ins[0].select();
       var m = el('div', 'msg err'), ac = el('div', 'acoes');
@@ -821,6 +885,116 @@
     };
     return c;
   }
+
+  // =========================================================
+  //  MANUTENÇÃO (kanban)
+  // =========================================================
+  function carregarManut(forcar) {
+    show('mEditar', S.u && S.u.gerente && $('mEtapasBox').classList.contains('hide'));
+    if (S.manut && !forcar) return renderManut();
+    $('mBoard').innerHTML = ''; $('mBoard').appendChild(el('div', 'empty', 'Carregando aparelhos em manutenção…'));
+    call('manutencao', [S.token]).then(function (d) { S.manut = d; renderManut(); })
+      .catch(function (e) { $('mBoard').innerHTML = ''; $('mBoard').appendChild(el('div', 'empty', e)); });
+  }
+  $('mAtualizar').onclick = function () { carregarManut(true); };
+  $('mBusca').addEventListener('input', renderManut);
+  function dias(ms) {
+    if (!ms) return null;
+    return Math.floor((Date.now() - ms) / 86400000);
+  }
+  function mover(x, etapa, nota, onErr) {
+    msg('mMsg', '');
+    call('manutMover', [S.token, x.imei, etapa, nota]).then(function (d) { S.manut = d; renderManut(); })
+      .catch(function (e) { msg('mMsg', e); if (onErr) onErr(); });
+  }
+  function renderManut() {
+    if (!S.manut) return;
+    var M = S.manut, termos = $('mBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    var l = M.itens.filter(function (x) {
+      var t = (x.modelo + ' ' + x.imei).toLowerCase();
+      return termos.every(function (q) { return t.indexOf(q) > -1; });
+    });
+    $('mCont').textContent = l.length + ' aparelho' + (l.length === 1 ? '' : 's') + ' em manutenção';
+    var board = $('mBoard'); board.innerHTML = '';
+    M.etapas.forEach(function (et, ei) {
+      var col = el('div', 'col'), h = el('h3', '', et), its = l.filter(function (x) { return x.etapa === et; });
+      its.sort(function (a, b) { return (a.desde || 0) - (b.desde || 0); });
+      h.appendChild(el('span', '', String(its.length))); col.appendChild(h);
+      col.addEventListener('dragover', function (e) { e.preventDefault(); col.classList.add('drop'); });
+      col.addEventListener('dragleave', function () { col.classList.remove('drop'); });
+      col.addEventListener('drop', function (e) {
+        e.preventDefault(); col.classList.remove('drop');
+        var imei = e.dataTransfer.getData('text/plain'), x = M.itens.filter(function (i) { return i.imei === imei; })[0];
+        if (x && x.etapa !== et) { x.etapa = et; x.desde = Date.now(); renderManut(); mover(x, et); }
+      });
+      if (!its.length) col.appendChild(el('div', 'd', ''));
+      its.forEach(function (x) { col.appendChild(cardManut(x, ei === M.etapas.length - 1)); });
+      board.appendChild(col);
+    });
+  }
+  function cardManut(x, ultima) {
+    var k = el('div', 'kc');
+    if (x.imei) { k.draggable = true; k.addEventListener('dragstart', function (e) { e.dataTransfer.setData('text/plain', x.imei); }); }
+    var m = el('div', 'm', x.modelo); if (x.classif) m.appendChild(el('span', 'cls c-' + x.classif, x.classif)); k.appendChild(m);
+    var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
+    k.appendChild(el('div', 'd', [x.cor, bat ? 'bateria ' + bat : '', x.imei ? 'IMEI ' + x.imei : 'SEM IMEI'].filter(Boolean).join(' · ')));
+    k.appendChild(el('div', 'd', 'Estoque: ' + [x.status, x.loja].filter(Boolean).join(' · ')));
+    if (S.u.gerente && (x.custo !== null || x.peca !== null)) k.appendChild(el('div', 'd', 'Custo ' + brl(x.custo) + ' · Peça ' + brl(x.peca)));
+    var dd = dias(x.desde);
+    var t = el('div', 't' + (dd !== null && dd >= 7 && !ultima ? ' velho' : ''),
+      dd === null ? 'Ainda sem etapa registrada' : dd === 0 ? 'Nesta etapa desde hoje' : 'Há ' + dd + ' dia' + (dd === 1 ? '' : 's') + ' nesta etapa');
+    k.appendChild(t);
+    if (x.nota) k.appendChild(el('div', 'nota', x.nota));
+    if (x.obs) k.appendChild(el('div', 'd', 'Obs. do estoque: ' + x.obs));
+    if (!x.imei) { k.appendChild(el('div', 'd', 'Cadastre o IMEI na planilha para mover este aparelho.')); return k; }
+    var sel = el('select'); opts(sel, S.manut.etapas, x.etapa);
+    sel.onchange = function () { var de = x.etapa; x.etapa = sel.value; x.desde = Date.now(); renderManut(); mover(x, sel.value, undefined, function () { x.etapa = de; renderManut(); }); };
+    k.appendChild(sel);
+    var an = el('button', 'lnk', x.nota ? 'Editar anotação' : '+ Anotação (peça, defeito, técnico…)'); an.type = 'button';
+    an.onclick = function () {
+      an.remove();
+      var ta = el('textarea'); ta.value = x.nota; ta.placeholder = 'Ex.: aguardando tela com fornecedor X, previsão 05/11'; k.appendChild(ta);
+      var ac = el('div', 'acoes'), sv = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Cancelar'); sv.type = cc.type = 'button';
+      ac.appendChild(sv); ac.appendChild(cc); k.appendChild(ac); ta.focus();
+      cc.onclick = renderManut;
+      sv.onclick = function () { sv.disabled = true; sv.textContent = 'Salvando…'; mover(x, x.etapa, ta.value.trim(), function () { sv.disabled = false; sv.textContent = 'Salvar'; }); };
+    };
+    k.appendChild(an);
+    return k;
+  }
+
+  // ---- editar colunas (gerente)
+  var ET = [];
+  function desenharEtapas() {
+    var box = $('mEtapas'); box.innerHTML = '';
+    ET.forEach(function (e, i) {
+      var r = el('div', 'ed-et'), inp = el('input'); inp.value = e.nome; inp.maxLength = 40; inp.placeholder = 'Nome da coluna';
+      inp.oninput = function () { e.nome = inp.value; };
+      var up = el('button', '', '↑'), dn = el('button', '', '↓'), rm = el('button', '', '✕');
+      up.type = dn.type = rm.type = 'button'; up.title = 'Subir'; dn.title = 'Descer'; rm.title = 'Excluir';
+      up.onclick = function () { if (i) { ET.splice(i - 1, 0, ET.splice(i, 1)[0]); desenharEtapas(); } };
+      dn.onclick = function () { if (i < ET.length - 1) { ET.splice(i + 1, 0, ET.splice(i, 1)[0]); desenharEtapas(); } };
+      rm.onclick = function () { ET.splice(i, 1); desenharEtapas(); };
+      [inp, up, dn, rm].forEach(function (z) { r.appendChild(z); }); box.appendChild(r);
+    });
+  }
+  $('mEditar').onclick = function () {
+    if (!S.manut) return;
+    ET = S.manut.etapas.map(function (n) { return { orig: n, nome: n }; });
+    desenharEtapas(); msg('mEtMsg', ''); show('mEtapasBox', true); show('mEditar', false);
+  };
+  $('mAddEt').onclick = function () { ET.push({ orig: '', nome: '' }); desenharEtapas(); var ins = $('mEtapas').querySelectorAll('input'); ins[ins.length - 1].focus(); };
+  $('mEtCancelar').onclick = function () { show('mEtapasBox', false); show('mEditar', true); };
+  $('mEtSalvar').onclick = function () {
+    var b = this, lista = ET.map(function (e) { return e.nome.trim(); }).filter(Boolean), ren = {};
+    if (!lista.length) { msg('mEtMsg', 'O quadro precisa de pelo menos uma coluna.'); return; }
+    if (lista.some(function (x, i) { return lista.indexOf(x) !== i; })) { msg('mEtMsg', 'Há colunas com o mesmo nome.'); return; }
+    ET.forEach(function (e) { if (e.orig && e.nome.trim() && e.orig !== e.nome.trim()) ren[e.orig] = e.nome.trim(); });
+    b.disabled = true; b.textContent = 'Salvando…';
+    call('manutEtapas', [S.token, lista, ren]).then(function (d) {
+      S.manut = d; b.disabled = false; b.textContent = 'Salvar colunas'; $('mEtCancelar').click(); renderManut();
+    }).catch(function (e) { b.disabled = false; b.textContent = 'Salvar colunas'; msg('mEtMsg', e); });
+  };
 
   iniciar();
 })();
