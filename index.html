@@ -124,6 +124,29 @@
   .ed-et{display:flex;gap:6px;align-items:center;margin-bottom:8px}
   .ed-et input{flex:1}
   .ed-et button{border:1px solid var(--line);background:#fff;border-radius:9px;width:38px;height:42px;font-size:16px;cursor:pointer;color:var(--navy)}
+  .badge-m{white-space:nowrap;font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--warn-bg);color:var(--warn);margin-left:6px;vertical-align:2px}
+  .trl{display:flex;gap:8px;margin-bottom:10px}.trl select{flex:1}.trl .btn{width:auto;padding:10px 14px;font-size:14px}
+  .overlay{position:fixed;inset:0;background:rgba(16,24,40,.55);z-index:50;display:flex;align-items:flex-end;justify-content:center}
+  .overlay.hide{display:none}
+  .sheet{background:var(--bg,#F3F4F8);width:100%;max-width:560px;max-height:94vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:16px 16px 24px}
+  @media(min-width:700px){.overlay{align-items:center}.sheet{border-radius:18px}}
+  .sheet h2.tt{font-size:17px;color:var(--navy);margin:2px 2px 2px;text-transform:none;letter-spacing:0}
+  .sheet .sub{font-size:13px;color:var(--muted);margin:0 2px 12px}
+  .ck{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+  .ck:first-of-type{border-top:0}
+  .ck .n{flex:1;font-size:14px}
+  .ck .n small{display:block;font-size:11px;color:var(--muted)}
+  .ck.bad .n{color:var(--err);font-weight:600}
+  .yn{display:flex;gap:6px}
+  .yn button{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:8px 11px;font:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;min-width:54px}
+  .yn button.on.s{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+  .yn button.on.n{background:var(--err-bg);border-color:var(--err);color:var(--err)}
+  .prog{font-size:12.5px;color:var(--muted);margin:2px 2px 8px}
+  .alerta{background:var(--err-bg);color:var(--err);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:10px}
+  .ciente{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;margin-top:10px}
+  .ciente input{width:20px;height:20px;padding:0;margin:0;appearance:auto;-webkit-appearance:checkbox;flex:0 0 auto}
+  .kc.fin{opacity:.85;cursor:default}
+  .ed-et select{flex:0 0 76px;padding:9px 6px}
   .pv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
   .pv div{background:#F5F7FB;border-radius:10px;padding:10px 6px;text-align:center}
   .pv .k{font-size:11.5px;color:var(--muted);font-weight:600}
@@ -238,6 +261,7 @@
       <select id="dLoja"></select>
       <select id="dCor"></select>
       <input id="dImei" inputmode="numeric" placeholder="IMEI (qualquer parte)" autocomplete="off">
+      <select id="dSit" class="full"><option value="">Disponíveis e em manutenção</option><option value="disp">Só disponíveis</option><option value="manut">Só em manutenção</option></select>
     </div>
     <div class="fbar"><div class="cont" id="dCont"></div><button type="button" class="lnk" id="dLimpar">Limpar filtros</button></div>
     <div id="dLista"></div>
@@ -317,7 +341,15 @@
       <input id="mBusca" placeholder="Buscar modelo ou IMEI" autocomplete="off">
       <button type="button" class="btn ghost" id="mAtualizar">Atualizar</button>
     </div>
-    <div class="fbar"><div class="cont" id="mCont"></div><button type="button" class="lnk hide" id="mEditar">Editar colunas</button></div>
+    <div class="fbar"><div class="cont" id="mCont"></div><div><button type="button" class="lnk hide" id="mEditCk" style="margin-right:12px">Editar checklist</button><button type="button" class="lnk hide" id="mEditar">Editar colunas</button></div></div>
+    <div class="card hide" id="mCkBox">
+      <h2>Itens do checklist</h2>
+      <div class="hint" style="margin:-4px 0 10px">Ao lado de cada item, a resposta esperada. Resposta diferente aparece em vermelho na finalização.</div>
+      <div id="mCkItens"></div>
+      <button type="button" class="lnk" id="mCkAdd">+ Novo item</button>
+      <div class="msg err" id="mCkMsg"></div>
+      <div class="acoes"><button type="button" class="btn" id="mCkSalvar">Salvar checklist</button><button type="button" class="btn ghost" id="mCkCancelar">Cancelar</button></div>
+    </div>
     <div class="card hide" id="mEtapasBox">
       <h2>Colunas do quadro</h2>
       <div id="mEtapas"></div>
@@ -350,6 +382,7 @@
     <div id="vLista"></div>
   </section>
 </main>
+<div class="overlay hide" id="fModal"><div class="sheet" id="fSheet"></div></div>
 
 <script>
 (function () {
@@ -590,8 +623,8 @@
     }).catch(function (e) { $('dLista').innerHTML = ''; $('dLista').appendChild(el('div', 'empty', e)); });
   }
   ['dBusca', 'dImei'].forEach(function (k) { $(k).addEventListener('input', renderDisp); });
-  ['dLoja', 'dCor', 'dClassif'].forEach(function (k) { $(k).addEventListener('change', renderDisp); });
-  $('dLimpar').onclick = function () { ['dBusca', 'dImei', 'dLoja', 'dCor', 'dClassif'].forEach(function (k) { $(k).value = ''; }); renderDisp(); };
+  ['dLoja', 'dCor', 'dClassif', 'dSit'].forEach(function (k) { $(k).addEventListener('change', renderDisp); });
+  $('dLimpar').onclick = function () { ['dBusca', 'dImei', 'dLoja', 'dCor', 'dClassif', 'dSit'].forEach(function (k) { $(k).value = ''; }); renderDisp(); };
   function linhasCartao(valor) {
     var t = el('table', 't');
     var h = el('tr'); ['Opção', 'Total', 'Parcela'].forEach(function (x) { h.appendChild(el('th', '', x)); }); t.appendChild(h);
@@ -606,22 +639,25 @@
   function renderDisp() {
     if (!S.disp) return;
     var termos = $('dBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    var loja = $('dLoja').value, cor = $('dCor').value, cls = $('dClassif').value;
+    var loja = $('dLoja').value, cor = $('dCor').value, cls = $('dClassif').value, sit = $('dSit').value;
     var imei = $('dImei').value.replace(/\D/g, '');
     var l = S.disp.filter(function (x) {
       if (loja && x.loja !== loja) return false;
       if (cor && String(x.cor).trim() !== cor) return false;
       if (cls && x.classif !== cls) return false;
+      if (sit === 'disp' && x.manut) return false;
+      if (sit === 'manut' && !x.manut) return false;
       if (imei && String(x.imei).replace(/\D/g, '').indexOf(imei) < 0) return false;
       var m = x.modelo.toLowerCase();
       return termos.every(function (t) { return m.indexOf(t) > -1; });
     }).sort(function (a, b) { return a.modelo.localeCompare(b.modelo) || (a.preco || 0) - (b.preco || 0); });
-    $('dCont').textContent = l.length + ' aparelho' + (l.length === 1 ? '' : 's') + ' disponíve' + (l.length === 1 ? 'l' : 'is');
+    var nm = l.filter(function (x) { return x.manut; }).length;
+    $('dCont').textContent = l.length + ' aparelho' + (l.length === 1 ? '' : 's') + (nm ? ' · ' + nm + ' em manutenção' : '');
     var box = $('dLista'); box.innerHTML = '';
     if (!l.length) { box.appendChild(el('div', 'empty', 'Nenhum aparelho encontrado.')); return; }
     l.forEach(function (x) {
       var it = el('div', 'item'), top = el('div', 'top'), a = el('div');
-      var m = el('div', 'm', x.modelo); var c = el('span', 'cls c-' + x.classif, x.classif); m.appendChild(c); a.appendChild(m);
+      var m = el('div', 'm', x.modelo); var c = el('span', 'cls c-' + x.classif, x.classif); m.appendChild(c); if (x.manut) m.appendChild(el('span', 'badge-m', 'Em manutenção')); a.appendChild(m);
       var bat = (typeof x.bateria === 'number') ? x.bateria + '%' : x.bateria;
       a.appendChild(el('div', 'd', [x.cor, 'bateria ' + bat, x.loja].filter(Boolean).join(' · ')));
       a.appendChild(el('div', 'd', 'IMEI ' + x.imei + (x.tipo ? ' · ' + x.tipo : '') + (x.obs ? ' · ' + x.obs : '')));
@@ -636,6 +672,18 @@
         var aberto = it.querySelector('.det');
         if (aberto) { aberto.remove(); return; }
         var det = el('div', 'det');
+        if (x.imei) {
+          var tr = el('div', 'trl'), sl = el('select'), bt = el('button', 'btn', 'Mudar loja'); bt.type = 'button';
+          opts(sl, S.u.lojas || [], x.loja); tr.appendChild(sl); tr.appendChild(bt); det.appendChild(tr);
+          if (x.manut) det.appendChild(el('div', 'hint', 'Em conserto: continua no quadro de Manutenção até ser finalizado com o checklist.'));
+          var tm = el('div', 'msg err'); det.appendChild(tm);
+          bt.onclick = function () {
+            if (sl.value === x.loja) return;
+            bt.disabled = true; bt.textContent = 'Salvando…';
+            call('alterarLoja', [S.token, x.imei, sl.value]).then(function (l) { S.disp = l; S.manut = null; renderDisp(); })
+              .catch(function (e) { bt.disabled = false; bt.textContent = 'Mudar loja'; tm.textContent = e; tm.classList.add('show'); });
+          };
+        }
         if (x.preco) {
           det.appendChild(linhasCartao(x.preco));
           var sh = el('button', 'btn ghost', 'Enviar oferta ao cliente'); sh.type = 'button'; sh.style.marginTop = '12px';
@@ -647,7 +695,7 @@
             else if (navigator.clipboard) navigator.clipboard.writeText(texto).then(function () { sh.textContent = 'Texto copiado ✓'; });
           };
           det.appendChild(sh);
-        } else det.appendChild(el('div', 'empty', 'Sem preço de venda cadastrado para essa classificação. Consulte o gerente.'));
+        } else det.appendChild(el('div', 'hint', 'Sem preço de venda cadastrado para essa classificação. Consulte o gerente.'));
         it.appendChild(det);
       };
       box.appendChild(it);
@@ -891,6 +939,7 @@
   // =========================================================
   function carregarManut(forcar) {
     show('mEditar', S.u && S.u.gerente && $('mEtapasBox').classList.contains('hide'));
+    show('mEditCk', S.u && S.u.gerente && $('mCkBox').classList.contains('hide'));
     if (S.manut && !forcar) return renderManut();
     $('mBoard').innerHTML = ''; $('mBoard').appendChild(el('div', 'empty', 'Carregando aparelhos em manutenção…'));
     call('manutencao', [S.token]).then(function (d) { S.manut = d; renderManut(); })
@@ -914,7 +963,8 @@
       var t = (x.modelo + ' ' + x.imei).toLowerCase();
       return termos.every(function (q) { return t.indexOf(q) > -1; });
     });
-    $('mCont').textContent = l.length + ' aparelho' + (l.length === 1 ? '' : 's') + ' em manutenção';
+    var ab = l.filter(function (x) { return !x.finalizado; }).length;
+    $('mCont').textContent = ab + ' aparelho' + (ab === 1 ? '' : 's') + ' em manutenção';
     var board = $('mBoard'); board.innerHTML = '';
     M.etapas.forEach(function (et, ei) {
       var col = el('div', 'col'), h = el('h3', '', et), its = l.filter(function (x) { return x.etapa === et; });
@@ -925,14 +975,17 @@
       col.addEventListener('drop', function (e) {
         e.preventDefault(); col.classList.remove('drop');
         var imei = e.dataTransfer.getData('text/plain'), x = M.itens.filter(function (i) { return i.imei === imei; })[0];
-        if (x && x.etapa !== et) { x.etapa = et; x.desde = Date.now(); renderManut(); mover(x, et); }
+        if (!x || x.finalizado || x.etapa === et) return;
+        if (et === M.final) { abrirFinalizar(x); return; }
+        x.etapa = et; x.desde = Date.now(); renderManut(); mover(x, et);
       });
       if (!its.length) col.appendChild(el('div', 'd', ''));
-      its.forEach(function (x) { col.appendChild(cardManut(x, ei === M.etapas.length - 1)); });
+      its.forEach(function (x) { col.appendChild(cardManut(x, et === M.final)); });
       board.appendChild(col);
     });
   }
   function cardManut(x, ultima) {
+    if (x.finalizado) return cardFinalizado(x);
     var k = el('div', 'kc');
     if (x.imei) { k.draggable = true; k.addEventListener('dragstart', function (e) { e.dataTransfer.setData('text/plain', x.imei); }); }
     var m = el('div', 'm', x.modelo); if (x.classif) m.appendChild(el('span', 'cls c-' + x.classif, x.classif)); k.appendChild(m);
@@ -948,7 +1001,10 @@
     if (x.obs) k.appendChild(el('div', 'd', 'Obs. do estoque: ' + x.obs));
     if (!x.imei) { k.appendChild(el('div', 'd', 'Cadastre o IMEI na planilha para mover este aparelho.')); return k; }
     var sel = el('select'); opts(sel, S.manut.etapas, x.etapa);
-    sel.onchange = function () { var de = x.etapa; x.etapa = sel.value; x.desde = Date.now(); renderManut(); mover(x, sel.value, undefined, function () { x.etapa = de; renderManut(); }); };
+    sel.onchange = function () {
+      if (sel.value === S.manut.final) { sel.value = x.etapa; abrirFinalizar(x); return; }
+      var de = x.etapa; x.etapa = sel.value; x.desde = Date.now(); renderManut(); mover(x, sel.value, undefined, function () { x.etapa = de; renderManut(); });
+    };
     k.appendChild(sel);
     var an = el('button', 'lnk', x.nota ? 'Editar anotação' : '+ Anotação (peça, defeito, técnico…)'); an.type = 'button';
     an.onclick = function () {
@@ -962,6 +1018,119 @@
     k.appendChild(an);
     return k;
   }
+
+  function cardFinalizado(x) {
+    var k = el('div', 'kc fin');
+    var m = el('div', 'm', x.modelo); if (x.classif) m.appendChild(el('span', 'cls c-' + x.classif, x.classif)); k.appendChild(m);
+    k.appendChild(el('div', 'd', [x.cor, 'IMEI ' + x.imei].filter(Boolean).join(' · ')));
+    var dd = dias(x.desde);
+    k.appendChild(el('div', 't', '✓ Finalizado ' + (dd === 0 ? 'hoje' : dd === 1 ? 'ontem' : 'há ' + dd + ' dias') + ' · agora em ' + x.loja));
+    if (S.u.gerente && x.peca !== null) k.appendChild(el('div', 'd', 'Peças no custo: ' + brl(x.peca)));
+    return k;
+  }
+
+  // ---- finalização: peça + loja de destino + checklist
+  function abrirFinalizar(x) {
+    var M = S.manut, R = {}, sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Finalizar conserto'));
+    sh.appendChild(el('div', 'sub', x.modelo + ' · ' + [x.cor, 'IMEI ' + x.imei].filter(Boolean).join(' · ')));
+
+    var c1 = el('div', 'card');
+    var lp = el('label', 'first', 'Valor da peça usada neste conserto'); c1.appendChild(lp);
+    var pw = el('div', 'prefix'); pw.appendChild(el('span', '', 'R$')); var peca = el('input'); peca.inputMode = 'decimal'; peca.placeholder = '0,00 (sem peça)'; pw.appendChild(peca); c1.appendChild(pw);
+    c1.appendChild(el('div', 'hint', 'Soma na coluna Peça do Estoque e entra no custo total e no custo médio do modelo.' +
+      (S.u.gerente && x.peca ? ' Já lançado antes neste aparelho: ' + brl(x.peca) + '.' : '')));
+    c1.appendChild(el('label', '', 'Vai para a loja'));
+    var lj = el('select'); opts(lj, (M.lojas || S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x.loja !== 'Manutenção' ? x.loja : (LS.get('loja', '') || ''), 'Escolha a loja…'); c1.appendChild(lj);
+    sh.appendChild(c1);
+
+    var c2 = el('div', 'card'); c2.appendChild(el('h2', '', 'Checklist de testes'));
+    var prog = el('div', 'prog'); c2.appendChild(prog);
+    M.checklist.forEach(function (it) {
+      var row = el('div', 'ck'), n = el('div', 'n', it.item);
+      if (it.ok === 'NÃO') n.appendChild(el('small', '', 'esperado: NÃO'));
+      var yn = el('div', 'yn'), bs = el('button', 's', 'SIM'), bn = el('button', 'n', 'NÃO'); bs.type = bn.type = 'button';
+      function marca(v) {
+        R[it.item] = v; bs.classList.toggle('on', v === 'SIM'); bn.classList.toggle('on', v === 'NÃO');
+        row.classList.toggle('bad', v !== it.ok); atualizar();
+      }
+      bs.onclick = function () { marca('SIM'); }; bn.onclick = function () { marca('NÃO'); };
+      yn.appendChild(bs); yn.appendChild(bn); row.appendChild(n); row.appendChild(yn); c2.appendChild(row);
+    });
+    sh.appendChild(c2);
+
+    var c3 = el('div', 'card');
+    c3.appendChild(el('label', 'first', 'Observação'));
+    var obs = el('textarea'); obs.placeholder = 'O que foi feito, peça trocada, técnico…'; c3.appendChild(obs);
+    var al = el('div', 'alerta hide'); c3.appendChild(al);
+    var ci = el('label', 'ciente hide'), cb = el('input'); cb.type = 'checkbox'; ci.appendChild(cb); ci.appendChild(el('span', '', 'Estou ciente dos itens acima e quero liberar o aparelho mesmo assim.')); c3.appendChild(ci);
+    sh.appendChild(c3);
+    var er = el('div', 'msg err'); sh.appendChild(er);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Finalizar e enviar para a loja'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
+    ac.appendChild(ok); ac.appendChild(cc); sh.appendChild(ac);
+
+    function probs() { return M.checklist.filter(function (it) { return R[it.item] && R[it.item] !== it.ok; }); }
+    function atualizar() {
+      var feitos = M.checklist.filter(function (it) { return R[it.item]; }).length;
+      prog.textContent = feitos + ' de ' + M.checklist.length + ' itens testados';
+      var p = probs();
+      al.classList.toggle('hide', !p.length); ci.classList.toggle('hide', !p.length);
+      al.textContent = p.length ? 'Fora do esperado: ' + p.map(function (it) { return it.item + ' (' + R[it.item] + ')'; }).join(', ') : '';
+    }
+    atualizar();
+    function fechar() { $('fModal').classList.add('hide'); document.body.style.overflow = ''; }
+    cc.onclick = fechar;
+    $('fModal').onclick = function (e) { if (e.target === $('fModal')) fechar(); };
+    ok.onclick = function () {
+      er.classList.remove('show');
+      var falta = M.checklist.filter(function (it) { return !R[it.item]; });
+      var erro = '';
+      var vp = peca.value.trim() ? num(peca.value) : 0;
+      if (vp === null || vp < 0) erro = 'Valor da peça inválido.';
+      else if (!lj.value) erro = 'Escolha para qual loja o aparelho vai.';
+      else if (falta.length) erro = 'Falta testar ' + falta.length + ' ite' + (falta.length === 1 ? 'm' : 'ns') + ': ' + falta.map(function (it) { return it.item; }).join(', ') + '.';
+      else if (probs().length && !obs.value.trim()) erro = 'Descreva na observação os itens fora do esperado.';
+      else if (probs().length && !cb.checked) erro = 'Confirme que está ciente dos itens fora do esperado.';
+      if (erro) { er.textContent = erro; er.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Finalizando…';
+      call('manutFinalizar', [S.token, x.imei, { peca: vp, loja: lj.value, respostas: R, obs: obs.value.trim(), ciente: cb.checked }]).then(function (d) {
+        S.manut = d; S.disp = null; S.venda = null; fechar(); renderManut();
+      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Finalizar e enviar para a loja'; er.textContent = e; er.classList.add('show'); });
+    };
+    $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; sh.scrollTop = 0;
+  }
+
+  // ---- editar checklist (gerente)
+  var CK = [];
+  function desenharCk() {
+    var box = $('mCkItens'); box.innerHTML = '';
+    CK.forEach(function (c, i) {
+      var r = el('div', 'ed-et'), inp = el('input'); inp.value = c.item; inp.maxLength = 80; inp.placeholder = 'Ex.: Botão power';
+      inp.oninput = function () { c.item = inp.value; };
+      var sl = el('select'); opts(sl, ['SIM', 'NÃO'], c.ok); sl.onchange = function () { c.ok = sl.value; }; sl.title = 'Resposta esperada';
+      var up = el('button', '', '↑'), rm = el('button', '', '✕'); up.type = rm.type = 'button';
+      up.onclick = function () { if (i) { CK.splice(i - 1, 0, CK.splice(i, 1)[0]); desenharCk(); } };
+      rm.onclick = function () { CK.splice(i, 1); desenharCk(); };
+      [inp, sl, up, rm].forEach(function (z) { r.appendChild(z); }); box.appendChild(r);
+    });
+  }
+  $('mEditCk').onclick = function () {
+    if (!S.manut) return;
+    CK = S.manut.checklist.map(function (c) { return { item: c.item, ok: c.ok }; });
+    desenharCk(); msg('mCkMsg', ''); show('mCkBox', true); show('mEditCk', false);
+  };
+  $('mCkAdd').onclick = function () { CK.push({ item: '', ok: 'SIM' }); desenharCk(); var ins = $('mCkItens').querySelectorAll('input'); ins[ins.length - 1].focus(); };
+  $('mCkCancelar').onclick = function () { show('mCkBox', false); show('mEditCk', true); };
+  $('mCkSalvar').onclick = function () {
+    var b = this, l = CK.map(function (c) { return { item: c.item.trim(), ok: c.ok }; }).filter(function (c) { return c.item; });
+    var nomes = l.map(function (c) { return c.item.toLowerCase(); });
+    if (!l.length) { msg('mCkMsg', 'O checklist precisa de pelo menos um item.'); return; }
+    if (nomes.some(function (x, i) { return nomes.indexOf(x) !== i; })) { msg('mCkMsg', 'Há itens repetidos.'); return; }
+    b.disabled = true; b.textContent = 'Salvando…';
+    call('manutChecklist', [S.token, l]).then(function (d) {
+      S.manut = d; b.disabled = false; b.textContent = 'Salvar checklist'; $('mCkCancelar').click(); renderManut();
+    }).catch(function (e) { b.disabled = false; b.textContent = 'Salvar checklist'; msg('mCkMsg', e); });
+  };
 
   // ---- editar colunas (gerente)
   var ET = [];
