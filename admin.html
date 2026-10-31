@@ -47,8 +47,8 @@
   .func .meta{color:var(--muted);font-size:13px;margin-top:3px}
   .badge{font-size:12px;font-weight:700;border-radius:999px;padding:3px 9px;white-space:nowrap}
   .badge.on{background:var(--ok-bg);color:var(--ok)} .badge.off{background:#eceff3;color:var(--muted)}
-  .acoes{display:flex;gap:8px;margin-top:10px}
-  .acoes button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 6px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;color:var(--ink)}
+  .acoes{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .acoes button{flex:1 1 30%;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 6px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;color:var(--ink)}
   .acoes button.danger{color:var(--err)}
   .acoes button.okb{color:var(--ok)}
   .confirm{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:10px;margin-top:10px;font-size:14px}
@@ -99,6 +99,7 @@
     <section class="card hide" id="cardSenha">
       <h2 id="senhaTitulo">Senha criada</h2>
       <div class="senha" id="senhaNum"></div>
+      <div style="text-align:center;font-weight:700;margin:-4px 0 10px" id="senhaUser"></div>
       <p class="hint" style="margin-top:0"><b>Anote ou envie agora.</b> Por segurança, essa senha não aparece de novo. Se perder, gere uma nova.</p>
       <label for="mensagem">Mensagem pronta para enviar no WhatsApp</label>
       <textarea id="mensagem" readonly></textarea>
@@ -110,8 +111,13 @@
       <h2>Novo funcionário</h2>
       <label class="first" for="nome">Nome</label>
       <input id="nome" autocomplete="off" placeholder="Ex.: Ana Souza">
+      <label for="usuario">Usuário (para entrar no sistema)</label>
+      <input id="usuario" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Ex.: ana">
+      <div class="hint">Só letras e números, sem espaço. É sugerido a partir do nome.</div>
       <label for="loja">Loja</label>
       <select id="loja"><option value="">Selecione…</option></select>
+      <label for="perfil">Perfil</label>
+      <select id="perfil"><option value="Vendedor">Vendedor — Cadastro, Disponíveis, Avaliação e Cartão</option><option value="Gerente">Gerente — tudo, inclusive Compra e Venda (custos e margens)</option></select>
       <button class="btn" id="criar">Cadastrar e gerar senha</button>
     </section>
 
@@ -201,7 +207,7 @@
       var l = document.createElement('div');
       var n = document.createElement('div'); n.className = 'nome'; n.textContent = f.nome;
       var m = document.createElement('div'); m.className = 'meta';
-      m.textContent = f.id + ' · ' + f.loja + ' · ' + f.cadastros + ' cadastro' + (f.cadastros === 1 ? '' : 's') +
+      m.textContent = 'usuário: ' + (f.usuario || '—') + ' · ' + f.perfil + ' · ' + f.id + ' · ' + f.loja + ' · ' + f.cadastros + ' cadastro' + (f.cadastros === 1 ? '' : 's') +
         ' · último acesso: ' + (f.ultimo || 'nunca');
       l.appendChild(n); l.appendChild(m);
       var bd = document.createElement('span'); bd.className = 'badge ' + (f.ativo ? 'on' : 'off'); bd.textContent = f.ativo ? 'Ativo' : 'Desativado';
@@ -223,6 +229,7 @@
         var a = document.createElement('div'); a.className = 'acoes';
         if (f.ativo) {
           a.appendChild(botao('Nova senha', '', function () { S.confirmando = { id: f.id, acao: 'senha' }; render(S.dados); }));
+          a.appendChild(botao(f.perfil === 'Gerente' ? 'Tornar vendedor' : 'Tornar gerente', '', function (ev) { mudarPerfil(f, f.perfil === 'Gerente' ? 'Vendedor' : 'Gerente', ev.target); }));
           a.appendChild(botao('Desativar', 'danger', function () { S.confirmando = { id: f.id, acao: 'desativar' }; render(S.dados); }));
         } else {
           a.appendChild(botao('Reativar', 'okb', function (ev) { ativar(f, true, ev.target); }));
@@ -235,15 +242,20 @@
   function botao(txt, cls, fn) { var b = document.createElement('button'); b.type = 'button'; b.textContent = txt; if (cls) b.className = cls; b.onclick = fn; return b; }
 
   function limparMsgs() { msg('okMsg', ''); msg('errMsg', ''); }
+  function sugerir(n) { return String(n || '').trim().split(/\s+/)[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9._]/g, ''); }
+  var usuarioEditado = false;
+  $('usuario').addEventListener('input', function () { usuarioEditado = !!this.value; this.value = this.value.toLowerCase().replace(/\s/g, ''); });
+  $('nome').addEventListener('input', function () { if (!usuarioEditado) $('usuario').value = sugerir(this.value); });
 
   $('criar').onclick = function () {
     limparMsgs();
-    var nome = $('nome').value.trim(), loja = $('loja').value;
+    var nome = $('nome').value.trim(), loja = $('loja').value, usuario = $('usuario').value.trim(), perfil = $('perfil').value;
     if (nome.length < 2) return msg('errMsg', 'Informe o nome do funcionário.');
+    if (usuario.length < 3) return msg('errMsg', 'Informe o usuário (pelo menos 3 letras).');
     if (!loja) return msg('errMsg', 'Escolha a loja do funcionário.');
     var b = this; busy(b, true);
-    call('adminCriar', [S.senha, nome, loja], function (r) {
-      busy(b, false, 'Cadastrar e gerar senha'); $('nome').value = ''; $('loja').value = '';
+    call('adminCriar', [S.senha, nome, usuario, loja, perfil], function (r) {
+      busy(b, false, 'Cadastrar e gerar senha'); $('nome').value = ''; $('usuario').value = ''; usuarioEditado = false; $('loja').value = ''; $('perfil').value = 'Vendedor';
       mostrarSenha(r, 'Senha criada para ' + r.nome); render(r.dados);
     }, function (e) { busy(b, false, 'Cadastrar e gerar senha'); erro(e); });
   };
@@ -251,6 +263,11 @@
   function novaSenha(f, b) {
     limparMsgs(); b.disabled = true;
     call('adminNovaSenha', [S.senha, f.id], function (r) { mostrarSenha(r, 'Nova senha de ' + r.nome); render(r.dados); },
+      function (e) { erro(e); render(S.dados); });
+  }
+  function mudarPerfil(f, perfil, b) {
+    limparMsgs(); b.disabled = true;
+    call('adminPerfil', [S.senha, f.id, perfil], function (d) { msg('okMsg', f.nome + ' agora é ' + perfil + '.'); render(d); },
       function (e) { erro(e); render(S.dados); });
   }
   function ativar(f, on, b) {
@@ -266,9 +283,9 @@
 
   function mostrarSenha(r, titulo) {
     $('senhaTitulo').textContent = titulo;
-    $('senhaNum').textContent = r.pin;
+    $('senhaNum').textContent = r.pin; $('senhaUser').textContent = 'Usuário: ' + r.usuario;
     $('mensagem').value = 'Olá, ' + r.nome.split(' ')[0] + '! Seu acesso ao cadastro de aparelhos da Tec-Cell:\n\n' +
-      'Link: ' + SITE + '\nSua senha: ' + r.pin + '\n\n' +
+      'Link: ' + SITE + '\nUsuário: ' + r.usuario + '\nSenha: ' + r.pin + '\n\n' +
       'A senha é pessoal: não passe para ninguém. Tudo o que você cadastrar fica registrado no seu nome.';
     show('cardSenha', true); window.scrollTo(0, 0);
   }
