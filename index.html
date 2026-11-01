@@ -450,7 +450,11 @@
         <h3>Filtros</h3>
         <label for="nBusca">Produto</label>
         <input id="nBusca" placeholder="Ex.: 16 128 ou capinha" autocomplete="off">
-        <button type="button" class="btn ghost" id="nLimpar">Limpar filtro</button>
+        <label for="nSit">Situação</label>
+        <select id="nSit"><option value="">Disponíveis</option><option value="indisp">Não disponíveis</option><option value="todos">Todos</option></select>
+        <label for="nOrdem">Ordenar por</label>
+        <select id="nOrdem"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select>
+        <button type="button" class="btn ghost" id="nLimpar">Limpar filtros</button>
         <div id="nResumo" class="hint" style="margin-top:14px"></div>
         <button type="button" class="btn hide" id="nPrec">⚙ Precificação</button>
       </aside>
@@ -972,15 +976,15 @@
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
     var linhas = [x.modelo + ' ' + String(x.cor || '').toLowerCase().replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); }),
                   'Classificação: ' + x.classif + (bat ? ' · Bateria ' + bat : '')];
-    if (x.preco) {
-      linhas.push(brl(x.preco) + ' à vista');
-      var tx = (S.u.taxas || []).filter(function (t) { return t.nome === (parcelas || '12x'); })[0];
-      if (tx && parcelas !== 'Só à vista') {
-        var tot = x.preco / (1 - tx.taxa);
-        linhas.push(tx.parcelas > 1 ? 'ou ' + tx.parcelas + 'x de ' + brl(tot / tx.parcelas) + ' no cartão' : 'ou ' + brl(tot) + ' no cartão (1x)');
-      }
-    }
+    if (x.preco) linhas.push(linhaPrecoOferta(x.preco, parcelas));
     return linhas.join('\n');
+  }
+  // "R$ 3.060,00 à vista PIX ou 18x de R$ 203,28 no cartão"
+  function linhaPrecoOferta(preco, parcelas) {
+    var t = brl(preco) + ' à vista PIX';
+    var tx = (S.u.taxas || []).filter(function (z) { return z.nome === (parcelas || '12x'); })[0];
+    if (tx && parcelas !== 'Só à vista') { var tot = preco / (1 - tx.taxa); t += ' ou ' + tx.parcelas + 'x de ' + brl(tot / tx.parcelas) + ' no cartão'; }
+    return t;
   }
   function abrirDrawer(x) {
     Array.prototype.forEach.call(document.querySelectorAll('.prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.linha + '|' + x.imei); });
@@ -1211,7 +1215,10 @@
   }
   function aposNovos(d) { S.novos = d.produtos; S.prec = d.config; renderNovos(); }
   $('nBusca').addEventListener('input', renderNovos);
-  $('nLimpar').onclick = function () { $('nBusca').value = ''; renderNovos(); };
+  $('nSit').addEventListener('change', renderNovos);
+  $('nOrdem').addEventListener('change', function () { LS.set('ordemNovos', this.value); renderNovos(); });
+  $('nOrdem').value = LS.get('ordemNovos', 'az');
+  $('nLimpar').onclick = function () { $('nBusca').value = ''; $('nSit').value = ''; renderNovos(); };
   $('nFilBtn').onclick = function () { var on = !$('nFil').classList.contains('on'); $('nFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
   $('nNovo').onclick = function () { abrirProdutoNovo(null); };
   $('nPrec').onclick = function () { abrirPrecificacao(); };
@@ -1224,11 +1231,21 @@
       $('nResumo').textContent = 'Precificação atual: ' + tot.toFixed(2).replace('.', ',') + '% de custos' + (fx ? ' + ' + brl(fx) + ' fixos' : '') + ' e margem de ' + String(S.prec.margem).replace('.', ',') + '%.';
     } else $('nResumo').textContent = '';
     var termos = $('nBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    var l = S.novos.filter(function (x) { var t = x.nome.toLowerCase(); return termos.every(function (q) { return t.indexOf(q) > -1; }); })
-      .sort(function (a2, b2) { return a2.nome.localeCompare(b2.nome); });
-    $('nCont').textContent = l.length + ' produto' + (l.length === 1 ? '' : 's');
+    var sit = $('nSit').value, ordem = $('nOrdem').value;
+    var l = S.novos.filter(function (x) {
+      if (sit === '' && x.indisp) return false;
+      if (sit === 'indisp' && !x.indisp) return false;
+      var t = x.nome.toLowerCase(); return termos.every(function (q) { return t.indexOf(q) > -1; });
+    }).sort(function (a2, b2) {
+      if (ordem === 'za') return b2.nome.localeCompare(a2.nome);
+      if (ordem === 'menor') return (a2.preco || Infinity) - (b2.preco || Infinity) || a2.nome.localeCompare(b2.nome);
+      if (ordem === 'maior') return (b2.preco || 0) - (a2.preco || 0) || a2.nome.localeCompare(b2.nome);
+      return a2.nome.localeCompare(b2.nome);
+    });
+    var ni = S.novos.filter(function (x) { return x.indisp; }).length;
+    $('nCont').textContent = l.length + ' produto' + (l.length === 1 ? '' : 's') + (sit === '' && ni ? ' · ' + ni + ' não disponíve' + (ni === 1 ? 'l' : 'is') + ' (veja no filtro Situação)' : '');
     var box = $('nLista'); box.innerHTML = '';
-    if (!l.length) { box.appendChild(el('div', 'empty', S.novos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto cadastrado ainda.' + (pode('editar_precos') ? ' Use "+ Novo Produto".' : ''))); return; }
+    if (!l.length) { box.appendChild(el('div', 'empty', sit === 'indisp' ? 'Nenhum produto marcado como não disponível.' : S.novos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto cadastrado ainda.' + (pode('editar_precos') ? ' Use "+ Novo Produto".' : ''))); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
     ['', 'Produto', ver ? 'Custo · Margem' : '', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
     tab.appendChild(h);
@@ -1236,7 +1253,7 @@
     l.forEach(function (x) {
       var r = el('div', 'prow'); r.dataset.k = x.linha + '|' + x.nome;
       var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
-      var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome)); nm.appendChild(botaoCopiar(x.nome, 'Copiar nome')); n.appendChild(nm);
+      var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome)); if (x.indisp) nm.appendChild(el('span', 'badge-m', 'Não disponível')); nm.appendChild(botaoCopiar(x.nome, 'Copiar nome')); n.appendChild(nm);
       if (ver && x.manual) n.appendChild(el('div', 'psub', 'Preço definido manualmente'));
       r.appendChild(n);
       var cm = el('div', 'psku');
@@ -1252,18 +1269,14 @@
   }
   function textoOfertaNovo(x, parcelas) {
     var linhas = [x.nome, 'Novo'];
-    if (x.preco) {
-      linhas.push(brl(x.preco) + ' à vista');
-      var tx = (S.u.taxas || []).filter(function (t) { return t.nome === (parcelas || '12x'); })[0];
-      if (tx && parcelas !== 'Só à vista') { var tot = x.preco / (1 - tx.taxa); linhas.push(tx.parcelas > 1 ? 'ou ' + tx.parcelas + 'x de ' + brl(tot / tx.parcelas) + ' no cartão' : 'ou ' + brl(tot) + ' no cartão (1x)'); }
-    }
+    if (x.preco) linhas.push(linhaPrecoOferta(x.preco, parcelas));
     return linhas.join('\n');
   }
   function abrirDrawerNovo(x) {
     Array.prototype.forEach.call(document.querySelectorAll('#nLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.linha + '|' + x.nome); });
     var dw = $('dw'); dw.innerHTML = '';
     var hd = el('div', 'dwh'), ht = el('div');
-    ht.appendChild(el('div', 't', x.nome)); ht.appendChild(el('div', 's', x.preco ? brl(x.preco) + ' à vista' : 'Sem preço'));
+    ht.appendChild(el('div', 't', x.nome)); ht.appendChild(el('div', 's', (x.preco ? brl(x.preco) + ' à vista PIX' : 'Sem preço') + (x.indisp ? ' · NÃO DISPONÍVEL' : '')));
     var fx = el('button', '', '×'); fx.type = 'button'; fx.onclick = fecharDrawer;
     hd.appendChild(ht); hd.appendChild(fx); dw.appendChild(hd);
     var bd = el('div', 'dwb'); dw.appendChild(bd);
@@ -1298,6 +1311,14 @@
       cp.onclick = function () { copiar(prev.textContent).then(function (ok) { cp.textContent = ok ? '✓ Copiada! Agora é só colar na conversa' : 'Não deu para copiar: selecione o texto acima'; }); };
     });
     if (pode('editar_precos')) {
+      var bdp = opcao(x.indisp ? 'Marcar como disponível' : 'Marcar como não disponível', x.indisp ? 'Volta para a lista principal' : 'Sai da lista e fica no filtro "Não disponíveis"', x.indisp ? 'okc' : '');
+      bdp.onclick = function () {
+        bdp.disabled = true; bdp.querySelector('small').textContent = 'Salvando…';
+        call('novoDisponivel', [S.token, x.linha, x.nome, !!x.indisp]).then(function (d) {
+          aposNovos(d); fecharDrawer();
+          var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ ' + x.nome + (x.indisp ? ' voltou a ficar disponível.' : ' marcado como não disponível.')));
+        }).catch(function (e) { bdp.disabled = false; am.textContent = e; am.classList.add('show'); });
+      };
       var bx = opcao('Excluir produto', 'Tira o produto da tabela de preços', 'danger');
       bx.onclick = function () {
         var sm = bx.querySelector('small');
