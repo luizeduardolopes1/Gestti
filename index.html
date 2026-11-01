@@ -974,9 +974,15 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fecharDrawer(); });
   function textoOferta(x, parcelas) {
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
-    var linhas = [x.modelo + ' ' + String(x.cor || '').toLowerCase().replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); }),
-                  'Classificação: ' + x.classif + (bat ? ' · Bateria ' + bat : '')];
-    if (x.preco) linhas.push(linhaPrecoOferta(x.preco, parcelas));
+    var linhas = [(x.modelo + ' ' + String(x.cor || '')).trim().toUpperCase(),
+                  'Classificação: ' + x.classif + (bat ? ' · Bateria: ' + bat : ''),
+                  '',
+                  '✅ 3 meses de garantia',
+                  '✅ Transferimos seus dados',
+                  '✅ Mais de 10 anos de mercado: você sabe onde nos encontrar',
+                  '',
+                  '🔄 Seu aparelho atual pode entrar como parte do pagamento'];
+    if (x.preco) { linhas.push(''); linhas.push('💰 ' + linhaPrecoOferta(x.preco, parcelas)); }
     return linhas.join('\n');
   }
   // "R$ 3.060,00 à vista PIX ou 18x de R$ 203,28 no cartão"
@@ -1268,8 +1274,11 @@
     box.appendChild(tab);
   }
   function textoOfertaNovo(x, parcelas) {
-    var linhas = [x.nome, 'Novo'];
-    if (x.preco) linhas.push(linhaPrecoOferta(x.preco, parcelas));
+    var linhas = [String(x.nome).trim().toUpperCase(), 'Novo', '',
+                  '✅ 1 ano de garantia',
+                  '✅ Transferimos seus dados',
+                  '✅ Mais de 10 anos de mercado: você sabe onde nos encontrar'];
+    if (x.preco) { linhas.push(''); linhas.push('💰 ' + linhaPrecoOferta(x.preco, parcelas)); }
     return linhas.join('\n');
   }
   function abrirDrawerNovo(x) {
