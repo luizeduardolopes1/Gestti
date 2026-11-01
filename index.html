@@ -443,20 +443,16 @@
     </div>
   </section>
 
-  <!-- PRODUTOS NOVOS -->
+  <!-- PRODUTOS NOVOS (tabela de preços) -->
   <section id="vNovos" class="hide">
     <div class="pgrid">
       <aside class="pfil" id="nFil">
         <h3>Filtros</h3>
         <label for="nBusca">Produto</label>
         <input id="nBusca" placeholder="Ex.: 16 128 ou capinha" autocomplete="off">
-        <label for="nCod">SKU / IMEI</label>
-        <input id="nCod" placeholder="Qualquer parte" autocomplete="off">
-        <label for="nLoja">Loja</label>
-        <select id="nLoja"></select>
-        <label for="nCor">Cor</label>
-        <select id="nCor"></select>
-        <button type="button" class="btn ghost" id="nLimpar">Limpar filtros</button>
+        <button type="button" class="btn ghost" id="nLimpar">Limpar filtro</button>
+        <div id="nResumo" class="hint" style="margin-top:14px"></div>
+        <button type="button" class="btn hide" id="nPrec">⚙ Precificação</button>
       </aside>
       <div>
         <div class="ptopo"><h1>Produtos Novos</h1><button type="button" class="btn hide" id="nNovo">+ Novo Produto</button></div>
@@ -465,40 +461,6 @@
         <div id="nLista"></div>
       </div>
     </div>
-  </section>
-
-  <!-- CADASTRO DE PRODUTO NOVO -->
-  <section id="vCadNovo" class="hide">
-    <div class="ptopo"><h1>Novo produto novo</h1><button type="button" class="btn ghost" id="cnVoltar">← Voltar para Produtos Novos</button></div>
-    <div class="msg err" id="cnMsg"></div>
-    <div class="col2"><div>
-      <div class="card">
-        <h2>Produto</h2>
-        <label class="first" for="cnProduto">Nome do produto <span class="req">*</span></label>
-        <input id="cnProduto" autocomplete="off" maxlength="120" placeholder="Ex.: IPHONE 16 128GB">
-        <label for="cnCor">Cor</label>
-        <select id="cnCor"></select>
-        <label for="cnSku">SKU</label>
-        <input id="cnSku" autocomplete="off" maxlength="40" placeholder="Código do produto (opcional)">
-        <label for="cnImei">IMEI <span style="font-weight:400;color:var(--muted)">(se for aparelho)</span></label>
-        <input id="cnImei" class="imei" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="15 números">
-        <div class="status" id="cnImeiSt"></div>
-      </div>
-    </div><div>
-      <div class="card">
-        <h2>Estoque</h2>
-        <label class="first" for="cnLoja">Loja <span class="req">*</span></label>
-        <select id="cnLoja"></select>
-        <div class="row">
-          <div><label for="cnQtd">Quantidade <span class="req">*</span></label><input id="cnQtd" type="number" inputmode="numeric" min="1" value="1"></div>
-          <div><label for="cnCusto">Valor pago (un.)</label><div class="prefix"><span>R$</span><input id="cnCusto" inputmode="decimal" placeholder="0,00"></div></div>
-        </div>
-        <div id="cnPrecoBox" class="hide"><label for="cnPreco">Preço de venda</label><div class="prefix"><span>R$</span><input id="cnPreco" inputmode="decimal" placeholder="0,00"></div></div>
-        <label for="cnObs">Observação</label>
-        <textarea id="cnObs" placeholder="Ex.: lacrado, nota fiscal 1234"></textarea>
-      </div>
-      <button class="btn" id="cnEnviar" type="button">Cadastrar produto</button>
-    </div></div>
   </section>
 
   <!-- AVALIAÇÃO -->
@@ -637,7 +599,6 @@
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos' },
     { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos' },
-    { id: 'cadNovo', sec: 'vCadNovo', nome: 'Novo produto novo', perm: 'cadastro', oculta: true },
     { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone', perm: 'avaliacao' },
     { id: 'cartao', sec: 'vCartao', nome: 'Cartão', perm: 'cartao' },
     { id: 'compra', sec: 'vCompra', nome: 'Calculadora de Compra', perm: 'compra' },
@@ -725,7 +686,7 @@
   $('lUser').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('lPass').focus(); });
 
   function sairLocal(motivo) {
-    S.token = ''; S.u = null; S.disp = null; S.venda = null; S.manut = null; S.novos = null;
+    S.token = ''; S.u = null; S.disp = null; S.venda = null; S.manut = null; S.novos = null; S.prec = null;
     LS.del('token'); LS.del('loja'); LS.del('hist');
     VIEWS.forEach(function (v) { show(v.sec, false); });
     show('nav', false); show('who', false); show('gear', false); show('vNovaSenha', false); show('vCarregando', false); show('vLogin', true);
@@ -770,8 +731,7 @@
     if (id === 'disp') carregarDisp(false);
     show('dNovo', pode('cadastro')); show('cVoltar', pode('produtos'));
     if (id === 'cadastro') Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.v === 'disp'); });
-    if (id === 'cadNovo') { Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.v === 'novos'); }); montarCadNovo(); }
-    if (id === 'novos') { carregarNovos(false); show('nNovo', pode('cadastro')); }
+    if (id === 'novos') { carregarNovos(false); show('nNovo', pode('editar_precos')); show('nPrec', pode('editar_precos')); }
     if (id === 'venda') carregarVenda(false);
     if (id === 'manut') carregarManut(false);
     window.scrollTo(0, 0);
@@ -1221,54 +1181,67 @@
   }
 
   // =========================================================
-  //  PRODUTOS NOVOS
+  //  PRODUTOS NOVOS: tabela de preços com precificação ajustável
   // =========================================================
+  var ARRED = [['nenhum', 'Sem arredondar'], ['inteiro', 'Número inteiro (ex.: 1.250)'], ['90', 'Terminar em ,90 (ex.: 1.249,90)'], ['9', 'Terminar em 9 (ex.: 1.249)']];
+  function arredonda(v, modo) {
+    if (!(v > 0)) return v;
+    if (modo === 'inteiro') return Math.ceil(v);
+    if (modo === '90') { var r = Math.floor(v) + 0.9; if (r < v - 1e-9) r += 1; return Math.round(r * 100) / 100; }
+    if (modo === '9') return Math.ceil((v + 1) / 10) * 10 - 1;
+    return Math.round(v * 100) / 100;
+  }
+  // mesma conta do servidor: preço = (custo + valores fixos) / (1 − soma dos % − margem)
+  function calcNovo(custo, aj, cfg) {
+    aj = aj || {}; var pct = 0, fixo = 0;
+    cfg.itens.forEach(function (it) { var v = aj.hasOwnProperty(it.nome) ? +aj[it.nome] || 0 : it.valor; if (it.tipo === 'R$') fixo += v; else pct += v / 100; });
+    var m = (aj.hasOwnProperty('__margem') ? +aj.__margem || 0 : cfg.margem) / 100, den = 1 - pct - m;
+    return { pct: pct, fixo: fixo, margem: m, sugerido: custo > 0 && den > 0 ? arredonda((custo + fixo) / den, cfg.arred) : null };
+  }
+  function resultado(preco, custo, c) {
+    if (!(preco > 0) || !(custo > 0)) return null;
+    var lucro = preco - preco * c.pct - c.fixo - custo;
+    return { lucro: lucro, margem: lucro / preco };
+  }
   function carregarNovos(forcar) {
     if (S.novos && !forcar) return renderNovos();
     $('nLista').innerHTML = ''; $('nLista').appendChild(el('div', 'empty', 'Carregando produtos novos…')); $('nCont').textContent = '';
-    call('novos', [S.token]).then(function (l) {
-      S.novos = l;
-      var uniq = function (k) { var u = []; l.forEach(function (x) { var v = String(x[k] || '').trim(); if (v && u.indexOf(v) < 0) u.push(v); }); return u.sort(); };
-      opts($('nLoja'), uniq('loja'), $('nLoja').value, 'Todas as lojas');
-      opts($('nCor'), uniq('cor'), $('nCor').value, 'Todas as cores');
-      renderNovos();
-    }).catch(function (e) { $('nLista').innerHTML = ''; $('nLista').appendChild(el('div', 'empty', e)); });
+    call('novos', [S.token]).then(function (d) { S.novos = d.produtos; S.prec = d.config; renderNovos(); })
+      .catch(function (e) { $('nLista').innerHTML = ''; $('nLista').appendChild(el('div', 'empty', e)); });
   }
-  ['nBusca', 'nCod'].forEach(function (k) { $(k).addEventListener('input', renderNovos); });
-  ['nLoja', 'nCor'].forEach(function (k) { $(k).addEventListener('change', renderNovos); });
-  $('nLimpar').onclick = function () { ['nBusca', 'nCod', 'nLoja', 'nCor'].forEach(function (k) { $(k).value = ''; }); renderNovos(); };
+  function aposNovos(d) { S.novos = d.produtos; S.prec = d.config; renderNovos(); }
+  $('nBusca').addEventListener('input', renderNovos);
+  $('nLimpar').onclick = function () { $('nBusca').value = ''; renderNovos(); };
   $('nFilBtn').onclick = function () { var on = !$('nFil').classList.contains('on'); $('nFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
-  $('nNovo').onclick = function () { ir('cadNovo'); };
-  $('cnVoltar').onclick = function () { ir('novos'); };
-  function nomeNovo(x) { return [x.produto, x.cor, x.imei ? 'IMEI: ' + x.imei : ''].filter(Boolean).join(' '); }
+  $('nNovo').onclick = function () { abrirProdutoNovo(null); };
+  $('nPrec').onclick = function () { abrirPrecificacao(); };
   function renderNovos() {
     if (!S.novos) return;
-    var termos = $('nBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean), cod = $('nCod').value.trim().toLowerCase();
-    var loja = $('nLoja').value, cor = $('nCor').value;
-    var l = S.novos.filter(function (x) {
-      if (loja && x.loja !== loja) return false;
-      if (cor && x.cor !== cor) return false;
-      if (cod && (x.sku + ' ' + x.imei).toLowerCase().indexOf(cod) < 0) return false;
-      var t = (x.produto + ' ' + x.cor).toLowerCase();
-      return termos.every(function (q) { return t.indexOf(q) > -1; });
-    }).sort(function (a, b) { return a.produto.localeCompare(b.produto) || (a.preco || 0) - (b.preco || 0); });
-    var un = l.reduce(function (s2, x) { return s2 + x.qtd; }, 0);
-    $('nCont').textContent = l.length + ' produto' + (l.length === 1 ? '' : 's') + ' · ' + un + ' unidade' + (un === 1 ? '' : 's');
+    var ver = !!S.prec;
+    if (ver) {
+      var tot = S.prec.itens.reduce(function (a2, it) { return a2 + (it.tipo === '%' ? it.valor : 0); }, 0);
+      var fx = S.prec.itens.reduce(function (a2, it) { return a2 + (it.tipo === 'R$' ? it.valor : 0); }, 0);
+      $('nResumo').textContent = 'Precificação atual: ' + tot.toFixed(2).replace('.', ',') + '% de custos' + (fx ? ' + ' + brl(fx) + ' fixos' : '') + ' e margem de ' + String(S.prec.margem).replace('.', ',') + '%.';
+    } else $('nResumo').textContent = '';
+    var termos = $('nBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    var l = S.novos.filter(function (x) { var t = x.nome.toLowerCase(); return termos.every(function (q) { return t.indexOf(q) > -1; }); })
+      .sort(function (a2, b2) { return a2.nome.localeCompare(b2.nome); });
+    $('nCont').textContent = l.length + ' produto' + (l.length === 1 ? '' : 's');
     var box = $('nLista'); box.innerHTML = '';
-    if (!l.length) { box.appendChild(el('div', 'empty', S.novos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto novo cadastrado ainda. Use "+ Novo Produto".')); return; }
+    if (!l.length) { box.appendChild(el('div', 'empty', S.novos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto cadastrado ainda.' + (pode('editar_precos') ? ' Use "+ Novo Produto".' : ''))); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
-    ['', 'Nome', 'SKU', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    ['', 'Produto', ver ? 'Custo · Margem' : '', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
     tab.appendChild(h);
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     l.forEach(function (x) {
-      var r = el('div', 'prow'); r.dataset.k = x.linha + '|' + x.chave;
+      var r = el('div', 'prow'); r.dataset.k = x.linha + '|' + x.nome;
       var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
-      var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(nomeNovo(x)));
-      nm.appendChild(botaoCopiar(nomeNovo(x), 'Copiar nome'));
-      n.appendChild(nm); n.appendChild(el('div', 'psub', [x.loja, x.qtd + ' em estoque'].join(' · ')));
+      var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome)); nm.appendChild(botaoCopiar(x.nome, 'Copiar nome')); n.appendChild(nm);
+      if (ver && x.manual) n.appendChild(el('div', 'psub', 'Preço definido manualmente'));
       r.appendChild(n);
-      var cod = x.sku || x.imei || '—';
-      var sk = el('div', 'psku', cod); if (x.sku || x.imei) sk.appendChild(botaoCopiar(cod, 'Copiar SKU')); r.appendChild(sk);
+      var cm = el('div', 'psku');
+      if (ver && x.custo) { var res = resultado(x.preco, x.custo, calcNovo(x.custo, x.aj, S.prec)); cm.textContent = brl(x.custo) + (res ? ' · ' + pct(res.margem) : ''); if (res) cm.style.color = res.margem >= (S.prec.margem / 100) - 0.0001 ? 'var(--ok)' : res.margem > 0 ? 'var(--warn)' : 'var(--err)'; }
+      r.appendChild(cm);
       var pr = el('div', 'ppre' + (x.preco ? '' : ' sem'), x.preco ? brl(x.preco).replace('R$', '').trim() : 'Consultar');
       if (x.preco && t12) pr.appendChild(el('small', '', '12x ' + brl(x.preco / (1 - t12.taxa) / 12)));
       r.appendChild(pr); r.appendChild(el('div', 'chev', '›'));
@@ -1278,55 +1251,44 @@
     box.appendChild(tab);
   }
   function textoOfertaNovo(x, parcelas) {
-    var linhas = [x.produto + (x.cor ? ' ' + x.cor.toLowerCase().replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); }) : ''), 'Novo'];
+    var linhas = [x.nome, 'Novo'];
     if (x.preco) {
       linhas.push(brl(x.preco) + ' à vista');
       var tx = (S.u.taxas || []).filter(function (t) { return t.nome === (parcelas || '12x'); })[0];
-      if (tx && parcelas !== 'Só à vista') {
-        var tot = x.preco / (1 - tx.taxa);
-        linhas.push(tx.parcelas > 1 ? 'ou ' + tx.parcelas + 'x de ' + brl(tot / tx.parcelas) + ' no cartão' : 'ou ' + brl(tot) + ' no cartão (1x)');
-      }
+      if (tx && parcelas !== 'Só à vista') { var tot = x.preco / (1 - tx.taxa); linhas.push(tx.parcelas > 1 ? 'ou ' + tx.parcelas + 'x de ' + brl(tot / tx.parcelas) + ' no cartão' : 'ou ' + brl(tot) + ' no cartão (1x)'); }
     }
     return linhas.join('\n');
   }
   function abrirDrawerNovo(x) {
-    Array.prototype.forEach.call(document.querySelectorAll('#nLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.linha + '|' + x.chave); });
+    Array.prototype.forEach.call(document.querySelectorAll('#nLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.linha + '|' + x.nome); });
     var dw = $('dw'); dw.innerHTML = '';
     var hd = el('div', 'dwh'), ht = el('div');
-    ht.appendChild(el('div', 't', x.produto + (x.cor ? ' ' + x.cor : '')));
-    ht.appendChild(el('div', 's', (x.preco ? brl(x.preco) : 'Sem preço') + ' · ' + x.loja));
+    ht.appendChild(el('div', 't', x.nome)); ht.appendChild(el('div', 's', x.preco ? brl(x.preco) + ' à vista' : 'Sem preço'));
     var fx = el('button', '', '×'); fx.type = 'button'; fx.onclick = fecharDrawer;
     hd.appendChild(ht); hd.appendChild(fx); dw.appendChild(hd);
     var bd = el('div', 'dwb'); dw.appendChild(bd);
-    var info = el('div', 'card'), kv = el('div', 'kv');
-    [['SKU', x.sku || '—'], ['IMEI', x.imei], ['Quantidade', x.qtd], ['Loja', x.loja], ['Custo (un.)', pode('ver_custos') && x.custo !== null ? brl(x.custo) : ''], ['Observação', x.obs]]
-      .forEach(function (p) { if (p[1] === '' || p[1] === undefined || p[1] === null) return; kv.appendChild(el('div', 'k', p[0])); kv.appendChild(el('div', '', String(p[1]))); });
-    info.appendChild(kv); bd.appendChild(info);
+    if (S.prec && x.custo) {
+      var c = calcNovo(x.custo, x.aj, S.prec), res = resultado(x.preco, x.custo, c);
+      var info = el('div', 'card'), kv = el('div', 'kv');
+      [['Custo', brl(x.custo)], ['Preço sugerido', c.sugerido ? brl(c.sugerido) : '—'], ['Preço de venda', x.preco ? brl(x.preco) + (x.manual ? ' (manual)' : '') : '—'],
+       ['Impostos e taxas', (c.pct * 100).toFixed(2).replace('.', ',') + '%' + (c.fixo ? ' + ' + brl(c.fixo) : '')], ['Lucro', res ? brl(res.lucro) : '—'], ['Margem real', res ? pct(res.margem) : '—'],
+       ['Ajustes próprios', Object.keys(x.aj || {}).length ? 'Sim' : 'Não'], ['Atualizado', [x.por, x.em].filter(Boolean).join(' · ')]]
+        .forEach(function (p) { if (!p[1]) return; kv.appendChild(el('div', 'k', p[0])); kv.appendChild(el('div', '', p[1])); });
+      info.appendChild(kv); bd.appendChild(info);
+    }
     var am = el('div', 'msg err'); bd.appendChild(am);
-    function erro(e) { am.textContent = e; am.classList.add('show'); }
     function opcao(titulo, sub, cls, onClick) {
       var b = el('button', 'opc' + (cls ? ' ' + cls : '')); b.type = 'button';
       var t = el('div', '', titulo); if (sub) t.appendChild(el('small', '', sub));
       b.appendChild(t); b.appendChild(el('span', 'ar', '›')); if (onClick) b.onclick = onClick; bd.appendChild(b); return b;
     }
     function painel(botao, montar) { var aberto = null; return function () { if (aberto) { aberto.remove(); aberto = null; return; } aberto = el('div', 'opc-box'); montar(aberto); botao.after(aberto); }; }
-    function depois(l) { S.novos = l; renderNovos(); var y = l.filter(function (z) { return z.linha === x.linha; })[0]; if (y) abrirDrawerNovo(y); else fecharDrawer(); }
-
-    if (pode('editar_aparelho')) opcao('Editar produto', 'Nome, cor, SKU, IMEI, quantidade, valores…', '', function () { fecharDrawer(); abrirEdicaoNovo(x); });
-    if (pode('mudar_loja')) {
-      var bl = opcao('Alterar loja', 'Agora em: ' + x.loja);
-      bl.onclick = painel(bl, function (box) {
-        var tr = el('div', 'trl'), sl = el('select'), bt = el('button', 'btn', 'Salvar'); bt.type = 'button';
-        opts(sl, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x.loja); tr.appendChild(sl); tr.appendChild(bt); box.appendChild(tr);
-        bt.onclick = function () { if (sl.value === x.loja) return; bt.disabled = true; bt.textContent = '…';
-          call('novoLoja', [S.token, x.linha, x.chave, sl.value]).then(depois).catch(function (e) { bt.disabled = false; bt.textContent = 'Salvar'; erro(e); }); };
-      });
-    }
-    var bc = opcao('Cálculo de cartão', x.preco ? 'Total e parcelas de 1x a 18x' : 'Sem preço de venda cadastrado');
-    bc.onclick = painel(bc, function (box) { if (!x.preco) { box.appendChild(el('div', 'hint', 'Cadastre o preço em "Editar produto".')); return; } box.appendChild(linhasCartao(x.preco)); });
-    var bo = opcao('Enviar oferta', x.preco ? 'Escolha as parcelas e copie a mensagem' : 'Sem preço de venda cadastrado', 'okc');
+    if (pode('editar_precos')) opcao('Editar produto e precificação', 'Nome, custo, % e valores deste produto, preço final', '', function () { fecharDrawer(); abrirProdutoNovo(x); });
+    var bc = opcao('Cálculo de cartão', x.preco ? 'Total e parcelas de 1x a 18x' : 'Sem preço');
+    bc.onclick = painel(bc, function (box) { if (!x.preco) { box.appendChild(el('div', 'hint', 'Produto sem preço.')); return; } box.appendChild(linhasCartao(x.preco)); });
+    var bo = opcao('Enviar oferta', x.preco ? 'Escolha as parcelas e copie a mensagem' : 'Sem preço', 'okc');
     bo.onclick = painel(bo, function (box) {
-      if (!x.preco) { box.appendChild(el('div', 'hint', 'Cadastre o preço em "Editar produto".')); return; }
+      if (!x.preco) { box.appendChild(el('div', 'hint', 'Produto sem preço.')); return; }
       var parc = (S.u.taxas || []).filter(function (t) { return t.nome !== 'Débito'; }).map(function (t) { return t.nome; });
       var sl = el('select'); opts(sl, ['Só à vista'].concat(parc), LS.get('parcOferta', '12x')); campo(box, 'Parcelar em', sl, true);
       var prev = el('div', 'oferta'); box.appendChild(prev);
@@ -1335,112 +1297,116 @@
       sl.onchange = function () { LS.set('parcOferta', sl.value); atual(); cp.textContent = 'Copiar mensagem'; }; atual();
       cp.onclick = function () { copiar(prev.textContent).then(function (ok) { cp.textContent = ok ? '✓ Copiada! Agora é só colar na conversa' : 'Não deu para copiar: selecione o texto acima'; }); };
     });
-    if (pode('vender')) {
-      var bv = opcao('Marcar como vendido', x.qtd > 1 ? 'Escolha quantas unidades foram vendidas' : 'Dá baixa no estoque (dá para desfazer)', 'okc');
-      bv.onclick = painel(bv, function (box) {
-        var tr = el('div', 'trl'), q = el('input'); q.type = 'number'; q.min = 1; q.max = x.qtd; q.value = 1; q.inputMode = 'numeric';
-        var bt = el('button', 'btn ok', 'Confirmar venda'); bt.type = 'button';
-        if (x.qtd > 1) { box.appendChild(el('label', 'first', 'Unidades vendidas (em estoque: ' + x.qtd + ')')); tr.appendChild(q); }
-        tr.appendChild(bt); box.appendChild(tr);
-        bt.onclick = function () {
-          var n = parseInt(q.value, 10); if (!(n >= 1 && n <= x.qtd)) return erro('Quantidade inválida.');
-          bt.disabled = true; bt.textContent = 'Salvando…';
-          call('novoVender', [S.token, x.linha, x.chave, n]).then(function (l) {
-            S.novos = l; fecharDrawer(); renderNovos(); avisoVendaNovo(x, n);
-          }).catch(function (e) { bt.disabled = false; bt.textContent = 'Confirmar venda'; erro(e); });
-        };
-      });
+    if (pode('editar_precos')) {
+      var bx = opcao('Excluir produto', 'Tira o produto da tabela de preços', 'danger');
+      bx.onclick = function () {
+        var sm = bx.querySelector('small');
+        if (!bx.dataset.conf) { bx.dataset.conf = '1'; sm.textContent = 'Toque de novo para confirmar a exclusão'; return; }
+        bx.disabled = true; sm.textContent = 'Excluindo…';
+        call('novoExcluir', [S.token, x.linha, x.nome]).then(function (d) { aposNovos(d); fecharDrawer(); })
+          .catch(function (e) { bx.disabled = false; delete bx.dataset.conf; sm.textContent = 'Tira o produto da tabela de preços'; am.textContent = e; am.classList.add('show'); });
+      };
     }
-    if (pode('excluir_aparelho')) opcao('Excluir produto', 'Só para cadastro feito por engano', 'danger', function () { fecharDrawer(); abrirExclusaoNovo(x); });
     $('dwBg').classList.remove('hide'); dw.classList.add('on'); dw.setAttribute('aria-hidden', 'false'); dw.scrollTop = 0;
     if (window.innerWidth < 820) document.body.style.overflow = 'hidden';
   }
-  function avisoVendaNovo(x, n) {
-    var box = $('nAviso'); box.innerHTML = '';
-    var a = el('div', 'aviso'), t = el('div', '', '✓ ' + n + ' un. de ' + x.produto + ' marcada' + (n > 1 ? 's' : '') + ' como vendida' + (n > 1 ? 's' : '') + '.');
-    var u = el('button', '', 'Desfazer'); u.type = 'button';
-    u.onclick = function () { u.disabled = true; u.textContent = '…';
-      call('novoDesfazer', [S.token, x.linha, x.chave, n]).then(function (l) { S.novos = l; box.innerHTML = ''; renderNovos(); })
-        .catch(function (e) { u.disabled = false; u.textContent = 'Desfazer'; t.textContent = e; }); };
-    a.appendChild(t); a.appendChild(u); box.appendChild(a); window.scrollTo(0, 0);
-  }
-  function abrirEdicaoNovo(x) {
+  function nfmt(v) { return v === null || v === undefined || v === '' ? '' : String(v).replace('.', ','); }
+  function abrirProdutoNovo(x) {
+    var cfg = S.prec; if (!cfg) return;
     var sh = $('fSheet'); sh.innerHTML = '';
-    sh.appendChild(el('h2', 'tt', 'Editar produto novo'));
+    sh.appendChild(el('h2', 'tt', x ? 'Editar produto novo' : 'Novo produto'));
     var c = el('div', 'card');
-    var nm = campo(c, 'Nome do produto', inp('text'), true); nm.value = x.produto; nm.maxLength = 120;
-    var cor = el('select'); var cs = CORES.slice(); var corAt = CORES.filter(function (k) { return k.toUpperCase() === x.cor; })[0] || x.cor; if (corAt && cs.indexOf(corAt) < 0) cs.unshift(corAt); opts(cor, cs, corAt, '—'); campo(c, 'Cor', cor);
-    var sku = campo(c, 'SKU', inp('text')); sku.value = x.sku; sku.maxLength = 40;
-    var im = campo(c, 'IMEI (se for aparelho)', inp('text')); im.value = x.imei; im.inputMode = 'numeric'; im.maxLength = 17;
-    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x.loja); campo(c, 'Loja', lj);
-    var q = campo(c, 'Quantidade em estoque', inp('number')); q.value = x.qtd; q.min = 1;
-    var custo = null, preco = null;
-    if (pode('ver_custos')) { custo = campo(c, 'Custo unitário (R$)', inp('text')); custo.inputMode = 'decimal'; custo.value = x.custo === null ? '' : String(x.custo).replace('.', ','); }
-    if (pode('editar_precos')) { preco = campo(c, 'Preço de venda (R$)', inp('text')); preco.inputMode = 'decimal'; preco.value = x.preco === null ? '' : String(x.preco).replace('.', ','); }
-    var obs = el('textarea'); obs.value = x.obs || ''; campo(c, 'Observação', obs);
+    var nome = campo(c, 'Nome do produto', inp('text', 'Ex.: IPHONE 16 128GB'), true); nome.maxLength = 150; nome.value = x ? x.nome : '';
+    var custo = campo(c, 'Custo (R$)', inp('text', '0,00')); custo.inputMode = 'decimal'; custo.value = x ? nfmt(x.custo) : '';
+    var aj = {}; Object.keys((x && x.aj) || {}).forEach(function (k) { aj[k] = x.aj[k]; });
+    var det = el('details'); var smy = el('summary', '', 'Ajustar % e valores só deste produto' + (Object.keys(aj).length ? ' (com ajustes)' : ''));
+    smy.style.cssText = 'cursor:pointer;font-weight:700;font-size:14px;margin-top:14px;color:var(--accent)'; det.appendChild(smy);
+    det.appendChild(el('div', 'hint', 'Em branco = usa o valor padrão da Precificação (mostrado em cinza).'));
+    var grade = el('div'); grade.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px';
+    var campos = cfg.itens.map(function (it) { return { k: it.nome, rot: it.nome + ' (' + it.tipo + ')', pad: it.valor }; }).concat([{ k: '__margem', rot: 'Margem de lucro (%)', pad: cfg.margem }]);
+    campos.forEach(function (f2) {
+      var w = el('div'), i = inp('text', nfmt(f2.pad)); i.inputMode = 'decimal'; i.value = aj.hasOwnProperty(f2.k) ? nfmt(aj[f2.k]) : '';
+      i.oninput = function () { var t = i.value.trim(); if (!t) delete aj[f2.k]; else { var n2 = num(t); if (n2 !== null) aj[f2.k] = n2; } atual(); };
+      campo(w, f2.rot, i); grade.appendChild(w);
+    });
+    det.appendChild(grade); if (Object.keys(aj).length) det.open = true; c.appendChild(det);
+    var big = el('div', 'big good'); big.style.marginTop = '14px';
+    var bk = el('div', 'k', 'PREÇO SUGERIDO'), bv = el('div', 'v', '—'), bs = el('div', 's', ''); big.appendChild(bk); big.appendChild(bv); big.appendChild(bs); c.appendChild(big);
+    var man = campo(c, 'Preço final (opcional: deixe em branco para usar o sugerido)', inp('text', '0,00')); man.inputMode = 'decimal'; man.value = x && x.manual ? nfmt(x.manual) : '';
+    var rs = el('div', 'lines'); c.appendChild(rs);
+    function atual() {
+      var cu = num(custo.value) || 0, k = calcNovo(cu, aj, cfg), mv = num(man.value), pf = mv || k.sugerido;
+      bv.textContent = k.sugerido ? brl(k.sugerido) : (cu > 0 ? 'Soma das % passa de 100%' : '—');
+      bs.textContent = cu > 0 ? 'Custos ' + (k.pct * 100).toFixed(2).replace('.', ',') + '%' + (k.fixo ? ' + ' + brl(k.fixo) : '') + ' · margem ' + (k.margem * 100).toFixed(2).replace('.', ',') + '%' : '';
+      var res = resultado(pf, cu, k);
+      lines(rs, res ? [['Preço de venda', brl(pf) + (mv ? ' (manual)' : '')], ['Impostos, taxas e despesas', brl(pf * k.pct + k.fixo)], ['Lucro', brl(res.lucro), 'tot'], ['Margem real', pct(res.margem), 'tot']] : []);
+    }
+    custo.oninput = atual; man.oninput = atual; atual();
     var m = el('div', 'msg err'); c.appendChild(m);
-    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar alterações'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', x ? 'Salvar' : 'Cadastrar produto'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
     ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
     cc.onclick = fecharModal;
     ok.onclick = function () {
-      var d = { produto: nm.value, cor: cor.value, sku: sku.value, imei: im.value.replace(/\D/g, ''), loja: lj.value, qtd: q.value, obs: obs.value };
-      if (custo) d.custo = custo.value; if (preco) d.preco = preco.value;
-      if (d.imei && !luhn(d.imei)) { m.textContent = 'IMEI inválido.'; m.classList.add('show'); return; }
+      m.classList.remove('show');
+      if (nome.value.trim().length < 2) { m.textContent = 'Informe o nome do produto.'; m.classList.add('show'); return; }
+      if (!(num(custo.value) > 0)) { m.textContent = 'Informe o custo.'; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Salvando…';
-      call('novoEditar', [S.token, x.linha, x.chave, d]).then(function (l) { S.novos = l; fecharModal(); renderNovos(); })
-        .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar alterações'; m.textContent = e; m.classList.add('show'); });
+      call('novoSalvar', [S.token, x ? x.linha : 0, x ? x.nome : '', { nome: nome.value, custo: custo.value, aj: aj, manual: man.value.trim() }]).then(function (d) {
+        aposNovos(d); fecharModal();
+        var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ ' + nome.value.trim().toUpperCase() + (x ? ' atualizado.' : ' cadastrado.')));
+      }).catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Cadastrar produto'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); if (!x) nome.focus();
+  }
+  function abrirPrecificacao() {
+    var cfg = S.prec; if (!cfg) return;
+    var itens = cfg.itens.map(function (it) { return { nome: it.nome, tipo: it.tipo, valor: it.valor }; });
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Precificação dos produtos novos'));
+    sh.appendChild(el('div', 'sub', 'Preço = (custo + valores em R$) ÷ (1 − soma das % − margem). Vale para todos os produtos, menos os ajustes feitos em cada um.'));
+    var c = el('div', 'card'); c.appendChild(el('h2', '', 'Custos sobre a venda'));
+    var lista = el('div'); c.appendChild(lista);
+    var add = el('button', 'lnk', '+ Novo item (imposto, taxa, frete…)'); add.type = 'button'; c.appendChild(add);
+    var c2 = el('div', 'card'); c2.appendChild(el('h2', '', 'Lucro e arredondamento'));
+    var mg = campo(c2, 'Margem de lucro (%)', inp('text'), true); mg.inputMode = 'decimal'; mg.value = nfmt(cfg.margem);
+    var ar = el('select'); opts(ar, ARRED.map(function (a2) { return a2[0]; }), cfg.arred); Array.prototype.forEach.call(ar.options, function (o, i) { o.textContent = ARRED[i][1]; }); campo(c2, 'Arredondamento do preço', ar);
+    var ex = el('div', 'big good'); ex.style.marginTop = '14px'; var exk = el('div', 'k', 'EXEMPLO: CUSTO DE R$ 1.000,00'), exv = el('div', 'v', '—'), exs = el('div', 's', '');
+    ex.appendChild(exk); ex.appendChild(exv); ex.appendChild(exs); c2.appendChild(ex);
+    function desenhar() {
+      lista.innerHTML = '';
+      itens.forEach(function (it, i) {
+        var r = el('div', 'ed-et'), n2 = inp('text', 'Nome'); n2.value = it.nome; n2.maxLength = 40; n2.oninput = function () { it.nome = n2.value; exemplo(); };
+        var tp = el('select'); opts(tp, ['%', 'R$'], it.tipo); tp.onchange = function () { it.tipo = tp.value; exemplo(); }; tp.style.flex = '0 0 70px';
+        var v = inp('text', '0'); v.inputMode = 'decimal'; v.value = nfmt(it.valor); v.style.flex = '0 0 90px'; v.oninput = function () { it.valor = num(v.value); exemplo(); };
+        var rm = el('button', '', '✕'); rm.type = 'button'; rm.onclick = function () { itens.splice(i, 1); desenhar(); };
+        [n2, tp, v, rm].forEach(function (z) { r.appendChild(z); }); lista.appendChild(r);
+      });
+      exemplo();
+    }
+    function exemplo() {
+      var k = calcNovo(1000, {}, { itens: itens.map(function (it) { return { nome: it.nome, tipo: it.tipo, valor: +it.valor || 0 }; }), margem: num(mg.value) || 0, arred: ar.value });
+      exv.textContent = k.sugerido ? brl(k.sugerido) : 'Soma das % passa de 100%';
+      exs.textContent = 'Custos ' + (k.pct * 100).toFixed(2).replace('.', ',') + '%' + (k.fixo ? ' + ' + brl(k.fixo) : '') + ' · margem ' + (k.margem * 100).toFixed(2).replace('.', ',') + '%';
+    }
+    add.onclick = function () { itens.push({ nome: '', tipo: '%', valor: 0 }); desenhar(); var ins = lista.querySelectorAll('input'); ins[ins.length - 2].focus(); };
+    mg.oninput = exemplo; ar.onchange = exemplo;
+    desenhar(); sh.appendChild(c); sh.appendChild(c2);
+    var m = el('div', 'msg err'); sh.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar e recalcular preços'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
+    ac.appendChild(ok); ac.appendChild(cc); sh.appendChild(ac);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var l = itens.filter(function (it) { return String(it.nome || '').trim(); });
+      if (l.some(function (it) { return it.valor === null || it.valor === undefined || isNaN(it.valor); })) { m.textContent = 'Confira os valores dos itens.'; m.classList.add('show'); return; }
+      if (num(mg.value) === null) { m.textContent = 'Informe a margem.'; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('precConfigSalvar', [S.token, { itens: l, margem: mg.value, arred: ar.value }]).then(function (d) {
+        aposNovos(d); fecharModal(); var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ Precificação salva e preços recalculados.'));
+      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar e recalcular preços'; m.textContent = e; m.classList.add('show'); });
     };
     abrirModal();
   }
-  function abrirExclusaoNovo(x) {
-    var sh = $('fSheet'); sh.innerHTML = '';
-    sh.appendChild(el('h2', 'tt', 'Excluir produto novo'));
-    var c = el('div', 'card');
-    c.appendChild(el('div', '', nomeNovo(x) + ' · ' + x.qtd + ' un. · ' + x.loja));
-    c.appendChild(el('div', 'alerta', 'Use só para cadastro feito por engano. Venda: use "Marcar como vendido". Os dados apagados ficam no Histórico.'));
-    var mot = el('textarea'); mot.placeholder = 'Ex.: cadastrado em duplicidade'; campo(c, 'Motivo da exclusão', mot);
-    var m = el('div', 'msg err'); c.appendChild(m);
-    var ac = el('div', 'acoes'), ok = el('button', 'btn danger', 'Excluir definitivamente'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
-    ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
-    cc.onclick = fecharModal;
-    ok.onclick = function () {
-      if (mot.value.trim().length < 3) { m.textContent = 'Informe o motivo da exclusão.'; m.classList.add('show'); return; }
-      ok.disabled = true; ok.textContent = 'Excluindo…';
-      call('novoExcluir', [S.token, x.linha, x.chave, mot.value.trim()]).then(function (l) { S.novos = l; fecharModal(); renderNovos(); })
-        .catch(function (e) { ok.disabled = false; ok.textContent = 'Excluir definitivamente'; m.textContent = e; m.classList.add('show'); });
-    };
-    abrirModal(); mot.focus();
-  }
-  // cadastro de produto novo
-  function montarCadNovo() {
-    opts($('cnCor'), CORES, $('cnCor').value, '— sem cor —');
-    opts($('cnLoja'), (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('cnLoja').value || LS.get('loja', '') || S.u.loja, 'Selecione…');
-    show('cnPrecoBox', pode('editar_precos')); msg('cnMsg', '');
-  }
-  $('cnImei').addEventListener('input', function () {
-    var d = this.value.replace(/\D/g, '').slice(0, 15); if (this.value !== d) this.value = d;
-    var st = $('cnImeiSt');
-    if (!d) { st.className = 'status'; st.textContent = ''; return; }
-    if (d.length < 15) { st.className = 'status show info'; st.textContent = d.length + ' de 15 números'; return; }
-    st.className = 'status show ' + (luhn(d) ? 'ok' : 'err'); st.textContent = luhn(d) ? '✓ IMEI válido' : 'IMEI inválido: confira os números.';
-    if (luhn(d)) $('cnQtd').value = 1;
-  });
-  $('cnEnviar').onclick = function () {
-    msg('cnMsg', '');
-    var d = { produto: $('cnProduto').value.trim(), cor: $('cnCor').value, sku: $('cnSku').value.trim(), imei: $('cnImei').value.replace(/\D/g, ''),
-              loja: $('cnLoja').value, qtd: $('cnQtd').value, custo: $('cnCusto').value.trim(), obs: $('cnObs').value.trim() };
-    if (pode('editar_precos')) d.preco = $('cnPreco').value.trim();
-    var falta = []; if (d.produto.length < 3) falta.push('nome do produto'); if (!d.loja) falta.push('loja'); if (!(+d.qtd >= 1)) falta.push('quantidade');
-    if (falta.length) { msg('cnMsg', 'Preencha: ' + falta.join(', ') + '.'); window.scrollTo(0, 0); return; }
-    if (d.imei && !luhn(d.imei)) { msg('cnMsg', 'IMEI inválido.'); window.scrollTo(0, 0); return; }
-    var b = this; b.disabled = true; b.textContent = 'Salvando…';
-    call('novoCadastrar', [S.token, d]).then(function (r) {
-      b.disabled = false; b.textContent = 'Cadastrar produto'; LS.set('loja', d.loja);
-      ['cnProduto', 'cnSku', 'cnImei', 'cnCusto', 'cnPreco', 'cnObs'].forEach(function (k) { $(k).value = ''; }); $('cnQtd').value = 1; $('cnImeiSt').className = 'status';
-      S.novos = null; ir('novos');
-      var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ ' + r.produto + ' cadastrado (' + r.qtd + ' un.).'));
-    }).catch(function (e) { b.disabled = false; b.textContent = 'Cadastrar produto'; msg('cnMsg', e); window.scrollTo(0, 0); });
-  };
 
   // =========================================================
   //  AVALIAÇÃO iPHONE
