@@ -180,6 +180,12 @@
   .ckbox .ck .n{font-size:13.5px}
   .consulta{background:#F5F7FB;border-radius:10px;padding:10px 12px;margin-top:8px}
   .consulta .btn{margin:8px 0 4px;padding:11px;font-size:14.5px}
+  .acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+  .acts .btn{padding:10px 6px;font-size:14px}
+  .btn.ok{background:var(--ok)}.btn.danger{background:var(--err)}
+  .btn.ghost.danger{background:#fff;color:var(--err);border-color:var(--err)}
+  .aviso{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--ok-bg);color:var(--ok);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:14px;font-weight:600}
+  .aviso button{background:#fff;border:1.5px solid var(--ok);color:var(--ok);border-radius:9px;padding:7px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
   .pv{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:4px}
   .pv div{background:#F5F7FB;border-radius:10px;padding:10px 6px;text-align:center}
   .pv .k{font-size:11.5px;color:var(--muted);font-weight:600}
@@ -335,6 +341,7 @@
       <select id="dSit" class="full"><option value="">Disponíveis e em manutenção</option><option value="disp">Só disponíveis</option><option value="manut">Só em manutenção</option></select>
     </div>
     <div class="fbar"><div class="cont" id="dCont"></div><button type="button" class="lnk" id="dLimpar">Limpar filtros</button></div>
+    <div id="dAviso"></div>
     <div id="dLista"></div>
   </section>
 
@@ -474,7 +481,7 @@
     { id: 'disp', sec: 'vDisp', nome: 'Produtos', perm: 'produtos' },
     { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone', perm: 'avaliacao' },
     { id: 'cartao', sec: 'vCartao', nome: 'Cartão', perm: 'cartao' },
-    { id: 'compra', sec: 'vCompra', nome: 'Calc. de compra', perm: 'compra' },
+    { id: 'compra', sec: 'vCompra', nome: 'Calculadora de Compra', perm: 'compra' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao' },
     { id: 'venda', sec: 'vVenda', nome: 'Preços', perm: 'precos' }
   ];
@@ -801,6 +808,25 @@
         var aberto = it.querySelector('.det');
         if (aberto) { aberto.remove(); return; }
         var det = el('div', 'det');
+        if (x.imei && x.linha && (pode('vender') || pode('editar_aparelho') || pode('excluir_aparelho'))) {
+          var acts = el('div', 'acts');
+          if (pode('vender')) {
+            var bv = el('button', 'btn ok', 'Vendido'); bv.type = 'button';
+            bv.onclick = function () {
+              if (x.manut) { am.textContent = 'Aparelho em manutenção: finalize o conserto antes de vender.'; am.classList.add('show'); return; }
+              if (!bv.dataset.conf) { bv.dataset.conf = '1'; bv.textContent = 'Confirmar?'; return; }
+              bv.disabled = true; bv.textContent = 'Salvando…';
+              call('marcarVendido', [S.token, x.linha, x.imei]).then(function (l) {
+                S.disp = l; S.venda = null; S.ultVenda = x; renderDisp(); mostrarAvisoVenda();
+              }).catch(function (e) { bv.disabled = false; bv.textContent = 'Vendido'; delete bv.dataset.conf; am.textContent = e; am.classList.add('show'); });
+            };
+            acts.appendChild(bv);
+          }
+          if (pode('editar_aparelho')) { var be = el('button', 'btn ghost', 'Alterar'); be.type = 'button'; be.onclick = function () { abrirEdicao(x); }; acts.appendChild(be); }
+          if (pode('excluir_aparelho')) { var bx = el('button', 'btn ghost danger', 'Excluir'); bx.type = 'button'; bx.onclick = function () { abrirExclusao(x); }; acts.appendChild(bx); }
+          det.appendChild(acts);
+          var am = el('div', 'msg err'); det.appendChild(am);
+        }
         if (x.imei && pode('mudar_loja')) {
           var tr = el('div', 'trl'), sl = el('select'), bt = el('button', 'btn', 'Mudar loja'); bt.type = 'button';
           opts(sl, S.u.lojas || [], x.loja); tr.appendChild(sl); tr.appendChild(bt); det.appendChild(tr);
@@ -829,6 +855,82 @@
       };
       box.appendChild(it);
     });
+  }
+
+  // ---- baixa, alteração e exclusão de aparelhos
+  function mostrarAvisoVenda() {
+    var box = $('dAviso'); box.innerHTML = '';
+    var x = S.ultVenda; if (!x) return;
+    var a = el('div', 'aviso'), t = el('div', '', '✓ ' + x.modelo + ' (IMEI final ' + String(x.imei).slice(-4) + ') marcado como vendido.');
+    var u = el('button', '', 'Desfazer'); u.type = 'button';
+    u.onclick = function () {
+      u.disabled = true; u.textContent = '…';
+      call('desfazerVenda', [S.token, x.linha, x.imei]).then(function (l) { S.disp = l; S.venda = null; S.ultVenda = null; box.innerHTML = ''; renderDisp(); })
+        .catch(function (e) { u.disabled = false; u.textContent = 'Desfazer'; t.textContent = e; });
+    };
+    a.appendChild(t); a.appendChild(u); box.appendChild(a); window.scrollTo(0, 0);
+  }
+  function abrirEdicao(x) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Alterar aparelho'));
+    sh.appendChild(el('div', 'sub', 'Corrija o que estiver errado. A alteração fica registrada no Histórico.'));
+    var c = el('div', 'card');
+    var sel = function (rot, lista, val, first) { var s2 = el('select'); var l = lista.slice(); if (val && l.indexOf(val) < 0) l.unshift(val); opts(s2, l, val); campo(c, rot, s2, first); return s2; };
+    var loja = sel('Loja', S.u.lojas || [], x.loja, true);
+    var modelo = sel('Modelo', S.u.modelos || [], x.modelo);
+    var corAtual = CORES.filter(function (k) { return k.toUpperCase() === String(x.cor).toUpperCase(); })[0] || x.cor;
+    var cor = sel('Cor', CORES, corAtual);
+    var imei = campo(c, 'IMEI', inp('text')); imei.value = x.imei; imei.inputMode = 'numeric'; imei.maxLength = 17;
+    var im = el('div', 'status'); c.appendChild(im);
+    imei.oninput = function () { var d = imei.value.replace(/\D/g, ''); im.className = 'status' + (d.length === 15 && !luhn(d) ? ' show err' : ''); im.textContent = d.length === 15 && !luhn(d) ? 'IMEI inválido.' : ''; };
+    var bat = campo(c, 'Bateria (%)', inp('number')); bat.value = typeof x.bateria === 'number' ? x.bateria : String(x.bateria).replace(/\D/g, '');
+    var cl = sel('Classificação', S.u.classificacoes || [], x.classif);
+    var tipo = sel('Tipo de compra', S.u.tipos || [], x.tipo || '');
+    var custo = null, peca = null;
+    if (pode('ver_custos')) {
+      custo = campo(c, 'Custo (R$)', inp('text')); custo.inputMode = 'decimal'; custo.value = x.custo === null || x.custo === undefined ? '' : String(x.custo).replace('.', ',');
+      peca = campo(c, 'Peça (R$)', inp('text')); peca.inputMode = 'decimal'; peca.value = x.peca === null || x.peca === undefined ? '' : String(x.peca).replace('.', ',');
+    }
+    var obs = el('textarea'); obs.value = x.obs || ''; campo(c, 'Observação', obs);
+    if (x.manut) c.appendChild(el('div', 'hint', 'Este aparelho está em manutenção e continua no quadro mesmo trocando a loja.'));
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar alterações'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
+    ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var d = { loja: loja.value, modelo: modelo.value, cor: cor.value, imei: imei.value.replace(/\D/g, ''), bateria: bat.value.trim(),
+                classificacao: cl.value, tipo: tipo.value, obs: obs.value.trim() };
+      if (custo) { d.custo = custo.value.trim(); d.peca = peca.value.trim(); }
+      var erro = '';
+      if (!luhn(d.imei)) erro = 'IMEI inválido. Confira os 15 números.';
+      else if (d.bateria === '' || +d.bateria < 0 || +d.bateria > 100) erro = 'Bateria deve ser de 0 a 100.';
+      else if (!d.tipo) erro = 'Escolha o tipo de compra.';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('editarAparelho', [S.token, x.linha, x.imei, d]).then(function (l) { S.disp = l; S.venda = null; S.manut = null; fecharModal(); renderDisp(); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar alterações'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal();
+  }
+  function abrirExclusao(x) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Excluir aparelho'));
+    var c = el('div', 'card');
+    c.appendChild(el('div', '', x.modelo + ' · ' + [x.cor, x.classif, 'IMEI ' + x.imei, x.loja].filter(Boolean).join(' · ')));
+    c.appendChild(el('div', 'alerta', 'Use só para cadastro feito por engano. Aparelho vendido: use "Vendido". Os dados apagados ficam guardados na aba Histórico.'));
+    var mot = el('textarea'); mot.placeholder = 'Ex.: cadastrado em duplicidade'; campo(c, 'Motivo da exclusão', mot);
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn danger', 'Excluir definitivamente'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
+    ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      if (mot.value.trim().length < 3) { m.textContent = 'Informe o motivo da exclusão.'; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Excluindo…';
+      call('excluirAparelho', [S.token, x.linha, x.imei, mot.value.trim()]).then(function (l) { S.disp = l; S.venda = null; S.manut = null; fecharModal(); renderDisp(); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Excluir definitivamente'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); mot.focus();
   }
 
   // =========================================================
