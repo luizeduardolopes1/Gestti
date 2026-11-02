@@ -249,6 +249,14 @@
   .kc.fin{opacity:.85;cursor:default}
   .ed-et select{flex:0 0 76px;padding:9px 6px}
   .ptiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .p4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 12px;font-size:12.5px;word-break:normal}
+  .p4 span{display:flex;justify-content:space-between;gap:6px;white-space:nowrap}
+  .p4 span i{font-style:normal;color:var(--muted)}
+  .p4 b{font-weight:700;color:var(--ink);background:none;padding:0}.p4 b.ok{color:var(--ok)}.p4 b.warn{color:var(--warn)}.p4 b.err{color:var(--err)}
+  #vLista .prow{grid-template-columns:52px minmax(0,1fr) 290px 110px 24px}
+  @media (max-width:820px){#vLista .prow{grid-template-columns:44px minmax(0,1fr) auto}}
+  .ppre.est{color:var(--ink)}.ppre.est.zero{color:var(--muted);font-weight:600;font-size:14px}
+  .ppre .st{margin-top:4px;display:inline-block}
   .pt{background:var(--card);border-radius:12px;padding:9px 9px 8px;box-shadow:0 1px 2px rgba(16,24,40,.06);cursor:pointer;min-width:0}
   .pt .nm{font-size:12px;font-weight:800;color:var(--accent);line-height:1.25;margin-bottom:5px;word-break:break-word}
   .pt .ln{display:flex;justify-content:space-between;gap:4px;font-size:11.5px;padding:2px 0;font-variant-numeric:tabular-nums}
@@ -672,25 +680,29 @@
 
   <!-- PREÇOS -->
   <section id="vVenda" class="hide">
-    <div class="crumb">Tabela de Preços</div>
-    <div class="ptopo"><h1>Produtos Usados</h1></div>
-    <div class="filtros"><input id="vBusca" placeholder="Buscar modelo" autocomplete="off"></div>
-    <div class="card hide" id="vNovo">
-      <h2>Incluir modelo</h2>
-      <label class="first" for="nModelo">Modelo</label>
-      <input id="nModelo" placeholder="Ex.: IPHONE 15 128GB" autocomplete="off" style="text-transform:uppercase">
-      <div class="row3" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-        <div><label for="nBom">Bom</label><input id="nBom" inputmode="decimal" placeholder="R$"></div>
-        <div><label for="nOtimo">Ótimo</label><input id="nOtimo" inputmode="decimal" placeholder="R$"></div>
-        <div><label for="nExc">Excelente</label><input id="nExc" inputmode="decimal" placeholder="R$"></div>
-        <div><label for="nRec">Recond.</label><input id="nRec" inputmode="decimal" placeholder="R$"></div>
+    <div class="pgrid">
+      <aside class="pfil" id="vFil">
+        <h3>Filtros</h3>
+        <label for="vBusca">Modelo</label>
+        <input id="vBusca" placeholder="Ex.: 13 128" autocomplete="off">
+        <label for="vSit">Situação</label>
+        <select id="vSit"><option value="">Com estoque</option><option value="todos">Todos os modelos</option><option value="sem">Sem estoque</option><option value="sempreco">Com estoque e sem preço</option></select>
+        <div id="vMgBox" class="hide">
+          <label for="vMg">Margem</label>
+          <select id="vMg"><option value="">Todas</option><option value="ok">Na meta</option><option value="abaixo">Abaixo da meta</option><option value="prej">Com prejuízo</option></select>
+        </div>
+        <label for="vOrdem">Ordenar por</label>
+        <select id="vOrdem"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="estoque">Mais estoque</option><option value="maior">Maior preço</option><option value="menor">Menor preço</option></select>
+        <button type="button" class="btn ghost" id="vLimpar">Limpar filtros</button>
+      </aside>
+      <div>
+        <div class="crumb">Tabela de Preços</div>
+        <div class="ptopo"><h1>Produtos Usados</h1><div class="tbtns"><button type="button" class="btn hide" id="vNovoBtn">+ Incluir modelo</button></div></div>
+        <div class="fbar"><div class="cont" id="vCont"></div><button type="button" class="lnk bfil" id="vFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="vFilEsc"></button></div>
+        <div id="vAviso"></div>
+        <div id="vLista"></div>
       </div>
-      <div class="msg" id="nMsg"></div>
-      <div class="acoes"><button type="button" class="btn" id="nSalvar">Incluir</button><button type="button" class="btn ghost" id="nCancelar">Cancelar</button></div>
     </div>
-    <button type="button" class="btn ghost hide" id="vNovoBtn" style="margin-bottom:10px">+ Incluir modelo</button>
-    <label class="check"><input type="checkbox" id="vSoEstoque" checked> Só modelos com estoque</label>
-    <div id="vLista"></div>
   </section>
 </main>
 <div class="dw-bg hide" id="dwBg"></div><aside class="drawer" id="dw" aria-hidden="true"></aside>
@@ -2162,75 +2174,138 @@
   function nc(v) { return v === null || v === undefined || isNaN(v) ? '—' : fmt0.format(Math.round(v)); }
   function vz(b) { return b || { preco: null, qtd: 0, custo: null, lucro: null, pct: null, status: '' }; }
   function carregarVenda(forcar) {
-    var g = pode('editar_precos');
-    show('vNovoBtn', g && $('vNovo').classList.contains('hide'));
+    show('vNovoBtn', pode('editar_precos')); show('vMgBox', pode('ver_custos'));
     if (S.venda && !forcar) return renderVenda();
-    $('vLista').innerHTML = ''; $('vLista').appendChild(el('div', 'empty', 'Carregando preços…'));
+    $('vLista').innerHTML = ''; $('vLista').appendChild(el('div', 'empty', 'Carregando preços…')); $('vCont').textContent = '';
     call('tabelaVenda', [S.token]).then(function (l) { S.venda = l; renderVenda(); })
       .catch(function (e) { $('vLista').innerHTML = ''; $('vLista').appendChild(el('div', 'empty', e)); });
   }
   $('vBusca').addEventListener('input', renderVenda);
-  $('vSoEstoque').addEventListener('change', renderVenda);
+  ['vSit', 'vMg'].forEach(function (k) { $(k).addEventListener('change', renderVenda); });
+  $('vOrdem').addEventListener('change', function () { LS.set('ordemUsados', this.value); renderVenda(); });
+  $('vOrdem').value = LS.get('ordemUsados', 'az');
+  $('vLimpar').onclick = function () { $('vBusca').value = ''; $('vSit').value = ''; $('vMg').value = ''; renderVenda(); };
+  $('vFilBtn').onclick = function () { var on = !$('vFil').classList.contains('on'); $('vFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
+  botaoEsconderFiltros($('vFilEsc'), 'vFil', 'semFilPrecos');
   function stCls(s) {
     if (/DENTRO/.test(s)) return 'st st-ok'; if (/ABAIXO/.test(s)) return 'st st-warn'; if (/PREJU/.test(s)) return 'st st-err'; return 'st st-off';
   }
   function stTxt(s) { return /DENTRO/.test(s) ? 'Na meta' : /ABAIXO/.test(s) ? 'Abaixo' : /PREJU/.test(s) ? 'Prejuízo' : s === 'Sem preço' ? 'Sem preço' : s ? 'Sem estoque' : ''; }
   function precoTxt(v) { return v === null || v === undefined ? '' : String(v).replace('.', ','); }
   function aposSalvar(l) { S.venda = l; S.disp = null; }
+  function qtdModelo(x) { return CL.reduce(function (a, k) { return a + vz(x[k[0]]).qtd; }, 0); }
+  // pior situação de margem entre as classificações com estoque
+  function piorStatus(x) {
+    var ord = ['PREJU', 'ABAIXO', 'DENTRO'];
+    for (var i = 0; i < ord.length; i++) if (CL.some(function (k) { var b = vz(x[k[0]]); return b.qtd && new RegExp(ord[i]).test(b.status || ''); })) return CL.map(function (k) { return vz(x[k[0]]); }).filter(function (b) { return b.qtd && new RegExp(ord[i]).test(b.status || ''); })[0].status;
+    return '';
+  }
+  function precosModelo(x) { return CL.map(function (k) { return vz(x[k[0]]).preco; }).filter(function (v) { return v > 0; }); }
 
-  // incluir modelo (gerente)
-  $('vNovoBtn').onclick = function () { show('vNovo', true); show('vNovoBtn', false); msg('nMsg', ''); $('nModelo').focus(); };
-  $('nCancelar').onclick = function () { show('vNovo', false); show('vNovoBtn', true); ['nModelo', 'nBom', 'nOtimo', 'nExc', 'nRec'].forEach(function (k) { $(k).value = ''; }); };
-  $('nSalvar').onclick = function () {
-    var b = this, mod = $('nModelo').value.trim();
-    if (mod.length < 3) { $('nMsg').className = 'msg err'; msg('nMsg', 'Informe o nome do modelo.'); return; }
-    b.disabled = true; b.textContent = 'Incluindo…';
-    call('adicionarModelo', [S.token, mod, { bom: $('nBom').value, otimo: $('nOtimo').value, excelente: $('nExc').value, recond: $('nRec').value }]).then(function (l) {
-      aposSalvar(l); b.disabled = false; b.textContent = 'Incluir';
-      $('vBusca').value = mod; $('vSoEstoque').checked = false; $('nCancelar').click(); renderVenda();
-    }).catch(function (e) { b.disabled = false; b.textContent = 'Incluir'; $('nMsg').className = 'msg err'; msg('nMsg', e); });
+  // incluir modelo (gerente) — janela igual à de Novo Produto
+  $('vNovoBtn').onclick = function () {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Incluir modelo'));
+    sh.appendChild(el('div', 'sub', 'O modelo entra na aba Venda com os preços de cada classificação (pode deixar em branco e preencher depois).'));
+    var c = el('div', 'card');
+    var mod = campo(c, 'Modelo', inp('text', 'Ex.: IPHONE 15 128GB'), true); mod.maxLength = 60; mod.style.textTransform = 'uppercase';
+    var grade = el('div'); grade.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px';
+    var P = {};
+    CL.forEach(function (k) { var w = el('div'), i = inp('text', 'R$'); i.inputMode = 'decimal'; campo(w, k[1] === 'Recond.' ? 'Recondicionado' : k[1], i); grade.appendChild(w); P[k[0]] = i; });
+    c.appendChild(grade);
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Incluir modelo'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
+    ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var nome = mod.value.trim().toUpperCase();
+      if (nome.length < 3) { m.textContent = 'Informe o nome do modelo.'; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Incluindo…';
+      call('adicionarModelo', [S.token, nome, { bom: P.bom.value, otimo: P.otimo.value, excelente: P.excelente.value, recond: P.recond.value }]).then(function (l) {
+        aposSalvar(l); fecharModal();
+        $('vBusca').value = nome; $('vSit').value = 'todos'; renderVenda();
+        var box = $('vAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ ' + nome + ' incluído.'));
+      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Incluir modelo'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); mod.focus();
   };
 
   function renderVenda() {
     if (!S.venda) return;
     var g = pode('ver_custos');
-    var termos = $('vBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean), so = $('vSoEstoque').checked;
+    var termos = $('vBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean), sit = $('vSit').value, mg = g ? $('vMg').value : '', ordem = $('vOrdem').value;
+    var re = { ok: /DENTRO/, abaixo: /ABAIXO/, prej: /PREJU/ }[mg];
     var l = S.venda.filter(function (x) {
-      var m = x.modelo.toLowerCase();
+      var m = x.modelo.toLowerCase(), q = qtdModelo(x);
       if (!termos.every(function (t) { return m.indexOf(t) > -1; })) return false;
-      if (so && !CL.some(function (k) { return vz(x[k[0]]).qtd; })) return false;
+      if (sit === '' && !q) return false;
+      if (sit === 'sem' && q) return false;
+      if (sit === 'sempreco' && !CL.some(function (k) { var b = vz(x[k[0]]); return b.qtd && !b.preco; })) return false;
+      if (re && !CL.some(function (k) { var b = vz(x[k[0]]); return b.qtd && re.test(b.status || ''); })) return false;
       return true;
+    }).sort(function (a, b) {
+      if (ordem === 'za') return b.modelo.localeCompare(a.modelo);
+      if (ordem === 'estoque') return qtdModelo(b) - qtdModelo(a) || a.modelo.localeCompare(b.modelo);
+      if (ordem === 'maior') return (Math.max.apply(null, precosModelo(b).concat([0]))) - (Math.max.apply(null, precosModelo(a).concat([0]))) || a.modelo.localeCompare(b.modelo);
+      if (ordem === 'menor') return (Math.min.apply(null, precosModelo(a).concat([Infinity]))) - (Math.min.apply(null, precosModelo(b).concat([Infinity]))) || a.modelo.localeCompare(b.modelo);
+      return a.modelo.localeCompare(b.modelo);
     });
+    var tq = l.reduce(function (a, x) { return a + qtdModelo(x); }, 0);
+    $('vCont').textContent = l.length + ' modelo' + (l.length === 1 ? '' : 's') + ' · ' + tq + ' aparelho' + (tq === 1 ? '' : 's') + ' em estoque';
     var box = $('vLista'); box.innerHTML = '';
-    if (!l.length) { box.appendChild(el('div', 'empty', so ? 'Nenhum modelo com estoque. Desmarque "Só modelos com estoque" para ver todos.' : 'Nenhum modelo encontrado.')); return; }
-    var grid = el('div', 'ptiles');
-    l.forEach(function (x) { grid.appendChild(tilePreco(x, g)); });
-    box.appendChild(grid);
+    if (!l.length) { box.appendChild(el('div', 'empty', sit === '' ? 'Nenhum modelo com estoque. Em "Situação", escolha "Todos os modelos" para ver todos.' : 'Nenhum modelo encontrado.')); return; }
+    var tab = el('div', 'ptab'), h = el('div', 'prow h');
+    ['', 'Modelo', 'Preços por classificação', 'Estoque', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    tab.appendChild(h);
+    l.forEach(function (x) { tab.appendChild(linhaPreco(x, g)); });
+    box.appendChild(tab);
   }
-
-  // cartão pequeno (3 por fileira); toque abre o detalhe
-  function tilePreco(x, g) {
-    var t = el('div', 'pt'); t.appendChild(el('div', 'nm', x.modelo));
-    var tot = 0;
+  function linhaPreco(x, g) {
+    var r = el('div', 'prow'); r.dataset.k = x.modelo;
+    var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
+    var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.modelo)); nm.appendChild(botaoCopiar(x.modelo, 'Copiar modelo')); n.appendChild(nm);
+    var porCl = CL.filter(function (k) { return vz(x[k[0]]).qtd; }).map(function (k) { return k[1] + ' ' + vz(x[k[0]]).qtd; });
+    if (porCl.length) n.appendChild(el('div', 'psub', porCl.join(' · ')));
+    r.appendChild(n);
+    var p4 = el('div', 'psku p4');
     CL.forEach(function (k) {
-      var b = vz(x[k[0]]); tot += b.qtd;
-      var ln = el('div', 'ln'); ln.appendChild(el('span', '', k[1]));
-      var cls = g ? (/DENTRO/.test(b.status) ? 'ok' : /ABAIXO/.test(b.status) ? 'warn' : /PREJU/.test(b.status) ? 'err' : '') : '';
-      ln.appendChild(el('b', cls, b.preco ? fmt0.format(b.preco) : '—')); t.appendChild(ln);
+      var b = vz(x[k[0]]), sp = el('span'); sp.appendChild(el('i', '', k[1]));
+      var cls = g && b.qtd ? (/DENTRO/.test(b.status) ? 'ok' : /ABAIXO/.test(b.status) ? 'warn' : /PREJU/.test(b.status) ? 'err' : '') : '';
+      sp.appendChild(el('b', cls, b.preco ? fmt0.format(b.preco) : '—')); p4.appendChild(sp);
     });
-    t.appendChild(el('div', 'qt', tot ? tot + ' em estoque' : 'sem estoque'));
-    t.onclick = function () { abrirPreco(x.modelo); };
-    return t;
+    r.appendChild(p4);
+    var q = qtdModelo(x), est = el('div', 'ppre est' + (q ? '' : ' zero'), q ? String(q) : 'Sem estoque');
+    if (q) est.appendChild(el('small', '', 'em estoque'));
+    if (g && q) { var ps = piorStatus(x), t = stTxt(ps); if (t) { est.appendChild(el('br')); est.appendChild(el('span', stCls(ps), t)); } }
+    r.appendChild(est);
+    r.appendChild(el('div', 'chev', '›'));
+    r.onclick = function () { abrirDrawerPreco(x.modelo); };
+    return r;
   }
-  function abrirPreco(modelo) {
+  // caixa lateral do modelo (igual à dos produtos)
+  function abrirDrawerPreco(modelo) {
     var x = (S.venda || []).filter(function (v) { return v.modelo === modelo; })[0];
-    if (!x) return;
-    var sh = $('fSheet'); sh.innerHTML = '';
-    var fechar = function () { $('fModal').classList.add('hide'); document.body.style.overflow = ''; };
-    sh.appendChild(pode('ver_custos') || pode('editar_precos') ? cardGerente(x, function () { renderVenda(); abrirPreco(modelo); }) : cardVendedor(x));
-    var f = el('button', 'btn ghost', 'Fechar'); f.type = 'button'; f.onclick = fechar; sh.appendChild(f);
-    $('fModal').onclick = function (e) { if (e.target === $('fModal')) fechar(); };
-    $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; sh.scrollTop = 0;
+    if (!x) return fecharDrawer();
+    Array.prototype.forEach.call(document.querySelectorAll('#vLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === modelo); });
+    var dw = $('dw'); dw.innerHTML = '';
+    var hd = el('div', 'dwh'), ht = el('div'), q = qtdModelo(x);
+    ht.appendChild(el('div', 't', x.modelo)); ht.appendChild(el('div', 's', q ? q + ' em estoque' : 'Sem estoque'));
+    var fx = el('button', '', '×'); fx.type = 'button'; fx.setAttribute('aria-label', 'Fechar'); fx.onclick = fecharDrawer;
+    hd.appendChild(ht); hd.appendChild(fx); dw.appendChild(hd);
+    var bd = el('div', 'dwb'); dw.appendChild(bd);
+    var card = pode('ver_custos') || pode('editar_precos') ? cardGerente(x, function () { renderVenda(); abrirDrawerPreco(modelo); }) : cardVendedor(x);
+    var t2 = card.querySelector('h2'); if (t2 && t2.firstChild && t2.firstChild.nodeType === 3) t2.firstChild.textContent = 'Preços';
+    bd.appendChild(card);
+    if (q && pode('produtos')) {
+      var b = el('button', 'opc'); b.type = 'button';
+      var t = el('div', '', 'Ver aparelhos no estoque'); t.appendChild(el('small', '', 'Abre Produtos Usados filtrado por este modelo'));
+      b.appendChild(t); b.appendChild(el('span', 'ar', '›'));
+      b.onclick = function () { fecharDrawer(); $('dBusca').value = x.modelo; ir('disp'); renderDisp(); };
+      bd.appendChild(b);
+    }
+    $('dwBg').classList.remove('hide'); dw.classList.add('on'); dw.setAttribute('aria-hidden', 'false'); dw.scrollTop = 0;
+    if (window.innerWidth < 820) document.body.style.overflow = 'hidden';
   }
 
   function cardVendedor(x) {
