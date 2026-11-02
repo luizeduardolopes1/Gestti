@@ -255,6 +255,17 @@
   .p4 span b{font-size:14.5px;margin-top:2px}
   .p4 span small{font-size:11px;color:var(--muted);margin-top:1px;min-height:13px}
   .p4 span.semq{opacity:.6}
+  .p4 span em{font-style:normal;margin-top:4px}
+  .p4 span em.st-vazio{font-size:10.5px;font-weight:600;color:var(--muted);background:none;padding:2px 0}
+  .epgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:4px}
+  .epc{background:var(--soft2);border-radius:12px;padding:12px}
+  .epc h3{margin:0 0 2px;font-size:15px;color:var(--ink)}
+  .epc .q{font-size:12px;color:var(--muted);margin-bottom:8px}
+  .epc .prefix input{margin:0}
+  .epc .lines{margin-top:8px}
+  .epc .ln2{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+  .epc .ln2 span:first-child{color:var(--muted)}
+  @media (max-width:560px){.epgrid{grid-template-columns:1fr}}
   .p4 b{font-weight:700;color:var(--ink);background:none;padding:0}.p4 b.ok{color:var(--ok)}.p4 b.warn{color:var(--warn)}.p4 b.err{color:var(--err)}
   #vLista .prow{grid-template-columns:52px minmax(0,1fr) 440px 96px 24px}
   @media (max-width:1100px){#vLista .prow{grid-template-columns:52px minmax(0,1fr) 96px 24px}#vLista .prow .p4{grid-column:2 / span 3;grid-row:2}#vLista .prow .ppre{grid-column:3;grid-row:1}#vLista .prow .chev{grid-column:4;grid-row:1}#vLista .prow.h>div:nth-child(3){display:none}}
@@ -2282,17 +2293,77 @@
       var cls = g && b.qtd ? (/DENTRO/.test(b.status) ? 'ok' : /ABAIXO/.test(b.status) ? 'warn' : /PREJU/.test(b.status) ? 'err' : '') : '';
       sp.appendChild(el('b', cls, b.preco ? nc(b.preco) : '—'));
       sp.appendChild(el('small', '', b.preco && t12 ? '12x ' + brl(b.preco / (1 - t12.taxa) / 12) : ''));
+      if (g) { var tx = b.qtd ? stTxt(b.status) : ''; sp.appendChild(tx ? el('em', stCls(b.status), tx) : el('em', 'st st-vazio', b.qtd ? '' : 'sem estoque')); }
       if (!b.qtd) sp.classList.add('semq');
       p4.appendChild(sp);
     });
     r.appendChild(p4);
     var q = qtdModelo(x), est = el('div', 'ppre est' + (q ? '' : ' zero'), q ? String(q) : 'Sem estoque');
     if (q) est.appendChild(el('small', '', 'em estoque'));
-    if (g && q) { var ps = piorStatus(x), t = stTxt(ps); if (t) { est.appendChild(el('br')); est.appendChild(el('span', stCls(ps), t)); } }
     r.appendChild(est);
     r.appendChild(el('div', 'chev', '›'));
     r.onclick = function () { abrirDrawerPreco(x.modelo); };
     return r;
+  }
+  // mesma conta da aba Venda (margem ao digitar)
+  function simPreco(b, preco) {
+    var P = S.u.params || {};
+    if (!preco || preco <= 0) return { lucro: null, pct: null, status: 'Sem preço' };
+    if (!b.qtd || b.custo === null || b.custo === undefined) return { lucro: null, pct: null, status: b.qtd ? 'Sem custo no estoque' : '' };
+    var fracIcms = (b.qtd - (b.distrib || 0)) / b.qtd;
+    var lucro = preco - preco * ((P.pis || 0) + (P.cofins || 0) + (P.irpj || 0) + (P.cartao || 0) + (P.despesas || 0)) - preco * (P.icms || 0) * fracIcms - (P.preparo || 0) - b.custo;
+    var mg = lucro / preco;
+    return { lucro: lucro, pct: mg, status: mg >= (P.margem || 0) ? 'DENTRO DA MARGEM' : mg > 0 ? 'ABAIXO DA MARGEM' : 'PREJUÍZO' };
+  }
+  // Editar produto e precificação (janela no centro, igual à de Produtos Novos)
+  function abrirEdicaoPreco(modelo) {
+    var x = (S.venda || []).filter(function (v) { return v.modelo === modelo; })[0]; if (!x) return;
+    var vc = pode('ver_custos'), t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Editar produto e precificação'));
+    sh.appendChild(el('div', 'sub', x.modelo + ' · deixe em branco a classificação que não tem preço.'));
+    var c = el('div', 'card'), grade = el('div', 'epgrid'); c.appendChild(grade);
+    var ins = {};
+    CL.forEach(function (k) {
+      var b = vz(x[k[0]]), bx = el('div', 'epc');
+      bx.appendChild(el('h3', '', k[1] === 'Recond.' ? 'Recondicionado' : k[1]));
+      bx.appendChild(el('div', 'q', b.qtd ? b.qtd + ' em estoque' + (vc && b.custo ? ' · custo médio ' + nc(b.custo) : '') : 'Sem estoque'));
+      var pf = el('div', 'prefix'), sp = el('span', '', 'R$'), i = el('input'); i.inputMode = 'decimal'; i.placeholder = '0,00'; i.value = precoTxt(b.preco);
+      i.setAttribute('aria-label', 'Preço ' + k[1]); pf.appendChild(sp); pf.appendChild(i); bx.appendChild(pf);
+      var info = el('div', 'lines'); bx.appendChild(info);
+      function atual() {
+        var v = i.value.trim(), pr = v ? num(v) : null, r = simPreco(b, pr);
+        info.innerHTML = '';
+        var add = function (a, v2, cor) { var l = el('div', 'ln2'); l.appendChild(el('span', '', a)); var s2 = el('span', '', v2); if (cor) s2.style.color = cor; l.appendChild(s2); info.appendChild(l); };
+        add('12x no cartão', pr && t12 ? '12x ' + brl(pr / (1 - t12.taxa) / 12) : '—');
+        if (vc) {
+          var cor = /DENTRO/.test(r.status) ? 'var(--ok)' : /ABAIXO/.test(r.status) ? 'var(--warn)' : /PREJU/.test(r.status) ? 'var(--err)' : '';
+          add('Lucro', r.lucro === null ? '—' : nc(r.lucro), cor);
+          add('Margem', r.pct === null ? '—' : pct(r.pct), cor);
+          var st = stTxt(r.status); if (st && b.qtd) { var l = el('div', 'ln2'); l.appendChild(el('span', '', 'Status')); l.appendChild(el('span', stCls(r.status), st)); info.appendChild(l); }
+        }
+      }
+      i.oninput = atual; atual();
+      ins[k[0]] = i; grade.appendChild(bx);
+    });
+    if (vc) c.appendChild(el('div', 'hint', 'Meta de margem: ' + pct((S.u.params || {}).margem || 0) + '. Lucro e margem consideram impostos, taxas e o custo médio do estoque de cada classificação.'));
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
+    ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
+    Object.keys(ins).forEach(function (k) { ins[k].addEventListener('keydown', function (e) { if (e.key === 'Enter') ok.click(); }); });
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var p = {}, erro = '';
+      CL.forEach(function (k) { var t = ins[k[0]].value.trim(); if (!t) { p[k[0]] = ''; return; } var n2 = num(t); if (n2 === null || n2 < 0) erro = 'Preço inválido em ' + k[1] + '.'; else p[k[0]] = n2; });
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('salvarPrecos', [S.token, x.modelo, p]).then(function (l) {
+        aposSalvar(l); fecharModal(); renderVenda();
+        var box = $('vAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ Preços de ' + x.modelo + ' atualizados.'));
+      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); var pri = ins.bom; pri.focus(); pri.select();
   }
   // caixa lateral do modelo (igual à dos produtos)
   function abrirDrawerPreco(modelo) {
@@ -2307,7 +2378,15 @@
     var bd = el('div', 'dwb'); dw.appendChild(bd);
     var card = pode('ver_custos') || pode('editar_precos') ? cardGerente(x, function () { renderVenda(); abrirDrawerPreco(modelo); }) : cardVendedor(x);
     var t2 = card.querySelector('h2'); if (t2 && t2.firstChild && t2.firstChild.nodeType === 3) t2.firstChild.textContent = 'Preços';
+    var edIn = card.querySelector('h2 .atualizar'); if (edIn) edIn.remove();
     bd.appendChild(card);
+    if (pode('editar_precos')) {
+      var be = el('button', 'opc'); be.type = 'button';
+      var te = el('div', '', 'Editar produto e precificação'); te.appendChild(el('small', '', 'Preço de cada classificação, com lucro e margem na hora'));
+      be.appendChild(te); be.appendChild(el('span', 'ar', '›'));
+      be.onclick = function () { fecharDrawer(); abrirEdicaoPreco(x.modelo); };
+      bd.appendChild(be);
+    }
     if (q && pode('produtos')) {
       var b = el('button', 'opc'); b.type = 'button';
       var t = el('div', '', 'Ver aparelhos no estoque'); t.appendChild(el('small', '', 'Abre Produtos Usados filtrado por este modelo'));
