@@ -249,12 +249,16 @@
   .kc.fin{opacity:.85;cursor:default}
   .ed-et select{flex:0 0 76px;padding:9px 6px}
   .ptiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-  .p4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 12px;font-size:12.5px;word-break:normal}
-  .p4 span{display:flex;justify-content:space-between;gap:6px;white-space:nowrap}
-  .p4 span i{font-style:normal;color:var(--muted)}
+  .p4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;font-size:12.5px;word-break:normal}
+  .p4 span{display:flex;flex-direction:column;align-items:center;text-align:center;white-space:nowrap;background:var(--soft2);border-radius:9px;padding:6px 4px;min-width:0}
+  .p4 span i{font-style:normal;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+  .p4 span b{font-size:14.5px;margin-top:2px}
+  .p4 span small{font-size:11px;color:var(--muted);margin-top:1px;min-height:13px}
+  .p4 span.semq{opacity:.6}
   .p4 b{font-weight:700;color:var(--ink);background:none;padding:0}.p4 b.ok{color:var(--ok)}.p4 b.warn{color:var(--warn)}.p4 b.err{color:var(--err)}
-  #vLista .prow{grid-template-columns:52px minmax(0,1fr) 290px 110px 24px}
-  @media (max-width:820px){#vLista .prow{grid-template-columns:44px minmax(0,1fr) auto}}
+  #vLista .prow{grid-template-columns:52px minmax(0,1fr) 440px 96px 24px}
+  @media (max-width:1100px){#vLista .prow{grid-template-columns:52px minmax(0,1fr) 96px 24px}#vLista .prow .p4{grid-column:2 / span 3;grid-row:2}#vLista .prow .ppre{grid-column:3;grid-row:1}#vLista .prow .chev{grid-column:4;grid-row:1}#vLista .prow.h>div:nth-child(3){display:none}}
+  @media (max-width:820px){#vLista .prow{grid-template-columns:44px minmax(0,1fr) auto}#vLista .prow .p4{grid-column:1 / -1;grid-row:3}#vLista .prow .ppre{grid-column:3;grid-row:1 / span 2}.p4 span b{font-size:13px}}
   .ppre.est{color:var(--ink)}.ppre.est.zero{color:var(--muted);font-weight:600;font-size:14px}
   .ppre .st{margin-top:4px;display:inline-block}
   .pt{background:var(--card);border-radius:12px;padding:9px 9px 8px;box-shadow:0 1px 2px rgba(16,24,40,.06);cursor:pointer;min-width:0}
@@ -473,13 +477,6 @@
         <div id="cGrupo"></div>
         <label>Tags <span style="font-weight:400;color:var(--muted)">(toque para marcar)</span></label>
         <div id="cTags"></div>
-        <div class="consulta hide" id="cBox">
-          <div style="font-size:13.5px;font-weight:600">Consulta de restrição do IMEI (roubo, furto, perda) <span class="req">*</span></div>
-          <button type="button" class="btn ghost" id="cAbrir">Copiar IMEI e abrir a consulta oficial</button>
-          <div class="hint" style="margin-bottom:6px">Cole o IMEI no site, faça a consulta e marque o resultado aqui:</div>
-          <div class="seg" id="cRes"></div>
-          <div class="status" id="cStatus"></div>
-        </div>
         <div class="row">
           <div>
             <label for="bateria">Bateria <span class="req">*</span></label>
@@ -500,6 +497,16 @@
         <div class="seg" id="tipo"></div>
         <label for="obs">Observação</label>
         <textarea id="obs" placeholder="Ex.: tela com risco leve, sem caixa"></textarea>
+      </div>
+      <div class="card hide" id="cBox">
+        <h2>Consulta do IMEI <span class="req">*</span></h2>
+        <div class="hint" style="margin-top:0">Restrição por roubo, furto ou perda. Obrigatória para cadastrar.</div>
+        <div class="consulta">
+          <button type="button" class="btn ghost" id="cAbrir">Copiar IMEI e abrir a consulta oficial</button>
+          <div class="hint" style="margin-bottom:6px">Cole o IMEI no site, faça a consulta e marque o resultado aqui:</div>
+          <div class="seg" id="cRes"></div>
+          <div class="status" id="cStatus"></div>
+        </div>
       </div>
       <div class="card ckbox">
         <h2>Checklist de testes <span style="text-transform:none;font-weight:500;letter-spacing:0">(opcional)</span></h2>
@@ -1389,7 +1396,7 @@
       var ex = r.existente;
       if (ex && ex.status !== 'Vendido') imeiStatus('err', 'Já está no estoque como "' + ex.status + '" — ' + ex.loja + (ex.modelo ? ' · ' + ex.modelo : '') + '. Não cadastre de novo.');
       else if (ex) imeiStatus('warn', 'Este aparelho já foi vendido antes. Será registrado como recompra.');
-      else imeiStatus('ok', '✓ IMEI válido e novo no estoque');
+      else imeiStatus('ok', '✓ IMEI válido e novo no estoque. Agora faça a "Consulta do IMEI" (logo acima do checklist).');
     }).catch(function (e) { if (n === S.imeiCheck) imeiStatus('err', e); });
   });
 
@@ -2171,7 +2178,8 @@
   // =========================================================
   var CL = [['bom', 'Bom'], ['otimo', 'Ótimo'], ['excelente', 'Excelente'], ['recond', 'Recond.']];
   var fmt0 = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 });
-  function nc(v) { return v === null || v === undefined || isNaN(v) ? '—' : fmt0.format(Math.round(v)); }
+  var fmtR0 = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0, minimumFractionDigits: 0 });
+  function nc(v) { return v === null || v === undefined || isNaN(v) ? '—' : fmtR0.format(Math.round(v)); }
   function vz(b) { return b || { preco: null, qtd: 0, custo: null, lucro: null, pct: null, status: '' }; }
   function carregarVenda(forcar) {
     show('vNovoBtn', pode('editar_precos')); show('vMgBox', pode('ver_custos'));
@@ -2268,11 +2276,14 @@
     var porCl = CL.filter(function (k) { return vz(x[k[0]]).qtd; }).map(function (k) { return k[1] + ' ' + vz(x[k[0]]).qtd; });
     if (porCl.length) n.appendChild(el('div', 'psub', porCl.join(' · ')));
     r.appendChild(n);
-    var p4 = el('div', 'psku p4');
+    var p4 = el('div', 'psku p4'), t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     CL.forEach(function (k) {
       var b = vz(x[k[0]]), sp = el('span'); sp.appendChild(el('i', '', k[1]));
       var cls = g && b.qtd ? (/DENTRO/.test(b.status) ? 'ok' : /ABAIXO/.test(b.status) ? 'warn' : /PREJU/.test(b.status) ? 'err' : '') : '';
-      sp.appendChild(el('b', cls, b.preco ? fmt0.format(b.preco) : '—')); p4.appendChild(sp);
+      sp.appendChild(el('b', cls, b.preco ? nc(b.preco) : '—'));
+      sp.appendChild(el('small', '', b.preco && t12 ? '12x ' + brl(b.preco / (1 - t12.taxa) / 12) : ''));
+      if (!b.qtd) sp.classList.add('semq');
+      p4.appendChild(sp);
     });
     r.appendChild(p4);
     var q = qtdModelo(x), est = el('div', 'ppre est' + (q ? '' : ' zero'), q ? String(q) : 'Sem estoque');
