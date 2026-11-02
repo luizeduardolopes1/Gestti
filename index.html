@@ -252,7 +252,7 @@
   .p4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;font-size:12.5px;word-break:normal}
   .p4 span{display:flex;flex-direction:column;align-items:center;text-align:center;white-space:nowrap;background:var(--soft2);border-radius:9px;padding:6px 4px;min-width:0}
   .p4 span i{font-style:normal;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
-  .p4 span b{font-size:14.5px;margin-top:2px}
+  .p4 span b{font-size:13.5px;margin-top:2px}
   .p4 span small{font-size:11px;color:var(--muted);margin-top:1px;min-height:13px}
   .p4 span.semq{opacity:.6}
   .p4 span em{font-style:normal;margin-top:4px}
@@ -262,6 +262,11 @@
   .epc h3{margin:0 0 2px;font-size:15px;color:var(--ink)}
   .epc .q{font-size:12px;color:var(--muted);margin-bottom:8px}
   .epc .prefix input{margin:0}
+  .cmed{background:var(--card);border:2px solid var(--accent);border-radius:10px;padding:8px 10px;margin:0 0 10px}
+  .cmed .k{display:block;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .cmed .v{display:block;font-size:20px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.2}
+  .cmed .pmeta{font-size:12px;color:var(--muted);margin-top:3px}.cmed .pmeta .lnk{font-size:12px;padding:0}
+  .vrow.cm>div{font-weight:800;color:var(--ink)}.vrow.cm>div:first-child{color:var(--accent)}
   .epc .lines{margin-top:8px}
   .epc .ln2{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
   .epc .ln2 span:first-child{color:var(--muted)}
@@ -715,7 +720,8 @@
       </aside>
       <div>
         <div class="crumb">Tabela de Preços</div>
-        <div class="ptopo"><h1>Produtos Usados</h1><div class="tbtns"><button type="button" class="btn hide" id="vNovoBtn">+ Incluir modelo</button></div></div>
+        <div class="ptopo"><h1>Produtos Usados</h1><div class="tbtns"><button type="button" class="btn ghost hide" id="vPrec">⚙ Precificação</button><button type="button" class="btn hide" id="vNovoBtn">+ Incluir modelo</button></div></div>
+        <div id="vResumo" class="hint" style="margin:-6px 2px 10px"></div>
         <div class="fbar"><div class="cont" id="vCont"></div><button type="button" class="lnk bfil" id="vFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="vFilEsc"></button></div>
         <div id="vAviso"></div>
         <div id="vLista"></div>
@@ -2189,11 +2195,10 @@
   // =========================================================
   var CL = [['bom', 'Bom'], ['otimo', 'Ótimo'], ['excelente', 'Excelente'], ['recond', 'Recond.']];
   var fmt0 = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 });
-  var fmtR0 = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0, minimumFractionDigits: 0 });
-  function nc(v) { return v === null || v === undefined || isNaN(v) ? '—' : fmtR0.format(Math.round(v)); }
+  function nc(v) { return v === null || v === undefined || isNaN(v) ? '—' : brl(v); }
   function vz(b) { return b || { preco: null, qtd: 0, custo: null, lucro: null, pct: null, status: '' }; }
   function carregarVenda(forcar) {
-    show('vNovoBtn', pode('editar_precos')); show('vMgBox', pode('ver_custos'));
+    show('vNovoBtn', pode('editar_precos')); show('vPrec', pode('editar_precos')); show('vMgBox', pode('ver_custos')); resumoPrecUsados();
     if (S.venda && !forcar) return renderVenda();
     $('vLista').innerHTML = ''; $('vLista').appendChild(el('div', 'empty', 'Carregando preços…')); $('vCont').textContent = '';
     call('tabelaVenda', [S.token]).then(function (l) { S.venda = l; renderVenda(); })
@@ -2315,6 +2320,69 @@
     var mg = lucro / preco;
     return { lucro: lucro, pct: mg, status: mg >= (P.margem || 0) ? 'DENTRO DA MARGEM' : mg > 0 ? 'ABAIXO DA MARGEM' : 'PREJUÍZO' };
   }
+  function resumoPrecUsados() {
+    var P = S.u && S.u.params; if (!P || !pode('ver_custos')) { $('vResumo').textContent = ''; return; }
+    var imp = (P.pis || 0) + (P.cofins || 0) + (P.irpj || 0);
+    $('vResumo').textContent = 'Precificação atual: impostos ' + pct(imp) + ' + ICMS ' + pct(P.icms || 0) + ' na recompra · cartão ' + pct(P.cartao || 0) + ' · despesas ' + pct(P.despesas || 0) +
+      (P.preparo ? ' · preparação ' + brl(P.preparo) : '') + ' · meta de margem ' + pct(P.margem || 0) + '.';
+  }
+  $('vPrec').onclick = function () { abrirPrecUsados(); };
+  function abrirPrecUsados() {
+    var P = S.u.params || {};
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Precificação dos produtos usados'));
+    sh.appendChild(el('div', 'sub', 'Valem para todos os modelos da Tabela de Preços › Produtos Usados. Também são usados na Calculadora de Compra e na Avaliação iPhone.'));
+    var F = {};
+    var pc = function (v) { return v === null || v === undefined ? '' : String(Math.round(v * 1e6) / 1e4).replace('.', ','); };
+    function grupo(titulo, campos, dica) {
+      var c = el('div', 'card'); c.appendChild(el('h2', '', titulo));
+      var g = el('div'); g.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px';
+      campos.forEach(function (f2, idx) {
+        var w = el('div'), box = el('div', f2[2] === 'R$' ? 'prefix' : 'suffix'), i = el('input'); i.inputMode = 'decimal';
+        i.value = f2[2] === 'R$' ? String(P[f2[0]] || 0).replace('.', ',') : pc(P[f2[0]] || 0);
+        if (f2[2] === 'R$') { box.appendChild(el('span', '', 'R$')); box.appendChild(i); } else { box.appendChild(i); box.appendChild(el('span', '', '%')); }
+        w.appendChild(el('label', idx < 2 ? 'first' : '', f2[1])); w.appendChild(box); g.appendChild(w);
+        i.oninput = atual; F[f2[0]] = i;
+      });
+      c.appendChild(g); if (dica) c.appendChild(el('div', 'hint', dica)); sh.appendChild(c);
+    }
+    grupo('Impostos sobre a venda', [['pis', 'PIS', '%'], ['cofins', 'Cofins', '%'], ['irpj', 'IRPJ', '%']]);
+    grupo('ICMS (só na recompra de cliente)', [['baseIcms', 'Base reduzida (% da venda)', '%'], ['aliqIcms', 'Alíquota sobre a base', '%']], 'Aparelho comprado de Distribuidor não paga este ICMS.');
+    grupo('Outros custos e meta', [['cartao', 'Taxa de cartão', '%'], ['despesas', 'Despesas rateadas', '%'], ['preparo', 'Preparação por aparelho', 'R$'], ['margem', 'Margem desejada', '%']]);
+    var c = el('div', 'card'), res = el('div', 'lines'); c.appendChild(res);
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar precificação'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
+    ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
+    function val(k) { var n2 = num(F[k].value); return n2 === null ? 0 : n2; }
+    function atual() {
+      var icms = val('baseIcms') / 100 * val('aliqIcms') / 100, imp = (val('pis') + val('cofins') + val('irpj')) / 100, out = (val('cartao') + val('despesas')) / 100, mg = val('margem') / 100;
+      lines(res, [['ICMS efetivo na recompra', pct(icms)], ['Total de impostos (recompra)', pct(imp + icms)], ['Cartão + despesas', pct(out)],
+                  ['Sobra para custo (fator de compra)', pct(1 - imp - icms - out - mg), 'tot'], ['Exemplo: venda de R$ 1.000,00', 'paga até ' + brl(Math.max(0, 1000 * (1 - imp - icms - out - mg) - val('preparo'))) + ' no aparelho']]);
+    }
+    atual();
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var d = {}, erro = '';
+      Object.keys(F).forEach(function (k) { var t = F[k].value.trim(), n2 = t === '' ? 0 : num(t); if (n2 === null || n2 < 0) erro = 'Valor inválido.'; d[k] = n2; });
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('precUsadosSalvar', [S.token, d]).then(function (r) {
+        S.u.params = r.params; aposSalvar(r.venda); montarAval(); montarCartao(); if (pode('compra')) montarCompra();
+        fecharModal(); resumoPrecUsados(); renderVenda();
+        var box = $('vAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ Precificação salva. Lucro e margem de todos os modelos foram recalculados.'));
+      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar precificação'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal();
+  }
+  // menor preço que atinge a meta de margem (mesma conta de simPreco, resolvida para o preço)
+  function precoMeta(b) {
+    var P = S.u.params || {};
+    if (!b.qtd || b.custo === null || b.custo === undefined) return null;
+    var frac = (b.qtd - (b.distrib || 0)) / b.qtd;
+    var den = 1 - ((P.pis || 0) + (P.cofins || 0) + (P.irpj || 0) + (P.cartao || 0) + (P.despesas || 0)) - (P.icms || 0) * frac - (P.margem || 0);
+    return den > 0 ? (b.custo + (P.preparo || 0)) / den : null;
+  }
   // Editar produto e precificação (janela no centro, igual à de Produtos Novos)
   function abrirEdicaoPreco(modelo) {
     var x = (S.venda || []).filter(function (v) { return v.modelo === modelo; })[0]; if (!x) return;
@@ -2327,7 +2395,17 @@
     CL.forEach(function (k) {
       var b = vz(x[k[0]]), bx = el('div', 'epc');
       bx.appendChild(el('h3', '', k[1] === 'Recond.' ? 'Recondicionado' : k[1]));
-      bx.appendChild(el('div', 'q', b.qtd ? b.qtd + ' em estoque' + (vc && b.custo ? ' · custo médio ' + nc(b.custo) : '') : 'Sem estoque'));
+      bx.appendChild(el('div', 'q', b.qtd ? b.qtd + ' em estoque' : 'Sem estoque'));
+      if (vc && b.qtd && b.custo) {
+        var cm = el('div', 'cmed'); cm.appendChild(el('span', 'k', 'Custo médio')); cm.appendChild(el('span', 'v', nc(b.custo)));
+        var alvo = precoMeta(b);
+        if (alvo) {
+          var pm = el('div', 'pmeta'); pm.appendChild(document.createTextNode('Preço mínimo p/ meta: ' + brl(alvo) + ' '));
+          var us = el('button', 'lnk', 'usar'); us.type = 'button'; pm.appendChild(us); cm.appendChild(pm);
+          us.onclick = function () { i.value = precoTxt(Math.ceil(alvo)); atual(); i.focus(); };
+        }
+        bx.appendChild(cm);
+      }
       var pf = el('div', 'prefix'), sp = el('span', '', 'R$'), i = el('input'); i.inputMode = 'decimal'; i.placeholder = '0,00'; i.value = precoTxt(b.preco);
       i.setAttribute('aria-label', 'Preço ' + k[1]); pf.appendChild(sp); pf.appendChild(i); bx.appendChild(pf);
       var info = el('div', 'lines'); bx.appendChild(info);
@@ -2426,7 +2504,7 @@
     [['qtd', 'Estoque', function (b) { return String(b.qtd); }],
      ['custo', 'Custo méd.', function (b) { return b.qtd ? nc(b.custo) : '—'; }], ['lucro', 'Lucro', function (b) { return nc(b.lucro); }],
      ['pct', 'Margem', function (b) { return b.pct === null ? '—' : pct(b.pct); }]].forEach(function (r) {
-      var d = el('div', 'vrow'); d.appendChild(el('div', '', r[1])); B.forEach(function (b) { d.appendChild(el('div', '', r[2](b))); }); c.appendChild(d); R[r[0]] = d;
+      var d = el('div', 'vrow' + (r[0] === 'custo' ? ' cm' : '')); d.appendChild(el('div', '', r[1])); B.forEach(function (b) { d.appendChild(el('div', '', r[2](b))); }); c.appendChild(d); R[r[0]] = d;
     });
     var s = el('div', 'vrow'); s.appendChild(el('div', '', 'Status'));
     B.forEach(function (b) { var dv = el('div'); var t = stTxt(b.status); if (t) dv.appendChild(el('span', stCls(b.status), t)); s.appendChild(dv); });
