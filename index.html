@@ -111,6 +111,26 @@
   .trow{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;background:var(--card);margin-bottom:6px;cursor:pointer;font-weight:700;font-size:14.5px;color:var(--ink)}
   .trow.sub{margin-left:24px;font-weight:500}
   .trow input{width:20px;height:20px;padding:0;margin:0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
+  .fbcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:12px}
+  .fbc{background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(16,32,56,.08);padding:14px;cursor:pointer;border:1.5px solid transparent;text-align:left;font:inherit;color:var(--ink)}
+  .fbc:hover,.fbc:focus-visible{border-color:var(--accent);outline:none}
+  .fbc .tp{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .fbc .nm{font-size:15px;font-weight:800;margin-top:2px}
+  .fbc .sd{font-size:24px;font-weight:800;margin-top:8px;font-variant-numeric:tabular-nums}
+  .fbc .sd.neg{color:var(--err)}
+  .fbc .mv{font-size:12px;color:var(--muted);margin-top:4px}
+  .fbc.off{opacity:.55}
+  .ext{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+  .ext td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+  .ext td.v{text-align:right;white-space:nowrap;font-weight:700}.ext td.v.e{color:var(--ok)}.ext td.v.s{color:var(--err)}
+  .ext small{display:block;color:var(--muted);font-size:11.5px}
+  .bdg{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:2px}
+  .bdg.ok{background:var(--ok-bg);color:var(--ok)}.bdg.err{background:var(--err-bg);color:var(--err)}.bdg.warn{background:var(--warn-bg);color:var(--warn)}.bdg.off{background:var(--soft);color:var(--muted)}.bdg.inf{background:var(--soft);color:var(--accent)}
+  .frow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.3fr) minmax(0,1.2fr) auto;gap:8px;align-items:center;margin-bottom:8px}
+  .frow input,.frow select{margin:0}
+  .frow label.ck{display:flex;gap:6px;align-items:center;font-size:13px;font-weight:600;white-space:nowrap}
+  .frow label.ck input{width:18px;height:18px;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864}
+  @media (max-width:700px){.frow{grid-template-columns:1fr 1fr}.frow>*:first-child{grid-column:1 / -1}}
   .vdgrid{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:14px;align-items:start}
   .vdlado{position:sticky;top:64px}
   @media (max-width:900px){.vdgrid{grid-template-columns:1fr}.vdlado{position:static}}
@@ -152,6 +172,8 @@
   .kpi .k{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
   .kpi .v{font-size:24px;font-weight:800;color:var(--ink);margin-top:4px;font-variant-numeric:tabular-nums;line-height:1.15}
   .kpi .s{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .kpi .v{white-space:nowrap}
+  @media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi{padding:12px;min-width:0}.kpi .v{font-size:18px}.ext,.tbwrap table{font-size:12.5px}}
   .kpi .s.up{color:var(--ok)}.kpi .s.down{color:var(--err)}
   .dbgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px;align-items:start}
   .dbgrid .card{margin:0}
@@ -489,7 +511,8 @@
 
   <!-- VENDAS -->
   <section id="vVendas" class="hide">
-    <div class="ptopo"><h1>Vendas</h1><div class="stabs" id="vdAbas" style="margin:0"><button type="button" data-a="nova" class="on">+ Nova venda</button><button type="button" data-a="hist">Histórico</button></div></div>
+    <button type="button" class="lnk hide" id="vdVoltar" style="margin:0 0 4px">← Voltar ao histórico</button>
+    <div class="ptopo"><h1 id="vdTit">Vendas</h1><button type="button" class="btn" id="vdNovaBtn" style="width:auto;padding:10px 18px;margin:0">+ Nova venda</button></div>
     <div id="vdNova"></div>
     <div id="vdHist" class="hide">
       <div class="pgrid">
@@ -510,6 +533,62 @@
           <div id="hResumo"></div>
           <div id="hLista"></div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CRM -->
+  <section id="vCrm" class="hide">
+    <div class="pgrid">
+      <aside class="pfil" id="cFil">
+        <h3>Filtros</h3>
+        <label for="crBusca">Buscar</label>
+        <input id="crBusca" placeholder="Nome, CPF/CNPJ, WhatsApp ou cidade" autocomplete="off">
+        <label for="crTipo">Tipo</label>
+        <select id="crTipo"><option value="">Todos</option><option value="Cliente">Clientes</option><option value="Fornecedor">Fornecedores</option></select>
+        <label for="crOrdem">Ordenar por</label>
+        <select id="crOrdem"><option value="az">Nome (A → Z)</option><option value="compras">Mais compras</option><option value="total">Maior valor comprado</option><option value="ultima">Compra mais recente</option></select>
+        <button type="button" class="btn ghost" id="crLimpar">Limpar filtros</button>
+      </aside>
+      <div>
+        <div class="crumb">CRM</div>
+        <div class="ptopo"><h1>Clientes/Fornecedores</h1><div class="tbtns"><button type="button" class="btn" id="crNovo">+ Novo cadastro</button></div></div>
+        <div class="fbar"><div class="cont" id="crCont"></div><button type="button" class="lnk bfil" id="crFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="crFilEsc"></button></div>
+        <div id="crLista"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAIXAS E BANCOS -->
+  <section id="vBancos" class="hide">
+    <div class="crumb">Financeiro</div>
+    <div class="ptopo"><h1>Caixas e Bancos</h1><div class="tbtns"><button type="button" class="btn ghost" id="fbConta">+ Nova conta</button><button type="button" class="btn" id="fbLanc">+ Lançamento</button></div></div>
+    <div id="fbAviso"></div>
+    <div id="fbCorpo"><div class="empty">Carregando…</div></div>
+  </section>
+
+  <!-- CONTAS A PAGAR -->
+  <section id="vPagar" class="hide">
+    <div class="pgrid">
+      <aside class="pfil" id="pgFil">
+        <h3>Filtros</h3>
+        <label for="pgBusca">Buscar</label>
+        <input id="pgBusca" placeholder="Descrição ou fornecedor" autocomplete="off">
+        <label for="pgSit">Situação</label>
+        <select id="pgSit"><option value="">Em aberto</option><option value="vencidas">Vencidas</option><option value="Pago">Pagas</option><option value="Cancelada">Canceladas</option><option value="todas">Todas</option></select>
+        <label for="pgPer">Vencimento</label>
+        <select id="pgPer"><option value="">Qualquer data</option><option value="mes">Este mês</option><option value="prox">Próximo mês</option><option value="7">Próximos 7 dias</option><option value="30">Próximos 30 dias</option></select>
+        <label for="pgCat">Categoria</label><select id="pgCat"></select>
+        <label for="pgLoja">Loja</label><select id="pgLoja"></select>
+        <button type="button" class="btn ghost" id="pgLimpar">Limpar filtros</button>
+      </aside>
+      <div>
+        <div class="crumb">Financeiro</div>
+        <div class="ptopo"><h1>Contas a Pagar</h1><div class="tbtns"><button type="button" class="btn" id="pgNovo">+ Nova conta a pagar</button></div></div>
+        <div id="pgResumo"></div>
+        <div class="fbar"><div class="cont" id="pgCont"></div><button type="button" class="lnk bfil" id="pgFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="pgFilEsc"></button></div>
+        <div id="pgAviso"></div>
+        <div id="pgLista"></div>
       </div>
     </div>
   </section>
@@ -818,7 +897,10 @@
     { id: 'cartao', sec: 'vCartao', nome: 'Cartão', perm: 'cartao' },
     { id: 'compra', sec: 'vCompra', nome: 'Calculadora de Compra', perm: 'compra' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao' },
-    { id: 'venda', sec: 'vVenda', nome: 'Produtos Usados', perm: 'precos', menu: 'Tabela de Preços', desc: 'Preço de venda dos aparelhos usados' }
+    { id: 'venda', sec: 'vVenda', nome: 'Produtos Usados', perm: 'precos', menu: 'Tabela de Preços', desc: 'Preço de venda dos aparelhos usados' },
+    { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
+    { id: 'bancos', sec: 'vBancos', nome: 'Caixas e Bancos', perm: 'financeiro', menu: 'Financeiro', desc: 'Saldos, extrato e lançamentos' },
+    { id: 'pagar', sec: 'vPagar', nome: 'Contas a Pagar', perm: 'financeiro', menu: 'Financeiro', desc: 'Despesas, vencimentos e pagamentos' }
   ];
 
   // ---------- utilidades ----------
@@ -988,6 +1070,9 @@
     if (id === 'venda') carregarVenda(false);
     if (id === 'dash') carregarDash(false);
     if (id === 'vendas') abrirVendas();
+    if (id === 'crm') carregarCrm(false);
+    if (id === 'bancos') carregarFin(false);
+    if (id === 'pagar') carregarPagar(false);
     if (id === 'manut') carregarManut(false);
     window.scrollTo(0, 0);
   }
@@ -1006,7 +1091,10 @@
   // =========================================================
   //  VENDAS
   // =========================================================
-  var V = null, PAGS = ['PIX', 'Dinheiro', 'Débito', 'Crédito'];
+  var V = null;
+  function formasV() { var l = (S.u && S.u.formas) || []; return l.length ? l : [{ id: '', nome: 'PIX', cartao: 'nao' }, { id: '', nome: 'Dinheiro', cartao: 'nao' }, { id: '', nome: 'Débito', cartao: 'debito' }, { id: '', nome: 'Crédito', cartao: 'credito' }]; }
+  function novaPag(fo, valor) { fo = fo || formasV()[0]; return { formaId: fo.id, forma: fo.nome, cartao: fo.cartao, valor: valor || '', parcelas: '12x' }; }
+  function parcTxt(p) { return p.parcelas > 1 ? ' ' + p.parcelas + 'x' : ''; }
   function soDig(x) { return String(x || '').replace(/\D/g, ''); }
   function fmtCPF(c) { c = soDig(c); return c.length === 11 ? c.slice(0, 3) + '.' + c.slice(3, 6) + '.' + c.slice(6, 9) + '-' + c.slice(9) : c; }
   function fmtFone(t) { t = soDig(t); return t.length === 11 ? '(' + t.slice(0, 2) + ') ' + t.slice(2, 7) + '-' + t.slice(7) : t.length === 10 ? '(' + t.slice(0, 2) + ') ' + t.slice(2, 6) + '-' + t.slice(6) : t; }
@@ -1018,18 +1106,21 @@
   function r2(n) { return Math.round((n || 0) * 100) / 100; }
   function taxa(nome) { return (S.u.taxas || []).filter(function (t) { return t.nome === nome; })[0]; }
   function abaVendas(a) {
-    Array.prototype.forEach.call($('vdAbas').children, function (b) { b.classList.toggle('on', b.dataset.a === a); });
-    show('vdNova', a === 'nova'); show('vdHist', a === 'hist');
-    if (a === 'hist') carregarHist(false);
+    show('vdNova', a === 'nova'); show('vdHist', a === 'hist'); show('vdNovaBtn', a === 'hist'); show('vdVoltar', a === 'nova');
+    $('vdTit').textContent = a === 'nova' ? 'Nova venda' : 'Vendas';
+    if (a === 'hist') carregarHist(false); else if (!$('vdNova').children.length) desenharVenda();
+    window.scrollTo(0, 0);
   }
-  Array.prototype.forEach.call($('vdAbas').children, function (b) { b.onclick = function () { abaVendas(b.dataset.a); }; });
+  $('vdNovaBtn').onclick = function () { abaVendas('nova'); };
+  $('vdVoltar').onclick = function () { abaVendas('hist'); };
   function abrirVendas() {
     if (!V) novaVenda();
     if (S.vdPre) { var x = S.vdPre; S.vdPre = null; abaVendas('nova'); addItem(x); return; }
-    if (!$('vdNova').children.length) desenharVenda();
+    abaVendas('hist');
   }
   function novaVenda() {
-    V = { itens: [], troca: [], pags: [{ forma: 'PIX', valor: '', auto: true, parcelas: '12x' }], cli: { cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' },
+    var p0 = novaPag(); p0.auto = true;
+    V = { itens: [], troca: [], pags: [p0], cli: { cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' },
           loja: LS.get('loja', '') || (S.u.loja !== 'Manutenção' ? S.u.loja : ''), obs: '' };
     desenharVenda();
   }
@@ -1154,12 +1245,13 @@
     function desenharPags() {
       pgbox.innerHTML = ''; pgbox.appendChild(el('div', 'k', 'Pagamento')).style.cssText = 'font-size:13px;font-weight:700;color:var(--muted)';
       V.pags.forEach(function (p, i) {
-        var r = el('div', 'r'), fs = el('select'); PAGS.forEach(function (f) { var o = el('option', '', f); o.value = f; fs.appendChild(o); }); fs.value = p.forma; fs.setAttribute('aria-label', 'Forma de pagamento');
+        var r = el('div', 'r'), fs = el('select'); formasV().forEach(function (f, k) { var o = el('option', '', f.nome); o.value = String(k); fs.appendChild(o); });
+        fs.value = String(Math.max(0, formasV().map(function (f) { return f.nome; }).indexOf(p.forma))); fs.setAttribute('aria-label', 'Forma de pagamento');
         var pf = el('div', 'prefix'), vi = el('input'); vi.inputMode = 'decimal'; vi.placeholder = '0,00'; vi.value = p.valor; vi.setAttribute('aria-label', 'Valor'); pf.appendChild(el('span', '', 'R$')); pf.appendChild(vi);
         var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar'; x.style.visibility = V.pags.length > 1 ? 'visible' : 'hidden';
         r.appendChild(fs); r.appendChild(pf); r.appendChild(x);
         var cb = el('div', 'cb');
-        if (p.forma === 'Crédito') {
+        if (p.cartao === 'credito') {
           var ps = el('select'); ps.style.cssText = 'margin:4px 0 0;padding:8px 10px;font-size:14px';
           (S.u.taxas || []).filter(function (t) { return t.nome !== 'Débito'; }).forEach(function (t) { var o = el('option', '', t.nome === '1x' ? '1x (à vista no crédito)' : t.nome); o.value = t.nome; ps.appendChild(o); });
           ps.value = p.parcelas || '12x'; p.parcelas = ps.value; ps.onchange = function () { p.parcelas = ps.value; cartaoInfo(); };
@@ -1167,16 +1259,16 @@
         }
         r.appendChild(cb);
         function cartaoInfo() {
-          var v = num(p.valor), tx = p.forma === 'Débito' ? taxa('Débito') : p.forma === 'Crédito' ? taxa(p.parcelas) : null;
+          var v = num(p.valor), tx = p.cartao === 'debito' ? taxa('Débito') : p.cartao === 'credito' ? taxa(p.parcelas) : null;
           cb.textContent = tx && v ? 'Cobrar na maquininha: ' + brl(v / (1 - tx.taxa)) + (tx.parcelas > 1 ? ' (' + tx.parcelas + 'x de ' + brl(v / (1 - tx.taxa) / tx.parcelas) + ')' : '') : '';
         }
-        fs.onchange = function () { p.forma = fs.value; desenharPags(); resumo(); };
+        fs.onchange = function () { var fo = formasV()[+fs.value]; p.formaId = fo.id; p.forma = fo.nome; p.cartao = fo.cartao; desenharPags(); resumo(); };
         vi.oninput = function () { p.valor = vi.value; p.auto = false; cartaoInfo(); resumo(true); };
         x.onclick = function () { V.pags.splice(i, 1); if (V.pags.length === 1) V.pags[0].auto = true; desenharPags(); resumo(); };
         cartaoInfo(); pgbox.appendChild(r);
       });
       var add = el('button', 'lnk', '+ Dividir em outra forma de pagamento'); add.type = 'button'; add.style.marginTop = '6px';
-      add.onclick = function () { var T = totaisVenda(); V.pags.forEach(function (p) { p.auto = false; }); V.pags.push({ forma: 'Crédito', valor: String(Math.max(0, r2(T.pagar - T.pago))).replace('.', ','), parcelas: '12x' }); desenharPags(); resumo(); };
+      add.onclick = function () { var T = totaisVenda(); V.pags.forEach(function (p) { p.auto = false; }); V.pags.push(novaPag(formasV().filter(function (f) { return f.cartao === 'credito'; })[0], String(Math.max(0, r2(T.pagar - T.pago))).replace('.', ','))); desenharPags(); resumo(); };
       pgbox.appendChild(add);
     }
     function resumo(semRedesenhar) {
@@ -1214,10 +1306,10 @@
         itens: V.itens.map(function (i) { return { linha: i.linha, imei: i.imei, preco: num(i.preco) }; }),
         troca: V.troca.map(function (t) { return { modelo: t.modelo, cor: t.cor, imei: soDig(t.imei), imei2: soDig(t.imei2), serial: t.serial, bateria: t.bateria, classificacao: t.classificacao, valor: num(t.valor), consulta: t.consulta, obs: t.obs }; }),
         cliente: V.cli,
-        pagamentos: V.pags.map(function (p) { return { forma: p.forma, valor: num(p.valor), parcelas: p.parcelas }; })
+        pagamentos: V.pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas }; })
       };
       call('vendaRegistrar', [S.token, d]).then(function (v) {
-        S.disp = null; S.dash = null; S.venda = null; S.vendas = null;
+        S.disp = null; S.dash = null; S.venda = null; S.vendas = null; S.fin = null; S.crm = null;
         V = null; novaVenda(); abrirRecibo(v, true);
       }).catch(function (e) { fin.disabled = false; fin.textContent = 'Finalizar venda'; m.textContent = e; m.classList.add('show'); });
     };
@@ -1281,7 +1373,7 @@
     tt('Total dos aparelhos', brl(v.totalItens));
     if (v.totalTroca) tt('Troca', '− ' + brl(v.totalTroca));
     tt('Valor pago', brl(v.aPagar), 'g');
-    (v.pagamentos || []).forEach(function (p) { tt(p.forma + (p.forma === 'Crédito' ? ' ' + p.parcelas + 'x' : ''), brl(p.valor) + (p.cobrado && p.cobrado !== p.valor ? ' (cobrado ' + brl(p.cobrado) + (p.parcelas > 1 ? ' em ' + p.parcelas + 'x de ' + brl(p.cobrado / p.parcelas) : '') + ')' : '')); });
+    (v.pagamentos || []).forEach(function (p) { tt(p.forma + parcTxt(p), brl(p.valor) + (p.cobrado && p.cobrado !== p.valor ? ' (cobrado ' + brl(p.cobrado) + (p.parcelas > 1 ? ' em ' + p.parcelas + 'x de ' + brl(p.cobrado / p.parcelas) : '') + ')' : '')); });
     if (v.obs) { r.appendChild(el('h2', '', 'Observação')); r.appendChild(el('div', '', v.obs)); }
     r.appendChild(el('div', 'gar', 'GARANTIA: 3 (três) meses a partir desta data para os aparelhos seminovos acima, contra defeitos de funcionamento. ' +
       'A garantia não cobre danos causados por queda, contato com líquidos, tela ou vidro quebrado, mau uso, abertura do aparelho por terceiros ou desgaste natural da bateria. ' +
@@ -1293,7 +1385,7 @@
     var l = ['Olá, ' + v.cliente.nome.split(' ')[0] + '! Obrigado pela compra na ' + (/^Find Cell/.test(v.loja) ? 'Find Cell' : 'Tec-Cell') + '. 😊', '', '🧾 Recibo Nº ' + v.id + ' · ' + (v.dataTxt || dataBR(v.data)), ''];
     v.itens.forEach(function (x) { l.push('📱 ' + x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' (' + x.classificacao + ')'); l.push('IMEI ' + x.imei + ' · ' + brl(x.preco)); l.push('✅ Garantia até ' + garantiaAte(v.data, x.garantiaMeses || 3)); l.push(''); });
     (v.troca || []).forEach(function (x) { l.push('🔄 Troca: ' + x.modelo + ' · − ' + brl(x.valor)); });
-    l.push('💰 Valor pago: ' + brl(v.aPagar) + ' (' + (v.pagamentos || []).map(function (p) { return p.forma + (p.forma === 'Crédito' ? ' ' + p.parcelas + 'x' : ''); }).join(' + ') + ')');
+    l.push('💰 Valor pago: ' + brl(v.aPagar) + ' (' + (v.pagamentos || []).map(function (p) { return p.forma + parcTxt(p); }).join(' + ') + ')');
     l.push(''); l.push('Guarde esta mensagem: ela vale como comprovante da garantia.');
     return l.join('\n');
   }
@@ -1390,7 +1482,7 @@
     [['Cliente', v.cliente.nome], ['CPF', fmtCPF(v.cliente.cpf)], ['WhatsApp', fmtFone(v.cliente.whats)], ['Endereço', v.cliente.endereco], ['Vendedor', v.vendedor],
      ['Aparelhos', v.itens.map(function (x) { return x.modelo + ' ' + x.classificacao + ' (IMEI ' + x.imei + ') ' + brl(x.preco); }).join('\n')],
      ['Troca', v.troca.map(function (x) { return x.modelo + ' (IMEI ' + x.imei + ') − ' + brl(x.valor); }).join('\n')],
-     ['Total', brl(v.totalItens)], ['Valor pago', brl(v.aPagar)], ['Pagamento', (v.pagamentos || []).map(function (p) { return p.forma + (p.forma === 'Crédito' ? ' ' + p.parcelas + 'x' : '') + ' ' + brl(p.valor); }).join(' + ')],
+     ['Total', brl(v.totalItens)], ['Valor pago', brl(v.aPagar)], ['Pagamento', (v.pagamentos || []).map(function (p) { return p.forma + parcTxt(p) + ' ' + brl(p.valor); }).join(' + ')],
      ['Observação', v.obs], ['Cancelamento', v.cancelamento]].forEach(function (p) { if (!p[1]) return; kv.appendChild(el('div', 'k', p[0])); var d = el('div', '', p[1]); d.style.whiteSpace = 'pre-line'; kv.appendChild(d); });
     info.appendChild(kv); bd.appendChild(info);
     var am = el('div', 'msg err'); bd.appendChild(am);
@@ -1412,6 +1504,391 @@
     }
     $('dwBg').classList.remove('hide'); dw.classList.add('on'); dw.setAttribute('aria-hidden', 'false'); dw.scrollTop = 0;
     if (window.innerWidth < 820) document.body.style.overflow = 'hidden';
+  }
+
+  // =========================================================
+  //  UTILIDADES DE DATA (aaaa-mm-dd)
+  // =========================================================
+  function isoHoje() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function isoAdd(iso, dias) { var q = iso.split('-').map(Number), d = new Date(q[0], q[1] - 1, q[2] + dias); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function isoBR(iso) { return iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) + '/' + iso.slice(0, 4) : '—'; }
+  function msIso(iso) { var q = iso.split('-').map(Number); return new Date(q[0], q[1] - 1, q[2]).getTime(); }
+  function inpData(v) { var i = el('input'); i.type = 'date'; i.value = v || isoHoje(); return i; }
+  function inpValor(v) { var w = el('div', 'prefix'), i = el('input'); i.inputMode = 'decimal'; i.placeholder = '0,00'; i.value = v === undefined || v === null || v === '' ? '' : String(v).replace('.', ','); w.appendChild(el('span', '', 'R$')); w.appendChild(i); w.input = i; return w; }
+  var ICO_PES = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
+  var ICO_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h7M9 17h5"/></svg>';
+  function opcaoDw(bd, t, sub, cls, fn) { var b = el('button', 'opc' + (cls ? ' ' + cls : '')); b.type = 'button'; var d = el('div', '', t); if (sub) d.appendChild(el('small', '', sub)); b.appendChild(d); b.appendChild(el('span', 'ar', '›')); b.onclick = fn; bd.appendChild(b); return b; }
+  function abrirDw(titulo, sub) {
+    var dw = $('dw'); dw.innerHTML = '';
+    var hd = el('div', 'dwh'), ht = el('div'); ht.appendChild(el('div', 't', titulo)); if (sub) ht.appendChild(el('div', 's', sub));
+    var fx = el('button', '', '×'); fx.type = 'button'; fx.setAttribute('aria-label', 'Fechar'); fx.onclick = fecharDrawer; hd.appendChild(ht); hd.appendChild(fx); dw.appendChild(hd);
+    var bd = el('div', 'dwb'); dw.appendChild(bd);
+    $('dwBg').classList.remove('hide'); dw.classList.add('on'); dw.setAttribute('aria-hidden', 'false'); dw.scrollTop = 0;
+    if (window.innerWidth < 820) document.body.style.overflow = 'hidden';
+    return bd;
+  }
+  function kvCard(bd, pares) { var c = el('div', 'card'), kv = el('div', 'kv'); pares.forEach(function (p) { if (p[1] === '' || p[1] === null || p[1] === undefined) return; kv.appendChild(el('div', 'k', p[0])); var d = el('div', '', String(p[1])); d.style.whiteSpace = 'pre-line'; kv.appendChild(d); }); c.appendChild(kv); bd.appendChild(c); return c; }
+
+  // =========================================================
+  //  CRM: CLIENTES / FORNECEDORES
+  // =========================================================
+  function fmtDoc(d) { d = soDig(d); return d.length === 11 ? fmtCPF(d) : d.length === 14 ? d.slice(0, 2) + '.' + d.slice(2, 5) + '.' + d.slice(5, 8) + '/' + d.slice(8, 12) + '-' + d.slice(12) : d; }
+  function cnpjOk(c) {
+    c = soDig(c); if (!/^\d{14}$/.test(c) || /^(\d)\1{13}$/.test(c)) return false;
+    var calc = function (n) { var s2 = 0, p = n - 7; for (var i = 0; i < n; i++) { s2 += +c[i] * p--; if (p < 2) p = 9; } var r = s2 % 11; return r < 2 ? 0 : 11 - r; };
+    return calc(12) === +c[12] && calc(13) === +c[13];
+  }
+  function carregarCrm(forcar) {
+    if (S.crm && !forcar) return renderCrm();
+    $('crLista').innerHTML = ''; $('crLista').appendChild(el('div', 'empty', 'Carregando cadastros…')); $('crCont').textContent = '';
+    call('crmListar', [S.token]).then(function (l) { S.crm = l; renderCrm(); }).catch(function (e) { $('crLista').innerHTML = ''; $('crLista').appendChild(el('div', 'empty', e)); });
+  }
+  $('crBusca').addEventListener('input', renderCrm);
+  ['crTipo', 'crOrdem'].forEach(function (k) { $(k).addEventListener('change', renderCrm); });
+  $('crLimpar').onclick = function () { $('crBusca').value = ''; $('crTipo').value = ''; renderCrm(); };
+  $('crFilBtn').onclick = function () { var on = !$('cFil').classList.contains('on'); $('cFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
+  botaoEsconderFiltros($('crFilEsc'), 'cFil', 'semFilCrm');
+  $('crNovo').onclick = function () { formPessoa(null); };
+  function renderCrm() {
+    if (!S.crm) return;
+    var q = $('crBusca').value.trim().toLowerCase(), qd = soDig(q), tp = $('crTipo').value, ord = $('crOrdem').value;
+    var l = S.crm.filter(function (x) {
+      if (tp === 'Cliente' && x.tipo === 'Fornecedor') return false;
+      if (tp === 'Fornecedor' && x.tipo === 'Cliente') return false;
+      if (q && [x.nome, x.cidade, x.email].join(' ').toLowerCase().indexOf(q) < 0 && !(qd.length >= 3 && (x.doc + ' ' + x.whats).indexOf(qd) > -1)) return false;
+      return true;
+    }).sort(function (a, b) {
+      if (ord === 'compras') return b.compras - a.compras || a.nome.localeCompare(b.nome);
+      if (ord === 'total') return b.total - a.total || a.nome.localeCompare(b.nome);
+      if (ord === 'ultima') return (b.ultimaCompra || 0) - (a.ultimaCompra || 0) || a.nome.localeCompare(b.nome);
+      return a.nome.localeCompare(b.nome);
+    });
+    var nc2 = S.crm.filter(function (x) { return x.tipo !== 'Fornecedor'; }).length, nf = S.crm.filter(function (x) { return x.tipo !== 'Cliente'; }).length;
+    $('crCont').textContent = l.length + ' cadastro' + (l.length === 1 ? '' : 's') + ' · ' + nc2 + ' cliente' + (nc2 === 1 ? '' : 's') + ' · ' + nf + ' fornecedor' + (nf === 1 ? '' : 'es');
+    var box = $('crLista'); box.innerHTML = '';
+    if (!l.length) { box.appendChild(el('div', 'empty', S.crm.length ? 'Nenhum cadastro encontrado.' : 'Nenhum cadastro ainda. Os clientes entram aqui automaticamente quando você registra uma venda.')); return; }
+    var tab = el('div', 'ptab'), h = el('div', 'prow h');
+    ['', 'Nome', 'Contato', 'Compras', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    tab.appendChild(h);
+    l.forEach(function (x) {
+      var r = el('div', 'prow'); r.dataset.k = x.id;
+      var ic = el('div', 'pimg'); ic.innerHTML = ICO_PES; r.appendChild(ic);
+      var n = el('div'), nm = el('div', 'pnome', x.nome); nm.appendChild(el('span', 'bdg ' + (x.tipo === 'Cliente' ? 'inf' : x.tipo === 'Fornecedor' ? 'warn' : 'ok'), x.tipo)); n.appendChild(nm);
+      n.appendChild(el('div', 'psub', [x.doc ? fmtDoc(x.doc) : '', x.cidade].filter(Boolean).join(' · ') || 'sem documento')); r.appendChild(n);
+      var ct = el('div', 'psku'); ct.appendChild(el('div', '', x.whats ? fmtFone(x.whats) : '—')); if (x.email) ct.appendChild(el('div', 'psub', x.email)); r.appendChild(ct);
+      var pr = el('div', 'ppre est' + (x.compras ? '' : ' zero'), x.compras ? brl(x.total).replace('R$', '').trim() : (x.tipo === 'Fornecedor' ? (x.pago ? brl(x.pago) : '—') : '—'));
+      pr.appendChild(el('small', '', x.compras ? x.compras + ' compra' + (x.compras === 1 ? '' : 's') + ' · última ' + dataBR(x.ultimaCompra) : x.tipo === 'Fornecedor' && x.pago ? 'pago a ele' : ''));
+      r.appendChild(pr); r.appendChild(el('div', 'chev', '›'));
+      r.onclick = function () { abrirPessoa(x); };
+      tab.appendChild(r);
+    });
+    box.appendChild(tab);
+  }
+  function abrirPessoa(x) {
+    Array.prototype.forEach.call(document.querySelectorAll('#crLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.id); });
+    var bd = abrirDw(x.nome, x.tipo + ' · ' + x.id);
+    kvCard(bd, [['Tipo', x.tipo], ['CPF/CNPJ', x.doc ? fmtDoc(x.doc) : ''], ['WhatsApp', x.whats ? fmtFone(x.whats) : ''], ['E-mail', x.email],
+                ['Endereço', [x.endereco, x.bairro, x.cidade, x.cep ? 'CEP ' + x.cep : ''].filter(Boolean).join(' · ')], ['Observação', x.obs],
+                ['Compras', x.compras ? x.compras + ' · ' + brl(x.total) : ''], ['1ª compra', x.primeira], ['Última compra', x.ultimaCompra ? dataBR(x.ultimaCompra) : ''],
+                ['Pago a ele', x.pago ? brl(x.pago) : ''], ['Em aberto', x.aberto ? brl(x.aberto) : '']]);
+    if (x.vendas && x.vendas.length) {
+      var c = el('div', 'card'); c.appendChild(el('h2', '', 'Últimas compras'));
+      var t = el('table', 'ext'); x.vendas.forEach(function (v) { var tr = el('tr'), a = el('td'); a.appendChild(document.createTextNode(v.itens)); a.appendChild(el('small', '', v.id + ' · ' + dataBR(v.data))); tr.appendChild(a); tr.appendChild(el('td', 'v', brl(v.total))); t.appendChild(tr); });
+      c.appendChild(t); bd.appendChild(c);
+    }
+    opcaoDw(bd, 'Editar cadastro', 'Dados, endereço e tipo', '', function () { fecharDrawer(); formPessoa(x); });
+    if (x.whats) opcaoDw(bd, 'Chamar no WhatsApp', fmtFone(x.whats), 'okc', function () { window.open('https://wa.me/55' + x.whats, '_blank', 'noopener'); });
+  }
+  function formPessoa(x) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', x ? 'Editar cadastro' : 'Novo cadastro'));
+    var c = el('div', 'card'), d = x ? JSON.parse(JSON.stringify(x)) : { tipo: 'Cliente', nome: '', doc: '', whats: '', email: '', cep: '', endereco: '', bairro: '', cidade: '', obs: '' };
+    c.appendChild(el('label', 'first', 'Tipo')); var sg = el('div', 'seg'); c.appendChild(sg); seg(sg, ['Cliente', 'Fornecedor', 'Ambos'], d.tipo, function (v) { d.tipo = v; });
+    var nome = campo(c, 'Nome / Razão social *', inp('text', 'Nome completo ou empresa')); nome.maxLength = 80; nome.value = d.nome;
+    var doc = campo(c, 'CPF ou CNPJ', inp('text', 'Opcional para fornecedor')); doc.inputMode = 'numeric'; doc.maxLength = 18; doc.value = fmtDoc(d.doc);
+    var dst = el('div', 'hint'); c.appendChild(dst);
+    var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); c.appendChild(lr);
+    var wpp = campo(a1, 'WhatsApp', inp('text', '(22) 99999-9999')); wpp.inputMode = 'tel'; wpp.value = fmtFone(d.whats);
+    var em = campo(a2, 'E-mail', inp('email', 'opcional')); em.value = d.email;
+    var lc = el('div', 'row'), b1 = el('div'), b2 = el('div'); lc.appendChild(b1); lc.appendChild(b2); c.appendChild(lc);
+    var cep = campo(b1, 'CEP', inp('text', '00000-000')); cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = d.cep;
+    var cid = campo(b2, 'Cidade', inp('text', '')); cid.value = d.cidade;
+    var end = campo(c, 'Endereço (rua e número)', inp('text', '')); end.maxLength = 120; end.value = d.endereco;
+    var bai = campo(c, 'Bairro', inp('text', '')); bai.value = d.bairro;
+    var ob = el('textarea'); ob.placeholder = 'Ex.: prefere contato à tarde; fornecedor de telas'; ob.value = d.obs; campo(c, 'Observação', ob);
+    doc.oninput = function () { var k = soDig(doc.value); dst.textContent = !k ? '' : k.length === 11 ? (cpfOk(k) ? '✓ CPF válido' : 'CPF inválido') : k.length === 14 ? (cnpjOk(k) ? '✓ CNPJ válido' : 'CNPJ inválido') : ''; dst.style.color = /✓/.test(dst.textContent) ? 'var(--ok)' : 'var(--err)'; };
+    cep.oninput = function () {
+      var k = soDig(cep.value).slice(0, 8); if (k.length !== 8) return; cep.value = k.slice(0, 5) + '-' + k.slice(5);
+      fetch('https://viacep.com.br/ws/' + k + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) {
+        if (!j || j.erro) return; if (!end.value && j.logradouro) end.value = j.logradouro + ', '; if (!bai.value) bai.value = j.bairro || ''; if (!cid.value && j.localidade) cid.value = j.localidade + (j.uf ? '/' + j.uf : '');
+      }).catch(function () {});
+    };
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var k = soDig(doc.value), w = soDig(wpp.value), erro = '';
+      if (nome.value.trim().length < 2) erro = 'Informe o nome.';
+      else if (k && !(k.length === 11 ? cpfOk(k) : k.length === 14 && cnpjOk(k))) erro = 'CPF/CNPJ inválido.';
+      else if (w && (w.length < 10 || w.length > 11)) erro = 'WhatsApp inválido (DDD + número).';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('crmSalvar', [S.token, { id: x ? x.id : '', tipo: d.tipo, nome: nome.value, doc: k, whats: w, email: em.value, cep: soDig(cep.value), endereco: end.value, bairro: bai.value, cidade: cid.value, obs: ob.value }])
+        .then(function (l) { S.crm = l; S.pagar = null; fecharModal(); renderCrm(); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); nome.focus();
+  }
+
+  // =========================================================
+  //  CAIXAS E BANCOS
+  // =========================================================
+  function carregarFin(forcar) {
+    if (S.fin && !forcar) return renderFin();
+    $('fbCorpo').innerHTML = ''; $('fbCorpo').appendChild(el('div', 'empty', 'Carregando saldos…'));
+    call('financeiro', [S.token]).then(function (d) { aposFin(d); }).catch(function (e) { $('fbCorpo').innerHTML = ''; $('fbCorpo').appendChild(el('div', 'empty', e)); });
+  }
+  function aposFin(d) { S.fin = d; S.u.formas = d.formas.filter(function (f) { return f.ativa; }); if ($('vBancos') && !$('vBancos').classList.contains('hide')) renderFin(); }
+  function nomeConta(id) { var c = S.fin && S.fin.contas.filter(function (x) { return x.id === id; })[0]; return c ? c.nome : id; }
+  $('fbConta').onclick = function () { formConta(null); };
+  $('fbLanc').onclick = function () { formLanc(null, 'Entrada'); };
+  function renderFin() {
+    var D = S.fin; if (!D) return;
+    var box = $('fbCorpo'); box.innerHTML = '';
+    var ativas = D.contas.filter(function (c) { return c.ativa; }), tot = soma(ativas, function (c) { return c.saldo; });
+    var k = el('div', 'kpis'); box.appendChild(k);
+    kpi(k, 'Saldo total', brl(tot), ativas.length + ' conta' + (ativas.length === 1 ? '' : 's') + ' ativa' + (ativas.length === 1 ? '' : 's'), tot < 0 ? 'down' : '');
+    kpi(k, 'Contas a pagar em aberto', brl(D.aPagar.total), D.aPagar.qtd + ' lançamento' + (D.aPagar.qtd === 1 ? '' : 's'));
+    kpi(k, 'Vencidas', brl(D.aPagar.vencido), D.aPagar.vencido ? 'pague ou renegocie' : 'nada vencido', D.aPagar.vencido ? 'down' : 'up');
+    kpi(k, 'Saldo previsto', brl(tot - D.aPagar.total), 'depois de pagar tudo em aberto', tot - D.aPagar.total < 0 ? 'down' : '');
+    var ini = new Date(); ini.setDate(1); ini.setHours(0, 0, 0, 0);
+    var cards = el('div', 'fbcards'); box.appendChild(cards);
+    D.contas.slice().sort(function (a, b) { return (b.ativa - a.ativa) || a.nome.localeCompare(b.nome); }).forEach(function (c) {
+      var b = el('button', 'fbc' + (c.ativa ? '' : ' off')); b.type = 'button';
+      b.appendChild(el('div', 'tp', c.tipo + (c.loja ? ' · ' + c.loja : '') + (c.ativa ? '' : ' · inativa')));
+      b.appendChild(el('div', 'nm', c.nome));
+      b.appendChild(el('div', 'sd' + (c.saldo < 0 ? ' neg' : ''), brl(c.saldo)));
+      var evm = D.eventos.filter(function (e) { return e.conta === c.id && e.d >= ini.getTime(); });
+      b.appendChild(el('div', 'mv', 'No mês: +' + brl(soma(evm, function (e) { return e.valor > 0 ? e.valor : 0; })) + ' · −' + brl(Math.abs(soma(evm, function (e) { return e.valor < 0 ? e.valor : 0; })))));
+      b.onclick = function () { abrirConta(c); };
+      cards.appendChild(b);
+    });
+    var ult = D.eventos.slice(0, 300);
+    tabela(box, 'Últimas movimentações', ['Data', 'Conta', 'Descrição', 'Origem', 'Valor'], ult.map(function (e) { return [dataBR(e.d), nomeConta(e.conta), e.desc, e.origem, (e.valor < 0 ? '-' : '') + brl(Math.abs(e.valor))]; }), 'movimentacoes');
+    box.appendChild(el('div', 'hint', 'Entradas das vendas: o valor de cada forma de pagamento entra na conta configurada em engrenagem › Formas de pagamento/recebimento (no cartão, entra o valor líquido, sem a taxa da maquininha). Saídas: contas a pagar marcadas como pagas e lançamentos manuais.'));
+  }
+  function abrirConta(c) {
+    var bd = abrirDw(c.nome, c.tipo + ' · saldo ' + brl(c.saldo));
+    var ev = S.fin.eventos.filter(function (e) { return e.conta === c.id; });
+    var card = el('div', 'card'); card.appendChild(el('h2', '', 'Extrato'));
+    if (!ev.length) card.appendChild(el('div', 'hint', 'Nenhuma movimentação ainda. Saldo inicial de ' + brl(c.inicial) + ' em ' + isoBR(c.desde) + '.'));
+    else {
+      var t = el('table', 'ext'), saldo = c.saldo;
+      ev.slice(0, 80).forEach(function (e) {
+        var tr = el('tr'), a = el('td'); a.appendChild(document.createTextNode(e.desc)); a.appendChild(el('small', '', dataBR(e.d) + ' · ' + e.origem + ' · saldo ' + brl(saldo)));
+        if (/Entrada|Saída|Transferência/.test(e.origem)) { var ex = el('button', 'lnk', 'excluir'); ex.type = 'button'; ex.style.cssText = 'font-size:11.5px;padding:0;color:var(--err)'; ex.onclick = function () { if (!ex.dataset.c) { ex.dataset.c = 1; ex.textContent = 'confirmar exclusão?'; return; } call('movExcluir', [S.token, e.ref]).then(function (d) { aposFin(d); fecharDrawer(); }).catch(function (er) { ex.textContent = String(er); }); }; a.appendChild(ex); }
+        tr.appendChild(a); tr.appendChild(el('td', 'v ' + (e.valor >= 0 ? 'e' : 's'), (e.valor >= 0 ? '+' : '−') + brl(Math.abs(e.valor)))); t.appendChild(tr); saldo -= e.valor;
+      });
+      card.appendChild(t);
+      card.appendChild(el('div', 'hint', 'Saldo inicial: ' + brl(c.inicial) + ' em ' + isoBR(c.desde) + '.'));
+    }
+    bd.appendChild(card);
+    opcaoDw(bd, 'Lançar entrada', 'Aporte, recebimento avulso, ajuste', 'okc', function () { fecharDrawer(); formLanc(c, 'Entrada'); });
+    opcaoDw(bd, 'Lançar saída', 'Sangria, retirada, despesa paga na hora', '', function () { fecharDrawer(); formLanc(c, 'Saída'); });
+    opcaoDw(bd, 'Transferir para outra conta', 'Ex.: depósito do caixa no banco', '', function () { fecharDrawer(); formLanc(c, 'Transferência'); });
+    opcaoDw(bd, 'Editar conta', 'Nome, tipo, saldo inicial', '', function () { fecharDrawer(); formConta(c); });
+  }
+  function formConta(c) {
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', c ? 'Editar conta' : 'Nova conta (caixa ou banco)'));
+    var k = el('div', 'card');
+    var nome = campo(k, 'Nome *', inp('text', 'Ex.: Banco Inter, Caixa Cordeiro'), true); nome.value = c ? c.nome : ''; nome.maxLength = 40;
+    var tp = el('select'); opts(tp, (S.fin && S.fin.tipos) || ['Caixa', 'Banco', 'Carteira digital'], c ? c.tipo : 'Banco'); campo(k, 'Tipo', tp);
+    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), c ? c.loja : '', 'Todas / nenhuma'); campo(k, 'Loja (opcional)', lj);
+    var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
+    var vi = inpValor(c ? c.inicial : 0); campo(a1, 'Saldo inicial', vi);
+    var dt = inpData(c ? c.desde : isoHoje()); campo(a2, 'Saldo inicial em', dt);
+    k.appendChild(el('div', 'hint', 'Coloque o saldo real da conta numa data (ex.: o extrato de hoje). Tudo que acontecer a partir dessa data é somado ou subtraído.'));
+    var at = null;
+    if (c) { var al = el('label', 'perm'); at = el('input'); at.type = 'checkbox'; at.checked = c.ativa; var tt2 = el('div', 't', 'Conta ativa'); tt2.appendChild(el('small', '', 'Desmarque para esconder uma conta que não usa mais.')); al.appendChild(at); al.appendChild(tt2); al.style.marginTop = '8px'; k.appendChild(al); }
+    var m = el('div', 'msg err'); k.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); k.appendChild(ac); sh.appendChild(k);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('contaFinSalvar', [S.token, { id: c ? c.id : '', nome: nome.value, tipo: tp.value, loja: lj.value, inicial: vi.input.value.trim() === '' ? 0 : num(vi.input.value), desde: dt.value, ativa: at ? at.checked : true }])
+        .then(function (d) { aposFin(d); fecharModal(); renderFin(); }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); nome.focus();
+  }
+  function formLanc(c, tipo) {
+    if (!S.fin) return carregarFin(true);
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Lançamento em caixa/banco'));
+    var k = el('div', 'card'), T = tipo;
+    var sg = el('div', 'seg'); k.appendChild(el('label', 'first', 'Tipo')); k.appendChild(sg);
+    var contas = S.fin.contas.filter(function (x) { return x.ativa; }).map(function (x) { return x; });
+    var co = el('select'); contas.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; co.appendChild(o); }); if (c) co.value = c.id; var lco = campo(k, 'Conta', co);
+    var dsw = el('div'); k.appendChild(dsw); var de = el('select'); contas.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; de.appendChild(o); }); campo(dsw, 'Para a conta', de);
+    var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
+    var vi = inpValor(''); campo(a1, 'Valor *', vi); var dt = inpData(isoHoje()); campo(a2, 'Data', dt);
+    var ds = campo(k, 'Descrição', inp('text', 'Ex.: troco inicial do caixa')); ds.maxLength = 120;
+    function ajustar() { dsw.classList.toggle('hide', T !== 'Transferência'); lco.previousSibling.textContent = T === 'Transferência' ? 'Da conta' : 'Conta'; if (T === 'Transferência' && de.value === co.value) { var o2 = contas.filter(function (x) { return x.id !== co.value; })[0]; if (o2) de.value = o2.id; } }
+    seg(sg, ['Entrada', 'Saída', 'Transferência'], T, function (v) { T = v; ajustar(); }); co.onchange = ajustar; ajustar();
+    var m = el('div', 'msg err'); k.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Lançar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); k.appendChild(ac); sh.appendChild(k);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      ok.disabled = true; ok.textContent = 'Lançando…';
+      call('movLancar', [S.token, { tipo: T, conta: co.value, destino: de.value, valor: num(vi.input.value), data: dt.value, desc: ds.value }])
+        .then(function (d) { aposFin(d); fecharModal(); renderFin(); var b = $('fbAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ Lançamento registrado.')); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Lançar'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); vi.input.focus();
+  }
+
+  // =========================================================
+  //  CONTAS A PAGAR
+  // =========================================================
+  function carregarPagar(forcar) {
+    if (S.pagar && !forcar) return renderPagar();
+    $('pgLista').innerHTML = ''; $('pgLista').appendChild(el('div', 'empty', 'Carregando contas…')); $('pgCont').textContent = '';
+    call('pagarListar', [S.token]).then(function (d) { S.pagar = d; renderPagar(); }).catch(function (e) { $('pgLista').innerHTML = ''; $('pgLista').appendChild(el('div', 'empty', e)); });
+  }
+  function aposPagar(d) { S.pagar = d; S.fin = null; renderPagar(); }
+  $('pgBusca').addEventListener('input', renderPagar);
+  ['pgSit', 'pgPer', 'pgCat', 'pgLoja'].forEach(function (k) { $(k).addEventListener('change', renderPagar); });
+  $('pgLimpar').onclick = function () { ['pgBusca', 'pgSit', 'pgPer', 'pgCat', 'pgLoja'].forEach(function (k) { $(k).value = ''; }); renderPagar(); };
+  $('pgFilBtn').onclick = function () { var on = !$('pgFil').classList.contains('on'); $('pgFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
+  botaoEsconderFiltros($('pgFilEsc'), 'pgFil', 'semFilPagar');
+  $('pgNovo').onclick = function () { if (!S.pagar) return; formPagar(null); };
+  function situacaoPg(x, hoje) { return x.situacao === 'Em aberto' && x.venc < hoje ? 'Vencida' : x.situacao; }
+  function renderPagar() {
+    var D = S.pagar; if (!D) return;
+    var hoje = isoHoje();
+    opts($('pgCat'), D.categorias, $('pgCat').value, 'Todas as categorias');
+    opts($('pgLoja'), (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('pgLoja').value, 'Todas as lojas');
+    var sit = $('pgSit').value, per = $('pgPer').value, cat = $('pgCat').value, lj = $('pgLoja').value, q = $('pgBusca').value.trim().toLowerCase();
+    var mesIni = hoje.slice(0, 8) + '01', proxIni = isoAdd(mesIni, 32).slice(0, 8) + '01', proxFim = isoAdd(isoAdd(proxIni, 32).slice(0, 8) + '01', -1), mesFim = isoAdd(proxIni, -1);
+    var l = D.contas.filter(function (x) {
+      var st = situacaoPg(x, hoje);
+      if (sit === '' && x.situacao !== 'Em aberto') return false;
+      if (sit === 'vencidas' && st !== 'Vencida') return false;
+      if ((sit === 'Pago' || sit === 'Cancelada') && x.situacao !== sit) return false;
+      if (per === 'mes' && (x.venc < mesIni || x.venc > mesFim)) return false;
+      if (per === 'prox' && (x.venc < proxIni || x.venc > proxFim)) return false;
+      if ((per === '7' || per === '30') && (x.venc < hoje || x.venc > isoAdd(hoje, +per))) return false;
+      if (cat && x.categoria !== cat) return false;
+      if (lj && x.loja !== lj) return false;
+      if (q && (x.descricao + ' ' + x.fornecedor + ' ' + x.id).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function (a, b) { return a.situacao === 'Pago' && b.situacao === 'Pago' ? (b.pagoEm < a.pagoEm ? -1 : 1) : (a.venc < b.venc ? -1 : a.venc > b.venc ? 1 : 0); });
+    var ab = D.contas.filter(function (x) { return x.situacao === 'Em aberto'; });
+    var rs = $('pgResumo'); rs.innerHTML = ''; var k = el('div', 'kpis'); rs.appendChild(k);
+    var venc = ab.filter(function (x) { return x.venc < hoje; }), sete = ab.filter(function (x) { return x.venc >= hoje && x.venc <= isoAdd(hoje, 7); });
+    var pagasMes = D.contas.filter(function (x) { return x.situacao === 'Pago' && x.pagoEm >= mesIni; });
+    kpi(k, 'Em aberto', brl(soma(ab, function (x) { return x.valor; })), ab.length + ' conta' + (ab.length === 1 ? '' : 's'));
+    kpi(k, 'Vencidas', brl(soma(venc, function (x) { return x.valor; })), venc.length ? venc.length + ' atrasada' + (venc.length === 1 ? '' : 's') : 'nada vencido', venc.length ? 'down' : 'up');
+    kpi(k, 'Vencem em 7 dias', brl(soma(sete, function (x) { return x.valor; })), sete.length + ' conta' + (sete.length === 1 ? '' : 's'));
+    kpi(k, 'Pagas no mês', brl(soma(pagasMes, function (x) { return x.valor; })), pagasMes.length + ' pagamento' + (pagasMes.length === 1 ? '' : 's'));
+    $('pgCont').textContent = l.length + ' conta' + (l.length === 1 ? '' : 's') + ' · ' + brl(soma(l, function (x) { return x.valor; }));
+    var box = $('pgLista'); box.innerHTML = '';
+    if (!l.length) { box.appendChild(el('div', 'empty', D.contas.length ? 'Nenhuma conta com esses filtros.' : 'Nenhuma conta lançada ainda. Use "+ Nova conta a pagar".')); return; }
+    var tab = el('div', 'ptab'), h = el('div', 'prow h');
+    ['', 'Descrição', 'Vencimento', 'Valor', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    tab.appendChild(h);
+    l.forEach(function (x) {
+      var st = situacaoPg(x, hoje), r = el('div', 'prow'); r.dataset.k = x.id;
+      var ic = el('div', 'pimg'); ic.innerHTML = ICO_DOC; r.appendChild(ic);
+      var n = el('div'), nm = el('div', 'pnome', x.descricao); nm.appendChild(el('span', 'bdg ' + ({ 'Vencida': 'err', 'Pago': 'ok', 'Cancelada': 'off' }[st] || 'warn'), st === 'Pago' ? 'Paga' : st)); n.appendChild(nm);
+      n.appendChild(el('div', 'psub', [x.fornecedor, x.categoria, x.loja].filter(Boolean).join(' · '))); r.appendChild(n);
+      var vc = el('div', 'psku'); vc.appendChild(el('div', '', st === 'Pago' ? 'Paga em ' + isoBR(x.pagoEm) : 'Vence ' + isoBR(x.venc)));
+      if (st === 'Pago') vc.appendChild(el('div', 'psub', nomeContaPg(x.conta))); else if (st === 'Vencida') { var dv = el('div', 'psub', Math.round((msIso(hoje) - msIso(x.venc)) / DIA) + ' dia(s) de atraso'); dv.style.color = 'var(--err)'; vc.appendChild(dv); }
+      r.appendChild(vc);
+      var pr = el('div', 'ppre' + (st === 'Pago' ? '' : st === 'Cancelada' ? ' sem' : ' est'), brl(x.valor).replace('R$', '').trim()); r.appendChild(pr);
+      r.appendChild(el('div', 'chev', '›'));
+      r.onclick = function () { abrirPagar(x); };
+      tab.appendChild(r);
+    });
+    box.appendChild(tab);
+  }
+  function nomeContaPg(id) { var c = S.pagar && S.pagar.financeiras.filter(function (x) { return x.id === id; })[0]; return c ? c.nome : (id ? nomeConta(id) : ''); }
+  function abrirPagar(x) {
+    Array.prototype.forEach.call(document.querySelectorAll('#pgLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.id); });
+    var hoje = isoHoje(), st = situacaoPg(x, hoje);
+    var bd = abrirDw(x.descricao, brl(x.valor) + ' · ' + (st === 'Pago' ? 'paga em ' + isoBR(x.pagoEm) : st === 'Cancelada' ? 'cancelada' : 'vence ' + isoBR(x.venc)));
+    kvCard(bd, [['Situação', st === 'Pago' ? 'Paga' : st], ['Valor', brl(x.valor)], ['Vencimento', isoBR(x.venc)], ['Fornecedor', x.fornecedor], ['Categoria', x.categoria], ['Loja', x.loja],
+                ['Pago em', x.pagoEm ? isoBR(x.pagoEm) : ''], ['Saiu de', x.conta ? nomeContaPg(x.conta) : ''], ['Forma', x.forma], ['Observação', x.obs], ['Lançada por', x.lancado], ['Paga por', x.pagoPor], ['Nº', x.id]]);
+    var am = el('div', 'msg err'); bd.appendChild(am);
+    if (x.situacao === 'Em aberto') {
+      var bp = opcaoDw(bd, 'Marcar como paga', 'Escolha de qual caixa/banco saiu o dinheiro', 'okc', function () {
+        if (bp.nextSibling && bp.nextSibling.classList && bp.nextSibling.classList.contains('opc-box')) return;
+        var bx = el('div', 'opc-box');
+        var co = el('select'); S.pagar.financeiras.forEach(function (c) { var o = el('option', '', c.nome); o.value = c.id; co.appendChild(o); }); campo(bx, 'Saiu da conta', co, true);
+        var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); bx.appendChild(lr);
+        var dt = inpData(hoje); campo(a1, 'Data do pagamento', dt); var vi = inpValor(x.valor); campo(a2, 'Valor pago', vi);
+        var fo = el('select'); ['PIX', 'Boleto', 'Transferência', 'Dinheiro', 'Cartão', 'Débito automático'].forEach(function (f2) { var o = el('option', '', f2); o.value = f2; fo.appendChild(o); }); campo(bx, 'Como foi pago', fo);
+        var ok = el('button', 'btn ok', 'Confirmar pagamento'); ok.type = 'button'; ok.style.marginTop = '10px'; bx.appendChild(ok); bp.after(bx);
+        ok.onclick = function () {
+          ok.disabled = true; ok.textContent = 'Salvando…';
+          call('pagarBaixar', [S.token, x.id, { pagar: true, conta: co.value, pagoEm: dt.value, valor: num(vi.input.value), forma: fo.value }])
+            .then(function (d) { aposPagar(d); fecharDrawer(); var b = $('pgAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + x.descricao + ' paga. O valor saiu de ' + nomeContaPg(co.value) + '.')); })
+            .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar pagamento'; am.textContent = e; am.classList.add('show'); });
+        };
+      });
+      opcaoDw(bd, 'Editar', 'Descrição, valor, vencimento, fornecedor', '', function () { fecharDrawer(); formPagar(x); });
+      var bc = opcaoDw(bd, 'Cancelar conta', 'Lançada por engano ou que não vai mais ser paga', 'danger', function () {
+        if (!bc.dataset.c) { bc.dataset.c = 1; bc.querySelector('small').textContent = 'Toque de novo para confirmar'; return; }
+        call('pagarCancelar', [S.token, x.id]).then(function (d) { aposPagar(d); fecharDrawer(); }).catch(function (e) { am.textContent = e; am.classList.add('show'); });
+      });
+    } else if (x.situacao === 'Pago') {
+      var be = opcaoDw(bd, 'Estornar pagamento', 'A conta volta para Em aberto e o valor volta para o saldo', 'danger', function () {
+        if (!be.dataset.c) { be.dataset.c = 1; be.querySelector('small').textContent = 'Toque de novo para confirmar o estorno'; return; }
+        call('pagarBaixar', [S.token, x.id, { pagar: false }]).then(function (d) { aposPagar(d); fecharDrawer(); }).catch(function (e) { am.textContent = e; am.classList.add('show'); });
+      });
+    }
+  }
+  function formPagar(x) {
+    var D = S.pagar, sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', x ? 'Editar conta a pagar' : 'Nova conta a pagar'));
+    var k = el('div', 'card');
+    var ds = campo(k, 'Descrição *', inp('text', 'Ex.: Aluguel loja Cordeiro'), true); ds.maxLength = 100; ds.value = x ? x.descricao.replace(/ \(\d+\/\d+\)$/, '') : '';
+    if (x) ds.value = x.descricao;
+    var fo = el('select'); var o0 = el('option', '', '— Sem fornecedor —'); o0.value = ''; fo.appendChild(o0);
+    D.fornecedores.slice().sort(function (a, b) { return a.nome.localeCompare(b.nome); }).forEach(function (f2) { var o = el('option', '', f2.nome); o.value = f2.id; fo.appendChild(o); });
+    var on = el('option', '', '+ Cadastrar novo fornecedor…'); on.value = '__novo'; fo.appendChild(on); fo.value = x ? x.fornId : ''; campo(k, 'Fornecedor', fo);
+    var nf = inp('text', 'Nome do novo fornecedor'); nf.className = 'hide'; nf.style.marginTop = '6px'; k.appendChild(nf);
+    fo.onchange = function () { nf.classList.toggle('hide', fo.value !== '__novo'); if (fo.value === '__novo') nf.focus(); };
+    var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
+    var ca = el('select'); opts(ca, D.categorias, x ? x.categoria : 'Outros'); campo(a1, 'Categoria', ca);
+    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x ? x.loja : '', 'Geral (todas)'); campo(a2, 'Loja', lj);
+    var lv = el('div', 'row'), b1 = el('div'), b2 = el('div'); lv.appendChild(b1); lv.appendChild(b2); k.appendChild(lv);
+    var vi = inpValor(x ? x.valor : ''); campo(b1, 'Valor *', vi); var ve = inpData(x ? x.venc : isoHoje()); campo(b2, 'Vencimento *', ve);
+    var rp = null;
+    if (!x) { rp = el('select'); var o1 = el('option', '', 'Não repetir'); o1.value = '1'; rp.appendChild(o1); for (var n2 = 2; n2 <= 36; n2++) { var o = el('option', '', 'Repetir por ' + n2 + ' meses (parcelas ou conta fixa)'); o.value = String(n2); rp.appendChild(o); } campo(k, 'Repetir', rp); }
+    var ob = el('textarea'); ob.placeholder = 'Opcional'; ob.value = x ? x.obs : ''; campo(k, 'Observação', ob);
+    var pg = null, pbox = el('div', 'hide'), pc, pd, pf;
+    if (!x) {
+      var al = el('label', 'perm'); pg = el('input'); pg.type = 'checkbox'; var tt2 = el('div', 't', 'Já está paga'); tt2.appendChild(el('small', '', 'Marque para já tirar o valor do caixa/banco.')); al.appendChild(pg); al.appendChild(tt2); al.style.marginTop = '10px'; k.appendChild(al);
+      k.appendChild(pbox);
+      pc = el('select'); D.financeiras.forEach(function (c) { var o = el('option', '', c.nome); o.value = c.id; pc.appendChild(o); }); campo(pbox, 'Saiu da conta', pc);
+      var lp = el('div', 'row'), c1 = el('div'), c2 = el('div'); lp.appendChild(c1); lp.appendChild(c2); pbox.appendChild(lp);
+      pd = inpData(isoHoje()); campo(c1, 'Pago em', pd);
+      pf = el('select'); ['PIX', 'Boleto', 'Transferência', 'Dinheiro', 'Cartão', 'Débito automático'].forEach(function (f2) { var o = el('option', '', f2); o.value = f2; pf.appendChild(o); }); campo(c2, 'Como', pf);
+      pg.onchange = function () { pbox.classList.toggle('hide', !pg.checked); };
+    }
+    var m = el('div', 'msg err'); k.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', x ? 'Salvar' : 'Lançar conta'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); k.appendChild(ac); sh.appendChild(k);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var erro = ds.value.trim().length < 3 ? 'Descreva a conta.' : !(num(vi.input.value) > 0) ? 'Informe o valor.' : !ve.value ? 'Informe o vencimento.' : fo.value === '__novo' && nf.value.trim().length < 2 ? 'Digite o nome do novo fornecedor.' : '';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      var d = { id: x ? x.id : '', descricao: ds.value, fornId: fo.value === '__novo' ? '' : fo.value, novoFornecedor: fo.value === '__novo' ? nf.value : '', categoria: ca.value, loja: lj.value,
+                valor: num(vi.input.value), venc: ve.value, obs: ob.value, repetir: rp ? +rp.value : 1, pago: !!(pg && pg.checked), conta: pc ? pc.value : '', pagoEm: pd ? pd.value : '', forma: pf ? pf.value : '' };
+      call('pagarSalvar', [S.token, d]).then(function (r) { aposPagar(r); S.crm = null; fecharModal(); var b = $('pgAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + (x ? 'Conta atualizada.' : d.repetir > 1 ? d.repetir + ' contas lançadas (uma por mês).' : 'Conta lançada.' + (d.pago ? ' O valor já saiu do saldo.' : '')))); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Lançar conta'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); ds.focus();
   }
 
   // =========================================================
@@ -3305,6 +3782,7 @@
     var l = [['conta', 'Minha conta', 'Aparência e troca de senha']];
     if (pode('equipe')) l.push(['func', 'Funcionários', 'Cadastro, senhas e permissões'], ['acesso', 'Grupos de acesso', 'Permissões de cada grupo de funcionários']);
     if (pode('grupos_tags')) l.push(['grupos', 'Grupo de Produtos', 'Grupos e subgrupos dos produtos'], ['tags', 'Tags', 'Tags e subtags dos produtos']);
+    if (pode('financeiro')) l.push(['formas', 'Formas de pagamento/recebimento', 'Formas aceitas e em qual caixa/banco o dinheiro entra']);
     return l;
   }
   function desenharCfg() {
@@ -3327,6 +3805,11 @@
     var box = el('div'); corpo.appendChild(box);
     var ab = CFG.aba;
     if (ab === 'conta') { cfgTema(box); cfgSenha(box); }
+    else if (ab === 'formas') {
+      box.appendChild(el('div', 'empty', 'Carregando…'));
+      call('financeiro', [S.token]).then(function (d) { aposFin(d); if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgFormas(box); })
+        .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
+    }
     else if (ab === 'grupos' || ab === 'tags') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
       call('catalogo', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgCat(box, d, ab === 'tags' ? 'tag' : 'grupo'); })
@@ -3477,6 +3960,39 @@
     box.appendChild(c);
   }
 
+  function cfgFormas(box) {
+    var D = S.fin, L = D.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa }; });
+    var contas = D.contas.filter(function (c) { return c.ativa; });
+    var c = el('div', 'card'); box.appendChild(c);
+    c.appendChild(el('div', 'hint', 'Estas são as formas que aparecem no pagamento da venda. O valor recebido entra no caixa/banco escolhido (no cartão, entra o valor líquido; as taxas vêm da tabela da Calculadora de Cartão).'));
+    var lst = el('div'); lst.style.marginTop = '12px'; c.appendChild(lst);
+    function desenhar() {
+      lst.innerHTML = '';
+      var h = el('div', 'frow'); ['Nome', 'Tipo', 'Entra na conta', ''].forEach(function (t) { var d = el('div', '', t); d.style.cssText = 'font-size:12px;font-weight:700;color:var(--muted)'; h.appendChild(d); }); lst.appendChild(h);
+      L.forEach(function (f) {
+        var r = el('div', 'frow'), nm = inp('text', 'Ex.: Boleto'); nm.value = f.nome; nm.maxLength = 40; nm.oninput = function () { f.nome = nm.value; };
+        var tp = el('select'); [['nao', 'Sem taxa (PIX, dinheiro…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; tp.appendChild(op); }); tp.value = f.cartao; tp.onchange = function () { f.cartao = tp.value; };
+        var co = el('select'); contas.forEach(function (x) { var op = el('option', '', x.nome); op.value = x.id; co.appendChild(op); }); if (!contas.some(function (x) { return x.id === f.conta; })) { var op2 = el('option', '', '(escolha)'); op2.value = ''; co.insertBefore(op2, co.firstChild); } co.value = f.conta || ''; co.onchange = function () { f.conta = co.value; };
+        var al = el('label', 'ck'), at = el('input'); at.type = 'checkbox'; at.checked = f.ativa; at.onchange = function () { f.ativa = at.checked; }; al.appendChild(at); al.appendChild(document.createTextNode('Ativa'));
+        r.appendChild(nm); r.appendChild(tp); r.appendChild(co); r.appendChild(al); lst.appendChild(r);
+      });
+    }
+    desenhar();
+    var add = el('button', 'lnk', '+ Nova forma de pagamento'); add.type = 'button';
+    add.onclick = function () { L.push({ id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true }); desenhar(); var ins = lst.querySelectorAll('input[type=text]'); ins[ins.length - 1].focus(); };
+    c.appendChild(add);
+    c.appendChild(el('div', 'hint', 'Para tirar uma forma, desmarque "Ativa" (as vendas antigas continuam com ela). Contas novas (caixas e bancos) você cria em Financeiro › Caixas e Bancos.'));
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var sv = el('button', 'btn', 'Salvar formas de pagamento'); sv.type = 'button'; sv.style.marginTop = '10px'; c.appendChild(sv);
+    sv.onclick = function () {
+      m.classList.remove('show');
+      if (L.some(function (f) { return f.nome.trim().length < 2; })) { m.textContent = 'Dê um nome para todas as formas.'; m.classList.add('show'); return; }
+      if (L.some(function (f) { return !f.conta; })) { m.textContent = 'Escolha a conta de todas as formas.'; m.classList.add('show'); return; }
+      sv.disabled = true; sv.textContent = 'Salvando…';
+      call('formasSalvar', [S.token, L]).then(function (d) { aposFin(d); box.innerHTML = ''; cfgFormas(box); box.insertBefore(el('div', 'msg ok show', '✓ Formas de pagamento salvas.'), box.firstChild); V = null; $('vdNova').innerHTML = ''; })
+        .catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar formas de pagamento'; m.textContent = e; m.classList.add('show'); });
+    };
+  }
   function cfgCat(box, d, tipo) {
     var lista = tipo === 'tag' ? d.tags : d.grupos, uso = (d.uso && d.uso[tipo === 'tag' ? 'tags' : 'grupos']) || {};
     var R = tipo === 'tag'
