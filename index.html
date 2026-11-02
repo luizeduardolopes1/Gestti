@@ -91,8 +91,30 @@
   .catnovo input{flex:1;margin:0}
   .catnovo .btn{width:auto;padding:10px 14px;margin:0}
   .tagmini{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px;margin:2px 4px 0 0;background:var(--soft2);color:var(--muted)}
-  .catrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-  .catrow input{flex:1;margin:0}
+  .catrow{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+  .catrow input{flex:1 1 170px;margin:0}
+  @media (max-width:819px){.catrow input{flex-basis:100%}.catrow .n{margin-right:auto;text-align:left;min-width:0}}
+  .catrow.sub{margin-left:22px;padding-left:10px;border-left:2px solid var(--line)}
+  .catgrp{padding-bottom:4px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+  .catgrp:last-child{border-bottom:0}
+  .tchip .tx{background:none;border:0;color:inherit;font-size:16px;line-height:1;padding:0 0 0 4px;cursor:pointer;opacity:.85}
+  .tagbox .tsel{width:auto;display:inline-block;padding:7px 14px;font-size:13.5px;margin:0}
+  .tw-bg{z-index:60}.drawer.tw{z-index:61;display:flex;flex-direction:column;overflow:hidden}
+  .tw .twb{flex:1;overflow-y:auto;padding:12px 14px}
+  .tw .twf{padding:12px 14px;border-top:1px solid var(--line);background:var(--bg)}
+  .trow{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;background:var(--card);margin-bottom:6px;cursor:pointer;font-weight:700;font-size:14.5px;color:var(--ink)}
+  .trow.sub{margin-left:24px;font-weight:500}
+  .trow input{width:20px;height:20px;padding:0;margin:0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
+  .cfgwrap{display:grid;grid-template-columns:280px minmax(0,1fr);gap:16px;align-items:start}
+  .cfgmenu{padding:8px}
+  .cfgmenu .who2{font-size:12.5px;color:var(--muted);padding:6px 10px 10px}
+  .cfgmenu button{display:block;width:100%;text-align:left;border:0;background:none;padding:12px;border-radius:10px;font:inherit;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer;margin-bottom:2px}
+  .cfgmenu button small{display:block;font-weight:500;color:var(--muted);font-size:12.5px;margin-top:2px}
+  .cfgmenu button:hover{background:var(--soft2)}
+  .cfgmenu button.on{background:var(--navy);color:#fff}.cfgmenu button.on small{color:rgba(255,255,255,.8)}
+  .cfgcorpo h2.ct{font-size:20px;margin:2px 0 12px;color:var(--ink)}
+  .cfgvolta{display:none}
+  @media (max-width:819px){.cfgwrap{grid-template-columns:1fr}.cfgwrap.sel .cfgmenu{display:none}.cfgwrap:not(.sel) .cfgcorpo{display:none}.cfgvolta{display:inline-block;margin-bottom:6px}}
   .catrow .n{font-size:12px;color:var(--muted);white-space:nowrap;min-width:72px;text-align:right}
   .chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 11px;font-size:13px;cursor:pointer;color:var(--ink)}
   .chip.on{border-color:var(--accent);background:var(--navy);color:#fff}
@@ -352,6 +374,12 @@
     <button class="btn ghost" id="nsSair" type="button" style="margin-top:8px">Sair</button>
   </section>
 
+  <!-- CONFIGURAÇÕES -->
+  <section id="vConfig" class="hide">
+    <div class="ptopo"><h1>Configurações</h1></div>
+    <div class="cfgwrap" id="cfgWrap"><div class="card cfgmenu" id="cfgMenu"></div><div class="cfgcorpo" id="cfgCorpo"></div></div>
+  </section>
+
   <!-- CADASTRO -->
   <section id="vCadastro" class="hide">
     <div class="ptopo"><h1>Novo produto usado</h1><button type="button" class="btn ghost" id="cVoltar">← Voltar para Produtos Usados</button></div>
@@ -608,6 +636,8 @@
   </section>
 </main>
 <div class="dw-bg hide" id="dwBg"></div><aside class="drawer" id="dw" aria-hidden="true"></aside>
+<div class="dw-bg tw-bg hide" id="twBg"></div>
+<aside class="drawer tw" id="tw" aria-hidden="true" aria-label="Selecionar tags"></aside>
 <div class="overlay hide" id="fModal"><div class="sheet" id="fSheet"></div></div>
 
 <script>
@@ -717,7 +747,7 @@
     S.token = ''; S.u = null; S.disp = null; S.venda = null; S.manut = null; S.novos = null; S.prec = null;
     LS.del('token'); LS.del('loja'); LS.del('hist');
     VIEWS.forEach(function (v) { show(v.sec, false); });
-    show('nav', false); show('who', false); show('gear', false); show('vNovaSenha', false); show('vCarregando', false); show('vLogin', true);
+    show('nav', false); show('who', false); show('gear', false); show('vConfig', false); show('vNovaSenha', false); show('vCarregando', false); show('vLogin', true);
     $('fModal').classList.add('hide'); document.body.style.overflow = ''; S.senhaInicial = '';
     msg('loginMsg', motivo || '');
   }
@@ -729,7 +759,7 @@
     show('vCarregando', false); show('vLogin', false);
     $('whoNome').textContent = d.nome + ' · ' + d.perfil; show('who', true);
     if (d.trocarSenha) {
-      VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false);
+      VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false); show('vConfig', false);
       $('nsNome').textContent = d.nome.split(' ')[0];
       show('nsAtualBox', !S.senhaInicial); msg('nsMsg', '');
       show('vNovaSenha', true); (S.senhaInicial ? $('nsNova') : $('nsAtual')).focus();
@@ -747,7 +777,7 @@
     montarCadastro(d); montarAval(); montarCartao(); if (pode('compra')) montarCompra();
     var ult = LS.get('view', 'cadastro');
     var permitidas = VIEWS.filter(function (v) { return pode(v.perm); });
-    if (!permitidas.some(function (v) { return v.id === ult; })) ult = permitidas.length ? permitidas[0].id : '';
+    if (ult !== 'config' && !permitidas.some(function (v) { return v.id === ult; })) ult = permitidas.length ? permitidas[0].id : '';
     if (!ult) { show('nav', false); msg('topMsg', 'Seu usuário ainda não tem nenhuma página liberada. Fale com o gerente.'); return; }
     ir(ult);
   }
@@ -755,6 +785,8 @@
   function ir(id) {
     S.view = id; LS.set('view', id); msg('topMsg', ''); document.body.classList.add('wide'); fecharDrawer();
     VIEWS.forEach(function (v) { show(v.sec, v.id === id); });
+    show('vConfig', id === 'config'); fecharTags();
+    if (id === 'config') desenharCfg();
     Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.v === id); if (b.dataset.v === id && b.scrollIntoView) b.scrollIntoView({ inline: 'center', block: 'nearest' }); });
     if (id === 'disp') carregarDisp(false);
     show('dNovo', pode('cadastro')); show('cVoltar', pode('produtos'));
@@ -779,37 +811,67 @@
   // =========================================================
   //  GRUPOS DE PRODUTOS E TAGS
   // =========================================================
+  var SEP = ' › ';
   function cat() { if (!S.u.catalogo) S.u.catalogo = { grupos: [], tags: [] }; return S.u.catalogo; }
+  function cmpNome(a, b) { return a.nome.localeCompare(b.nome, 'pt-BR'); }
+  // ["A", "A › B"] -> [{nome:'A', path:'A', filhos:[{nome:'B', path:'A › B'}]}]
+  function arvore(lista) {
+    var pais = [], idx = {};
+    (lista || []).forEach(function (p) {
+      var i = p.indexOf(SEP), pai = i > 0 ? p.slice(0, i) : p;
+      if (!idx[pai]) { idx[pai] = { nome: pai, path: pai, filhos: [] }; pais.push(idx[pai]); }
+      if (i > 0) idx[pai].filhos.push({ nome: p.slice(i + SEP.length), path: p });
+    });
+    pais.sort(cmpNome); pais.forEach(function (p) { p.filhos.sort(cmpNome); });
+    return pais;
+  }
+  function optsArvore(sel, lista, keep, vazio) {
+    sel.innerHTML = '';
+    var add = function (v, t) { var o = el('option', '', t); o.value = v; sel.appendChild(o); };
+    if (vazio) add('', vazio);
+    arvore(lista).forEach(function (p) { add(p.path, p.nome); p.filhos.forEach(function (f) { add(f.path, '   ' + p.nome + ' › ' + f.nome); }); });
+    if (keep && Array.prototype.some.call(sel.options, function (o) { return o.value === keep; })) sel.value = keep;
+  }
+  function casaCat(v, f) { v = v || ''; return v === f || v.indexOf(f + SEP) === 0; }
   function filtrosCat() {
     [['dGrupo', 'grupos', 'Todos os grupos'], ['nGrupo', 'grupos', 'Todos os grupos'], ['dTag', 'tags', 'Todas as tags'], ['nTag', 'tags', 'Todas as tags']].forEach(function (f) {
-      var e = $(f[0]); if (e) opts(e, cat()[f[1]], e.value, f[2]);
+      var e = $(f[0]); if (e) optsArvore(e, cat()[f[1]], e.value, f[2]);
     });
   }
+  // Cadastro rápido de grupo/tag (com opção de ser subgrupo/subtag)
   function novoCatInline(box, tipo, aoCriar) {
-    var nv = el('div', 'catnovo hide'), i = inp('text', tipo === 'tag' ? 'Nome da nova tag' : 'Nome do novo grupo'); i.maxLength = 40;
+    var w = el('div', 'hide'), nv = el('div', 'catnovo'), i = inp('text', tipo === 'tag' ? 'Nome da nova tag' : 'Nome do novo grupo'); i.maxLength = 40;
+    var pai = el('select'); pai.style.marginTop = '8px';
     var b = el('button', 'btn', 'Cadastrar'), x = el('button', 'lnk', 'Cancelar'); b.type = x.type = 'button';
     var m = el('div', 'msg err');
-    nv.appendChild(i); nv.appendChild(b); nv.appendChild(x); box.appendChild(nv); box.appendChild(m);
-    x.onclick = function () { nv.classList.add('hide'); m.classList.remove('show'); i.value = ''; };
+    nv.appendChild(i); nv.appendChild(b); nv.appendChild(x); w.appendChild(pai); w.appendChild(nv); w.appendChild(m); box.appendChild(w);
+    x.onclick = function () { w.classList.add('hide'); m.classList.remove('show'); i.value = ''; };
     i.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); b.click(); } };
     b.onclick = function () {
       m.classList.remove('show');
-      if (i.value.trim().length < 2) { m.textContent = 'Digite o nome (mínimo 2 letras).'; m.classList.add('show'); return; }
+      var nome = i.value.replace(/[›,]/g, ' ').trim();
+      if (nome.length < 2) { m.textContent = 'Digite o nome (mínimo 2 letras).'; m.classList.add('show'); return; }
+      if (pai.value) nome = pai.value + SEP + nome;
       b.disabled = true; b.textContent = 'Salvando…';
-      call('catAdicionar', [S.token, tipo, i.value.trim()]).then(function (r) {
-        S.u.catalogo = r.catalogo; filtrosCat(); b.disabled = false; b.textContent = 'Cadastrar'; i.value = ''; nv.classList.add('hide'); aoCriar(r.nome);
+      call('catAdicionar', [S.token, tipo, nome]).then(function (r) {
+        S.u.catalogo = r.catalogo; filtrosCat(); b.disabled = false; b.textContent = 'Cadastrar'; i.value = ''; w.classList.add('hide'); aoCriar(r.nome);
       }).catch(function (e) { b.disabled = false; b.textContent = 'Cadastrar'; m.textContent = e; m.classList.add('show'); });
     };
-    return function () { nv.classList.remove('hide'); i.focus(); };
+    return function () {
+      pai.innerHTML = '';
+      var o = el('option', '', tipo === 'tag' ? 'Tag principal (sem subtag)' : 'Grupo principal (sem subgrupo)'); o.value = ''; pai.appendChild(o);
+      arvore(cat()[tipo === 'tag' ? 'tags' : 'grupos']).forEach(function (p) { var q = el('option', '', (tipo === 'tag' ? 'Subtag de: ' : 'Subgrupo de: ') + p.nome); q.value = p.path; pai.appendChild(q); });
+      w.classList.remove('hide'); i.focus();
+    };
   }
   // Caixa de seleção do grupo, com "+ Cadastrar novo grupo…" ali mesmo
   function seletorGrupo(box, valor) {
     box.innerHTML = '';
     var atual = valor || '', s2 = el('select'); box.appendChild(s2);
     function montar() {
-      var l = cat().grupos.slice(); if (atual && l.indexOf(atual) < 0) l.unshift(atual);
-      opts(s2, l, atual, '— Sem grupo —');
-      var o = el('option', '', '+ Cadastrar novo grupo…'); o.value = '__novo'; s2.appendChild(o);
+      var l = cat().grupos.slice(); if (atual && l.indexOf(atual) < 0) l.push(atual);
+      optsArvore(s2, l, atual, '— Sem grupo —');
+      var o = el('option', '', '+ Cadastrar novo grupo ou subgrupo…'); o.value = '__novo'; s2.appendChild(o);
       s2.value = atual;
     }
     var abrir = novoCatInline(box, 'grupo', function (nome) { atual = nome; montar(); });
@@ -817,24 +879,62 @@
     montar();
     return { get: function () { return atual; } };
   }
-  // Tags: caixa pontilhada, toca para marcar/desmarcar
+  // Tags: no formulário só aparecem as selecionadas; "Selecionar tags" abre o painel da direita
   function seletorTags(box, sel) {
     box.innerHTML = '';
     var esc = (sel || []).slice(), w = el('div', 'tagbox'); box.appendChild(w);
-    var abrir = pode('grupos_tags') ? novoCatInline(box, 'tag', function (nome) { if (esc.indexOf(nome) < 0) esc.push(nome); montar(); }) : null;
     function montar() {
       w.innerHTML = '';
-      var l = cat().tags.slice(); esc.forEach(function (t) { if (l.indexOf(t) < 0) l.push(t); });
-      if (!l.length) w.appendChild(el('span', 'hint', pode('grupos_tags') ? 'Nenhuma tag cadastrada ainda.' : 'Nenhuma tag cadastrada. O gerente cria as tags na engrenagem.'));
-      l.forEach(function (t) {
-        var on = esc.indexOf(t) > -1, c = el('button', 'tchip' + (on ? ' on' : ''), t); c.type = 'button'; c.setAttribute('aria-pressed', on ? 'true' : 'false');
-        c.onclick = function () { var i = esc.indexOf(t); if (i > -1) esc.splice(i, 1); else esc.push(t); montar(); };
-        w.appendChild(c);
+      if (!esc.length) w.appendChild(el('span', 'hint', 'Nenhuma tag selecionada.'));
+      esc.slice().sort(function (a, b) { return a.localeCompare(b, 'pt-BR'); }).forEach(function (t) {
+        var c = el('span', 'tchip on', t), x = el('button', 'tx', '×'); x.type = 'button'; x.title = 'Tirar esta tag'; x.setAttribute('aria-label', 'Tirar ' + t);
+        x.onclick = function () { esc.splice(esc.indexOf(t), 1); montar(); };
+        c.appendChild(x); w.appendChild(c);
       });
-      if (abrir) { var a = el('button', 'lnk', '+ Nova tag'); a.type = 'button'; a.onclick = abrir; w.appendChild(a); }
+      var b = el('button', 'btn ghost tsel', esc.length ? 'Alterar tags' : 'Selecionar tags'); b.type = 'button';
+      b.onclick = function () { abrirPainelTags(esc, montar); };
+      w.appendChild(b);
     }
     montar();
     return { get: function () { return esc.slice(); } };
+  }
+  function fecharTags() { $('tw').classList.remove('on'); $('tw').setAttribute('aria-hidden', 'true'); $('twBg').classList.add('hide'); }
+  $('twBg').onclick = fecharTags;
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fecharTags(); });
+  function abrirPainelTags(esc, aoMudar) {
+    var tw = $('tw'); tw.innerHTML = '';
+    var hd = el('div', 'dwh'), ht = el('div'); ht.appendChild(el('div', 't', 'Selecionar tags')); ht.appendChild(el('div', 's', 'Toque para marcar. Só as marcadas aparecem no cadastro.'));
+    var fx = el('button', '', '×'); fx.type = 'button'; fx.setAttribute('aria-label', 'Fechar'); fx.onclick = fecharTags;
+    hd.appendChild(ht); hd.appendChild(fx); tw.appendChild(hd);
+    var bd = el('div', 'twb'); tw.appendChild(bd);
+    var busca = inp('text', 'Buscar tag…'); busca.style.marginBottom = '10px'; bd.appendChild(busca);
+    var lista = el('div'); bd.appendChild(lista);
+    var ft = el('div', 'twf'), ok = el('button', 'btn', ''); ok.type = 'button'; ok.onclick = fecharTags; ft.appendChild(ok); tw.appendChild(ft);
+    function conta() { ok.textContent = 'Concluir' + (esc.length ? ' (' + esc.length + ' selecionada' + (esc.length === 1 ? '' : 's') + ')' : ''); }
+    function linha(item, sub) {
+      var r = el('label', 'trow' + (sub ? ' sub' : '')), c = el('input'); c.type = 'checkbox'; c.checked = esc.indexOf(item.path) > -1;
+      c.onchange = function () { var i = esc.indexOf(item.path); if (c.checked && i < 0) esc.push(item.path); if (!c.checked && i > -1) esc.splice(i, 1); conta(); aoMudar(); };
+      r.appendChild(c); r.appendChild(document.createTextNode(item.nome)); return r;
+    }
+    function desenhar() {
+      lista.innerHTML = '';
+      var q = busca.value.trim().toLowerCase(), n = 0;
+      arvore(cat().tags).forEach(function (p) {
+        var fs = p.filhos.filter(function (f) { return !q || f.path.toLowerCase().indexOf(q) > -1; });
+        if (q && p.nome.toLowerCase().indexOf(q) < 0 && !fs.length) return;
+        lista.appendChild(linha(p, false)); n++;
+        (q && p.nome.toLowerCase().indexOf(q) > -1 ? p.filhos : fs).forEach(function (f) { lista.appendChild(linha(f, true)); n++; });
+      });
+      if (!n) lista.appendChild(el('div', 'empty', cat().tags.length ? 'Nenhuma tag encontrada.' : (pode('grupos_tags') ? 'Nenhuma tag cadastrada ainda. Use "+ Nova tag".' : 'Nenhuma tag cadastrada. O gerente cria as tags em Configurações › Tags.')));
+    }
+    busca.oninput = desenhar;
+    if (pode('grupos_tags')) {
+      var nb = el('div'); nb.style.marginTop = '8px'; bd.appendChild(nb);
+      var a = el('button', 'lnk', '+ Nova tag'); a.type = 'button'; nb.appendChild(a);
+      a.onclick = novoCatInline(nb, 'tag', function (nome) { if (esc.indexOf(nome) < 0) esc.push(nome); conta(); aoMudar(); desenhar(); });
+    }
+    desenhar(); conta();
+    $('twBg').classList.remove('hide'); tw.classList.add('on'); tw.setAttribute('aria-hidden', 'false'); busca.focus();
   }
   function montarCatCadastro() { S.cGrupo = seletorGrupo($('cGrupo'), ''); S.cTags = seletorTags($('cTags'), []); }
 
@@ -999,8 +1099,8 @@
       if (cls && x.classif !== cls) return false;
       if (sit === 'disp' && x.manut) return false;
       if (sit === 'manut' && !x.manut) return false;
-      if (gru && x.grupo !== gru) return false;
-      if (tag && (x.tags || []).indexOf(tag) < 0) return false;
+      if (gru && !casaCat(x.grupo, gru)) return false;
+      if (tag && !(x.tags || []).some(function (t) { return casaCat(t, tag); })) return false;
       if (imeiTxt && (String(x.imei) + ' ' + String(x.sku || '')).toLowerCase().indexOf(imeiTxt) < 0) return false;
       var m = x.modelo.toLowerCase();
       return termos.every(function (t) { return m.indexOf(t) > -1; });
@@ -1335,8 +1435,8 @@
     var termos = $('nBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
     var sit = $('nSit').value, ordem = $('nOrdem').value, gru = $('nGrupo').value, tag = $('nTag').value;
     var l = S.novos.filter(function (x) {
-      if (gru && x.grupo !== gru) return false;
-      if (tag && (x.tags || []).indexOf(tag) < 0) return false;
+      if (gru && !casaCat(x.grupo, gru)) return false;
+      if (tag && !(x.tags || []).some(function (t) { return casaCat(t, tag); })) return false;
       if (sit === '' && x.indisp) return false;
       if (sit === 'indisp' && !x.indisp) return false;
       var t = x.nome.toLowerCase(); return termos.every(function (q) { return t.indexOf(q) > -1; });
@@ -2103,35 +2203,46 @@
   // =========================================================
   //  ENGRENAGEM: MINHA SENHA / FUNCIONÁRIOS / GRUPOS
   // =========================================================
-  var CFG = { aba: 'senha', eq: null };
+  var CFG = { aba: 'conta', eq: null };
   function fecharModal() { $('fModal').classList.add('hide'); document.body.style.overflow = ''; }
   function abrirModal() { $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModal(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
-  $('gear').onclick = function () { CFG.aba = 'senha'; CFG.eq = null; desenharCfg(); abrirModal(); };
+  $('gear').onclick = function () { CFG.aba = window.innerWidth >= 820 ? 'conta' : null; CFG.eq = null; ir('config'); };
 
+  function itensCfg() {
+    var l = [['conta', 'Minha conta', 'Aparência e troca de senha']];
+    if (pode('equipe')) l.push(['func', 'Funcionários', 'Cadastro, senhas e permissões'], ['acesso', 'Grupos de acesso', 'Permissões de cada grupo de funcionários']);
+    if (pode('grupos_tags')) l.push(['grupos', 'Grupo de Produtos', 'Grupos e subgrupos dos produtos'], ['tags', 'Tags', 'Tags e subtags dos produtos']);
+    return l;
+  }
   function desenharCfg() {
-    var sh = $('fSheet'); sh.innerHTML = '';
-    sh.appendChild(el('h2', 'tt', 'Configurações'));
-    sh.appendChild(el('div', 'sub', S.u.nome + ' · usuário ' + S.u.usuario + ' · ' + S.u.perfil));
-    var abas = [['senha', 'Minha conta']];
-    if (pode('equipe')) abas.push(['func', 'Funcionários'], ['grupos', 'Grupos de acesso']);
-    if (pode('grupos_tags')) abas.push(['cat', 'Grupos de produtos e tags']);
-    if (abas.length > 1) {
-      var t = el('div', 'stabs');
-      abas.forEach(function (a) { var b = el('button', a[0] === CFG.aba ? 'on' : '', a[1]); b.type = 'button'; b.onclick = function () { CFG.aba = a[0]; desenharCfg(); }; t.appendChild(b); });
-      sh.appendChild(t);
-    }
-    var corpo = el('div'); sh.appendChild(corpo);
-    if (CFG.aba === 'senha') { cfgTema(corpo); cfgSenha(corpo); }
-    else if (CFG.aba === 'cat') {
-      corpo.appendChild(el('div', 'empty', 'Carregando…'));
-      call('catalogo', [S.token]).then(function (d) { corpo.innerHTML = ''; cfgCat(corpo, d); }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', e)); });
-    }
-    else if (!CFG.eq) {
-      corpo.appendChild(el('div', 'empty', 'Carregando…'));
-      call('equipe', [S.token]).then(function (d) { CFG.eq = d; desenharCfg(); }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', e)); });
-    } else if (CFG.aba === 'func') cfgFunc(corpo);
-    else cfgGrupos(corpo);
-    var f = el('button', 'btn ghost', 'Fechar'); f.type = 'button'; f.style.marginTop = '10px'; f.onclick = fecharModal; sh.appendChild(f);
+    var it = itensCfg();
+    if (CFG.aba && !it.some(function (a) { return a[0] === CFG.aba; })) CFG.aba = 'conta';
+    var menu = $('cfgMenu'); menu.innerHTML = '';
+    menu.appendChild(el('div', 'who2', S.u.nome + ' · usuário ' + S.u.usuario + ' · ' + S.u.perfil));
+    it.forEach(function (a) {
+      var b = el('button', a[0] === CFG.aba ? 'on' : ''); b.type = 'button';
+      b.appendChild(document.createTextNode(a[1])); b.appendChild(el('small', '', a[2]));
+      b.onclick = function () { CFG.aba = a[0]; desenharCfg(); window.scrollTo(0, 0); };
+      menu.appendChild(b);
+    });
+    $('cfgWrap').classList.toggle('sel', !!CFG.aba);
+    var corpo = $('cfgCorpo'); corpo.innerHTML = '';
+    if (!CFG.aba) return;
+    var vt = el('button', 'lnk cfgvolta', '← Configurações'); vt.type = 'button'; vt.onclick = function () { CFG.aba = null; desenharCfg(); window.scrollTo(0, 0); }; corpo.appendChild(vt);
+    var atual = it.filter(function (a) { return a[0] === CFG.aba; })[0];
+    corpo.appendChild(el('h2', 'ct', atual[1]));
+    var box = el('div'); corpo.appendChild(box);
+    var ab = CFG.aba;
+    if (ab === 'conta') { cfgTema(box); cfgSenha(box); }
+    else if (ab === 'grupos' || ab === 'tags') {
+      box.appendChild(el('div', 'empty', 'Carregando…'));
+      call('catalogo', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgCat(box, d, ab === 'tags' ? 'tag' : 'grupo'); })
+        .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
+    } else if (!CFG.eq) {
+      box.appendChild(el('div', 'empty', 'Carregando…'));
+      call('equipe', [S.token]).then(function (d) { CFG.eq = d; if (CFG.aba === ab) desenharCfg(); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
+    } else if (ab === 'func') cfgFunc(box);
+    else cfgGrupos(box);
   }
   function inp(tipo, ph) { var i = el('input'); i.type = tipo || 'text'; if (ph) i.placeholder = ph; i.maxLength = 60; return i; }
   function campo(box, rot, node, first) { box.appendChild(el('label', first ? 'first' : '', rot)); box.appendChild(node); return node; }
@@ -2250,7 +2361,7 @@
       var ns = el('button', 'btn ghost', 'Gerar nova senha inicial'); ns.type = 'button'; ns.style.marginTop = '8px';
       ns.onclick = function () {
         ns.disabled = true; ns.textContent = 'Gerando…';
-        call('equipeNovaSenha', [S.token, x.id]).then(function (r) { CFG.eq = r.dados; box.innerHTML = ''; cfgFunc(box); mostrarSenhaInicial(box, r); $('fSheet').scrollTop = 0; })
+        call('equipeNovaSenha', [S.token, x.id]).then(function (r) { CFG.eq = r.dados; box.innerHTML = ''; cfgFunc(box); mostrarSenhaInicial(box, r); window.scrollTo(0, 0); })
           .catch(function (e) { ns.disabled = false; ns.textContent = 'Gerar nova senha inicial'; m.textContent = e; m.classList.add('show'); });
       };
       c.appendChild(ns);
@@ -2267,54 +2378,80 @@
       ok.disabled = true; ok.textContent = 'Salvando…';
       (x ? call('equipeEditar', [S.token, x.id, d]) : call('equipeCriar', [S.token, d])).then(function (r) {
         CFG.eq = x ? r : r.dados; box.innerHTML = ''; cfgFunc(box);
-        if (!x) { mostrarSenhaInicial(box, r); $('fSheet').scrollTop = 0; }
+        if (!x) { mostrarSenhaInicial(box, r); window.scrollTo(0, 0); }
       }).catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Cadastrar e gerar senha'; m.textContent = e; m.classList.add('show'); });
     };
     box.appendChild(c);
   }
 
-  function cfgCat(box, d) {
-    [['grupo', 'grupos', 'Grupos de produtos', '+ Novo grupo', 'Ex.: Smartphones, Fones, Carregadores'],
-     ['tag', 'tags', 'Tags', '+ Nova tag', 'Ex.: Promoção, Lançamento, Mais vendido']].forEach(function (cf) {
-      var c = el('div', 'card'); c.appendChild(el('h2', '', cf[2]));
-      var L = d[cf[1]].map(function (n) { return { nome: n, orig: n }; });
-      var uso = (d.uso && d.uso[cf[1]]) || {};
-      var lista = el('div'); c.appendChild(lista);
-      function desenhar() {
-        lista.innerHTML = '';
-        if (!L.length) lista.appendChild(el('div', 'hint', 'Nenhum cadastrado ainda.'));
-        L.forEach(function (x, i) {
-          var r = el('div', 'catrow'), ip = inp('text', cf[4]); ip.maxLength = 40; ip.value = x.nome; ip.oninput = function () { x.nome = ip.value; };
-          var q = x.orig ? (uso[x.orig] || 0) : 0;
-          var n = el('div', 'n', x.orig ? q + ' produto' + (q === 1 ? '' : 's') : 'novo');
-          var del = el('button', 'lnk', 'Excluir'); del.type = 'button'; del.style.color = 'var(--err)';
-          del.onclick = function () {
-            if (x.orig && q && !del.dataset.conf) { del.dataset.conf = '1'; del.textContent = 'Confirmar?'; return; }
-            L.splice(i, 1); desenhar();
-          };
-          r.appendChild(ip); r.appendChild(n); r.appendChild(del); lista.appendChild(r);
-        });
-      }
-      desenhar();
-      var add = el('button', 'lnk', cf[3]); add.type = 'button';
-      add.onclick = function () { L.push({ nome: '', orig: '' }); desenhar(); var ins = lista.querySelectorAll('input'); ins[ins.length - 1].focus(); };
-      c.appendChild(add);
-      var m = el('div', 'msg err'); c.appendChild(m);
-      var sv = el('button', 'btn', 'Salvar ' + cf[2].toLowerCase()); sv.type = 'button'; sv.style.marginTop = '10px'; c.appendChild(sv);
-      c.appendChild(el('div', 'hint', 'Renomear muda em todos os produtos que usam. Excluir tira dos produtos (o produto continua cadastrado).'));
-      sv.onclick = function () {
-        m.classList.remove('show');
-        var nomes = L.map(function (x) { return x.nome.trim().toLowerCase(); });
-        if (nomes.some(function (n) { return n.length < 2; })) { m.textContent = 'Todos precisam ter nome (mínimo 2 letras).'; m.classList.add('show'); return; }
-        if (nomes.some(function (n, i) { return nomes.indexOf(n) !== i; })) { m.textContent = 'Há nomes repetidos.'; m.classList.add('show'); return; }
-        sv.disabled = true; sv.textContent = 'Salvando…';
-        call('catSalvar', [S.token, cf[0], L.map(function (x) { return { nome: x.nome.trim(), orig: x.orig }; })]).then(function (nd) {
-          S.u.catalogo = { grupos: nd.grupos, tags: nd.tags }; filtrosCat(); S.disp = null; S.novos = null; montarCatCadastro();
-          box.innerHTML = ''; cfgCat(box, nd); box.insertBefore(el('div', 'msg ok show', '✓ ' + cf[2] + ' salvos.'), box.firstChild);
-        }).catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar ' + cf[2].toLowerCase(); m.textContent = e; m.classList.add('show'); });
-      };
-      box.appendChild(c);
+  function cfgCat(box, d, tipo) {
+    var lista = tipo === 'tag' ? d.tags : d.grupos, uso = (d.uso && d.uso[tipo === 'tag' ? 'tags' : 'grupos']) || {};
+    var R = tipo === 'tag'
+      ? { Sub: 'Subtag', novo: '+ Nova tag', ph: 'Ex.: Promoção', phs: 'Ex.: Black Friday', tit: 'tags', ok: 'Tags salvas.' }
+      : { Sub: 'Subgrupo', novo: '+ Novo grupo', ph: 'Ex.: Acessórios', phs: 'Ex.: Capas', tit: 'grupos', ok: 'Grupos de produtos salvos.' };
+    var T = arvore(lista).map(function (p) {
+      return { nome: p.nome, orig: lista.indexOf(p.path) > -1 ? p.path : '', filhos: p.filhos.map(function (f) { return { nome: f.nome, orig: f.path }; }) };
     });
+    function qtd(path, tudo) { var n = 0; Object.keys(uso).forEach(function (k) { if (k === path || (tudo && k.indexOf(path + SEP) === 0)) n += uso[k]; }); return n; }
+    var c = el('div', 'card'); box.appendChild(c);
+    c.appendChild(el('div', 'hint', tipo === 'tag'
+      ? 'Organize em tags principais e subtags. No cadastro do produto, o vendedor toca em "Selecionar tags" e só as marcadas aparecem.'
+      : 'Organize em grupos e subgrupos (ex.: Acessórios › Capas). Filtrar por um grupo mostra também os produtos dos subgrupos.'));
+    var lst = el('div'); lst.style.marginTop = '12px'; c.appendChild(lst);
+    function linha(item, sub, arr, i) {
+      var r = el('div', 'catrow' + (sub ? ' sub' : '')), ip = inp('text', sub ? R.phs : R.ph); ip.maxLength = 40; ip.value = item.nome;
+      ip.oninput = function () { item.nome = ip.value; };
+      var q = item.orig ? qtd(item.orig, !sub) : 0;
+      r.appendChild(ip); r.appendChild(el('div', 'n', item.orig ? q + ' produto' + (q === 1 ? '' : 's') : 'novo'));
+      if (!sub) {
+        var as = el('button', 'lnk', '+ ' + R.Sub); as.type = 'button';
+        as.onclick = function () { item.filhos.push({ nome: '', orig: '' }); desenhar(); var g = lst.children[i].querySelectorAll('input'); g[g.length - 1].focus(); };
+        r.appendChild(as);
+      }
+      var del = el('button', 'lnk', 'Excluir'); del.type = 'button'; del.style.color = 'var(--err)';
+      del.onclick = function () {
+        var pesa = q || (!sub && item.filhos.length);
+        if (pesa && !del.dataset.conf) { del.dataset.conf = '1'; del.textContent = !sub && item.filhos.length ? 'Confirmar? (exclui também ' + item.filhos.length + (item.filhos.length === 1 ? ' sub)' : ' subs)') : 'Confirmar?'; return; }
+        arr.splice(i, 1); desenhar();
+      };
+      r.appendChild(del);
+      return r;
+    }
+    function desenhar() {
+      lst.innerHTML = '';
+      if (!T.length) lst.appendChild(el('div', 'hint', 'Nenhum cadastrado ainda.'));
+      T.forEach(function (p, i) {
+        var g = el('div', 'catgrp'); g.appendChild(linha(p, false, T, i));
+        p.filhos.forEach(function (f, j) { g.appendChild(linha(f, true, p.filhos, j)); });
+        lst.appendChild(g);
+      });
+    }
+    desenhar();
+    var add = el('button', 'lnk', R.novo); add.type = 'button';
+    add.onclick = function () { T.push({ nome: '', orig: '', filhos: [] }); desenhar(); var ins = lst.querySelectorAll('.catgrp:last-child input'); ins[0].focus(); };
+    c.appendChild(add);
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var sv = el('button', 'btn', 'Salvar ' + R.tit); sv.type = 'button'; sv.style.marginTop = '12px'; c.appendChild(sv);
+    c.appendChild(el('div', 'hint', 'Renomear muda em todos os produtos que usam. Excluir tira dos produtos (o produto continua cadastrado). Excluir um principal exclui os subs dele.'));
+    sv.onclick = function () {
+      m.classList.remove('show');
+      var limpa = function (x) { return x.replace(/[›,]/g, ' ').replace(/\s+/g, ' ').trim(); };
+      var erro = '', topo = [];
+      T.forEach(function (p) {
+        var n = limpa(p.nome); if (n.length < 2) erro = 'Todos precisam ter nome (mínimo 2 letras).';
+        if (topo.indexOf(n.toLowerCase()) > -1) erro = 'Há nomes repetidos: "' + n + '".'; topo.push(n.toLowerCase());
+        var fl = [];
+        p.filhos.forEach(function (f) { var k = limpa(f.nome); if (k.length < 2) erro = 'Todos precisam ter nome (mínimo 2 letras).'; if (fl.indexOf(k.toLowerCase()) > -1) erro = 'Há nomes repetidos dentro de "' + n + '".'; fl.push(k.toLowerCase()); });
+      });
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      var out = [];
+      T.forEach(function (p) { var n = limpa(p.nome); out.push({ nome: n, orig: p.orig }); p.filhos.forEach(function (f) { out.push({ nome: n + SEP + limpa(f.nome), orig: f.orig }); }); });
+      sv.disabled = true; sv.textContent = 'Salvando…';
+      call('catSalvar', [S.token, tipo, out]).then(function (nd) {
+        S.u.catalogo = { grupos: nd.grupos, tags: nd.tags }; filtrosCat(); S.disp = null; S.novos = null; montarCatCadastro();
+        box.innerHTML = ''; cfgCat(box, nd, tipo); box.insertBefore(el('div', 'msg ok show', '✓ ' + R.ok), box.firstChild);
+      }).catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar ' + R.tit; m.textContent = e; m.classList.add('show'); });
+    };
   }
   function cfgGrupos(box) {
     var G = CFG.eq.grupos.map(function (g) { return { nome: g.nome, orig: g.nome, perms: g.perms.slice() }; });
@@ -2353,7 +2490,7 @@
       sv.disabled = true; sv.textContent = 'Salvando…';
       call('gruposSalvar', [S.token, G.map(function (g) { return { nome: g.nome.trim(), orig: g.orig, perms: g.perms }; })]).then(function (d) {
         CFG.eq = d; sv.disabled = false; sv.textContent = 'Salvar grupos';
-        call('retomar', [S.token]).then(function (u) { abrirApp(u); desenharCfg(); }).catch(function () {});
+        call('retomar', [S.token]).then(function (u) { S.u = u; }).catch(function () {});
         box.innerHTML = ''; cfgGrupos(box); var ok = el('div', 'msg ok show', '✓ Grupos salvos.'); box.insertBefore(ok, box.firstChild);
       }).catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar grupos'; m.textContent = e; m.classList.add('show'); });
     };
