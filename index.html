@@ -105,6 +105,33 @@
   .trow{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;background:var(--card);margin-bottom:6px;cursor:pointer;font-weight:700;font-size:14.5px;color:var(--ink)}
   .trow.sub{margin-left:24px;font-weight:500}
   .trow input{width:20px;height:20px;padding:0;margin:0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
+  .dbfil{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 10px}.dbfil>div{flex:1 1 180px;max-width:280px}.dbfil label{margin-top:0}
+  .dbrel{margin-bottom:14px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;margin-bottom:12px}
+  .kpi{background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(16,32,56,.08);padding:14px}
+  .kpi .k{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+  .kpi .v{font-size:24px;font-weight:800;color:var(--ink);margin-top:4px;font-variant-numeric:tabular-nums;line-height:1.15}
+  .kpi .s{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .kpi .s.up{color:var(--ok)}.kpi .s.down{color:var(--err)}
+  .dbgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px;align-items:start}
+  .dbgrid .card{margin:0}
+  .card h3.ch{font-size:14px;margin:0 0 10px;color:var(--ink)}
+  .br{display:grid;grid-template-columns:minmax(80px,36%) minmax(40px,1fr) auto;gap:8px;align-items:center;font-size:13.5px;margin:7px 0}
+  .br .rt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+  .br .tr{height:14px;background:var(--soft2);border-radius:4px;overflow:hidden}
+  .br .fi{height:100%;background:var(--accent);border-radius:0 4px 4px 0;min-width:2px}
+  .br .vl{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600;text-align:right;white-space:nowrap}
+  .br .vl small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+  .cols{display:flex;align-items:flex-end;gap:2px;height:150px;border-bottom:1px solid var(--line);padding-top:18px}
+  .cols .c{flex:1;position:relative;height:100%;display:flex;align-items:flex-end;cursor:default}
+  .cols .c i{display:block;width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:1px}
+  .cols .c:hover i{opacity:.75}
+  .cols .c:hover::after{content:attr(data-t);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--card);font-size:12px;font-weight:600;padding:4px 8px;border-radius:6px;white-space:nowrap;z-index:2;pointer-events:none}
+  .cols .c:first-child:hover::after{left:0;transform:none}.cols .c:last-child:hover::after{left:auto;right:0;transform:none}
+  .colx{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:4px}
+  .tbwrap{overflow-x:auto;margin:0 -4px}
+  .tbacoes{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+  .tbacoes h3.ch{margin:0}
   .cfgwrap{display:grid;grid-template-columns:280px minmax(0,1fr);gap:16px;align-items:start}
   .cfgmenu{padding:8px}
   .cfgmenu .who2{font-size:12.5px;color:var(--muted);padding:6px 10px 10px}
@@ -374,6 +401,20 @@
     <button class="btn ghost" id="nsSair" type="button" style="margin-top:8px">Sair</button>
   </section>
 
+  <!-- DASHBOARD -->
+  <section id="vDash" class="hide">
+    <div class="ptopo"><h1>Dashboard</h1><button type="button" class="btn ghost" id="dbAtual" style="width:auto;padding:9px 16px;margin:0">↻ Atualizar</button></div>
+    <div class="dbfil">
+      <div><label for="dbPer">Período</label><select id="dbPer">
+        <option value="hoje">Hoje</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option>
+        <option value="mes">Este mês</option><option value="mespass">Mês passado</option><option value="90">Últimos 90 dias</option><option value="365">Últimos 12 meses</option></select></div>
+      <div><label for="dbLoja">Loja</label><select id="dbLoja"></select></div>
+    </div>
+    <div class="stabs dbrel" id="dbRel" role="tablist" aria-label="Relatórios"></div>
+    <div id="dbCorpo"><div class="empty">Carregando…</div></div>
+    <div class="hint" id="dbRodape" style="margin-top:6px"></div>
+  </section>
+
   <!-- CONFIGURAÇÕES -->
   <section id="vConfig" class="hide">
     <div class="ptopo"><h1>Configurações</h1></div>
@@ -399,10 +440,15 @@
         <div class="hint">Modelo fora da lista? Avise o gerente para incluir na aba Venda.</div>
         <label for="cor">Cor <span class="req">*</span></label>
         <select id="cor"></select>
-        <label for="imei">IMEI <span class="req">*</span></label>
+        <label for="imei">IMEI1 <span class="req">*</span></label>
         <input id="imei" class="imei" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="15 números">
         <div class="hint">Disque <b>*#06#</b> no aparelho para ver o IMEI.</div>
         <div class="status" id="imeiStatus"></div>
+        <label for="imei2">IMEI2 <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+        <input id="imei2" class="imei" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="15 números (aparelho com 2 chips)">
+        <div class="status" id="imei2Status"></div>
+        <label for="serial">Serial <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+        <input id="serial" autocomplete="off" maxlength="30" placeholder="Número de série" style="text-transform:uppercase">
         <label for="sku">SKU <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
         <input id="sku" autocomplete="off" maxlength="40" placeholder="Código do produto (ex.: do Bling)">
         <label>Grupo de produtos <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
@@ -466,7 +512,7 @@
         <h3>Filtros</h3>
         <label for="dBusca">Modelo</label>
         <input id="dBusca" placeholder="Ex.: 13 128" autocomplete="off">
-        <label for="dImei">IMEI / SKU</label>
+        <label for="dImei">IMEI / SKU / Serial</label>
         <input id="dImei" placeholder="Qualquer parte" autocomplete="off">
         <label for="dClassif">Classificação</label>
         <select id="dClassif"></select>
@@ -654,6 +700,7 @@
   var CORES = ['Preto','Branco','Azul','Azul-claro','Azul-profundo','Verde','Verde-acinzentado','Rosa','Roxo','Lavanda','Vermelho','Amarelo','Laranja','Laranja-cósmico','Dourado','Prata','Grafite','Meia-noite','Estelar','Sálvia','Titânio Natural','Titânio Preto','Titânio Branco','Titânio Azul','Titânio Deserto','Ultramarino','Cinza','Bege','Outra'];
   var CONSULTA_URL = 'https://www.consultaserialaparelho.com.br/public-web/homeSiga?token=20260618';
   var VIEWS = [
+    { id: 'dash', sec: 'vDash', nome: 'Dashboard', perm: 'dashboard' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos' },
     { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos' },
@@ -775,7 +822,7 @@
     });
     show('nav', true);
     montarCadastro(d); montarAval(); montarCartao(); if (pode('compra')) montarCompra();
-    var ult = LS.get('view', 'cadastro');
+    var ult = pode('dashboard') ? 'dash' : LS.get('view', 'cadastro'); // o sistema sempre abre no Dashboard
     var permitidas = VIEWS.filter(function (v) { return pode(v.perm); });
     if (ult !== 'config' && !permitidas.some(function (v) { return v.id === ult; })) ult = permitidas.length ? permitidas[0].id : '';
     if (!ult) { show('nav', false); msg('topMsg', 'Seu usuário ainda não tem nenhuma página liberada. Fale com o gerente.'); return; }
@@ -793,6 +840,7 @@
     if (id === 'cadastro') Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.v === 'disp'); });
     if (id === 'novos') { carregarNovos(false); show('nNovo', pode('editar_precos')); show('nPrec', pode('editar_precos')); }
     if (id === 'venda') carregarVenda(false);
+    if (id === 'dash') carregarDash(false);
     if (id === 'manut') carregarManut(false);
     window.scrollTo(0, 0);
   }
@@ -807,6 +855,265 @@
       }).catch(function (e) { b.textContent = 'Tentar de novo'; msg('topMsg', e); });
     };
   });
+
+  // =========================================================
+  //  DASHBOARD
+  // =========================================================
+  var REL = [['geral', 'Visão geral'], ['vendas', 'Vendas'], ['estoque', 'Estoque'], ['parado', 'Estoque parado'], ['compras', 'Cadastros e compras'],
+             ['manut', 'Manutenção'], ['grupos', 'Grupos e tags'], ['novos', 'Produtos novos']];
+  var DIA = 864e5;
+  function carregarDash(forcar) {
+    if (S.dash && !forcar && Date.now() - S.dash.agora < 5 * 60e3) return renderDash();
+    $('dbCorpo').innerHTML = ''; $('dbCorpo').appendChild(el('div', 'empty', 'Carregando relatórios…'));
+    call('dashboard', [S.token]).then(function (d) {
+      S.dash = d;
+      opts($('dbLoja'), (d.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('dbLoja').value, 'Todas as lojas');
+      renderDash();
+    }).catch(function (e) { $('dbCorpo').innerHTML = ''; $('dbCorpo').appendChild(el('div', 'empty', e)); });
+  }
+  $('dbAtual').onclick = function () { carregarDash(true); };
+  $('dbPer').value = LS.get('dbPer', '30');
+  $('dbPer').onchange = function () { LS.set('dbPer', this.value); renderDash(); };
+  $('dbLoja').onchange = renderDash;
+  function periodo(v) {
+    var h = new Date(); h.setHours(0, 0, 0, 0); var hoje = h.getTime(), fim = Date.now();
+    if (v === 'hoje') return [hoje, fim, 'hoje'];
+    if (v === 'mes') return [new Date(h.getFullYear(), h.getMonth(), 1).getTime(), fim, 'este mês'];
+    if (v === 'mespass') return [new Date(h.getFullYear(), h.getMonth() - 1, 1).getTime(), new Date(h.getFullYear(), h.getMonth(), 1).getTime() - 1, 'mês passado'];
+    var n = +v || 30; return [hoje - (n - 1) * DIA, fim, 'últimos ' + n + ' dias'];
+  }
+  function inteiro(n) { return new Intl.NumberFormat('pt-BR').format(Math.round(n || 0)); }
+  function dataBR(ms) { var d = new Date(ms); return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear(); }
+  function soma(l, f) { return l.reduce(function (a, x) { var v = f(x); return a + (typeof v === 'number' && !isNaN(v) ? v : 0); }, 0); }
+  function agrupar(l, chave) {
+    var m = {}, o = [];
+    l.forEach(function (x) { var ks = chave(x); (Array.isArray(ks) ? ks : [ks]).forEach(function (k) { k = k || '—'; if (!m[k]) { m[k] = { k: k, itens: [] }; o.push(m[k]); } m[k].itens.push(x); }); });
+    return o;
+  }
+  function kpi(box, k, v, sub, cls) { var c = el('div', 'kpi'); c.appendChild(el('div', 'k', k)); c.appendChild(el('div', 'v', v)); if (sub) c.appendChild(el('div', 's' + (cls ? ' ' + cls : ''), sub)); box.appendChild(c); }
+  function variacao(atual, ant) {
+    if (!ant) return atual ? ['novo no período', 'up'] : ['', ''];
+    var p = (atual - ant) / ant; return [(p >= 0 ? '▲ ' : '▼ ') + Math.abs(p * 100).toFixed(0) + '% vs período anterior', p >= 0 ? 'up' : 'down'];
+  }
+  function cartao(box, titulo) { var c = el('div', 'card'); if (titulo) c.appendChild(el('h3', 'ch', titulo)); box.appendChild(c); return c; }
+  // barras horizontais: linhas = [{rot, val, txt, sub}]
+  function barras(box, titulo, linhas, max) {
+    var c = cartao(box, titulo);
+    if (!linhas.length) { c.appendChild(el('div', 'hint', 'Sem dados no período.')); return c; }
+    linhas.sort(function (a, b) { return b.val - a.val; });
+    var lim = max || 8, top = linhas[0].val || 1, lista = el('div'); c.appendChild(lista);
+    function desenhar(todos) {
+      lista.innerHTML = '';
+      (todos ? linhas : linhas.slice(0, lim)).forEach(function (l) {
+        var r = el('div', 'br'); r.title = l.rot + ': ' + l.txt + (l.sub ? ' · ' + l.sub : '');
+        r.appendChild(el('div', 'rt', l.rot));
+        var tr = el('div', 'tr'), fi = el('div', 'fi'); fi.style.width = Math.max(0, l.val / top * 100) + '%'; tr.appendChild(fi); r.appendChild(tr);
+        var vl = el('div', 'vl', l.txt); if (l.sub) vl.appendChild(el('small', '', l.sub)); r.appendChild(vl);
+        lista.appendChild(r);
+      });
+    }
+    desenhar(false);
+    if (linhas.length > lim) { var b = el('button', 'lnk', 'Ver todos (' + linhas.length + ')'); b.type = 'button'; b.onclick = function () { var t = b.dataset.t !== '1'; b.dataset.t = t ? '1' : ''; desenhar(t); b.textContent = t ? 'Ver menos' : 'Ver todos (' + linhas.length + ')'; }; c.appendChild(b); }
+    return c;
+  }
+  // colunas no tempo: serie = [{rot, val, txt}]
+  function colunas(box, titulo, serie) {
+    var c = cartao(box, titulo);
+    var top = Math.max.apply(null, serie.map(function (x) { return x.val; }).concat([0]));
+    if (!top) { c.appendChild(el('div', 'hint', 'Sem dados no período.')); return c; }
+    var w = el('div', 'cols'); w.setAttribute('role', 'img'); w.setAttribute('aria-label', titulo);
+    serie.forEach(function (x) { var k = el('div', 'c'); k.dataset.t = x.rot + ': ' + x.txt; var i = el('i'); i.style.height = (x.val / top * 100) + '%'; k.appendChild(i); w.appendChild(k); });
+    c.appendChild(w);
+    var ax = el('div', 'colx'); ax.appendChild(el('span', '', serie[0].rot)); if (serie.length > 2) ax.appendChild(el('span', '', serie[Math.floor(serie.length / 2)].rot)); ax.appendChild(el('span', '', serie[serie.length - 1].rot)); c.appendChild(ax);
+    return c;
+  }
+  function serieTempo(lista, ini, fim, valor, fmt) {
+    var dias = Math.ceil((fim - ini) / DIA), passo = dias > 120 ? 'mes' : dias > 35 ? 'sem' : 'dia', b = [], idx = {};
+    var d0 = new Date(ini); d0.setHours(0, 0, 0, 0);
+    if (passo === 'mes') d0 = new Date(d0.getFullYear(), d0.getMonth(), 1);
+    if (passo === 'sem') d0 = new Date(d0.getTime() - ((d0.getDay() + 6) % 7) * DIA);
+    var MES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+    for (var t = d0.getTime(); t <= fim;) {
+      var d = new Date(t), rot = passo === 'mes' ? MES[d.getMonth()] + '/' + String(d.getFullYear()).slice(2) : (passo === 'sem' ? 'sem. ' : '') + ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2);
+      idx[t] = b.length; b.push({ t: t, rot: rot, val: 0 });
+      t = passo === 'mes' ? new Date(d.getFullYear(), d.getMonth() + 1, 1).getTime() : new Date(d.getFullYear(), d.getMonth(), d.getDate() + (passo === 'sem' ? 7 : 1)).getTime();
+    }
+    lista.forEach(function (x) { for (var i = b.length - 1; i >= 0; i--) if (x.d >= b[i].t) { b[i].val += valor(x); break; } });
+    b.forEach(function (x) { x.txt = fmt(x.val); });
+    return { serie: b, passo: passo === 'mes' ? 'mês' : passo === 'sem' ? 'semana' : 'dia' };
+  }
+  function tabela(box, titulo, cab, linhas, nomeArq) {
+    var c = el('div', 'card'), top = el('div', 'tbacoes'); top.appendChild(el('h3', 'ch', titulo));
+    if (linhas.length) { var dl = el('button', 'lnk', '⬇ Baixar planilha (CSV)'); dl.type = 'button'; dl.onclick = function () { baixarCSV(nomeArq || titulo, cab, linhas); }; top.appendChild(dl); }
+    c.appendChild(top); box.appendChild(c);
+    if (!linhas.length) { c.appendChild(el('div', 'hint', 'Nada para mostrar.')); return c; }
+    var w = el('div', 'tbwrap'), t = el('table', 't'), h = el('tr');
+    cab.forEach(function (x) { h.appendChild(el('th', '', x)); }); t.appendChild(h);
+    linhas.slice(0, 200).forEach(function (l) { var r = el('tr'); l.forEach(function (v) { r.appendChild(el('td', '', v === null || v === undefined ? '—' : String(v))); }); t.appendChild(r); });
+    w.appendChild(t); c.appendChild(w);
+    if (linhas.length > 200) c.appendChild(el('div', 'hint', 'Mostrando 200 de ' + linhas.length + '. A planilha baixada tem todos.'));
+    return c;
+  }
+  function baixarCSV(nome, cab, linhas) {
+    var esc = function (v) { v = v === null || v === undefined || v === '—' ? '' : String(v).replace(/^R\$\s?/, '').replace(/^(-?)R\$\s?/, '$1'); return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    var txt = '﻿' + [cab].concat(linhas).map(function (l) { return l.map(esc).join(';'); }).join('\n');
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/csv;charset=utf-8' }));
+    a.download = nome.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-') + '-' + dataBR(Date.now()).replace(/\//g, '-') + '.csv';
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+  function lucroVenda(v) { return typeof v.v === 'number' && typeof v.cu === 'number' ? v.v - v.cu : null; }
+
+  function renderDash() {
+    var D = S.dash; if (!D) return;
+    var rel = LS.get('dbRel', 'geral'); if (!REL.some(function (r) { return r[0] === rel; })) rel = 'geral';
+    var abas = $('dbRel'); abas.innerHTML = '';
+    REL.forEach(function (r) { var b = el('button', r[0] === rel ? 'on' : '', r[1]); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', r[0] === rel ? 'true' : 'false'); b.onclick = function () { LS.set('dbRel', r[0]); renderDash(); }; abas.appendChild(b); });
+    var P = periodo($('dbPer').value), ini = P[0], fim = P[1], dur = fim - ini, loja = $('dbLoja').value, C = D.custos;
+    var naLoja = function (x) { return !loja || x.l === loja; };
+    var ctx = {
+      D: D, C: C, ini: ini, fim: fim, rotulo: P[2], loja: loja,
+      vendas: D.vendas.filter(function (v) { return v.d >= ini && v.d <= fim && naLoja(v); }),
+      vendasAnt: D.vendas.filter(function (v) { return v.d >= ini - dur - 1 && v.d < ini && naLoja(v); }),
+      estoque: D.itens.filter(function (x) { return (x.s === 'Disponível' || x.s === 'Manutenção') && (!loja || x.l === loja); }),
+      cadastros: D.itens.filter(function (x) { return x.d && x.d >= ini && x.d <= fim && naLoja(x); })
+    };
+    var box = $('dbCorpo'); box.innerHTML = '';
+    ({ geral: relGeral, vendas: relVendas, estoque: relEstoque, parado: relParado, compras: relCompras, manut: relManut, grupos: relGrupos, novos: relNovos })[rel](box, ctx);
+    $('dbRodape').textContent = 'Atualizado às ' + new Date(D.agora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + '. Valor das vendas = preço da tabela de Preços no momento da venda' + (C ? '; lucro = valor − custo total (custo + peça).' : '.');
+  }
+  function kpisVendas(k, ctx) {
+    var V = ctx.vendas, A = ctx.vendasAnt, fat = soma(V, function (v) { return v.v; }), fatA = soma(A, function (v) { return v.v; });
+    var q = variacao(V.length, A.length), f = variacao(fat, fatA);
+    kpi(k, 'Aparelhos vendidos', inteiro(V.length), q[0], q[1]);
+    kpi(k, 'Valor vendido', brl(fat), f[0], f[1]);
+    kpi(k, 'Ticket médio', V.length ? brl(fat / V.length) : '—', ctx.rotulo);
+    if (ctx.C) { var lc = V.filter(function (v) { return lucroVenda(v) !== null; }), lu = soma(lc, lucroVenda), fl = soma(lc, function (v) { return v.v; }); kpi(k, 'Lucro estimado', brl(lu), fl ? 'margem ' + pct(lu / fl) : ''); }
+  }
+  function diasParado(x, agora) { return x.d ? Math.floor((agora - x.d) / DIA) : null; }
+
+  function relGeral(box, ctx) {
+    var k = el('div', 'kpis'); box.appendChild(k);
+    kpisVendas(k, ctx);
+    var E = ctx.estoque, disp = E.filter(function (x) { return x.s === 'Disponível'; }), man = E.filter(function (x) { return x.s === 'Manutenção'; });
+    kpi(k, 'Em estoque', inteiro(disp.length), man.length ? '+ ' + man.length + ' em manutenção' : 'disponíveis');
+    if (ctx.C) kpi(k, 'Capital parado', brl(soma(E, function (x) { return x.cu; })), 'custo do estoque atual');
+    kpi(k, 'Valor do estoque', brl(soma(E, function (x) { return x.p; })), 'pela tabela de preços');
+    var p60 = E.filter(function (x) { var d = diasParado(x, ctx.D.agora); return d !== null && d > 60; }).length;
+    kpi(k, 'Parados +60 dias', inteiro(p60), p60 ? 'veja "Estoque parado"' : 'nenhum', p60 ? 'down' : '');
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    var st = serieTempo(ctx.vendas, ctx.ini, ctx.fim, function () { return 1; }, function (n) { return inteiro(n) + ' vendido' + (n === 1 ? '' : 's'); });
+    colunas(g, 'Vendas por ' + st.passo, st.serie);
+    barras(g, 'Modelos mais vendidos', agrupar(ctx.vendas, function (v) { return v.m; }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length) }; }), 5);
+    barras(g, 'Vendas por vendedor', agrupar(ctx.vendas, function (v) { return v.quem; }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: brl(soma(x.itens, function (v) { return v.v; })) }; }), 5);
+    barras(g, 'Estoque por loja', agrupar(ctx.estoque, function (x) { return x.l; }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: ctx.C ? brl(soma(x.itens, function (i) { return i.cu; })) : '' }; }));
+  }
+  function relVendas(box, ctx) {
+    var k = el('div', 'kpis'); box.appendChild(k); kpisVendas(k, ctx);
+    var g = el('div', 'dbgrid'), V = ctx.vendas; box.appendChild(g);
+    var st = serieTempo(V, ctx.ini, ctx.fim, function (v) { return v.v || 0; }, brl);
+    colunas(g, 'Valor vendido por ' + st.passo, st.serie);
+    var linha = function (x) { var o = { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: brl(soma(x.itens, function (v) { return v.v; })) }; if (ctx.C) o.sub += ' · lucro ' + brl(soma(x.itens, lucroVenda)); return o; };
+    barras(g, 'Por vendedor', agrupar(V, function (v) { return v.quem; }).map(linha));
+    barras(g, 'Por loja', agrupar(V, function (v) { return v.l; }).map(linha));
+    barras(g, 'Por modelo', agrupar(V, function (v) { return v.m; }).map(linha));
+    barras(g, 'Por classificação', agrupar(V, function (v) { return v.c; }).map(linha));
+    var cab = ['Data', 'Modelo', 'Classificação', 'Loja', 'Vendedor', 'Valor'].concat(ctx.C ? ['Custo', 'Lucro'] : []);
+    tabela(box, 'Vendas do período (' + V.length + ')', cab, V.slice().sort(function (a, b) { return b.d - a.d; }).map(function (v) {
+      return [dataBR(v.d), v.m, v.c, v.l, v.quem, v.v ? brl(v.v) : '—'].concat(ctx.C ? [v.cu ? brl(v.cu) : '—', lucroVenda(v) !== null ? brl(lucroVenda(v)) : '—'] : []);
+    }), 'vendas');
+  }
+  function relEstoque(box, ctx) {
+    var E = ctx.estoque, k = el('div', 'kpis'); box.appendChild(k);
+    kpi(k, 'Aparelhos', inteiro(E.length), E.filter(function (x) { return x.s === 'Manutenção'; }).length + ' em manutenção');
+    if (ctx.C) kpi(k, 'Capital parado', brl(soma(E, function (x) { return x.cu; })), 'custo + peças');
+    kpi(k, 'Valor de venda', brl(soma(E, function (x) { return x.p; })), 'pela tabela de preços');
+    if (ctx.C) { var cp = E.filter(function (x) { return x.p && x.cu; }); kpi(k, 'Lucro potencial', brl(soma(cp, function (x) { return x.p - x.cu; })), 'se vender tudo pela tabela'); }
+    var sp = E.filter(function (x) { return !x.p; }); kpi(k, 'Sem preço', inteiro(sp.length), sp.length ? 'cadastre em Preços' : 'tudo com preço', sp.length ? 'down' : '');
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    var linha = function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: ctx.C ? brl(soma(x.itens, function (i) { return i.cu; })) : brl(soma(x.itens, function (i) { return i.p; })) }; };
+    barras(g, 'Por loja', agrupar(E, function (x) { return x.l; }).map(linha));
+    barras(g, 'Por modelo', agrupar(E, function (x) { return x.m; }).map(linha));
+    barras(g, 'Por classificação', agrupar(E, function (x) { return x.c; }).map(linha));
+    barras(g, 'Por tipo de compra', agrupar(E, function (x) { return x.t; }).map(linha));
+    if (sp.length) tabela(box, 'Aparelhos sem preço de venda (' + sp.length + ')', ['Modelo', 'Classificação', 'Loja'], sp.map(function (x) { return [x.m, x.c, x.l]; }), 'sem-preco');
+  }
+  function relParado(box, ctx) {
+    var ag = ctx.D.agora, E = ctx.estoque.filter(function (x) { return x.d; });
+    var faixas = [['Até 15 dias', 0, 15], ['16 a 30 dias', 16, 30], ['31 a 60 dias', 31, 60], ['61 a 90 dias', 61, 90], ['Mais de 90 dias', 91, 1e9]];
+    var k = el('div', 'kpis'); box.appendChild(k);
+    var media = E.length ? soma(E, function (x) { return diasParado(x, ag); }) / E.length : 0;
+    kpi(k, 'Tempo médio em estoque', E.length ? inteiro(media) + ' dias' : '—', 'desde o cadastro');
+    var p60 = E.filter(function (x) { return diasParado(x, ag) > 60; });
+    kpi(k, 'Parados +60 dias', inteiro(p60.length), ctx.C ? brl(soma(p60, function (x) { return x.cu; })) + ' parados' : '', p60.length ? 'down' : '');
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    var c = cartao(g, 'Aparelhos por tempo em estoque'); var lst = el('div'); c.appendChild(lst);
+    var linhas = faixas.map(function (f) { var it = E.filter(function (x) { var d = diasParado(x, ag); return d >= f[1] && d <= f[2]; }); return { rot: f[0], val: it.length, txt: inteiro(it.length), sub: ctx.C ? brl(soma(it, function (x) { return x.cu; })) : '' }; });
+    var top = Math.max.apply(null, linhas.map(function (l) { return l.val; }).concat([1]));
+    linhas.forEach(function (l) { var r = el('div', 'br'); r.appendChild(el('div', 'rt', l.rot)); var tr = el('div', 'tr'), fi = el('div', 'fi'); fi.style.width = (l.val / top * 100) + '%'; tr.appendChild(fi); r.appendChild(tr); var vl = el('div', 'vl', l.txt); if (l.sub) vl.appendChild(el('small', '', l.sub)); r.appendChild(vl); lst.appendChild(r); });
+    barras(g, 'Média de dias parado por loja', agrupar(E, function (x) { return x.l; }).map(function (x) { var m = soma(x.itens, function (i) { return diasParado(i, ag); }) / x.itens.length; return { rot: x.k, val: m, txt: inteiro(m) + ' dias', sub: x.itens.length + ' aparelhos' }; }));
+    var sem = ctx.estoque.length - E.length;
+    var cab = ['Modelo', 'Classificação', 'Loja', 'Dias', 'Cadastrado em', 'Preço'].concat(ctx.C ? ['Custo'] : []);
+    tabela(box, 'Mais antigos no estoque', cab, E.slice().sort(function (a, b) { return a.d - b.d; }).map(function (x) {
+      return [x.m, x.c, x.l, diasParado(x, ag), dataBR(x.d), x.p ? brl(x.p) : '—'].concat(ctx.C ? [x.cu ? brl(x.cu) : '—'] : []);
+    }), 'estoque-parado');
+    if (sem) box.appendChild(el('div', 'hint', sem + ' aparelho(s) sem data de cadastro não entram nesta conta.'));
+  }
+  function relCompras(box, ctx) {
+    var L = ctx.cadastros, k = el('div', 'kpis'); box.appendChild(k);
+    kpi(k, 'Aparelhos cadastrados', inteiro(L.length), ctx.rotulo);
+    if (ctx.C) { var tot = soma(L, function (x) { return x.cu; }); kpi(k, 'Total investido', brl(tot), L.length ? 'média ' + brl(tot / L.length) : ''); }
+    var vend = L.filter(function (x) { return x.s === 'Vendido'; }).length;
+    kpi(k, 'Já vendidos', inteiro(vend), L.length ? pct(vend / L.length) + ' do que entrou' : '');
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    var st = serieTempo(L, ctx.ini, ctx.fim, function () { return 1; }, function (n) { return inteiro(n) + ' cadastrado' + (n === 1 ? '' : 's'); });
+    colunas(g, 'Cadastros por ' + st.passo, st.serie);
+    var linha = function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: ctx.C ? brl(soma(x.itens, function (i) { return i.cu; })) : '' }; };
+    barras(g, 'Por quem cadastrou', agrupar(L, function (x) { return x.por; }).map(linha));
+    barras(g, 'Por tipo de compra', agrupar(L, function (x) { return x.t; }).map(linha));
+    barras(g, 'Por loja', agrupar(L, function (x) { return x.l; }).map(linha));
+    barras(g, 'Por modelo', agrupar(L, function (x) { return x.m; }).map(linha));
+  }
+  function relManut(box, ctx) {
+    var M = ctx.D.manut, ag = ctx.D.agora, ab = M.itens.filter(function (x) { return x.e !== M.final; });
+    var fin = M.itens.filter(function (x) { return x.e === M.final && x.fin && x.fin >= ctx.ini && x.fin <= ctx.fim; });
+    var k = el('div', 'kpis'); box.appendChild(k);
+    kpi(k, 'Em manutenção agora', inteiro(ab.length), '');
+    var md = ab.filter(function (x) { return x.desde; }); kpi(k, 'Tempo médio na etapa', md.length ? inteiro(soma(md, function (x) { return (ag - x.desde) / DIA; }) / md.length) + ' dias' : '—', 'dos que estão abertos');
+    kpi(k, 'Finalizados', inteiro(fin.length), ctx.rotulo);
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    barras(g, 'Aparelhos por etapa', M.etapas.filter(function (e) { return e !== M.final; }).map(function (e) { var n = ab.filter(function (x) { return x.e === e; }).length; return { rot: e, val: n, txt: inteiro(n) }; }));
+    tabela(box, 'Abertos há mais tempo', ['Modelo', 'Etapa', 'Dias na etapa'], md.slice().sort(function (a, b) { return a.desde - b.desde; }).map(function (x) { return [x.m || '—', x.e, Math.floor((ag - x.desde) / DIA)]; }), 'manutencao');
+  }
+  function relGrupos(box, ctx) {
+    var pai = function (gp) { return gp ? gp.split(SEP)[0] : 'Sem grupo'; };
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    var linha = function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: ctx.C ? brl(soma(x.itens, function (i) { return i.cu; })) : '' }; };
+    barras(g, 'Estoque por grupo', agrupar(ctx.estoque, function (x) { return pai(x.g); }).map(linha));
+    barras(g, 'Estoque por subgrupo', agrupar(ctx.estoque.filter(function (x) { return x.g && x.g.indexOf(SEP) > 0; }), function (x) { return x.g; }).map(linha));
+    barras(g, 'Vendas por grupo (' + ctx.rotulo + ')', agrupar(ctx.vendas, function (v) { return pai(v.g); }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: brl(soma(x.itens, function (v) { return v.v; })) }; }));
+    barras(g, 'Estoque por tag', agrupar(ctx.estoque.filter(function (x) { return x.tg && x.tg.length; }), function (x) { return x.tg; }).map(linha));
+    var N = ctx.D.novos.lista;
+    barras(g, 'Produtos novos por grupo', agrupar(N, function (x) { return pai(x.g); }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length) }; }));
+  }
+  function relNovos(box, ctx) {
+    var N = ctx.D.novos.lista, cfg = ctx.D.novos.config, k = el('div', 'kpis'); box.appendChild(k);
+    var ind = N.filter(function (x) { return x.indisp; });
+    kpi(k, 'Produtos cadastrados', inteiro(N.length), '');
+    kpi(k, 'Disponíveis', inteiro(N.length - ind.length), '');
+    kpi(k, 'Não disponíveis', inteiro(ind.length), ind.length ? 'fora da lista principal' : '', ind.length ? 'down' : '');
+    var abaixo = [];
+    if (cfg) {
+      var cm = N.filter(function (x) { return x.custo && x.preco; }).map(function (x) { var r = resultado(x.preco, x.custo, calcNovo(x.custo, x.aj, cfg)); return { x: x, r: r }; }).filter(function (z) { return z.r; });
+      var mm = cm.length ? soma(cm, function (z) { return z.r.margem; }) / cm.length : null;
+      kpi(k, 'Margem média', mm === null ? '—' : pct(mm), 'padrão ' + String(cfg.margem).replace('.', ',') + '%');
+      abaixo = cm.filter(function (z) { return z.r.margem < cfg.margem / 100 - 0.0001; });
+      kpi(k, 'Abaixo da margem', inteiro(abaixo.length), abaixo.length ? 'veja a lista abaixo' : 'nenhum', abaixo.length ? 'down' : '');
+    }
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    barras(g, 'Por grupo', agrupar(N, function (x) { return x.g ? x.g.split(SEP)[0] : 'Sem grupo'; }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length) }; }));
+    if (cfg) tabela(box, 'Produtos abaixo da margem padrão', ['Produto', 'Custo', 'Preço', 'Margem real'], abaixo.sort(function (a, b) { return a.r.margem - b.r.margem; }).map(function (z) { return [z.x.nome, brl(z.x.custo), brl(z.x.preco), pct(z.r.margem)]; }), 'novos-abaixo-da-margem');
+    if (ind.length) tabela(box, 'Não disponíveis', ['Produto', 'Preço'], ind.map(function (x) { return [x.nome, x.preco ? brl(x.preco) : '—']; }), 'novos-nao-disponiveis');
+  }
 
   // =========================================================
   //  GRUPOS DE PRODUTOS E TAGS
@@ -1026,17 +1333,25 @@
     }).catch(function (e) { if (n === S.imeiCheck) imeiStatus('err', e); });
   });
 
+  $('imei2').addEventListener('input', function () {
+    var d = this.value.replace(/\D/g, '').slice(0, 15); if (this.value !== d) this.value = d;
+    var st = $('imei2Status');
+    var t = !d ? '' : d.length < 15 ? d.length + ' de 15 números' : !luhn(d) ? 'IMEI2 inválido: confira os números.' : d === $('imei').value.replace(/\D/g, '') ? 'O IMEI2 está igual ao IMEI1.' : '✓ IMEI2 válido';
+    st.className = 'status ' + (t ? 'show ' + (t.charAt(0) === '✓' ? 'ok' : d.length < 15 ? 'info' : 'err') : ''); st.textContent = t;
+  });
   $('form').addEventListener('submit', function (e) {
     e.preventDefault(); msg('formMsg', '');
     var d = { loja: $('loja').value, modelo: $('modelo').value, cor: $('cor').value.trim(), imei: $('imei').value.replace(/\D/g, ''),
               bateria: $('bateria').value.trim(), custo: $('custo').value.trim(), classificacao: S.classificacao, tipo: S.tipo, obs: $('obs').value.trim(), sku: $('sku').value.trim(),
+              imei2: $('imei2').value.replace(/\D/g, ''), serial: $('serial').value.trim().toUpperCase(),
               consultaImei: S.consulta, checklist: S.ck, grupo: S.cGrupo ? S.cGrupo.get() : '', tags: S.cTags ? S.cTags.get() : [] };
     var falta = [];
     if (!d.loja) falta.push('loja'); if (!d.modelo) falta.push('modelo'); if (!d.cor) falta.push('cor');
     if (!d.imei) falta.push('IMEI'); if (d.bateria === '') falta.push('bateria');
     if (!d.classificacao) falta.push('classificação'); if (!d.tipo) falta.push('tipo de compra');
     if (falta.length) { msg('formMsg', 'Preencha: ' + falta.join(', ') + '.'); window.scrollTo(0, 0); return; }
-    if (!luhn(d.imei)) { msg('formMsg', 'IMEI inválido. Confira os 15 números.'); window.scrollTo(0, 0); return; }
+    if (!luhn(d.imei)) { msg('formMsg', 'IMEI1 inválido. Confira os 15 números.'); window.scrollTo(0, 0); return; }
+    if (d.imei2 && (!luhn(d.imei2) || d.imei2 === d.imei)) { msg('formMsg', d.imei2 === d.imei ? 'O IMEI2 está igual ao IMEI1.' : 'IMEI2 inválido. Confira os 15 números ou deixe em branco.'); window.scrollTo(0, 0); return; }
     if (S.consulta === 'Consta restrição') { msg('formMsg', 'IMEI com restrição: o aparelho não pode ser cadastrado.'); window.scrollTo(0, 0); return; }
     if (S.consulta !== 'Nada consta') { msg('formMsg', 'Faça a consulta oficial do IMEI e marque o resultado.'); window.scrollTo(0, 0); return; }
     var b = +d.bateria; if (isNaN(b) || b < 0 || b > 100) { msg('formMsg', 'Bateria deve ser de 0 a 100.'); window.scrollTo(0, 0); return; }
@@ -1052,7 +1367,7 @@
     });
   });
   $('outro').onclick = function () {
-    ['modelo', 'cor', 'imei', 'sku', 'bateria', 'custo', 'obs'].forEach(function (k) { $(k).value = ''; });
+    ['modelo', 'cor', 'imei', 'imei2', 'serial', 'sku', 'bateria', 'custo', 'obs'].forEach(function (k) { $(k).value = ''; }); $('imei2Status').className = 'status'; $('imei2Status').textContent = '';
     S.classificacao = ''; S.tipo = ''; S.ck = {}; resetConsulta(); S.imeiConsultado = ''; show('cBox', false); montarCkCadastro(); montarCatCadastro();
     Array.prototype.forEach.call(document.querySelectorAll('#classif button,#tipo button,.chip'), function (c) { c.classList.remove('on'); });
     imeiStatus('', ''); show('sucesso', false); show('form', true); window.scrollTo(0, 0);
@@ -1101,7 +1416,7 @@
       if (sit === 'manut' && !x.manut) return false;
       if (gru && !casaCat(x.grupo, gru)) return false;
       if (tag && !(x.tags || []).some(function (t) { return casaCat(t, tag); })) return false;
-      if (imeiTxt && (String(x.imei) + ' ' + String(x.sku || '')).toLowerCase().indexOf(imeiTxt) < 0) return false;
+      if (imeiTxt && [x.imei, x.imei2, x.sku, x.serial].join(' ').toLowerCase().indexOf(imeiTxt) < 0) return false;
       var m = x.modelo.toLowerCase();
       return termos.every(function (t) { return m.indexOf(t) > -1; });
     }).sort(function (a, b) { return a.modelo.localeCompare(b.modelo) || (a.preco || 0) - (b.preco || 0); });
@@ -1196,7 +1511,7 @@
 
     var info = el('div', 'card'), kv = el('div', 'kv');
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
-    [['SKU', x.sku || '—'], ['IMEI', x.imei], ['Classificação', x.classif], ['Bateria', bat], ['Loja', x.loja], ['Situação', x.manut ? 'Em manutenção' : 'Disponível'],
+    [['SKU', x.sku || '—'], ['IMEI1', x.imei], ['IMEI2', x.imei2 || ''], ['Serial', x.serial || ''], ['Classificação', x.classif], ['Bateria', bat], ['Loja', x.loja], ['Situação', x.manut ? 'Em manutenção' : 'Disponível'],
      ['Tipo', x.tipo], ['Custo', pode('ver_custos') && x.custo !== null && x.custo !== undefined ? brl((x.custo || 0) + (x.peca || 0)) : ''], ['Observação', x.obs]]
       .forEach(function (p) { if (p[1] === '' || p[1] === undefined || p[1] === null) return; kv.appendChild(el('div', 'k', p[0])); kv.appendChild(el('div', '', String(p[1]))); });
     info.appendChild(kv); bd.appendChild(info);
@@ -1307,8 +1622,10 @@
     var modelo = sel('Modelo', S.u.modelos || [], x.modelo);
     var corAtual = CORES.filter(function (k) { return k.toUpperCase() === String(x.cor).toUpperCase(); })[0] || x.cor;
     var cor = sel('Cor', CORES, corAtual);
-    var imei = campo(c, 'IMEI', inp('text')); imei.value = x.imei; imei.inputMode = 'numeric'; imei.maxLength = 17;
+    var imei = campo(c, 'IMEI1', inp('text')); imei.value = x.imei; imei.inputMode = 'numeric'; imei.maxLength = 17;
     var im = el('div', 'status'); c.appendChild(im);
+    var imei2E = campo(c, 'IMEI2', inp('text', 'Opcional')); imei2E.value = x.imei2 || ''; imei2E.inputMode = 'numeric'; imei2E.maxLength = 17;
+    var serialE = campo(c, 'Serial', inp('text', 'Opcional')); serialE.value = x.serial || ''; serialE.maxLength = 30; serialE.style.textTransform = 'uppercase';
     var skuE = campo(c, 'SKU', inp('text', 'Opcional')); skuE.value = x.sku || ''; skuE.maxLength = 40;
     var gBox = campo(c, 'Grupo de produtos', el('div')), eGrupo = seletorGrupo(gBox, x.grupo || '');
     var tBox = campo(c, 'Tags', el('div')), eTags = seletorTags(tBox, x.tags || []);
@@ -1330,10 +1647,12 @@
     ok.onclick = function () {
       m.classList.remove('show');
       var d = { loja: loja.value, modelo: modelo.value, cor: cor.value, imei: imei.value.replace(/\D/g, ''), bateria: bat.value.trim(),
-                classificacao: cl.value, tipo: tipo.value, obs: obs.value.trim(), sku: skuE.value.trim(), grupo: eGrupo.get(), tags: eTags.get() };
+                classificacao: cl.value, tipo: tipo.value, obs: obs.value.trim(), sku: skuE.value.trim(),
+                imei2: imei2E.value.replace(/\D/g, ''), serial: serialE.value.trim().toUpperCase(), grupo: eGrupo.get(), tags: eTags.get() };
       if (custo) { d.custo = custo.value.trim(); d.peca = peca.value.trim(); }
       var erro = '';
-      if (!luhn(d.imei)) erro = 'IMEI inválido. Confira os 15 números.';
+      if (!luhn(d.imei)) erro = 'IMEI1 inválido. Confira os 15 números.';
+      else if (d.imei2 && (!luhn(d.imei2) || d.imei2 === d.imei)) erro = d.imei2 === d.imei ? 'O IMEI2 está igual ao IMEI1.' : 'IMEI2 inválido. Confira ou deixe em branco.';
       else if (d.bateria === '' || +d.bateria < 0 || +d.bateria > 100) erro = 'Bateria deve ser de 0 a 100.';
       else if (!d.tipo) erro = 'Escolha o tipo de compra.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
