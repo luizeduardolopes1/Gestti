@@ -338,6 +338,8 @@
   .anx .lnk{white-space:nowrap}.anx.pend .ai{background:#fff4d6;color:#8a5a00}
   .peacoes{position:sticky;bottom:0;background:var(--bg);padding:10px 0 14px;z-index:5}
   .peacoes .acoes{max-width:420px;margin:0 0 0 auto}
+  .crdpg{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:8px;margin-top:4px}.crdpg label{margin:0 0 2px;font-size:12px}.crdpg select,.crdpg input{margin:0;padding:8px 10px;font-size:14px}
+  .vdac .qp{display:grid;grid-template-columns:90px 1fr;gap:8px}.vdac .qp label{margin-top:6px}
   .p4 b{font-weight:700;color:var(--ink);background:none;padding:0}.p4 b.ok{color:var(--ok)}.p4 b.warn{color:var(--warn)}.p4 b.err{color:var(--err)}
   #vLista .prow{grid-template-columns:52px minmax(0,1fr) 440px 96px 24px}
   @media (max-width:1100px){#vLista .prow{grid-template-columns:52px minmax(0,1fr) 96px 24px}#vLista .prow .p4{grid-column:2 / span 3;grid-row:2}#vLista .prow .ppre{grid-column:3;grid-row:1}#vLista .prow .chev{grid-column:4;grid-row:1}#vLista .prow.h>div:nth-child(3){display:none}}
@@ -603,6 +605,58 @@
         <div class="fbar"><div class="cont" id="pgCont"></div><button type="button" class="lnk bfil" id="pgFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="pgFilEsc"></button></div>
         <div id="pgAviso"></div>
         <div id="pgLista"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREDIÁRIO -->
+  <section id="vCred" class="hide">
+    <div class="pgrid">
+      <aside class="pfil" id="cdFil">
+        <h3>Filtros</h3>
+        <label for="cdBusca">Buscar</label>
+        <input id="cdBusca" placeholder="Cliente, CPF, WhatsApp ou contrato" autocomplete="off">
+        <div id="cdSitW"><label for="cdSit">Situação</label>
+        <select id="cdSit"><option value="">Em aberto</option><option value="atrasadas">Atrasadas</option><option value="7">Vencem em 7 dias</option><option value="Paga">Pagas</option><option value="Cancelada">Canceladas</option><option value="todas">Todas</option></select></div>
+        <label for="cdLoja">Loja</label><select id="cdLoja"></select>
+        <button type="button" class="btn ghost" id="cdLimpar">Limpar filtros</button>
+      </aside>
+      <div>
+        <div class="crumb">Financeiro</div>
+        <div class="ptopo"><h1>Crediário</h1><div class="tbtns"><button type="button" class="btn ghost" id="cdSim">Simulador</button><button type="button" class="btn ghost hide" id="cdCfg">⚙ Regras</button><button type="button" class="btn hide" id="cdAvulso">+ Crediário avulso</button></div></div>
+        <div id="cdResumo"></div>
+        <div class="hint" id="cdRegras" style="margin:-4px 2px 10px"></div>
+        <div class="seg" id="cdAba" style="max-width:340px;margin-bottom:10px"></div>
+        <div class="fbar"><div class="cont" id="cdCont"></div><button type="button" class="lnk bfil" id="cdFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="cdFilEsc"></button></div>
+        <div id="cdAviso"></div>
+        <div id="cdLista"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACESSÓRIOS -->
+  <section id="vAcess" class="hide">
+    <div class="pgrid">
+      <aside class="pfil" id="acFil">
+        <h3>Filtros</h3>
+        <label for="acBusca">Acessório ou código de barras</label>
+        <input id="acBusca" placeholder="Ex.: capa 13 ou leia o código" autocomplete="off">
+        <label for="acGrupo">Grupo de produtos</label><select id="acGrupo"></select>
+        <label for="acTag">Tag</label><select id="acTag"></select>
+        <label for="acLoja">Loja</label><select id="acLoja"></select>
+        <label for="acSit">Estoque</label>
+        <select id="acSit"><option value="">Todos</option><option value="com">Com estoque</option><option value="sem">Sem estoque</option><option value="min">Abaixo do mínimo (repor)</option></select>
+        <label for="acOrdem">Ordenar por</label>
+        <select id="acOrdem"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="estoque">Mais estoque</option></select>
+        <button type="button" class="btn ghost" id="acLimpar">Limpar filtros</button>
+      </aside>
+      <div>
+        <div class="crumb">Tabela de Preços</div>
+        <div class="ptopo"><h1>Acessórios</h1><div class="tbtns"><button type="button" class="btn ghost hide" id="acPrec">⚙ Precificação</button><button type="button" class="btn hide" id="acNovo">+ Novo acessório</button></div></div>
+        <div id="acResumo" class="hint" style="margin:-6px 2px 10px"></div>
+        <div class="fbar"><div class="cont" id="acCont"></div><button type="button" class="lnk bfil" id="acFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="acFilEsc"></button></div>
+        <div id="acAviso"></div>
+        <div id="acLista"></div>
       </div>
     </div>
   </section>
@@ -919,9 +973,11 @@
     { id: 'compra', sec: 'vCompra', nome: 'Calculadora de Compra', perm: 'compra' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao' },
     { id: 'venda', sec: 'vVenda', nome: 'Produtos Usados', perm: 'precos', menu: 'Tabela de Preços', desc: 'Preço de venda dos aparelhos usados' },
+    { id: 'acess', sec: 'vAcess', nome: 'Acessórios', perm: 'acessorios', menu: 'Tabela de Preços', desc: 'Capas, películas, carregadores: preço e estoque por loja' },
     { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
     { id: 'bancos', sec: 'vBancos', nome: 'Caixas e Bancos', perm: 'financeiro', menu: 'Financeiro', desc: 'Saldos, extrato e lançamentos' },
-    { id: 'pagar', sec: 'vPagar', nome: 'Contas a Pagar', perm: 'financeiro', menu: 'Financeiro', desc: 'Despesas, vencimentos e pagamentos' }
+    { id: 'pagar', sec: 'vPagar', nome: 'Contas a Pagar', perm: 'financeiro', menu: 'Financeiro', desc: 'Despesas, vencimentos e pagamentos' },
+    { id: 'cred', sec: 'vCred', nome: 'Crediário', perm: 'crediario', menu: 'Financeiro', desc: 'Faturas, atrasos, recebimentos e limite dos clientes' }
   ];
 
   // ---------- utilidades ----------
@@ -1097,6 +1153,8 @@
     if (id === 'crm') carregarCrm(false);
     if (id === 'bancos') carregarFin(false);
     if (id === 'pagar') carregarPagar(false);
+    if (id === 'cred') carregarCred(false);
+    if (id === 'acess') carregarAcess(false);
     if (id === 'manut') carregarManut(false);
     window.scrollTo(0, 0);
   }
@@ -1140,16 +1198,17 @@
   function abrirVendas() {
     if (!V) novaVenda();
     if (S.vdPre) { var x = S.vdPre; S.vdPre = null; abaVendas('nova'); addItem(x); return; }
+    if (S.vdPreAc) { var y = S.vdPreAc; S.vdPreAc = null; abaVendas('nova'); addAcess(y); return; }
     abaVendas('hist');
   }
   function novaVenda() {
     var p0 = novaPag(); p0.auto = true;
-    V = { itens: [], troca: [], pags: [p0], cli: { cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' },
+    V = { itens: [], acess: [], troca: [], pags: [p0], cli: { cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' },
           loja: LS.get('loja', '') || (S.u.loja !== 'Manutenção' ? S.u.loja : ''), obs: '' };
     desenharVenda();
   }
   function totaisVenda() {
-    var ti = r2(V.itens.reduce(function (a, x) { return a + (num(x.preco) || 0); }, 0)), tt = r2(V.troca.reduce(function (a, x) { return a + (num(x.valor) || 0); }, 0));
+    var ti = r2(V.itens.reduce(function (a, x) { return a + (num(x.preco) || 0); }, 0) + V.acess.reduce(function (a, x) { return a + (num(x.preco) || 0) * (parseInt(x.qtd, 10) || 0); }, 0)), tt = r2(V.troca.reduce(function (a, x) { return a + (num(x.valor) || 0); }, 0));
     return { itens: ti, troca: tt, pagar: r2(ti - tt), pago: r2(V.pags.reduce(function (a, p) { return a + (num(p.valor) || 0); }, 0)) };
   }
   function addItem(x) {
@@ -1157,6 +1216,13 @@
     if (V.itens.some(function (i) { return i.imei === x.imei; })) return;
     V.itens.push({ linha: x.linha, imei: x.imei, modelo: x.modelo, cor: x.cor, classif: x.classif, bateria: x.bateria, loja: x.loja, tabela: x.preco || null, preco: x.preco ? String(x.preco).replace('.', ',') : '' });
     if (!V.loja && x.loja !== 'Manutenção') V.loja = x.loja;
+    desenharVenda();
+  }
+  function addAcess(x) {
+    if (!V) novaVenda();
+    var j = V.acess.filter(function (a) { return a.id === x.id; })[0];
+    if (j) j.qtd = String((parseInt(j.qtd, 10) || 0) + 1);
+    else V.acess.push({ id: x.id, nome: x.nome, qtd: '1', preco: x.preco ? String(x.preco.toFixed(2)).replace('.', ',') : '', tabela: x.preco || null, estoque: x.estoque || {} });
     desenharVenda();
   }
   function garantiaAte(ms, meses) { var d = new Date(ms); d.setMonth(d.getMonth() + (meses || 3)); return dataBR(d.getTime()); }
@@ -1208,6 +1274,55 @@
       ip.oninput = function () { it.preco = ip.value; aviso(); resumo(); };
       aviso(); c1.appendChild(b);
     });
+    // ---- acessórios
+    if (pode('acessorios')) {
+      var ca = cartao(esq, 'Acessórios vendidos');
+      var bA = inp('text', 'Buscar acessório: nome ou código de barras'); bA.setAttribute('aria-label', 'Buscar acessório'); ca.appendChild(bA);
+      var rA = el('div'); ca.appendChild(rA);
+      var buscarAc = function () {
+        rA.innerHTML = '';
+        var q = bA.value.trim().toLowerCase(); if (q.length < 2) return;
+        if (!S.ac) { rA.appendChild(el('div', 'hint', 'Carregando acessórios…')); call('acessorios', [S.token]).then(function (d) { S.ac = d; buscarAc(); }).catch(function (e) { rA.innerHTML = ''; rA.appendChild(el('div', 'hint', e)); }); return; }
+        var ex = S.ac.produtos.filter(function (x) { return x.codigo && x.codigo.toLowerCase() === q; });
+        if (ex.length === 1) { bA.value = ''; addAcess(ex[0]); return; }
+        var termos = q.split(/\s+/);
+        var l = S.ac.produtos.filter(function (x) { var t = (x.nome + ' ' + x.codigo + ' ' + x.grupo).toLowerCase(); return termos.every(function (k) { return t.indexOf(k) > -1; }); }).slice(0, 8);
+        if (!l.length) { rA.appendChild(el('div', 'hint', 'Nenhum acessório encontrado.')); return; }
+        var lst = el('div', 'vdres');
+        l.forEach(function (x) {
+          var b = el('button'); b.type = 'button'; var naLoja = V.loja ? (x.estoque[V.loja] || 0) : x.total;
+          var a = el('span', '', x.nome); a.appendChild(el('small', '', (V.loja ? naLoja + ' em ' + V.loja : x.total + ' no total') + (x.codigo ? ' · cód. ' + x.codigo : '')));
+          b.appendChild(a); b.appendChild(el('b', '', x.preco ? brl(x.preco) : 'sem preço'));
+          if (!(naLoja > 0)) b.style.opacity = '.55';
+          b.onclick = function () { addAcess(x); };
+          lst.appendChild(b);
+        });
+        rA.appendChild(lst);
+      };
+      bA.oninput = buscarAc;
+      if (!V.acess.length) ca.appendChild(el('div', 'hint', 'Com leitor de código de barras, é só ler o código aqui que o acessório entra na venda.'));
+      V.acess.forEach(function (it, i) {
+        var b = el('div', 'vdit vdac'), hd = el('div', 'hd'), t = el('div', 't', it.nome);
+        var tem = V.loja ? (it.estoque[V.loja] || 0) : null;
+        t.appendChild(el('small', '', (tem === null ? 'Escolha a loja para ver o estoque' : tem + ' em estoque em ' + V.loja) + ' · garantia 90 dias'));
+        var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar da venda'; x.onclick = function () { V.acess.splice(i, 1); desenharVenda(); };
+        hd.appendChild(t); hd.appendChild(x); b.appendChild(hd);
+        var qp = el('div', 'qp'), w1 = el('div'), w2 = el('div'); qp.appendChild(w1); qp.appendChild(w2); b.appendChild(qp);
+        var qi = inp('number', '1'); qi.min = 1; qi.value = it.qtd; campo(w1, 'Qtd.', qi);
+        var pf = el('div', 'prefix'), ip = el('input'); ip.inputMode = 'decimal'; ip.value = it.preco; ip.placeholder = '0,00'; pf.appendChild(el('span', '', 'R$')); pf.appendChild(ip); campo(w2, 'Preço unitário', pf);
+        var av = el('div', 'hint'); b.appendChild(av);
+        var aviso = function () {
+          var q = parseInt(qi.value, 10) || 0, pv = num(ip.value), ms = [];
+          if (q && pv) ms.push('Subtotal ' + brl(q * pv));
+          if (it.tabela && pv && pv < it.tabela) ms.push('desconto de ' + brl((it.tabela - pv) * q));
+          if (tem !== null && q > tem) ms.push('ATENÇÃO: só tem ' + tem + ' nesta loja');
+          av.textContent = ms.join(' · '); av.style.color = tem !== null && q > tem ? 'var(--err)' : '';
+        };
+        qi.oninput = function () { it.qtd = qi.value; aviso(); resumo(); };
+        ip.oninput = function () { it.preco = ip.value; aviso(); resumo(); };
+        aviso(); ca.appendChild(b);
+      });
+    }
     // ---- troca
     var c2 = cartao(esq, 'Aparelho do cliente na troca (opcional)');
     V.troca.forEach(function (t, i) { c2.appendChild(cardTroca(t, i)); });
@@ -1232,10 +1347,12 @@
     wpp.onblur = function () { wpp.value = fmtFone(C.whats); };
     cpf.oninput = function () {
       C.cpf = soDig(cpf.value).slice(0, 11); info.style.color = '';
+      if (V.credito !== undefined && V.credCpf !== C.cpf) { V.credito = undefined; if (temCred()) desenharPags(); }
       if (C.cpf.length < 11) { info.textContent = ''; return; }
       if (!cpfOk(C.cpf)) { info.textContent = 'CPF inválido: confira os números.'; info.style.color = 'var(--err)'; return; }
       cpf.value = fmtCPF(C.cpf); info.textContent = 'Procurando cliente…';
       call('clienteBuscar', [S.token, C.cpf]).then(function (r) {
+        V.credito = r ? r.credito || null : null; V.credCpf = C.cpf; if (temCred()) desenharPags();
         if (!r) { info.textContent = 'Cliente novo: preencha os dados abaixo.'; return; }
         info.textContent = '✓ Cliente já cadastrado (' + r.compras + ' compra' + (r.compras === 1 ? '' : 's') + '). Confira os dados.'; info.style.color = 'var(--ok)';
         ['nome', 'whats', 'cep', 'endereco', 'bairro', 'cidade'].forEach(function (k) { C[k] = r[k] || ''; });
@@ -1281,12 +1398,42 @@
           ps.value = p.parcelas || '12x'; p.parcelas = ps.value; ps.onchange = function () { p.parcelas = ps.value; cartaoInfo(); };
           var w = el('div'); w.style.gridColumn = '1 / -1'; w.appendChild(ps); r.appendChild(w);
         }
+        var nsel = null;
+        if (p.cartao === 'crediario') {
+          var cc = cfgCred();
+          if (!(+p.parcelas >= 1 && +p.parcelas <= cc.maxParcelas)) p.parcelas = String(Math.min(cc.maxParcelas, 3));
+          if (!p.primeiroVenc) p.primeiroVenc = isoAdd(isoHoje(), cc.diasPrimeiro);
+          var cw = el('div', 'crdpg'); cw.style.gridColumn = '1 / -1';
+          var c1w = el('div'), c2w = el('div'); cw.appendChild(c1w); cw.appendChild(c2w);
+          nsel = el('select'); for (var nn = 1; nn <= cc.maxParcelas; nn++) { var on = el('option', '', nn + 'x'); on.value = String(nn); nsel.appendChild(on); }
+          nsel.value = String(p.parcelas); nsel.onchange = function () { p.parcelas = nsel.value; cartaoInfo(); };
+          c1w.appendChild(el('label', '', 'Parcelas')); c1w.appendChild(nsel);
+          var dv = inpData(p.primeiroVenc); dv.min = isoAdd(isoHoje(), 1); dv.max = isoAdd(isoHoje(), 90); dv.onchange = function () { p.primeiroVenc = dv.value; };
+          c2w.appendChild(el('label', '', '1º vencimento')); c2w.appendChild(dv);
+          r.appendChild(cw);
+        }
         r.appendChild(cb);
         function cartaoInfo() {
+          if (p.cartao === 'crediario') return credInfo();
           var v = num(p.valor), tx = p.cartao === 'debito' ? taxa('Débito') : p.cartao === 'credito' ? taxa(p.parcelas) : null;
           cb.textContent = tx && v ? 'Cobrar na maquininha: ' + brl(v / (1 - tx.taxa)) + (tx.parcelas > 1 ? ' (' + tx.parcelas + 'x de ' + brl(v / (1 - tx.taxa) / tx.parcelas) + ')' : '') : '';
         }
-        fs.onchange = function () { var fo = formasV()[+fs.value]; p.formaId = fo.id; p.forma = fo.nome; p.cartao = fo.cartao; desenharPags(); resumo(); };
+        function credInfo() {
+          var v = num(p.valor) || 0, cc = cfgCred(), cr = V.credito, ln = [];
+          if (nsel) Array.prototype.forEach.call(nsel.options, function (o) { var pl = planoCred(v, +o.value, cc); o.textContent = o.value + 'x de ' + (v ? brl(pl.parcela) : '—') + (pl.juros ? ' (total ' + brl(pl.total) + ')' : ' sem juros'); });
+          var pl = planoCred(v, +p.parcelas || 1, cc); cb.style.color = '';
+          if (!cpfOk(V.cli.cpf)) ln.push('Informe o CPF do cliente para conferir o limite de crédito.');
+          else if (cr === undefined) ln.push('Conferindo limite do cliente…');
+          else if (!cr || !cr.limite) { ln.push('Cliente sem limite de crédito: a venda no crediário será bloqueada. Cadastre o limite em CRM › Clientes/Fornecedores.'); cb.style.color = 'var(--err)'; }
+          else {
+            ln.push('Limite ' + brl(cr.limite) + ' · em aberto ' + brl(cr.emAberto) + ' · disponível ' + brl(Math.max(0, cr.disponivel)) + '.');
+            if (cr.atrasado > 0 && cc.bloquearAtraso) { ln.push('BLOQUEADO: cliente com ' + cr.qtdAtraso + ' fatura(s) atrasada(s).'); cb.style.color = 'var(--err)'; }
+            else if (v && pl.total > cr.disponivel + 0.009) { ln.push('BLOQUEADO: esta compra (' + brl(pl.total) + ') passa do disponível.'); cb.style.color = 'var(--err)'; }
+            else if (v) { ln.push('✓ Dentro do limite.'); cb.style.color = 'var(--ok)'; }
+          }
+          cb.textContent = ln.join(' ');
+        }
+        fs.onchange = function () { var fo = formasV()[+fs.value]; p.formaId = fo.id; p.forma = fo.nome; p.cartao = fo.cartao; p.parcelas = fo.cartao === 'credito' ? '12x' : ''; p.primeiroVenc = ''; desenharPags(); resumo(); };
         vi.oninput = function () { p.valor = vi.value; p.auto = false; cartaoInfo(); resumo(true); };
         x.onclick = function () { V.pags.splice(i, 1); if (V.pags.length === 1) V.pags[0].auto = true; desenharPags(); resumo(); };
         cartaoInfo(); pgbox.appendChild(r);
@@ -1300,21 +1447,27 @@
       if (V.pags.length === 1 && V.pags[0].auto) { var nv = T.pagar > 0 ? String(T.pagar.toFixed(2)).replace('.', ',') : ''; if (V.pags[0].valor !== nv) { V.pags[0].valor = nv; desenharPags(); } T = totaisVenda(); }
       tots.innerHTML = '';
       var add = function (a, b, cls) { var d = el('div', 'vdtot' + (cls ? ' ' + cls : '')); d.appendChild(el('span', '', a)); d.appendChild(el(cls ? 'b' : 'span', '', b)); tots.appendChild(d); };
-      add('Aparelhos (' + V.itens.length + ')', brl(T.itens));
+      var tAp = r2(V.itens.reduce(function (a, x) { return a + (num(x.preco) || 0); }, 0));
+      if (V.itens.length || !V.acess.length) add('Aparelhos (' + V.itens.length + ')', brl(tAp));
+      if (V.acess.length) add('Acessórios (' + V.acess.reduce(function (a, x) { return a + (parseInt(x.qtd, 10) || 0); }, 0) + ')', brl(r2(T.itens - tAp)));
       if (V.troca.length) add('Troca (' + V.troca.length + ')', '− ' + brl(T.troca));
       add('A pagar', brl(T.pagar), 'big');
       var dif = r2(T.pagar - T.pago);
-      falta.textContent = !V.itens.length ? '' : Math.abs(dif) < 0.01 ? '✓ Pagamento fechado' : dif > 0 ? 'Falta lançar ' + brl(dif) : 'Pagamento passou ' + brl(-dif);
+      falta.textContent = !V.itens.length && !V.acess.length ? '' : Math.abs(dif) < 0.01 ? '✓ Pagamento fechado' : dif > 0 ? 'Falta lançar ' + brl(dif) : 'Pagamento passou ' + brl(-dif);
       falta.style.color = Math.abs(dif) < 0.01 ? 'var(--ok)' : 'var(--warn)';
     }
     V._resumo = resumo;
+    function temCred() { return V.pags.some(function (p) { return p.cartao === 'crediario'; }); }
     desenharPags(); resumo();
     fin.onclick = function () {
       m.classList.remove('show');
       var T = totaisVenda(), erro = '';
       if (!V.loja) erro = 'Escolha a loja da venda.';
-      else if (!V.itens.length) erro = 'Adicione pelo menos um aparelho.';
+      else if (!V.itens.length && !V.acess.length) erro = 'Adicione pelo menos um aparelho ou acessório.';
       else if (V.itens.some(function (i) { return !(num(i.preco) > 0); })) erro = 'Informe o preço de todos os aparelhos.';
+      else if (V.acess.some(function (i) { return !(num(i.preco) > 0) || !(parseInt(i.qtd, 10) > 0); })) erro = 'Informe quantidade e preço de todos os acessórios.';
+      else if (V.acess.some(function (i) { return (parseInt(i.qtd, 10) || 0) > (i.estoque[V.loja] || 0); })) erro = 'Tem acessório com quantidade maior que o estoque desta loja.';
+      else if (V.pags.some(function (p) { return p.cartao === 'crediario' && !p.primeiroVenc; })) erro = 'Informe o 1º vencimento do crediário.';
       else if (V.troca.some(function (t) { return !t.modelo || !t.cor || !luhn(soDig(t.imei)) || t.bateria === '' || !t.classificacao || !(num(t.valor) > 0); })) erro = 'Complete os dados do aparelho da troca (modelo, cor, IMEI, bateria, classificação e valor).';
       else if (V.troca.some(function (t) { return t.consulta !== 'Nada consta'; })) erro = 'Faça a consulta oficial do IMEI do aparelho da troca e marque "Nada consta".';
       else if (T.pagar < 0) erro = 'A troca vale mais que a venda.';
@@ -1328,12 +1481,13 @@
       var d = {
         loja: V.loja, obs: V.obs,
         itens: V.itens.map(function (i) { return { linha: i.linha, imei: i.imei, preco: num(i.preco) }; }),
+        acessorios: V.acess.map(function (a) { return { id: a.id, qtd: parseInt(a.qtd, 10), preco: num(a.preco) }; }),
         troca: V.troca.map(function (t) { return { modelo: t.modelo, cor: t.cor, imei: soDig(t.imei), imei2: soDig(t.imei2), serial: t.serial, bateria: t.bateria, classificacao: t.classificacao, valor: num(t.valor), consulta: t.consulta, obs: t.obs }; }),
         cliente: V.cli,
-        pagamentos: V.pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas }; })
+        pagamentos: V.pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, primeiroVenc: p.primeiroVenc || '' }; })
       };
       call('vendaRegistrar', [S.token, d]).then(function (v) {
-        S.disp = null; S.dash = null; S.venda = null; S.vendas = null; S.fin = null; S.crm = null;
+        S.disp = null; S.dash = null; S.venda = null; S.vendas = null; S.fin = null; S.crm = null; S.ac = null; S.cred = null;
         V = null; novaVenda(); abrirRecibo(v, true);
       }).catch(function (e) { fin.disabled = false; fin.textContent = 'Finalizar venda'; m.textContent = e; m.classList.add('show'); });
     };
@@ -1382,10 +1536,18 @@
     r.appendChild(el('h2', '', 'Cliente'));
     r.appendChild(el('div', '', v.cliente.nome + ' · CPF ' + fmtCPF(v.cliente.cpf) + ' · WhatsApp ' + fmtFone(v.cliente.whats)));
     if (v.cliente.endereco) r.appendChild(el('div', '', v.cliente.endereco));
-    r.appendChild(el('h2', '', 'Aparelhos'));
-    var t = el('table'), h = el('tr'); ['Aparelho', 'IMEI', 'Garantia até', 'Valor'].forEach(function (x, i) { h.appendChild(el('th', i === 3 ? 'v' : '', x)); }); t.appendChild(h);
-    v.itens.forEach(function (x) { var tr = el('tr'); [x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classificacao, x.imei, garantiaAte(v.data, x.garantiaMeses || 3), brl(x.preco)].forEach(function (c, i) { tr.appendChild(el('td', i === 3 ? 'v' : '', c)); }); t.appendChild(tr); });
-    r.appendChild(t);
+    if (v.itens.length) {
+      r.appendChild(el('h2', '', 'Aparelhos'));
+      var t = el('table'), h = el('tr'); ['Aparelho', 'IMEI', 'Garantia até', 'Valor'].forEach(function (x, i) { h.appendChild(el('th', i === 3 ? 'v' : '', x)); }); t.appendChild(h);
+      v.itens.forEach(function (x) { var tr = el('tr'); [x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classificacao, x.imei, garantiaAte(v.data, x.garantiaMeses || 3), brl(x.preco)].forEach(function (c, i) { tr.appendChild(el('td', i === 3 ? 'v' : '', c)); }); t.appendChild(tr); });
+      r.appendChild(t);
+    }
+    if ((v.acessorios || []).length) {
+      r.appendChild(el('h2', '', 'Acessórios'));
+      var ta = el('table'), ha = el('tr'); ['Acessório', 'Qtd.', 'Unitário', 'Valor'].forEach(function (x, i) { ha.appendChild(el('th', i >= 2 ? 'v' : '', x)); }); ta.appendChild(ha);
+      v.acessorios.forEach(function (x) { var tr = el('tr'); [x.nome, String(x.qtd), brl(x.preco), brl(x.total)].forEach(function (c, i) { tr.appendChild(el('td', i >= 2 ? 'v' : '', c)); }); ta.appendChild(tr); });
+      r.appendChild(ta);
+    }
     if (v.troca && v.troca.length) {
       r.appendChild(el('h2', '', 'Aparelho recebido na troca'));
       var t2 = el('table'), h2 = el('tr'); ['Aparelho', 'IMEI', 'Valor abatido'].forEach(function (x, i) { h2.appendChild(el('th', i === 2 ? 'v' : '', x)); }); t2.appendChild(h2);
@@ -1394,12 +1556,17 @@
     }
     r.appendChild(el('h2', '', 'Valores'));
     var tt = function (a2, b2, cls) { var d = el('div', 'tt' + (cls ? ' ' + cls : '')); d.appendChild(el('span', '', a2)); d.appendChild(el('span', '', b2)); r.appendChild(d); };
-    tt('Total dos aparelhos', brl(v.totalItens));
+    tt((v.acessorios || []).length ? 'Total dos produtos' : 'Total dos aparelhos', brl(v.totalItens));
     if (v.totalTroca) tt('Troca', '− ' + brl(v.totalTroca));
-    tt('Valor pago', brl(v.aPagar), 'g');
-    (v.pagamentos || []).forEach(function (p) { tt(p.forma + parcTxt(p), brl(p.valor) + (p.cobrado && p.cobrado !== p.valor ? ' (cobrado ' + brl(p.cobrado) + (p.parcelas > 1 ? ' em ' + p.parcelas + 'x de ' + brl(p.cobrado / p.parcelas) : '') + ')' : '')); });
+    tt((v.pagamentos || []).some(function (p) { return p.crediario; }) ? 'Valor da compra' : 'Valor pago', brl(v.aPagar), 'g');
+    (v.pagamentos || []).forEach(function (p) {
+      if (p.crediario) { tt(p.forma + ' ' + p.parcelas + 'x de ' + brl(p.valorParcela) + ' · 1º venc. ' + isoBR(p.primeiroVenc), brl(p.valor) + (p.totalCred > p.valor + 0.009 ? ' (total com juros ' + brl(p.totalCred) + ')' : '')); return; }
+      tt(p.forma + parcTxt(p), brl(p.valor) + (p.cobrado && p.cobrado !== p.valor ? ' (cobrado ' + brl(p.cobrado) + (p.parcelas > 1 ? ' em ' + p.parcelas + 'x de ' + brl(p.cobrado / p.parcelas) : '') + ')' : '')); });
     if (v.obs) { r.appendChild(el('h2', '', 'Observação')); r.appendChild(el('div', '', v.obs)); }
-    r.appendChild(el('div', 'gar', 'GARANTIA: 3 (três) meses a partir desta data para os aparelhos seminovos acima, contra defeitos de funcionamento. ' +
+    var credP = (v.pagamentos || []).filter(function (p) { return p.crediario; })[0];
+    if (credP) { var cc = cfgCred(); r.appendChild(el('div', 'gar', 'CREDIÁRIO: ' + credP.parcelas + ' parcela(s) de ' + brl(credP.valorParcela) + ', 1º vencimento em ' + isoBR(credP.primeiroVenc) + ', demais no mesmo dia dos meses seguintes. Após o vencimento: multa de ' + nfmt(cc.multa) + '% e juros de ' + nfmt(cc.mora) + '% ao mês.')); }
+    if ((v.acessorios || []).length) r.appendChild(el('div', 'gar', 'ACESSÓRIOS: garantia de 90 (noventa) dias contra defeito de fabricação, a partir desta data. Não cobre mau uso, quebra ou desgaste.'));
+    if (v.itens.length) r.appendChild(el('div', 'gar', 'GARANTIA: 3 (três) meses a partir desta data para os aparelhos seminovos acima, contra defeitos de funcionamento. ' +
       'A garantia não cobre danos causados por queda, contato com líquidos, tela ou vidro quebrado, mau uso, abertura do aparelho por terceiros ou desgaste natural da bateria. ' +
       'Para usar a garantia, apresente este recibo.' + (v.troca && v.troca.length ? ' TROCA: o cliente declara ser o proprietário do aparelho entregue e que ele tem procedência lícita.' : '')));
     var as = el('div', 'ass'); as.appendChild(el('div', '', v.cliente.nome)); as.appendChild(el('div', '', 'Vendedor: ' + String(v.vendedor || '').replace(/\s*\([^)]*\)\s*$/, ''))); r.appendChild(as);
@@ -1408,8 +1575,10 @@
   function textoRecibo(v) {
     var l = ['Olá, ' + v.cliente.nome.split(' ')[0] + '! Obrigado pela compra na ' + (/^Find Cell/.test(v.loja) ? 'Find Cell' : 'Tec-Cell') + '. 😊', '', '🧾 Recibo Nº ' + v.id + ' · ' + (v.dataTxt || dataBR(v.data)), ''];
     v.itens.forEach(function (x) { l.push('📱 ' + x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' (' + x.classificacao + ')'); l.push('IMEI ' + x.imei + ' · ' + brl(x.preco)); l.push('✅ Garantia até ' + garantiaAte(v.data, x.garantiaMeses || 3)); l.push(''); });
+    (v.acessorios || []).forEach(function (x) { l.push('🎧 ' + x.qtd + 'x ' + x.nome + ' · ' + brl(x.total)); });
+    if ((v.acessorios || []).length) { l.push('✅ Acessórios: garantia de 90 dias'); l.push(''); }
     (v.troca || []).forEach(function (x) { l.push('🔄 Troca: ' + x.modelo + ' · − ' + brl(x.valor)); });
-    l.push('💰 Valor pago: ' + brl(v.aPagar) + ' (' + (v.pagamentos || []).map(function (p) { return p.forma + parcTxt(p); }).join(' + ') + ')');
+    l.push('💰 Valor: ' + brl(v.aPagar) + ' (' + (v.pagamentos || []).map(function (p) { return p.crediario ? 'crediário ' + p.parcelas + 'x de ' + brl(p.valorParcela) + ', 1º venc. ' + isoBR(p.primeiroVenc) : p.forma + parcTxt(p); }).join(' + ') + ')');
     l.push(''); l.push('Guarde esta mensagem: ela vale como comprovante da garantia.');
     return l.join('\n');
   }
@@ -1424,7 +1593,7 @@
   function abrirRecibo(v, nova) {
     var sh = $('fSheet'); sh.innerHTML = '';
     sh.appendChild(el('h2', 'tt', nova ? '✓ Venda ' + v.id + ' registrada' : 'Recibo da venda ' + v.id));
-    if (nova) sh.appendChild(el('div', 'sub', 'Os aparelhos saíram do estoque' + (v.troca && v.troca.length ? ' e a troca entrou como Recompra' : '') + '. Imprima ou envie o recibo para o cliente.'));
+    if (nova) sh.appendChild(el('div', 'sub', 'Os produtos saíram do estoque' + (v.troca && v.troca.length ? ' e a troca entrou como Recompra' : '') + '. Imprima ou envie o recibo para o cliente.'));
     sh.appendChild(reciboEl(v));
     var ac = el('div', 'acoes'), pr = el('button', 'btn', '🖨 Imprimir'), wa = el('button', 'btn ok', 'Enviar por WhatsApp'); pr.type = wa.type = 'button';
     ac.appendChild(pr); ac.appendChild(wa); sh.appendChild(ac);
@@ -1463,7 +1632,7 @@
       if (sit === '' && v.situacao === 'Cancelada') return false;
       if (sit === 'Cancelada' && v.situacao !== 'Cancelada') return false;
       if (q) {
-        var t = [v.id, v.cliente.nome].concat(v.itens.map(function (x) { return x.modelo; })).join(' ').toLowerCase(), d = [v.cliente.cpf, v.cliente.whats].concat(v.itens.map(function (x) { return x.imei; }), v.troca.map(function (x) { return x.imei; })).join(' ');
+        var t = [v.id, v.cliente.nome].concat(v.itens.map(function (x) { return x.modelo; }), (v.acessorios || []).map(function (x) { return x.nome; })).join(' ').toLowerCase(), d = [v.cliente.cpf, v.cliente.whats].concat(v.itens.map(function (x) { return x.imei; }), v.troca.map(function (x) { return x.imei; })).join(' ');
         if (t.indexOf(q) < 0 && !(qd.length >= 3 && d.indexOf(qd) > -1)) return false;
       }
       return true;
@@ -1485,7 +1654,7 @@
       var r = el('div', 'prow'); r.dataset.k = v.id;
       var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
       var n = el('div'), nm = el('div', 'pnome', v.cliente.nome); if (v.situacao === 'Cancelada') nm.appendChild(el('span', 'badge-m canc', 'Cancelada'));
-      n.appendChild(nm); n.appendChild(el('div', 'psub', v.itens.map(function (x) { return x.modelo + ' ' + x.classificacao; }).join(' · ') + (v.troca.length ? ' · troca: ' + v.troca.map(function (x) { return x.modelo; }).join(', ') : '')));
+      n.appendChild(nm); n.appendChild(el('div', 'psub', v.itens.map(function (x) { return x.modelo + ' ' + x.classificacao; }).concat((v.acessorios || []).map(function (x) { return x.qtd + 'x ' + x.nome; })).join(' · ') + (v.troca.length ? ' · troca: ' + v.troca.map(function (x) { return x.modelo; }).join(', ') : '')));
       r.appendChild(n);
       var md = el('div', 'psku'); md.appendChild(el('div', '', v.id + ' · ' + (v.dataTxt || dataBR(v.data)))); md.appendChild(el('div', 'psub', String(v.vendedor).replace(/\s*\([^)]*\)\s*$/, '') + ' · ' + v.loja)); r.appendChild(md);
       var pr = el('div', 'ppre' + (v.situacao === 'Cancelada' ? ' sem' : ''), brl(v.totalItens).replace('R$', '').trim());
@@ -1505,6 +1674,7 @@
     var info = el('div', 'card'), kv = el('div', 'kv');
     [['Cliente', v.cliente.nome], ['CPF', fmtCPF(v.cliente.cpf)], ['WhatsApp', fmtFone(v.cliente.whats)], ['Endereço', v.cliente.endereco], ['Vendedor', v.vendedor],
      ['Aparelhos', v.itens.map(function (x) { return x.modelo + ' ' + x.classificacao + ' (IMEI ' + x.imei + ') ' + brl(x.preco); }).join('\n')],
+     ['Acessórios', (v.acessorios || []).map(function (x) { return x.qtd + 'x ' + x.nome + ' ' + brl(x.total); }).join('\n')],
      ['Troca', v.troca.map(function (x) { return x.modelo + ' (IMEI ' + x.imei + ') − ' + brl(x.valor); }).join('\n')],
      ['Total', brl(v.totalItens)], ['Valor pago', brl(v.aPagar)], ['Pagamento', (v.pagamentos || []).map(function (p) { return p.forma + parcTxt(p) + ' ' + brl(p.valor); }).join(' + ')],
      ['Observação', v.obs], ['Cancelamento', v.cancelamento]].forEach(function (p) { if (!p[1]) return; kv.appendChild(el('div', 'k', p[0])); var d = el('div', '', p[1]); d.style.whiteSpace = 'pre-line'; kv.appendChild(d); });
@@ -1623,7 +1793,7 @@
     var bd = abrirDw(x.nome, x.tipo + ' · Pessoa ' + (x.pessoa || 'Física').toLowerCase() + ' · ' + x.id), fi = x.ficha || {}, pj = x.pessoa === 'Jurídica';
     var ln = function (v) { return v ? brl(v) : ''; };
     kvCard(bd, [['Tipo', x.tipo], [pj ? 'CNPJ' : 'CPF', x.doc ? fmtDoc(x.doc) : ''], ['WhatsApp', x.whats ? fmtFone(x.whats) : ''], ['E-mail', x.email],
-                ['Endereço', [x.endereco, x.bairro, x.cidade, x.cep ? 'CEP ' + x.cep : ''].filter(Boolean).join(' · ')],
+                ['Endereço', [[x.endereco, fi.numero ? 'nº ' + fi.numero : '', fi.complemento].filter(Boolean).join(', '), x.bairro, x.cidade, x.cep ? 'CEP ' + x.cep : ''].filter(Boolean).join(' · ')],
                 ['Compras', x.compras ? x.compras + ' · ' + brl(x.total) : ''], ['1ª compra', x.primeira], ['Última compra', x.ultimaCompra ? dataBR(x.ultimaCompra) : ''],
                 ['Pago a ele', x.pago ? brl(x.pago) : ''], ['Em aberto', x.aberto ? brl(x.aberto) : '']]);
     var pares = pj ? [['Regime tributário', fi.regime], ['Contribuinte', CONTRIB[fi.contrib] ? fi.contrib + ' - ' + CONTRIB[fi.contrib] : ''], ['Inscrição Estadual', fi.ie]]
@@ -1775,7 +1945,10 @@
     g = el('div', 'g2'); a = el('div'); b = el('div'); g.appendChild(a); g.appendChild(b); cC.appendChild(g);
     var cep = campo(a, 'CEP', inp('text', '00000-000')); cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = d.cep;
     var cid = campo(b, 'Cidade', inp('text', '')); cid.value = d.cidade;
-    var end = campo(cC, 'Endereço (rua e número)', inp('text', '')); end.maxLength = 120; end.value = d.endereco;
+    var end = campo(cC, 'Endereço (rua, avenida…)', inp('text', '')); end.maxLength = 120; end.value = d.endereco;
+    g = el('div', 'g2'); a = el('div'); b = el('div'); g.appendChild(a); g.appendChild(b); cC.appendChild(g);
+    var numE = campo(a, 'Número', inp('text', 'Ex.: 120 ou S/N')); numE.maxLength = 10; numE.value = fi.numero || '';
+    var comp = campo(b, 'Complemento', inp('text', 'Ex.: casa 2, apto 301')); comp.maxLength = 40; comp.value = fi.complemento || '';
     var bai = campo(cC, 'Bairro', inp('text', '')); bai.value = d.bairro;
 
     // Comercial/Financeiro
@@ -1847,7 +2020,7 @@
         { nasc: nasc.value, rg: rg.value, orgao: org.value, mae: mae.value, pai: pai.value, trabalho: trab.value, atividade: ativ.value, renda: num(renda.value) || 0,
           naturalidade: nat.value, escolaridade: esc.value, sexo: sexo.value, civil: civil.value, conjuge: conj.value };
       ficha.limite = num(lim.value) || 0; ficha.limiteDC = num(limDC.value) || 0; ficha.tolerancia = num(tol.value) || 0; ficha.tabela = tab.value; ficha.frete = fre.value;
-      ficha.vendedores = getVend(); ficha.planos = getPlan(); ficha.infoCom = info.value;
+      ficha.vendedores = getVend(); ficha.planos = getPlan(); ficha.infoCom = info.value; ficha.numero = numE.value; ficha.complemento = comp.value;
       ok.disabled = cc.disabled = true; ok.textContent = 'Salvando…';
       call('crmSalvar', [S.token, { id: x ? x.id : '', tipo: tipoAtual, pessoa: pesSel.value, nome: nome.value, doc: k, whats: w, email: em.value.trim(), cep: soDig(cep.value), endereco: end.value, bairro: bai.value, cidade: cid.value, obs: ob.value, ficha: ficha }])
         .then(function (r) {
@@ -2114,6 +2287,557 @@
         .catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Lançar conta'; m.textContent = e; m.classList.add('show'); });
     };
     abrirModal(); ds.focus();
+  }
+
+  // =========================================================
+  //  CREDIÁRIO
+  // =========================================================
+  function carregarCred(forcar) {
+    if (S.cred && !forcar) return renderCred();
+    $('cdLista').innerHTML = ''; $('cdLista').appendChild(el('div', 'empty', 'Carregando crediário…')); $('cdCont').textContent = '';
+    call('crediario', [S.token]).then(aposCred).catch(function (e) { $('cdLista').innerHTML = ''; $('cdLista').appendChild(el('div', 'empty', e)); });
+  }
+  function aposCred(d) { S.cred = d; S.fin = null; if (d.cfg) S.u.credCfg = d.cfg; show('cdCfg', d.gerente); show('cdAvulso', d.gerente); renderCred(); }
+  var CDV = LS.get('credAba', 'Faturas');
+  seg($('cdAba'), ['Faturas', 'Clientes'], CDV, function (v) { CDV = v; LS.set('credAba', v); renderCred(); });
+  $('cdBusca').addEventListener('input', renderCred);
+  ['cdSit', 'cdLoja'].forEach(function (k) { $(k).addEventListener('change', renderCred); });
+  $('cdLimpar').onclick = function () { $('cdBusca').value = ''; $('cdSit').value = ''; $('cdLoja').value = ''; renderCred(); };
+  $('cdFilBtn').onclick = function () { var on = !$('cdFil').classList.contains('on'); $('cdFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
+  botaoEsconderFiltros($('cdFilEsc'), 'cdFil', 'semFilCred');
+  $('cdSim').onclick = function () { simuladorCred(); };
+  $('cdCfg').onclick = function () { if (S.cred) regrasCred(); };
+  $('cdAvulso').onclick = function () { if (S.cred) avulsoCred(); };
+  function cfgCred() { return (S.cred && S.cred.cfg) || S.u.credCfg || { taxa: 0, semJuros: 1, maxParcelas: 10, entradaMin: 0, multa: 2, mora: 1, carencia: 0, bloquearAtraso: true, diasPrimeiro: 30 }; }
+  function diasIso(a, b) { return Math.round((msIso(b) - msIso(a)) / DIA); }
+  // mesma conta do servidor: multa uma vez + juros por dia sobre o saldo, depois da carência
+  function encCred(p, data) {
+    var cc = cfgCred();
+    if (p.situacao !== 'Em aberto' || !(p.saldo > 0)) return { multa: 0, juros: 0, dias: 0 };
+    var dias = diasIso(p.venc, data);
+    if (dias <= (cc.carencia || 0)) return { multa: 0, juros: 0, dias: Math.max(0, dias) };
+    var multaJa = (p.recs || []).some(function (r) { return r.multa > 0 || r.dispensado > 0; }), base = p.venc;
+    (p.recs || []).forEach(function (r) { if (r.data > base) base = r.data; });
+    var dj = Math.max(0, diasIso(base, data));
+    return { multa: multaJa ? 0 : Math.round(p.saldo * cc.multa) / 100, juros: Math.round(p.saldo * cc.mora / 30 * dj) / 100, dias: dias };
+  }
+  function planoCred(valor, n, cc) {
+    cc = cc || cfgCred();
+    var i = n <= cc.semJuros || !(cc.taxa > 0) ? 0 : cc.taxa / 100;
+    var parc = Math.round((i ? valor * i / (1 - Math.pow(1 + i, -n)) : valor / n) * 100) / 100;
+    var total = i ? r2(parc * n) : r2(valor);
+    return { parcela: parc, total: total, juros: i > 0 };
+  }
+  function stCred(p, hoje) { if (p.situacao !== 'Em aberto') return p.situacao; var d = diasIso(p.venc, hoje); return d > 0 ? 'Atrasada' : d === 0 ? 'Vence hoje' : 'Em aberto'; }
+  function totalHoje(p) { var e = encCred(p, isoHoje()); return r2(p.saldo + e.multa + e.juros); }
+  function renderCred() {
+    var D = S.cred; if (!D) return;
+    var hoje = isoHoje(), mesIni = hoje.slice(0, 8) + '01';
+    opts($('cdLoja'), D.lojas || [], $('cdLoja').value, 'Todas as lojas');
+    var lj = $('cdLoja').value, q = $('cdBusca').value.trim().toLowerCase(), qd = soDig(q), sit = $('cdSit').value;
+    var ab = D.parcelas.filter(function (p) { return p.situacao === 'Em aberto' && (!lj || p.loja === lj); });
+    var atr = ab.filter(function (p) { return diasIso(p.venc, hoje) > 0; }), sete = ab.filter(function (p) { var d = diasIso(hoje, p.venc); return d >= 0 && d <= 7; });
+    var recMes = 0, qRec = 0; D.parcelas.forEach(function (p) { if (lj && p.loja !== lj) return; (p.recs || []).forEach(function (r) { if (r.data >= mesIni) { recMes += r.valor; qRec++; } }); });
+    var cliAtr = {}; atr.forEach(function (p) { cliAtr[p.cliId] = 1; });
+    var rs = $('cdResumo'); rs.innerHTML = ''; var k = el('div', 'kpis'); rs.appendChild(k);
+    kpi(k, 'A receber', brl(soma(ab, function (p) { return p.saldo; })), ab.length + ' fatura' + (ab.length === 1 ? '' : 's') + ' em aberto');
+    kpi(k, 'Atrasadas', brl(soma(atr, function (p) { return p.saldo; })), atr.length ? atr.length + ' fatura' + (atr.length === 1 ? '' : 's') + ' · ' + Object.keys(cliAtr).length + ' cliente' + (Object.keys(cliAtr).length === 1 ? '' : 's') : 'nada atrasado', atr.length ? 'down' : 'up');
+    kpi(k, 'Vencem em 7 dias', brl(soma(sete, function (p) { return p.saldo; })), sete.length + ' fatura' + (sete.length === 1 ? '' : 's'));
+    kpi(k, 'Recebido no mês', brl(recMes), qRec + ' recebimento' + (qRec === 1 ? '' : 's'));
+    var cc = cfgCred();
+    $('cdRegras').textContent = 'Regras: ' + (cc.taxa > 0 ? 'até ' + cc.semJuros + 'x sem juros, depois ' + nfmt(cc.taxa) + '% a.m.' : 'sem juros') + ' · até ' + cc.maxParcelas + 'x' + (cc.entradaMin ? ' · entrada mínima ' + nfmt(cc.entradaMin) + '%' : '') +
+      ' · atraso: multa ' + nfmt(cc.multa) + '% + juros ' + nfmt(cc.mora) + '% a.m.' + (cc.carencia ? ' (carência ' + cc.carencia + ' dias)' : '') + (cc.bloquearAtraso ? ' · bloqueia cliente com atraso' : '');
+    var box = $('cdLista'); box.innerHTML = '';
+    $('cdSitW').classList.toggle('hide', CDV !== 'Faturas');
+    if (CDV === 'Clientes') return renderCredCli(box, q, qd);
+    var l = D.parcelas.filter(function (p) {
+      var st = stCred(p, hoje);
+      if (lj && p.loja !== lj) return false;
+      if (sit === '' && p.situacao !== 'Em aberto') return false;
+      if (sit === 'atrasadas' && st !== 'Atrasada') return false;
+      if (sit === '7' && !(p.situacao === 'Em aberto' && diasIso(hoje, p.venc) >= 0 && diasIso(hoje, p.venc) <= 7)) return false;
+      if ((sit === 'Paga' || sit === 'Cancelada') && p.situacao !== sit) return false;
+      if (q && (p.cliente + ' ' + p.contrato + ' ' + p.desc).toLowerCase().indexOf(q) < 0 && !(qd.length >= 3 && (p.doc + ' ' + p.whats).indexOf(qd) > -1)) return false;
+      return true;
+    }).sort(function (a, b) { return sit === 'Paga' ? (b.ultimo > a.ultimo ? 1 : -1) : a.venc < b.venc ? -1 : a.venc > b.venc ? 1 : a.cliente.localeCompare(b.cliente); });
+    $('cdCont').textContent = l.length + ' fatura' + (l.length === 1 ? '' : 's') + ' · ' + brl(soma(l, function (p) { return p.situacao === 'Em aberto' ? p.saldo : p.recebido; }));
+    if (!l.length) { box.appendChild(el('div', 'empty', D.parcelas.length ? 'Nenhuma fatura com esses filtros.' : 'Nenhum crediário ainda. Venda no crediário pela página Vendas (forma de pagamento "Crediário").')); return; }
+    var tab = el('div', 'ptab'), h = el('div', 'prow h');
+    ['', 'Cliente', 'Vencimento', 'Valor', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    tab.appendChild(h);
+    l.forEach(function (p) {
+      var st = stCred(p, hoje), r = el('div', 'prow'); r.dataset.k = p.id;
+      var ic = el('div', 'pimg'); ic.innerHTML = ICO_DOC; r.appendChild(ic);
+      var n = el('div'), nm = el('div', 'pnome', p.cliente); nm.appendChild(el('span', 'bdg ' + ({ 'Atrasada': 'err', 'Paga': 'ok', 'Cancelada': 'off', 'Vence hoje': 'warn' }[st] || 'inf'), st)); n.appendChild(nm);
+      n.appendChild(el('div', 'psub', 'Parcela ' + p.parcela + ' · ' + p.contrato + ' · ' + p.loja)); r.appendChild(n);
+      var vc = el('div', 'psku'); vc.appendChild(el('div', '', p.situacao === 'Paga' ? 'Paga em ' + isoBR(p.ultimo) : 'Vence ' + isoBR(p.venc)));
+      if (st === 'Atrasada') { var dv = el('div', 'psub', p.atraso + ' dia' + (p.atraso === 1 ? '' : 's') + ' de atraso'); dv.style.color = 'var(--err)'; vc.appendChild(dv); }
+      else if (p.recebido && p.situacao === 'Em aberto') vc.appendChild(el('div', 'psub', 'Pago em parte: ' + brl(p.recebido)));
+      r.appendChild(vc);
+      var th = p.situacao === 'Em aberto' ? totalHoje(p) : p.recebido;
+      var pr = el('div', 'ppre' + (p.situacao === 'Cancelada' ? ' sem' : p.situacao === 'Em aberto' ? ' est' : ''), brl(th).replace('R$', '').trim());
+      if (p.situacao === 'Em aberto' && th > p.saldo) pr.appendChild(el('small', '', 'com multa e juros (era ' + brl(p.saldo) + ')'));
+      r.appendChild(pr); r.appendChild(el('div', 'chev', '›'));
+      r.onclick = function () { abrirFatura(p); };
+      tab.appendChild(r);
+    });
+    box.appendChild(tab);
+  }
+  function renderCredCli(box, q, qd) {
+    var D = S.cred, hoje = isoHoje();
+    var l = D.clientes.filter(function (c) { return !q || (c.nome + ' ' + c.cidade).toLowerCase().indexOf(q) > -1 || (qd.length >= 3 && (c.doc + ' ' + c.whats).indexOf(qd) > -1); })
+      .sort(function (a, b) { return b.atrasado - a.atrasado || b.emAberto - a.emAberto || a.nome.localeCompare(b.nome); });
+    $('cdCont').textContent = l.length + ' cliente' + (l.length === 1 ? '' : 's') + ' com crediário ou limite';
+    if (!l.length) { box.appendChild(el('div', 'empty', 'Nenhum cliente com limite de crédito. O limite é cadastrado em CRM › Clientes/Fornecedores (Comercial/Financeiro).')); return; }
+    var tab = el('div', 'ptab'), h = el('div', 'prow h');
+    ['', 'Cliente', 'Limite · disponível', 'Em aberto', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    tab.appendChild(h);
+    l.forEach(function (c) {
+      var r = el('div', 'prow'); r.dataset.k = c.id;
+      var ic = el('div', 'pimg'); ic.innerHTML = ICO_PES; r.appendChild(ic);
+      var n = el('div'), nm = el('div', 'pnome', c.nome);
+      if (c.atrasado) nm.appendChild(el('span', 'bdg err', c.qtdAtraso + ' atrasada' + (c.qtdAtraso === 1 ? '' : 's'))); else if (!c.limite) nm.appendChild(el('span', 'bdg off', 'Sem limite')); else if (c.disponivel <= 0) nm.appendChild(el('span', 'bdg warn', 'Limite usado'));
+      n.appendChild(nm); n.appendChild(el('div', 'psub', [c.doc ? fmtDoc(c.doc) : '', c.cidade].filter(Boolean).join(' · '))); r.appendChild(n);
+      var lm = el('div', 'psku'); lm.appendChild(el('div', '', c.limite ? brl(c.limite) : '—')); var dp = el('div', 'psub', c.limite ? 'disponível ' + brl(Math.max(0, c.disponivel)) : 'sem limite'); if (c.limite && c.disponivel <= 0) dp.style.color = 'var(--warn)'; lm.appendChild(dp); r.appendChild(lm);
+      var pr = el('div', 'ppre' + (c.emAberto ? ' est' : ' zero'), c.emAberto ? brl(c.emAberto).replace('R$', '').trim() : '—'); if (c.atrasado) pr.appendChild(el('small', '', brl(c.atrasado) + ' atrasado'));
+      r.appendChild(pr); r.appendChild(el('div', 'chev', '›'));
+      r.onclick = function () { abrirCliCred(c); };
+      tab.appendChild(r);
+    });
+    box.appendChild(tab);
+  }
+  function lojaNome(loja) { return /^Find Cell/.test(loja || '') ? 'Find Cell' : 'Tec-Cell'; }
+  function msgCobranca(lista, cli) {
+    var hoje = isoHoje(), nome = String(cli || lista[0].cliente).split(' ')[0];
+    var l = ['Olá, ' + nome + '! Aqui é da ' + lojaNome(lista[0].loja) + '. 😊', ''];
+    var atr = lista.filter(function (p) { return diasIso(p.venc, hoje) > 0; });
+    l.push(atr.length ? 'Passando para lembrar que ' + (lista.length === 1 ? 'a parcela abaixo do seu crediário está' : 'as parcelas abaixo do seu crediário estão') + ' em aberto:' : 'Lembrete do seu crediário:');
+    l.push('');
+    var tot = 0;
+    lista.forEach(function (p) {
+      var th = totalHoje(p); tot += th;
+      l.push('📅 Parcela ' + p.parcela + ' (' + p.contrato + ') · vencimento ' + isoBR(p.venc));
+      l.push('💰 ' + brl(th) + (th > p.saldo ? ' (valor de hoje, com multa e juros por ' + diasIso(p.venc, hoje) + ' dia(s) de atraso)' : ''));
+    });
+    if (lista.length > 1) { l.push(''); l.push('Total: ' + brl(tot)); }
+    l.push(''); l.push('Você pode pagar na loja ou por PIX. Qualquer dúvida, é só chamar! 🙏');
+    return l.join('\n');
+  }
+  function abrirWhats(fone, txt) { window.open('https://wa.me/55' + soDig(fone) + '?text=' + encodeURIComponent(txt), '_blank', 'noopener'); }
+  function abrirFatura(p) {
+    Array.prototype.forEach.call(document.querySelectorAll('#cdLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === p.id); });
+    var hoje = isoHoje(), st = stCred(p, hoje), e = encCred(p, hoje), D = S.cred;
+    var bd = abrirDw(p.cliente, 'Parcela ' + p.parcela + ' · ' + p.contrato + ' · ' + st);
+    kvCard(bd, [['Situação', st + (st === 'Atrasada' ? ' há ' + e.dias + ' dia(s)' : '')], ['Vencimento', isoBR(p.venc)], ['Valor da parcela', brl(p.valor)], ['Já recebido', p.recebido ? brl(p.recebido) : ''],
+                ['Saldo', p.situacao === 'Em aberto' ? brl(p.saldo) : ''], ['Multa', e.multa ? brl(e.multa) : ''], ['Juros de mora', e.juros ? brl(e.juros) : ''], ['Total hoje', p.situacao === 'Em aberto' ? brl(r2(p.saldo + e.multa + e.juros)) : ''],
+                ['CPF/CNPJ', p.doc ? fmtDoc(p.doc) : ''], ['WhatsApp', p.whats ? fmtFone(p.whats) : ''], ['Loja', p.loja], ['Origem', p.origem === 'Venda' ? 'Venda ' + p.contrato : 'Lançado à mão'], ['Descrição', p.desc]]);
+    if ((p.recs || []).length) {
+      var c = el('div', 'card'); c.appendChild(el('h2', '', 'Recebimentos'));
+      var t = el('table', 'ext');
+      p.recs.forEach(function (r) { var tr = el('tr'), a = el('td'); a.appendChild(document.createTextNode(isoBR(r.data) + ' · ' + r.forma)); a.appendChild(el('small', '', [r.multa + r.juros ? 'encargos ' + brl(r.multa + r.juros) : '', r.dispensado ? 'dispensado ' + brl(r.dispensado) : '', r.por].filter(Boolean).join(' · '))); tr.appendChild(a); tr.appendChild(el('td', 'v e', brl(r.valor))); t.appendChild(tr); });
+      c.appendChild(t); bd.appendChild(c);
+    }
+    var am = el('div', 'msg err'); bd.appendChild(am);
+    if (p.situacao === 'Em aberto') {
+      var br = opcaoDw(bd, 'Receber pagamento', 'Total hoje ' + brl(r2(p.saldo + e.multa + e.juros)) + ' · aceita pagamento parcial', 'okc', function () {
+        if (br.nextSibling && br.nextSibling.classList && br.nextSibling.classList.contains('opc-box')) return;
+        var bx = el('div', 'opc-box');
+        var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); bx.appendChild(lr);
+        var dt = inpData(hoje); dt.max = hoje; campo(a1, 'Data', dt, true); var vi = inpValor(''); campo(a2, 'Valor recebido', vi, true);
+        var fo = el('select'); D.formas.forEach(function (f2) { var o = el('option', '', f2.nome); o.value = f2.id; fo.appendChild(o); }); campo(bx, 'Como o cliente pagou', fo);
+        var ds = null;
+        if (D.gerente) { var al = el('label', 'ck'); ds = el('input'); ds.type = 'checkbox'; al.appendChild(ds); al.appendChild(document.createTextNode(' Dispensar multa e juros')); al.style.marginTop = '8px'; bx.appendChild(al); }
+        var ln = el('div', 'lines'); bx.appendChild(ln);
+        function conta() {
+          var e2 = encCred(p, dt.value || hoje), enc = ds && ds.checked ? 0 : r2(e2.multa + e2.juros), tot = r2(p.saldo + enc);
+          vi.input.value = String(tot.toFixed(2)).replace('.', ',');
+          lines(ln, [['Saldo da parcela', brl(p.saldo)]].concat(e2.multa && enc ? [['Multa (' + nfmt(cfgCred().multa) + '%)', brl(e2.multa)]] : []).concat(e2.juros && enc ? [['Juros (' + e2.dias + ' dia(s))', brl(e2.juros)]] : []).concat(ds && ds.checked && (e2.multa + e2.juros) ? [['Dispensado', '− ' + brl(r2(e2.multa + e2.juros))]] : []).concat([['Total', brl(tot), 'tot']]));
+        }
+        dt.onchange = conta; if (ds) ds.onchange = conta; conta();
+        var ok = el('button', 'btn ok', 'Confirmar recebimento'); ok.type = 'button'; ok.style.marginTop = '10px'; bx.appendChild(ok); br.after(bx);
+        ok.onclick = function () {
+          am.classList.remove('show');
+          if (!(num(vi.input.value) > 0)) { am.textContent = 'Informe o valor recebido.'; am.classList.add('show'); return; }
+          ok.disabled = true; ok.textContent = 'Salvando…';
+          call('credReceber', [S.token, p.id, { data: dt.value, valor: num(vi.input.value), formaId: fo.value, dispensar: !!(ds && ds.checked) }])
+            .then(function (d) { aposCred(d); fecharDrawer(); comprovanteCred(d.recibo); })
+            .catch(function (e3) { ok.disabled = false; ok.textContent = 'Confirmar recebimento'; am.textContent = e3; am.classList.add('show'); });
+        };
+      });
+      if (p.whats) opcaoDw(bd, st === 'Atrasada' ? 'Cobrar no WhatsApp' : 'Lembrar no WhatsApp', 'Mensagem pronta com o valor de hoje', '', function () { abrirWhats(p.whats, msgCobranca([p])); });
+    }
+    opcaoDw(bd, 'Imprimir carnê', 'Todas as parcelas do contrato ' + p.contrato, '', function () { imprimirCarne(p.contrato); });
+    var cli = D.clientes.filter(function (c2) { return c2.id === p.cliId; })[0];
+    if (cli) opcaoDw(bd, 'Ver o cliente', 'Limite, em aberto e todas as faturas', '', function () { abrirCliCred(cli); });
+    if (D.gerente && (p.recs || []).length) {
+      var be = opcaoDw(bd, 'Estornar último recebimento', isoBR(p.recs[p.recs.length - 1].data) + ' · ' + brl(p.recs[p.recs.length - 1].valor) + ' (sai do caixa/banco)', 'danger', function () {
+        if (!be.dataset.c) { be.dataset.c = 1; be.querySelector('small').textContent = 'Toque de novo para confirmar o estorno'; return; }
+        call('credEstornar', [S.token, p.id]).then(function (d) { aposCred(d); fecharDrawer(); }).catch(function (e3) { am.textContent = e3; am.classList.add('show'); });
+      });
+    }
+    if (D.gerente && p.origem !== 'Venda' && p.situacao !== 'Cancelada') {
+      var bc = opcaoDw(bd, 'Cancelar este crediário', 'Todas as parcelas do contrato ' + p.contrato + ' (só se nada foi recebido)', 'danger', function () {
+        if (bc.nextSibling && bc.nextSibling.classList && bc.nextSibling.classList.contains('opc-box')) return;
+        var bx = el('div', 'opc-box'), mt = campo(bx, 'Motivo', inp('text', 'Ex.: lançado errado'), true), ok = el('button', 'btn danger', 'Cancelar crediário'); ok.type = 'button'; ok.style.marginTop = '10px'; bx.appendChild(ok); bc.after(bx);
+        ok.onclick = function () { ok.disabled = true; call('credCancelar', [S.token, p.contrato, mt.value]).then(function (d) { aposCred(d); fecharDrawer(); }).catch(function (e3) { ok.disabled = false; am.textContent = e3; am.classList.add('show'); }); };
+      });
+    }
+  }
+  function abrirCliCred(c) {
+    var D = S.cred, hoje = isoHoje();
+    var bd = abrirDw(c.nome, 'Crediário' + (c.doc ? ' · ' + fmtDoc(c.doc) : ''));
+    kvCard(bd, [['Limite de crédito', c.limite ? brl(c.limite) : 'Sem limite cadastrado'], ['Tolerância', c.tolerancia ? brl(c.tolerancia) : ''], ['Em aberto', brl(c.emAberto)],
+                ['Disponível', c.limite ? brl(Math.max(0, c.disponivel)) : ''], ['Atrasado', c.atrasado ? brl(c.atrasado) + ' (' + c.qtdAtraso + ' fatura' + (c.qtdAtraso === 1 ? '' : 's') + ')' : 'Nada'],
+                ['WhatsApp', c.whats ? fmtFone(c.whats) : ''], ['Cidade', c.cidade]]);
+    var minhas = D.parcelas.filter(function (p) { return p.cliId === c.id; }).sort(function (a, b) { return a.venc < b.venc ? -1 : 1; });
+    var ab = minhas.filter(function (p) { return p.situacao === 'Em aberto'; });
+    if (minhas.length) {
+      var k = el('div', 'card'); k.appendChild(el('h2', '', 'Faturas'));
+      var t = el('table', 'ext');
+      minhas.forEach(function (p) {
+        var st = stCred(p, hoje), tr = el('tr'), a = el('td'); a.appendChild(document.createTextNode('Parcela ' + p.parcela + ' · ' + p.contrato)); a.appendChild(el('small', '', st + ' · vence ' + isoBR(p.venc)));
+        var v = el('td', 'v' + (st === 'Atrasada' ? ' s' : p.situacao === 'Paga' ? ' e' : ''), brl(p.situacao === 'Em aberto' ? totalHoje(p) : p.recebido));
+        tr.appendChild(a); tr.appendChild(v); tr.style.cursor = 'pointer'; tr.onclick = function () { abrirFatura(p); }; t.appendChild(tr);
+      });
+      k.appendChild(t); bd.appendChild(k);
+    }
+    var atr = ab.filter(function (p) { return diasIso(p.venc, hoje) > 0; });
+    if (c.whats && atr.length) opcaoDw(bd, 'Cobrar atrasadas no WhatsApp', atr.length + ' fatura(s) · ' + brl(soma(atr, totalHoje)) + ' hoje', 'okc', function () { abrirWhats(c.whats, msgCobranca(atr, c.nome)); });
+    if (pode('crm')) opcaoDw(bd, 'Alterar limite de crédito', 'Abre o cadastro do cliente (Comercial/Financeiro)', '', function () {
+      fecharDrawer();
+      var abrir = function () { var x = (S.crm || []).filter(function (y) { return y.id === c.id; })[0]; if (x) formPessoa(x); };
+      if (S.crm) abrir(); else call('crmListar', [S.token]).then(function (r) { aposCrm(r); abrir(); });
+    });
+  }
+  function imprimirHTML(titulo, no, css) {
+    var f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
+    var d = f.contentWindow.document;
+    d.open(); d.write('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>' + titulo.replace(/</g, '') + '</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:14px;color:#111}' + css + '</style></head><body></body></html>'); d.close();
+    d.body.appendChild(d.importNode(no, true));
+    setTimeout(function () { f.contentWindow.focus(); f.contentWindow.print(); setTimeout(function () { f.remove(); }, 1500); }, 200);
+  }
+  var CSS_CARNE = '.carne{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bol{border:1.5px dashed #555;border-radius:8px;padding:10px 12px;font-size:12.5px;page-break-inside:avoid}.bol h3{margin:0 0 4px;font-size:15px}.bol .l{display:flex;justify-content:space-between;gap:8px;padding:2px 0}.bol .v{font-size:17px;font-weight:800}.bol .pg{color:#1b7a3a;font-weight:800}.bol small{color:#555}';
+  function imprimirCarne(contrato) {
+    var D = S.cred, ps = D.parcelas.filter(function (p) { return p.contrato === contrato && p.situacao !== 'Cancelada'; }).sort(function (a, b) { return a.venc < b.venc ? -1 : 1; });
+    if (!ps.length) return;
+    var cc = cfgCred(), w = el('div', 'carne');
+    ps.forEach(function (p) {
+      var b = el('div', 'bol'); b.appendChild(el('h3', '', lojaNome(p.loja) + ' · Crediário'));
+      var L = function (a, v, cls) { var d = el('div', 'l'); d.appendChild(el('span', '', a)); d.appendChild(el('span', cls || '', v)); b.appendChild(d); };
+      L('Cliente', p.cliente); if (p.doc) L('CPF/CNPJ', fmtDoc(p.doc)); L('Contrato', p.contrato); L('Parcela', p.parcela); L('Vencimento', isoBR(p.venc)); L('Valor', brl(p.valor), 'v');
+      if (p.situacao === 'Paga') L('Situação', 'PAGA em ' + isoBR(p.ultimo), 'pg');
+      b.appendChild(el('small', '', 'Após o vencimento: multa de ' + nfmt(cc.multa) + '% e juros de ' + nfmt(cc.mora) + '% ao mês. ' + p.loja + '.'));
+      w.appendChild(b);
+    });
+    imprimirHTML('Carnê ' + contrato, w, CSS_CARNE);
+  }
+  function comprovanteCred(r) {
+    if (!r) return;
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', '✓ Recebimento registrado'));
+    sh.appendChild(el('div', 'sub', 'O valor entrou em Caixas e Bancos.' + (r.saldo > 0 ? ' Ainda falta ' + brl(r.saldo) + ' desta parcela.' : ' Parcela quitada.')));
+    var b = el('div', 'bol'); b.style.cssText = 'border:1.5px dashed var(--line);border-radius:10px;padding:12px 14px;background:var(--card)';
+    var L = function (a, v) { var d = el('div', 'vdtot'); d.appendChild(el('span', '', a)); d.appendChild(el('b', '', v)); b.appendChild(d); };
+    L('Cliente', r.cliente); L('Contrato', r.contrato + ' · parcela ' + r.parcela); L('Vencimento', isoBR(r.venc)); L('Pago em', isoBR(r.rec.data) + ' · ' + r.rec.forma);
+    if (r.rec.multa + r.rec.juros) L('Multa e juros', brl(r.rec.multa + r.rec.juros));
+    L('Valor pago', brl(r.rec.valor)); L('Saldo da parcela', r.saldo > 0 ? brl(r.saldo) : 'Quitada');
+    sh.appendChild(b);
+    var txt = ['Olá, ' + r.cliente.split(' ')[0] + '! Recebemos seu pagamento. Obrigado! 🙏', '', '🧾 ' + lojaNome(r.loja) + ' · Crediário ' + r.contrato, 'Parcela ' + r.parcela + ' (vencimento ' + isoBR(r.venc) + ')',
+               '💰 Valor pago: ' + brl(r.rec.valor) + ' em ' + isoBR(r.rec.data) + ' (' + r.rec.forma + ')', r.saldo > 0 ? 'Saldo desta parcela: ' + brl(r.saldo) : '✅ Parcela quitada'].join('\n');
+    var ac = el('div', 'acoes'), pr = el('button', 'btn', '🖨 Imprimir'), wa = el('button', 'btn ok', 'Enviar por WhatsApp'); pr.type = wa.type = 'button'; ac.appendChild(pr); ac.appendChild(wa); sh.appendChild(ac);
+    var fc = el('button', 'btn ghost', 'Fechar'); fc.type = 'button'; fc.style.marginTop = '8px'; sh.appendChild(fc);
+    pr.onclick = function () { var c = b.cloneNode(true); c.className = 'bol'; c.removeAttribute('style'); imprimirHTML('Comprovante ' + r.id, c, CSS_CARNE + '.vdtot{display:flex;justify-content:space-between;padding:3px 0}'); };
+    wa.onclick = function () { abrirWhats(r.whats, txt); };
+    fc.onclick = fecharModal;
+    abrirModal();
+  }
+  function simuladorCred(valorIni) {
+    var cc = cfgCred(), sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Simulador de crediário'));
+    sh.appendChild(el('div', 'sub', cc.taxa > 0 ? 'Até ' + cc.semJuros + 'x sem juros; acima disso, ' + nfmt(cc.taxa) + '% ao mês (tabela Price). Mude em ⚙ Regras.' : 'Sem juros no parcelamento. Para cobrar juros, ajuste em ⚙ Regras.'));
+    var c = el('div', 'card');
+    var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); c.appendChild(lr);
+    var vp = inpValor(valorIni || ''); campo(a1, 'Valor do produto', vp, true); var en = inpValor(''); campo(a2, 'Entrada', en, true);
+    var hint = el('div', 'hint'); c.appendChild(hint);
+    var tb = el('div'); c.appendChild(tb);
+    var cp = el('button', 'btn ghost', 'Copiar opções para o cliente'); cp.type = 'button'; cp.style.marginTop = '10px'; c.appendChild(cp);
+    var txt = '';
+    function atual() {
+      var v = num(vp.input.value) || 0, e = num(en.input.value) || 0, fin = r2(v - e); tb.innerHTML = ''; txt = '';
+      hint.textContent = cc.entradaMin && v ? 'Entrada mínima: ' + brl(v * cc.entradaMin / 100) + (e + 0.009 < v * cc.entradaMin / 100 ? ' (a entrada está abaixo)' : '') : '';
+      hint.style.color = cc.entradaMin && e + 0.009 < v * cc.entradaMin / 100 ? 'var(--warn)' : '';
+      if (!(fin > 0)) return;
+      var t = el('table', 'ext'), lin = [];
+      for (var n = 1; n <= cc.maxParcelas; n++) {
+        var pl = planoCred(fin, n, cc), tr = el('tr'), a = el('td'); a.appendChild(document.createTextNode(n + 'x de ' + brl(pl.parcela)));
+        a.appendChild(el('small', '', pl.juros ? 'com juros · total ' + brl(pl.total + e) : 'sem juros'));
+        tr.appendChild(a); tr.appendChild(el('td', 'v', brl(pl.total + e))); t.appendChild(tr);
+        lin.push('• ' + n + 'x de ' + brl(pl.parcela) + (pl.juros ? '' : ' sem juros'));
+      }
+      tb.appendChild(t);
+      txt = ['💳 Crediário' + (e ? ' com entrada de ' + brl(e) : '') + ':'].concat(lin).concat(['', '1ª parcela em ' + cc.diasPrimeiro + ' dias. Sujeito a análise de crédito.']).join('\n');
+    }
+    vp.input.oninput = atual; en.input.oninput = atual; atual();
+    cp.onclick = function () { if (!txt) return; copiar(txt).then(function (ok) { cp.textContent = ok ? '✓ Copiado' : 'Não deu para copiar'; }); };
+    sh.appendChild(c);
+    var fc = el('button', 'btn ghost', 'Fechar'); fc.type = 'button'; fc.onclick = fecharModal; sh.appendChild(fc);
+    abrirModal(); vp.input.focus();
+  }
+  function regrasCred() {
+    var cc = cfgCred(), sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Regras do crediário'));
+    var c = el('div', 'card'); c.appendChild(el('h2', '', 'Parcelamento'));
+    var g = el('div', 'g2'), ins = {};
+    function cmp(box, k, rot, suf) { var w = el('div', suf ? 'suffix' : ''), i = inp('text'); i.inputMode = 'decimal'; i.value = nfmt(cc[k]); w.appendChild(i); if (suf) w.appendChild(el('span', '', suf)); campo(box, rot, w); ins[k] = i; }
+    [['maxParcelas', 'Máximo de parcelas', 'x'], ['semJuros', 'Sem juros até', 'x'], ['taxa', 'Juros do parcelamento (ao mês)', '%'], ['entradaMin', 'Entrada mínima', '%'], ['diasPrimeiro', '1º vencimento em', 'dias']]
+      .forEach(function (q) { var w = el('div'); cmp(w, q[0], q[1], q[2]); g.appendChild(w); });
+    c.appendChild(g); sh.appendChild(c);
+    var c2 = el('div', 'card'); c2.appendChild(el('h2', '', 'Atraso'));
+    var g2 = el('div', 'g2');
+    [['multa', 'Multa (máx. 2%)', '%'], ['mora', 'Juros de mora (ao mês, por dia)', '%'], ['carencia', 'Carência sem encargos', 'dias']].forEach(function (q) { var w = el('div'); cmp(w, q[0], q[1], q[2]); g2.appendChild(w); });
+    c2.appendChild(g2);
+    var al = el('label', 'perm'), bl = el('input'); bl.type = 'checkbox'; bl.checked = cc.bloquearAtraso !== false; var tt = el('div', 't', 'Bloquear nova compra no crediário de cliente com fatura atrasada'); al.appendChild(bl); al.appendChild(tt); al.style.marginTop = '12px'; c2.appendChild(al);
+    c2.appendChild(el('div', 'hint', 'O limite de crédito de cada cliente fica no cadastro dele (CRM › Comercial/Financeiro). A venda é bloqueada quando o que ele deve + a compra passa do limite + tolerância.'));
+    sh.appendChild(c2);
+    var m = el('div', 'msg err'); sh.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar regras'), cc2 = el('button', 'btn ghost', 'Cancelar'); ok.type = cc2.type = 'button'; ac.appendChild(ok); ac.appendChild(cc2); sh.appendChild(ac);
+    cc2.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show'); var d = { bloquearAtraso: bl.checked };
+      Object.keys(ins).forEach(function (k) { d[k] = num(ins[k].value); });
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('credCfgSalvar', [S.token, d]).then(function (r) { aposCred(r); fecharModal(); var b = $('cdAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ Regras do crediário salvas.')); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar regras'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal();
+  }
+  function avulsoCred() {
+    var go = function () {
+      var sh = $('fSheet'); sh.innerHTML = '';
+      sh.appendChild(el('h2', 'tt', 'Crediário avulso'));
+      sh.appendChild(el('div', 'sub', 'Para carnês antigos (de antes do sistema), renegociação ou venda feita fora do sistema. Não passa pela checagem de limite.'));
+      var c = el('div', 'card');
+      var cl = el('select'), l = (S.crm || []).filter(function (x) { return x.tipo !== 'Fornecedor'; }).slice().sort(function (a, b) { return a.nome.localeCompare(b.nome); });
+      var o0 = el('option', '', 'Escolha o cliente…'); o0.value = ''; cl.appendChild(o0);
+      l.forEach(function (x) { var o = el('option', '', x.nome + (x.doc ? ' · ' + fmtDoc(x.doc) : '')); o.value = x.id; cl.appendChild(o); });
+      campo(c, 'Cliente * (cadastrado no CRM)', cl, true);
+      var lj = el('select'); opts(lj, S.cred.lojas, S.u.loja, 'Escolha a loja…'); campo(c, 'Loja *', lj);
+      var ds = campo(c, 'Descrição *', inp('text', 'Ex.: carnê antigo · iPhone 11 vendido em 08/2026')); ds.maxLength = 120;
+      var g = el('div', 'g3'), a1 = el('div'), a2 = el('div'), a3 = el('div'); [a1, a2, a3].forEach(function (z) { g.appendChild(z); }); c.appendChild(g);
+      var np = inp('number', 'Ex.: 5'); np.min = 1; np.max = 60; campo(a1, 'Nº de parcelas *', np); var vp = inpValor(''); campo(a2, 'Valor da parcela *', vp); var pv = inpData(isoAdd(isoHoje(), cfgCred().diasPrimeiro)); campo(a3, '1º vencimento *', pv);
+      var tt = el('div', 'hint'); c.appendChild(tt);
+      var at = function () { var n = +np.value, v = num(vp.input.value); tt.textContent = n > 0 && v > 0 ? 'Total: ' + brl(n * v) + ' em ' + n + 'x' : ''; };
+      np.oninput = at; vp.input.oninput = at;
+      var m = el('div', 'msg err'); c.appendChild(m);
+      var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Lançar crediário'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
+      cc.onclick = fecharModal;
+      ok.onclick = function () {
+        m.classList.remove('show');
+        var erro = !cl.value ? 'Escolha o cliente.' : !lj.value ? 'Escolha a loja.' : ds.value.trim().length < 3 ? 'Descreva o crediário.' : !(+np.value >= 1) ? 'Informe o nº de parcelas.' : !(num(vp.input.value) > 0) ? 'Informe o valor da parcela.' : '';
+        if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+        ok.disabled = true; ok.textContent = 'Salvando…';
+        call('credAvulso', [S.token, { clienteId: cl.value, loja: lj.value, descricao: ds.value, parcelas: +np.value, valorParcela: num(vp.input.value), primeiroVenc: pv.value }])
+          .then(function (d) { aposCred(d); fecharModal(); var b = $('cdAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ Crediário lançado.')); })
+          .catch(function (e) { ok.disabled = false; ok.textContent = 'Lançar crediário'; m.textContent = e; m.classList.add('show'); });
+      };
+      abrirModal();
+    };
+    if (S.crm) go(); else call('crmListar', [S.token]).then(function (r) { aposCrm(r); go(); }).catch(function (e) { var b = $('cdAviso'); b.innerHTML = ''; b.appendChild(el('div', 'msg err show', e)); });
+  }
+
+  // =========================================================
+  //  ACESSÓRIOS
+  // =========================================================
+  var ICO_AC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>';
+  function carregarAcess(forcar) {
+    if (S.ac && !forcar) return renderAcess();
+    $('acLista').innerHTML = ''; $('acLista').appendChild(el('div', 'empty', 'Carregando acessórios…')); $('acCont').textContent = '';
+    call('acessorios', [S.token]).then(aposAcess).catch(function (e) { $('acLista').innerHTML = ''; $('acLista').appendChild(el('div', 'empty', e)); });
+  }
+  function aposAcess(d) {
+    S.ac = d; show('acNovo', d.editar); show('acPrec', d.editar && !!d.config);
+    opts($('acLoja'), d.lojas, $('acLoja').value, 'Todas as lojas');
+    var g = $('acGrupo'), t = $('acTag'); optsArvore(g, cat().grupos, g.value, 'Todos os grupos'); optsArvore(t, cat().tags, t.value, 'Todas as tags');
+    renderAcess();
+  }
+  $('acBusca').addEventListener('input', renderAcess);
+  ['acGrupo', 'acTag', 'acLoja', 'acSit'].forEach(function (k) { $(k).addEventListener('change', renderAcess); });
+  $('acOrdem').addEventListener('change', function () { LS.set('ordemAc', this.value); renderAcess(); });
+  $('acOrdem').value = LS.get('ordemAc', 'az');
+  $('acLimpar').onclick = function () { ['acBusca', 'acGrupo', 'acTag', 'acLoja', 'acSit'].forEach(function (k) { $(k).value = ''; }); renderAcess(); };
+  $('acFilBtn').onclick = function () { var on = !$('acFil').classList.contains('on'); $('acFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
+  botaoEsconderFiltros($('acFilEsc'), 'acFil', 'semFilAc');
+  $('acNovo').onclick = function () { if (S.ac) formAcess(null); };
+  $('acPrec').onclick = function () {
+    if (!S.ac || !S.ac.config) return;
+    abrirPrecificacao({ cfg: S.ac.config, tit: 'Precificação dos acessórios', acao: 'acPrecSalvar', apos: function (d) { aposAcess(d); var b = $('acAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ Precificação salva e preços recalculados.')); } });
+  };
+  function qtdLoja(x, lj) { return lj ? (x.estoque[lj] || 0) : x.total; }
+  function baixoMin(x, lj) { if (!x.minimo) return false; return lj ? (x.estoque[lj] || 0) < x.minimo : (S.ac.lojas || []).some(function (l) { return (x.estoque[l] || 0) < x.minimo; }); }
+  function renderAcess() {
+    var D = S.ac; if (!D) return;
+    var q = $('acBusca').value.trim().toLowerCase(), termos = q.split(/\s+/).filter(Boolean), gru = $('acGrupo').value, tag = $('acTag').value, lj = $('acLoja').value, sit = $('acSit').value, ordem = $('acOrdem').value;
+    var exato = D.produtos.filter(function (x) { return x.codigo && x.codigo.toLowerCase() === q; });
+    var l = exato.length ? exato : D.produtos.filter(function (x) {
+      if (gru && !casaCat(x.grupo, gru)) return false;
+      if (tag && !(x.tags || []).some(function (t) { return casaCat(t, tag); })) return false;
+      var qt = qtdLoja(x, lj);
+      if (sit === 'com' && !(qt > 0)) return false;
+      if (sit === 'sem' && qt > 0) return false;
+      if (sit === 'min' && !baixoMin(x, lj)) return false;
+      var t = (x.nome + ' ' + x.codigo + ' ' + x.grupo).toLowerCase(); return termos.every(function (k) { return t.indexOf(k) > -1; });
+    }).sort(function (a, b) {
+      if (ordem === 'za') return b.nome.localeCompare(a.nome);
+      if (ordem === 'menor') return (a.preco || Infinity) - (b.preco || Infinity) || a.nome.localeCompare(b.nome);
+      if (ordem === 'maior') return (b.preco || 0) - (a.preco || 0) || a.nome.localeCompare(b.nome);
+      if (ordem === 'estoque') return qtdLoja(b, lj) - qtdLoja(a, lj) || a.nome.localeCompare(b.nome);
+      return a.nome.localeCompare(b.nome);
+    });
+    var ver = !!D.config, un = soma(l, function (x) { return qtdLoja(x, lj); });
+    var rs = []; if (ver) { var tot = D.config.itens.reduce(function (a, it) { return a + (it.tipo === '%' ? it.valor : 0); }, 0); rs.push('Precificação: ' + tot.toFixed(2).replace('.', ',') + '% de custos e margem de ' + nfmt(D.config.margem) + '%.'); }
+    if (ver) rs.push('Estoque' + (lj ? ' em ' + lj : '') + ' a custo: ' + brl(soma(l, function (x) { return qtdLoja(x, lj) * (x.custo || 0); })) + ' · a preço de venda: ' + brl(soma(l, function (x) { return qtdLoja(x, lj) * (x.preco || 0); })) + '.');
+    var nMin = D.produtos.filter(function (x) { return baixoMin(x, lj); }).length; if (nMin) rs.push(nMin + ' abaixo do estoque mínimo (filtro Estoque).');
+    $('acResumo').textContent = rs.join(' ');
+    $('acCont').textContent = l.length + ' acessório' + (l.length === 1 ? '' : 's') + ' · ' + inteiro(un) + ' unidade' + (un === 1 ? '' : 's') + (lj ? ' em ' + lj : '');
+    var box = $('acLista'); box.innerHTML = '';
+    if (!l.length) { box.appendChild(el('div', 'empty', D.produtos.length ? 'Nenhum acessório encontrado.' : 'Nenhum acessório cadastrado ainda.' + (D.editar ? ' Use "+ Novo acessório".' : ''))); return; }
+    var tab = el('div', 'ptab'), h = el('div', 'prow h');
+    ['', 'Acessório', 'Estoque' + (lj ? ' (' + lj.replace(/^.*\| /, '') + ')' : ''), 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    tab.appendChild(h);
+    var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
+    l.forEach(function (x) {
+      var r = el('div', 'prow'), qt = qtdLoja(x, lj); r.dataset.k = x.id;
+      var ic = el('div', 'pimg'); ic.innerHTML = ICO_AC; r.appendChild(ic);
+      var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome));
+      if (!(qt > 0)) nm.appendChild(el('span', 'badge-m', 'Sem estoque')); else if (baixoMin(x, lj)) nm.appendChild(el('span', 'bdg warn', 'Repor'));
+      n.appendChild(nm); var sub = [x.grupo, x.codigo ? 'Cód. ' + x.codigo : ''].filter(Boolean).join(' · '); if (sub) n.appendChild(el('div', 'psub', sub)); tagsMini(n, x.tags); r.appendChild(n);
+      var es = el('div', 'psku'); es.appendChild(el('div', '', inteiro(qt) + ' un.'));
+      if (!lj) { var lo = Object.keys(x.estoque).map(function (k) { return k.replace(/^.*\| /, '') + ' ' + x.estoque[k]; }).join(' · '); if (lo) es.appendChild(el('div', 'psub', lo)); }
+      r.appendChild(es);
+      var pr = el('div', 'ppre' + (x.preco ? '' : ' sem'), x.preco ? brl(x.preco).replace('R$', '').trim() : 'Consultar');
+      if (x.preco && t12) pr.appendChild(el('small', '', '12x ' + brl(x.preco / (1 - t12.taxa) / 12)));
+      r.appendChild(pr); r.appendChild(el('div', 'chev', '›'));
+      r.onclick = function () { abrirAcess(x); };
+      tab.appendChild(r);
+    });
+    box.appendChild(tab);
+  }
+  function abrirAcess(x) {
+    Array.prototype.forEach.call(document.querySelectorAll('#acLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.id); });
+    var D = S.ac, bd = abrirDw(x.nome, (x.preco ? brl(x.preco) + ' à vista PIX' : 'Sem preço') + ' · ' + x.total + ' em estoque');
+    var pares = [['Preço de venda', x.preco ? brl(x.preco) + (x.manual ? ' (manual)' : '') : '—']];
+    if (D.config && x.custo) { var c = calcNovo(x.custo, x.aj, D.config), res = resultado(x.preco, x.custo, c); pares.push(['Custo médio', brl(x.custo)], ['Preço sugerido', c.sugerido ? brl(c.sugerido) : '—'], ['Lucro', res ? brl(res.lucro) : '—'], ['Margem real', res ? pct(res.margem) : '—']); }
+    pares.push(['Código de barras', x.codigo], ['Grupo', x.grupo], ['Tags', (x.tags || []).join(', ')], ['Estoque mínimo', x.minimo ? x.minimo + ' por loja' : ''], ['Atualizado', [x.por, x.em].filter(Boolean).join(' · ')]);
+    kvCard(bd, pares);
+    var ce = el('div', 'card'); ce.appendChild(el('h2', '', 'Estoque por loja')); var te = el('table', 'ext');
+    D.lojas.forEach(function (l) { var q = x.estoque[l] || 0, tr = el('tr'); tr.appendChild(el('td', '', l)); var v = el('td', 'v' + (x.minimo && q < x.minimo ? ' s' : ''), q + ' un.'); tr.appendChild(v); te.appendChild(tr); });
+    ce.appendChild(te); bd.appendChild(ce);
+    var am = el('div', 'msg err'); bd.appendChild(am);
+    if (pode('vender') && x.total > 0) opcaoDw(bd, 'Vender', 'Abre a página Vendas com este acessório', 'okc', function () { fecharDrawer(); S.vdPreAc = x; ir('vendas'); });
+    if (D.editar) {
+      opcaoDw(bd, 'Editar acessório e precificação', 'Nome, código, custo, % e preço final', '', function () { fecharDrawer(); formAcess(x); });
+      [['entrada', 'Entrada de estoque', 'Compra / reposição (atualiza o custo médio)'], ['transferencia', 'Transferir entre lojas', 'Tira de uma loja e coloca em outra'],
+       ['ajuste', 'Ajuste (contagem)', 'Corrige a quantidade depois de contar'], ['saida', 'Saída (perda, defeito, brinde)', 'Tira do estoque com motivo']].forEach(function (o) {
+        var b = opcaoDw(bd, o[1], o[2], '', function () { painelEstoque(b, x, o[0], am); });
+      });
+    }
+    var bh = opcaoDw(bd, 'Histórico de movimentações', 'Entradas, vendas, transferências e ajustes', '', function () {
+      if (bh.nextSibling && bh.nextSibling.classList && bh.nextSibling.classList.contains('opc-box')) { bh.nextSibling.remove(); return; }
+      var bx = el('div', 'opc-box', 'Carregando…'); bh.after(bx);
+      call('acMov', [S.token, x.id]).then(function (l) {
+        bx.textContent = ''; if (!l.length) { bx.appendChild(el('div', 'hint', 'Nenhuma movimentação.')); return; }
+        var t = el('table', 'ext'); l.forEach(function (m) { var tr = el('tr'), a = el('td'); a.appendChild(document.createTextNode(m.tipo + ' · ' + m.loja.replace(/^.*\| /, '') + (m.destino ? ' → ' + m.destino.replace(/^.*\| /, '') : ''))); a.appendChild(el('small', '', [m.data, m.por, m.obs].filter(Boolean).join(' · '))); tr.appendChild(a); tr.appendChild(el('td', 'v' + (m.qtd > 0 ? ' e' : ' s'), (m.qtd > 0 ? '+' : '') + m.qtd)); t.appendChild(tr); });
+        bx.appendChild(t);
+      }).catch(function (e) { bx.textContent = e; });
+    });
+    var bc = opcaoDw(bd, 'Cálculo de cartão', x.preco ? 'Total e parcelas de 1x a 18x' : 'Sem preço', '', function () {
+      if (bc.nextSibling && bc.nextSibling.classList && bc.nextSibling.classList.contains('opc-box')) { bc.nextSibling.remove(); return; }
+      var bx = el('div', 'opc-box'); if (x.preco) bx.appendChild(linhasCartao(x.preco)); else bx.appendChild(el('div', 'hint', 'Sem preço.')); bc.after(bx);
+    });
+    if (D.editar) {
+      var bx2 = opcaoDw(bd, 'Excluir acessório', 'Só com estoque zerado', 'danger', function () {
+        if (!bx2.dataset.c) { bx2.dataset.c = 1; bx2.querySelector('small').textContent = 'Toque de novo para confirmar'; return; }
+        call('acExcluir', [S.token, x.id]).then(function (d) { aposAcess(d); fecharDrawer(); }).catch(function (e) { am.textContent = e; am.classList.add('show'); });
+      });
+    }
+  }
+  function painelEstoque(btn, x, tipo, am) {
+    if (btn.nextSibling && btn.nextSibling.classList && btn.nextSibling.classList.contains('opc-box')) { btn.nextSibling.remove(); return; }
+    var D = S.ac, bx = el('div', 'opc-box');
+    var lj = el('select'); opts(lj, D.lojas, $('acLoja').value || S.u.loja); campo(bx, tipo === 'transferencia' ? 'Sai da loja' : 'Loja', lj, true);
+    var de = null; if (tipo === 'transferencia') { de = el('select'); opts(de, D.lojas, ''); campo(bx, 'Vai para a loja', de); }
+    var qt = inp('number', tipo === 'ajuste' ? 'Quantidade contada' : 'Quantidade'); qt.min = tipo === 'ajuste' ? 0 : 1; campo(bx, tipo === 'ajuste' ? 'Quantidade contada na loja' : 'Quantidade', qt);
+    var cu = null; if (tipo === 'entrada') { cu = inpValor(x.custo || ''); campo(bx, 'Custo unitário desta compra', cu); }
+    var ob = inp('text', tipo === 'saida' ? 'Ex.: capa com defeito' : 'Opcional (nota, fornecedor…)'); campo(bx, tipo === 'saida' ? 'Motivo *' : 'Observação', ob);
+    var hint = el('div', 'hint'); bx.appendChild(hint);
+    var at = function () { var q = x.estoque[lj.value] || 0; hint.textContent = 'Hoje em ' + lj.value + ': ' + q + ' un.' + (tipo === 'ajuste' && qt.value !== '' ? ' → ' + qt.value : ''); };
+    lj.onchange = at; qt.oninput = at; at();
+    var ok = el('button', 'btn ok', 'Confirmar'); ok.type = 'button'; ok.style.marginTop = '10px'; bx.appendChild(ok); btn.after(bx);
+    ok.onclick = function () {
+      am.classList.remove('show'); ok.disabled = true; ok.textContent = 'Salvando…';
+      call('acEstoque', [S.token, x.id, { tipo: tipo, loja: lj.value, destino: de ? de.value : '', qtd: qt.value, custo: cu ? num(cu.input.value) : null, obs: ob.value }])
+        .then(function (d) { aposAcess(d); var nx = d.produtos.filter(function (y) { return y.id === x.id; })[0]; if (nx) abrirAcess(nx); else fecharDrawer(); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar'; am.textContent = e; am.classList.add('show'); });
+    };
+    qt.focus();
+  }
+  function formAcess(x) {
+    var D = S.ac, cfg = D.config; if (!cfg) return;
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', x ? 'Editar acessório' : 'Novo acessório'));
+    var c = el('div', 'card');
+    var nome = campo(c, 'Nome do acessório *', inp('text', 'Ex.: Capa anti-impacto iPhone 13'), true); nome.maxLength = 120; nome.value = x ? x.nome : '';
+    var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); c.appendChild(lr);
+    var cod = campo(a1, 'Código de barras', inp('text', 'Leia com o leitor ou digite')); cod.maxLength = 30; cod.value = x ? x.codigo : '';
+    var mn = campo(a2, 'Estoque mínimo por loja', inp('number', '0 = sem alerta')); mn.min = 0; mn.value = x && x.minimo ? x.minimo : '';
+    var gBox = campo(c, 'Grupo de produtos', el('div')), aGrupo = seletorGrupo(gBox, x ? x.grupo || '' : '');
+    var tBox = campo(c, 'Tags', el('div')), aTags = seletorTags(tBox, x ? x.tags || [] : []);
+    var custo = campo(c, x ? 'Custo médio (R$) *' : 'Custo (R$) *', inp('text', '0,00')); custo.inputMode = 'decimal'; custo.value = x ? nfmt(x.custo) : '';
+    var aj = {}; Object.keys((x && x.aj) || {}).forEach(function (k) { aj[k] = x.aj[k]; });
+    var det = el('details'); var smy = el('summary', '', 'Ajustar % e margem só deste acessório' + (Object.keys(aj).length ? ' (com ajustes)' : ''));
+    smy.style.cssText = 'cursor:pointer;font-weight:700;font-size:14px;margin-top:14px;color:var(--accent)'; det.appendChild(smy);
+    det.appendChild(el('div', 'hint', 'Em branco = usa o valor padrão da Precificação dos acessórios (mostrado em cinza).'));
+    var grade = el('div', 'g2');
+    cfg.itens.map(function (it) { return { k: it.nome, rot: it.nome + ' (' + it.tipo + ')', pad: it.valor }; }).concat([{ k: '__margem', rot: 'Margem de lucro (%)', pad: cfg.margem }]).forEach(function (f2) {
+      var w = el('div'), i = inp('text', nfmt(f2.pad)); i.inputMode = 'decimal'; i.value = aj.hasOwnProperty(f2.k) ? nfmt(aj[f2.k]) : '';
+      i.oninput = function () { var t = i.value.trim(); if (!t) delete aj[f2.k]; else { var n2 = num(t); if (n2 !== null) aj[f2.k] = n2; } atual(); };
+      campo(w, f2.rot, i); grade.appendChild(w);
+    });
+    det.appendChild(grade); if (Object.keys(aj).length) det.open = true; c.appendChild(det);
+    var big = el('div', 'big good'); big.style.marginTop = '14px';
+    var bv = el('div', 'v', '—'), bs = el('div', 's', ''); big.appendChild(el('div', 'k', 'PREÇO SUGERIDO')); big.appendChild(bv); big.appendChild(bs); c.appendChild(big);
+    var man = campo(c, 'Preço final (opcional: em branco usa o sugerido)', inp('text', '0,00')); man.inputMode = 'decimal'; man.value = x && x.manual ? nfmt(x.manual) : '';
+    var rs = el('div', 'lines'); c.appendChild(rs);
+    function atual() {
+      var cu = num(custo.value) || 0, k = calcNovo(cu, aj, cfg), mv = num(man.value), pf = mv || k.sugerido;
+      bv.textContent = k.sugerido ? brl(k.sugerido) : (cu > 0 ? 'Soma das % passa de 100%' : '—');
+      bs.textContent = cu > 0 ? 'Custos ' + (k.pct * 100).toFixed(2).replace('.', ',') + '%' + (k.fixo ? ' + ' + brl(k.fixo) : '') + ' · margem ' + (k.margem * 100).toFixed(2).replace('.', ',') + '%' : '';
+      var res = resultado(pf, cu, k);
+      lines(rs, res ? [['Preço de venda', brl(pf) + (mv ? ' (manual)' : '')], ['Impostos, taxas e despesas', brl(pf * k.pct + k.fixo)], ['Lucro', brl(res.lucro), 'tot'], ['Margem real', pct(res.margem), 'tot']] : []);
+    }
+    custo.oninput = atual; man.oninput = atual; atual();
+    var ini = {};
+    if (!x) {
+      c.appendChild(el('label', '', 'Estoque inicial por loja (opcional)'));
+      var ge = el('div', 'g2');
+      D.lojas.forEach(function (l) { var w = el('div'), i = inp('number', '0'); i.min = 0; i.oninput = function () { ini[l] = i.value; }; campo(w, l, i); ge.appendChild(w); });
+      c.appendChild(ge);
+    }
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', x ? 'Salvar' : 'Cadastrar acessório'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
+    ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      if (nome.value.trim().length < 2) { m.textContent = 'Informe o nome.'; m.classList.add('show'); return; }
+      if (!(num(custo.value) > 0)) { m.textContent = 'Informe o custo.'; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('acSalvar', [S.token, x ? x.id : '', { nome: nome.value, codigo: cod.value, minimo: mn.value, grupo: aGrupo.get(), tags: aTags.get(), custo: custo.value, aj: aj, manual: man.value.trim(), estoque: ini }]).then(function (d) {
+        aposAcess(d); fecharModal();
+        var b = $('acAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + nome.value.trim() + (x ? ' atualizado.' : ' cadastrado.')));
+      }).catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Cadastrar acessório'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); if (!x) nome.focus();
   }
 
   // =========================================================
@@ -3178,11 +3902,12 @@
     };
     abrirModal(); if (!x) nome.focus();
   }
-  function abrirPrecificacao() {
-    var cfg = S.prec; if (!cfg) return;
+  function abrirPrecificacao(o) {
+    o = o || { cfg: S.prec, tit: 'Precificação dos produtos novos', acao: 'precConfigSalvar', apos: function (d) { aposNovos(d); var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ Precificação salva e preços recalculados.')); } };
+    var cfg = o.cfg; if (!cfg) return;
     var itens = cfg.itens.map(function (it) { return { nome: it.nome, tipo: it.tipo, valor: it.valor }; });
     var sh = $('fSheet'); sh.innerHTML = '';
-    sh.appendChild(el('h2', 'tt', 'Precificação dos produtos novos'));
+    sh.appendChild(el('h2', 'tt', o.tit));
     sh.appendChild(el('div', 'sub', 'Preço = (custo + valores em R$) ÷ (1 − soma das % − margem). Vale para todos os produtos, menos os ajustes feitos em cada um.'));
     var c = el('div', 'card'); c.appendChild(el('h2', '', 'Custos sobre a venda'));
     var lista = el('div'); c.appendChild(lista);
@@ -3221,8 +3946,8 @@
       if (l.some(function (it) { return it.valor === null || it.valor === undefined || isNaN(it.valor); })) { m.textContent = 'Confira os valores dos itens.'; m.classList.add('show'); return; }
       if (num(mg.value) === null) { m.textContent = 'Informe a margem.'; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Salvando…';
-      call('precConfigSalvar', [S.token, { itens: l, margem: mg.value, arred: ar.value }]).then(function (d) {
-        aposNovos(d); fecharModal(); var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ Precificação salva e preços recalculados.'));
+      call(o.acao, [S.token, { itens: l, margem: mg.value, arred: ar.value }]).then(function (d) {
+        fecharModal(); o.apos(d);
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar e recalcular preços'; m.textContent = e; m.classList.add('show'); });
     };
     abrirModal();
@@ -4196,7 +4921,7 @@
       var h = el('div', 'frow'); ['Nome', 'Tipo', 'Entra na conta', ''].forEach(function (t) { var d = el('div', '', t); d.style.cssText = 'font-size:12px;font-weight:700;color:var(--muted)'; h.appendChild(d); }); lst.appendChild(h);
       L.forEach(function (f) {
         var r = el('div', 'frow'), nm = inp('text', 'Ex.: Boleto'); nm.value = f.nome; nm.maxLength = 40; nm.oninput = function () { f.nome = nm.value; };
-        var tp = el('select'); [['nao', 'Sem taxa (PIX, dinheiro…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; tp.appendChild(op); }); tp.value = f.cartao; tp.onchange = function () { f.cartao = tp.value; };
+        var tp = el('select'); [['nao', 'Sem taxa (PIX, dinheiro…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)'], ['crediario', 'Crediário (parcelas com o cliente)']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; tp.appendChild(op); }); tp.value = f.cartao; tp.onchange = function () { f.cartao = tp.value; };
         var co = el('select'); contas.forEach(function (x) { var op = el('option', '', x.nome); op.value = x.id; co.appendChild(op); }); if (!contas.some(function (x) { return x.id === f.conta; })) { var op2 = el('option', '', '(escolha)'); op2.value = ''; co.insertBefore(op2, co.firstChild); } co.value = f.conta || ''; co.onchange = function () { f.conta = co.value; };
         var al = el('label', 'ck'), at = el('input'); at.type = 'checkbox'; at.checked = f.ativa; at.onchange = function () { f.ativa = at.checked; }; al.appendChild(at); al.appendChild(document.createTextNode('Ativa'));
         r.appendChild(nm); r.appendChild(tp); r.appendChild(co); r.appendChild(al); lst.appendChild(r);
@@ -4206,6 +4931,7 @@
     var add = el('button', 'lnk', '+ Nova forma de pagamento'); add.type = 'button';
     add.onclick = function () { L.push({ id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true }); desenhar(); var ins = lst.querySelectorAll('input[type=text]'); ins[ins.length - 1].focus(); };
     c.appendChild(add);
+    c.appendChild(el('div', 'hint', 'No Crediário, o dinheiro não entra na venda: entra no caixa/banco quando cada parcela é recebida (em Financeiro › Crediário).'));
     c.appendChild(el('div', 'hint', 'Para tirar uma forma, desmarque "Ativa" (as vendas antigas continuam com ela). Contas novas (caixas e bancos) você cria em Financeiro › Caixas e Bancos.'));
     var m = el('div', 'msg err'); c.appendChild(m);
     var sv = el('button', 'btn', 'Salvar formas de pagamento'); sv.type = 'button'; sv.style.marginTop = '10px'; c.appendChild(sv);
