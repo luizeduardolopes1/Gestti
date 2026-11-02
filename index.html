@@ -63,6 +63,12 @@
   nav button{flex:0 0 auto;border:0;border-radius:999px;padding:8px 14px;font:inherit;font-size:14px;font-weight:600;
     background:rgba(255,255,255,.12);color:#fff;cursor:pointer;white-space:nowrap}
   nav button.on{background:var(--card);color:var(--accent)}
+  .navmenu{position:fixed;z-index:30;background:var(--card);border-radius:12px;box-shadow:0 10px 30px rgba(16,24,40,.28);padding:6px;min-width:240px;max-width:calc(100vw - 16px)}
+  .navmenu button{display:block;width:100%;text-align:left;border:0;background:none;padding:11px 12px;border-radius:9px;font:inherit;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer}
+  .navmenu button small{display:block;font-size:12.5px;font-weight:500;color:var(--muted);margin-top:2px}
+  .navmenu button:hover,.navmenu button:focus-visible{background:var(--soft);outline:none}
+  .navmenu button.on{background:var(--navy);color:#fff}.navmenu button.on small{color:rgba(255,255,255,.8)}
+  .crumb{font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 2px}
   main{max-width:640px;margin:12px auto 0;padding:0 12px 48px}
   .card{background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(16,32,56,.08);padding:16px;margin-bottom:12px}
   .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 12px;display:flex;justify-content:space-between;align-items:center}
@@ -263,6 +269,7 @@
   body.wide nav .tabs,body.wide .hrow{max-width:1240px}
   #vLogin,#vNovaSenha,#vCarregando{max-width:460px;margin-left:auto;margin-right:auto}
   .ptopo{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 0 12px}
+  .tbtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.tbtns .btn{width:auto;margin:0}
   .ptopo h1{margin:0;font-size:20px;color:var(--accent)}
   .ptopo .btn{width:auto;padding:10px 16px;font-size:14.5px}
   .ppre small{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-top:2px}
@@ -279,6 +286,8 @@
   .pfil input,.pfil select{padding:10px 11px;font-size:15px}
   .pfil .btn{margin-top:12px;padding:10px;font-size:14px}
   .bfil{display:none}
+  .pgrid.semfil{grid-template-columns:minmax(0,1fr)}.pgrid.semfil>.pfil{display:none}
+  .bfil2{display:inline-block}
   .ptab{background:var(--card);border-radius:14px;box-shadow:0 1px 2px rgba(16,24,40,.06);overflow:hidden}
   .prow{display:grid;grid-template-columns:52px minmax(0,1fr) 190px 130px 24px;gap:14px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);cursor:pointer}
   .prow:hover{background:var(--soft2)}
@@ -318,6 +327,7 @@
     .pfil{position:static;display:none}
     .pfil.on{display:block}
     .bfil{display:inline-block}
+    .bfil2{display:none}
     .prow{grid-template-columns:44px minmax(0,1fr) auto;gap:10px;padding:11px 12px}
     .prow.h{display:none}
     .prow .psku{grid-column:2;grid-row:2;font-size:12.5px;color:var(--muted)}
@@ -530,7 +540,7 @@
       </aside>
       <div>
         <div class="ptopo"><h1>Produtos Usados</h1><button type="button" class="btn hide" id="dNovo">+ Novo Produto</button></div>
-        <div class="fbar"><div class="cont" id="dCont"></div><button type="button" class="lnk bfil" id="dFilBtn">Filtros ▾</button></div>
+        <div class="fbar"><div class="cont" id="dCont"></div><button type="button" class="lnk bfil" id="dFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="dFilEsc"></button></div>
         <div id="dAviso"></div>
         <div id="dLista"></div>
       </div>
@@ -553,12 +563,12 @@
         <label for="nOrdem">Ordenar por</label>
         <select id="nOrdem"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select>
         <button type="button" class="btn ghost" id="nLimpar">Limpar filtros</button>
-        <div id="nResumo" class="hint" style="margin-top:14px"></div>
-        <button type="button" class="btn hide" id="nPrec">⚙ Precificação</button>
       </aside>
       <div>
-        <div class="ptopo"><h1>Produtos Novos</h1><button type="button" class="btn hide" id="nNovo">+ Novo Produto</button></div>
-        <div class="fbar"><div class="cont" id="nCont"></div><button type="button" class="lnk bfil" id="nFilBtn">Filtros ▾</button></div>
+        <div class="crumb">Tabela de Preços</div>
+        <div class="ptopo"><h1>Produtos Novos</h1><div class="tbtns"><button type="button" class="btn ghost hide" id="nPrec">⚙ Precificação</button><button type="button" class="btn hide" id="nNovo">+ Novo Produto</button></div></div>
+        <div id="nResumo" class="hint" style="margin:-6px 2px 10px"></div>
+        <div class="fbar"><div class="cont" id="nCont"></div><button type="button" class="lnk bfil" id="nFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="nFilEsc"></button></div>
         <div id="nAviso"></div>
         <div id="nLista"></div>
       </div>
@@ -662,6 +672,8 @@
 
   <!-- PREÇOS -->
   <section id="vVenda" class="hide">
+    <div class="crumb">Tabela de Preços</div>
+    <div class="ptopo"><h1>Produtos Usados</h1></div>
     <div class="filtros"><input id="vBusca" placeholder="Buscar modelo" autocomplete="off"></div>
     <div class="card hide" id="vNovo">
       <h2>Incluir modelo</h2>
@@ -703,12 +715,12 @@
     { id: 'dash', sec: 'vDash', nome: 'Dashboard', perm: 'dashboard' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos' },
-    { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos' },
+    { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos', menu: 'Tabela de Preços', desc: 'Preço e precificação dos produtos novos' },
     { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone', perm: 'avaliacao' },
     { id: 'cartao', sec: 'vCartao', nome: 'Cartão', perm: 'cartao' },
     { id: 'compra', sec: 'vCompra', nome: 'Calculadora de Compra', perm: 'compra' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao' },
-    { id: 'venda', sec: 'vVenda', nome: 'Preços', perm: 'precos' }
+    { id: 'venda', sec: 'vVenda', nome: 'Produtos Usados', perm: 'precos', menu: 'Tabela de Preços', desc: 'Preço de venda dos aparelhos usados' }
   ];
 
   // ---------- utilidades ----------
@@ -817,6 +829,16 @@
     VIEWS.forEach(function (v) {
       if (!pode(v.perm)) return;
       if (v.oculta || (v.id === 'cadastro' && pode('produtos'))) return; // abre pelo botão Novo Produto
+      if (v.menu) {
+        var mb = Array.prototype.filter.call(tabs.children, function (z) { return z.dataset.menu === v.menu; })[0];
+        if (!mb) {
+          mb = el('button', '', v.menu + ' ▾'); mb.type = 'button'; mb.dataset.menu = v.menu; mb.dataset.vs = ''; mb.setAttribute('aria-haspopup', 'menu'); mb.setAttribute('aria-expanded', 'false');
+          mb.onclick = function (e) { e.stopPropagation(); abrirMenuNav(this); };
+          tabs.appendChild(mb);
+        }
+        mb.dataset.vs += (mb.dataset.vs ? ',' : '') + v.id;
+        return;
+      }
       var b = el('button', '', v.nome); b.type = 'button'; b.dataset.v = v.id; b.onclick = function () { ir(v.id); };
       tabs.appendChild(b);
     });
@@ -829,12 +851,38 @@
     ir(ult);
   }
 
+  // menu suspenso da barra de cima (ex.: Tabela de Preços → Produtos Novos / Produtos Usados)
+  function fecharMenuNav() { var m = $('navMenu'); if (m) m.remove(); Array.prototype.forEach.call(document.querySelectorAll('[aria-expanded="true"]'), function (b) { b.setAttribute('aria-expanded', 'false'); }); }
+  function abrirMenuNav(btn) {
+    var aberto = $('navMenu'); fecharMenuNav(); if (aberto && aberto.dataset.de === btn.dataset.menu) return;
+    var m = el('div', 'navmenu'); m.id = 'navMenu'; m.dataset.de = btn.dataset.menu; m.setAttribute('role', 'menu');
+    btn.dataset.vs.split(',').forEach(function (id) {
+      var v = VIEWS.filter(function (z) { return z.id === id; })[0];
+      var b = el('button', id === S.view ? 'on' : '', v.nome); b.type = 'button'; b.setAttribute('role', 'menuitem');
+      if (v.desc) b.appendChild(el('small', '', v.desc));
+      b.onclick = function () { fecharMenuNav(); ir(id); };
+      m.appendChild(b);
+    });
+    document.body.appendChild(m); m._btn = btn; posMenuNav();
+    btn.setAttribute('aria-expanded', 'true'); m.querySelector('button').focus({ preventScroll: true });
+  }
+  function posMenuNav() {
+    var m = $('navMenu'); if (!m) return;
+    var r = m._btn.getBoundingClientRect(), w = m.offsetWidth;
+    m.style.top = (r.bottom + 6) + 'px'; m.style.left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8)) + 'px';
+  }
+  document.addEventListener('click', function (e) { var m = $('navMenu'); if (m && !m.contains(e.target)) fecharMenuNav(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fecharMenuNav(); });
+  window.addEventListener('resize', fecharMenuNav);
+  $('tabs').addEventListener('scroll', posMenuNav);
+
   function ir(id) {
     S.view = id; LS.set('view', id); msg('topMsg', ''); document.body.classList.add('wide'); fecharDrawer();
     VIEWS.forEach(function (v) { show(v.sec, v.id === id); });
     show('vConfig', id === 'config'); fecharTags();
     if (id === 'config') desenharCfg();
-    Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.v === id); if (b.dataset.v === id && b.scrollIntoView) b.scrollIntoView({ inline: 'center', block: 'nearest' }); });
+    fecharMenuNav();
+    Array.prototype.forEach.call($('tabs').children, function (b) { var on = (b.dataset.vs || b.dataset.v || '').split(',').indexOf(id) > -1; b.classList.toggle('on', on); if (on && b.scrollIntoView) b.scrollIntoView({ inline: 'center', block: 'nearest' }); });
     if (id === 'disp') carregarDisp(false);
     show('dNovo', pode('cadastro')); show('cVoltar', pode('produtos'));
     if (id === 'cadastro') Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.v === 'disp'); });
@@ -979,7 +1027,7 @@
     };
     var box = $('dbCorpo'); box.innerHTML = '';
     ({ geral: relGeral, vendas: relVendas, estoque: relEstoque, parado: relParado, compras: relCompras, manut: relManut, grupos: relGrupos, novos: relNovos })[rel](box, ctx);
-    $('dbRodape').textContent = 'Atualizado às ' + new Date(D.agora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + '. Valor das vendas = preço da tabela de Preços no momento da venda' + (C ? '; lucro = valor − custo total (custo + peça).' : '.');
+    $('dbRodape').textContent = 'Atualizado às ' + new Date(D.agora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + '. Valor das vendas = preço da Tabela de Preços no momento da venda' + (C ? '; lucro = valor − custo total (custo + peça).' : '.');
   }
   function kpisVendas(k, ctx) {
     var V = ctx.vendas, A = ctx.vendasAnt, fat = soma(V, function (v) { return v.v; }), fatA = soma(A, function (v) { return v.v; });
@@ -1028,7 +1076,7 @@
     if (ctx.C) kpi(k, 'Capital parado', brl(soma(E, function (x) { return x.cu; })), 'custo + peças');
     kpi(k, 'Valor de venda', brl(soma(E, function (x) { return x.p; })), 'pela tabela de preços');
     if (ctx.C) { var cp = E.filter(function (x) { return x.p && x.cu; }); kpi(k, 'Lucro potencial', brl(soma(cp, function (x) { return x.p - x.cu; })), 'se vender tudo pela tabela'); }
-    var sp = E.filter(function (x) { return !x.p; }); kpi(k, 'Sem preço', inteiro(sp.length), sp.length ? 'cadastre em Preços' : 'tudo com preço', sp.length ? 'down' : '');
+    var sp = E.filter(function (x) { return !x.p; }); kpi(k, 'Sem preço', inteiro(sp.length), sp.length ? 'cadastre na Tabela de Preços' : 'tudo com preço', sp.length ? 'down' : '');
     var g = el('div', 'dbgrid'); box.appendChild(g);
     var linha = function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: ctx.C ? brl(soma(x.itens, function (i) { return i.cu; })) : brl(soma(x.itens, function (i) { return i.p; })) }; };
     barras(g, 'Por loja', agrupar(E, function (x) { return x.l; }).map(linha));
@@ -1469,6 +1517,14 @@
     r.onclick = function () { abrirDrawer(x); };
     return r;
   }
+  function botaoEsconderFiltros(btn, filtro, chave) {
+    var grid = $(filtro).parentNode;
+    function aplicar() { var sem = LS.get(chave, '') === '1'; grid.classList.toggle('semfil', sem); btn.textContent = sem ? '☰ Mostrar filtros' : '⟨ Esconder filtros'; btn.setAttribute('aria-expanded', sem ? 'false' : 'true'); }
+    btn.onclick = function () { LS.set(chave, LS.get(chave, '') === '1' ? '' : '1'); aplicar(); };
+    aplicar();
+  }
+  botaoEsconderFiltros($('dFilEsc'), 'dFil', 'semFilUsados');
+  botaoEsconderFiltros($('nFilEsc'), 'nFil', 'semFilNovos');
   $('dFilBtn').onclick = function () { var on = !$('dFil').classList.contains('on'); $('dFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
 
   // ---- caixa lateral do produto
@@ -1556,14 +1612,14 @@
     // 2. Cálculo de cartão
     var bc = opcao('Cálculo de cartão', x.preco ? 'Total e parcelas de 1x a 18x' : 'Sem preço de venda cadastrado');
     bc.onclick = painel(bc, function (box) {
-      if (!x.preco) { box.appendChild(el('div', 'hint', 'Cadastre o preço desta classificação na página Preços.')); return; }
+      if (!x.preco) { box.appendChild(el('div', 'hint', 'Cadastre o preço desta classificação em Tabela de Preços › Produtos Usados.')); return; }
       box.appendChild(linhasCartao(x.preco));
     });
 
     // 4. Enviar oferta: escolhe as parcelas e copia (sem o nome da loja)
     var bo = opcao('Enviar oferta', x.preco ? 'Escolha as parcelas e copie a mensagem' : 'Sem preço de venda cadastrado', 'okc');
     bo.onclick = painel(bo, function (box) {
-      if (!x.preco) { box.appendChild(el('div', 'hint', 'Cadastre o preço desta classificação na página Preços.')); return; }
+      if (!x.preco) { box.appendChild(el('div', 'hint', 'Cadastre o preço desta classificação em Tabela de Preços › Produtos Usados.')); return; }
       var parc = (S.u.taxas || []).filter(function (t) { return t.nome !== 'Débito'; }).map(function (t) { return t.nome; });
       var sl = el('select'); opts(sl, ['Só à vista'].concat(parc), LS.get('parcOferta', '12x'));
       campo(box, 'Parcelar em', sl, true);
