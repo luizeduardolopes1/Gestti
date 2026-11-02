@@ -111,6 +111,40 @@
   .trow{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;background:var(--card);margin-bottom:6px;cursor:pointer;font-weight:700;font-size:14.5px;color:var(--ink)}
   .trow.sub{margin-left:24px;font-weight:500}
   .trow input{width:20px;height:20px;padding:0;margin:0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
+  .vdgrid{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:14px;align-items:start}
+  .vdlado{position:sticky;top:64px}
+  @media (max-width:900px){.vdgrid{grid-template-columns:1fr}.vdlado{position:static}}
+  .vdres{margin-top:6px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+  .vdres button{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;border:0;border-top:1px solid var(--line);background:none;padding:10px 12px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer}
+  .vdres button:first-child{border-top:0}.vdres button:hover,.vdres button:focus-visible{background:var(--soft2);outline:none}
+  .vdres small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+  .vdres b{white-space:nowrap;color:var(--ok)}
+  .vdit{border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--soft2)}
+  .vdit .hd{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .vdit .hd .t{font-weight:800;font-size:14.5px;color:var(--ink)}.vdit .hd small{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
+  .vdit .x{background:none;border:0;font-size:22px;line-height:1;color:var(--muted);cursor:pointer;padding:0 2px}
+  .vdit .row{margin-top:8px}
+  .vdtot{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;font-size:14px}
+  .vdtot.big{border-top:1px solid var(--line);margin-top:6px;padding-top:10px;font-size:15px;font-weight:800}
+  .vdtot.big b{font-size:24px;color:var(--ink)}
+  .vdpg{border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+  .vdpg .r{display:grid;grid-template-columns:118px minmax(0,1fr) 28px;gap:6px;align-items:center;margin-top:8px}
+  .vdpg .r select,.vdpg .r input{margin:0;padding:9px 10px;font-size:15px}
+  .vdpg .r .prefix input{padding-left:36px}
+  .vdpg .r .x{background:none;border:0;font-size:20px;color:var(--muted);cursor:pointer}
+  .vdpg .cb{grid-column:1 / -1;font-size:12.5px;color:var(--muted)}
+  .vdfalta{font-size:13px;font-weight:700;margin-top:8px}
+  .recibo{background:#fff;color:#111;border-radius:12px;padding:18px;font-size:13px;line-height:1.45}
+  .recibo h1{font-size:18px;margin:0;color:#111}.recibo .lj{color:#555;font-size:12.5px}
+  .recibo .topo{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid #111;padding-bottom:8px;margin-bottom:10px}
+  .recibo .topo .n{text-align:right;font-weight:800}
+  .recibo h2{font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin:12px 0 4px;color:#333}
+  .recibo table{width:100%;border-collapse:collapse}.recibo td,.recibo th{border-bottom:1px solid #ddd;padding:5px 4px;text-align:left;vertical-align:top}
+  .recibo th{font-size:11px;color:#555;text-transform:uppercase}.recibo td.v,.recibo th.v{text-align:right;white-space:nowrap}
+  .recibo .tt{display:flex;justify-content:space-between;padding:3px 0}.recibo .tt.g{font-size:16px;font-weight:800;border-top:2px solid #111;margin-top:4px;padding-top:6px}
+  .recibo .gar{background:#f4f4f4;border-radius:8px;padding:8px 10px;font-size:11.5px;margin-top:10px}
+  .recibo .ass{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:34px;text-align:center;font-size:11.5px}.recibo .ass div{border-top:1px solid #111;padding-top:4px}
+  .canc{background:var(--err-bg);color:var(--err)}
   .dbfil{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 10px}.dbfil>div{flex:1 1 180px;max-width:280px}.dbfil label{margin-top:0}
   .dbrel{margin-bottom:14px}
   .kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;margin-bottom:12px}
@@ -453,6 +487,33 @@
     <div class="hint" id="dbRodape" style="margin-top:6px"></div>
   </section>
 
+  <!-- VENDAS -->
+  <section id="vVendas" class="hide">
+    <div class="ptopo"><h1>Vendas</h1><div class="stabs" id="vdAbas" style="margin:0"><button type="button" data-a="nova" class="on">+ Nova venda</button><button type="button" data-a="hist">Histórico</button></div></div>
+    <div id="vdNova"></div>
+    <div id="vdHist" class="hide">
+      <div class="pgrid">
+        <aside class="pfil" id="hFil">
+          <h3>Filtros</h3>
+          <label for="hBusca">Buscar</label>
+          <input id="hBusca" placeholder="Cliente, CPF, IMEI ou nº" autocomplete="off">
+          <label for="hPer">Período</label>
+          <select id="hPer"><option value="hoje">Hoje</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option><option value="mes">Este mês</option><option value="mespass">Mês passado</option><option value="90">Últimos 90 dias</option><option value="365">Últimos 12 meses</option></select>
+          <label for="hLoja">Loja</label><select id="hLoja"></select>
+          <label for="hVend">Vendedor</label><select id="hVend"></select>
+          <label for="hSit">Situação</label>
+          <select id="hSit"><option value="">Ativas</option><option value="Cancelada">Canceladas</option><option value="todas">Todas</option></select>
+          <button type="button" class="btn ghost" id="hLimpar">Limpar filtros</button>
+        </aside>
+        <div>
+          <div class="fbar"><div class="cont" id="hCont"></div><button type="button" class="lnk bfil" id="hFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="hFilEsc"></button></div>
+          <div id="hResumo"></div>
+          <div id="hLista"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CONFIGURAÇÕES -->
   <section id="vConfig" class="hide">
     <div class="ptopo"><h1>Configurações</h1></div>
@@ -751,6 +812,7 @@
     { id: 'dash', sec: 'vDash', nome: 'Dashboard', perm: 'dashboard' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos' },
+    { id: 'vendas', sec: 'vVendas', nome: 'Vendas', perm: 'vender' },
     { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos', menu: 'Tabela de Preços', desc: 'Preço e precificação dos produtos novos' },
     { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone', perm: 'avaliacao' },
     { id: 'cartao', sec: 'vCartao', nome: 'Cartão', perm: 'cartao' },
@@ -925,6 +987,7 @@
     if (id === 'novos') { carregarNovos(false); show('nNovo', pode('editar_precos')); show('nPrec', pode('editar_precos')); }
     if (id === 'venda') carregarVenda(false);
     if (id === 'dash') carregarDash(false);
+    if (id === 'vendas') abrirVendas();
     if (id === 'manut') carregarManut(false);
     window.scrollTo(0, 0);
   }
@@ -939,6 +1002,417 @@
       }).catch(function (e) { b.textContent = 'Tentar de novo'; msg('topMsg', e); });
     };
   });
+
+  // =========================================================
+  //  VENDAS
+  // =========================================================
+  var V = null, PAGS = ['PIX', 'Dinheiro', 'Débito', 'Crédito'];
+  function soDig(x) { return String(x || '').replace(/\D/g, ''); }
+  function fmtCPF(c) { c = soDig(c); return c.length === 11 ? c.slice(0, 3) + '.' + c.slice(3, 6) + '.' + c.slice(6, 9) + '-' + c.slice(9) : c; }
+  function fmtFone(t) { t = soDig(t); return t.length === 11 ? '(' + t.slice(0, 2) + ') ' + t.slice(2, 7) + '-' + t.slice(7) : t.length === 10 ? '(' + t.slice(0, 2) + ') ' + t.slice(2, 6) + '-' + t.slice(6) : t; }
+  function cpfOk(c) {
+    c = soDig(c); if (!/^\d{11}$/.test(c) || /^(\d)\1{10}$/.test(c)) return false;
+    for (var t = 9; t < 11; t++) { var s2 = 0; for (var i = 0; i < t; i++) s2 += +c[i] * (t + 1 - i); if (((s2 * 10) % 11) % 10 !== +c[t]) return false; }
+    return true;
+  }
+  function r2(n) { return Math.round((n || 0) * 100) / 100; }
+  function taxa(nome) { return (S.u.taxas || []).filter(function (t) { return t.nome === nome; })[0]; }
+  function abaVendas(a) {
+    Array.prototype.forEach.call($('vdAbas').children, function (b) { b.classList.toggle('on', b.dataset.a === a); });
+    show('vdNova', a === 'nova'); show('vdHist', a === 'hist');
+    if (a === 'hist') carregarHist(false);
+  }
+  Array.prototype.forEach.call($('vdAbas').children, function (b) { b.onclick = function () { abaVendas(b.dataset.a); }; });
+  function abrirVendas() {
+    if (!V) novaVenda();
+    if (S.vdPre) { var x = S.vdPre; S.vdPre = null; abaVendas('nova'); addItem(x); return; }
+    if (!$('vdNova').children.length) desenharVenda();
+  }
+  function novaVenda() {
+    V = { itens: [], troca: [], pags: [{ forma: 'PIX', valor: '', auto: true, parcelas: '12x' }], cli: { cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' },
+          loja: LS.get('loja', '') || (S.u.loja !== 'Manutenção' ? S.u.loja : ''), obs: '' };
+    desenharVenda();
+  }
+  function totaisVenda() {
+    var ti = r2(V.itens.reduce(function (a, x) { return a + (num(x.preco) || 0); }, 0)), tt = r2(V.troca.reduce(function (a, x) { return a + (num(x.valor) || 0); }, 0));
+    return { itens: ti, troca: tt, pagar: r2(ti - tt), pago: r2(V.pags.reduce(function (a, p) { return a + (num(p.valor) || 0); }, 0)) };
+  }
+  function addItem(x) {
+    if (!V) novaVenda();
+    if (V.itens.some(function (i) { return i.imei === x.imei; })) return;
+    V.itens.push({ linha: x.linha, imei: x.imei, modelo: x.modelo, cor: x.cor, classif: x.classif, bateria: x.bateria, loja: x.loja, tabela: x.preco || null, preco: x.preco ? String(x.preco).replace('.', ',') : '' });
+    if (!V.loja && x.loja !== 'Manutenção') V.loja = x.loja;
+    desenharVenda();
+  }
+  function garantiaAte(ms, meses) { var d = new Date(ms); d.setMonth(d.getMonth() + (meses || 3)); return dataBR(d.getTime()); }
+
+  function desenharVenda() {
+    var box = $('vdNova'); box.innerHTML = '';
+    var g = el('div', 'vdgrid'), esq = el('div'), dir = el('div', 'vdlado'); g.appendChild(esq); g.appendChild(dir); box.appendChild(g);
+    // ---- aparelhos vendidos
+    var c1 = cartao(esq, 'Aparelhos vendidos');
+    var busca = inp('text', 'Buscar no estoque: modelo, IMEI ou serial'); busca.setAttribute('aria-label', 'Buscar aparelho no estoque'); c1.appendChild(busca);
+    var res = el('div'); c1.appendChild(res);
+    function buscar() {
+      res.innerHTML = '';
+      var q = busca.value.trim().toLowerCase(); if (q.length < 2) return;
+      if (!S.disp) { res.appendChild(el('div', 'hint', 'Carregando estoque…')); call('disponiveis', [S.token]).then(function (l) { S.disp = l; buscar(); }).catch(function (e) { res.innerHTML = ''; res.appendChild(el('div', 'hint', e)); }); return; }
+      var termos = q.split(/\s+/);
+      var l = S.disp.filter(function (x) {
+        if (x.manut || x.status !== 'Disponível' || V.itens.some(function (i) { return i.imei === x.imei; })) return false;
+        var t = [x.modelo, x.cor, x.classif, x.imei, x.imei2, x.serial, x.sku].join(' ').toLowerCase();
+        return termos.every(function (k) { return t.indexOf(k) > -1; });
+      }).slice(0, 8);
+      if (!l.length) { res.appendChild(el('div', 'hint', 'Nenhum aparelho disponível encontrado.')); return; }
+      var lst = el('div', 'vdres');
+      l.forEach(function (x) {
+        var b = el('button'); b.type = 'button';
+        var a = el('span', '', x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classif); a.appendChild(el('small', '', 'IMEI ' + x.imei + ' · ' + x.loja + (typeof x.bateria === 'number' ? ' · bateria ' + x.bateria + '%' : '')));
+        b.appendChild(a); b.appendChild(el('b', '', x.preco ? brl(x.preco) : 'sem preço'));
+        b.onclick = function () { addItem(x); };
+        lst.appendChild(b);
+      });
+      res.appendChild(lst);
+    }
+    busca.oninput = buscar;
+    if (!V.itens.length) c1.appendChild(el('div', 'hint', 'Digite pelo menos 2 letras ou números. Também dá para vender pela caixa lateral de Produtos Usados (botão "Vender").'));
+    V.itens.forEach(function (it, i) {
+      var b = el('div', 'vdit'), hd = el('div', 'hd'), t = el('div', 't', it.modelo + ' ' + String(it.cor || '').toUpperCase() + ' · ' + it.classif);
+      t.appendChild(el('small', '', 'IMEI ' + it.imei + ' · ' + it.loja + (typeof it.bateria === 'number' ? ' · bateria ' + it.bateria + '%' : '') + ' · garantia 3 meses'));
+      var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar da venda'; x.setAttribute('aria-label', 'Tirar ' + it.modelo); x.onclick = function () { V.itens.splice(i, 1); desenharVenda(); };
+      hd.appendChild(t); hd.appendChild(x); b.appendChild(hd);
+      var pf = el('div', 'prefix'), ip = el('input'); ip.inputMode = 'decimal'; ip.value = it.preco; ip.placeholder = '0,00'; ip.setAttribute('aria-label', 'Preço de venda');
+      pf.appendChild(el('span', '', 'R$')); pf.appendChild(ip); var lb = el('label', '', 'Preço de venda'); b.appendChild(lb); b.appendChild(pf);
+      var av = el('div', 'hint'); b.appendChild(av);
+      function aviso() {
+        var pv = num(ip.value), msgs = [];
+        if (it.tabela) msgs.push('Tabela: ' + brl(it.tabela) + (pv && pv < it.tabela ? ' · desconto de ' + brl(it.tabela - pv) : ''));
+        if (V.loja && it.loja !== V.loja) msgs.push('Atenção: este aparelho está em ' + it.loja + '.');
+        av.textContent = msgs.join(' '); av.style.color = pv && it.tabela && pv < it.tabela ? 'var(--warn)' : '';
+      }
+      ip.oninput = function () { it.preco = ip.value; aviso(); resumo(); };
+      aviso(); c1.appendChild(b);
+    });
+    // ---- troca
+    var c2 = cartao(esq, 'Aparelho do cliente na troca (opcional)');
+    V.troca.forEach(function (t, i) { c2.appendChild(cardTroca(t, i)); });
+    var bt = el('button', 'btn ghost', '+ Adicionar aparelho na troca'); bt.type = 'button'; bt.style.marginTop = '10px';
+    bt.onclick = function () { V.troca.push({ modelo: '', cor: '', imei: '', imei2: '', serial: '', bateria: '', classificacao: '', valor: '', consulta: '', obs: '' }); desenharVenda(); };
+    c2.appendChild(bt);
+    if (V.troca.length) c2.appendChild(el('div', 'hint', 'O aparelho da troca entra no estoque como Recompra, na loja da venda, com o valor da troca como custo.'));
+    // ---- cliente
+    var c3 = cartao(esq, 'Cliente');
+    var C = V.cli, info = el('div', 'hint');
+    var cpf = campo(c3, 'CPF *', inp('text', '000.000.000-00'), true); cpf.inputMode = 'numeric'; cpf.maxLength = 14; cpf.value = fmtCPF(C.cpf);
+    c3.appendChild(info);
+    var nome = campo(c3, 'Nome completo *', inp('text', 'Nome do cliente')); nome.maxLength = 80; nome.value = C.nome;
+    var wpp = campo(c3, 'WhatsApp *', inp('text', '(22) 99999-9999')); wpp.inputMode = 'tel'; wpp.maxLength = 16; wpp.value = fmtFone(C.whats);
+    var lc = el('div', 'row'), w1 = el('div'), w2 = el('div'); lc.appendChild(w1); lc.appendChild(w2); c3.appendChild(lc);
+    var cep = campo(w1, 'CEP', inp('text', '00000-000')); cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = C.cep;
+    var cid = campo(w2, 'Cidade *', inp('text', 'Ex.: Bom Jardim')); cid.value = C.cidade;
+    var end = campo(c3, 'Endereço (rua e número) *', inp('text', 'Ex.: Rua Principal, 120')); end.maxLength = 120; end.value = C.endereco;
+    var bai = campo(c3, 'Bairro', inp('text', '')); bai.value = C.bairro;
+    nome.oninput = function () { C.nome = nome.value; }; end.oninput = function () { C.endereco = end.value; }; bai.oninput = function () { C.bairro = bai.value; }; cid.oninput = function () { C.cidade = cid.value; };
+    wpp.oninput = function () { C.whats = soDig(wpp.value).slice(0, 11); };
+    wpp.onblur = function () { wpp.value = fmtFone(C.whats); };
+    cpf.oninput = function () {
+      C.cpf = soDig(cpf.value).slice(0, 11); info.style.color = '';
+      if (C.cpf.length < 11) { info.textContent = ''; return; }
+      if (!cpfOk(C.cpf)) { info.textContent = 'CPF inválido: confira os números.'; info.style.color = 'var(--err)'; return; }
+      cpf.value = fmtCPF(C.cpf); info.textContent = 'Procurando cliente…';
+      call('clienteBuscar', [S.token, C.cpf]).then(function (r) {
+        if (!r) { info.textContent = 'Cliente novo: preencha os dados abaixo.'; return; }
+        info.textContent = '✓ Cliente já cadastrado (' + r.compras + ' compra' + (r.compras === 1 ? '' : 's') + '). Confira os dados.'; info.style.color = 'var(--ok)';
+        ['nome', 'whats', 'cep', 'endereco', 'bairro', 'cidade'].forEach(function (k) { C[k] = r[k] || ''; });
+        nome.value = C.nome; wpp.value = fmtFone(C.whats); cep.value = C.cep; end.value = C.endereco; bai.value = C.bairro; cid.value = C.cidade;
+      }).catch(function () { info.textContent = ''; });
+    };
+    cep.oninput = function () {
+      var d = soDig(cep.value).slice(0, 8); C.cep = d;
+      if (d.length !== 8) return;
+      cep.value = d.slice(0, 5) + '-' + d.slice(5);
+      fetch('https://viacep.com.br/ws/' + d + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) {
+        if (!j || j.erro) return;
+        if (!C.endereco && j.logradouro) { C.endereco = j.logradouro + ', '; end.value = C.endereco; end.focus(); }
+        if (!C.bairro && j.bairro) { C.bairro = j.bairro; bai.value = C.bairro; }
+        if (!C.cidade && j.localidade) { C.cidade = j.localidade + (j.uf ? '/' + j.uf : ''); cid.value = C.cidade; }
+      }).catch(function () {});
+    };
+    // ---- resumo e pagamento (lado direito)
+    var c4 = cartao(dir, 'Resumo da venda');
+    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), V.loja, 'Escolha a loja…'); campo(c4, 'Loja da venda *', lj, true);
+    lj.onchange = function () { V.loja = lj.value; LS.set('loja', lj.value); desenharVenda(); };
+    var tots = el('div'); c4.appendChild(tots);
+    var pgbox = el('div', 'vdpg'); c4.appendChild(pgbox);
+    var falta = el('div', 'vdfalta'); c4.appendChild(falta);
+    var obs = el('textarea'); obs.placeholder = 'Ex.: cliente levou capinha de brinde'; obs.value = V.obs; obs.oninput = function () { V.obs = obs.value; }; campo(c4, 'Observação', obs);
+    c4.appendChild(el('div', 'hint', 'Vendedor: ' + S.u.nome));
+    var m = el('div', 'msg err'); c4.appendChild(m);
+    var fin = el('button', 'btn', 'Finalizar venda'); fin.type = 'button'; fin.style.marginTop = '12px'; c4.appendChild(fin);
+    var lim = el('button', 'btn ghost', 'Limpar tudo'); lim.type = 'button'; lim.style.marginTop = '8px'; c4.appendChild(lim);
+    lim.onclick = function () { if (!lim.dataset.c) { lim.dataset.c = '1'; lim.textContent = 'Toque de novo para limpar'; return; } novaVenda(); };
+    function desenharPags() {
+      pgbox.innerHTML = ''; pgbox.appendChild(el('div', 'k', 'Pagamento')).style.cssText = 'font-size:13px;font-weight:700;color:var(--muted)';
+      V.pags.forEach(function (p, i) {
+        var r = el('div', 'r'), fs = el('select'); PAGS.forEach(function (f) { var o = el('option', '', f); o.value = f; fs.appendChild(o); }); fs.value = p.forma; fs.setAttribute('aria-label', 'Forma de pagamento');
+        var pf = el('div', 'prefix'), vi = el('input'); vi.inputMode = 'decimal'; vi.placeholder = '0,00'; vi.value = p.valor; vi.setAttribute('aria-label', 'Valor'); pf.appendChild(el('span', '', 'R$')); pf.appendChild(vi);
+        var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar'; x.style.visibility = V.pags.length > 1 ? 'visible' : 'hidden';
+        r.appendChild(fs); r.appendChild(pf); r.appendChild(x);
+        var cb = el('div', 'cb');
+        if (p.forma === 'Crédito') {
+          var ps = el('select'); ps.style.cssText = 'margin:4px 0 0;padding:8px 10px;font-size:14px';
+          (S.u.taxas || []).filter(function (t) { return t.nome !== 'Débito'; }).forEach(function (t) { var o = el('option', '', t.nome === '1x' ? '1x (à vista no crédito)' : t.nome); o.value = t.nome; ps.appendChild(o); });
+          ps.value = p.parcelas || '12x'; p.parcelas = ps.value; ps.onchange = function () { p.parcelas = ps.value; cartaoInfo(); };
+          var w = el('div'); w.style.gridColumn = '1 / -1'; w.appendChild(ps); r.appendChild(w);
+        }
+        r.appendChild(cb);
+        function cartaoInfo() {
+          var v = num(p.valor), tx = p.forma === 'Débito' ? taxa('Débito') : p.forma === 'Crédito' ? taxa(p.parcelas) : null;
+          cb.textContent = tx && v ? 'Cobrar na maquininha: ' + brl(v / (1 - tx.taxa)) + (tx.parcelas > 1 ? ' (' + tx.parcelas + 'x de ' + brl(v / (1 - tx.taxa) / tx.parcelas) + ')' : '') : '';
+        }
+        fs.onchange = function () { p.forma = fs.value; desenharPags(); resumo(); };
+        vi.oninput = function () { p.valor = vi.value; p.auto = false; cartaoInfo(); resumo(true); };
+        x.onclick = function () { V.pags.splice(i, 1); if (V.pags.length === 1) V.pags[0].auto = true; desenharPags(); resumo(); };
+        cartaoInfo(); pgbox.appendChild(r);
+      });
+      var add = el('button', 'lnk', '+ Dividir em outra forma de pagamento'); add.type = 'button'; add.style.marginTop = '6px';
+      add.onclick = function () { var T = totaisVenda(); V.pags.forEach(function (p) { p.auto = false; }); V.pags.push({ forma: 'Crédito', valor: String(Math.max(0, r2(T.pagar - T.pago))).replace('.', ','), parcelas: '12x' }); desenharPags(); resumo(); };
+      pgbox.appendChild(add);
+    }
+    function resumo(semRedesenhar) {
+      var T = totaisVenda();
+      if (V.pags.length === 1 && V.pags[0].auto) { var nv = T.pagar > 0 ? String(T.pagar.toFixed(2)).replace('.', ',') : ''; if (V.pags[0].valor !== nv) { V.pags[0].valor = nv; desenharPags(); } T = totaisVenda(); }
+      tots.innerHTML = '';
+      var add = function (a, b, cls) { var d = el('div', 'vdtot' + (cls ? ' ' + cls : '')); d.appendChild(el('span', '', a)); d.appendChild(el(cls ? 'b' : 'span', '', b)); tots.appendChild(d); };
+      add('Aparelhos (' + V.itens.length + ')', brl(T.itens));
+      if (V.troca.length) add('Troca (' + V.troca.length + ')', '− ' + brl(T.troca));
+      add('A pagar', brl(T.pagar), 'big');
+      var dif = r2(T.pagar - T.pago);
+      falta.textContent = !V.itens.length ? '' : Math.abs(dif) < 0.01 ? '✓ Pagamento fechado' : dif > 0 ? 'Falta lançar ' + brl(dif) : 'Pagamento passou ' + brl(-dif);
+      falta.style.color = Math.abs(dif) < 0.01 ? 'var(--ok)' : 'var(--warn)';
+    }
+    V._resumo = resumo;
+    desenharPags(); resumo();
+    fin.onclick = function () {
+      m.classList.remove('show');
+      var T = totaisVenda(), erro = '';
+      if (!V.loja) erro = 'Escolha a loja da venda.';
+      else if (!V.itens.length) erro = 'Adicione pelo menos um aparelho.';
+      else if (V.itens.some(function (i) { return !(num(i.preco) > 0); })) erro = 'Informe o preço de todos os aparelhos.';
+      else if (V.troca.some(function (t) { return !t.modelo || !t.cor || !luhn(soDig(t.imei)) || t.bateria === '' || !t.classificacao || !(num(t.valor) > 0); })) erro = 'Complete os dados do aparelho da troca (modelo, cor, IMEI, bateria, classificação e valor).';
+      else if (V.troca.some(function (t) { return t.consulta !== 'Nada consta'; })) erro = 'Faça a consulta oficial do IMEI do aparelho da troca e marque "Nada consta".';
+      else if (T.pagar < 0) erro = 'A troca vale mais que a venda.';
+      else if (!cpfOk(V.cli.cpf)) erro = 'Informe um CPF válido.';
+      else if ((V.cli.nome || '').trim().length < 3) erro = 'Informe o nome do cliente.';
+      else if (soDig(V.cli.whats).length < 10) erro = 'Informe o WhatsApp do cliente com DDD.';
+      else if ((V.cli.endereco || '').trim().length < 5 || (V.cli.cidade || '').trim().length < 2) erro = 'Informe o endereço e a cidade do cliente.';
+      else if (Math.abs(r2(T.pagar - T.pago)) > 0.009) erro = 'A soma dos pagamentos precisa ser igual ao valor a pagar (' + brl(T.pagar) + ').';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      fin.disabled = true; fin.innerHTML = '<span class="spin"></span>Registrando…';
+      var d = {
+        loja: V.loja, obs: V.obs,
+        itens: V.itens.map(function (i) { return { linha: i.linha, imei: i.imei, preco: num(i.preco) }; }),
+        troca: V.troca.map(function (t) { return { modelo: t.modelo, cor: t.cor, imei: soDig(t.imei), imei2: soDig(t.imei2), serial: t.serial, bateria: t.bateria, classificacao: t.classificacao, valor: num(t.valor), consulta: t.consulta, obs: t.obs }; }),
+        cliente: V.cli,
+        pagamentos: V.pags.map(function (p) { return { forma: p.forma, valor: num(p.valor), parcelas: p.parcelas }; })
+      };
+      call('vendaRegistrar', [S.token, d]).then(function (v) {
+        S.disp = null; S.dash = null; S.venda = null; S.vendas = null;
+        V = null; novaVenda(); abrirRecibo(v, true);
+      }).catch(function (e) { fin.disabled = false; fin.textContent = 'Finalizar venda'; m.textContent = e; m.classList.add('show'); });
+    };
+  }
+  function cardTroca(t, i) {
+    var b = el('div', 'vdit'), hd = el('div', 'hd'); hd.appendChild(el('div', 't', 'Aparelho ' + (i + 1) + ' da troca'));
+    var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar da troca'; x.onclick = function () { V.troca.splice(i, 1); desenharVenda(); }; hd.appendChild(x); b.appendChild(hd);
+    var mo = el('select'); opts(mo, S.u.modelos || [], t.modelo, 'Modelo…'); campo(b, 'Modelo *', mo, true); mo.onchange = function () { t.modelo = mo.value; };
+    var co = el('select'); opts(co, CORES, t.cor, 'Cor…'); campo(b, 'Cor *', co); co.onchange = function () { t.cor = co.value; };
+    var im = campo(b, 'IMEI1 *', inp('text', '15 números')); im.inputMode = 'numeric'; im.maxLength = 17; im.value = t.imei;
+    var st = el('div', 'status'); b.appendChild(st);
+    var cons = el('div', 'consulta' + (luhn(soDig(t.imei)) ? '' : ' hide'));
+    var ab = el('button', 'btn ghost', 'Copiar IMEI e abrir a consulta oficial'); ab.type = 'button'; cons.appendChild(ab);
+    cons.appendChild(el('div', 'hint', 'Consulte se o aparelho tem restrição (roubo, furto, perda) e marque o resultado:'));
+    var sg = el('div', 'seg'); cons.appendChild(sg); b.appendChild(cons);
+    seg(sg, ['Nada consta', 'Consta restrição'], t.consulta, function (v) { t.consulta = v; st.className = 'status show ' + (v === 'Nada consta' ? 'ok' : 'err'); st.textContent = v === 'Nada consta' ? '✓ Consulta: nada consta' : 'NÃO aceite este aparelho: consta restrição.'; });
+    ab.onclick = function () { copiar(soDig(t.imei)); window.open(CONSULTA_URL, '_blank', 'noopener'); };
+    im.oninput = function () {
+      var d = soDig(im.value).slice(0, 15); if (im.value !== d) im.value = d;
+      if (d !== t.imei) { t.consulta = ''; Array.prototype.forEach.call(sg.children, function (c) { c.classList.remove('on'); }); }
+      t.imei = d; cons.classList.toggle('hide', !(d.length === 15 && luhn(d)));
+      st.className = 'status' + (d.length === 15 ? ' show ' + (luhn(d) ? 'info' : 'err') : ''); st.textContent = d.length === 15 ? (luhn(d) ? 'IMEI válido. Faça a consulta abaixo.' : 'IMEI inválido: confira os números.') : '';
+    };
+    var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); b.appendChild(lr);
+    var i2 = campo(a1, 'IMEI2', inp('text', 'Opcional')); i2.inputMode = 'numeric'; i2.maxLength = 17; i2.value = t.imei2; i2.oninput = function () { t.imei2 = soDig(i2.value).slice(0, 15); };
+    var se = campo(a2, 'Serial', inp('text', 'Opcional')); se.maxLength = 30; se.style.textTransform = 'uppercase'; se.value = t.serial; se.oninput = function () { t.serial = se.value.toUpperCase(); };
+    var lb = el('div', 'row'), b1 = el('div'), b2 = el('div'); lb.appendChild(b1); lb.appendChild(b2); b.appendChild(lb);
+    var bat = campo(b1, 'Bateria (%) *', inp('number', 'Ex.: 85')); bat.min = 0; bat.max = 100; bat.value = t.bateria; bat.oninput = function () { t.bateria = bat.value; };
+    var vb = el('div', 'prefix'), vl = el('input'); vl.inputMode = 'decimal'; vl.placeholder = '0,00'; vl.value = t.valor; vb.appendChild(el('span', '', 'R$')); vb.appendChild(vl); campo(b2, 'Valor da troca *', vb);
+    vl.oninput = function () { t.valor = vl.value; if (V._resumo) V._resumo(); };
+    var cl = el('div', 'seg'); b.appendChild(el('label', '', 'Classificação *')); b.appendChild(cl);
+    seg(cl, S.u.classificacoes || [], t.classificacao, function (v) { t.classificacao = v; });
+    var ob = campo(b, 'Observação', inp('text', 'Ex.: tela com risco leve')); ob.value = t.obs; ob.oninput = function () { t.obs = ob.value; };
+    if (t.imei) im.oninput();
+    if (t.consulta) { var on = Array.prototype.filter.call(sg.children, function (c) { return c.textContent === t.consulta; })[0]; if (on) on.click(); }
+    return b;
+  }
+
+  // ---------- recibo
+  function reciboEl(v) {
+    var r = el('div', 'recibo'), top = el('div', 'topo'), a = el('div'), n = el('div', 'n');
+    a.appendChild(el('h1', '', /^Find Cell/.test(v.loja) ? 'Find Cell' : 'Tec-Cell')); a.appendChild(el('div', 'lj', v.loja + ' · mais de 10 anos de mercado'));
+    n.appendChild(el('div', '', 'RECIBO DE VENDA')); n.appendChild(el('div', '', 'Nº ' + v.id)); n.appendChild(el('div', 'lj', v.dataTxt || dataBR(v.data)));
+    top.appendChild(a); top.appendChild(n); r.appendChild(top);
+    if (v.situacao === 'Cancelada') { var cc = el('div', 'gar', 'VENDA CANCELADA · ' + v.cancelamento); cc.style.cssText = 'background:#fde7e5;color:#b3261e;font-weight:700;margin:0 0 8px'; r.appendChild(cc); }
+    r.appendChild(el('h2', '', 'Cliente'));
+    r.appendChild(el('div', '', v.cliente.nome + ' · CPF ' + fmtCPF(v.cliente.cpf) + ' · WhatsApp ' + fmtFone(v.cliente.whats)));
+    if (v.cliente.endereco) r.appendChild(el('div', '', v.cliente.endereco));
+    r.appendChild(el('h2', '', 'Aparelhos'));
+    var t = el('table'), h = el('tr'); ['Aparelho', 'IMEI', 'Garantia até', 'Valor'].forEach(function (x, i) { h.appendChild(el('th', i === 3 ? 'v' : '', x)); }); t.appendChild(h);
+    v.itens.forEach(function (x) { var tr = el('tr'); [x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classificacao, x.imei, garantiaAte(v.data, x.garantiaMeses || 3), brl(x.preco)].forEach(function (c, i) { tr.appendChild(el('td', i === 3 ? 'v' : '', c)); }); t.appendChild(tr); });
+    r.appendChild(t);
+    if (v.troca && v.troca.length) {
+      r.appendChild(el('h2', '', 'Aparelho recebido na troca'));
+      var t2 = el('table'), h2 = el('tr'); ['Aparelho', 'IMEI', 'Valor abatido'].forEach(function (x, i) { h2.appendChild(el('th', i === 2 ? 'v' : '', x)); }); t2.appendChild(h2);
+      v.troca.forEach(function (x) { var tr = el('tr'); [x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · bateria ' + x.bateria + '%', x.imei, '− ' + brl(x.valor)].forEach(function (c, i) { tr.appendChild(el('td', i === 2 ? 'v' : '', c)); }); t2.appendChild(tr); });
+      r.appendChild(t2);
+    }
+    r.appendChild(el('h2', '', 'Valores'));
+    var tt = function (a2, b2, cls) { var d = el('div', 'tt' + (cls ? ' ' + cls : '')); d.appendChild(el('span', '', a2)); d.appendChild(el('span', '', b2)); r.appendChild(d); };
+    tt('Total dos aparelhos', brl(v.totalItens));
+    if (v.totalTroca) tt('Troca', '− ' + brl(v.totalTroca));
+    tt('Valor pago', brl(v.aPagar), 'g');
+    (v.pagamentos || []).forEach(function (p) { tt(p.forma + (p.forma === 'Crédito' ? ' ' + p.parcelas + 'x' : ''), brl(p.valor) + (p.cobrado && p.cobrado !== p.valor ? ' (cobrado ' + brl(p.cobrado) + (p.parcelas > 1 ? ' em ' + p.parcelas + 'x de ' + brl(p.cobrado / p.parcelas) : '') + ')' : '')); });
+    if (v.obs) { r.appendChild(el('h2', '', 'Observação')); r.appendChild(el('div', '', v.obs)); }
+    r.appendChild(el('div', 'gar', 'GARANTIA: 3 (três) meses a partir desta data para os aparelhos seminovos acima, contra defeitos de funcionamento. ' +
+      'A garantia não cobre danos causados por queda, contato com líquidos, tela ou vidro quebrado, mau uso, abertura do aparelho por terceiros ou desgaste natural da bateria. ' +
+      'Para usar a garantia, apresente este recibo.' + (v.troca && v.troca.length ? ' TROCA: o cliente declara ser o proprietário do aparelho entregue e que ele tem procedência lícita.' : '')));
+    var as = el('div', 'ass'); as.appendChild(el('div', '', v.cliente.nome)); as.appendChild(el('div', '', 'Vendedor: ' + String(v.vendedor || '').replace(/\s*\([^)]*\)\s*$/, ''))); r.appendChild(as);
+    return r;
+  }
+  function textoRecibo(v) {
+    var l = ['Olá, ' + v.cliente.nome.split(' ')[0] + '! Obrigado pela compra na ' + (/^Find Cell/.test(v.loja) ? 'Find Cell' : 'Tec-Cell') + '. 😊', '', '🧾 Recibo Nº ' + v.id + ' · ' + (v.dataTxt || dataBR(v.data)), ''];
+    v.itens.forEach(function (x) { l.push('📱 ' + x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' (' + x.classificacao + ')'); l.push('IMEI ' + x.imei + ' · ' + brl(x.preco)); l.push('✅ Garantia até ' + garantiaAte(v.data, x.garantiaMeses || 3)); l.push(''); });
+    (v.troca || []).forEach(function (x) { l.push('🔄 Troca: ' + x.modelo + ' · − ' + brl(x.valor)); });
+    l.push('💰 Valor pago: ' + brl(v.aPagar) + ' (' + (v.pagamentos || []).map(function (p) { return p.forma + (p.forma === 'Crédito' ? ' ' + p.parcelas + 'x' : ''); }).join(' + ') + ')');
+    l.push(''); l.push('Guarde esta mensagem: ela vale como comprovante da garantia.');
+    return l.join('\n');
+  }
+  function imprimirRecibo(v) {
+    var css = Array.prototype.map.call(document.querySelectorAll('style'), function (st) { return st.textContent; }).join('\n').match(/\.recibo[^{]*\{[^}]*\}/g) || [];
+    var f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
+    var d = f.contentWindow.document;
+    d.open(); d.write('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Recibo ' + v.id + '</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:16px}' + css.join('') + '.recibo{padding:0}</style></head><body></body></html>'); d.close();
+    d.body.appendChild(d.importNode(reciboEl(v), true));
+    setTimeout(function () { f.contentWindow.focus(); f.contentWindow.print(); setTimeout(function () { f.remove(); }, 1500); }, 200);
+  }
+  function abrirRecibo(v, nova) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', nova ? '✓ Venda ' + v.id + ' registrada' : 'Recibo da venda ' + v.id));
+    if (nova) sh.appendChild(el('div', 'sub', 'Os aparelhos saíram do estoque' + (v.troca && v.troca.length ? ' e a troca entrou como Recompra' : '') + '. Imprima ou envie o recibo para o cliente.'));
+    sh.appendChild(reciboEl(v));
+    var ac = el('div', 'acoes'), pr = el('button', 'btn', '🖨 Imprimir'), wa = el('button', 'btn ok', 'Enviar por WhatsApp'); pr.type = wa.type = 'button';
+    ac.appendChild(pr); ac.appendChild(wa); sh.appendChild(ac);
+    var cp = el('button', 'btn ghost', 'Copiar texto do recibo'), fc = el('button', 'btn ghost', 'Fechar'); cp.type = fc.type = 'button'; cp.style.marginTop = fc.style.marginTop = '8px';
+    sh.appendChild(cp); sh.appendChild(fc);
+    pr.onclick = function () { imprimirRecibo(v); };
+    wa.onclick = function () { window.open('https://wa.me/55' + soDig(v.cliente.whats) + '?text=' + encodeURIComponent(textoRecibo(v)), '_blank', 'noopener'); };
+    cp.onclick = function () { copiar(textoRecibo(v)).then(function (ok) { cp.textContent = ok ? 'Texto copiado ✓' : 'Não deu para copiar'; }); };
+    fc.onclick = fecharModal;
+    abrirModal();
+  }
+
+  // ---------- histórico
+  function carregarHist(forcar) {
+    if (S.vendas && !forcar) return renderHist();
+    $('hLista').innerHTML = ''; $('hLista').appendChild(el('div', 'empty', 'Carregando vendas…')); $('hCont').textContent = '';
+    call('vendasListar', [S.token]).then(function (l) { S.vendas = l; renderHist(); }).catch(function (e) { $('hLista').innerHTML = ''; $('hLista').appendChild(el('div', 'empty', e)); });
+  }
+  $('hPer').value = LS.get('hPer', '30');
+  $('hPer').onchange = function () { LS.set('hPer', this.value); renderHist(); };
+  ['hLoja', 'hVend', 'hSit'].forEach(function (k) { $(k).addEventListener('change', renderHist); });
+  $('hBusca').addEventListener('input', renderHist);
+  $('hLimpar').onclick = function () { $('hBusca').value = ''; $('hLoja').value = ''; $('hVend').value = ''; $('hSit').value = ''; renderHist(); };
+  $('hFilBtn').onclick = function () { var on = !$('hFil').classList.contains('on'); $('hFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
+  botaoEsconderFiltros($('hFilEsc'), 'hFil', 'semFilVendas');
+  function renderHist() {
+    if (!S.vendas) return;
+    var uniq = function (f) { var u = []; S.vendas.forEach(function (v) { var k = f(v); if (k && u.indexOf(k) < 0) u.push(k); }); return u.sort(); };
+    opts($('hLoja'), uniq(function (v) { return v.loja; }), $('hLoja').value, 'Todas as lojas');
+    opts($('hVend'), uniq(function (v) { return v.vendedor; }), $('hVend').value, 'Todos os vendedores');
+    var P = periodo($('hPer').value), loja = $('hLoja').value, ven = $('hVend').value, sit = $('hSit').value, q = $('hBusca').value.trim().toLowerCase(), qd = soDig(q);
+    var l = S.vendas.filter(function (v) {
+      if (v.data && (v.data < P[0] || v.data > P[1])) return false;
+      if (loja && v.loja !== loja) return false;
+      if (ven && v.vendedor !== ven) return false;
+      if (sit === '' && v.situacao === 'Cancelada') return false;
+      if (sit === 'Cancelada' && v.situacao !== 'Cancelada') return false;
+      if (q) {
+        var t = [v.id, v.cliente.nome].concat(v.itens.map(function (x) { return x.modelo; })).join(' ').toLowerCase(), d = [v.cliente.cpf, v.cliente.whats].concat(v.itens.map(function (x) { return x.imei; }), v.troca.map(function (x) { return x.imei; })).join(' ');
+        if (t.indexOf(q) < 0 && !(qd.length >= 3 && d.indexOf(qd) > -1)) return false;
+      }
+      return true;
+    });
+    var ativas = l.filter(function (v) { return v.situacao !== 'Cancelada'; });
+    var tot = soma(ativas, function (v) { return v.totalItens; }), ap = ativas.reduce(function (a, v) { return a + v.itens.length; }, 0);
+    $('hCont').textContent = l.length + ' venda' + (l.length === 1 ? '' : 's') + ' · ' + P[2];
+    var rs = $('hResumo'); rs.innerHTML = '';
+    var k = el('div', 'kpis'); rs.appendChild(k);
+    kpi(k, 'Vendas', inteiro(ativas.length), ap + ' aparelho' + (ap === 1 ? '' : 's'));
+    kpi(k, 'Total vendido', brl(tot), ativas.length ? 'ticket médio ' + brl(tot / ativas.length) : '');
+    kpi(k, 'Recebido em trocas', brl(soma(ativas, function (v) { return v.totalTroca; })), ativas.filter(function (v) { return v.troca.length; }).length + ' com troca');
+    var box = $('hLista'); box.innerHTML = '';
+    if (!l.length) { box.appendChild(el('div', 'empty', S.vendas.length ? 'Nenhuma venda encontrada com esses filtros.' : 'Nenhuma venda registrada ainda. Use "+ Nova venda".')); return; }
+    var tab = el('div', 'ptab'), h = el('div', 'prow h');
+    ['', 'Cliente e aparelhos', 'Venda', 'Valor', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    tab.appendChild(h);
+    l.forEach(function (v) {
+      var r = el('div', 'prow'); r.dataset.k = v.id;
+      var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
+      var n = el('div'), nm = el('div', 'pnome', v.cliente.nome); if (v.situacao === 'Cancelada') nm.appendChild(el('span', 'badge-m canc', 'Cancelada'));
+      n.appendChild(nm); n.appendChild(el('div', 'psub', v.itens.map(function (x) { return x.modelo + ' ' + x.classificacao; }).join(' · ') + (v.troca.length ? ' · troca: ' + v.troca.map(function (x) { return x.modelo; }).join(', ') : '')));
+      r.appendChild(n);
+      var md = el('div', 'psku'); md.appendChild(el('div', '', v.id + ' · ' + (v.dataTxt || dataBR(v.data)))); md.appendChild(el('div', 'psub', String(v.vendedor).replace(/\s*\([^)]*\)\s*$/, '') + ' · ' + v.loja)); r.appendChild(md);
+      var pr = el('div', 'ppre' + (v.situacao === 'Cancelada' ? ' sem' : ''), brl(v.totalItens).replace('R$', '').trim());
+      pr.appendChild(el('small', '', (v.totalTroca ? 'troca − ' + brl(v.totalTroca) + ' · ' : '') + (v.pagamentos || []).map(function (p) { return p.forma; }).join(' + ')));
+      r.appendChild(pr); r.appendChild(el('div', 'chev', '›'));
+      r.onclick = function () { abrirDrawerVenda(v); };
+      tab.appendChild(r);
+    });
+    box.appendChild(tab);
+  }
+  function abrirDrawerVenda(v) {
+    Array.prototype.forEach.call(document.querySelectorAll('#hLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === v.id); });
+    var dw = $('dw'); dw.innerHTML = '';
+    var hd = el('div', 'dwh'), ht = el('div'); ht.appendChild(el('div', 't', 'Venda ' + v.id + (v.situacao === 'Cancelada' ? ' · CANCELADA' : ''))); ht.appendChild(el('div', 's', (v.dataTxt || dataBR(v.data)) + ' · ' + v.loja));
+    var fx = el('button', '', '×'); fx.type = 'button'; fx.setAttribute('aria-label', 'Fechar'); fx.onclick = fecharDrawer; hd.appendChild(ht); hd.appendChild(fx); dw.appendChild(hd);
+    var bd = el('div', 'dwb'); dw.appendChild(bd);
+    var info = el('div', 'card'), kv = el('div', 'kv');
+    [['Cliente', v.cliente.nome], ['CPF', fmtCPF(v.cliente.cpf)], ['WhatsApp', fmtFone(v.cliente.whats)], ['Endereço', v.cliente.endereco], ['Vendedor', v.vendedor],
+     ['Aparelhos', v.itens.map(function (x) { return x.modelo + ' ' + x.classificacao + ' (IMEI ' + x.imei + ') ' + brl(x.preco); }).join('\n')],
+     ['Troca', v.troca.map(function (x) { return x.modelo + ' (IMEI ' + x.imei + ') − ' + brl(x.valor); }).join('\n')],
+     ['Total', brl(v.totalItens)], ['Valor pago', brl(v.aPagar)], ['Pagamento', (v.pagamentos || []).map(function (p) { return p.forma + (p.forma === 'Crédito' ? ' ' + p.parcelas + 'x' : '') + ' ' + brl(p.valor); }).join(' + ')],
+     ['Observação', v.obs], ['Cancelamento', v.cancelamento]].forEach(function (p) { if (!p[1]) return; kv.appendChild(el('div', 'k', p[0])); var d = el('div', '', p[1]); d.style.whiteSpace = 'pre-line'; kv.appendChild(d); });
+    info.appendChild(kv); bd.appendChild(info);
+    var am = el('div', 'msg err'); bd.appendChild(am);
+    function opcao(t, sub, cls, fn) { var b = el('button', 'opc' + (cls ? ' ' + cls : '')); b.type = 'button'; var d = el('div', '', t); if (sub) d.appendChild(el('small', '', sub)); b.appendChild(d); b.appendChild(el('span', 'ar', '›')); b.onclick = fn; bd.appendChild(b); return b; }
+    opcao('Ver recibo', 'Imprimir ou enviar de novo', '', function () { fecharDrawer(); abrirRecibo(v, false); });
+    opcao('Enviar recibo por WhatsApp', fmtFone(v.cliente.whats), 'okc', function () { window.open('https://wa.me/55' + soDig(v.cliente.whats) + '?text=' + encodeURIComponent(textoRecibo(v)), '_blank', 'noopener'); });
+    if (pode('cancelar_venda') && v.situacao !== 'Cancelada') {
+      var bc = opcao('Cancelar venda', 'Os aparelhos voltam para o estoque e a troca sai', 'danger', function () {
+        if (bc.nextSibling && bc.nextSibling.classList && bc.nextSibling.classList.contains('opc-box')) return;
+        var bx = el('div', 'opc-box'), mt = el('textarea'); mt.placeholder = 'Motivo do cancelamento (obrigatório)'; bx.appendChild(mt);
+        var ok = el('button', 'btn danger', 'Confirmar cancelamento'); ok.type = 'button'; ok.style.marginTop = '8px'; bx.appendChild(ok); bc.after(bx); mt.focus();
+        ok.onclick = function () {
+          if (mt.value.trim().length < 3) { am.textContent = 'Informe o motivo.'; am.classList.add('show'); return; }
+          ok.disabled = true; ok.textContent = 'Cancelando…';
+          call('vendaCancelar', [S.token, v.id, mt.value.trim()]).then(function (l) { S.vendas = l; S.disp = null; S.dash = null; S.venda = null; fecharDrawer(); renderHist(); })
+            .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar cancelamento'; am.textContent = e; am.classList.add('show'); });
+        };
+      });
+    }
+    $('dwBg').classList.remove('hide'); dw.classList.add('on'); dw.setAttribute('aria-hidden', 'false'); dw.scrollTop = 0;
+    if (window.innerWidth < 820) document.body.style.overflow = 'hidden';
+  }
 
   // =========================================================
   //  DASHBOARD
@@ -1672,7 +2146,8 @@
     // Tirar da manutenção (colocado por engano)
     if (x.manut && pode('tirar_manut') && x.linha) opcao('Tirar da manutenção', 'Colocado em manutenção por engano (sem checklist)', '', function () { fecharDrawer(); abrirTirarManut(x, function () { S.disp = null; carregarDisp(true); }); });
 
-    // 5. Vendido / Excluir
+    // 5. Vender / Vendido / Excluir
+    if (pode('vender') && x.linha && !x.manut) opcao('Vender (registrar venda)', 'Abre a página Vendas com este aparelho, cliente, troca e recibo', 'okc', function () { fecharDrawer(); S.vdPre = x; ir('vendas'); });
     if (pode('vender') && x.linha) {
       var bv = opcao('Marcar como vendido', x.manut ? 'Finalize o conserto antes de vender' : 'Dá baixa no estoque (dá para desfazer)', 'okc');
       bv.onclick = function () {
