@@ -82,6 +82,18 @@
   .prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
   .prefix input{padding-left:40px}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tagbox{border:1.5px dashed var(--line);border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--card)}
+  .tchip{display:inline-flex;align-items:center;gap:7px;border:1.5px dotted var(--muted);background:transparent;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer}
+  .tchip::before{content:'';width:10px;height:10px;border-radius:50%;border:2px solid var(--muted);box-sizing:border-box;flex:0 0 auto}
+  .tchip.on{border-style:solid;border-color:var(--accent);background:var(--navy);color:#fff}
+  .tchip.on::before{background:#fff;border-color:#fff}
+  .catnovo{display:flex;gap:8px;margin-top:8px;align-items:center}
+  .catnovo input{flex:1;margin:0}
+  .catnovo .btn{width:auto;padding:10px 14px;margin:0}
+  .tagmini{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px;margin:2px 4px 0 0;background:var(--soft2);color:var(--muted)}
+  .catrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .catrow input{flex:1;margin:0}
+  .catrow .n{font-size:12px;color:var(--muted);white-space:nowrap;min-width:72px;text-align:right}
   .chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 11px;font-size:13px;cursor:pointer;color:var(--ink)}
   .chip.on{border-color:var(--accent);background:var(--navy);color:#fff}
   .seg{display:flex;gap:8px}
@@ -365,6 +377,10 @@
         <div class="status" id="imeiStatus"></div>
         <label for="sku">SKU <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
         <input id="sku" autocomplete="off" maxlength="40" placeholder="Código do produto (ex.: do Bling)">
+        <label>Grupo de produtos <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+        <div id="cGrupo"></div>
+        <label>Tags <span style="font-weight:400;color:var(--muted)">(toque para marcar)</span></label>
+        <div id="cTags"></div>
         <div class="consulta hide" id="cBox">
           <div style="font-size:13.5px;font-weight:600">Consulta de restrição do IMEI (roubo, furto, perda) <span class="req">*</span></div>
           <button type="button" class="btn ghost" id="cAbrir">Copiar IMEI e abrir a consulta oficial</button>
@@ -430,6 +446,10 @@
         <select id="dLoja"></select>
         <label for="dCor">Cor</label>
         <select id="dCor"></select>
+        <label for="dGrupo">Grupo de produtos</label>
+        <select id="dGrupo"></select>
+        <label for="dTag">Tag</label>
+        <select id="dTag"></select>
         <label for="dSit">Situação</label>
         <select id="dSit"><option value="">Disponíveis e em manutenção</option><option value="disp">Só disponíveis</option><option value="manut">Só em manutenção</option></select>
         <button type="button" class="btn ghost" id="dLimpar">Limpar filtros</button>
@@ -450,6 +470,10 @@
         <h3>Filtros</h3>
         <label for="nBusca">Produto</label>
         <input id="nBusca" placeholder="Ex.: 16 128 ou capinha" autocomplete="off">
+        <label for="nGrupo">Grupo de produtos</label>
+        <select id="nGrupo"></select>
+        <label for="nTag">Tag</label>
+        <select id="nTag"></select>
         <label for="nSit">Situação</label>
         <select id="nSit"><option value="">Disponíveis</option><option value="indisp">Não disponíveis</option><option value="todos">Todos</option></select>
         <label for="nOrdem">Ordenar por</label>
@@ -753,6 +777,68 @@
   });
 
   // =========================================================
+  //  GRUPOS DE PRODUTOS E TAGS
+  // =========================================================
+  function cat() { if (!S.u.catalogo) S.u.catalogo = { grupos: [], tags: [] }; return S.u.catalogo; }
+  function filtrosCat() {
+    [['dGrupo', 'grupos', 'Todos os grupos'], ['nGrupo', 'grupos', 'Todos os grupos'], ['dTag', 'tags', 'Todas as tags'], ['nTag', 'tags', 'Todas as tags']].forEach(function (f) {
+      var e = $(f[0]); if (e) opts(e, cat()[f[1]], e.value, f[2]);
+    });
+  }
+  function novoCatInline(box, tipo, aoCriar) {
+    var nv = el('div', 'catnovo hide'), i = inp('text', tipo === 'tag' ? 'Nome da nova tag' : 'Nome do novo grupo'); i.maxLength = 40;
+    var b = el('button', 'btn', 'Cadastrar'), x = el('button', 'lnk', 'Cancelar'); b.type = x.type = 'button';
+    var m = el('div', 'msg err');
+    nv.appendChild(i); nv.appendChild(b); nv.appendChild(x); box.appendChild(nv); box.appendChild(m);
+    x.onclick = function () { nv.classList.add('hide'); m.classList.remove('show'); i.value = ''; };
+    i.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); b.click(); } };
+    b.onclick = function () {
+      m.classList.remove('show');
+      if (i.value.trim().length < 2) { m.textContent = 'Digite o nome (mínimo 2 letras).'; m.classList.add('show'); return; }
+      b.disabled = true; b.textContent = 'Salvando…';
+      call('catAdicionar', [S.token, tipo, i.value.trim()]).then(function (r) {
+        S.u.catalogo = r.catalogo; filtrosCat(); b.disabled = false; b.textContent = 'Cadastrar'; i.value = ''; nv.classList.add('hide'); aoCriar(r.nome);
+      }).catch(function (e) { b.disabled = false; b.textContent = 'Cadastrar'; m.textContent = e; m.classList.add('show'); });
+    };
+    return function () { nv.classList.remove('hide'); i.focus(); };
+  }
+  // Caixa de seleção do grupo, com "+ Cadastrar novo grupo…" ali mesmo
+  function seletorGrupo(box, valor) {
+    box.innerHTML = '';
+    var atual = valor || '', s2 = el('select'); box.appendChild(s2);
+    function montar() {
+      var l = cat().grupos.slice(); if (atual && l.indexOf(atual) < 0) l.unshift(atual);
+      opts(s2, l, atual, '— Sem grupo —');
+      var o = el('option', '', '+ Cadastrar novo grupo…'); o.value = '__novo'; s2.appendChild(o);
+      s2.value = atual;
+    }
+    var abrir = novoCatInline(box, 'grupo', function (nome) { atual = nome; montar(); });
+    s2.onchange = function () { if (s2.value === '__novo') { s2.value = atual; abrir(); } else atual = s2.value; };
+    montar();
+    return { get: function () { return atual; } };
+  }
+  // Tags: caixa pontilhada, toca para marcar/desmarcar
+  function seletorTags(box, sel) {
+    box.innerHTML = '';
+    var esc = (sel || []).slice(), w = el('div', 'tagbox'); box.appendChild(w);
+    var abrir = pode('grupos_tags') ? novoCatInline(box, 'tag', function (nome) { if (esc.indexOf(nome) < 0) esc.push(nome); montar(); }) : null;
+    function montar() {
+      w.innerHTML = '';
+      var l = cat().tags.slice(); esc.forEach(function (t) { if (l.indexOf(t) < 0) l.push(t); });
+      if (!l.length) w.appendChild(el('span', 'hint', pode('grupos_tags') ? 'Nenhuma tag cadastrada ainda.' : 'Nenhuma tag cadastrada. O gerente cria as tags na engrenagem.'));
+      l.forEach(function (t) {
+        var on = esc.indexOf(t) > -1, c = el('button', 'tchip' + (on ? ' on' : ''), t); c.type = 'button'; c.setAttribute('aria-pressed', on ? 'true' : 'false');
+        c.onclick = function () { var i = esc.indexOf(t); if (i > -1) esc.splice(i, 1); else esc.push(t); montar(); };
+        w.appendChild(c);
+      });
+      if (abrir) { var a = el('button', 'lnk', '+ Nova tag'); a.type = 'button'; a.onclick = abrir; w.appendChild(a); }
+    }
+    montar();
+    return { get: function () { return esc.slice(); } };
+  }
+  function montarCatCadastro() { S.cGrupo = seletorGrupo($('cGrupo'), ''); S.cTags = seletorTags($('cTags'), []); }
+
+  // =========================================================
   //  CADASTRO
   // =========================================================
   function montarCadastro(d) {
@@ -764,6 +850,8 @@
     opts($('cor'), CORES, $('cor').value, 'Selecione a cor…');
     seg($('cRes'), ['Nada consta', 'Consta restrição'], S.consulta, marcarConsulta);
     montarCkCadastro();
+    if (!S.cGrupo) montarCatCadastro();
+    filtrosCat();
   }
 
   // consulta oficial de IMEI (feita pelo vendedor no site; o resultado fica registrado no cadastro)
@@ -842,7 +930,7 @@
     e.preventDefault(); msg('formMsg', '');
     var d = { loja: $('loja').value, modelo: $('modelo').value, cor: $('cor').value.trim(), imei: $('imei').value.replace(/\D/g, ''),
               bateria: $('bateria').value.trim(), custo: $('custo').value.trim(), classificacao: S.classificacao, tipo: S.tipo, obs: $('obs').value.trim(), sku: $('sku').value.trim(),
-              consultaImei: S.consulta, checklist: S.ck };
+              consultaImei: S.consulta, checklist: S.ck, grupo: S.cGrupo ? S.cGrupo.get() : '', tags: S.cTags ? S.cTags.get() : [] };
     var falta = [];
     if (!d.loja) falta.push('loja'); if (!d.modelo) falta.push('modelo'); if (!d.cor) falta.push('cor');
     if (!d.imei) falta.push('IMEI'); if (d.bateria === '') falta.push('bateria');
@@ -865,7 +953,7 @@
   });
   $('outro').onclick = function () {
     ['modelo', 'cor', 'imei', 'sku', 'bateria', 'custo', 'obs'].forEach(function (k) { $(k).value = ''; });
-    S.classificacao = ''; S.tipo = ''; S.ck = {}; resetConsulta(); S.imeiConsultado = ''; show('cBox', false); montarCkCadastro();
+    S.classificacao = ''; S.tipo = ''; S.ck = {}; resetConsulta(); S.imeiConsultado = ''; show('cBox', false); montarCkCadastro(); montarCatCadastro();
     Array.prototype.forEach.call(document.querySelectorAll('#classif button,#tipo button,.chip'), function (c) { c.classList.remove('on'); });
     imeiStatus('', ''); show('sucesso', false); show('form', true); window.scrollTo(0, 0);
   };
@@ -887,8 +975,8 @@
     }).catch(function (e) { $('dLista').innerHTML = ''; $('dLista').appendChild(el('div', 'empty', e)); });
   }
   ['dBusca', 'dImei'].forEach(function (k) { $(k).addEventListener('input', renderDisp); });
-  ['dLoja', 'dCor', 'dClassif', 'dSit'].forEach(function (k) { $(k).addEventListener('change', renderDisp); });
-  $('dLimpar').onclick = function () { ['dBusca', 'dImei', 'dLoja', 'dCor', 'dClassif', 'dSit'].forEach(function (k) { $(k).value = ''; }); renderDisp(); };
+  ['dLoja', 'dCor', 'dClassif', 'dSit', 'dGrupo', 'dTag'].forEach(function (k) { $(k).addEventListener('change', renderDisp); });
+  $('dLimpar').onclick = function () { ['dBusca', 'dImei', 'dLoja', 'dCor', 'dClassif', 'dSit', 'dGrupo', 'dTag'].forEach(function (k) { $(k).value = ''; }); renderDisp(); };
   function linhasCartao(valor) {
     var t = el('table', 't');
     var h = el('tr'); ['Opção', 'Total', 'Parcela'].forEach(function (x) { h.appendChild(el('th', '', x)); }); t.appendChild(h);
@@ -903,7 +991,7 @@
   function renderDisp() {
     if (!S.disp) return;
     var termos = $('dBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    var loja = $('dLoja').value, cor = $('dCor').value, cls = $('dClassif').value, sit = $('dSit').value;
+    var loja = $('dLoja').value, cor = $('dCor').value, cls = $('dClassif').value, sit = $('dSit').value, gru = $('dGrupo').value, tag = $('dTag').value;
     var imeiTxt = $('dImei').value.trim().toLowerCase();
     var l = S.disp.filter(function (x) {
       if (loja && x.loja !== loja) return false;
@@ -911,6 +999,8 @@
       if (cls && x.classif !== cls) return false;
       if (sit === 'disp' && x.manut) return false;
       if (sit === 'manut' && !x.manut) return false;
+      if (gru && x.grupo !== gru) return false;
+      if (tag && (x.tags || []).indexOf(tag) < 0) return false;
       if (imeiTxt && (String(x.imei) + ' ' + String(x.sku || '')).toLowerCase().indexOf(imeiTxt) < 0) return false;
       var m = x.modelo.toLowerCase();
       return termos.every(function (t) { return m.indexOf(t) > -1; });
@@ -943,6 +1033,7 @@
     b.onclick = function (e) { e.stopPropagation(); copiar(texto, b); };
     return b;
   }
+  function tagsMini(box, tags) { if (!tags || !tags.length) return; var d = el('div'); tags.forEach(function (t) { d.appendChild(el('span', 'tagmini', t)); }); box.appendChild(d); }
   function linhaProduto(x) {
     var r = el('div', 'prow'); r.dataset.k = x.linha + '|' + x.imei;
     var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
@@ -950,7 +1041,8 @@
     if (x.manut) nm.appendChild(el('span', 'badge-m', 'Em manutenção'));
     nm.appendChild(botaoCopiar(nomeProduto(x), 'Copiar nome'));
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
-    n.appendChild(nm); n.appendChild(el('div', 'psub', [x.loja, bat ? 'bateria ' + bat : ''].filter(Boolean).join(' · ')));
+    n.appendChild(nm); n.appendChild(el('div', 'psub', [x.loja, bat ? 'bateria ' + bat : '', x.grupo].filter(Boolean).join(' · ')));
+    tagsMini(n, x.tags);
     r.appendChild(n);
     var cod = x.sku || x.imei;
     var sku = el('div', 'psku', cod); sku.appendChild(botaoCopiar(cod, 'Copiar SKU')); r.appendChild(sku);
@@ -1118,6 +1210,8 @@
     var imei = campo(c, 'IMEI', inp('text')); imei.value = x.imei; imei.inputMode = 'numeric'; imei.maxLength = 17;
     var im = el('div', 'status'); c.appendChild(im);
     var skuE = campo(c, 'SKU', inp('text', 'Opcional')); skuE.value = x.sku || ''; skuE.maxLength = 40;
+    var gBox = campo(c, 'Grupo de produtos', el('div')), eGrupo = seletorGrupo(gBox, x.grupo || '');
+    var tBox = campo(c, 'Tags', el('div')), eTags = seletorTags(tBox, x.tags || []);
     imei.oninput = function () { var d = imei.value.replace(/\D/g, ''); im.className = 'status' + (d.length === 15 && !luhn(d) ? ' show err' : ''); im.textContent = d.length === 15 && !luhn(d) ? 'IMEI inválido.' : ''; };
     var bat = campo(c, 'Bateria (%)', inp('number')); bat.value = typeof x.bateria === 'number' ? x.bateria : String(x.bateria).replace(/\D/g, '');
     var cl = sel('Classificação', S.u.classificacoes || [], x.classif);
@@ -1136,7 +1230,7 @@
     ok.onclick = function () {
       m.classList.remove('show');
       var d = { loja: loja.value, modelo: modelo.value, cor: cor.value, imei: imei.value.replace(/\D/g, ''), bateria: bat.value.trim(),
-                classificacao: cl.value, tipo: tipo.value, obs: obs.value.trim(), sku: skuE.value.trim() };
+                classificacao: cl.value, tipo: tipo.value, obs: obs.value.trim(), sku: skuE.value.trim(), grupo: eGrupo.get(), tags: eTags.get() };
       if (custo) { d.custo = custo.value.trim(); d.peca = peca.value.trim(); }
       var erro = '';
       if (!luhn(d.imei)) erro = 'IMEI inválido. Confira os 15 números.';
@@ -1222,9 +1316,11 @@
   function aposNovos(d) { S.novos = d.produtos; S.prec = d.config; renderNovos(); }
   $('nBusca').addEventListener('input', renderNovos);
   $('nSit').addEventListener('change', renderNovos);
+  $('nGrupo').addEventListener('change', renderNovos);
+  $('nTag').addEventListener('change', renderNovos);
   $('nOrdem').addEventListener('change', function () { LS.set('ordemNovos', this.value); renderNovos(); });
   $('nOrdem').value = LS.get('ordemNovos', 'az');
-  $('nLimpar').onclick = function () { $('nBusca').value = ''; $('nSit').value = ''; renderNovos(); };
+  $('nLimpar').onclick = function () { $('nBusca').value = ''; $('nSit').value = ''; $('nGrupo').value = ''; $('nTag').value = ''; renderNovos(); };
   $('nFilBtn').onclick = function () { var on = !$('nFil').classList.contains('on'); $('nFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
   $('nNovo').onclick = function () { abrirProdutoNovo(null); };
   $('nPrec').onclick = function () { abrirPrecificacao(); };
@@ -1237,8 +1333,10 @@
       $('nResumo').textContent = 'Precificação atual: ' + tot.toFixed(2).replace('.', ',') + '% de custos' + (fx ? ' + ' + brl(fx) + ' fixos' : '') + ' e margem de ' + String(S.prec.margem).replace('.', ',') + '%.';
     } else $('nResumo').textContent = '';
     var termos = $('nBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    var sit = $('nSit').value, ordem = $('nOrdem').value;
+    var sit = $('nSit').value, ordem = $('nOrdem').value, gru = $('nGrupo').value, tag = $('nTag').value;
     var l = S.novos.filter(function (x) {
+      if (gru && x.grupo !== gru) return false;
+      if (tag && (x.tags || []).indexOf(tag) < 0) return false;
       if (sit === '' && x.indisp) return false;
       if (sit === 'indisp' && !x.indisp) return false;
       var t = x.nome.toLowerCase(); return termos.every(function (q) { return t.indexOf(q) > -1; });
@@ -1260,7 +1358,9 @@
       var r = el('div', 'prow'); r.dataset.k = x.linha + '|' + x.nome;
       var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
       var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome)); if (x.indisp) nm.appendChild(el('span', 'badge-m', 'Não disponível')); nm.appendChild(botaoCopiar(x.nome, 'Copiar nome')); n.appendChild(nm);
-      if (ver && x.manual) n.appendChild(el('div', 'psub', 'Preço definido manualmente'));
+      var sub = [x.grupo, ver && x.manual ? 'Preço definido manualmente' : ''].filter(Boolean).join(' · ');
+      if (sub) n.appendChild(el('div', 'psub', sub));
+      tagsMini(n, x.tags);
       r.appendChild(n);
       var cm = el('div', 'psku');
       if (ver && x.custo) { var res = resultado(x.preco, x.custo, calcNovo(x.custo, x.aj, S.prec)); cm.textContent = brl(x.custo) + (res ? ' · ' + pct(res.margem) : ''); if (res) cm.style.color = res.margem >= (S.prec.margem / 100) - 0.0001 ? 'var(--ok)' : res.margem > 0 ? 'var(--warn)' : 'var(--err)'; }
@@ -1347,6 +1447,8 @@
     sh.appendChild(el('h2', 'tt', x ? 'Editar produto novo' : 'Novo produto'));
     var c = el('div', 'card');
     var nome = campo(c, 'Nome do produto', inp('text', 'Ex.: IPHONE 16 128GB'), true); nome.maxLength = 150; nome.value = x ? x.nome : '';
+    var gBox = campo(c, 'Grupo de produtos', el('div')), nGrupo = seletorGrupo(gBox, x ? x.grupo || '' : '');
+    var tBox = campo(c, 'Tags', el('div')), nTags = seletorTags(tBox, x ? x.tags || [] : []);
     var custo = campo(c, 'Custo (R$)', inp('text', '0,00')); custo.inputMode = 'decimal'; custo.value = x ? nfmt(x.custo) : '';
     var aj = {}; Object.keys((x && x.aj) || {}).forEach(function (k) { aj[k] = x.aj[k]; });
     var det = el('details'); var smy = el('summary', '', 'Ajustar % e valores só deste produto' + (Object.keys(aj).length ? ' (com ajustes)' : ''));
@@ -1381,7 +1483,7 @@
       if (nome.value.trim().length < 2) { m.textContent = 'Informe o nome do produto.'; m.classList.add('show'); return; }
       if (!(num(custo.value) > 0)) { m.textContent = 'Informe o custo.'; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Salvando…';
-      call('novoSalvar', [S.token, x ? x.linha : 0, x ? x.nome : '', { nome: nome.value, custo: custo.value, aj: aj, manual: man.value.trim() }]).then(function (d) {
+      call('novoSalvar', [S.token, x ? x.linha : 0, x ? x.nome : '', { nome: nome.value, custo: custo.value, aj: aj, manual: man.value.trim(), grupo: nGrupo.get(), tags: nTags.get() }]).then(function (d) {
         aposNovos(d); fecharModal();
         var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ ' + nome.value.trim().toUpperCase() + (x ? ' atualizado.' : ' cadastrado.')));
       }).catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Cadastrar produto'; m.textContent = e; m.classList.add('show'); });
@@ -2011,7 +2113,8 @@
     sh.appendChild(el('h2', 'tt', 'Configurações'));
     sh.appendChild(el('div', 'sub', S.u.nome + ' · usuário ' + S.u.usuario + ' · ' + S.u.perfil));
     var abas = [['senha', 'Minha conta']];
-    if (pode('equipe')) abas.push(['func', 'Funcionários'], ['grupos', 'Grupos']);
+    if (pode('equipe')) abas.push(['func', 'Funcionários'], ['grupos', 'Grupos de acesso']);
+    if (pode('grupos_tags')) abas.push(['cat', 'Grupos de produtos e tags']);
     if (abas.length > 1) {
       var t = el('div', 'stabs');
       abas.forEach(function (a) { var b = el('button', a[0] === CFG.aba ? 'on' : '', a[1]); b.type = 'button'; b.onclick = function () { CFG.aba = a[0]; desenharCfg(); }; t.appendChild(b); });
@@ -2019,6 +2122,10 @@
     }
     var corpo = el('div'); sh.appendChild(corpo);
     if (CFG.aba === 'senha') { cfgTema(corpo); cfgSenha(corpo); }
+    else if (CFG.aba === 'cat') {
+      corpo.appendChild(el('div', 'empty', 'Carregando…'));
+      call('catalogo', [S.token]).then(function (d) { corpo.innerHTML = ''; cfgCat(corpo, d); }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', e)); });
+    }
     else if (!CFG.eq) {
       corpo.appendChild(el('div', 'empty', 'Carregando…'));
       call('equipe', [S.token]).then(function (d) { CFG.eq = d; desenharCfg(); }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', e)); });
@@ -2166,6 +2273,49 @@
     box.appendChild(c);
   }
 
+  function cfgCat(box, d) {
+    [['grupo', 'grupos', 'Grupos de produtos', '+ Novo grupo', 'Ex.: Smartphones, Fones, Carregadores'],
+     ['tag', 'tags', 'Tags', '+ Nova tag', 'Ex.: Promoção, Lançamento, Mais vendido']].forEach(function (cf) {
+      var c = el('div', 'card'); c.appendChild(el('h2', '', cf[2]));
+      var L = d[cf[1]].map(function (n) { return { nome: n, orig: n }; });
+      var uso = (d.uso && d.uso[cf[1]]) || {};
+      var lista = el('div'); c.appendChild(lista);
+      function desenhar() {
+        lista.innerHTML = '';
+        if (!L.length) lista.appendChild(el('div', 'hint', 'Nenhum cadastrado ainda.'));
+        L.forEach(function (x, i) {
+          var r = el('div', 'catrow'), ip = inp('text', cf[4]); ip.maxLength = 40; ip.value = x.nome; ip.oninput = function () { x.nome = ip.value; };
+          var q = x.orig ? (uso[x.orig] || 0) : 0;
+          var n = el('div', 'n', x.orig ? q + ' produto' + (q === 1 ? '' : 's') : 'novo');
+          var del = el('button', 'lnk', 'Excluir'); del.type = 'button'; del.style.color = 'var(--err)';
+          del.onclick = function () {
+            if (x.orig && q && !del.dataset.conf) { del.dataset.conf = '1'; del.textContent = 'Confirmar?'; return; }
+            L.splice(i, 1); desenhar();
+          };
+          r.appendChild(ip); r.appendChild(n); r.appendChild(del); lista.appendChild(r);
+        });
+      }
+      desenhar();
+      var add = el('button', 'lnk', cf[3]); add.type = 'button';
+      add.onclick = function () { L.push({ nome: '', orig: '' }); desenhar(); var ins = lista.querySelectorAll('input'); ins[ins.length - 1].focus(); };
+      c.appendChild(add);
+      var m = el('div', 'msg err'); c.appendChild(m);
+      var sv = el('button', 'btn', 'Salvar ' + cf[2].toLowerCase()); sv.type = 'button'; sv.style.marginTop = '10px'; c.appendChild(sv);
+      c.appendChild(el('div', 'hint', 'Renomear muda em todos os produtos que usam. Excluir tira dos produtos (o produto continua cadastrado).'));
+      sv.onclick = function () {
+        m.classList.remove('show');
+        var nomes = L.map(function (x) { return x.nome.trim().toLowerCase(); });
+        if (nomes.some(function (n) { return n.length < 2; })) { m.textContent = 'Todos precisam ter nome (mínimo 2 letras).'; m.classList.add('show'); return; }
+        if (nomes.some(function (n, i) { return nomes.indexOf(n) !== i; })) { m.textContent = 'Há nomes repetidos.'; m.classList.add('show'); return; }
+        sv.disabled = true; sv.textContent = 'Salvando…';
+        call('catSalvar', [S.token, cf[0], L.map(function (x) { return { nome: x.nome.trim(), orig: x.orig }; })]).then(function (nd) {
+          S.u.catalogo = { grupos: nd.grupos, tags: nd.tags }; filtrosCat(); S.disp = null; S.novos = null; montarCatCadastro();
+          box.innerHTML = ''; cfgCat(box, nd); box.insertBefore(el('div', 'msg ok show', '✓ ' + cf[2] + ' salvos.'), box.firstChild);
+        }).catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar ' + cf[2].toLowerCase(); m.textContent = e; m.classList.add('show'); });
+      };
+      box.appendChild(c);
+    });
+  }
   function cfgGrupos(box) {
     var G = CFG.eq.grupos.map(function (g) { return { nome: g.nome, orig: g.nome, perms: g.perms.slice() }; });
     var lista = el('div'); box.appendChild(lista);
