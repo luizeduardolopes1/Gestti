@@ -789,7 +789,7 @@
         <button type="button" class="btn ghost" id="esLimpar">Limpar filtros</button>
       </aside>
       <div>
-        <div class="crumb">Estoque</div>
+        <div class="crumb">Suprimento</div>
         <div class="ptopo"><h1>Controle de Estoque</h1><div class="tbtns"><button type="button" class="btn hide" id="esLanc">+ Lançar estoque</button></div></div>
         <div id="esResumo"></div>
         <div class="seg" id="esAba" style="max-width:360px;margin-bottom:10px"></div>
@@ -816,7 +816,7 @@
           <button type="button" class="btn ghost" id="cpLimpar">Limpar filtros</button>
         </aside>
         <div>
-          <div class="crumb">Estoque</div>
+          <div class="crumb">Suprimento</div>
           <div class="ptopo"><h1>Entrada de Compras</h1><div class="tbtns"><button type="button" class="btn ghost" id="cpXml">Importar XML da NF-e</button><button type="button" class="btn" id="cpNova">+ Nova entrada</button></div></div>
           <input type="file" id="cpXmlFile" accept=".xml,text/xml,application/xml" class="hide">
           <div id="cpResumo"></div>
@@ -857,7 +857,7 @@
 
   <!-- CADASTRO DE PRODUTO (página inteira) -->
   <section id="vProd" class="hide">
-    <div class="crumb">Produtos</div>
+    <div class="crumb">Suprimento › Produtos</div>
     <div class="ptopo"><h1 id="prTit">Novo produto</h1><button type="button" class="btn ghost" id="prVoltar">← Voltar para Produtos</button></div>
     <div id="prCorpo"></div>
   </section>
@@ -1166,14 +1166,14 @@
   var VIEWS = [
     { id: 'dash', sec: 'vDash', nome: 'Dashboard', perm: 'dashboard' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
-    { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos' },
+    { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos', menu: 'Suprimento', desc: 'Aparelhos seminovos e outros produtos usados' },
     { id: 'vendas', sec: 'vVendas', nome: 'Vendas', perm: 'vender' },
     { id: 'pdv', sec: 'vPdv', nome: 'PDV', perm: 'vender' },
-    { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios' },
+    { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios', menu: 'Suprimento', desc: 'Cadastro, preço e estoque dos produtos' },
     { id: 'os', sec: 'vOs', nome: 'Ordem de Serviço', perm: 'os' },
     { id: 'caixa', sec: 'vCaixa', nome: 'Caixa', perm: 'caixa' },
-    { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Estoque', desc: 'Saldo de cada produto por loja e lançamentos' },
-    { id: 'compras', sec: 'vCompras', nome: 'Entrada de Compras', perm: 'compras', menu: 'Estoque', desc: 'Lançar nota de compra (XML da NF-e ou manual)' },
+    { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Suprimento', desc: 'Saldo de cada produto por loja e lançamentos' },
+    { id: 'compras', sec: 'vCompras', nome: 'Entrada de Compras', perm: 'compras', menu: 'Suprimento', desc: 'Lançar nota de compra (XML da NF-e ou manual)' },
     { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos', menu: 'Tabela de Preços', desc: 'Preço e precificação dos produtos novos' },
     { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone', perm: 'avaliacao' },
     { id: 'cartao', sec: 'vCartao', nome: 'Cartão', perm: 'cartao' },
@@ -1353,7 +1353,7 @@
     Array.prototype.forEach.call($('tabs').children, function (b) { var on = (b.dataset.vs || b.dataset.v || '').split(',').indexOf(id) > -1; b.classList.toggle('on', on); if (on && b.scrollIntoView) b.scrollIntoView({ inline: 'center', block: 'nearest' }); });
     if (id === 'disp') carregarDisp(false);
     show('dNovo', pode('cadastro')); show('dNovoP', pode('editar_acessorios')); show('cVoltar', pode('produtos'));
-    if (id === 'cadastro') Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.v === 'disp'); });
+    if (id === 'cadastro') Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', (b.dataset.vs || b.dataset.v || '').split(',').indexOf('disp') > -1); });
     if (id === 'prod') Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', (b.dataset.vs || b.dataset.v || '').split(',').indexOf('acess') > -1); });
     if (id === 'pessoa') Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', (b.dataset.vs || b.dataset.v || '').split(',').indexOf('crm') > -1); });
     if (id === 'novos') { carregarNovos(false); show('nNovo', pode('editar_precos')); show('nPrec', pode('editar_precos')); }
@@ -5778,7 +5778,7 @@
   }
   function desenharCompra() {
     var D = S.cp, box = $('cpForm'); box.innerHTML = '';
-    box.appendChild(el('div', 'crumb', 'Estoque › Entrada de Compras'));
+    box.appendChild(el('div', 'crumb', 'Suprimento › Entrada de Compras'));
     var tp = el('div', 'ptopo'); tp.appendChild(el('h1', '', CP.xml ? 'Entrada pela NF-e (XML)' : 'Nova entrada de compra')); box.appendChild(tp);
     if (CP.xml) box.appendChild(el('div', 'hint', 'Dados lidos do XML. Confira principalmente os itens marcados como "produto novo": vincule ao produto que já existe ou deixe cadastrar.'));
     var W = el('div', 'vdcol'); box.appendChild(W);
