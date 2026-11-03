@@ -67,6 +67,8 @@
   .navmenu button{display:block;width:100%;text-align:left;border:0;background:none;padding:11px 12px;border-radius:9px;font:inherit;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer}
   .navmenu button small{display:block;font-size:12.5px;font-weight:500;color:var(--muted);margin-top:2px}
   .navmenu button:hover,.navmenu button:focus-visible{background:var(--soft);outline:none}
+  .navmenu .navsub{display:flex;justify-content:space-between;align-items:center}.navmenu .navsub .ar{transition:transform .15s;color:var(--muted)}.navmenu .navsub.aberto .ar{transform:rotate(90deg)}
+  .navmenu .navsubbox{margin:0 0 4px 12px;padding-left:8px;border-left:2px solid var(--line)}
   .navmenu button.on{background:var(--navy);color:#fff}.navmenu button.on small{color:rgba(255,255,255,.8)}
   .crumb{font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 2px}
   main{max-width:640px;margin:12px auto 0;padding:0 12px 48px}
@@ -412,6 +414,7 @@
   @media (max-width:560px){.agd{min-height:58px}.agd .ev{font-size:0;height:6px;padding:0}.agd .mais{font-size:10px}}
   .cxl{display:grid;grid-template-columns:minmax(0,1fr) 150px 100px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}.cxl small{display:block;color:var(--muted);font-size:12px}.cxl .dv{text-align:right;font-weight:700;font-size:13px}.cxl .prefix input{margin:0}
 
+  .subnav{max-width:320px;margin:0 0 10px}
   .siln{border:1px dashed var(--line);border-radius:10px;padding:4px 12px 12px;margin-bottom:8px}
   .vdac .qp{display:grid;grid-template-columns:90px 1fr;gap:8px}.vdac .qp label{margin-top:6px}
   .p4 b{font-weight:700;color:var(--ink);background:none;padding:0}.p4 b.ok{color:var(--ok)}.p4 b.warn{color:var(--warn)}.p4 b.err{color:var(--err)}
@@ -986,6 +989,7 @@
         <button type="button" class="btn ghost" id="dLimpar">Limpar filtros</button>
       </aside>
       <div>
+        <div class="seg subnav" data-sub="disp"></div>
         <div class="ptopo"><h1>Produtos Usados</h1><div class="tbtns"><button type="button" class="btn ghost hide" id="dNovoP">+ Outro produto usado</button><button type="button" class="btn hide" id="dNovo">+ Novo Produto</button></div></div>
         <div class="fbar"><div class="cont" id="dCont"></div><button type="button" class="lnk bfil" id="dFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="dFilEsc"></button></div>
         <div id="dAviso"></div>
@@ -1092,6 +1096,9 @@
 
   <!-- MANUTENÇÃO -->
   <section id="vManut" class="hide">
+    <div class="crumb">Suprimento › Produtos Usados</div>
+    <div class="ptopo"><h1>Manutenção</h1></div>
+    <div class="seg subnav" data-sub="manut"></div>
     <div class="kbar">
       <input id="mBusca" placeholder="Buscar modelo ou IMEI" autocomplete="off">
       <button type="button" class="btn ghost" id="mAtualizar">Atualizar</button>
@@ -1166,7 +1173,8 @@
   var VIEWS = [
     { id: 'dash', sec: 'vDash', nome: 'Dashboard', perm: 'dashboard' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
-    { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos', menu: 'Suprimento', desc: 'Aparelhos seminovos e outros produtos usados' },
+    { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Produtos', desc: 'Aparelhos seminovos e outros produtos usados' },
+    { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Manutenção', desc: 'Quadro de conserto dos aparelhos usados' },
     { id: 'vendas', sec: 'vVendas', nome: 'Vendas', perm: 'vender' },
     { id: 'pdv', sec: 'vPdv', nome: 'PDV', perm: 'vender' },
     { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios', menu: 'Suprimento', desc: 'Cadastro, preço e estoque dos produtos' },
@@ -1178,7 +1186,6 @@
     { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone', perm: 'avaliacao' },
     { id: 'cartao', sec: 'vCartao', nome: 'Cartão', perm: 'cartao' },
     { id: 'compra', sec: 'vCompra', nome: 'Calculadora de Compra', perm: 'compra' },
-    { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao' },
     { id: 'venda', sec: 'vVenda', nome: 'Produtos Usados', perm: 'precos', menu: 'Tabela de Preços', desc: 'Preço de venda dos aparelhos usados' },
     { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
     { id: 'bancos', sec: 'vBancos', nome: 'Caixas e Bancos', perm: 'financeiro', menu: 'Financeiro', desc: 'Saldos, extrato e lançamentos' },
@@ -1320,11 +1327,23 @@
   function abrirMenuNav(btn) {
     var aberto = $('navMenu'); fecharMenuNav(); if (aberto && aberto.dataset.de === btn.dataset.menu) return;
     var m = el('div', 'navmenu'); m.id = 'navMenu'; m.dataset.de = btn.dataset.menu; m.setAttribute('role', 'menu');
+    var subs = {};
     btn.dataset.vs.split(',').forEach(function (id) {
       var v = VIEWS.filter(function (z) { return z.id === id; })[0];
-      var b = el('button', id === S.view ? 'on' : '', v.nome); b.type = 'button'; b.setAttribute('role', 'menuitem');
+      var b = el('button', id === S.view ? 'on' : '', v.sub ? v.subNome || v.nome : v.nome); b.type = 'button'; b.setAttribute('role', 'menuitem');
       if (v.desc) b.appendChild(el('small', '', v.desc));
       b.onclick = function () { fecharMenuNav(); ir(id); };
+      if (v.sub) {
+        var g = subs[v.sub];
+        if (!g) {
+          var aberto = VIEWS.some(function (z) { return z.sub === v.sub && (z.id === S.view || (S.view === 'cadastro' && z.id === 'disp')); });
+          var hb = el('button', 'navsub' + (aberto ? ' aberto' : ''), v.sub + ' '); hb.type = 'button'; hb.setAttribute('aria-expanded', aberto ? 'true' : 'false'); hb.appendChild(el('span', 'ar', '▸'));
+          var box = el('div', 'navsubbox' + (aberto ? '' : ' hide'));
+          hb.onclick = function (e) { e.stopPropagation(); var on = box.classList.contains('hide'); box.classList.toggle('hide', !on); hb.classList.toggle('aberto', on); hb.setAttribute('aria-expanded', on ? 'true' : 'false'); posMenuNav(); };
+          m.appendChild(hb); m.appendChild(box); g = subs[v.sub] = box;
+        }
+        g.appendChild(b); return;
+      }
       m.appendChild(b);
     });
     document.body.appendChild(m); m._btn = btn; posMenuNav();
@@ -1372,6 +1391,10 @@
     if (id === 'caixa') carregarCaixa(true);
     if (id === 'conferencia') carregarCaixa(true);
     if (id === 'manut') carregarManut(false);
+    Array.prototype.forEach.call(document.querySelectorAll('.subnav'), function (sg) {
+      sg.innerHTML = ''; if (!(pode('produtos') && pode('manutencao'))) { sg.classList.add('hide'); return; } sg.classList.remove('hide');
+      [['disp', 'Produtos'], ['manut', 'Manutenção']].forEach(function (x) { var b = el('button', sg.dataset.sub === x[0] ? 'on' : '', x[1]); b.type = 'button'; b.onclick = function () { if (sg.dataset.sub !== x[0]) ir(x[0]); }; sg.appendChild(b); });
+    });
     window.scrollTo(0, 0);
   }
 
