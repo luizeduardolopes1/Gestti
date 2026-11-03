@@ -340,6 +340,37 @@
   .peacoes .acoes{max-width:420px;margin:0 0 0 auto}
   .crdpg{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:8px;margin-top:4px}.crdpg label{margin:0 0 2px;font-size:12px}.crdpg select,.crdpg input{margin:0;padding:8px 10px;font-size:14px}
   .g4{display:grid;gap:0 12px;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .g6{display:grid;gap:0 10px;grid-template-columns:repeat(6,minmax(0,1fr))}@media (max-width:820px){.g6{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .vdcol{max-width:1080px}
+  .clisel{border:1.5px solid var(--line);border-radius:12px;padding:12px;background:var(--soft2)}.clibt{display:flex;gap:16px;margin-top:6px}
+  .vditab{margin-top:10px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  .vdl{display:grid;grid-template-columns:minmax(0,1fr) 80px 130px 120px 110px 30px;gap:8px;align-items:center;padding:8px 10px;border-top:1px solid var(--line)}
+  .vdl.h{border-top:0;background:var(--soft2);font-size:12px;font-weight:700;color:var(--muted)}
+  .vdl .nm{font-weight:600;font-size:14px}.vdl .nm small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+  .vdl input{margin:0;padding:8px 10px}.vdl .prefix input{padding-left:36px}.vdl .q1{text-align:center}.vdl .tt{text-align:right;font-weight:700}
+  .vdl .x,.pgl .x,.pdvl .x,.pdvpg .x{border:0;background:none;font-size:20px;color:var(--muted);cursor:pointer}
+  .vdl .av{grid-column:1/-1;font-size:12px;color:var(--warn)}
+  @media (max-width:760px){.vdl{grid-template-columns:1fr 1fr 1fr}.vdl .nm{grid-column:1/-1}.vdl.h{display:none}.vdl .tt{text-align:left}}
+  .totgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px 18px;margin-top:12px}
+  .totgrid .tl{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding:5px 0;font-size:14px}.totgrid .tl.big{font-size:16px}.totgrid .tl.big b{color:var(--accent)}
+  .totgrid .tl.ok b,.totgrid .tl.ok span{color:var(--ok)}.totgrid .tl.warn b,.totgrid .tl.warn span{color:var(--warn)}
+  .pgl{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1.3fr) 30px;gap:8px;align-items:end;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px 10px;margin-bottom:8px}
+  .pgl label{margin:0 0 3px;font-size:12px}.pgl select,.pgl input{margin:0}.pgl .pgx{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}.pgl .pgx:empty{display:none}
+  .pgl .cb{grid-column:1/-1;font-size:12.5px;color:var(--muted)}
+  @media (max-width:640px){.pgl{grid-template-columns:1fr 1fr}.pgl>div:nth-child(3){grid-column:1/-1}}
+  .vdrod .rodw{display:flex;justify-content:space-between;align-items:center;gap:12px}.vdrod .rodl .k{font-size:12px;color:var(--muted);font-weight:700}.vdrod .rodl .v{font-size:22px;font-weight:800;color:var(--accent)}.vdrod .rodl .s{font-size:12.5px;color:var(--warn)}
+  .vdrod .acoes{margin:0;max-width:420px;flex:1}
+  .fdet{margin:-2px 0 10px;padding:0 0 0 4px}.fdet summary{cursor:pointer;font-size:13px;color:var(--navy-2);font-weight:600}
+  .pdvg{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;align-items:start}@media (max-width:900px){.pdvg{grid-template-columns:1fr}}
+  .pdvlado{position:sticky;top:64px}.pdvtop{display:flex;gap:12px;align-items:center;margin-bottom:10px}.pdvtop select{margin:0;max-width:260px}
+  .pdvbusca{font-size:18px;padding:14px 16px}
+  .pdvcar{margin-top:10px}.pdvl{display:grid;grid-template-columns:minmax(0,1fr) 110px 110px 30px;gap:8px;align-items:center;padding:10px 4px;border-top:1px solid var(--line)}
+  .pdvl .nm{font-weight:600}.pdvl .nm small{display:block;font-weight:400;color:var(--muted);font-size:12px}.pdvl .tt{text-align:right;font-weight:700}
+  .pdvl .qt{display:flex;align-items:center;justify-content:center;gap:8px}.pdvl .qt button{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);font-size:16px;cursor:pointer;color:var(--ink)}
+  .pdvcli{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin:4px 0 6px}.pdvcli small{color:var(--muted)}
+  .pdvtot{background:var(--navy);color:#fff;border-radius:12px;padding:12px 14px;margin:12px 0}.pdvtot .k{font-size:12px;opacity:.85}.pdvtot .v{font-size:30px;font-weight:800}
+  .pdvfp{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}.pdvfp .btn{width:auto;padding:8px 12px;font-size:14px}
+  .pdvpg{border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:6px}.pdvpg .hd{display:flex;justify-content:space-between;align-items:center}.pdvpg input,.pdvpg select{margin:6px 0 0}.pdvpg .cb{font-size:12.5px;color:var(--muted);margin-top:4px}
   @media (max-width:820px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
   details.sec{padding:0}details.sec>summary{list-style:none;cursor:pointer;padding:16px;font-size:13px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:var(--accent);display:flex;justify-content:space-between;align-items:center}
   details.sec>summary::-webkit-details-marker{display:none}details.sec>summary::after{content:'▾';font-size:16px;transition:transform .15s}details.sec[open]>summary::after{transform:rotate(180deg)}
@@ -556,6 +587,12 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- PDV -->
+  <section id="vPdv" class="hide">
+    <div class="ptopo"><h1>PDV</h1><div class="hint">Venda rápida no balcão</div></div>
+    <div id="pdvCorpo"></div>
   </section>
 
   <!-- CRM -->
@@ -983,6 +1020,7 @@
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos' },
     { id: 'vendas', sec: 'vVendas', nome: 'Vendas', perm: 'vender' },
+    { id: 'pdv', sec: 'vPdv', nome: 'PDV', perm: 'vender' },
     { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios' },
     { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos', menu: 'Tabela de Preços', desc: 'Preço e precificação dos produtos novos' },
     { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone', perm: 'avaliacao' },
@@ -1173,6 +1211,7 @@
     if (id === 'bancos') carregarFin(false);
     if (id === 'pagar') carregarPagar(false);
     if (id === 'cred') carregarCred(false);
+    if (id === 'pdv') abrirPdv();
     if (id === 'acess') carregarAcess(false);
     if (id === 'manut') carregarManut(false);
     window.scrollTo(0, 0);
@@ -1194,7 +1233,7 @@
   // =========================================================
   var V = null;
   function formasV() { var l = (S.u && S.u.formas) || []; return l.length ? l : [{ id: '', nome: 'PIX', cartao: 'nao' }, { id: '', nome: 'Dinheiro', cartao: 'nao' }, { id: '', nome: 'Débito', cartao: 'debito' }, { id: '', nome: 'Crédito', cartao: 'credito' }]; }
-  function novaPag(fo, valor) { fo = fo || formasV()[0]; return { formaId: fo.id, forma: fo.nome, cartao: fo.cartao, valor: valor || '', parcelas: '12x' }; }
+  function novaPag(fo, valor) { fo = fo || formasV()[0]; return { formaId: fo.id, forma: fo.nome, cartao: fo.cartao, valor: valor || '', parcelas: '', categoria: (S.u.categoriasRec || [''])[0] }; }
   function parcTxt(p) { return p.parcelas > 1 ? ' ' + p.parcelas + 'x' : ''; }
   function soDig(x) { return String(x || '').replace(/\D/g, ''); }
   function fmtCPF(c) { c = soDig(c); return c.length === 11 ? c.slice(0, 3) + '.' + c.slice(3, 6) + '.' + c.slice(6, 9) + '-' + c.slice(9) : c; }
@@ -1220,20 +1259,60 @@
     if (S.vdPreAc) { var y = S.vdPreAc; S.vdPreAc = null; abaVendas('nova'); addAcess(y); return; }
     abaVendas('hist');
   }
+  // ---------- regras de pagamento (iguais às do servidor) ----------
+  var UPG = '__upgrade';
+  function catRec() { return (S.u && S.u.categoriasRec) || ['Recebimento com vendas de produtos']; }
+  function taxaFormaSite(fo, n) {
+    var t = fo.taxas || {};
+    if (t[String(n)] !== undefined && t[String(n)] !== '') return (+t[String(n)] || 0) / 100;
+    if (fo.cartao === 'debito') { var d = taxa('Débito'); return d ? d.taxa : 0; }
+    if (fo.cartao === 'credito') { var c = taxa(n + 'x'); return c ? c.taxa : 0; }
+    return 0;
+  }
+  function diaUtilSite(iso, n) { var q = iso.split('-').map(Number), d = new Date(q[0], q[1] - 1, q[2]), k = 0; while (k < n) { d.setDate(d.getDate() + 1); if (d.getDay() && d.getDay() !== 6) k++; } while (!d.getDay() || d.getDay() === 6) d.setDate(d.getDate() + 1); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function recebSite(receb, liq, n, iso) {
+    var r = String(receb || 'hora'), m = /^(dias|uteis):(\d+)$/.exec(r);
+    if (r === 'mensal') { var out = [], pc = Math.floor(liq / n * 100) / 100; for (var k = 1; k <= n; k++) out.push({ data: isoAdd(iso, 30 * k), valor: k < n ? pc : r2(liq - pc * (n - 1)) }); return out; }
+    if (m) return [{ data: m[1] === 'uteis' ? diaUtilSite(iso, +m[2]) : isoAdd(iso, +m[2]), valor: liq }];
+    return [{ data: iso, valor: liq }];
+  }
+  function formaDe(p) { return formasV().filter(function (f) { return f.id === p.formaId; })[0] || formasV().filter(function (f) { return f.nome === p.forma; })[0]; }
+  function calcPag(p, iso) {
+    var fo = formaDe(p), v = num(p.valor) || 0; if (!fo || !v || fo.cartao === 'crediario') return null;
+    var n = fo.cartao === 'credito' ? (parseInt(p.parcelas, 10) || 1) : 1, tx = taxaFormaSite(fo, n), cob, liq;
+    if (fo.repassa && tx > 0) { cob = r2(v / (1 - tx)); liq = v; } else { cob = v; liq = r2(v * (1 - tx)); }
+    return { n: n, taxa: tx, cobrado: cob, liquido: liq, recs: recebSite(fo.receb, liq, n, iso || isoHoje()), fo: fo };
+  }
+  function textoReceb(c) {
+    if (!c) return '';
+    var t = [];
+    if (c.fo.repassa && c.taxa) t.push('Cobrar na maquininha: ' + brl(c.cobrado) + (c.n > 1 ? ' (' + c.n + 'x de ' + brl(c.cobrado / c.n) + ')' : ''));
+    if (c.taxa) t.push('Taxa ' + (c.taxa * 100).toFixed(2).replace('.', ',') + '%' + (c.fo.repassa ? ' (repassada ao cliente)' : ''));
+    t.push('Líquido ' + brl(c.liquido));
+    t.push(c.recs.length > 1 ? 'cai em ' + c.recs.length + ' parcelas mensais de ' + brl(c.recs[0].valor) + ' a partir de ' + isoBR(c.recs[0].data) : 'cai ' + (c.recs[0].data === isoHoje() ? 'hoje' : 'em ' + isoBR(c.recs[0].data)));
+    return t.join(' · ');
+  }
   function novaVenda() {
     var p0 = novaPag(); p0.auto = true;
-    V = { itens: [], acess: [], troca: [], pags: [p0], cli: { cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' },
-          loja: LS.get('loja', '') || (S.u.loja !== 'Manutenção' ? S.u.loja : ''), obs: '' };
+    V = { cli: { id: '', cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' }, cliModo: 'busca', credito: undefined,
+          vendedorId: S.u.id, loja: LS.get('loja', '') || (S.u.loja !== 'Manutenção' ? S.u.loja : ''),
+          itens: [], acess: [], troca: [], pags: [p0], desconto: '', descTipo: 'R$', prazo: '', despesas: '', dataVenda: isoHoje(), dataSaida: '', dataPrevista: '', obs: '', obsInt: '' };
     desenharVenda();
   }
   function totaisVenda() {
-    var ti = r2(V.itens.reduce(function (a, x) { return a + (num(x.preco) || 0); }, 0) + V.acess.reduce(function (a, x) { return a + (num(x.preco) || 0) * (parseInt(x.qtd, 10) || 0); }, 0)), tt = r2(V.troca.reduce(function (a, x) { return a + (num(x.valor) || 0); }, 0));
-    return { itens: ti, troca: tt, pagar: r2(ti - tt), pago: r2(V.pags.reduce(function (a, p) { return a + (num(p.valor) || 0); }, 0)) };
+    var bruto = 0, dItens = 0, qtd = 0;
+    V.itens.forEach(function (x) { bruto += num(x.preco) || 0; dItens += num(x.desc) || 0; qtd += 1; });
+    V.acess.forEach(function (x) { var q = parseInt(x.qtd, 10) || 0; bruto += (num(x.preco) || 0) * q; dItens += num(x.desc) || 0; qtd += q; });
+    var ti = r2(bruto - dItens), dv = num(V.desconto) || 0; if (V.descTipo === '%') dv = r2(ti * dv / 100);
+    var desp = num(V.despesas) || 0, tv = r2(ti - dv + desp), tt = r2(V.troca.reduce(function (a, x) { return a + (num(x.valor) || 0); }, 0));
+    var pago = r2(V.pags.reduce(function (a, p) { return a + (p.formaId === UPG ? 0 : (num(p.valor) || 0)); }, 0));
+    var liq = r2(V.pags.reduce(function (a, p) { var c = p.formaId === UPG ? null : calcPag(p, V.dataVenda); return a + (c ? c.liquido : 0); }, 0));
+    return { linhas: V.itens.length + V.acess.length, qtd: qtd, bruto: r2(bruto), descItens: r2(dItens), itens: ti, descVenda: r2(dv), despesas: r2(desp), venda: tv, troca: tt, pagar: r2(tv - tt), pago: pago, liquido: liq };
   }
   function addItem(x) {
     if (!V) novaVenda();
     if (V.itens.some(function (i) { return i.imei === x.imei; })) return;
-    V.itens.push({ linha: x.linha, imei: x.imei, modelo: x.modelo, cor: x.cor, classif: x.classif, bateria: x.bateria, loja: x.loja, tabela: x.preco || null, preco: x.preco ? String(x.preco).replace('.', ',') : '' });
+    V.itens.push({ linha: x.linha, imei: x.imei, modelo: x.modelo, cor: x.cor, classif: x.classif, bateria: x.bateria, loja: x.loja, tabela: x.preco || null, preco: x.preco ? String(x.preco).replace('.', ',') : '', desc: '' });
     if (!V.loja && x.loja !== 'Manutenção') V.loja = x.loja;
     desenharVenda();
   }
@@ -1241,270 +1320,322 @@
     if (!V) novaVenda();
     var j = V.acess.filter(function (a) { return a.id === x.id; })[0];
     if (j) j.qtd = String((parseInt(j.qtd, 10) || 0) + 1);
-    else V.acess.push({ id: x.id, nome: x.nome, qtd: '1', preco: x.preco ? String(x.preco.toFixed(2)).replace('.', ',') : '', tabela: x.preco || null, estoque: x.estoque || {} });
+    else V.acess.push({ id: x.id, nome: x.nome, sku: x.sku || '', unidade: x.unidade || 'UN', qtd: '1', preco: x.preco ? String(x.preco.toFixed(2)).replace('.', ',') : '', tabela: x.preco || null, estoque: x.estoque || {}, desc: '' });
     desenharVenda();
   }
   function garantiaAte(ms, meses) { var d = new Date(ms); d.setMonth(d.getMonth() + (meses || 3)); return dataBR(d.getTime()); }
-
+  // busca unificada: aparelhos seminovos do estoque + produtos cadastrados
+  function buscaProdutos(q, cb, excl) {
+    var precisa = [];
+    if (pode('produtos') && !S.disp) precisa.push(call('disponiveis', [S.token]).then(function (l) { S.disp = l; }));
+    if (pode('acessorios') && !S.ac) precisa.push(call('acessorios', [S.token]).then(function (d) { S.ac = d; }));
+    if (precisa.length) { cb(null, 'Carregando produtos…'); Promise.all(precisa).then(function () { buscaProdutos(q, cb, excl); }).catch(function (e) { cb([], String(e)); }); return; }
+    q = q.trim().toLowerCase(); var termos = q.split(/\s+/), out = [];
+    var prods = S.ac ? S.ac.produtos.filter(function (x) { return x.formato !== 'variacoes'; }) : [];
+    var ex = prods.filter(function (x) { return (x.codigo && x.codigo.toLowerCase() === q) || (x.sku && x.sku.toLowerCase() === q); });
+    if (ex.length === 1) return cb([{ tipo: 'p', x: ex[0], exato: true }]);
+    var apx = (S.disp || []).filter(function (x) { return !x.manut && x.status === 'Disponível' && (x.imei === q || x.imei2 === q); });
+    if (apx.length === 1) return cb([{ tipo: 'a', x: apx[0], exato: true }]);
+    (S.disp || []).forEach(function (x) {
+      var ja = excl || (V ? V.itens.map(function (i) { return i.imei; }) : []);
+      if (x.manut || x.status !== 'Disponível' || ja.indexOf(x.imei) > -1) return;
+      var t = [x.modelo, x.cor, x.classif, x.imei, x.imei2, x.serial, x.sku].join(' ').toLowerCase();
+      if (termos.every(function (k) { return t.indexOf(k) > -1; })) out.push({ tipo: 'a', x: x });
+    });
+    prods.forEach(function (x) { var t = (x.nome + ' ' + x.sku + ' ' + x.codigo + ' ' + x.grupo).toLowerCase(); if (termos.every(function (k) { return t.indexOf(k) > -1; })) out.push({ tipo: 'p', x: x }); });
+    cb(out.slice(0, 10));
+  }
   function desenharVenda() {
     var box = $('vdNova'); box.innerHTML = '';
-    var g = el('div', 'vdgrid'), esq = el('div'), dir = el('div', 'vdlado'); g.appendChild(esq); g.appendChild(dir); box.appendChild(g);
-    // ---- aparelhos vendidos
-    var c1 = cartao(esq, 'Aparelhos vendidos');
-    var busca = inp('text', 'Buscar no estoque: modelo, IMEI ou serial'); busca.setAttribute('aria-label', 'Buscar aparelho no estoque'); c1.appendChild(busca);
-    var res = el('div'); c1.appendChild(res);
-    function buscar() {
-      res.innerHTML = '';
-      var q = busca.value.trim().toLowerCase(); if (q.length < 2) return;
-      if (!S.disp) { res.appendChild(el('div', 'hint', 'Carregando estoque…')); call('disponiveis', [S.token]).then(function (l) { S.disp = l; buscar(); }).catch(function (e) { res.innerHTML = ''; res.appendChild(el('div', 'hint', e)); }); return; }
-      var termos = q.split(/\s+/);
-      var l = S.disp.filter(function (x) {
-        if (x.manut || x.status !== 'Disponível' || V.itens.some(function (i) { return i.imei === x.imei; })) return false;
-        var t = [x.modelo, x.cor, x.classif, x.imei, x.imei2, x.serial, x.sku].join(' ').toLowerCase();
-        return termos.every(function (k) { return t.indexOf(k) > -1; });
-      }).slice(0, 8);
-      if (!l.length) { res.appendChild(el('div', 'hint', 'Nenhum aparelho disponível encontrado.')); return; }
-      var lst = el('div', 'vdres');
-      l.forEach(function (x) {
-        var b = el('button'); b.type = 'button';
-        var a = el('span', '', x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classif); a.appendChild(el('small', '', 'IMEI ' + x.imei + ' · ' + x.loja + (typeof x.bateria === 'number' ? ' · bateria ' + x.bateria + '%' : '')));
-        b.appendChild(a); b.appendChild(el('b', '', x.preco ? brl(x.preco) : 'sem preço'));
-        b.onclick = function () { addItem(x); };
-        lst.appendChild(b);
-      });
-      res.appendChild(lst);
+    var W = el('div', 'vdcol'); box.appendChild(W);
+    // ---- 1. cliente
+    var c1 = el('div', 'card pecard'); c1.appendChild(el('h2', '', 'Cliente')); W.appendChild(c1);
+    var C = V.cli;
+    if (V.cliModo === 'sel') {
+      var sel = el('div', 'clisel'), nm = el('div', 'pnome', C.nome); sel.appendChild(nm);
+      sel.appendChild(el('div', 'psub', [C.cpf ? fmtDoc(C.cpf) : 'sem CPF', C.whats ? fmtFone(C.whats) : '', C.cidade].filter(Boolean).join(' · ')));
+      if (V.credito && V.credito.limite) sel.appendChild(el('div', 'psub', 'Crédito: limite ' + brl(V.credito.limite) + ' · disponível ' + brl(Math.max(0, V.credito.disponivel)) + (V.credito.atrasado ? ' · ' + V.credito.qtdAtraso + ' fatura(s) atrasada(s)' : '')));
+      var bt = el('div', 'clibt'), tr = el('button', 'lnk', 'Trocar cliente'), ed = el('button', 'lnk', 'Editar dados'); tr.type = ed.type = 'button'; bt.appendChild(ed); bt.appendChild(tr); sel.appendChild(bt);
+      tr.onclick = function () { V.cli = { id: '', cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' }; V.credito = undefined; V.cliModo = 'busca'; desenharVenda(); };
+      ed.onclick = function () { V.cliModo = 'novo'; desenharVenda(); };
+      c1.appendChild(sel);
+    } else if (V.cliModo === 'busca') {
+      var bq = inp('text', 'Buscar cliente cadastrado: nome, CPF ou WhatsApp'); bq.setAttribute('aria-label', 'Buscar cliente'); c1.appendChild(bq);
+      var rq = el('div'); c1.appendChild(rq);
+      var nv = el('button', 'btn ghost', '+ Cadastrar novo cliente'); nv.type = 'button'; nv.style.cssText = 'width:auto;margin-top:10px'; c1.appendChild(nv);
+      nv.onclick = function () { V.cliModo = 'novo'; V.cli.id = ''; desenharVenda(); };
+      var tmr = null;
+      bq.oninput = function () {
+        clearTimeout(tmr); rq.innerHTML = ''; var q = bq.value.trim(); if (q.length < 2) return;
+        tmr = setTimeout(function () {
+          rq.innerHTML = ''; rq.appendChild(el('div', 'hint', 'Procurando…'));
+          call('clientesBusca', [S.token, q]).then(function (l) {
+            rq.innerHTML = ''; if (bq.value.trim() !== q) return;
+            if (!l.length) { rq.appendChild(el('div', 'hint', 'Nenhum cliente encontrado. Use "+ Cadastrar novo cliente".')); return; }
+            var lst = el('div', 'vdres');
+            l.forEach(function (x) {
+              var b = el('button'); b.type = 'button'; var a = el('span', '', x.nome); a.appendChild(el('small', '', [x.cpf ? fmtDoc(x.cpf) : '', x.whats ? fmtFone(x.whats) : '', x.cidade].filter(Boolean).join(' · ')));
+              b.appendChild(a); b.onclick = function () { V.cli = { id: x.id, cpf: x.cpf, nome: x.nome, whats: x.whats, cep: x.cep, endereco: x.endereco, bairro: x.bairro, cidade: x.cidade }; V.credito = x.credito; V.credCpf = x.cpf; V.cliModo = 'sel'; desenharVenda(); };
+              lst.appendChild(b);
+            });
+            rq.appendChild(lst);
+          }).catch(function (e) { rq.innerHTML = ''; rq.appendChild(el('div', 'hint', e)); });
+        }, 300);
+      };
+    } else {
+      var vl = el('button', 'lnk', '← Buscar cliente cadastrado'); vl.type = 'button'; c1.appendChild(vl);
+      vl.onclick = function () { V.cliModo = C.id ? 'sel' : 'busca'; desenharVenda(); };
+      var info = el('div', 'hint');
+      var g1 = el('div', 'g3'), a1 = el('div'), a2 = el('div'), a3 = el('div'); [a1, a2, a3].forEach(function (z) { g1.appendChild(z); }); c1.appendChild(g1);
+      var cpf = campo(a1, 'CPF' + (C.id ? '' : ' *'), inp('text', '000.000.000-00')); cpf.inputMode = 'numeric'; cpf.maxLength = 18; cpf.value = fmtDoc(C.cpf);
+      var nome = campo(a2, 'Nome completo *', inp('text', 'Nome do cliente')); nome.maxLength = 80; nome.value = C.nome;
+      var wpp = campo(a3, 'WhatsApp' + (C.id ? '' : ' *'), inp('text', '(22) 99999-9999')); wpp.inputMode = 'tel'; wpp.maxLength = 16; wpp.value = fmtFone(C.whats);
+      c1.appendChild(info);
+      var g2 = el('div', 'g4'), b1 = el('div'), b2 = el('div'), b3 = el('div'), b4 = el('div'); [b1, b2, b3, b4].forEach(function (z) { g2.appendChild(z); }); c1.appendChild(g2);
+      var cep = campo(b1, 'CEP', inp('text', '00000-000')); cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = C.cep;
+      var end = campo(b2, 'Endereço (rua e número)', inp('text', 'Ex.: Rua Principal, 120')); end.maxLength = 120; end.value = C.endereco;
+      var bai = campo(b3, 'Bairro', inp('text', '')); bai.value = C.bairro;
+      var cid = campo(b4, 'Cidade', inp('text', 'Ex.: Bom Jardim')); cid.value = C.cidade;
+      nome.oninput = function () { C.nome = nome.value; }; end.oninput = function () { C.endereco = end.value; }; bai.oninput = function () { C.bairro = bai.value; }; cid.oninput = function () { C.cidade = cid.value; };
+      wpp.oninput = function () { C.whats = soDig(wpp.value).slice(0, 11); }; wpp.onblur = function () { wpp.value = fmtFone(C.whats); };
+      cpf.oninput = function () {
+        C.cpf = soDig(cpf.value).slice(0, 14); info.style.color = '';
+        if (V.credCpf !== C.cpf) { V.credito = undefined; }
+        if (C.cpf.length !== 11) { info.textContent = ''; return; }
+        if (!cpfOk(C.cpf)) { info.textContent = 'CPF inválido: confira os números.'; info.style.color = 'var(--err)'; return; }
+        cpf.value = fmtCPF(C.cpf); if (C.id) return; info.textContent = 'Procurando cliente…';
+        call('clienteBuscar', [S.token, C.cpf]).then(function (r) {
+          V.credito = r ? r.credito || null : null; V.credCpf = C.cpf;
+          if (!r) { info.textContent = 'Cliente novo: preencha os dados.'; return; }
+          info.textContent = '✓ Cliente já cadastrado (' + r.compras + ' compra' + (r.compras === 1 ? '' : 's') + '). Dados preenchidos.'; info.style.color = 'var(--ok)';
+          ['nome', 'whats', 'cep', 'endereco', 'bairro', 'cidade'].forEach(function (k) { C[k] = r[k] || ''; });
+          nome.value = C.nome; wpp.value = fmtFone(C.whats); cep.value = C.cep; end.value = C.endereco; bai.value = C.bairro; cid.value = C.cidade;
+        }).catch(function () { info.textContent = ''; });
+      };
+      cep.oninput = function () {
+        var d = soDig(cep.value).slice(0, 8); C.cep = d; if (d.length !== 8) return; cep.value = d.slice(0, 5) + '-' + d.slice(5);
+        fetch('https://viacep.com.br/ws/' + d + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) {
+          if (!j || j.erro) return;
+          if (!C.endereco && j.logradouro) { C.endereco = j.logradouro + ', '; end.value = C.endereco; end.focus(); }
+          if (!C.bairro && j.bairro) { C.bairro = j.bairro; bai.value = C.bairro; }
+          if (!C.cidade && j.localidade) { C.cidade = j.localidade + (j.uf ? '/' + j.uf : ''); cid.value = C.cidade; }
+        }).catch(function () {});
+      };
     }
-    busca.oninput = buscar;
-    if (!V.itens.length) c1.appendChild(el('div', 'hint', 'Digite pelo menos 2 letras ou números. Também dá para vender pela caixa lateral de Produtos Usados (botão "Vender").'));
-    V.itens.forEach(function (it, i) {
-      var b = el('div', 'vdit'), hd = el('div', 'hd'), t = el('div', 't', it.modelo + ' ' + String(it.cor || '').toUpperCase() + ' · ' + it.classif);
-      t.appendChild(el('small', '', 'IMEI ' + it.imei + ' · ' + it.loja + (typeof it.bateria === 'number' ? ' · bateria ' + it.bateria + '%' : '') + ' · garantia 3 meses'));
-      var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar da venda'; x.setAttribute('aria-label', 'Tirar ' + it.modelo); x.onclick = function () { V.itens.splice(i, 1); desenharVenda(); };
-      hd.appendChild(t); hd.appendChild(x); b.appendChild(hd);
-      var pf = el('div', 'prefix'), ip = el('input'); ip.inputMode = 'decimal'; ip.value = it.preco; ip.placeholder = '0,00'; ip.setAttribute('aria-label', 'Preço de venda');
-      pf.appendChild(el('span', '', 'R$')); pf.appendChild(ip); var lb = el('label', '', 'Preço de venda'); b.appendChild(lb); b.appendChild(pf);
-      var av = el('div', 'hint'); b.appendChild(av);
-      function aviso() {
-        var pv = num(ip.value), msgs = [];
-        if (it.tabela) msgs.push('Tabela: ' + brl(it.tabela) + (pv && pv < it.tabela ? ' · desconto de ' + brl(it.tabela - pv) : ''));
-        if (V.loja && it.loja !== V.loja) msgs.push('Atenção: este aparelho está em ' + it.loja + '.');
-        av.textContent = msgs.join(' '); av.style.color = pv && it.tabela && pv < it.tabela ? 'var(--warn)' : '';
-      }
-      ip.oninput = function () { it.preco = ip.value; aviso(); resumo(); };
-      aviso(); c1.appendChild(b);
-    });
-    // ---- acessórios
-    if (pode('acessorios')) {
-      var ca = cartao(esq, 'Produtos vendidos (acessórios, kits…)');
-      var bA = inp('text', 'Buscar produto: nome, SKU ou código de barras'); bA.setAttribute('aria-label', 'Buscar produto'); ca.appendChild(bA);
-      var rA = el('div'); ca.appendChild(rA);
-      var buscarAc = function () {
-        rA.innerHTML = '';
-        var q = bA.value.trim().toLowerCase(); if (q.length < 2) return;
-        if (!S.ac) { rA.appendChild(el('div', 'hint', 'Carregando produtos…')); call('acessorios', [S.token]).then(function (d) { S.ac = d; buscarAc(); }).catch(function (e) { rA.innerHTML = ''; rA.appendChild(el('div', 'hint', e)); }); return; }
-        var vend = S.ac.produtos.filter(function (x) { return x.formato !== 'variacoes'; });
-        var ex = vend.filter(function (x) { return (x.codigo && x.codigo.toLowerCase() === q) || (x.sku && x.sku.toLowerCase() === q); });
-        if (ex.length === 1) { bA.value = ''; addAcess(ex[0]); return; }
-        var termos = q.split(/\s+/);
-        var l = vend.filter(function (x) { var t = (x.nome + ' ' + x.sku + ' ' + x.codigo + ' ' + x.grupo).toLowerCase(); return termos.every(function (k) { return t.indexOf(k) > -1; }); }).slice(0, 8);
-        if (!l.length) { rA.appendChild(el('div', 'hint', 'Nenhum produto encontrado.')); return; }
+    // ---- 2. vendedor e loja
+    var c2 = el('div', 'card pecard'); W.appendChild(c2);
+    var g3 = el('div', 'g2'), v1 = el('div'), v2 = el('div'); g3.appendChild(v1); g3.appendChild(v2); c2.appendChild(g3);
+    var vs = el('select'); var vends = (S.u.vendedores || []).slice(); if (!vends.some(function (x) { return x.id === S.u.id; })) vends.unshift({ id: S.u.id, nome: S.u.nome });
+    vends.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; vs.appendChild(o); }); vs.value = V.vendedorId; vs.onchange = function () { V.vendedorId = vs.value; };
+    campo(v1, 'Vendedor *', vs, true);
+    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), V.loja, 'Escolha a loja…'); campo(v2, 'Loja da venda *', lj, true);
+    lj.onchange = function () { V.loja = lj.value; LS.set('loja', lj.value); desenharVenda(); };
+    // ---- 3. produtos
+    var c3 = el('div', 'card pecard'); c3.appendChild(el('h2', '', 'Produtos')); W.appendChild(c3);
+    var busca = inp('text', 'Buscar: modelo, IMEI, nome do produto, SKU ou código de barras'); busca.setAttribute('aria-label', 'Buscar produto'); c3.appendChild(busca);
+    var res = el('div'); c3.appendChild(res);
+    function buscar() {
+      res.innerHTML = ''; var q = busca.value.trim(); if (q.length < 2) return;
+      buscaProdutos(q, function (l, msgTxt) {
+        res.innerHTML = '';
+        if (!l) { res.appendChild(el('div', 'hint', msgTxt)); return; }
+        if (l.length === 1 && l[0].exato) { busca.value = ''; if (l[0].tipo === 'a') addItem(l[0].x); else addAcess(l[0].x); return; }
+        if (!l.length) { res.appendChild(el('div', 'hint', msgTxt || 'Nada encontrado.')); return; }
         var lst = el('div', 'vdres');
-        l.forEach(function (x) {
-          var b = el('button'); b.type = 'button'; var naLoja = V.loja ? (x.estoque[V.loja] || 0) : x.total;
-          var a = el('span', '', x.nome + (x.formato === 'composicao' ? ' (kit)' : '')); a.appendChild(el('small', '', (V.loja ? naLoja + ' em ' + V.loja : x.total + ' no total') + (x.sku ? ' · SKU ' + x.sku : '')));
+        l.forEach(function (o) {
+          var x = o.x, b = el('button'), a = null; b.type = 'button';
+          if (o.tipo === 'a') { a = el('span', '', x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classif); a.appendChild(el('small', '', 'Seminovo · IMEI ' + x.imei + ' · ' + x.loja + (typeof x.bateria === 'number' ? ' · bateria ' + x.bateria + '%' : ''))); }
+          else { var naLoja = V.loja ? (x.estoque[V.loja] || 0) : x.total; a = el('span', '', x.nome + (x.formato === 'composicao' ? ' (kit)' : '')); a.appendChild(el('small', '', 'Produto · ' + (V.loja ? naLoja + ' em ' + V.loja : x.total + ' no total') + (x.sku ? ' · SKU ' + x.sku : ''))); if (!(naLoja > 0)) b.style.opacity = '.55'; }
           b.appendChild(a); b.appendChild(el('b', '', x.preco ? brl(x.preco) : 'sem preço'));
-          if (!(naLoja > 0)) b.style.opacity = '.55';
-          b.onclick = function () { addAcess(x); };
+          b.onclick = function () { if (o.tipo === 'a') addItem(x); else addAcess(x); };
           lst.appendChild(b);
         });
-        rA.appendChild(lst);
-      };
-      bA.oninput = buscarAc;
-      if (!V.acess.length) ca.appendChild(el('div', 'hint', 'Com leitor de código de barras, é só ler o código aqui que o produto entra na venda.'));
-      V.acess.forEach(function (it, i) {
-        var b = el('div', 'vdit vdac'), hd = el('div', 'hd'), t = el('div', 't', it.nome);
-        var tem = V.loja ? (it.estoque[V.loja] || 0) : null;
-        t.appendChild(el('small', '', (tem === null ? 'Escolha a loja para ver o estoque' : tem + ' em estoque em ' + V.loja) + ' · garantia 90 dias'));
-        var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar da venda'; x.onclick = function () { V.acess.splice(i, 1); desenharVenda(); };
-        hd.appendChild(t); hd.appendChild(x); b.appendChild(hd);
-        var qp = el('div', 'qp'), w1 = el('div'), w2 = el('div'); qp.appendChild(w1); qp.appendChild(w2); b.appendChild(qp);
-        var qi = inp('number', '1'); qi.min = 1; qi.value = it.qtd; campo(w1, 'Qtd.', qi);
-        var pf = el('div', 'prefix'), ip = el('input'); ip.inputMode = 'decimal'; ip.value = it.preco; ip.placeholder = '0,00'; pf.appendChild(el('span', '', 'R$')); pf.appendChild(ip); campo(w2, 'Preço unitário', pf);
-        var av = el('div', 'hint'); b.appendChild(av);
-        var aviso = function () {
-          var q = parseInt(qi.value, 10) || 0, pv = num(ip.value), ms = [];
-          if (q && pv) ms.push('Subtotal ' + brl(q * pv));
-          if (it.tabela && pv && pv < it.tabela) ms.push('desconto de ' + brl((it.tabela - pv) * q));
-          if (tem !== null && q > tem) ms.push('ATENÇÃO: só tem ' + tem + ' nesta loja');
-          av.textContent = ms.join(' · '); av.style.color = tem !== null && q > tem ? 'var(--err)' : '';
-        };
-        qi.oninput = function () { it.qtd = qi.value; aviso(); resumo(); };
-        ip.oninput = function () { it.preco = ip.value; aviso(); resumo(); };
-        aviso(); ca.appendChild(b);
+        res.appendChild(lst);
       });
     }
-    // ---- troca
-    var c2 = cartao(esq, 'Aparelho do cliente na troca (opcional)');
-    V.troca.forEach(function (t, i) { c2.appendChild(cardTroca(t, i)); });
-    var bt = el('button', 'btn ghost', '+ Adicionar aparelho na troca'); bt.type = 'button'; bt.style.marginTop = '10px';
-    bt.onclick = function () { V.troca.push({ modelo: '', cor: '', imei: '', imei2: '', serial: '', bateria: '', classificacao: '', valor: '', consulta: '', obs: '' }); desenharVenda(); };
-    c2.appendChild(bt);
-    if (V.troca.length) c2.appendChild(el('div', 'hint', 'O aparelho da troca entra no estoque como Recompra, na loja da venda, com o valor da troca como custo.'));
-    // ---- cliente
-    var c3 = cartao(esq, 'Cliente');
-    var C = V.cli, info = el('div', 'hint');
-    var cpf = campo(c3, 'CPF *', inp('text', '000.000.000-00'), true); cpf.inputMode = 'numeric'; cpf.maxLength = 14; cpf.value = fmtCPF(C.cpf);
-    c3.appendChild(info);
-    var nome = campo(c3, 'Nome completo *', inp('text', 'Nome do cliente')); nome.maxLength = 80; nome.value = C.nome;
-    var wpp = campo(c3, 'WhatsApp *', inp('text', '(22) 99999-9999')); wpp.inputMode = 'tel'; wpp.maxLength = 16; wpp.value = fmtFone(C.whats);
-    var lc = el('div', 'row'), w1 = el('div'), w2 = el('div'); lc.appendChild(w1); lc.appendChild(w2); c3.appendChild(lc);
-    var cep = campo(w1, 'CEP', inp('text', '00000-000')); cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = C.cep;
-    var cid = campo(w2, 'Cidade *', inp('text', 'Ex.: Bom Jardim')); cid.value = C.cidade;
-    var end = campo(c3, 'Endereço (rua e número) *', inp('text', 'Ex.: Rua Principal, 120')); end.maxLength = 120; end.value = C.endereco;
-    var bai = campo(c3, 'Bairro', inp('text', '')); bai.value = C.bairro;
-    nome.oninput = function () { C.nome = nome.value; }; end.oninput = function () { C.endereco = end.value; }; bai.oninput = function () { C.bairro = bai.value; }; cid.oninput = function () { C.cidade = cid.value; };
-    wpp.oninput = function () { C.whats = soDig(wpp.value).slice(0, 11); };
-    wpp.onblur = function () { wpp.value = fmtFone(C.whats); };
-    cpf.oninput = function () {
-      C.cpf = soDig(cpf.value).slice(0, 11); info.style.color = '';
-      if (V.credito !== undefined && V.credCpf !== C.cpf) { V.credito = undefined; if (temCred()) desenharPags(); }
-      if (C.cpf.length < 11) { info.textContent = ''; return; }
-      if (!cpfOk(C.cpf)) { info.textContent = 'CPF inválido: confira os números.'; info.style.color = 'var(--err)'; return; }
-      cpf.value = fmtCPF(C.cpf); info.textContent = 'Procurando cliente…';
-      call('clienteBuscar', [S.token, C.cpf]).then(function (r) {
-        V.credito = r ? r.credito || null : null; V.credCpf = C.cpf; if (temCred()) desenharPags();
-        if (!r) { info.textContent = 'Cliente novo: preencha os dados abaixo.'; return; }
-        info.textContent = '✓ Cliente já cadastrado (' + r.compras + ' compra' + (r.compras === 1 ? '' : 's') + '). Confira os dados.'; info.style.color = 'var(--ok)';
-        ['nome', 'whats', 'cep', 'endereco', 'bairro', 'cidade'].forEach(function (k) { C[k] = r[k] || ''; });
-        nome.value = C.nome; wpp.value = fmtFone(C.whats); cep.value = C.cep; end.value = C.endereco; bai.value = C.bairro; cid.value = C.cidade;
-      }).catch(function () { info.textContent = ''; });
-    };
-    cep.oninput = function () {
-      var d = soDig(cep.value).slice(0, 8); C.cep = d;
-      if (d.length !== 8) return;
-      cep.value = d.slice(0, 5) + '-' + d.slice(5);
-      fetch('https://viacep.com.br/ws/' + d + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) {
-        if (!j || j.erro) return;
-        if (!C.endereco && j.logradouro) { C.endereco = j.logradouro + ', '; end.value = C.endereco; end.focus(); }
-        if (!C.bairro && j.bairro) { C.bairro = j.bairro; bai.value = C.bairro; }
-        if (!C.cidade && j.localidade) { C.cidade = j.localidade + (j.uf ? '/' + j.uf : ''); cid.value = C.cidade; }
-      }).catch(function () {});
-    };
-    // ---- resumo e pagamento (lado direito)
-    var c4 = cartao(dir, 'Resumo da venda');
-    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), V.loja, 'Escolha a loja…'); campo(c4, 'Loja da venda *', lj, true);
-    lj.onchange = function () { V.loja = lj.value; LS.set('loja', lj.value); desenharVenda(); };
-    var tots = el('div'); c4.appendChild(tots);
-    var pgbox = el('div', 'vdpg'); c4.appendChild(pgbox);
-    var falta = el('div', 'vdfalta'); c4.appendChild(falta);
-    var obs = el('textarea'); obs.placeholder = 'Ex.: cliente levou capinha de brinde'; obs.value = V.obs; obs.oninput = function () { V.obs = obs.value; }; campo(c4, 'Observação', obs);
-    c4.appendChild(el('div', 'hint', 'Vendedor: ' + S.u.nome));
-    var m = el('div', 'msg err'); c4.appendChild(m);
-    var fin = el('button', 'btn', 'Finalizar venda'); fin.type = 'button'; fin.style.marginTop = '12px'; c4.appendChild(fin);
-    var lim = el('button', 'btn ghost', 'Limpar tudo'); lim.type = 'button'; lim.style.marginTop = '8px'; c4.appendChild(lim);
+    busca.oninput = buscar;
+    busca.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); buscar(); } };
+    if (!V.itens.length && !V.acess.length) c3.appendChild(el('div', 'hint', 'Digite pelo menos 2 letras ou leia o código de barras / IMEI. Aparelhos seminovos e produtos aparecem juntos.'));
+    else {
+      var tb = el('div', 'vditab'), hh = el('div', 'vdl h'); ['Produto', 'Qtd.', 'Preço un.', 'Desconto', 'Total', ''].forEach(function (t) { hh.appendChild(el('div', '', t)); }); tb.appendChild(hh);
+      var linha = function (nomeTxt, sub, qtdEl, it, onX, avisoFn) {
+        var r = el('div', 'vdl'), n0 = el('div', 'nm', nomeTxt); n0.appendChild(el('small', '', sub)); r.appendChild(n0);
+        var q0 = el('div'); q0.appendChild(qtdEl); r.appendChild(q0);
+        var pw = el('div', 'prefix'), pi = el('input'); pi.inputMode = 'decimal'; pi.placeholder = '0,00'; pi.value = it.preco; pw.appendChild(el('span', '', 'R$')); pw.appendChild(pi); var p0 = el('div'); p0.appendChild(pw); r.appendChild(p0);
+        var dw = el('div', 'prefix'), di = el('input'); di.inputMode = 'decimal'; di.placeholder = '0,00'; di.value = it.desc; dw.appendChild(el('span', '', 'R$')); dw.appendChild(di); var d0 = el('div'); d0.appendChild(dw); r.appendChild(d0);
+        var tt = el('div', 'tt'); r.appendChild(tt);
+        var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar da venda'; x.onclick = onX; r.appendChild(x);
+        var av = el('div', 'av'); r.appendChild(av);
+        var at = function () { var q = qtdEl.tagName === 'INPUT' ? (parseInt(qtdEl.value, 10) || 0) : 1; tt.textContent = brl(Math.max(0, q * (num(pi.value) || 0) - (num(di.value) || 0))); var m = avisoFn ? avisoFn(q) : ''; av.textContent = m; av.style.display = m ? '' : 'none'; };
+        pi.oninput = function () { it.preco = pi.value; at(); resumo(); }; di.oninput = function () { it.desc = di.value; at(); resumo(); };
+        if (qtdEl.tagName === 'INPUT') qtdEl.oninput = function () { it.qtd = qtdEl.value; at(); resumo(); };
+        at(); tb.appendChild(r);
+      };
+      V.itens.forEach(function (it, i) {
+        var q = el('div', 'q1', '1');
+        linha(it.modelo + ' ' + String(it.cor || '').toUpperCase() + ' · ' + it.classif, 'Seminovo · IMEI ' + it.imei + ' · garantia 3 meses', q, it, function () { V.itens.splice(i, 1); desenharVenda(); },
+          function () { var ms = []; if (it.tabela && num(it.preco) && num(it.preco) < it.tabela) ms.push('Tabela ' + brl(it.tabela)); if (V.loja && it.loja !== V.loja) ms.push('Atenção: este aparelho está em ' + it.loja + '.'); return ms.join(' · '); });
+      });
+      V.acess.forEach(function (it, i) {
+        var qi = inp('number', '1'); qi.min = 1; qi.value = it.qtd;
+        var tem = V.loja ? (it.estoque[V.loja] || 0) : null;
+        linha(it.nome, 'Produto' + (it.sku ? ' · SKU ' + it.sku : '') + (tem === null ? '' : ' · ' + tem + ' em estoque'), qi, it, function () { V.acess.splice(i, 1); desenharVenda(); },
+          function (q) { return tem !== null && q > tem ? 'ATENÇÃO: só tem ' + tem + ' nesta loja' : ''; });
+      });
+      c3.appendChild(tb);
+    }
+    // ---- 4. totais
+    var c4 = el('div', 'card pecard'); c4.appendChild(el('h2', '', 'Totais')); W.appendChild(c4);
+    var g4 = el('div', 'g3'), t1 = el('div'), t2 = el('div'), t3 = el('div'); [t1, t2, t3].forEach(function (z) { g4.appendChild(z); }); c4.appendChild(g4);
+    t1.appendChild(el('label', 'first', 'Desconto'));
+    var dwr = el('div', 'cusw'), dsi = inp('text', '0'); dsi.inputMode = 'decimal'; dsi.value = V.desconto; var dst = el('select'); ['R$', '%'].forEach(function (o) { var q = el('option', '', o); q.value = o; dst.appendChild(q); }); dst.value = V.descTipo;
+    dwr.appendChild(dsi); dwr.appendChild(dst); t1.appendChild(dwr);
+    dsi.oninput = function () { V.desconto = dsi.value; resumo(); }; dst.onchange = function () { V.descTipo = dst.value; resumo(); };
+    var prz = campo(t2, 'Prazo de entrega', inp('text', 'Ex.: imediato, 2 dias')); prz.maxLength = 40; prz.value = V.prazo; prz.oninput = function () { V.prazo = prz.value; }; t2.firstChild.className = 'first';
+    var dpw = inpValor(V.despesas); campo(t3, 'Outras despesas', dpw); t3.firstChild.className = 'first'; dpw.input.oninput = function () { V.despesas = dpw.input.value; resumo(); };
+    var totBox = el('div', 'totgrid'); c4.appendChild(totBox);
+    // ---- 5. detalhes
+    var c5 = el('div', 'card pecard'); c5.appendChild(el('h2', '', 'Detalhes da venda')); W.appendChild(c5);
+    var g5 = el('div', 'g4'), d1 = el('div'), d2 = el('div'), d3 = el('div'), d4 = el('div'); [d1, d2, d3, d4].forEach(function (z) { g5.appendChild(z); }); c5.appendChild(g5);
+    var np = inp('text', ''); np.value = 'Gerado ao finalizar'; np.readOnly = true; campo(d1, 'Número do pedido', np, true);
+    var dv = inpData(V.dataVenda); dv.max = isoHoje(); dv.min = isoAdd(isoHoje(), -60); campo(d2, 'Data da venda', dv, true); dv.onchange = function () { V.dataVenda = dv.value || isoHoje(); desenharPags(); resumo(); };
+    var ds = inpData(V.dataSaida); if (!V.dataSaida) ds.value = ''; campo(d3, 'Data de saída', ds, true); ds.onchange = function () { V.dataSaida = ds.value; };
+    var dpv = inpData(V.dataPrevista); if (!V.dataPrevista) dpv.value = ''; campo(d4, 'Data prevista', dpv, true); dpv.onchange = function () { V.dataPrevista = dpv.value; };
+    // ---- 6. pagamento
+    var c6 = el('div', 'card pecard'); c6.appendChild(el('h2', '', 'Pagamento')); W.appendChild(c6);
+    var pgbox = el('div', 'vdpg2'); c6.appendChild(pgbox);
+    var trocaBox = el('div'); c6.appendChild(trocaBox);
+    var pgres = el('div', 'totgrid'); c6.appendChild(pgres);
+    // ---- 7. dados adicionais
+    var c7 = el('div', 'card pecard'); c7.appendChild(el('h2', '', 'Dados adicionais')); W.appendChild(c7);
+    var g7 = el('div', 'g2'), o1 = el('div'), o2 = el('div'); g7.appendChild(o1); g7.appendChild(o2); c7.appendChild(g7);
+    var obs = el('textarea'); obs.maxLength = 600; obs.placeholder = 'Ex.: cliente levou película de brinde'; obs.value = V.obs; obs.oninput = function () { V.obs = obs.value; }; campo(o1, 'Observações (aparece no comprovante da venda)', obs, true);
+    var obi = el('textarea'); obi.maxLength = 600; obi.placeholder = 'Só a equipe vê'; obi.value = V.obsInt; obi.oninput = function () { V.obsInt = obi.value; }; campo(o2, 'Observações internas (só fica registrada na venda)', obi, true);
+    // ---- rodapé
+    var rod = el('div', 'peacoes vdrod'), m = el('div', 'msg err'), rl = el('div', 'rodl'), ac = el('div', 'acoes'), lim = el('button', 'btn ghost', 'Limpar tudo'), fin = el('button', 'btn', 'Finalizar venda');
+    lim.type = fin.type = 'button'; ac.appendChild(lim); ac.appendChild(fin); rod.appendChild(m); var rw = el('div', 'rodw'); rw.appendChild(rl); rw.appendChild(ac); rod.appendChild(rw); W.appendChild(rod);
     lim.onclick = function () { if (!lim.dataset.c) { lim.dataset.c = '1'; lim.textContent = 'Toque de novo para limpar'; return; } novaVenda(); };
     function desenharPags() {
-      pgbox.innerHTML = ''; pgbox.appendChild(el('div', 'k', 'Pagamento')).style.cssText = 'font-size:13px;font-weight:700;color:var(--muted)';
+      pgbox.innerHTML = '';
+      var temUpg = V.pags.some(function (p) { return p.formaId === UPG; });
       V.pags.forEach(function (p, i) {
-        var r = el('div', 'r'), fs = el('select'); formasV().forEach(function (f, k) { var o = el('option', '', f.nome); o.value = String(k); fs.appendChild(o); });
-        fs.value = String(Math.max(0, formasV().map(function (f) { return f.nome; }).indexOf(p.forma))); fs.setAttribute('aria-label', 'Forma de pagamento');
-        var pf = el('div', 'prefix'), vi = el('input'); vi.inputMode = 'decimal'; vi.placeholder = '0,00'; vi.value = p.valor; vi.setAttribute('aria-label', 'Valor'); pf.appendChild(el('span', '', 'R$')); pf.appendChild(vi);
+        var r = el('div', 'pgl'), fs = el('select');
+        formasV().forEach(function (f) { var o = el('option', '', f.nome); o.value = f.id || f.nome; fs.appendChild(o); });
+        var ou = el('option', '', 'Upgrade (aparelho na troca)'); ou.value = UPG; if (!temUpg || p.formaId === UPG) fs.appendChild(ou);
+        fs.value = p.formaId === UPG ? UPG : (p.formaId || p.forma); fs.setAttribute('aria-label', 'Forma de pagamento');
+        var pf = el('div', 'prefix'), vi = el('input'); vi.inputMode = 'decimal'; vi.placeholder = '0,00'; vi.value = p.formaId === UPG ? String(totaisVenda().troca.toFixed(2)).replace('.', ',') : p.valor; vi.readOnly = p.formaId === UPG; pf.appendChild(el('span', '', 'R$')); pf.appendChild(vi);
+        var ct = el('select'); catRec().forEach(function (c) { var o = el('option', '', c); o.value = c; ct.appendChild(o); }); ct.value = p.categoria || catRec()[0]; ct.onchange = function () { p.categoria = ct.value; }; p.categoria = ct.value;
         var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar'; x.style.visibility = V.pags.length > 1 ? 'visible' : 'hidden';
-        r.appendChild(fs); r.appendChild(pf); r.appendChild(x);
-        var cb = el('div', 'cb');
-        if (p.cartao === 'credito') {
-          var ps = el('select'); ps.style.cssText = 'margin:4px 0 0;padding:8px 10px;font-size:14px';
-          (S.u.taxas || []).filter(function (t) { return t.nome !== 'Débito'; }).forEach(function (t) { var o = el('option', '', t.nome === '1x' ? '1x (à vista no crédito)' : t.nome); o.value = t.nome; ps.appendChild(o); });
-          ps.value = p.parcelas || '12x'; p.parcelas = ps.value; ps.onchange = function () { p.parcelas = ps.value; cartaoInfo(); };
-          var w = el('div'); w.style.gridColumn = '1 / -1'; w.appendChild(ps); r.appendChild(w);
+        var w1 = el('div'), w2 = el('div'), w3 = el('div'); w1.appendChild(el('label', '', 'Forma')); w1.appendChild(fs); w2.appendChild(el('label', '', 'Valor')); w2.appendChild(pf); w3.appendChild(el('label', '', 'Categoria')); w3.appendChild(ct);
+        r.appendChild(w1); r.appendChild(w2); r.appendChild(w3); r.appendChild(x);
+        var ex = el('div', 'pgx'); r.appendChild(ex);
+        var cb = el('div', 'cb'); r.appendChild(cb);
+        var fo = p.formaId === UPG ? null : formaDe(p), nsel = null;
+        if (p.formaId === UPG) { ct.parentNode.style.visibility = 'hidden'; }
+        if (fo && fo.cartao === 'credito') {
+          var ps = el('select'); for (var nn = 1; nn <= (fo.maxParc || 12); nn++) { var on = el('option', '', nn === 1 ? '1x (à vista no crédito)' : nn + 'x'); on.value = String(nn); ps.appendChild(on); }
+          if (!(+p.parcelas >= 1 && +p.parcelas <= (fo.maxParc || 12))) p.parcelas = String(Math.min(12, fo.maxParc || 12));
+          ps.value = String(p.parcelas); ps.onchange = function () { p.parcelas = ps.value; info(); resumo(); };
+          var pw0 = el('div'); pw0.appendChild(el('label', '', 'Parcelas')); pw0.appendChild(ps); ex.appendChild(pw0);
         }
-        var nsel = null;
-        if (p.cartao === 'crediario') {
+        if (fo && fo.cartao === 'crediario') {
           var cc = cfgCred();
           if (!(+p.parcelas >= 1 && +p.parcelas <= cc.maxParcelas)) p.parcelas = String(Math.min(cc.maxParcelas, 3));
           if (!p.primeiroVenc) p.primeiroVenc = isoAdd(isoHoje(), cc.diasPrimeiro);
-          var cw = el('div', 'crdpg'); cw.style.gridColumn = '1 / -1';
-          var c1w = el('div'), c2w = el('div'); cw.appendChild(c1w); cw.appendChild(c2w);
-          nsel = el('select'); for (var nn = 1; nn <= cc.maxParcelas; nn++) { var on = el('option', '', nn + 'x'); on.value = String(nn); nsel.appendChild(on); }
-          nsel.value = String(p.parcelas); nsel.onchange = function () { p.parcelas = nsel.value; cartaoInfo(); };
-          c1w.appendChild(el('label', '', 'Parcelas')); c1w.appendChild(nsel);
-          var dv = inpData(p.primeiroVenc); dv.min = isoAdd(isoHoje(), 1); dv.max = isoAdd(isoHoje(), 90); dv.onchange = function () { p.primeiroVenc = dv.value; };
-          c2w.appendChild(el('label', '', '1º vencimento')); c2w.appendChild(dv);
-          r.appendChild(cw);
+          nsel = el('select'); for (var nn2 = 1; nn2 <= cc.maxParcelas; nn2++) { var on2 = el('option', '', nn2 + 'x'); on2.value = String(nn2); nsel.appendChild(on2); }
+          nsel.value = String(p.parcelas); nsel.onchange = function () { p.parcelas = nsel.value; info(); };
+          var cw1 = el('div'); cw1.appendChild(el('label', '', 'Parcelas')); cw1.appendChild(nsel); ex.appendChild(cw1);
+          var dvv = inpData(p.primeiroVenc); dvv.min = isoAdd(isoHoje(), 1); dvv.max = isoAdd(isoHoje(), 90); dvv.onchange = function () { p.primeiroVenc = dvv.value; };
+          var cw2 = el('div'); cw2.appendChild(el('label', '', '1º vencimento')); cw2.appendChild(dvv); ex.appendChild(cw2);
         }
-        r.appendChild(cb);
-        function cartaoInfo() {
-          if (p.cartao === 'crediario') return credInfo();
-          var v = num(p.valor), tx = p.cartao === 'debito' ? taxa('Débito') : p.cartao === 'credito' ? taxa(p.parcelas) : null;
-          cb.textContent = tx && v ? 'Cobrar na maquininha: ' + brl(v / (1 - tx.taxa)) + (tx.parcelas > 1 ? ' (' + tx.parcelas + 'x de ' + brl(v / (1 - tx.taxa) / tx.parcelas) + ')' : '') : '';
-        }
-        function credInfo() {
-          var v = num(p.valor) || 0, cc = cfgCred(), cr = V.credito, ln = [];
-          if (nsel) Array.prototype.forEach.call(nsel.options, function (o) { var pl = planoCred(v, +o.value, cc); o.textContent = o.value + 'x de ' + (v ? brl(pl.parcela) : '—') + (pl.juros ? ' (total ' + brl(pl.total) + ')' : ' sem juros'); });
-          var pl = planoCred(v, +p.parcelas || 1, cc); cb.style.color = '';
-          if (!cpfOk(V.cli.cpf)) ln.push('Informe o CPF do cliente para conferir o limite de crédito.');
-          else if (cr === undefined) ln.push('Conferindo limite do cliente…');
-          else if (!cr || !cr.limite) { ln.push('Cliente sem limite de crédito: a venda no crediário será bloqueada. Cadastre o limite em CRM › Clientes/Fornecedores.'); cb.style.color = 'var(--err)'; }
-          else {
-            ln.push('Limite ' + brl(cr.limite) + ' · em aberto ' + brl(cr.emAberto) + ' · disponível ' + brl(Math.max(0, cr.disponivel)) + '.');
-            if (cr.atrasado > 0 && cc.bloquearAtraso) { ln.push('BLOQUEADO: cliente com ' + cr.qtdAtraso + ' fatura(s) atrasada(s).'); cb.style.color = 'var(--err)'; }
-            else if (v && pl.total > cr.disponivel + 0.009) { ln.push('BLOQUEADO: esta compra (' + brl(pl.total) + ') passa do disponível.'); cb.style.color = 'var(--err)'; }
-            else if (v) { ln.push('✓ Dentro do limite.'); cb.style.color = 'var(--ok)'; }
+        function info() {
+          cb.style.color = '';
+          if (p.formaId === UPG) { cb.textContent = 'O valor é a soma dos aparelhos da troca (abaixo). Eles entram no estoque como Recompra.'; return; }
+          if (fo && fo.cartao === 'crediario') {
+            var v = num(p.valor) || 0, cc2 = cfgCred(), cr = V.credito, ln = [];
+            if (nsel) Array.prototype.forEach.call(nsel.options, function (o) { var pl = planoCred(v, +o.value, cc2); o.textContent = o.value + 'x de ' + (v ? brl(pl.parcela) : '—') + (pl.juros ? ' (total ' + brl(pl.total) + ')' : ' sem juros'); });
+            var pl = planoCred(v, +p.parcelas || 1, cc2);
+            if (!V.cli.id && !cpfOk(V.cli.cpf)) ln.push('Escolha o cliente para conferir o limite de crédito.');
+            else if (cr === undefined) ln.push('Limite do cliente: escolha o cliente pela busca ou informe o CPF.');
+            else if (!cr || !cr.limite) { ln.push('Cliente sem limite de crédito: a venda no crediário será bloqueada. Cadastre o limite em CRM › Clientes/Fornecedores.'); cb.style.color = 'var(--err)'; }
+            else {
+              ln.push('Limite ' + brl(cr.limite) + ' · em aberto ' + brl(cr.emAberto) + ' · disponível ' + brl(Math.max(0, cr.disponivel)) + '.');
+              if (cr.atrasado > 0 && cc2.bloquearAtraso) { ln.push('BLOQUEADO: cliente com ' + cr.qtdAtraso + ' fatura(s) atrasada(s).'); cb.style.color = 'var(--err)'; }
+              else if (v && pl.total > cr.disponivel + 0.009) { ln.push('BLOQUEADO: esta compra (' + brl(pl.total) + ') passa do disponível.'); cb.style.color = 'var(--err)'; }
+              else if (v) { ln.push('✓ Dentro do limite.'); cb.style.color = 'var(--ok)'; }
+            }
+            cb.textContent = ln.join(' '); return;
           }
-          cb.textContent = ln.join(' ');
+          cb.textContent = textoReceb(calcPag(p, V.dataVenda));
         }
-        fs.onchange = function () { var fo = formasV()[+fs.value]; p.formaId = fo.id; p.forma = fo.nome; p.cartao = fo.cartao; p.parcelas = fo.cartao === 'credito' ? '12x' : ''; p.primeiroVenc = ''; desenharPags(); resumo(); };
-        vi.oninput = function () { p.valor = vi.value; p.auto = false; cartaoInfo(); resumo(true); };
-        x.onclick = function () { V.pags.splice(i, 1); if (V.pags.length === 1) V.pags[0].auto = true; desenharPags(); resumo(); };
-        cartaoInfo(); pgbox.appendChild(r);
+        fs.onchange = function () {
+          if (fs.value === UPG) { p.formaId = UPG; p.forma = 'Upgrade'; p.cartao = ''; if (!V.troca.length) V.troca.push({ modelo: '', cor: '', imei: '', imei2: '', serial: '', bateria: '', classificacao: '', valor: '', consulta: '', obs: '' }); }
+          else { var f2 = formasV().filter(function (f) { return (f.id || f.nome) === fs.value; })[0]; if (p.formaId === UPG) V.troca = []; p.formaId = f2.id; p.forma = f2.nome; p.cartao = f2.cartao; p.parcelas = ''; p.primeiroVenc = ''; }
+          desenharPags(); resumo();
+        };
+        vi.oninput = function () { p.valor = vi.value; p.auto = false; info(); resumo(true); };
+        x.onclick = function () { if (p.formaId === UPG) V.troca = []; V.pags.splice(i, 1); if (V.pags.length === 1 && V.pags[0].formaId !== UPG) V.pags[0].auto = true; desenharPags(); resumo(); };
+        info(); pgbox.appendChild(r);
       });
-      var add = el('button', 'lnk', '+ Dividir em outra forma de pagamento'); add.type = 'button'; add.style.marginTop = '6px';
-      add.onclick = function () { var T = totaisVenda(); V.pags.forEach(function (p) { p.auto = false; }); V.pags.push(novaPag(formasV().filter(function (f) { return f.cartao === 'credito'; })[0], String(Math.max(0, r2(T.pagar - T.pago))).replace('.', ','))); desenharPags(); resumo(); };
+      var add = el('button', 'btn ghost', '+ Adicionar forma de pagamento'); add.type = 'button'; add.style.cssText = 'width:auto;margin-top:8px';
+      add.onclick = function () { var T = totaisVenda(); V.pags.forEach(function (p) { p.auto = false; }); V.pags.push(novaPag(formasV()[0], String(Math.max(0, r2(T.pagar - T.pago)).toFixed(2)).replace('.', ','))); desenharPags(); resumo(); };
       pgbox.appendChild(add);
+      // aparelhos da troca (upgrade)
+      trocaBox.innerHTML = '';
+      if (V.pags.some(function (p) { return p.formaId === UPG; })) {
+        trocaBox.appendChild(el('h3', 'ch', 'Aparelho do cliente na troca (upgrade)'));
+        V.troca.forEach(function (t, i) { trocaBox.appendChild(cardTroca(t, i)); });
+        var bt2 = el('button', 'lnk', '+ Outro aparelho na troca'); bt2.type = 'button'; bt2.style.marginTop = '8px';
+        bt2.onclick = function () { V.troca.push({ modelo: '', cor: '', imei: '', imei2: '', serial: '', bateria: '', classificacao: '', valor: '', consulta: '', obs: '' }); desenharVenda(); };
+        trocaBox.appendChild(bt2);
+      }
     }
     function resumo(semRedesenhar) {
       var T = totaisVenda();
-      if (V.pags.length === 1 && V.pags[0].auto) { var nv = T.pagar > 0 ? String(T.pagar.toFixed(2)).replace('.', ',') : ''; if (V.pags[0].valor !== nv) { V.pags[0].valor = nv; desenharPags(); } T = totaisVenda(); }
-      tots.innerHTML = '';
-      var add = function (a, b, cls) { var d = el('div', 'vdtot' + (cls ? ' ' + cls : '')); d.appendChild(el('span', '', a)); d.appendChild(el(cls ? 'b' : 'span', '', b)); tots.appendChild(d); };
-      var tAp = r2(V.itens.reduce(function (a, x) { return a + (num(x.preco) || 0); }, 0));
-      if (V.itens.length || !V.acess.length) add('Aparelhos (' + V.itens.length + ')', brl(tAp));
-      if (V.acess.length) add('Produtos (' + V.acess.reduce(function (a, x) { return a + (parseInt(x.qtd, 10) || 0); }, 0) + ')', brl(r2(T.itens - tAp)));
-      if (V.troca.length) add('Troca (' + V.troca.length + ')', '− ' + brl(T.troca));
-      add('A pagar', brl(T.pagar), 'big');
+      var reais = V.pags.filter(function (p) { return p.formaId !== UPG; });
+      if (reais.length === 1 && reais[0].auto) { var nv = T.pagar > 0 ? String(T.pagar.toFixed(2)).replace('.', ',') : ''; if (reais[0].valor !== nv) { reais[0].valor = nv; desenharPags(); } T = totaisVenda(); }
+      Array.prototype.forEach.call(pgbox.querySelectorAll('.pgl'), function (r, i) { var p = V.pags[i]; if (p && p.formaId === UPG) { var vi = r.querySelector('input'); vi.value = String(T.troca.toFixed(2)).replace('.', ','); } });
+      totBox.innerHTML = '';
+      var L = function (box, a, b, cls) { var d = el('div', 'tl' + (cls ? ' ' + cls : '')); d.appendChild(el('span', '', a)); d.appendChild(el('b', '', b)); box.appendChild(d); };
+      L(totBox, 'Nº de itens do pedido', String(T.linhas)); L(totBox, 'Soma das quantidades', String(T.qtd)); L(totBox, 'Desconto total dos itens', brl(T.descItens));
+      L(totBox, 'Desconto total da venda', brl(T.descVenda)); L(totBox, 'Outras despesas', brl(T.despesas)); L(totBox, 'Total dos itens', brl(T.itens)); L(totBox, 'Total da venda', brl(T.venda), 'big');
+      pgres.innerHTML = '';
+      L(pgres, 'Total da venda', brl(T.venda));
+      if (T.troca) L(pgres, 'Upgrade (troca)', '− ' + brl(T.troca));
+      L(pgres, 'A receber', brl(T.pagar)); L(pgres, 'Lançado', brl(T.pago));
       var dif = r2(T.pagar - T.pago);
-      falta.textContent = !V.itens.length && !V.acess.length ? '' : Math.abs(dif) < 0.01 ? '✓ Pagamento fechado' : dif > 0 ? 'Falta lançar ' + brl(dif) : 'Pagamento passou ' + brl(-dif);
-      falta.style.color = Math.abs(dif) < 0.01 ? 'var(--ok)' : 'var(--warn)';
+      L(pgres, Math.abs(dif) < 0.01 ? '✓ Pagamento fechado' : dif > 0 ? 'Falta lançar' : 'Passou', Math.abs(dif) < 0.01 ? '' : brl(Math.abs(dif)), Math.abs(dif) < 0.01 ? 'ok' : 'warn');
+      L(pgres, 'Valor líquido que cai nas contas', brl(T.liquido), 'big');
+      rl.innerHTML = ''; rl.appendChild(el('div', 'k', 'Total da venda')); rl.appendChild(el('div', 'v', brl(T.venda))); if (Math.abs(dif) >= 0.01 && (V.itens.length || V.acess.length)) rl.appendChild(el('div', 's', dif > 0 ? 'Falta lançar ' + brl(dif) : 'Pagamento passou ' + brl(-dif)));
     }
     V._resumo = resumo;
-    function temCred() { return V.pags.some(function (p) { return p.cartao === 'crediario'; }); }
     desenharPags(); resumo();
     fin.onclick = function () {
       m.classList.remove('show');
-      var T = totaisVenda(), erro = '';
+      var T = totaisVenda(), erro = '', C2 = V.cli;
       if (!V.loja) erro = 'Escolha a loja da venda.';
-      else if (!V.itens.length && !V.acess.length) erro = 'Adicione pelo menos um aparelho ou produto.';
-      else if (V.itens.some(function (i) { return !(num(i.preco) > 0); })) erro = 'Informe o preço de todos os aparelhos.';
-      else if (V.acess.some(function (i) { return !(num(i.preco) > 0) || !(parseInt(i.qtd, 10) > 0); })) erro = 'Informe quantidade e preço de todos os produtos.';
+      else if (!V.itens.length && !V.acess.length) erro = 'Adicione pelo menos um produto.';
+      else if (V.itens.some(function (i) { return !(num(i.preco) > 0); }) || V.acess.some(function (i) { return !(num(i.preco) > 0) || !(parseInt(i.qtd, 10) > 0); })) erro = 'Informe quantidade e preço de todos os produtos.';
       else if (V.acess.some(function (i) { return (parseInt(i.qtd, 10) || 0) > (i.estoque[V.loja] || 0); })) erro = 'Tem produto com quantidade maior que o estoque desta loja.';
-      else if (V.pags.some(function (p) { return p.cartao === 'crediario' && !p.primeiroVenc; })) erro = 'Informe o 1º vencimento do crediário.';
       else if (V.troca.some(function (t) { return !t.modelo || !t.cor || !luhn(soDig(t.imei)) || t.bateria === '' || !t.classificacao || !(num(t.valor) > 0); })) erro = 'Complete os dados do aparelho da troca (modelo, cor, IMEI, bateria, classificação e valor).';
       else if (V.troca.some(function (t) { return t.consulta !== 'Nada consta'; })) erro = 'Faça a consulta oficial do IMEI do aparelho da troca e marque "Nada consta".';
       else if (T.pagar < 0) erro = 'A troca vale mais que a venda.';
-      else if (!cpfOk(V.cli.cpf)) erro = 'Informe um CPF válido.';
-      else if ((V.cli.nome || '').trim().length < 3) erro = 'Informe o nome do cliente.';
-      else if (soDig(V.cli.whats).length < 10) erro = 'Informe o WhatsApp do cliente com DDD.';
-      else if ((V.cli.endereco || '').trim().length < 5 || (V.cli.cidade || '').trim().length < 2) erro = 'Informe o endereço e a cidade do cliente.';
-      else if (Math.abs(r2(T.pagar - T.pago)) > 0.009) erro = 'A soma dos pagamentos precisa ser igual ao valor a pagar (' + brl(T.pagar) + ').';
+      else if (V.cliModo === 'busca' && !C2.id) erro = 'Escolha o cliente (busca) ou cadastre um novo.';
+      else if ((C2.nome || '').trim().length < 3) erro = 'Informe o nome do cliente.';
+      else if (!C2.id && !cpfOk(C2.cpf)) erro = 'Informe um CPF válido.';
+      else if (!C2.id && soDig(C2.whats).length < 10) erro = 'Informe o WhatsApp do cliente com DDD.';
+      else if (Math.abs(r2(T.pagar - T.pago)) > 0.009) erro = 'A soma dos pagamentos precisa ser igual ao valor a receber (' + brl(T.pagar) + ').';
+      else if (V.pags.some(function (p) { return p.cartao === 'crediario' && !p.primeiroVenc; })) erro = 'Informe o 1º vencimento do crediário.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       fin.disabled = true; fin.innerHTML = '<span class="spin"></span>Registrando…';
       var d = {
-        loja: V.loja, obs: V.obs,
-        itens: V.itens.map(function (i) { return { linha: i.linha, imei: i.imei, preco: num(i.preco) }; }),
-        acessorios: V.acess.map(function (a) { return { id: a.id, qtd: parseInt(a.qtd, 10), preco: num(a.preco) }; }),
+        loja: V.loja, vendedorId: V.vendedorId, obs: V.obs, obsInterna: V.obsInt, desconto: T.descVenda, outrasDespesas: T.despesas, prazoEntrega: V.prazo,
+        dataVenda: V.dataVenda, dataSaida: V.dataSaida, dataPrevista: V.dataPrevista,
+        itens: V.itens.map(function (i) { return { linha: i.linha, imei: i.imei, preco: num(i.preco), desconto: num(i.desc) || 0 }; }),
+        acessorios: V.acess.map(function (a) { return { id: a.id, qtd: parseInt(a.qtd, 10), preco: num(a.preco), desconto: num(a.desc) || 0 }; }),
         troca: V.troca.map(function (t) { return { modelo: t.modelo, cor: t.cor, imei: soDig(t.imei), imei2: soDig(t.imei2), serial: t.serial, bateria: t.bateria, classificacao: t.classificacao, valor: num(t.valor), consulta: t.consulta, obs: t.obs }; }),
-        cliente: V.cli,
-        pagamentos: V.pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, primeiroVenc: p.primeiroVenc || '' }; })
+        cliente: { id: C2.id, cpf: C2.cpf, nome: C2.nome, whats: C2.whats, cep: C2.cep, endereco: C2.endereco, bairro: C2.bairro, cidade: C2.cidade },
+        pagamentos: V.pags.filter(function (p) { return p.formaId !== UPG; }).map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, primeiroVenc: p.primeiroVenc || '', categoria: p.categoria }; })
       };
       call('vendaRegistrar', [S.token, d]).then(function (v) {
         S.disp = null; S.dash = null; S.venda = null; S.vendas = null; S.fin = null; S.crm = null; S.ac = null; S.cred = null;
@@ -1554,7 +1685,7 @@
     top.appendChild(a); top.appendChild(n); r.appendChild(top);
     if (v.situacao === 'Cancelada') { var cc = el('div', 'gar', 'VENDA CANCELADA · ' + v.cancelamento); cc.style.cssText = 'background:#fde7e5;color:#b3261e;font-weight:700;margin:0 0 8px'; r.appendChild(cc); }
     r.appendChild(el('h2', '', 'Cliente'));
-    r.appendChild(el('div', '', v.cliente.nome + ' · CPF ' + fmtCPF(v.cliente.cpf) + ' · WhatsApp ' + fmtFone(v.cliente.whats)));
+    r.appendChild(el('div', '', [v.cliente.nome, v.cliente.cpf ? (v.cliente.cpf.length === 14 ? 'CNPJ ' : 'CPF ') + fmtDoc(v.cliente.cpf) : '', v.cliente.whats ? 'WhatsApp ' + fmtFone(v.cliente.whats) : ''].filter(Boolean).join(' · ')));
     if (v.cliente.endereco) r.appendChild(el('div', '', v.cliente.endereco));
     if (v.itens.length) {
       r.appendChild(el('h2', '', 'Aparelhos'));
@@ -1579,13 +1710,18 @@
     }
     r.appendChild(el('h2', '', 'Valores'));
     var tt = function (a2, b2, cls) { var d = el('div', 'tt' + (cls ? ' ' + cls : '')); d.appendChild(el('span', '', a2)); d.appendChild(el('span', '', b2)); r.appendChild(d); };
+    var dt = v.det || {};
     tt((v.acessorios || []).length ? 'Total dos produtos' : 'Total dos aparelhos', brl(v.totalItens));
-    if (v.totalTroca) tt('Troca', '− ' + brl(v.totalTroca));
+    if (dt.desconto) tt('Desconto', '− ' + brl(dt.desconto));
+    if (dt.despesas) tt('Outras despesas', '+ ' + brl(dt.despesas));
+    if (dt.totalVenda !== undefined && (dt.desconto || dt.despesas)) tt('Total da venda', brl(dt.totalVenda));
+    if (v.totalTroca) tt('Upgrade (aparelho na troca)', '− ' + brl(v.totalTroca));
     tt((v.pagamentos || []).some(function (p) { return p.crediario; }) ? 'Valor da compra' : 'Valor pago', brl(v.aPagar), 'g');
     (v.pagamentos || []).forEach(function (p) {
       if (p.crediario) { tt(p.forma + ' ' + p.parcelas + 'x de ' + brl(p.valorParcela) + ' · 1º venc. ' + isoBR(p.primeiroVenc), brl(p.valor) + (p.totalCred > p.valor + 0.009 ? ' (total com juros ' + brl(p.totalCred) + ')' : '')); return; }
       tt(p.forma + parcTxt(p), brl(p.valor) + (p.cobrado && p.cobrado !== p.valor ? ' (cobrado ' + brl(p.cobrado) + (p.parcelas > 1 ? ' em ' + p.parcelas + 'x de ' + brl(p.cobrado / p.parcelas) : '') + ')' : '')); });
-    if (v.obs) { r.appendChild(el('h2', '', 'Observação')); r.appendChild(el('div', '', v.obs)); }
+    if (v.obs) { r.appendChild(el('h2', '', 'Observações')); var ob0 = el('div', '', v.obs); ob0.style.whiteSpace = 'pre-line'; r.appendChild(ob0); }
+    if (dt.prazoEntrega || dt.dataPrevista) r.appendChild(el('div', '', [dt.prazoEntrega ? 'Prazo de entrega: ' + dt.prazoEntrega : '', dt.dataPrevista ? 'Data prevista: ' + isoBR(dt.dataPrevista) : ''].filter(Boolean).join(' · ')));
     var credP = (v.pagamentos || []).filter(function (p) { return p.crediario; })[0];
     if (credP) { var cc = cfgCred(); r.appendChild(el('div', 'gar', 'CREDIÁRIO: ' + credP.parcelas + ' parcela(s) de ' + brl(credP.valorParcela) + ', 1º vencimento em ' + isoBR(credP.primeiroVenc) + ', demais no mesmo dia dos meses seguintes. Após o vencimento: multa de ' + nfmt(cc.multa) + '% e juros de ' + nfmt(cc.mora) + '% ao mês.')); }
     if ((v.acessorios || []).length) r.appendChild(el('div', 'gar', 'PRODUTOS: garantia de 90 (noventa) dias contra defeito de fabricação, a partir desta data. Não cobre mau uso, quebra ou desgaste.'));
@@ -1642,6 +1778,7 @@
   $('hLimpar').onclick = function () { $('hBusca').value = ''; $('hLoja').value = ''; $('hVend').value = ''; $('hSit').value = ''; renderHist(); };
   $('hFilBtn').onclick = function () { var on = !$('hFil').classList.contains('on'); $('hFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
   botaoEsconderFiltros($('hFilEsc'), 'hFil', 'semFilVendas');
+  function totVenda(v) { return v.det && v.det.totalVenda !== undefined ? v.det.totalVenda : v.totalItens; }
   function renderHist() {
     if (!S.vendas) return;
     var uniq = function (f) { var u = []; S.vendas.forEach(function (v) { var k = f(v); if (k && u.indexOf(k) < 0) u.push(k); }); return u.sort(); };
@@ -1661,7 +1798,7 @@
       return true;
     });
     var ativas = l.filter(function (v) { return v.situacao !== 'Cancelada'; });
-    var tot = soma(ativas, function (v) { return v.totalItens; }), ap = ativas.reduce(function (a, v) { return a + v.itens.length; }, 0);
+    var tot = soma(ativas, totVenda), ap = ativas.reduce(function (a, v) { return a + v.itens.length; }, 0);
     $('hCont').textContent = l.length + ' venda' + (l.length === 1 ? '' : 's') + ' · ' + P[2];
     var rs = $('hResumo'); rs.innerHTML = '';
     var k = el('div', 'kpis'); rs.appendChild(k);
@@ -1680,7 +1817,7 @@
       n.appendChild(nm); n.appendChild(el('div', 'psub', v.itens.map(function (x) { return x.modelo + ' ' + x.classificacao; }).concat((v.acessorios || []).map(function (x) { return x.qtd + 'x ' + x.nome; })).join(' · ') + (v.troca.length ? ' · troca: ' + v.troca.map(function (x) { return x.modelo; }).join(', ') : '')));
       r.appendChild(n);
       var md = el('div', 'psku'); md.appendChild(el('div', '', v.id + ' · ' + (v.dataTxt || dataBR(v.data)))); md.appendChild(el('div', 'psub', String(v.vendedor).replace(/\s*\([^)]*\)\s*$/, '') + ' · ' + v.loja)); r.appendChild(md);
-      var pr = el('div', 'ppre' + (v.situacao === 'Cancelada' ? ' sem' : ''), brl(v.totalItens).replace('R$', '').trim());
+      var pr = el('div', 'ppre' + (v.situacao === 'Cancelada' ? ' sem' : ''), brl(totVenda(v)).replace('R$', '').trim());
       pr.appendChild(el('small', '', (v.totalTroca ? 'troca − ' + brl(v.totalTroca) + ' · ' : '') + (v.pagamentos || []).map(function (p) { return p.forma; }).join(' + ')));
       r.appendChild(pr); r.appendChild(el('div', 'chev', '›'));
       r.onclick = function () { abrirDrawerVenda(v); };
@@ -1695,11 +1832,13 @@
     var fx = el('button', '', '×'); fx.type = 'button'; fx.setAttribute('aria-label', 'Fechar'); fx.onclick = fecharDrawer; hd.appendChild(ht); hd.appendChild(fx); dw.appendChild(hd);
     var bd = el('div', 'dwb'); dw.appendChild(bd);
     var info = el('div', 'card'), kv = el('div', 'kv');
-    [['Cliente', v.cliente.nome], ['CPF', fmtCPF(v.cliente.cpf)], ['WhatsApp', fmtFone(v.cliente.whats)], ['Endereço', v.cliente.endereco], ['Vendedor', v.vendedor],
+    [['Cliente', v.cliente.nome], ['CPF/CNPJ', v.cliente.cpf ? fmtDoc(v.cliente.cpf) : ''], ['WhatsApp', fmtFone(v.cliente.whats)], ['Endereço', v.cliente.endereco], ['Vendedor', v.vendedor],
      ['Aparelhos', v.itens.map(function (x) { return x.modelo + ' ' + x.classificacao + ' (IMEI ' + x.imei + ') ' + brl(x.preco); }).join('\n')],
      ['Produtos', (v.acessorios || []).map(function (x) { return x.qtd + 'x ' + x.nome + ' ' + brl(x.total); }).join('\n')],
      ['Troca', v.troca.map(function (x) { return x.modelo + ' (IMEI ' + x.imei + ') − ' + brl(x.valor); }).join('\n')],
-     ['Total', brl(v.totalItens)], ['Valor pago', brl(v.aPagar)], ['Pagamento', (v.pagamentos || []).map(function (p) { return p.forma + parcTxt(p) + ' ' + brl(p.valor); }).join(' + ')],
+     ['Total dos itens', brl(v.totalItens)], ['Desconto', v.det && v.det.desconto ? brl(v.det.desconto) : ''], ['Outras despesas', v.det && v.det.despesas ? brl(v.det.despesas) : ''],
+     ['Total da venda', brl(totVenda(v))], ['Valor pago', brl(v.aPagar)], ['Data de saída', v.det && v.det.dataSaida ? isoBR(v.det.dataSaida) : ''], ['Data prevista', v.det && v.det.dataPrevista ? isoBR(v.det.dataPrevista) : ''],
+     ['Prazo de entrega', v.det && v.det.prazoEntrega], ['Obs. interna', v.det && v.det.obsInterna], ['Registrada por', v.det && v.det.registradoPor && v.det.registradoPor !== v.vendedor ? v.det.registradoPor : ''], ['Pagamento', (v.pagamentos || []).map(function (p) { return p.forma + parcTxt(p) + ' ' + brl(p.valor); }).join(' + ')],
      ['Observação', v.obs], ['Cancelamento', v.cancelamento]].forEach(function (p) { if (!p[1]) return; kv.appendChild(el('div', 'k', p[0])); var d = el('div', '', p[1]); d.style.whiteSpace = 'pre-line'; kv.appendChild(d); });
     info.appendChild(kv); bd.appendChild(info);
     var am = el('div', 'msg err'); bd.appendChild(am);
@@ -2082,7 +2221,8 @@
     kpi(k, 'Saldo total', brl(tot), ativas.length + ' conta' + (ativas.length === 1 ? '' : 's') + ' ativa' + (ativas.length === 1 ? '' : 's'), tot < 0 ? 'down' : '');
     kpi(k, 'Contas a pagar em aberto', brl(D.aPagar.total), D.aPagar.qtd + ' lançamento' + (D.aPagar.qtd === 1 ? '' : 's'));
     kpi(k, 'Vencidas', brl(D.aPagar.vencido), D.aPagar.vencido ? 'pague ou renegocie' : 'nada vencido', D.aPagar.vencido ? 'down' : 'up');
-    kpi(k, 'Saldo previsto', brl(tot - D.aPagar.total), 'depois de pagar tudo em aberto', tot - D.aPagar.total < 0 ? 'down' : '');
+    if (D.aReceber) kpi(k, 'A receber (cartões)', brl(D.aReceber), 'já vendido, cai nas próximas datas');
+    kpi(k, 'Saldo previsto', brl(tot + (D.aReceber || 0) - D.aPagar.total), 'com o que vai cair e depois de pagar tudo', tot + (D.aReceber || 0) - D.aPagar.total < 0 ? 'down' : '');
     var ini = new Date(); ini.setDate(1); ini.setHours(0, 0, 0, 0);
     var cards = el('div', 'fbcards'); box.appendChild(cards);
     D.contas.slice().sort(function (a, b) { return (b.ativa - a.ativa) || a.nome.localeCompare(b.nome); }).forEach(function (c) {
@@ -2090,13 +2230,14 @@
       b.appendChild(el('div', 'tp', c.tipo + (c.loja ? ' · ' + c.loja : '') + (c.ativa ? '' : ' · inativa')));
       b.appendChild(el('div', 'nm', c.nome));
       b.appendChild(el('div', 'sd' + (c.saldo < 0 ? ' neg' : ''), brl(c.saldo)));
+      if (c.aReceber) b.appendChild(el('div', 'mv', 'A receber: ' + brl(c.aReceber)));
       var evm = D.eventos.filter(function (e) { return e.conta === c.id && e.d >= ini.getTime(); });
       b.appendChild(el('div', 'mv', 'No mês: +' + brl(soma(evm, function (e) { return e.valor > 0 ? e.valor : 0; })) + ' · −' + brl(Math.abs(soma(evm, function (e) { return e.valor < 0 ? e.valor : 0; })))));
       b.onclick = function () { abrirConta(c); };
       cards.appendChild(b);
     });
     var ult = D.eventos.slice(0, 300);
-    tabela(box, 'Últimas movimentações', ['Data', 'Conta', 'Descrição', 'Origem', 'Valor'], ult.map(function (e) { return [dataBR(e.d), nomeConta(e.conta), e.desc, e.origem, (e.valor < 0 ? '-' : '') + brl(Math.abs(e.valor))]; }), 'movimentacoes');
+    tabela(box, 'Últimas movimentações e a receber', ['Data', 'Conta', 'Descrição', 'Origem', 'Valor'], ult.map(function (e) { return [dataBR(e.d) + (e.futuro ? ' (previsto)' : ''), nomeConta(e.conta), e.desc, e.origem, (e.valor < 0 ? '-' : '') + brl(Math.abs(e.valor))]; }), 'movimentacoes');
     box.appendChild(el('div', 'hint', 'Entradas das vendas: o valor de cada forma de pagamento entra na conta configurada em engrenagem › Formas de pagamento/recebimento (no cartão, entra o valor líquido, sem a taxa da maquininha). Saídas: contas a pagar marcadas como pagas e lançamentos manuais.'));
   }
   function abrirConta(c) {
@@ -3092,6 +3233,152 @@
       }).catch(function (e) { ok.disabled = cc.disabled = false; ok.textContent = 'Salvar produto'; m.textContent = e; m.classList.add('show'); });
     };
     ir('prod'); nome.focus();
+  }
+
+  // =========================================================
+  //  PDV (venda rápida no balcão)
+  // =========================================================
+  var PDV = null;
+  function pdvNovo() { PDV = { loja: LS.get('loja', '') || (S.u.loja !== 'Manutenção' ? S.u.loja : ''), itens: [], acess: [], cli: null, credito: null, desconto: '', pags: [] }; }
+  function pdvTot() {
+    var t = 0, q = 0;
+    PDV.itens.forEach(function (x) { t += x.preco; q++; });
+    PDV.acess.forEach(function (x) { t += x.preco * x.qtd; q += x.qtd; });
+    var dv = num(PDV.desconto) || 0, tv = r2(t - dv), pago = r2(PDV.pags.reduce(function (a, p) { return a + (num(p.valor) || 0); }, 0));
+    return { itens: r2(t), qtd: q, desc: r2(dv), venda: tv, pago: pago, falta: r2(tv - pago) };
+  }
+  function abrirPdv() { if (!PDV) pdvNovo(); desenharPdv(); setTimeout(function () { var b = $('pdvBusca'); if (b) b.focus(); }, 50); }
+  document.addEventListener('keydown', function (e) {
+    if (S.view !== 'pdv' || !$('fModal').classList.contains('hide')) return;
+    if (e.key === 'F2') { e.preventDefault(); var f = $('pdvFin'); if (f) f.click(); }
+    if (e.key === 'F4') { e.preventDefault(); pdvNovo(); abrirPdv(); }
+  });
+  function pdvAdd(o) {
+    if (o.tipo === 'a') { if (PDV.itens.some(function (i) { return i.imei === o.x.imei; })) return; if (!o.x.preco) { msg('topMsg', 'Aparelho sem preço na tabela: use a página Vendas.'); return; } PDV.itens.push({ linha: o.x.linha, imei: o.x.imei, nome: o.x.modelo + ' ' + String(o.x.cor || '').toUpperCase() + ' · ' + o.x.classif, preco: o.x.preco, loja: o.x.loja }); }
+    else { var x = o.x; if (!x.preco) { msg('topMsg', x.nome + ' está sem preço.'); return; } var j = PDV.acess.filter(function (a) { return a.id === x.id; })[0]; if (j) j.qtd++; else PDV.acess.push({ id: x.id, nome: x.nome, sku: x.sku, preco: x.preco, qtd: 1, estoque: x.estoque || {} }); }
+    PDV.pags = []; desenharPdv();
+  }
+  function desenharPdv() {
+    var box = $('pdvCorpo'); box.innerHTML = '';
+    var g = el('div', 'pdvg'), esq = el('div'), dir = el('div', 'pdvlado'); g.appendChild(esq); g.appendChild(dir); box.appendChild(g);
+    // ---- busca + carrinho
+    var c1 = el('div', 'card'); esq.appendChild(c1);
+    var top = el('div', 'pdvtop'), lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), PDV.loja, 'Escolha a loja…'); lj.onchange = function () { PDV.loja = lj.value; LS.set('loja', lj.value); desenharPdv(); };
+    top.appendChild(lj); top.appendChild(el('div', 'hint', 'Vendedor: ' + S.u.nome + ' · F2 finaliza · F4 nova venda')); c1.appendChild(top);
+    var bs = inp('text', 'Leia o código de barras / IMEI ou digite o nome do produto'); bs.id = 'pdvBusca'; bs.className = 'pdvbusca'; bs.setAttribute('aria-label', 'Buscar produto'); c1.appendChild(bs);
+    var rs = el('div'); c1.appendChild(rs);
+    var ultimo = [];
+    var buscar = function (enter) {
+      rs.innerHTML = ''; var q = bs.value.trim(); if (q.length < 2) return;
+      buscaProdutos(q, function (l, t) {
+        rs.innerHTML = ''; ultimo = l || [];
+        if (!l) { rs.appendChild(el('div', 'hint', t)); return; }
+        if ((l.length === 1 && l[0].exato) || (enter && l.length)) { bs.value = ''; pdvAdd(l[0]); return; }
+        if (!l.length) { rs.appendChild(el('div', 'hint', 'Nada encontrado.')); return; }
+        var lst = el('div', 'vdres');
+        l.forEach(function (o) {
+          var x = o.x, b = el('button'), a = el('span', '', o.tipo === 'a' ? x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classif : x.nome); b.type = 'button';
+          a.appendChild(el('small', '', o.tipo === 'a' ? 'Seminovo · IMEI ' + x.imei : 'Produto · ' + (PDV.loja ? (x.estoque[PDV.loja] || 0) + ' na loja' : x.total + ' no total') + (x.sku ? ' · ' + x.sku : '')));
+          b.appendChild(a); b.appendChild(el('b', '', x.preco ? brl(x.preco) : 'sem preço')); b.onclick = function () { bs.value = ''; pdvAdd(o); }; lst.appendChild(b);
+        });
+        rs.appendChild(lst);
+      }, PDV.itens.map(function (i) { return i.imei; }));
+    };
+    bs.oninput = function () { buscar(false); };
+    bs.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); buscar(true); } if (e.key === 'Escape') { bs.value = ''; rs.innerHTML = ''; } };
+    var T = pdvTot();
+    if (!PDV.itens.length && !PDV.acess.length) c1.appendChild(el('div', 'empty', 'Carrinho vazio. Leia o código de barras para começar.'));
+    else {
+      var tb = el('div', 'pdvcar');
+      PDV.itens.forEach(function (it, i) {
+        var r = el('div', 'pdvl'), n0 = el('div', 'nm', it.nome); n0.appendChild(el('small', '', 'IMEI ' + it.imei + (PDV.loja && it.loja !== PDV.loja ? ' · está em ' + it.loja : ''))); r.appendChild(n0);
+        r.appendChild(el('div', 'qt', '1')); r.appendChild(el('div', 'tt', brl(it.preco)));
+        var x = el('button', 'x', '×'); x.type = 'button'; x.onclick = function () { PDV.itens.splice(i, 1); PDV.pags = []; desenharPdv(); }; r.appendChild(x); tb.appendChild(r);
+      });
+      PDV.acess.forEach(function (it, i) {
+        var tem = PDV.loja ? (it.estoque[PDV.loja] || 0) : null;
+        var r = el('div', 'pdvl'), n0 = el('div', 'nm', it.nome); n0.appendChild(el('small', '', brl(it.preco) + ' un.' + (tem !== null && it.qtd > tem ? ' · SÓ TEM ' + tem + ' NA LOJA' : ''))); r.appendChild(n0);
+        var qw = el('div', 'qt'), mn = el('button', '', '−'), pl = el('button', '', '+'); mn.type = pl.type = 'button';
+        mn.onclick = function () { if (it.qtd > 1) it.qtd--; else PDV.acess.splice(i, 1); PDV.pags = []; desenharPdv(); }; pl.onclick = function () { it.qtd++; PDV.pags = []; desenharPdv(); };
+        qw.appendChild(mn); qw.appendChild(el('span', '', String(it.qtd))); qw.appendChild(pl); r.appendChild(qw);
+        r.appendChild(el('div', 'tt', brl(it.preco * it.qtd)));
+        var x = el('button', 'x', '×'); x.type = 'button'; x.onclick = function () { PDV.acess.splice(i, 1); PDV.pags = []; desenharPdv(); }; r.appendChild(x); tb.appendChild(r);
+      });
+      c1.appendChild(tb);
+    }
+    // ---- lado: cliente, total, pagamento
+    var c2 = el('div', 'card'); dir.appendChild(c2);
+    c2.appendChild(el('div', 'k', 'Cliente'));
+    var cl = el('div', 'pdvcli'); c2.appendChild(cl);
+    if (!PDV.cli) {
+      cl.appendChild(el('b', '', 'Consumidor final'));
+      var idb = el('button', 'lnk', 'Identificar cliente'); idb.type = 'button'; cl.appendChild(idb);
+      var ib = el('div', 'hide'); c2.appendChild(ib);
+      idb.onclick = function () {
+        ib.classList.remove('hide'); ib.innerHTML = '';
+        var q = inp('text', 'Nome, CPF ou WhatsApp'); ib.appendChild(q); var rr = el('div'); ib.appendChild(rr);
+        var nb = el('button', 'lnk', '+ Cliente novo (CPF, nome e WhatsApp)'); nb.type = 'button'; ib.appendChild(nb);
+        var tm = null;
+        q.oninput = function () { clearTimeout(tm); rr.innerHTML = ''; var t = q.value.trim(); if (t.length < 2) return; tm = setTimeout(function () { call('clientesBusca', [S.token, t]).then(function (l) { rr.innerHTML = ''; var lst = el('div', 'vdres'); l.forEach(function (x) { var b = el('button'); b.type = 'button'; var a = el('span', '', x.nome); a.appendChild(el('small', '', [x.cpf ? fmtDoc(x.cpf) : '', x.whats ? fmtFone(x.whats) : ''].filter(Boolean).join(' · '))); b.appendChild(a); b.onclick = function () { PDV.cli = x; PDV.credito = x.credito; desenharPdv(); }; lst.appendChild(b); }); if (!l.length) lst.appendChild(el('div', 'hint', 'Nenhum cliente encontrado.')); rr.appendChild(lst); }); }, 300); };
+        nb.onclick = function () {
+          ib.innerHTML = ''; var cp = campo(ib, 'CPF', inp('text', '000.000.000-00'), true); cp.inputMode = 'numeric'; var nm = campo(ib, 'Nome', inp('text', '')); var wp = campo(ib, 'WhatsApp', inp('text', '(22) 99999-9999')); wp.inputMode = 'tel';
+          var okb = el('button', 'btn ghost', 'Usar este cliente'); okb.type = 'button'; okb.style.marginTop = '8px'; ib.appendChild(okb); var em = el('div', 'msg err'); ib.appendChild(em);
+          okb.onclick = function () { var c = soDig(cp.value), w = soDig(wp.value); if (!cpfOk(c)) { em.textContent = 'CPF inválido.'; em.classList.add('show'); return; } if (nm.value.trim().length < 3) { em.textContent = 'Informe o nome.'; em.classList.add('show'); return; } if (w.length < 10) { em.textContent = 'WhatsApp com DDD.'; em.classList.add('show'); return; } PDV.cli = { id: '', cpf: c, nome: nm.value.trim(), whats: w }; desenharPdv(); };
+          cp.focus();
+        };
+        q.focus();
+      };
+    } else {
+      cl.appendChild(el('b', '', PDV.cli.nome)); cl.appendChild(el('small', '', [PDV.cli.cpf ? fmtDoc(PDV.cli.cpf) : '', PDV.cli.whats ? fmtFone(PDV.cli.whats) : ''].filter(Boolean).join(' · ')));
+      var tc = el('button', 'lnk', 'Tirar'); tc.type = 'button'; tc.onclick = function () { PDV.cli = null; PDV.credito = null; desenharPdv(); }; cl.appendChild(tc);
+    }
+    var dw = inpValor(PDV.desconto); campo(c2, 'Desconto (R$)', dw); dw.input.onchange = function () { PDV.desconto = dw.input.value; PDV.pags = []; desenharPdv(); };
+    var tot = el('div', 'pdvtot'); tot.appendChild(el('div', 'k', T.qtd + ' ite' + (T.qtd === 1 ? 'm' : 'ns') + (T.desc ? ' · desconto ' + brl(T.desc) : ''))); tot.appendChild(el('div', 'v', brl(T.venda))); c2.appendChild(tot);
+    c2.appendChild(el('div', 'k', 'Pagamento'));
+    var bts = el('div', 'pdvfp'); c2.appendChild(bts);
+    formasV().filter(function (f) { return f.cartao !== 'crediario'; }).forEach(function (f) {
+      var b = el('button', 'btn ghost', f.nome); b.type = 'button';
+      b.onclick = function () { var T2 = pdvTot(); if (T2.falta <= 0) return; PDV.pags.push({ formaId: f.id, forma: f.nome, cartao: f.cartao, valor: String(T2.falta.toFixed(2)).replace('.', ','), parcelas: f.cartao === 'credito' ? '1' : '', recebido: '' }); desenharPdv(); };
+      bts.appendChild(b);
+    });
+    var pl2 = el('div'); c2.appendChild(pl2);
+    PDV.pags.forEach(function (p, i) {
+      var r = el('div', 'pdvpg'), hd = el('div', 'hd'); hd.appendChild(el('b', '', p.forma)); var x = el('button', 'x', '×'); x.type = 'button'; x.onclick = function () { PDV.pags.splice(i, 1); desenharPdv(); }; hd.appendChild(x); r.appendChild(hd);
+      var vw = inpValor(p.valor); r.appendChild(vw); vw.input.oninput = function () { p.valor = vw.input.value; inf(); faltaTxt(); };
+      var fo = formaDe(p);
+      if (fo && fo.cartao === 'credito') { var ps = el('select'); for (var n = 1; n <= (fo.maxParc || 12); n++) { var o = el('option', '', n + 'x'); o.value = String(n); ps.appendChild(o); } ps.value = p.parcelas || '1'; ps.onchange = function () { p.parcelas = ps.value; inf(); }; r.appendChild(ps); }
+      var rec = null;
+      if (fo && fo.cartao === 'nao' && /dinheiro/i.test(fo.nome)) { rec = inpValor(p.recebido); rec.input.placeholder = 'Valor entregue pelo cliente'; r.appendChild(rec); rec.input.oninput = function () { p.recebido = rec.input.value; inf(); }; }
+      var cb = el('div', 'cb'); r.appendChild(cb);
+      function inf() { var t = textoReceb(calcPag(p, isoHoje())); if (rec && num(p.recebido)) { var tr = r2((num(p.recebido) || 0) - (num(p.valor) || 0)); t = (tr >= 0 ? 'TROCO: ' + brl(tr) : 'Falta ' + brl(-tr)) + (t ? ' · ' + t : ''); } cb.textContent = t; }
+      inf(); pl2.appendChild(r);
+    });
+    var ft = el('div', 'vdfalta'); c2.appendChild(ft);
+    function faltaTxt() { var T3 = pdvTot(); ft.textContent = !(PDV.itens.length || PDV.acess.length) ? '' : Math.abs(T3.falta) < 0.01 ? '✓ Pagamento fechado' : T3.falta > 0 ? 'Falta ' + brl(T3.falta) : 'Passou ' + brl(-T3.falta); ft.style.color = Math.abs(T3.falta) < 0.01 ? 'var(--ok)' : 'var(--warn)'; }
+    faltaTxt();
+    var m = el('div', 'msg err'); c2.appendChild(m);
+    var fin = el('button', 'btn ok', 'Finalizar venda (F2)'); fin.type = 'button'; fin.id = 'pdvFin'; fin.style.marginTop = '10px'; c2.appendChild(fin);
+    var nv = el('button', 'btn ghost', 'Nova venda (F4)'); nv.type = 'button'; nv.style.marginTop = '8px'; c2.appendChild(nv); nv.onclick = function () { pdvNovo(); abrirPdv(); };
+    fin.onclick = function () {
+      m.classList.remove('show'); var T4 = pdvTot(), erro = '';
+      if (!PDV.loja) erro = 'Escolha a loja.';
+      else if (!PDV.itens.length && !PDV.acess.length) erro = 'Carrinho vazio.';
+      else if (PDV.itens.length && !PDV.cli) erro = 'Venda de aparelho: identifique o cliente (a garantia sai no nome dele).';
+      else if (PDV.acess.some(function (a) { return a.qtd > (a.estoque[PDV.loja] || 0); })) erro = 'Tem produto sem estoque suficiente nesta loja.';
+      else if (!PDV.pags.length) erro = 'Escolha a forma de pagamento.';
+      else if (Math.abs(T4.falta) > 0.009) erro = 'A soma dos pagamentos precisa ser ' + brl(T4.venda) + '.';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      fin.disabled = true; fin.innerHTML = '<span class="spin"></span>Registrando…';
+      var d = { loja: PDV.loja, vendedorId: S.u.id, desconto: T4.desc, dataVenda: isoHoje(), consumidorFinal: !PDV.cli,
+        cliente: PDV.cli ? { id: PDV.cli.id || '', cpf: PDV.cli.cpf || '', nome: PDV.cli.nome, whats: PDV.cli.whats || '', cep: PDV.cli.cep || '', endereco: PDV.cli.endereco || '', bairro: PDV.cli.bairro || '', cidade: PDV.cli.cidade || '' } : {},
+        itens: PDV.itens.map(function (i) { return { linha: i.linha, imei: i.imei, preco: i.preco, desconto: 0 }; }),
+        acessorios: PDV.acess.map(function (a) { return { id: a.id, qtd: a.qtd, preco: a.preco, desconto: 0 }; }), troca: [],
+        pagamentos: PDV.pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, categoria: catRec()[0] }; }), obs: '' };
+      call('vendaRegistrar', [S.token, d]).then(function (v) {
+        S.disp = null; S.dash = null; S.vendas = null; S.fin = null; S.ac = null; S.cred = null;
+        pdvNovo(); desenharPdv(); abrirRecibo(v, true);
+      }).catch(function (e) { fin.disabled = false; fin.textContent = 'Finalizar venda (F2)'; m.textContent = e; m.classList.add('show'); });
+    };
   }
 
   // =========================================================
@@ -5165,28 +5452,54 @@
   }
 
   function cfgFormas(box) {
-    var D = S.fin, L = D.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa }; });
+    var D = S.fin, L = D.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa, taxas: JSON.parse(JSON.stringify(f.taxas || {})), repassa: !!f.repassa, receb: f.receb || 'hora', maxParc: f.maxParc || 1 }; });
     var contas = D.contas.filter(function (c) { return c.ativa; });
     var c = el('div', 'card'); box.appendChild(c);
-    c.appendChild(el('div', 'hint', 'Estas são as formas que aparecem no pagamento da venda. O valor recebido entra no caixa/banco escolhido (no cartão, entra o valor líquido; as taxas vêm da tabela da Calculadora de Cartão).'));
+    c.appendChild(el('div', 'hint', 'Estas são as formas que aparecem no pagamento da venda e no PDV. Em "Taxas e recebimento" você define a taxa de cada parcela e quando o dinheiro cai na conta: a venda mostra o valor líquido, e ele entra em Caixas e Bancos na data certa.'));
     var lst = el('div'); lst.style.marginTop = '12px'; c.appendChild(lst);
+    var RECEB = [['hora', 'Na hora (mesmo dia)'], ['dias', 'Em X dias corridos'], ['uteis', 'Em X dias úteis'], ['mensal', 'Mensal: uma parcela a cada 30 dias']];
     function desenhar() {
       lst.innerHTML = '';
       var h = el('div', 'frow'); ['Nome', 'Tipo', 'Entra na conta', ''].forEach(function (t) { var d = el('div', '', t); d.style.cssText = 'font-size:12px;font-weight:700;color:var(--muted)'; h.appendChild(d); }); lst.appendChild(h);
       L.forEach(function (f) {
         var r = el('div', 'frow'), nm = inp('text', 'Ex.: Boleto'); nm.value = f.nome; nm.maxLength = 40; nm.oninput = function () { f.nome = nm.value; };
-        var tp = el('select'); [['nao', 'Sem taxa (PIX, dinheiro…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)'], ['crediario', 'Crediário (parcelas com o cliente)']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; tp.appendChild(op); }); tp.value = f.cartao; tp.onchange = function () { f.cartao = tp.value; };
+        var tp = el('select'); [['nao', 'Sem cartão (PIX, dinheiro…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)'], ['crediario', 'Crediário (parcelas com o cliente)']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; tp.appendChild(op); }); tp.value = f.cartao;
+        tp.onchange = function () { f.cartao = tp.value; if (f.cartao === 'credito' && f.maxParc < 2) f.maxParc = 12; if (f.cartao === 'credito' && f.receb === 'hora') f.receb = 'mensal'; desenhar(); };
         var co = el('select'); contas.forEach(function (x) { var op = el('option', '', x.nome); op.value = x.id; co.appendChild(op); }); if (!contas.some(function (x) { return x.id === f.conta; })) { var op2 = el('option', '', '(escolha)'); op2.value = ''; co.insertBefore(op2, co.firstChild); } co.value = f.conta || ''; co.onchange = function () { f.conta = co.value; };
         var al = el('label', 'ck'), at = el('input'); at.type = 'checkbox'; at.checked = f.ativa; at.onchange = function () { f.ativa = at.checked; }; al.appendChild(at); al.appendChild(document.createTextNode('Ativa'));
         r.appendChild(nm); r.appendChild(tp); r.appendChild(co); r.appendChild(al); lst.appendChild(r);
+        if (f.cartao === 'crediario') { lst.appendChild(el('div', 'hint fdet', 'Crediário: juros, multa e parcelas ficam em Financeiro › Crediário › ⚙ Regras. O dinheiro entra quando cada parcela é recebida.')); return; }
+        var det = el('details', 'fdet'), sm = el('summary', '', 'Taxas e recebimento: ' + resumoForma(f)); det.appendChild(sm); lst.appendChild(det);
+        var g = el('div', 'g3'), a1 = el('div'), a2 = el('div'), a3 = el('div'); [a1, a2, a3].forEach(function (z) { g.appendChild(z); }); det.appendChild(g);
+        var rb = el('select'); RECEB.forEach(function (o) { var q = el('option', '', o[1]); q.value = o[0]; rb.appendChild(q); });
+        var mm = /^(dias|uteis):(\d+)$/.exec(f.receb); rb.value = mm ? mm[1] : f.receb; campo(a1, 'Quando cai na conta', rb, true);
+        var nd = inp('number', 'Ex.: 1'); nd.min = 0; nd.max = 365; nd.value = mm ? mm[2] : '1'; campo(a2, 'X (dias)', nd, true);
+        var upd = function () { f.receb = rb.value === 'dias' || rb.value === 'uteis' ? rb.value + ':' + (parseInt(nd.value, 10) || 0) : rb.value; a2.style.visibility = rb.value === 'dias' || rb.value === 'uteis' ? '' : 'hidden'; sm.textContent = 'Taxas e recebimento: ' + resumoForma(f); };
+        rb.onchange = upd; nd.oninput = upd; upd();
+        if (f.cartao === 'credito') { var mp = inp('number', '12'); mp.min = 1; mp.max = 24; mp.value = f.maxParc; campo(a3, 'Máximo de parcelas', mp, true); mp.onchange = function () { f.maxParc = Math.min(24, Math.max(1, parseInt(mp.value, 10) || 1)); desenhar(); }; }
+        var rp = el('label', 'perm'), rc = el('input'); rc.type = 'checkbox'; rc.checked = f.repassa; var rt = el('div', 't', 'Repassar a taxa ao cliente'); rt.appendChild(el('small', '', 'Ligado: o cliente paga o valor + taxa na maquininha e cai o valor cheio. Desligado: cai o valor menos a taxa.')); rp.appendChild(rc); rp.appendChild(rt); rp.style.marginTop = '10px'; det.appendChild(rp);
+        rc.onchange = function () { f.repassa = rc.checked; sm.textContent = 'Taxas e recebimento: ' + resumoForma(f); };
+        det.appendChild(el('div', 'hint', f.cartao === 'credito' ? 'Taxa (%) por número de parcelas. Em branco = usa a tabela da Calculadora de Cartão.' : 'Taxa (%) cobrada nesta forma (em branco = sem taxa' + (f.cartao === 'debito' ? ', ou a do Débito da Calculadora' : '') + ').'));
+        var gt = el('div', 'g6');
+        for (var n = 1; n <= (f.cartao === 'credito' ? f.maxParc : 1); n++) (function (n) {
+          var w = el('div'), i = inp('text', f.cartao === 'credito' && taxa(n + 'x') ? nfmt(r2(taxa(n + 'x').taxa * 100)) : f.cartao === 'debito' && taxa('Débito') ? nfmt(r2(taxa('Débito').taxa * 100)) : '0'); i.inputMode = 'decimal';
+          i.value = f.taxas[String(n)] !== undefined ? nfmt(f.taxas[String(n)]) : '';
+          i.oninput = function () { var v = num(i.value); if (i.value.trim() === '' || v === null) delete f.taxas[String(n)]; else f.taxas[String(n)] = v; sm.textContent = 'Taxas e recebimento: ' + resumoForma(f); };
+          var sw = el('div', 'suffix'); sw.appendChild(i); sw.appendChild(el('span', '', '%')); campo(w, f.cartao === 'credito' ? n + 'x' : 'Taxa', sw); gt.appendChild(w);
+        })(n);
+        det.appendChild(gt);
       });
+    }
+    function resumoForma(f) {
+      var rr = /^(dias|uteis):(\d+)$/.exec(f.receb), q = f.receb === 'hora' ? 'cai na hora' : f.receb === 'mensal' ? 'cai mensal (por parcela)' : rr ? 'cai em ' + rr[2] + ' dia(s) ' + (rr[1] === 'uteis' ? 'úteis' : 'corridos') : '';
+      var nT = Object.keys(f.taxas || {}).length;
+      return q + ' · ' + (nT ? nT + ' taxa(s) cadastrada(s)' : 'taxas da Calculadora') + (f.repassa ? ' · repassa ao cliente' : '');
     }
     desenhar();
     var add = el('button', 'lnk', '+ Nova forma de pagamento'); add.type = 'button';
-    add.onclick = function () { L.push({ id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true }); desenhar(); var ins = lst.querySelectorAll('input[type=text]'); ins[ins.length - 1].focus(); };
+    add.onclick = function () { L.push({ id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true, taxas: {}, repassa: false, receb: 'hora', maxParc: 1 }); desenhar(); var ins = lst.querySelectorAll('.frow input[type=text]'); ins[ins.length - 1].focus(); };
     c.appendChild(add);
-    c.appendChild(el('div', 'hint', 'No Crediário, o dinheiro não entra na venda: entra no caixa/banco quando cada parcela é recebida (em Financeiro › Crediário).'));
-    c.appendChild(el('div', 'hint', 'Para tirar uma forma, desmarque "Ativa" (as vendas antigas continuam com ela). Contas novas (caixas e bancos) você cria em Financeiro › Caixas e Bancos.'));
+    c.appendChild(el('div', 'hint', 'Para tirar uma forma, desmarque "Ativa" (as vendas antigas continuam com ela). Dias úteis não contam sábado e domingo (feriados não são descontados).'));
     var m = el('div', 'msg err'); c.appendChild(m);
     var sv = el('button', 'btn', 'Salvar formas de pagamento'); sv.type = 'button'; sv.style.marginTop = '10px'; c.appendChild(sv);
     sv.onclick = function () {
@@ -5194,7 +5507,7 @@
       if (L.some(function (f) { return f.nome.trim().length < 2; })) { m.textContent = 'Dê um nome para todas as formas.'; m.classList.add('show'); return; }
       if (L.some(function (f) { return !f.conta; })) { m.textContent = 'Escolha a conta de todas as formas.'; m.classList.add('show'); return; }
       sv.disabled = true; sv.textContent = 'Salvando…';
-      call('formasSalvar', [S.token, L]).then(function (d) { aposFin(d); box.innerHTML = ''; cfgFormas(box); box.insertBefore(el('div', 'msg ok show', '✓ Formas de pagamento salvas.'), box.firstChild); V = null; $('vdNova').innerHTML = ''; })
+      call('formasSalvar', [S.token, L]).then(function (d) { aposFin(d); box.innerHTML = ''; cfgFormas(box); box.insertBefore(el('div', 'msg ok show', '✓ Formas de pagamento salvas.'), box.firstChild); V = null; $('vdNova').innerHTML = ''; PDV = null; })
         .catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar formas de pagamento'; m.textContent = e; m.classList.add('show'); });
     };
   }
