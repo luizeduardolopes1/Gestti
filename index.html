@@ -580,6 +580,9 @@
   .who .uic svg{width:20px;height:20px}
   #whoNome{font-weight:700;font-size:13.5px}.who .wl{font-size:12px;opacity:.75}
   #who.hide~#sair{display:none}
+  .irhome{background:none;border:0;font:inherit;text-align:left;cursor:pointer;border-radius:10px}
+  .sbtop.irhome{width:100%}.irhome:hover .wm{opacity:.85}.irhome:focus-visible{outline:2px solid var(--brand2);outline-offset:-2px}
+  body:not(.logado) .irhome{cursor:default}
   .gear{position:relative}.gear.gpend::after{content:'';position:absolute;top:7px;right:7px;width:10px;height:10px;border-radius:50%;background:#FFB020;box-shadow:0 0 0 2px var(--sb)}
   .sbabrir{display:none}
   body.logado .hbrand{display:none}
@@ -701,7 +704,7 @@
 </head>
 <body class="tela-login">
 <aside class="sb hide" id="nav" aria-label="Menu principal">
-  <div class="sbtop"><span id="sbLogo" style="display:flex"></span><span class="wm">gestti</span></div>
+  <button type="button" class="sbtop irhome" title="Ir para o Dashboard" aria-label="Gestti: ir para o Dashboard"><span id="sbLogo" style="display:flex"></span><span class="wm">gestti</span></button>
   <div class="sbbusca"><span id="sbBuscaIc"></span><input id="sbBusca" type="search" placeholder="Pesquisar…" autocomplete="off" aria-label="Pesquisar página do menu"></div>
   <div class="sbnav" id="tabs" role="navigation"></div>
   <div class="sbrod"><button type="button" class="sbmodo" id="sbModo"></button></div>
@@ -710,7 +713,7 @@
 <header>
   <div class="hrow">
     <button class="hbtn sbabrir" id="sbAbrir" type="button" aria-label="Abrir menu"></button>
-    <div class="hbrand"><span id="hLogo" style="display:flex"></span><span class="wm">gestti</span></div>
+    <button type="button" class="hbrand irhome" title="Ir para o Dashboard" aria-label="Gestti: ir para o Dashboard"><span id="hLogo" style="display:flex"></span><span class="wm">gestti</span></button>
     <div class="htit" id="topTit"></div>
     <div class="hdir">
       <div class="who hide" id="who"><span class="uic" id="whoIc"></span><div class="wtx"><div id="whoNome"></div><div class="wl" id="whoLoja"></div></div></div>
@@ -1581,6 +1584,13 @@
   $('sbBusca').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { var b = document.querySelector('#tabs .sbi'); if (b) { b.click(); this.value = ''; montarMenu(); } }
     if (e.key === 'Escape') { this.value = ''; montarMenu(); this.blur(); }
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.irhome'), function (b) {
+    b.onclick = function () {
+      if (!S.u || !document.body.classList.contains('logado')) return;
+      var dest = pode('dashboard') ? 'dash' : (VIEWS.filter(function (v) { return pode(v.perm); })[0] || {}).id;
+      if (dest) { ir(dest); fecharSb(); }
+    };
   });
   $('sbLogo').innerHTML = logoSvg(true); $('hLogo').innerHTML = logoSvg(true);
   $('sbAbrir').innerHTML = svgIco('menu'); $('sair').innerHTML = svgIco('sair'); $('whoIc').innerHTML = svgIco('usuario');
