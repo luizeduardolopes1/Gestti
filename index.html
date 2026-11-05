@@ -779,6 +779,13 @@
   .cftipo{grid-template-columns:repeat(2,minmax(0,1fr))}
   @media (max-width:900px){.cfplano{grid-template-columns:1fr}}
   @media (max-width:700px){.cftop{flex-direction:column;align-items:stretch}.cftipo{grid-template-columns:1fr}.vdser .serin{max-width:none;width:100%}}
+  .cpln .prefix input{padding-left:31px}.cpln .prefix span{left:9px;font-size:12.5px}
+  .cpres{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-top:8px}.cpres div small{display:block;font-size:11.5px;color:var(--muted)}.cpres div b{font-size:14px}.cpres .btn{width:auto;margin:0 0 0 auto;padding:8px 16px}
+  .cpit.salvo{background:var(--soft)}.cpsv{display:flex;align-items:center;gap:10px;justify-content:flex-end;margin-top:10px}.cpsv .msg{margin:0;flex:1}.cpsv .btn{width:auto;margin:0;padding:9px 18px}
+  .cmbox{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:4px 0 12px}.cmbox>div{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--soft)}
+  .cmbox small{display:block;color:var(--muted);font-size:12px}.cmbox b{display:block;font-size:17px;margin-top:2px}.cmbox span{display:block;color:var(--muted);font-size:11.5px}
+  .sertipo{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:8px}.dstg{grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media (max-width:700px){.sertipo,.dstg,.cmbox{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="tela-login">
@@ -941,6 +948,32 @@
   </section>
 
   <!-- CONTAS A PAGAR -->
+  <!-- CONTAS A RECEBER -->
+  <section id="vReceber" class="hide">
+    <div class="pgrid">
+      <aside class="pfil" id="rcFil">
+        <h3>Filtros</h3>
+        <label for="rcBusca">Buscar</label>
+        <input id="rcBusca" placeholder="Descrição, cliente ou venda" autocomplete="off">
+        <label for="rcSit">Situação</label>
+        <select id="rcSit"><option value="">Em aberto</option><option value="vencidas">Vencidas</option><option value="Recebida">Recebidas</option><option value="Cancelada">Canceladas</option><option value="todas">Todas</option></select>
+        <label for="rcPer">Vencimento</label>
+        <select id="rcPer"><option value="">Qualquer data</option><option value="mes">Este mês</option><option value="prox">Próximo mês</option><option value="7">Próximos 7 dias</option><option value="30">Próximos 30 dias</option></select>
+        <label for="rcCat">Categoria</label><select id="rcCat"></select>
+        <label for="rcLoja">Loja</label><select id="rcLoja"></select>
+        <button type="button" class="btn ghost" id="rcLimpar">Limpar filtros</button>
+      </aside>
+      <div>
+        <div class="crumb">Financeiro</div>
+        <div class="ptopo"><h1>Contas a Receber</h1><div class="tbtns"><button type="button" class="btn" id="rcNovo">+ Nova conta a receber</button></div></div>
+        <div id="rcResumo"></div>
+        <div class="fbar"><div class="cont" id="rcCont"></div><button type="button" class="lnk bfil" id="rcFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="rcFilEsc"></button></div>
+        <div id="rcAviso"></div>
+        <div id="rcLista"></div>
+      </div>
+    </div>
+  </section>
+
   <section id="vPagar" class="hide">
     <div class="pgrid">
       <aside class="pfil" id="pgFil">
@@ -1501,6 +1534,7 @@
     { id: 'osimei', sec: 'vOsImei', nome: 'Histórico por IMEI', perm: 'os', menu: 'Ordem de Serviço', desc: 'Serviços já feitos em um aparelho' },
     { id: 'osaux', sec: 'vOsAux', nome: 'Termos e prazos de garantia', perm: 'cancelar_os', menu: 'Ordem de Serviço', sub: 'Cadastro de Auxiliares', subNome: 'Termos e prazos de garantia', desc: 'Prazos de garantia e textos dos termos da OS' },
     { id: 'bancos', sec: 'vBancos', nome: 'Caixas e Bancos', perm: 'financeiro', menu: 'Financeiro', desc: 'Saldos, extrato e lançamentos' },
+    { id: 'receber', sec: 'vReceber', nome: 'Contas a Receber', perm: 'financeiro', menu: 'Financeiro', desc: 'Valores a receber, vencimentos e recebimentos' },
     { id: 'pagar', sec: 'vPagar', nome: 'Contas a Pagar', perm: 'financeiro', menu: 'Financeiro', desc: 'Despesas, vencimentos e pagamentos' },
     { id: 'cred', sec: 'vCred', nome: 'Crediário', perm: 'crediario', menu: 'Financeiro', desc: 'Faturas, atrasos, recebimentos e limite dos clientes' },
     { id: 'conferencia', sec: 'vConfCx', nome: 'Auditoria de Caixa', perm: 'conferir_caixa', menu: 'Financeiro', desc: 'Caixas abertos, fechados e diferenças' },
@@ -1572,6 +1606,7 @@
   //  GESTTI: ÍCONES, MENU LATERAL (FIXO / MÓVEL)
   // =========================================================
   var ICO = {
+    entrada: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 8v6"/><path d="M9 11l3 3 3-3"/><path d="M7 18h10"/>',
     dre: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/><path d="M15 8h4v4"/>',
     grafico: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
     mais: '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/>',
@@ -1618,7 +1653,7 @@
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
   var ICO_MENU = { 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta' };
-  var ICO_VIEW = { dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
+  var ICO_VIEW = { receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas' };
   var SBM = { aberto: {} };
@@ -1858,7 +1893,7 @@
     nb.onclick = function () { if (ni.value.trim().length < 2) { m.className = 'msg err show'; m.textContent = 'Digite o nome do depósito.'; return; } enviar({ acao: 'criar', nome: ni.value }, '✓ Depósito criado.'); };
     ni.onkeydown = function (e) { if (e.key === 'Enter') nb.click(); };
   }
-  function limparCaches() { S.disp = null; S.ac = null; S.est = null; S.os = null; S.dash = null; S.vendas = null; S.fin = null; S.cx = null; S.mt = null; S.pagar = null; S.cred = null; }
+  function limparCaches() { S.receber = null; S.disp = null; S.ac = null; S.est = null; S.os = null; S.dash = null; S.vendas = null; S.fin = null; S.cx = null; S.mt = null; S.pagar = null; S.cred = null; }
 
   // =========================================================
   //  OS: CADASTRO DE AUXILIARES (garantias e textos)
@@ -2012,7 +2047,7 @@
   var USO_FORMA = [['receber', 'Somente recebimento', 'Aparece nas vendas, PDV, OS, crediário e caixa'], ['ambos', 'Recebimento e pagamento', 'Aparece nas vendas e também em contas a pagar e compras'], ['pagar', 'Somente pagamento', 'Aparece só em contas a pagar e entrada de compras']];
   var TIPO_FORMA = [['nao', 'Sem cartão (PIX, dinheiro, boleto…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)'], ['crediario', 'Crediário (parcelas com o cliente)']];
   function rotulo(l, k) { var x = l.filter(function (z) { return z[0] === k; })[0]; return x ? x[1] : k; }
-  function copiaFormas() { return S.fin.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa, taxas: JSON.parse(JSON.stringify(f.taxas || {})), repassa: !!f.repassa, receb: f.receb || 'hora', maxParc: f.maxParc || 1, uso: f.uso || 'receber', maquininha: f.maquininha || '', bandeiras: JSON.parse(JSON.stringify(f.bandeiras || {})) }; }); }
+  function copiaFormas() { return S.fin.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa, taxas: JSON.parse(JSON.stringify(f.taxas || {})), repassa: !!f.repassa, receb: f.receb || 'hora', maxParc: f.maxParc || 1, uso: f.uso || 'receber', maquininha: f.maquininha || '', bandeiras: JSON.parse(JSON.stringify(f.bandeiras || {})), destino: f.destino || 'caixa' }; }); }
   function resumoForma(f) {
     if (f.cartao === 'crediario') return 'regras em Financeiro › Crediário';
     var rr = /^(dias|uteis):(\d+)$/.exec(f.receb), q = f.receb === 'hora' ? 'cai na hora' : f.receb === 'mensal' ? 'cai mensal (por parcela)' : rr ? 'cai em ' + rr[2] + ' dia(s) ' + (rr[1] === 'uteis' ? 'úteis' : 'corridos') : '';
@@ -2031,7 +2066,7 @@
       var r = el('div', 'prow' + (f.ativa ? '' : ' off')); r.tabIndex = 0; r.setAttribute('role', 'button');
       var ic = el('div', 'pimg'); ic.innerHTML = svgIco(f.cartao === 'nao' ? 'moedas' : 'cartao'); r.appendChild(ic);
       var n = el('div'), nm = el('div', 'pnome', f.nome); if (!f.ativa) nm.appendChild(el('span', 'bdg off', 'Inativa')); n.appendChild(nm); n.appendChild(el('div', 'psub', [f.maquininha, rotulo(TIPO_FORMA, f.cartao).replace(/ \(.*\)$/, ''), bandeirasDe(f).length ? bandeirasDe(f).length + ' bandeira(s)' : '', resumoForma(f)].filter(Boolean).join(' · '))); r.appendChild(n);
-      r.appendChild(el('div', 'psku', '')); r.lastChild.appendChild(el('span', 'bdg uso-' + f.uso, rotulo(USO_FORMA, f.uso)));
+      r.appendChild(el('div', 'psku', '')); r.lastChild.appendChild(el('span', 'bdg uso-' + f.uso, rotulo(USO_FORMA, f.uso))); if (f.destino === 'contas' && f.cartao !== 'crediario') r.lastChild.appendChild(el('span', 'bdg', 'Vai p/ contas'));
       r.appendChild(el('div', 'psub', nomeConta(f.conta) || '—'));
       r.appendChild(el('div', 'chev', '›'));
       r.onclick = function () { formaPagina(box, i); };
@@ -2044,7 +2079,7 @@
   }
   function formaPagina(box, idx) {
     var D = S.fin, L = copiaFormas(), contas = D.contas.filter(function (c) { return c.ativa; });
-    var f = idx > -1 ? L[idx] : { id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true, taxas: {}, repassa: false, receb: 'hora', maxParc: 1, uso: 'receber', maquininha: '', bandeiras: {} };
+    var f = idx > -1 ? L[idx] : { id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true, taxas: {}, repassa: false, receb: 'hora', maxParc: 1, uso: 'receber', maquininha: '', bandeiras: {}, destino: 'caixa' };
     if (idx < 0) L.push(f);
     box.innerHTML = '';
     var vt = el('button', 'lnk', '← Todas as formas de pagamento'); vt.type = 'button'; vt.onclick = function () { cfgFormas(box); window.scrollTo(0, 0); }; box.appendChild(vt);
@@ -2065,7 +2100,16 @@
         var tx = el('div'); tx.appendChild(el('b', '', u[1])); tx.appendChild(el('small', '', u[2])); lb.appendChild(rd); lb.appendChild(tx); ug.appendChild(lb);
         rd.onchange = function () { f.uso = u[0]; Array.prototype.forEach.call(ug.children, function (z) { z.classList.toggle('on', z === lb); }); };
       });
-      if (f.cartao === 'crediario') corpo.appendChild(el('div', 'hint', 'Crediário é sempre só de recebimento.'));
+      if (f.cartao === 'crediario') corpo.appendChild(el('div', 'hint', 'Crediário é sempre só de recebimento e as parcelas aparecem no Crediário e em Contas a Receber.'));
+      else {
+        corpo.appendChild(el('label', '', 'Para onde vai o valor'));
+        var dg = el('div', 'usog dstg'); corpo.appendChild(dg);
+        [['caixa', 'Direto para Caixas e Bancos', 'Entra (ou sai) do caixa/banco sozinho, na data do recebimento.'], ['contas', 'Contas a receber / Contas a pagar', 'Na venda vira uma conta a receber; na entrada de compras vira uma conta a pagar. Só entra no caixa quando você der baixa.']].forEach(function (u) {
+          var lb = el('label', 'usoop' + (f.destino === u[0] ? ' on' : '')), rd = el('input'); rd.type = 'radio'; rd.name = 'fdest'; rd.checked = (f.destino || 'caixa') === u[0];
+          var tx = el('div'); tx.appendChild(el('b', '', u[1])); tx.appendChild(el('small', '', u[2])); lb.appendChild(rd); lb.appendChild(tx); dg.appendChild(lb);
+          rd.onchange = function () { f.destino = u[0]; Array.prototype.forEach.call(dg.children, function (z) { z.classList.toggle('on', z === lb); }); };
+        });
+      }
       var g2 = grade(corpo, 2);
       var co = el('select'); contas.forEach(function (x) { var op = el('option', '', x.nome); op.value = x.id; co.appendChild(op); }); if (!contas.some(function (x) { return x.id === f.conta; })) { var o2 = el('option', '', '(escolha)'); o2.value = ''; co.insertBefore(o2, co.firstChild); }
       co.value = f.conta || ''; co.onchange = function () { f.conta = co.value; }; campo(g2[0], 'Caixa/banco onde o dinheiro entra (ou de onde sai)', co, true);
@@ -2281,23 +2325,26 @@
     if (ant === 'compras') CP = null;
     if (!$('fModal').classList.contains('hide')) fecharModal();
   }
-  function serNorm(s) { return String(s || '').toUpperCase().replace(/\s+/g, '').replace(/[^A-Z0-9\-_.\/]/g, '').slice(0, 40); }
+  function serNorm(s) { return String(s == null ? '' : s).replace(/[\u0000-\u001F]/g, '').trim().slice(0, 60); }
+  function serKey(s) { return serNorm(s).replace(/\s+/g, ' ').toUpperCase(); }
+  function serSplit(txt, tipo) { return String(txt || '').split(tipo === 'numerico' ? /[\n,;\s]+/ : /\n+/).map(serNorm).filter(Boolean); }
   function seriaisEst() { return (S.ac && S.ac.seriais) || (S.est && S.est.seriais) || []; }
-  function serialAchar(q) { q = serNorm(q); if (q.length < 3) return null; return seriaisEst().filter(function (x) { return x.s === q; })[0] || null; }
+  function serialAchar(q) { q = serKey(q); if (q.length < 3) return null; return seriaisEst().filter(function (x) { return serKey(x.s) === q; })[0] || null; }
   /** Caixa de seriais: modo 'entrada' (digita/lê) ou 'saida' (escolhe os que estão na loja). */
   function caixaSeriais(box, prod, modo, lojaFn, fonte, onChange) {
     var w = el('div', 'serbox'); box.appendChild(w); var sel = [];
     function des() {
       w.innerHTML = '';
       if (modo === 'entrada') {
-        w.appendChild(el('label', '', 'Seriais * (um por linha; pode usar o leitor)'));
+        w.appendChild(el('label', '', prod.serialTipo === 'numerico' ? 'Seriais * (só números; um por linha ou separados por espaço)' : 'Seriais * (um por linha, do jeito que está no produto)'));
         var ta = el('textarea'); ta.rows = 4; ta.placeholder = 'Ex.: SN0012345'; ta.value = sel.join('\n'); ta.setAttribute('aria-label', 'Seriais'); w.appendChild(ta);
         var inf = el('div', 'hint'); w.appendChild(inf);
         var upd = function () {
-          sel = ta.value.split(/[\n,;]+/).map(serNorm).filter(Boolean);
-          var dup = sel.filter(function (s, i) { return sel.indexOf(s) !== i; }), ja = sel.filter(function (s) { return (fonte() || []).some(function (x) { return x.s === s; }); });
-          inf.textContent = sel.length + ' serial(is) = quantidade ' + sel.length + (dup.length ? ' · repetido: ' + dup.join(', ') : '') + (ja.length ? ' · já em estoque: ' + ja.join(', ') : '');
-          inf.style.color = dup.length || ja.length ? 'var(--err)' : '';
+          sel = serSplit(ta.value, prod.serialTipo);
+          var ks = sel.map(serKey), dup = sel.filter(function (s, i) { return ks.indexOf(ks[i]) !== i; }), ja = sel.filter(function (s) { return (fonte() || []).some(function (x) { return serKey(x.s) === serKey(s); }); });
+          var nn = prod.serialTipo === 'numerico' ? sel.filter(function (s) { return !/^\d+$/.test(s); }) : [];
+          inf.textContent = sel.length + ' serial(is) = quantidade ' + sel.length + (dup.length ? ' · repetido: ' + dup.join(', ') : '') + (ja.length ? ' · já em estoque: ' + ja.join(', ') : '') + (nn.length ? ' · só números: ' + nn.join(', ') : '');
+          inf.style.color = dup.length || ja.length || nn.length ? 'var(--err)' : '';
           onChange(sel);
         };
         ta.oninput = upd; upd();
@@ -2323,10 +2370,10 @@
     var ip = inp('text', it.seriais.length ? 'Ler outro serial' : 'Leia ou digite o serial *'); ip.className = 'serin'; ip.setAttribute('aria-label', 'Serial de ' + it.nome); w.appendChild(ip);
     var add = function () {
       var s = serNorm(ip.value); if (!s) return;
-      var x = serialAchar(s);
+      var x = serialAchar(s); if (x) s = x.s;
       if (!x || x.p !== it.id) { msgFn('O serial ' + s + ' não está em estoque para ' + it.nome + '.'); return; }
       if (x.l !== loja) { msgFn('O serial ' + s + ' está em ' + x.l + ', não nesta loja.'); return; }
-      if (it.seriais.indexOf(s) > -1) { msgFn('Esse serial já está na venda.'); return; }
+      if (it.seriais.some(function (z) { return serKey(z) === serKey(s); })) { msgFn('Esse serial já está na venda.'); return; }
       it.seriais.push(s); it.qtd = it.seriais.length; ip.value = ''; redesenhar();
     };
     ip.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); add(); } };
@@ -2536,6 +2583,7 @@
     if (id === 'crm') carregarCrm(false);
     if (id === 'bancos') carregarFin(false);
     if (id === 'pagar') carregarPagar(false);
+    if (id === 'receber') carregarReceber(true);
     if (id === 'cred') carregarCred(false);
     if (id === 'pdv') abrirPdv();
     if (id === 'acess') carregarAcess(false);
@@ -3780,6 +3828,162 @@
   }
 
   // =========================================================
+  //  CONTAS A RECEBER
+  // =========================================================
+  function carregarReceber(forcar) {
+    if (S.receber && !forcar) return renderReceber();
+    $('rcLista').innerHTML = ''; $('rcLista').appendChild(el('div', 'empty', 'Carregando contas…')); $('rcCont').textContent = '';
+    call('receberListar', [S.token]).then(function (d) { S.receber = d; renderReceber(); }).catch(function (e) { $('rcLista').innerHTML = ''; $('rcLista').appendChild(el('div', 'empty', e)); });
+  }
+  function aposReceber(d) { S.receber = d; S.fin = null; renderReceber(); }
+  $('rcBusca').addEventListener('input', renderReceber);
+  ['rcSit', 'rcPer', 'rcCat', 'rcLoja'].forEach(function (k) { $(k).addEventListener('change', renderReceber); });
+  $('rcLimpar').onclick = function () { ['rcBusca', 'rcSit', 'rcPer', 'rcCat', 'rcLoja'].forEach(function (k) { $(k).value = ''; }); renderReceber(); };
+  $('rcFilBtn').onclick = function () { var on = !$('rcFil').classList.contains('on'); $('rcFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
+  botaoEsconderFiltros($('rcFilEsc'), 'rcFil', 'semFilReceber');
+  $('rcNovo').onclick = function () { if (!S.receber) return; formReceber(null); };
+  var ICO_REC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>';
+  function situacaoRc(x, hoje) { return x.situacao === 'Em aberto' && x.venc < hoje ? 'Vencida' : x.situacao; }
+  function renderReceber() {
+    var D = S.receber; if (!D) return;
+    var hoje = isoHoje();
+    opts($('rcCat'), D.todasCategorias || D.categorias, $('rcCat').value, 'Todas as categorias');
+    opts($('rcLoja'), D.lojas || (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('rcLoja').value, 'Todas as lojas');
+    var sit = $('rcSit').value, per = $('rcPer').value, cat = $('rcCat').value, lj = $('rcLoja').value, q = $('rcBusca').value.trim().toLowerCase();
+    var mesIni = hoje.slice(0, 8) + '01', proxIni = isoAdd(mesIni, 32).slice(0, 8) + '01', proxFim = isoAdd(isoAdd(proxIni, 32).slice(0, 8) + '01', -1), mesFim = isoAdd(proxIni, -1);
+    var todas = D.contas.concat(D.crediario || []);
+    var l = todas.filter(function (x) {
+      var st = situacaoRc(x, hoje);
+      if (sit === '' && x.situacao !== 'Em aberto') return false;
+      if (sit === 'vencidas' && st !== 'Vencida') return false;
+      if ((sit === 'Recebida' || sit === 'Cancelada') && x.situacao !== sit) return false;
+      if (per === 'mes' && (x.venc < mesIni || x.venc > mesFim)) return false;
+      if (per === 'prox' && (x.venc < proxIni || x.venc > proxFim)) return false;
+      if ((per === '7' || per === '30') && (x.venc < hoje || x.venc > isoAdd(hoje, +per))) return false;
+      if (cat && x.categoria !== cat) return false;
+      if (lj && x.loja !== lj) return false;
+      if (q && (x.descricao + ' ' + x.cliente + ' ' + x.id + ' ' + (x.origem || '')).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function (a, b) { return a.situacao === 'Recebida' && b.situacao === 'Recebida' ? (b.recebidoEm < a.recebidoEm ? -1 : 1) : (a.venc < b.venc ? -1 : a.venc > b.venc ? 1 : 0); });
+    var ab = todas.filter(function (x) { return x.situacao === 'Em aberto'; });
+    var rs = $('rcResumo'); rs.innerHTML = ''; var k = el('div', 'kpis'); rs.appendChild(k);
+    var venc = ab.filter(function (x) { return x.venc < hoje; }), sete = ab.filter(function (x) { return x.venc >= hoje && x.venc <= isoAdd(hoje, 7); });
+    var recMes = todas.filter(function (x) { return x.situacao === 'Recebida' && x.recebidoEm >= mesIni; });
+    kpi(k, 'Em aberto', brl(soma(ab, function (x) { return x.valor; })), ab.length + ' conta' + (ab.length === 1 ? '' : 's'));
+    kpi(k, 'Vencidas', brl(soma(venc, function (x) { return x.valor; })), venc.length ? venc.length + ' atrasada' + (venc.length === 1 ? '' : 's') : 'nada vencido', venc.length ? 'down' : 'up');
+    kpi(k, 'Vencem em 7 dias', brl(soma(sete, function (x) { return x.valor; })), sete.length + ' conta' + (sete.length === 1 ? '' : 's'));
+    kpi(k, 'Recebidas no mês', brl(soma(recMes, function (x) { return x.valor; })), recMes.length + ' recebimento' + (recMes.length === 1 ? '' : 's'));
+    $('rcCont').textContent = l.length + ' conta' + (l.length === 1 ? '' : 's') + ' · ' + brl(soma(l, function (x) { return x.valor; }));
+    var box = $('rcLista'); box.innerHTML = '';
+    if (!l.length) { box.appendChild(el('div', 'empty', todas.length ? 'Nenhuma conta com esses filtros.' : 'Nenhuma conta a receber ainda. Use "+ Nova conta a receber".')); return; }
+    var tab = el('div', 'ptab'), h = el('div', 'prow h');
+    ['', 'Descrição', 'Vencimento', 'Valor', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    tab.appendChild(h);
+    l.forEach(function (x) {
+      var st = situacaoRc(x, hoje), r = el('div', 'prow'); r.dataset.k = x.id;
+      var ic = el('div', 'pimg'); ic.innerHTML = ICO_REC; r.appendChild(ic);
+      var n = el('div'), nm = el('div', 'pnome', x.descricao); nm.appendChild(el('span', 'bdg ' + ({ 'Vencida': 'err', 'Recebida': 'ok', 'Cancelada': 'off' }[st] || 'warn'), st)); if (x.crediario) nm.appendChild(el('span', 'bdg', 'Crediário')); n.appendChild(nm);
+      n.appendChild(el('div', 'psub', [x.cliente, x.categoria, x.loja].filter(Boolean).join(' · '))); r.appendChild(n);
+      var vc = el('div', 'psku'); vc.appendChild(el('div', '', st === 'Recebida' ? 'Recebida em ' + isoBR(x.recebidoEm) : 'Vence ' + isoBR(x.venc)));
+      if (st === 'Recebida') vc.appendChild(el('div', 'psub', nomeContaRc(x.conta))); else if (st === 'Vencida') { var dv = el('div', 'psub', Math.round((msIso(hoje) - msIso(x.venc)) / DIA) + ' dia(s) de atraso'); dv.style.color = 'var(--err)'; vc.appendChild(dv); }
+      r.appendChild(vc);
+      var pr = el('div', 'ppre' + (st === 'Recebida' ? '' : st === 'Cancelada' ? ' sem' : ' est'), brl(x.valor)); r.appendChild(pr);
+      r.appendChild(el('div', 'chev', '›'));
+      r.onclick = function () { abrirReceber(x); };
+      tab.appendChild(r);
+    });
+    box.appendChild(tab);
+  }
+  function formasRcNomes() { var l = (S.receber && S.receber.formas) || []; return l.length ? l.map(function (f) { return f.nome; }) : ['PIX', 'Dinheiro', 'Transferência', 'Boleto', 'Cartão']; }
+  function contaDaFormaRc(nome) { var f = ((S.receber && S.receber.formas) || []).filter(function (x) { return x.nome === nome; })[0]; return f && S.receber.financeiras.some(function (c) { return c.id === f.conta; }) ? f.conta : ''; }
+  function nomeContaRc(id) { var c = S.receber && S.receber.financeiras.filter(function (x) { return x.id === id; })[0]; return c ? c.nome : (id ? nomeConta(id) : ''); }
+  function abrirReceber(x) {
+    Array.prototype.forEach.call(document.querySelectorAll('#rcLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.id); });
+    var hoje = isoHoje(), st = situacaoRc(x, hoje);
+    var bd = abrirDw(x.descricao, brl(x.valor) + ' · ' + (st === 'Recebida' ? 'recebida em ' + isoBR(x.recebidoEm) : st === 'Cancelada' ? 'cancelada' : 'vence ' + isoBR(x.venc)));
+    kvCard(bd, [['Situação', st], ['Valor', brl(x.valor)], ['Vencimento', isoBR(x.venc)], ['Cliente', x.cliente], ['Categoria', x.categoria], ['Loja', x.loja],
+                ['Recebida em', x.recebidoEm ? isoBR(x.recebidoEm) : ''], [x.situacao === 'Recebida' ? 'Entrou em' : 'Vai entrar em', x.conta ? nomeContaRc(x.conta) : ''], ['Origem', x.origem], ['Forma', x.forma], ['Observação', x.obs], ['Lançada por', x.lancado], ['Recebida por', x.recebidoPor], ['Nº', x.id]]);
+    if (x.crediario) {
+      bd.appendChild(el('div', 'hint', 'Parcela do crediário: o recebimento (com juros e multa de atraso) é feito na página Crediário.'));
+      opcaoDw(bd, 'Receber no Crediário', 'Abre o crediário deste cliente', 'okc', function () { fecharDrawer(); $('cdBusca').value = x.cliente; ir('cred'); });
+      return;
+    }
+    var am = el('div', 'msg err'); bd.appendChild(am);
+    if (x.situacao === 'Em aberto') {
+      var bp = opcaoDw(bd, 'Marcar como recebida', 'Escolha em qual caixa/banco o dinheiro entrou', 'okc', function () {
+        if (bp.nextSibling && bp.nextSibling.classList && bp.nextSibling.classList.contains('opc-box')) return;
+        var bx = el('div', 'opc-box');
+        var co = el('select'); S.receber.financeiras.forEach(function (c) { var o = el('option', '', c.nome); o.value = c.id; co.appendChild(o); }); campo(bx, 'Entrou na conta', co, true); if (x.conta) co.value = x.conta;
+        var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); bx.appendChild(lr);
+        var dt = inpData(hoje); campo(a1, 'Data do recebimento', dt); var vi = inpValor(x.valor); campo(a2, 'Valor recebido', vi);
+        var fo = el('select'); formasRcNomes().forEach(function (f2) { var o = el('option', '', f2); o.value = f2; fo.appendChild(o); }); campo(bx, 'Como foi recebido', fo); if (x.forma && formasRcNomes().indexOf(x.forma) > -1) fo.value = x.forma;
+        fo.onchange = function () { var c2 = contaDaFormaRc(fo.value); if (c2) co.value = c2; }; if (!x.conta) fo.onchange();
+        var ok = el('button', 'btn ok', 'Confirmar recebimento'); ok.type = 'button'; ok.style.marginTop = '10px'; bx.appendChild(ok); bp.after(bx);
+        ok.onclick = function () {
+          ok.disabled = true; ok.textContent = 'Salvando…';
+          call('receberBaixar', [S.token, x.id, { receber: true, conta: co.value, recebidoEm: dt.value, valor: num(vi.input.value), forma: fo.value }])
+            .then(function (d) { aposReceber(d); fecharDrawer(); var b = $('rcAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + x.descricao + ' recebida. O valor entrou em ' + nomeContaRc(co.value) + '.')); })
+            .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar recebimento'; am.textContent = e; am.classList.add('show'); });
+        };
+      });
+      opcaoDw(bd, 'Editar', 'Descrição, valor, vencimento, cliente', '', function () { fecharDrawer(); formReceber(x); });
+      var bc = opcaoDw(bd, 'Cancelar conta', 'Lançada por engano ou que não vai mais ser recebida', 'danger', function () {
+        if (!bc.dataset.c) { bc.dataset.c = 1; bc.querySelector('small').textContent = 'Toque de novo para confirmar'; return; }
+        call('receberCancelar', [S.token, x.id]).then(function (d) { aposReceber(d); fecharDrawer(); }).catch(function (e) { am.textContent = e; am.classList.add('show'); });
+      });
+    } else if (x.situacao === 'Recebida') {
+      var be = opcaoDw(bd, 'Estornar recebimento', 'A conta volta para Em aberto e o valor sai do saldo', 'danger', function () {
+        if (!be.dataset.c) { be.dataset.c = 1; be.querySelector('small').textContent = 'Toque de novo para confirmar o estorno'; return; }
+        call('receberBaixar', [S.token, x.id, { receber: false }]).then(function (d) { aposReceber(d); fecharDrawer(); }).catch(function (e) { am.textContent = e; am.classList.add('show'); });
+      });
+    }
+  }
+  function formReceber(x) {
+    var D = S.receber, sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', x ? 'Editar conta a receber' : 'Nova conta a receber'));
+    var k = el('div', 'card');
+    var ds = campo(k, 'Descrição *', inp('text', 'Ex.: Serviço para empresa X'), true); ds.maxLength = 100; ds.value = x ? x.descricao.replace(/ \(\d+\/\d+\)$/, '') : '';
+    if (x) ds.value = x.descricao;
+    var fo = el('select'); var o0 = el('option', '', '— Sem cliente —'); o0.value = ''; fo.appendChild(o0);
+    D.clientes.slice().sort(function (a, b) { return a.nome.localeCompare(b.nome); }).forEach(function (f2) { var o = el('option', '', f2.nome); o.value = f2.id; fo.appendChild(o); });
+    var on = el('option', '', '+ Digitar nome (sem cadastro)…'); on.value = '__novo'; fo.appendChild(on); fo.value = x ? x.cliId : ''; campo(k, 'Cliente', fo);
+    var nf = inp('text', 'Nome do cliente'); nf.className = 'hide'; nf.style.marginTop = '6px'; k.appendChild(nf);
+    fo.onchange = function () { nf.classList.toggle('hide', fo.value !== '__novo'); if (fo.value === '__novo') nf.focus(); };
+    var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
+    var ca = el('select'); opts(ca, x && D.categorias.indexOf(x.categoria) < 0 ? D.categorias.concat([x.categoria]) : D.categorias, x ? x.categoria : 'Outras receitas'); campo(a1, 'Categoria', ca);
+    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x ? x.loja : '', 'Geral (todas)'); campo(a2, 'Loja', lj);
+    var lv = el('div', 'row'), b1 = el('div'), b2 = el('div'); lv.appendChild(b1); lv.appendChild(b2); k.appendChild(lv);
+    var vi = inpValor(x ? x.valor : ''); campo(b1, 'Valor *', vi); var ve = inpData(x ? x.venc : isoHoje()); campo(b2, 'Vencimento *', ve);
+    var rp = null;
+    if (!x) { rp = el('select'); var o1 = el('option', '', 'Não repetir'); o1.value = '1'; rp.appendChild(o1); for (var n2 = 2; n2 <= 36; n2++) { var o = el('option', '', 'Repetir por ' + n2 + ' meses (parcelas ou conta fixa)'); o.value = String(n2); rp.appendChild(o); } campo(k, 'Repetir', rp); }
+    var ob = el('textarea'); ob.placeholder = 'Opcional'; ob.value = x ? x.obs : ''; campo(k, 'Observação', ob);
+    var pg = null, pbox = el('div', 'hide'), pc, pd, pf;
+    if (!x) {
+      var al = el('label', 'perm'); pg = el('input'); pg.type = 'checkbox'; var tt2 = el('div', 't', 'Já foi recebida'); tt2.appendChild(el('small', '', 'Marque para já somar o valor no caixa/banco.')); al.appendChild(pg); al.appendChild(tt2); al.style.marginTop = '10px'; k.appendChild(al);
+      k.appendChild(pbox);
+      pc = el('select'); D.financeiras.forEach(function (c) { var o = el('option', '', c.nome); o.value = c.id; pc.appendChild(o); }); campo(pbox, 'Entrou na conta', pc);
+      var lp = el('div', 'row'), c1 = el('div'), c2 = el('div'); lp.appendChild(c1); lp.appendChild(c2); pbox.appendChild(lp);
+      pd = inpData(isoHoje()); campo(c1, 'Recebida em', pd);
+      pf = el('select'); formasRcNomes().forEach(function (f2) { var o = el('option', '', f2); o.value = f2; pf.appendChild(o); }); campo(c2, 'Como', pf);
+      pf.onchange = function () { var c3 = contaDaFormaRc(pf.value); if (c3) pc.value = c3; }; pf.onchange();
+      pg.onchange = function () { pbox.classList.toggle('hide', !pg.checked); };
+    }
+    var m = el('div', 'msg err'); k.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', x ? 'Salvar' : 'Lançar conta'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); k.appendChild(ac); sh.appendChild(k);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var erro = ds.value.trim().length < 3 ? 'Descreva a conta.' : !(num(vi.input.value) > 0) ? 'Informe o valor.' : !ve.value ? 'Informe o vencimento.' : fo.value === '__novo' && nf.value.trim().length < 2 ? 'Digite o nome do cliente.' : '';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      var d = { id: x ? x.id : '', descricao: ds.value, cliId: fo.value === '__novo' ? '' : fo.value, clienteNome: fo.value === '__novo' ? nf.value : '', categoria: ca.value, loja: lj.value,
+                valor: num(vi.input.value), venc: ve.value, obs: ob.value, repetir: rp ? +rp.value : 1, recebido: !!(pg && pg.checked), conta: pc ? pc.value : '', recebidoEm: pd ? pd.value : '', forma: pf ? pf.value : '' };
+      call('receberSalvar', [S.token, d]).then(function (r) { aposReceber(r); S.crm = null; fecharModal(); var b = $('rcAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + (x ? 'Conta atualizada.' : d.repetir > 1 ? d.repetir + ' contas lançadas (uma por mês).' : 'Conta lançada.' + (d.recebido ? ' O valor já entrou no saldo.' : '')))); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Lançar conta'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal(); ds.focus();
+  }
+
+  // =========================================================
   //  CREDIÁRIO
   // =========================================================
   function carregarCred(forcar) {
@@ -4252,7 +4456,7 @@
     var D = S.ac, M = mapaP(), fi = x.ficha || {}, ca = fi.carac || {}, tr = fi.trib || {};
     var bd = abrirDw(x.nome, FMT_NOME[x.formato] + ' · ' + (x.preco ? brl(x.preco) : 'sem preço') + ' · ' + (x.formato === 'composicao' ? x.total + ' kit(s) montável(is)' : x.total + ' em estoque'));
     var pares = [['Preço de venda', x.preco ? brl(x.preco) : '—']];
-    if (D.ver && x.custo !== undefined && x.custo !== null) pares.push(['Custo líquido', brl(x.custo)], ['Mark-up', x.markup !== null ? nfmt(x.markup) + '%' : ''], ['Lucro bruto', x.preco ? brl(x.preco - x.custo) + (x.preco ? ' (' + pct((x.preco - x.custo) / x.preco) + ' do preço)' : '') : '']);
+    if (D.ver && x.custo !== undefined && x.custo !== null) pares.push(['Custo líquido', brl(x.custo)], ['Custo médio', x.custoMedio != null ? brl(x.custoMedio) : ''], [x.ultimaDeCompra ? 'Última compra' : 'Última entrada', x.ultimaCompra != null ? brl(x.ultimaCompra) + (x.ultimaData ? ' em ' + x.ultimaData : '') : ''], ['Mark-up', x.markup !== null ? nfmt(x.markup) + '%' : ''], ['Lucro bruto', x.preco ? brl(x.preco - x.custo) + (x.preco ? ' (' + pct((x.preco - x.custo) / x.preco) + ' do preço)' : '') : '']);
     pares.push(['SKU', x.sku], ['GTIN/EAN', x.codigo], ['Unidade', x.unidade], ['Condição', x.condicao !== 'Não especificado' ? x.condicao : ''], ['Categoria', x.grupo], ['Tags', (x.tags || []).join(', ')],
                ['Marca', ca.marca], ['Localização', x.localizacao], ['Estoque mín./máx.', x.minimo || x.maximo ? (x.minimo || 0) + ' / ' + (x.maximo || '—') : ''], ['NCM', tr.ncm],
                ['Fornecedores', (fi.fornecedores || []).map(function (id) { var f2 = (D.fornecedores || []).filter(function (q) { return q.id === id; })[0]; return f2 ? f2.nome : ''; }).filter(Boolean).join(', ')],
@@ -4437,6 +4641,7 @@
     function mostrarFormato() { boxVar.classList.toggle('hide', formato !== 'variacoes'); boxKit.classList.toggle('hide', formato !== 'composicao'); compraW.classList.toggle('hide', formato === 'composicao'); custosW.classList.toggle('hide', formato === 'composicao'); siW.classList.toggle('hide', formato !== 'simples' || temEstoque); siAviso.classList.toggle('hide', formato === 'simples' && !temEstoque); }
     // ---- preço de venda
     var c2 = el('div', 'card pecard'); c2.appendChild(el('h2', '', 'Preço de venda')); corpo.appendChild(c2);
+    if (x && (x.custoMedio != null || x.ultimaCompra != null)) { var hcm = el('div', 'cmbox'); [['Custo médio', x.custoMedio != null ? brl(x.custoMedio) : '—', 'média ponderada das entradas no estoque'], [x.ultimaDeCompra ? 'Preço da última compra' : 'Custo da última entrada', x.ultimaCompra != null ? brl(x.ultimaCompra) : '—', x.ultimaData ? 'em ' + x.ultimaData : '']].forEach(function (a) { var b = el('div'); b.appendChild(el('small', '', a[0])); b.appendChild(el('b', '', a[1])); if (a[2]) b.appendChild(el('span', '', a[2])); hcm.appendChild(b); }); c2.appendChild(hcm); }
     var compraW = el('div'); c2.appendChild(compraW);
     var compra = el('div', 'prefix'), compraI = el('input'); compraI.inputMode = 'decimal'; compraI.placeholder = '0,00'; compraI.value = fi.compra ? nfmt(fi.compra) : ''; compra.appendChild(el('span', '', 'R$')); compra.appendChild(compraI); campo(compraW, 'Preço de compra (unitário) *', compra, true);
     var custosW = el('div'); c2.appendChild(custosW);
@@ -4484,7 +4689,17 @@
     var serW = el('label', 'perm'), serCk = el('input'); serCk.type = 'checkbox'; serCk.checked = serOn; serCk.disabled = serTrava;
     var serT = el('div', 't', 'Controle de serial'); serT.appendChild(el('small', '', serTrava ? 'Ligado: cada unidade tem serial na entrada e na venda. Não pode ser desligado.' : 'Pede o serial de cada unidade na entrada no estoque e na venda. Atenção: depois de salvo, não dá para desligar.'));
     serW.appendChild(serCk); serW.appendChild(serT); serW.style.marginTop = '12px'; c3.appendChild(serW);
-    serCk.onchange = function () { serOn = serCk.checked; desenharSI(); };
+    var serTipo = (x && x.serialTipo) || 'alfanumerico', stW = el('div', 'usog sertipo'); serW.after(stW);
+    function desSerTipo() {
+      stW.innerHTML = ''; stW.classList.toggle('hide', !serOn);
+      [['numerico', 'Somente números', 'Ex.: 356789012345678. Aceita vários separados por espaço ou vírgula.'], ['alfanumerico', 'Alfanumérico', 'Letras e números, gravado do jeito que digitar (com espaços, vírgulas e pontos). Um por linha.']].forEach(function (u) {
+        var lb = el('label', 'usoop' + (serTipo === u[0] ? ' on' : '')), rd = el('input'); rd.type = 'radio'; rd.name = 'sertipo'; rd.checked = serTipo === u[0]; rd.disabled = serTrava;
+        var tx = el('div'); tx.appendChild(el('b', '', u[1])); tx.appendChild(el('small', '', u[2])); lb.appendChild(rd); lb.appendChild(tx); stW.appendChild(lb);
+        rd.onchange = function () { serTipo = u[0]; desSerTipo(); desenharSI(); };
+      });
+    }
+    desSerTipo();
+    serCk.onchange = function () { serOn = serCk.checked; desSerTipo(); desenharSI(); };
     var avCond = function () {
       condAv.innerHTML = ''; if (cond.value !== 'Usado') return;
       condAv.appendChild(document.createTextNode('Produto usado aparece também na página Produtos Usados. '));
@@ -4527,7 +4742,7 @@
         var w = el('div', 'siln'); var gs = grade(w, 4);
         var dp = selIn(gs[0], 'Depósito', D.lojas, s2.loja); dp.onchange = function () { s2.loja = dp.value; };
         var q = inp('number', '0'); q.min = 0; q.value = s2.qtd; q.oninput = function () { s2.qtd = q.value; }; campo(gs[1], 'Quantidade', q);
-        if (serOn) { q.readOnly = true; var sta = el('textarea'); sta.rows = 3; sta.placeholder = 'Um serial por linha'; sta.value = s2.seriais || ''; var sw = el('div'); campo(sw, 'Seriais * (a quantidade é a contagem)', sta); w.appendChild(sw); sta.oninput = function () { s2.seriais = sta.value; s2.qtd = String(sta.value.split(/[\n,;]+/).map(serNorm).filter(Boolean).length || ''); q.value = s2.qtd; }; }
+        if (serOn) { q.readOnly = true; var sta = el('textarea'); sta.rows = 3; sta.placeholder = 'Um serial por linha'; sta.value = s2.seriais || ''; var sw = el('div'); campo(sw, serTipo === 'numerico' ? 'Seriais * (só números; a quantidade é a contagem)' : 'Seriais * (um por linha; a quantidade é a contagem)', sta); w.appendChild(sw); sta.oninput = function () { s2.seriais = sta.value; s2.qtd = String(serSplit(sta.value, serTipo).length || ''); q.value = s2.qtd; }; }
         var pu = inpValor(s2.precoUnit); pu.input.oninput = function () { s2.precoUnit = pu.input.value; }; campo(gs[2], 'Preço unitário', pu);
         var cc = inpValor(s2.custo); cc.input.oninput = function () { s2.custo = cc.input.value; }; campo(gs[3], 'Custo de compra', cc);
         var ob2 = campo(w, 'Observações do saldo inicial', inp('text', 'Ex.: contagem de abertura')); ob2.value = s2.obs; ob2.oninput = function () { s2.obs = ob2.value; };
@@ -4599,7 +4814,7 @@
         trib: { origem: orig.value, ncm: soDig(ncm.value), cest: soDig(cest.value), tipoItem: tipoIt.value, icmsBaseSt: num(ibst.input.value), icmsSt: num(ist.input.value), icmsProprio: num(ipr.input.value), tipiExc: tipi.value, pisFixo: num(pis.input.value), cofinsFixo: num(cof.input.value), infoAdic: inf.value },
         atributos: attrs.map(function (a) { return { nome: a.nome.trim(), valores: a.valores.split(',').map(function (v) { return v.trim(); }).filter(Boolean) }; }),
         variacoes: vars.map(function (v) { return { id: v.id, attrs: v.attrs, sku: v.sku, preco: num(v.preco) || 0 }; }),
-        componentes: comps, saldoInicial: formato === 'simples' && !temEstoque ? SI.filter(function (s2) { return +s2.qtd > 0; }).map(function (s2) { return { loja: s2.loja, qtd: +s2.qtd, precoUnit: num(s2.precoUnit), custo: num(s2.custo), obs: s2.obs, seriais: serOn ? String(s2.seriais || '') : [] }; }) : [], serial: serOn };
+        componentes: comps, saldoInicial: formato === 'simples' && !temEstoque ? SI.filter(function (s2) { return +s2.qtd > 0; }).map(function (s2) { return { loja: s2.loja, qtd: +s2.qtd, precoUnit: num(s2.precoUnit), custo: num(s2.custo), obs: s2.obs, seriais: serOn ? String(s2.seriais || '') : [] }; }) : [], serial: serOn, serialTipo: serTipo };
       ok.disabled = cc.disabled = true; ok.textContent = 'Salvando…';
       call('acSalvar', [S.token, x ? x.id : '', d]).then(function (r) {
         aposAcess(r); ir('acess');
@@ -7111,7 +7326,11 @@
   $('esLimpar').onclick = function () { ['esBusca', 'esLoja', 'esGrupo', 'esSit', 'esTipo'].forEach(function (k) { $(k).value = ''; }); $('esPer').value = '30'; renderEstoque(); };
   $('esFilBtn').onclick = function () { var on = !$('esFil').classList.contains('on'); $('esFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
   botaoEsconderFiltros($('esFilEsc'), 'esFil', 'semFilEs');
-  $('esLanc').onclick = function () { lancarEstoque(null); };
+  $('esLanc').onclick = function () {
+    var q = $('esBusca').value.trim().toLowerCase(), p = null;
+    if (q && S.est) p = (S.est.produtos || []).filter(function (y) { return (y.formato === 'simples' || y.formato === 'variacao') && (y.nome.toLowerCase() === q || (y.sku && y.sku.toLowerCase() === q) || y.codigo === q); })[0] || null;
+    lancarEstoque(p);
+  };
   function sitEst(x, lj) {
     var q = lj ? (x.estoque[lj] || 0) : x.total;
     if (x.minimo && (lj ? q < x.minimo : (S.est.lojas || []).some(function (l) { return (x.estoque[l] || 0) < x.minimo; }))) return ['Repor', 'warn'];
@@ -7356,7 +7575,7 @@
         if (!pid && it.ean) { var pe = D.produtos.filter(function (p) { return p.codigo === it.ean; })[0]; if (pe) pid = pe.id; }
         if (!pid && it.codForn) { var ps = D.produtos.filter(function (p) { return p.sku && p.sku.toLowerCase() === it.codForn.toLowerCase(); })[0]; if (ps) pid = ps.id; }
         if (pid && !D.produtos.some(function (p) { return p.id === pid; })) pid = '';
-        CP.itens.push({ prodId: pid, novo: pid ? null : { nome: it.descricao, sku: '', gtin: it.ean, unidade: it.unidade.toUpperCase().slice(0, 6), markup: '', preco: '', condicao: 'Novo' },
+        CP.itens.push({ salvo: !!pid, prodId: pid, novo: pid ? null : { nome: it.descricao, sku: '', gtin: it.ean, unidade: it.unidade.toUpperCase().slice(0, 6), markup: '', preco: '', condicao: 'Novo' },
                         descricao: it.descricao, codForn: it.codForn, ean: it.ean, ncm: it.ncm, cfop: it.cfop, unidade: it.unidade, qtd: vs(it.qtd), fator: '1', vUnit: vs(it.vUnit),
                         desconto: vs(it.desconto || ''), ipi: vs(it.ipi || ''), st: vs(it.st || ''), aberto: !pid });
       });
@@ -7466,9 +7685,16 @@
         hd.appendChild(nmw);
         var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar item'; x.onclick = function () { CP.itens.splice(i, 1); desenharItens(); totais(); }; hd.appendChild(x);
         r.appendChild(hd);
+        if (it.salvo) {
+          var oS = T.itens[i] || {}, rs = el('div', 'cpres');
+          [['Qtd.', (it.qtd || 0) + ' ' + (it.unidade || 'UN')], ['Valor unit.', brl(num(it.vUnit) || 0)], ['Desconto', brl(num(it.desconto) || 0)], ['IPI', brl(num(it.ipi) || 0)], ['ICMS ST', brl(num(it.st) || 0)], ['Total do item', brl(oS.total || 0)]].forEach(function (a) { var dd = el('div'); dd.appendChild(el('small', '', a[0])); dd.appendChild(el('b', '', a[1])); rs.appendChild(dd); });
+          if (p && p.serial) { var dS = el('div'); dS.appendChild(el('small', '', 'Seriais')); dS.appendChild(el('b', '', String(serSplit(it.seriais, p.serialTipo).length))); rs.appendChild(dS); }
+          var edB = el('button', 'btn ghost mini', 'Editar'); edB.type = 'button'; edB.onclick = function () { it.salvo = false; desenharItens(); totais(); }; rs.appendChild(edB);
+          r.appendChild(rs); r.classList.add('salvo'); itBox.appendChild(r); return;
+        }
         var gl = el('div', 'cpln');
         var mk = function (rot, k, ph, dec) { var w = el('div'), ii = inp('text', ph || ''); ii.inputMode = 'decimal'; ii.value = it[k]; w.appendChild(el('label', '', rot)); w.appendChild(ii); ii.oninput = function () { it[k] = ii.value; info(); totais(); }; gl.appendChild(w); return ii; };
-        mk('Qtd. (' + (it.unidade || 'UN') + ')', 'qtd', '1'); mk('Valor unit. (R$)', 'vUnit', '0,00'); mk('Desconto (R$)', 'desconto', '0,00'); mk('IPI (R$)', 'ipi', '0,00'); mk('ICMS ST (R$)', 'st', '0,00'); mk('Fator conv.', 'fator', '1');
+        mk('Qtd. (' + (it.unidade || 'UN') + ')', 'qtd', '1'); mk('Valor unit.', 'vUnit', '0,00'); mk('Desconto', 'desconto', '0,00'); mk('IPI', 'ipi', '0,00'); mk('ICMS ST', 'st', '0,00'); mk('Fator conv.', 'fator', '1');
         r.appendChild(gl);
         var inf = el('div', 'cb'); r.appendChild(inf);
         function info() {
@@ -7483,7 +7709,7 @@
         if (p && p.serial) {
           var sw = el('div', 'serbox'); sw.appendChild(el('label', '', 'Seriais * (um por linha; a quantidade que entra precisa bater)')); var sta = el('textarea'); sta.rows = 3; sta.value = it.seriais || ''; sta.placeholder = 'Leia ou digite cada serial'; sw.appendChild(sta);
           var sinf = el('div', 'hint'); sw.appendChild(sinf); r.appendChild(sw);
-          var sup = function () { it.seriais = sta.value; var n = sta.value.split(/[\n,;]+/).map(serNorm).filter(Boolean).length; sinf.textContent = n + ' serial(is) informados'; };
+          var sup = function () { it.seriais = sta.value; var n = serSplit(sta.value, p.serialTipo).length; sinf.textContent = n + ' serial(is) informados' + (p.serialTipo === 'numerico' ? ' (só números)' : ''); };
           sta.oninput = sup; sup();
         }
         var det = el('details', 'fdet'); if (it.aberto) det.open = true; det.ontoggle = function () { it.aberto = det.open; };
@@ -7520,6 +7746,13 @@
         var cf = campo(gf[1], 'CFOP', inp('text', '')); cf.maxLength = 4; cf.inputMode = 'numeric'; cf.value = it.cfop; cf.oninput = function () { it.cfop = soDig(cf.value); };
         var cfr = campo(gf[2], 'Código no fornecedor', inp('text', '')); cfr.value = it.codForn; cfr.oninput = function () { it.codForn = cfr.value; };
         dbx.appendChild(el('div', 'hint', 'Fator de conversão: quantas unidades do estoque vêm em cada unidade da nota (ex.: caixa com 10 → fator 10).'));
+        var svw = el('div', 'cpsv'), svm = el('div', 'msg err'), svB = el('button', 'btn mini', 'Salvar item'); svB.type = 'button'; svw.appendChild(svm); svw.appendChild(svB); r.appendChild(svw);
+        svB.onclick = function () {
+          svm.classList.remove('show');
+          var e = !(num(it.qtd) > 0) ? 'Informe a quantidade.' : String(it.vUnit == null ? '' : it.vUnit).trim() === '' || num(it.vUnit) === null ? 'Informe o valor unitário.' : !it.prodId && !(it.novo && (it.novo.nome || '').trim().length >= 2) ? 'Vincule a um produto ou dê o nome do produto novo.' : p && p.serial && serSplit(it.seriais, p.serialTipo).length !== Math.round(calcCp().itens[i].qe) ? 'Informe um serial para cada unidade que entra (' + Math.round(calcCp().itens[i].qe) + ').' : '';
+          if (e) { svm.textContent = e; svm.classList.add('show'); return; }
+          it.salvo = true; it.aberto = false; desenharItens(); totais();
+        };
         itBox.appendChild(r);
       });
     }
