@@ -758,6 +758,27 @@
     .drl{grid-template-columns:minmax(0,1fr) auto;padding:10px 12px}.drl .dp{display:none}.drl.h>:nth-child(3){display:none}.drl.c{padding-left:24px}
     .drfil>div{flex:1 1 140px}
   }
+  .lojafixa{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:700;background:var(--soft)}.lojafixa.err{color:var(--err);font-weight:600;font-size:13.5px}
+  .serbox{margin-top:10px}.serbox textarea{margin:0}.serbox .chips{margin-top:6px}
+  .vdser{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:6px 0 10px;border-bottom:1px solid var(--line)}
+  .vdser .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0}.vdser .serin{max-width:260px;margin:0;padding:9px 12px}.vdser .hint{width:100%;margin:0}
+  .pdvcar .vdser{padding:4px 0 10px 4px}
+  .bandgrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .bandnova{display:flex;gap:8px;align-items:center;margin:8px 0}.bandnova input{max-width:220px;margin:0}.bandnova .btn{width:auto;margin:0}
+  .fmprev{border:1.5px dashed var(--line);border-radius:12px;padding:10px 12px;margin-top:26px}.fmprev small{display:block;color:var(--muted);font-size:12px}.fmprev b{font-size:15px;letter-spacing:.02em}
+  .cftop{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.cftop .hint{margin:0}.cftop .btn{width:auto;margin:0;padding:11px 18px;white-space:nowrap}
+  .cfplano{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .cfcol{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .cfcolt{background:#0F1B2D;color:#fff;font-weight:800;padding:12px 14px;letter-spacing:.02em}
+  .cfg{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--soft);padding:9px 14px;border-top:1px solid var(--line);font-size:13px;font-weight:700;color:var(--ink)}
+  .cfadd{border:0;background:#2F5BFF;color:#fff;width:26px;height:26px;border-radius:7px;font-size:18px;line-height:1;cursor:pointer;flex:0 0 auto}.cfadd:hover{background:#1A3FD1}
+  .cfr{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;border-top:1px solid var(--line);background:none;padding:10px 14px;font:inherit;color:inherit;cursor:pointer}
+  .cfr:hover{background:var(--soft)}.cfr:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}.cfr.off{opacity:.6}
+  .cfr .cfn{flex:1;min-width:0;font-size:14px}.cfr small{color:var(--muted);font-size:12px;white-space:nowrap}.cfr .chev{color:var(--muted)}
+  .cfvaz{padding:9px 14px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+  .cftipo{grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media (max-width:900px){.cfplano{grid-template-columns:1fr}}
+  @media (max-width:700px){.cftop{flex-direction:column;align-items:stretch}.cftipo{grid-template-columns:1fr}.vdser .serin{max-width:none;width:100%}}
 </style>
 </head>
 <body class="tela-login">
@@ -1119,8 +1140,8 @@
 
   <!-- OS: CADASTRO DE AUXILIARES -->
   <section id="vOsAux" class="hide">
-    <div class="crumb">Ordem de Serviço</div>
-    <div class="ptopo"><h1>Cadastro de Auxiliares</h1></div>
+    <div class="crumb">Ordem de Serviço › Cadastro de Auxiliares</div>
+    <div class="ptopo"><h1>Termos e prazos de garantia</h1></div>
     <div id="osaCorpo"></div>
   </section>
 
@@ -1478,7 +1499,7 @@
     { id: 'oslista', sec: 'vOs', nome: 'Lista', perm: 'os', menu: 'Ordem de Serviço', desc: 'Todas as OS por status' },
     { id: 'os', sec: 'vOs', nome: 'Quadro', perm: 'os', menu: 'Ordem de Serviço', desc: 'Kanban das OS e usados em manutenção' },
     { id: 'osimei', sec: 'vOsImei', nome: 'Histórico por IMEI', perm: 'os', menu: 'Ordem de Serviço', desc: 'Serviços já feitos em um aparelho' },
-    { id: 'osaux', sec: 'vOsAux', nome: 'Cadastro de Auxiliares', perm: 'cancelar_os', menu: 'Ordem de Serviço', desc: 'Termos e prazos de garantia' },
+    { id: 'osaux', sec: 'vOsAux', nome: 'Termos e prazos de garantia', perm: 'cancelar_os', menu: 'Ordem de Serviço', sub: 'Cadastro de Auxiliares', subNome: 'Termos e prazos de garantia', desc: 'Prazos de garantia e textos dos termos da OS' },
     { id: 'bancos', sec: 'vBancos', nome: 'Caixas e Bancos', perm: 'financeiro', menu: 'Financeiro', desc: 'Saldos, extrato e lançamentos' },
     { id: 'pagar', sec: 'vPagar', nome: 'Contas a Pagar', perm: 'financeiro', menu: 'Financeiro', desc: 'Despesas, vencimentos e pagamentos' },
     { id: 'cred', sec: 'vCred', nome: 'Crediário', perm: 'crediario', menu: 'Financeiro', desc: 'Faturas, atrasos, recebimentos e limite dos clientes' },
@@ -1596,8 +1617,8 @@
     var b = escuro ? '#FFFFFF' : '#0F1B2D', a = escuro ? '#7D97FF' : '#2F5BFF', s = escuro ? '#0F1B2D' : '#FFFFFF';
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
-  var ICO_MENU = { 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular' };
-  var ICO_VIEW = { dre: 'dre', osnova: 'mais', osaux: 'conta', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
+  var ICO_MENU = { 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta' };
+  var ICO_VIEW = { dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas' };
   var SBM = { aberto: {} };
@@ -1991,7 +2012,7 @@
   var USO_FORMA = [['receber', 'Somente recebimento', 'Aparece nas vendas, PDV, OS, crediário e caixa'], ['ambos', 'Recebimento e pagamento', 'Aparece nas vendas e também em contas a pagar e compras'], ['pagar', 'Somente pagamento', 'Aparece só em contas a pagar e entrada de compras']];
   var TIPO_FORMA = [['nao', 'Sem cartão (PIX, dinheiro, boleto…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)'], ['crediario', 'Crediário (parcelas com o cliente)']];
   function rotulo(l, k) { var x = l.filter(function (z) { return z[0] === k; })[0]; return x ? x[1] : k; }
-  function copiaFormas() { return S.fin.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa, taxas: JSON.parse(JSON.stringify(f.taxas || {})), repassa: !!f.repassa, receb: f.receb || 'hora', maxParc: f.maxParc || 1, uso: f.uso || 'receber' }; }); }
+  function copiaFormas() { return S.fin.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa, taxas: JSON.parse(JSON.stringify(f.taxas || {})), repassa: !!f.repassa, receb: f.receb || 'hora', maxParc: f.maxParc || 1, uso: f.uso || 'receber', maquininha: f.maquininha || '', bandeiras: JSON.parse(JSON.stringify(f.bandeiras || {})) }; }); }
   function resumoForma(f) {
     if (f.cartao === 'crediario') return 'regras em Financeiro › Crediário';
     var rr = /^(dias|uteis):(\d+)$/.exec(f.receb), q = f.receb === 'hora' ? 'cai na hora' : f.receb === 'mensal' ? 'cai mensal (por parcela)' : rr ? 'cai em ' + rr[2] + ' dia(s) ' + (rr[1] === 'uteis' ? 'úteis' : 'corridos') : '';
@@ -2009,7 +2030,7 @@
     L.forEach(function (f, i) {
       var r = el('div', 'prow' + (f.ativa ? '' : ' off')); r.tabIndex = 0; r.setAttribute('role', 'button');
       var ic = el('div', 'pimg'); ic.innerHTML = svgIco(f.cartao === 'nao' ? 'moedas' : 'cartao'); r.appendChild(ic);
-      var n = el('div'), nm = el('div', 'pnome', f.nome); if (!f.ativa) nm.appendChild(el('span', 'bdg off', 'Inativa')); n.appendChild(nm); n.appendChild(el('div', 'psub', rotulo(TIPO_FORMA, f.cartao).replace(/ \(.*\)$/, '') + ' · ' + resumoForma(f))); r.appendChild(n);
+      var n = el('div'), nm = el('div', 'pnome', f.nome); if (!f.ativa) nm.appendChild(el('span', 'bdg off', 'Inativa')); n.appendChild(nm); n.appendChild(el('div', 'psub', [f.maquininha, rotulo(TIPO_FORMA, f.cartao).replace(/ \(.*\)$/, ''), bandeirasDe(f).length ? bandeirasDe(f).length + ' bandeira(s)' : '', resumoForma(f)].filter(Boolean).join(' · '))); r.appendChild(n);
       r.appendChild(el('div', 'psku', '')); r.lastChild.appendChild(el('span', 'bdg uso-' + f.uso, rotulo(USO_FORMA, f.uso)));
       r.appendChild(el('div', 'psub', nomeConta(f.conta) || '—'));
       r.appendChild(el('div', 'chev', '›'));
@@ -2023,7 +2044,7 @@
   }
   function formaPagina(box, idx) {
     var D = S.fin, L = copiaFormas(), contas = D.contas.filter(function (c) { return c.ativa; });
-    var f = idx > -1 ? L[idx] : { id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true, taxas: {}, repassa: false, receb: 'hora', maxParc: 1, uso: 'receber' };
+    var f = idx > -1 ? L[idx] : { id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true, taxas: {}, repassa: false, receb: 'hora', maxParc: 1, uso: 'receber', maquininha: '', bandeiras: {} };
     if (idx < 0) L.push(f);
     box.innerHTML = '';
     var vt = el('button', 'lnk', '← Todas as formas de pagamento'); vt.type = 'button'; vt.onclick = function () { cfgFormas(box); window.scrollTo(0, 0); }; box.appendChild(vt);
@@ -2049,6 +2070,18 @@
       var co = el('select'); contas.forEach(function (x) { var op = el('option', '', x.nome); op.value = x.id; co.appendChild(op); }); if (!contas.some(function (x) { return x.id === f.conta; })) { var o2 = el('option', '', '(escolha)'); o2.value = ''; co.insertBefore(o2, co.firstChild); }
       co.value = f.conta || ''; co.onchange = function () { f.conta = co.value; }; campo(g2[0], 'Caixa/banco onde o dinheiro entra (ou de onde sai)', co, true);
       var al = el('label', 'perm'), at = el('input'); at.type = 'checkbox'; at.checked = f.ativa; var tt = el('div', 't', 'Ativa'); tt.appendChild(el('small', '', 'Desmarque para esconder esta forma (o histórico continua).')); al.appendChild(at); al.appendChild(tt); at.onchange = function () { f.ativa = at.checked; }; g2[1].appendChild(al); al.style.marginTop = '26px';
+      if (f.cartao !== 'crediario') {
+        var maqs = (D.maquininhas || []).slice(); if (f.maquininha && maqs.indexOf(f.maquininha) < 0) maqs.push(f.maquininha);
+        var mq = el('select'), mo0 = el('option', '', '— Sem maquininha —'); mo0.value = ''; mq.appendChild(mo0);
+        maqs.forEach(function (n2) { var o = el('option', '', n2); o.value = n2; mq.appendChild(o); }); var mon = el('option', '', '+ Cadastrar nova maquininha…'); mon.value = '__nova'; mq.appendChild(mon); mq.value = f.maquininha || '';
+        var gq = grade(corpo, 2); campo(gq[0], 'Maquininha' + (f.cartao === 'nao' ? ' (opcional, ex.: PIX na maquininha)' : ''), mq, true);
+        var nmq = inp('text', 'Nome da nova maquininha'); nmq.maxLength = 30; nmq.className = 'hide'; nmq.style.marginTop = '6px'; gq[0].appendChild(nmq);
+        var prev = el('div', 'fmprev'); gq[1].appendChild(prev);
+        var prevUpd = function () { var b1 = bandeirasDe(f)[0]; prev.innerHTML = ''; prev.appendChild(el('small', '', 'No recibo sai assim:')); prev.appendChild(el('b', '', formaTxt({ maquininha: f.maquininha, forma: f.nome || 'Forma', cartao: f.cartao, bandeira: b1 || '', parcelas: f.cartao === 'credito' ? Math.min(10, f.maxParc || 10) : 1 }))); };
+        mq.onchange = function () { if (mq.value === '__nova') { nmq.classList.remove('hide'); nmq.focus(); f.maquininha = nmq.value.trim(); } else { nmq.classList.add('hide'); f.maquininha = mq.value; } prevUpd(); };
+        nmq.oninput = function () { f.maquininha = nmq.value.trim(); prevUpd(); };
+        prevUpd();
+      }
       if (f.cartao === 'crediario') { corpo.appendChild(el('div', 'hint', 'Juros, multa e número de parcelas ficam em Financeiro › Crediário › ⚙ Regras. O dinheiro entra quando cada parcela é recebida.')); return; }
       corpo.appendChild(el('h3', 'ch', 'Recebimento e taxas'));
       var g3 = grade(corpo, 3);
@@ -2069,6 +2102,27 @@
         var sw = el('div', 'suffix'); sw.appendChild(i); sw.appendChild(el('span', '', '%')); campo(w, f.cartao === 'credito' ? n + 'x' : 'Taxa', sw); gt.appendChild(w);
       })(n);
       corpo.appendChild(gt);
+      if (f.cartao === 'credito' || f.cartao === 'debito') {
+        corpo.appendChild(el('h3', 'ch', 'Bandeiras do cartão'));
+        corpo.appendChild(el('div', 'hint', 'Marque as bandeiras aceitas nesta maquininha. Na venda escolhe-se a bandeira e vale a taxa dela (em branco = taxa padrão acima).'));
+        f.bandeiras = f.bandeiras || {};
+        var todas = (D.bandeirasPadrao || []).slice(); Object.keys(f.bandeiras).forEach(function (b) { if (todas.indexOf(b) < 0) todas.push(b); });
+        var bch = el('div', 'chips'); corpo.appendChild(bch);
+        todas.forEach(function (b) { var bt = el('button', 'chip' + (f.bandeiras[b] ? ' on' : ''), b); bt.type = 'button'; bt.setAttribute('aria-pressed', f.bandeiras[b] ? 'true' : 'false'); bt.onclick = function () { if (f.bandeiras[b]) delete f.bandeiras[b]; else f.bandeiras[b] = {}; desenhar(); }; bch.appendChild(bt); });
+        var nbw = el('div', 'bandnova'), nbi = inp('text', 'Outra bandeira'); nbi.maxLength = 25; var nbb = el('button', 'btn ghost mini', '+ Adicionar'); nbb.type = 'button'; nbw.appendChild(nbi); nbw.appendChild(nbb); corpo.appendChild(nbw);
+        nbb.onclick = function () { var b = nbi.value.trim(); if (b.length < 2) return; f.bandeiras[b] = f.bandeiras[b] || {}; desenhar(); };
+        Object.keys(f.bandeiras).forEach(function (b) {
+          var det = el('details', 'fdet'); det.open = true; det.appendChild(el('summary', '', 'Taxas da bandeira ' + b)); corpo.appendChild(det);
+          var gb = el('div', 'g6');
+          for (var n3 = 1; n3 <= (f.cartao === 'credito' ? f.maxParc : 1); n3++) (function (n3) {
+            var w = el('div'), i = inp('text', f.taxas[String(n3)] !== undefined ? nfmt(f.taxas[String(n3)]) : 'padrão'); i.inputMode = 'decimal';
+            i.value = f.bandeiras[b][String(n3)] !== undefined ? nfmt(f.bandeiras[b][String(n3)]) : '';
+            i.oninput = function () { var v = num(i.value); if (i.value.trim() === '' || v === null) delete f.bandeiras[b][String(n3)]; else f.bandeiras[b][String(n3)] = v; };
+            var sw = el('div', 'suffix'); sw.appendChild(i); sw.appendChild(el('span', '', '%')); campo(w, f.cartao === 'credito' ? n3 + 'x' : 'Taxa', sw); gb.appendChild(w);
+          })(n3);
+          det.appendChild(gb);
+        });
+      }
       corpo.appendChild(el('div', 'hint', 'Dias úteis não contam sábado e domingo (feriados não são descontados).'));
     }
     desenhar();
@@ -2078,7 +2132,7 @@
     sv.onclick = function () {
       m.classList.remove('show');
       var nome = f.nome.trim(), dup = L.some(function (x) { return x !== f && x.nome.trim().toLowerCase() === nome.toLowerCase(); });
-      var erro = nome.length < 2 ? 'Dê um nome para a forma.' : dup ? 'Já existe uma forma com esse nome.' : !f.conta ? 'Escolha o caixa/banco.' : '';
+      var erro = nome.length < 2 ? 'Dê um nome para a forma.' : dup ? 'Já existe uma forma com esse nome.' : !f.conta ? 'Escolha o caixa/banco.' : f.maquininha === '__nova' || (f.maquininha === '' && false) ? 'Digite o nome da nova maquininha.' : '';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       f.nome = nome; sv.disabled = true; sv.textContent = 'Salvando…';
       call('formasSalvar', [S.token, L]).then(function (d) { aposFin(d); S.pagar = null; V = null; $('vdNova').innerHTML = ''; PDV = null; cfgFormas(box, '✓ ' + nome + (idx > -1 ? ' salva.' : ' cadastrada.')); window.scrollTo(0, 0); })
@@ -2094,44 +2148,6 @@
     box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
     call('categoriasFinDados', [S.token]).then(function (d) { if (box.isConnected) desenharCatFin(box, d); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
   }
-  function desenharCatFin(box, d, ok) {
-    box.innerHTML = '';
-    if (ok) box.appendChild(el('div', 'msg ok show', ok));
-    box.appendChild(el('div', 'hint', 'O grupo de cada categoria diz em que linha do DRE ela entra. As marcadas como "Sistema" são usadas automaticamente pelas vendas, OS, crediário, compras e comissões: dá para mudar o grupo, mas não excluir.'));
-    var E = { receber: d.receber.map(function (x) { return { id: x.id, nome: x.nome, grupo: x.grupo, ativa: x.ativa, sistema: x.sistema }; }), pagar: d.pagar.map(function (x) { return { id: x.id, nome: x.nome, grupo: x.grupo, ativa: x.ativa, sistema: x.sistema }; }) };
-    [['receber', 'Categorias de contas a receber', d.gruposRec, d.sisRec], ['pagar', 'Categorias de contas a pagar', d.gruposPag, d.sisPag]].forEach(function (t) {
-      var c = el('div', 'card'); box.appendChild(c); c.appendChild(el('h2', '', t[1]));
-      var lst = el('div'); c.appendChild(lst);
-      var des = function () {
-        lst.innerHTML = '';
-        var h = el('div', 'cfrow h'); ['Nome', 'Grupo no DRE', 'Ativa', ''].forEach(function (x) { h.appendChild(el('div', '', x)); }); lst.appendChild(h);
-        E[t[0]].forEach(function (x, i) {
-          var r = el('div', 'cfrow'), nw = el('div', 'cfn');
-          if (x.sistema) { nw.appendChild(el('b', '', x.nome)); nw.appendChild(el('small', '', 'Sistema · ' + (t[3][x.nome] || ''))); }
-          else { var n = inp('text', 'Nome da categoria'); n.maxLength = 60; n.value = x.nome; n.oninput = function () { x.nome = n.value; }; nw.appendChild(n); var u = (d.uso[t[0]] || {})[x.nome]; if (u) nw.appendChild(el('small', '', u + ' lançamento(s)')); }
-          var gs = el('select'); gs.setAttribute('aria-label', 'Grupo no DRE'); t[2].forEach(function (g) { var o = el('option', '', g[1]); o.value = g[0]; gs.appendChild(o); }); gs.value = x.grupo; gs.onchange = function () { x.grupo = gs.value; };
-          var aw = el('label', 'auxrad'); if (!x.sistema) { var ck = el('input'); ck.type = 'checkbox'; ck.checked = x.ativa; ck.setAttribute('aria-label', 'Ativa'); ck.style.cssText = 'width:20px;height:20px;appearance:auto;-webkit-appearance:checkbox;accent-color:#2F5BFF;margin:0'; ck.onchange = function () { x.ativa = ck.checked; }; aw.appendChild(ck); }
-          var xb = el('button', 'x', x.sistema ? '' : '×'); xb.type = 'button'; xb.disabled = !!x.sistema; if (!x.sistema) { xb.setAttribute('aria-label', 'Excluir categoria'); xb.onclick = function () { E[t[0]].splice(i, 1); des(); }; }
-          r.appendChild(nw); r.appendChild(gs); r.appendChild(aw); r.appendChild(xb); lst.appendChild(r);
-        });
-        var ad = el('button', 'lnk', '+ Nova categoria'); ad.type = 'button'; ad.onclick = function () { E[t[0]].push({ id: '', nome: '', grupo: t[0] === 'receber' ? 'rec_operacional' : 'desp_operacionais', ativa: true }); des(); var ins = lst.querySelectorAll('.cfrow:not(.h) input[type=text]'); if (ins.length) ins[ins.length - 1].focus(); }; lst.appendChild(ad);
-      };
-      des();
-    });
-    var m = el('div', 'msg err'); box.appendChild(m);
-    var sv = el('button', 'btn', 'Salvar categorias'); sv.type = 'button'; sv.style.cssText = 'width:auto;padding:12px 24px'; box.appendChild(sv);
-    sv.onclick = function () {
-      m.classList.remove('show');
-      if (E.receber.concat(E.pagar).some(function (x) { return x.nome.trim().length < 2; })) { m.textContent = 'Dê um nome para todas as categorias.'; m.classList.add('show'); return; }
-      sv.disabled = true; sv.textContent = 'Salvando…';
-      call('categoriasFinSalvar', [S.token, E]).then(function (r) {
-        S.pagar = null; S.fin = null; S.dre = null;
-        S.u.categoriasRec = r.receber.filter(function (x) { return x.ativa && x.nome !== 'Juros e multas do crediário'; }).map(function (x) { return x.nome; });
-        desenharCatFin(box, r, '✓ Categorias salvas.'); window.scrollTo(0, 0);
-      }).catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar categorias'; m.textContent = e; m.classList.add('show'); });
-    };
-  }
-
   // =========================================================
   //  DRE (sintético e analítico)
   // =========================================================
@@ -2241,25 +2257,163 @@
   // =========================================================
   //  OS › CADASTRO DE AUXILIARES (página inicial com os cadastros)
   // =========================================================
-  var AUXP = '';
-  function renderAuxHub(box) {
-    box.innerHTML = '';
-    if (AUXP === 'termos') {
-      var vt = el('button', 'lnk', '← Cadastro de Auxiliares'); vt.type = 'button'; vt.onclick = function () { AUXP = ''; renderAuxHub(box); window.scrollTo(0, 0); }; box.appendChild(vt);
-      box.appendChild(el('h2', 'auxtit', 'Termos e prazos de garantia'));
-      var inner = el('div'); box.appendChild(inner); renderOsAux(inner);
-      return;
+
+  // =========================================================
+  //  V31: loja do usuário, texto do pagamento, rascunhos, seriais
+  // =========================================================
+  function lojaUser() { var l = S.u && S.u.loja; return l && l !== 'Manutenção' && (S.u.lojas || []).indexOf(l) > -1 ? l : ''; }
+  function formaTxt(p) {
+    if (!p) return '';
+    if (p.crediario || p.cartao === 'crediario') return ('Crediário ' + (p.parcelas || 1) + 'x').toUpperCase();
+    var t = [p.maquininha, p.bandeira || p.forma].filter(Boolean).join(' - ');
+    if (p.cartao === 'credito') t += ' ' + (parseInt(p.parcelas, 10) || 1) + 'X'; else if (p.cartao === 'debito' && p.bandeira) t += ' DÉBITO';
+    return t.toUpperCase();
+  }
+  function bandeirasDe(fo) { return fo && (fo.cartao === 'credito' || fo.cartao === 'debito') ? Object.keys(fo.bandeiras || {}) : []; }
+  function limparRascunhos(ant, novo) {
+    var osv = ['os', 'oslista', 'osnova'];
+    if (ant === 'vendas') { V = null; if ($('vdNova')) $('vdNova').innerHTML = ''; }
+    if (ant === 'pdv') PDV = null;
+    if (osv.indexOf(ant) > -1 && (osv.indexOf(novo) < 0 || ant === 'osnova')) OSF = null;
+    if (ant === 'compras') CP = null;
+    if (!$('fModal').classList.contains('hide')) fecharModal();
+  }
+  function serNorm(s) { return String(s || '').toUpperCase().replace(/\s+/g, '').replace(/[^A-Z0-9\-_.\/]/g, '').slice(0, 40); }
+  function seriaisEst() { return (S.ac && S.ac.seriais) || (S.est && S.est.seriais) || []; }
+  function serialAchar(q) { q = serNorm(q); if (q.length < 3) return null; return seriaisEst().filter(function (x) { return x.s === q; })[0] || null; }
+  /** Caixa de seriais: modo 'entrada' (digita/lê) ou 'saida' (escolhe os que estão na loja). */
+  function caixaSeriais(box, prod, modo, lojaFn, fonte, onChange) {
+    var w = el('div', 'serbox'); box.appendChild(w); var sel = [];
+    function des() {
+      w.innerHTML = '';
+      if (modo === 'entrada') {
+        w.appendChild(el('label', '', 'Seriais * (um por linha; pode usar o leitor)'));
+        var ta = el('textarea'); ta.rows = 4; ta.placeholder = 'Ex.: SN0012345'; ta.value = sel.join('\n'); ta.setAttribute('aria-label', 'Seriais'); w.appendChild(ta);
+        var inf = el('div', 'hint'); w.appendChild(inf);
+        var upd = function () {
+          sel = ta.value.split(/[\n,;]+/).map(serNorm).filter(Boolean);
+          var dup = sel.filter(function (s, i) { return sel.indexOf(s) !== i; }), ja = sel.filter(function (s) { return (fonte() || []).some(function (x) { return x.s === s; }); });
+          inf.textContent = sel.length + ' serial(is) = quantidade ' + sel.length + (dup.length ? ' · repetido: ' + dup.join(', ') : '') + (ja.length ? ' · já em estoque: ' + ja.join(', ') : '');
+          inf.style.color = dup.length || ja.length ? 'var(--err)' : '';
+          onChange(sel);
+        };
+        ta.oninput = upd; upd();
+      } else {
+        var disp = (fonte() || []).filter(function (x) { return x.p === prod.id && x.l === lojaFn(); });
+        sel = sel.filter(function (s) { return disp.some(function (x) { return x.s === s; }); });
+        w.appendChild(el('label', '', 'Toque nos seriais que saem * (' + disp.length + ' em estoque nesta loja)'));
+        if (!disp.length) w.appendChild(el('div', 'hint', 'Nenhum serial deste produto em estoque nesta loja.'));
+        var ch = el('div', 'chips'); w.appendChild(ch);
+        disp.forEach(function (x) { var b = el('button', 'chip' + (sel.indexOf(x.s) > -1 ? ' on' : ''), x.s); b.type = 'button'; b.onclick = function () { var k = sel.indexOf(x.s); if (k > -1) sel.splice(k, 1); else sel.push(x.s); b.classList.toggle('on', k < 0); onChange(sel); }; ch.appendChild(b); });
+        onChange(sel);
+      }
     }
-    box.appendChild(el('div', 'hint', 'Cadastros de apoio usados na Ordem de Serviço.'));
-    var c = el('div', 'auxhub'); box.appendChild(c);
-    var C = (S.os && S.os.cfg) || {};
-    [['termos', 'conta', 'Termos e prazos de garantia', (C.garantias || []).length + ' prazo(s) de garantia · ' + (C.textos || []).length + ' texto(s) de termos']].forEach(function (a) {
-      var b = el('button', 'auxcard'); b.type = 'button';
-      var ic = el('span', 'ai'); ic.innerHTML = svgIco(a[1]); b.appendChild(ic);
-      var tx = el('span', 'at'); tx.appendChild(el('b', '', a[2])); tx.appendChild(el('small', '', a[3])); b.appendChild(tx); b.appendChild(el('span', 'chev', '›'));
-      b.onclick = function () { AUXP = a[0]; renderAuxHub(box); window.scrollTo(0, 0); };
-      c.appendChild(b);
+    des();
+    return { redesenhar: des, get: function () { return sel.slice(); } };
+  }
+  /** Linha de seriais de um item de venda (PDV / Vendas). */
+  function itemSeriais(it, loja, redesenhar, msgFn) {
+    var w = el('div', 'vdser');
+    it.seriais = it.seriais || [];
+    var ch = el('div', 'chips'); w.appendChild(ch);
+    it.seriais.forEach(function (s, k) { var b = el('button', 'chip on', s + ' ×'); b.type = 'button'; b.title = 'Tirar este serial'; b.onclick = function () { it.seriais.splice(k, 1); it.qtd = it.seriais.length; redesenhar(); }; ch.appendChild(b); });
+    var ip = inp('text', it.seriais.length ? 'Ler outro serial' : 'Leia ou digite o serial *'); ip.className = 'serin'; ip.setAttribute('aria-label', 'Serial de ' + it.nome); w.appendChild(ip);
+    var add = function () {
+      var s = serNorm(ip.value); if (!s) return;
+      var x = serialAchar(s);
+      if (!x || x.p !== it.id) { msgFn('O serial ' + s + ' não está em estoque para ' + it.nome + '.'); return; }
+      if (x.l !== loja) { msgFn('O serial ' + s + ' está em ' + x.l + ', não nesta loja.'); return; }
+      if (it.seriais.indexOf(s) > -1) { msgFn('Esse serial já está na venda.'); return; }
+      it.seriais.push(s); it.qtd = it.seriais.length; ip.value = ''; redesenhar();
+    };
+    ip.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); add(); } };
+    ip.onchange = add;
+    if (!it.seriais.length) w.appendChild(el('div', 'hint', 'Produto com controle de serial: leia o serial de cada unidade.'));
+    return w;
+  }
+
+  // =========================================================
+  //  CATEGORIAS FINANCEIRAS (estilo plano de contas)
+  // =========================================================
+  function desenharCatFin(box, d, ok) {
+    box.innerHTML = '';
+    var top = el('div', 'cftop'); box.appendChild(top);
+    top.appendChild(el('div', 'hint', 'Cada categoria fica dentro do grupo do DRE onde ela entra. Clique em uma categoria para ver e alterar.'));
+    var nb = el('button', 'btn', '+ Nova categoria'); nb.type = 'button'; nb.onclick = function () { catPagina(box, d, 'receber', -1, ''); }; top.appendChild(nb);
+    if (ok) box.appendChild(el('div', 'msg ok show', ok));
+    var gd = el('div', 'cfplano'); box.appendChild(gd);
+    [['receber', 'Contas a receber', d.gruposRec], ['pagar', 'Contas a pagar', d.gruposPag]].forEach(function (t, ti) {
+      var col = el('div', 'cfcol'); gd.appendChild(col);
+      col.appendChild(el('div', 'cfcolt', (ti + 1) + ' - ' + t[1].toUpperCase()));
+      t[2].forEach(function (g, gi) {
+        var itens = d[t[0]].map(function (x, i) { return { x: x, i: i }; }).filter(function (o) { return o.x.grupo === g[0]; });
+        var h = el('div', 'cfg'), ht = el('span', '', (ti + 1) + '.' + (gi + 1) + ' - ' + g[1].replace(/\s*\(.*\)$/, '').toUpperCase() + ' (' + itens.length + ')'); h.appendChild(ht);
+        var ad = el('button', 'cfadd', '+'); ad.type = 'button'; ad.title = 'Nova categoria em ' + g[1]; ad.setAttribute('aria-label', 'Nova categoria em ' + g[1]); ad.onclick = function () { catPagina(box, d, t[0], -1, g[0]); }; h.appendChild(ad);
+        col.appendChild(h);
+        if (!itens.length) col.appendChild(el('div', 'cfvaz', 'Nenhuma categoria'));
+        itens.forEach(function (o, k) {
+          var r = el('button', 'cfr' + (o.x.ativa ? '' : ' off')); r.type = 'button';
+          var n = el('span', 'cfn', (ti + 1) + '.' + (gi + 1) + '.' + (k + 1) + ' - ' + o.x.nome); r.appendChild(n);
+          var u = (d.uso[t[0]] || {})[o.x.nome];
+          if (o.x.sistema) r.appendChild(el('span', 'bdg', 'Sistema')); if (!o.x.ativa) r.appendChild(el('span', 'bdg off', 'Inativa')); if (u) r.appendChild(el('small', '', u + ' lanç.'));
+          r.appendChild(el('span', 'chev', '›'));
+          r.onclick = function () { catPagina(box, d, t[0], o.i, ''); };
+          col.appendChild(r);
+        });
+      });
     });
+  }
+  function catPagina(box, d, tipo, idx, grupoPre) {
+    var novo = idx < 0, x = novo ? { id: '', nome: '', grupo: grupoPre || (tipo === 'receber' ? 'rec_operacional' : 'desp_operacionais'), ativa: true } : JSON.parse(JSON.stringify(d[tipo][idx]));
+    box.innerHTML = '';
+    var vt = el('button', 'lnk', '← Todas as categorias'); vt.type = 'button'; vt.onclick = function () { desenharCatFin(box, d); window.scrollTo(0, 0); }; box.appendChild(vt);
+    var tit = el('h3', 'fmtit', novo ? 'Nova categoria' : x.nome); box.appendChild(tit);
+    var c = el('div', 'card'); box.appendChild(c);
+    c.appendChild(el('label', 'first', 'Tipo'));
+    var ug = el('div', 'usog cftipo'); c.appendChild(ug);
+    var gs = el('select');
+    var desGrupos = function () { gs.innerHTML = ''; (tipo === 'receber' ? d.gruposRec : d.gruposPag).forEach(function (g) { var o = el('option', '', g[1]); o.value = g[0]; gs.appendChild(o); }); if (!Array.prototype.some.call(gs.options, function (o) { return o.value === x.grupo; })) x.grupo = gs.options[0].value; gs.value = x.grupo; };
+    [['receber', 'Categorias de contas a receber', 'Entradas: vendas, serviços, juros recebidos…'], ['pagar', 'Categorias de contas a pagar', 'Saídas: aluguel, salários, impostos, taxas…']].forEach(function (u) {
+      var lb = el('label', 'usoop' + (tipo === u[0] ? ' on' : '')), rd = el('input'); rd.type = 'radio'; rd.name = 'cftipo'; rd.checked = tipo === u[0]; rd.disabled = !novo;
+      var tx = el('div'); tx.appendChild(el('b', '', u[1])); tx.appendChild(el('small', '', u[2])); lb.appendChild(rd); lb.appendChild(tx); ug.appendChild(lb);
+      rd.onchange = function () { tipo = u[0]; Array.prototype.forEach.call(ug.children, function (z) { z.classList.toggle('on', z === lb); }); x.grupo = tipo === 'receber' ? 'rec_operacional' : 'desp_operacionais'; desGrupos(); };
+    });
+    if (!novo) c.appendChild(el('div', 'hint', 'O tipo não muda depois de criada.'));
+    var g2 = grade(c, 2);
+    var nm = campo(g2[0], 'Nome *', inp('text', 'Ex.: Aluguel'), true); nm.maxLength = 60; nm.value = x.nome; nm.disabled = !!x.sistema; nm.oninput = function () { x.nome = nm.value; tit.textContent = nm.value || 'Nova categoria'; };
+    campo(g2[1], 'Grupo no DRE *', gs, true); desGrupos(); gs.onchange = function () { x.grupo = gs.value; };
+    if (x.sistema) c.appendChild(el('div', 'hint', 'Categoria do sistema (' + ((tipo === 'receber' ? d.sisRec : d.sisPag)[x.nome] || 'automática') + '): só o grupo pode mudar.'));
+    else { var al = el('label', 'perm'), at = el('input'); at.type = 'checkbox'; at.checked = x.ativa; var tt = el('div', 't', 'Ativa'); tt.appendChild(el('small', '', 'Inativa some das opções, mas os lançamentos antigos continuam com ela.')); al.appendChild(at); al.appendChild(tt); at.onchange = function () { x.ativa = at.checked; }; c.appendChild(al); al.style.marginTop = '10px'; }
+    var u = !novo ? (d.uso[tipo] || {})[d[tipo][idx].nome] : 0;
+    if (u) c.appendChild(el('div', 'hint', u + ' lançamento(s) usam esta categoria. Renomear atualiza todos eles.'));
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), sv = el('button', 'btn', novo ? 'Cadastrar categoria' : 'Salvar alterações'), cc = el('button', 'btn ghost', 'Voltar'); sv.type = cc.type = 'button'; ac.appendChild(sv); ac.appendChild(cc); c.appendChild(ac);
+    cc.onclick = function () { desenharCatFin(box, d); window.scrollTo(0, 0); };
+    var enviar = function (E, okTxt, btn, txtBtn) {
+      m.classList.remove('show'); btn.disabled = true; btn.textContent = 'Salvando…';
+      call('categoriasFinSalvar', [S.token, E]).then(function (r) {
+        S.pagar = null; S.fin = null; S.dre = null;
+        S.u.categoriasRec = r.receber.filter(function (z) { return z.ativa && z.nome !== 'Juros e multas do crediário'; }).map(function (z) { return z.nome; });
+        desenharCatFin(box, r, okTxt); window.scrollTo(0, 0);
+      }).catch(function (e) { btn.disabled = false; btn.textContent = txtBtn; m.textContent = e; m.classList.add('show'); });
+    };
+    var copia = function () { return { receber: d.receber.map(function (z) { return { id: z.id, nome: z.nome, grupo: z.grupo, ativa: z.ativa }; }), pagar: d.pagar.map(function (z) { return { id: z.id, nome: z.nome, grupo: z.grupo, ativa: z.ativa }; }) }; };
+    sv.onclick = function () {
+      var nome = x.nome.trim();
+      if (nome.length < 2) { m.textContent = 'Dê um nome para a categoria.'; m.classList.add('show'); return; }
+      if (d[tipo].some(function (z, i) { return i !== idx && z.nome.trim().toLowerCase() === nome.toLowerCase(); })) { m.textContent = 'Já existe uma categoria com esse nome.'; m.classList.add('show'); return; }
+      var E = copia(), it = { id: x.id, nome: nome, grupo: x.grupo, ativa: x.ativa };
+      if (novo) E[tipo].push(it); else E[tipo][idx] = it;
+      enviar(E, '✓ ' + nome + (novo ? ' cadastrada.' : ' salva.'), sv, novo ? 'Cadastrar categoria' : 'Salvar alterações');
+    };
+    if (!novo && !x.sistema) {
+      var ex = el('button', 'btn ghost danger', 'Excluir categoria'); ex.type = 'button'; ex.style.cssText = 'width:auto;margin-top:12px;color:var(--err)'; c.appendChild(ex);
+      ex.onclick = function () {
+        if (!ex.dataset.c) { ex.dataset.c = '1'; ex.textContent = u ? 'Tem lançamentos: toque de novo para excluir mesmo assim' : 'Toque de novo para excluir'; return; }
+        var E = copia(); E[tipo].splice(idx, 1); enviar(E, '✓ Categoria excluída.', ex, 'Excluir categoria');
+      };
+    }
+    window.scrollTo(0, 0); if (novo) nm.focus();
   }
 
   // ---------- login ----------
@@ -2359,6 +2513,7 @@
   window.addEventListener('resize', fecharMenuNav);
 
   function ir(id) {
+    if (S.view && S.view !== id) limparRascunhos(S.view, id);
     if (id === 'pessoa' && !PE) id = 'crm';
     if (id === 'prod' && !PR) id = 'acess';
     S.view = id; if (id !== 'pessoa' && id !== 'prod') LS.set('view', id); msg('topMsg', ''); document.body.classList.add('wide'); fecharDrawer();
@@ -2384,7 +2539,7 @@
     if (id === 'estoque') carregarEstoque(false);
     if (id === 'compras') abaCompras(CP ? 'form' : 'lista');
     if (id === 'osnova') { OSM = 'Lista'; $('osTit').textContent = 'Ordem de Serviço · Lista'; garantirOS(function () { if (S.view === 'osnova') formOS(null); }); }
-    if (id === 'osaux') { var ob = $('osaCorpo'); ob.innerHTML = ''; ob.appendChild(el('div', 'empty', 'Carregando…')); AUXP = ''; garantirOS(function () { if (S.view === 'osaux') renderAuxHub(ob); }); }
+    if (id === 'osaux') { var ob = $('osaCorpo'); ob.innerHTML = ''; ob.appendChild(el('div', 'empty', 'Carregando…')); garantirOS(function () { if (S.view === 'osaux') renderOsAux(ob); }); }
     if (id === 'dre') carregarDre();
     if (id === 'os' || id === 'oslista') { OSM = id === 'os' ? 'Quadro' : 'Lista'; $('osTit').textContent = 'Ordem de Serviço · ' + OSM; abaOS(OSF ? 'form' : 'lista'); }
     if (id === 'osimei') { var ib = $('oiCorpo'); ib.innerHTML = ''; renderImeiOS(ib); }
@@ -2441,7 +2596,8 @@
   // ---------- regras de pagamento (iguais às do servidor) ----------
   var UPG = '__upgrade';
   function catRec() { return (S.u && S.u.categoriasRec) || ['Recebimento com vendas de produtos']; }
-  function taxaFormaSite(fo, n) {
+  function taxaFormaSite(fo, n, band) {
+    var tb = band && fo.bandeiras && fo.bandeiras[band]; if (tb && tb[String(n)] !== undefined && tb[String(n)] !== '') return (+tb[String(n)] || 0) / 100;
     var t = fo.taxas || {};
     if (t[String(n)] !== undefined && t[String(n)] !== '') return (+t[String(n)] || 0) / 100;
     if (fo.cartao === 'debito') { var d = taxa('Débito'); return d ? d.taxa : 0; }
@@ -2456,17 +2612,18 @@
     return [{ data: iso, valor: liq }];
   }
   function formaDe(p) { return formasV().filter(function (f) { return f.id === p.formaId; })[0] || formasV().filter(function (f) { return f.nome === p.forma; })[0]; }
-  function calcPag(p, iso) {
+  function calcPag(p, iso, semRep) {
     var fo = formaDe(p), v = num(p.valor) || 0; if (!fo || !v || fo.cartao === 'crediario') return null;
-    var n = fo.cartao === 'credito' ? (parseInt(p.parcelas, 10) || 1) : 1, tx = taxaFormaSite(fo, n), cob, liq;
-    if (fo.repassa && tx > 0) { cob = r2(v / (1 - tx)); liq = v; } else { cob = v; liq = r2(v * (1 - tx)); }
-    return { n: n, taxa: tx, cobrado: cob, liquido: liq, recs: recebSite(fo.receb, liq, n, iso || isoHoje()), fo: fo };
+    var n = fo.cartao === 'credito' ? (parseInt(p.parcelas, 10) || 1) : 1, tx = taxaFormaSite(fo, n, p.bandeira), cob, liq;
+    var rep = fo.repassa && tx > 0 && !semRep;
+    if (rep) { cob = r2(v / (1 - tx)); liq = v; } else { cob = v; liq = r2(v * (1 - tx)); }
+    return { n: n, taxa: tx, cobrado: cob, liquido: liq, recs: recebSite(fo.receb, liq, n, iso || isoHoje()), fo: fo, rep: rep };
   }
   function textoReceb(c) {
     if (!c) return '';
     var t = [];
-    if (c.fo.repassa && c.taxa) t.push('Cobrar na maquininha: ' + brl(c.cobrado) + (c.n > 1 ? ' (' + c.n + 'x de ' + brl(c.cobrado / c.n) + ')' : ''));
-    if (c.taxa) t.push('Taxa ' + (c.taxa * 100).toFixed(2).replace('.', ',') + '%' + (c.fo.repassa ? ' (repassada ao cliente)' : ''));
+    if (c.rep && c.taxa) t.push('Cobrar na maquininha: ' + brl(c.cobrado) + (c.n > 1 ? ' (' + c.n + 'x de ' + brl(c.cobrado / c.n) + ')' : ''));
+    if (c.taxa) t.push('Taxa ' + (c.taxa * 100).toFixed(2).replace('.', ',') + '%' + (c.rep ? ' (repassada ao cliente)' : ''));
     t.push('Líquido ' + brl(c.liquido));
     t.push(c.recs.length > 1 ? 'cai em ' + c.recs.length + ' parcelas mensais de ' + brl(c.recs[0].valor) + ' a partir de ' + isoBR(c.recs[0].data) : 'cai ' + (c.recs[0].data === isoHoje() ? 'hoje' : 'em ' + isoBR(c.recs[0].data)));
     return t.join(' · ');
@@ -2474,7 +2631,7 @@
   function novaVenda() {
     var p0 = novaPag(); p0.auto = true;
     V = { cli: { id: '', cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' }, cliModo: 'busca', credito: undefined,
-          vendedorId: S.u.id, loja: LS.get('loja', '') || (S.u.loja !== 'Manutenção' ? S.u.loja : ''),
+          vendedorId: S.u.id, loja: lojaUser(),
           itens: [], acess: [], troca: [], pags: [p0], desconto: '', descTipo: 'R$', prazo: '', despesas: '', dataVenda: isoHoje(), dataSaida: '', dataPrevista: '', horaPrevista: '', obs: '', obsInt: '' };
     desenharVenda();
   }
@@ -2492,13 +2649,16 @@
     if (!V) novaVenda();
     if (V.itens.some(function (i) { return i.imei === x.imei; })) return;
     V.itens.push({ linha: x.linha, imei: x.imei, modelo: x.modelo, cor: x.cor, classif: x.classif, bateria: x.bateria, loja: x.loja, tabela: x.preco || null, preco: x.preco ? String(x.preco).replace('.', ',') : '', desc: '' });
-    if (!V.loja && x.loja !== 'Manutenção') V.loja = x.loja;
     desenharVenda();
   }
-  function addAcess(x) {
+  function addAcess(x, serial) {
     if (!V) novaVenda();
     var j = V.acess.filter(function (a) { return a.id === x.id; })[0];
-    if (j) j.qtd = String((parseInt(j.qtd, 10) || 0) + 1);
+    if (x.serial) {
+      if (!j) { j = { id: x.id, nome: x.nome, sku: x.sku || '', unidade: x.unidade || 'UN', qtd: '0', preco: x.preco ? String(x.preco.toFixed(2)).replace('.', ',') : '', tabela: x.preco || null, estoque: x.estoque || {}, desc: '', serial: true, seriais: [] }; V.acess.push(j); }
+      if (serial && j.seriais.indexOf(serial) < 0) j.seriais.push(serial);
+      j.qtd = String(j.seriais.length);
+    } else if (j) j.qtd = String((parseInt(j.qtd, 10) || 0) + 1);
     else V.acess.push({ id: x.id, nome: x.nome, sku: x.sku || '', unidade: x.unidade || 'UN', qtd: '1', preco: x.preco ? String(x.preco.toFixed(2)).replace('.', ',') : '', tabela: x.preco || null, estoque: x.estoque || {}, desc: '' });
     desenharVenda();
   }
@@ -2511,6 +2671,7 @@
     if (precisa.length) { cb(null, 'Carregando produtos…'); Promise.all(precisa).then(function () { buscaProdutos(q, cb, excl); }).catch(function (e) { cb([], String(e)); }); return; }
     q = q.trim().toLowerCase(); var termos = q.split(/\s+/), out = [];
     var prods = S.ac ? S.ac.produtos.filter(function (x) { return x.formato !== 'variacoes'; }) : [];
+    var sx = serialAchar(q); if (sx) { var psx = prods.filter(function (x) { return x.id === sx.p; })[0]; if (psx) return cb([{ tipo: 'p', x: psx, exato: true, serial: sx.s, serLoja: sx.l }]); }
     var ex = prods.filter(function (x) { return (x.codigo && x.codigo.toLowerCase() === q) || (x.sku && x.sku.toLowerCase() === q); });
     if (ex.length === 1) return cb([{ tipo: 'p', x: ex[0], exato: true }]);
     var apx = (S.disp || []).filter(function (x) { return !x.manut && x.status === 'Disponível' && (x.imei === q || x.imei2 === q); });
@@ -2573,8 +2734,7 @@
     var vs = el('select'); var vends = (S.u.vendedores || []).slice(); if (!vends.some(function (x) { return x.id === S.u.id; })) vends.unshift({ id: S.u.id, nome: S.u.nome });
     vends.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; vs.appendChild(o); }); vs.value = V.vendedorId; vs.onchange = function () { V.vendedorId = vs.value; };
     campo(v1, 'Vendedor *', vs, true);
-    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), V.loja, 'Escolha a loja…'); campo(v2, 'Loja da venda *', lj, true);
-    lj.onchange = function () { V.loja = lj.value; LS.set('loja', lj.value); desenharVenda(); };
+    V.loja = lojaUser(); v2.appendChild(el('label', 'first', 'Loja da venda')); v2.appendChild(el('div', 'lojafixa' + (V.loja ? '' : ' err'), V.loja || 'Seu usuário não tem loja de venda. Peça ao gerente para ajustar em Configurações › Funcionários.'));
     // ---- 3. produtos
     var c3 = el('div', 'card pecard'); c3.appendChild(el('h2', '', 'Produtos')); W.appendChild(c3);
     var busca = inp('text', 'Buscar: modelo, IMEI, nome do produto, SKU ou código de barras'); busca.setAttribute('aria-label', 'Buscar produto'); c3.appendChild(busca);
@@ -2584,7 +2744,7 @@
       buscaProdutos(q, function (l, msgTxt) {
         res.innerHTML = '';
         if (!l) { res.appendChild(el('div', 'hint', msgTxt)); return; }
-        if (l.length === 1 && l[0].exato) { busca.value = ''; if (l[0].tipo === 'a') addItem(l[0].x); else addAcess(l[0].x); return; }
+        if (l.length === 1 && l[0].exato) { busca.value = ''; if (l[0].tipo === 'a') addItem(l[0].x); else if (l[0].serial && l[0].serLoja !== V.loja) res.appendChild(el('div', 'hint', 'O serial ' + l[0].serial + ' está em ' + l[0].serLoja + ', não nesta loja.')); else addAcess(l[0].x, l[0].serial); return; }
         if (!l.length) { res.appendChild(el('div', 'hint', msgTxt || 'Nada encontrado.')); return; }
         var lst = el('div', 'vdres');
         l.forEach(function (o) {
@@ -2611,7 +2771,7 @@
         var tt = el('div', 'tt'); r.appendChild(tt);
         var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar da venda'; x.onclick = onX; r.appendChild(x);
         var av = el('div', 'av'); r.appendChild(av);
-        var at = function () { var q = qtdEl.tagName === 'INPUT' ? (parseInt(qtdEl.value, 10) || 0) : 1; tt.textContent = brl(Math.max(0, q * (num(pi.value) || 0) - (num(di.value) || 0))); var m = avisoFn ? avisoFn(q) : ''; av.textContent = m; av.style.display = m ? '' : 'none'; };
+        var at = function () { var q = qtdEl.tagName === 'INPUT' ? (parseInt(qtdEl.value, 10) || 0) : (parseInt(qtdEl.textContent, 10) || 0); tt.textContent = brl(Math.max(0, q * (num(pi.value) || 0) - (num(di.value) || 0))); var m = avisoFn ? avisoFn(q) : ''; av.textContent = m; av.style.display = m ? '' : 'none'; };
         pi.oninput = function () { it.preco = pi.value; at(); resumo(); }; di.oninput = function () { it.desc = di.value; at(); resumo(); };
         if (qtdEl.tagName === 'INPUT') qtdEl.oninput = function () { it.qtd = qtdEl.value; at(); resumo(); };
         at(); tb.appendChild(r);
@@ -2623,9 +2783,11 @@
       });
       V.acess.forEach(function (it, i) {
         var qi = inp('number', '1'); qi.min = 1; qi.value = it.qtd;
+        if (it.serial) { it.qtd = String((it.seriais || []).length); qi = el('div', 'q1', it.qtd); }
         var tem = V.loja ? (it.estoque[V.loja] || 0) : null;
         linha(it.nome, 'Produto' + (it.sku ? ' · SKU ' + it.sku : '') + (tem === null ? '' : ' · ' + tem + ' em estoque'), qi, it, function () { V.acess.splice(i, 1); desenharVenda(); },
           function (q) { return tem !== null && q > tem ? 'ATENÇÃO: só tem ' + tem + ' nesta loja' : ''; });
+        if (it.serial) tb.appendChild(itemSeriais(it, V.loja, desenharVenda, function (t) { msg('topMsg', t); }));
       });
       c3.appendChild(tb);
     }
@@ -2684,6 +2846,12 @@
           ps.value = String(p.parcelas); ps.onchange = function () { p.parcelas = ps.value; info(); resumo(); };
           var pw0 = el('div'); pw0.appendChild(el('label', '', 'Parcelas')); pw0.appendChild(ps); ex.appendChild(pw0);
         }
+        var blv = bandeirasDe(fo);
+        if (blv.length) {
+          if (blv.indexOf(p.bandeira) < 0) p.bandeira = blv[0];
+          var bsv = el('select'); blv.forEach(function (b) { var o = el('option', '', b); o.value = b; bsv.appendChild(o); }); bsv.value = p.bandeira; bsv.onchange = function () { p.bandeira = bsv.value; info(); resumo(); };
+          var bw0 = el('div'); bw0.appendChild(el('label', '', 'Bandeira')); bw0.appendChild(bsv); ex.appendChild(bw0);
+        } else p.bandeira = '';
         if (fo && fo.cartao === 'crediario') {
           var cc = cfgCred();
           if (!(+p.parcelas >= 1 && +p.parcelas <= cc.maxParcelas)) p.parcelas = String(Math.min(cc.maxParcelas, 3));
@@ -2716,7 +2884,7 @@
         }
         fs.onchange = function () {
           if (fs.value === UPG) { p.formaId = UPG; p.forma = 'Upgrade'; p.cartao = ''; if (!V.troca.length) V.troca.push({ modelo: '', cor: '', imei: '', imei2: '', serial: '', bateria: '', classificacao: '', valor: '', consulta: '', obs: '' }); }
-          else { var f2 = formasV().filter(function (f) { return (f.id || f.nome) === fs.value; })[0]; if (p.formaId === UPG) V.troca = []; p.formaId = f2.id; p.forma = f2.nome; p.cartao = f2.cartao; p.parcelas = ''; p.primeiroVenc = ''; }
+          else { var f2 = formasV().filter(function (f) { return (f.id || f.nome) === fs.value; })[0]; if (p.formaId === UPG) V.troca = []; p.formaId = f2.id; p.forma = f2.nome; p.cartao = f2.cartao; p.parcelas = ''; p.primeiroVenc = ''; p.bandeira = ''; }
           desenharPags(); resumo();
         };
         vi.oninput = function () { p.valor = vi.value; p.auto = false; info(); resumo(true); };
@@ -2759,8 +2927,9 @@
     fin.onclick = function () {
       m.classList.remove('show');
       var T = totaisVenda(), erro = '', C2 = V.cli;
-      if (!V.loja) erro = 'Escolha a loja da venda.';
+      if (!V.loja) erro = 'Seu usuário não tem loja de venda definida (Configurações › Funcionários).';
       else if (!V.itens.length && !V.acess.length) erro = 'Adicione pelo menos um produto.';
+      else if (V.acess.some(function (i) { return i.serial && !(i.seriais || []).length; })) erro = 'Leia o serial dos produtos com controle de serial.';
       else if (V.itens.some(function (i) { return !(num(i.preco) > 0); }) || V.acess.some(function (i) { return !(num(i.preco) > 0) || !(parseInt(i.qtd, 10) > 0); })) erro = 'Informe quantidade e preço de todos os produtos.';
       else if (V.acess.some(function (i) { return (parseInt(i.qtd, 10) || 0) > (i.estoque[V.loja] || 0); })) erro = 'Tem produto com quantidade maior que o estoque desta loja.';
       else if (V.troca.some(function (t) { return !t.modelo || !t.cor || !luhn(soDig(t.imei)) || t.bateria === '' || !t.classificacao || !(num(t.valor) > 0); })) erro = 'Complete os dados do aparelho da troca (modelo, cor, IMEI, bateria, classificação e valor).';
@@ -2779,10 +2948,10 @@
         loja: V.loja, vendedorId: V.vendedorId, obs: V.obs, obsInterna: V.obsInt, desconto: T.descVenda, outrasDespesas: T.despesas, prazoEntrega: V.prazo,
         dataVenda: V.dataVenda, dataSaida: V.dataSaida, dataPrevista: V.dataPrevista, horaPrevista: V.horaPrevista || '',
         itens: V.itens.map(function (i) { return { linha: i.linha, imei: i.imei, preco: num(i.preco), desconto: num(i.desc) || 0 }; }),
-        acessorios: V.acess.map(function (a) { return { id: a.id, qtd: parseInt(a.qtd, 10), preco: num(a.preco), desconto: num(a.desc) || 0 }; }),
+        acessorios: V.acess.map(function (a) { return { id: a.id, qtd: parseInt(a.qtd, 10), preco: num(a.preco), desconto: num(a.desc) || 0, seriais: a.seriais || [] }; }),
         troca: V.troca.map(function (t) { return { modelo: t.modelo, cor: t.cor, imei: soDig(t.imei), imei2: soDig(t.imei2), serial: t.serial, bateria: t.bateria, classificacao: t.classificacao, valor: num(t.valor), consulta: t.consulta, obs: t.obs }; }),
         cliente: { id: C2.id, cpf: C2.cpf, nome: C2.nome, whats: C2.whats, cep: C2.cep, endereco: C2.endereco, bairro: C2.bairro, cidade: C2.cidade },
-        pagamentos: V.pags.filter(function (p) { return p.formaId !== UPG; }).map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, primeiroVenc: p.primeiroVenc || '', categoria: p.categoria }; })
+        pagamentos: V.pags.filter(function (p) { return p.formaId !== UPG; }).map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, primeiroVenc: p.primeiroVenc || '', categoria: p.categoria, bandeira: p.bandeira || '' }; })
       };
       call('vendaRegistrar', [S.token, d]).then(function (v) {
         S.disp = null; S.dash = null; S.venda = null; S.vendas = null; S.fin = null; S.crm = null; S.ac = null; S.cred = null;
@@ -2866,7 +3035,7 @@
     tt((v.pagamentos || []).some(function (p) { return p.crediario; }) ? 'Valor da compra' : 'Valor pago', brl(v.aPagar), 'g');
     (v.pagamentos || []).forEach(function (p) {
       if (p.crediario) { tt(p.forma + ' ' + p.parcelas + 'x de ' + brl(p.valorParcela) + ' · 1º venc. ' + isoBR(p.primeiroVenc), brl(p.valor) + (p.totalCred > p.valor + 0.009 ? ' (total com juros ' + brl(p.totalCred) + ')' : '')); return; }
-      tt(p.forma + parcTxt(p), brl(p.valor) + (p.cobrado && p.cobrado !== p.valor ? ' (cobrado ' + brl(p.cobrado) + (p.parcelas > 1 ? ' em ' + p.parcelas + 'x de ' + brl(p.cobrado / p.parcelas) : '') + ')' : '')); });
+      tt(formaTxt(p), brl(p.valor) + (p.cobrado && p.cobrado !== p.valor ? ' (cobrado ' + brl(p.cobrado) + (p.parcelas > 1 ? ' em ' + p.parcelas + 'x de ' + brl(p.cobrado / p.parcelas) : '') + ')' : '')); });
     if (v.obs) { r.appendChild(el('h2', '', 'Observações')); var ob0 = el('div', '', v.obs); ob0.style.whiteSpace = 'pre-line'; r.appendChild(ob0); }
     if (dt.prazoEntrega || dt.dataPrevista) r.appendChild(el('div', '', [dt.prazoEntrega ? 'Prazo de entrega: ' + dt.prazoEntrega : '', dt.dataPrevista ? 'Data prevista: ' + isoBR(dt.dataPrevista) : ''].filter(Boolean).join(' · ')));
     var credP = (v.pagamentos || []).filter(function (p) { return p.crediario; })[0];
@@ -2885,7 +3054,7 @@
     (v.acessorios || []).forEach(function (x) { l.push('🛍️ ' + x.qtd + 'x ' + x.nome + ' · ' + brl(x.total)); if (x.descComp) l.push(x.descComp); });
     if ((v.acessorios || []).length) { l.push('✅ Produtos: garantia de 90 dias'); l.push(''); }
     (v.troca || []).forEach(function (x) { l.push('🔄 Troca: ' + x.modelo + ' · − ' + brl(x.valor)); });
-    l.push('💰 Valor: ' + brl(v.aPagar) + ' (' + (v.pagamentos || []).map(function (p) { return p.crediario ? 'crediário ' + p.parcelas + 'x de ' + brl(p.valorParcela) + ', 1º venc. ' + isoBR(p.primeiroVenc) : p.forma + parcTxt(p); }).join(' + ') + ')');
+    l.push('💰 Valor: ' + brl(v.aPagar) + ' (' + (v.pagamentos || []).map(function (p) { return p.crediario ? 'crediário ' + p.parcelas + 'x de ' + brl(p.valorParcela) + ', 1º venc. ' + isoBR(p.primeiroVenc) : formaTxt(p); }).join(' + ') + ')');
     l.push(''); l.push('Guarde esta mensagem: ela vale como comprovante da garantia.');
     return l.join('\n');
   }
@@ -2986,7 +3155,7 @@
      ['Troca', v.troca.map(function (x) { return x.modelo + ' (IMEI ' + x.imei + ') − ' + brl(x.valor); }).join('\n')],
      ['Total dos itens', brl(v.totalItens)], ['Desconto', v.det && v.det.desconto ? brl(v.det.desconto) : ''], ['Outras despesas', v.det && v.det.despesas ? brl(v.det.despesas) : ''],
      ['Total da venda', brl(totVenda(v))], ['Valor pago', brl(v.aPagar)], ['Data de saída', v.det && v.det.dataSaida ? isoBR(v.det.dataSaida) : ''], ['Data prevista', v.det && v.det.dataPrevista ? isoBR(v.det.dataPrevista) : ''],
-     ['Prazo de entrega', v.det && v.det.prazoEntrega], ['Obs. interna', v.det && v.det.obsInterna], ['Registrada por', v.det && v.det.registradoPor && v.det.registradoPor !== v.vendedor ? v.det.registradoPor : ''], ['Pagamento', (v.pagamentos || []).map(function (p) { return p.forma + parcTxt(p) + ' ' + brl(p.valor); }).join(' + ')],
+     ['Prazo de entrega', v.det && v.det.prazoEntrega], ['Obs. interna', v.det && v.det.obsInterna], ['Registrada por', v.det && v.det.registradoPor && v.det.registradoPor !== v.vendedor ? v.det.registradoPor : ''], ['Pagamento', (v.pagamentos || []).map(function (p) { return formaTxt(p) + ' ' + brl(p.valor); }).join(' + ')],
      ['Observação', v.obs], ['Cancelamento', v.cancelamento]].forEach(function (p) { if (!p[1]) return; kv.appendChild(el('div', 'k', p[0])); var d = el('div', '', p[1]); d.style.whiteSpace = 'pre-line'; kv.appendChild(d); });
     info.appendChild(kv); bd.appendChild(info);
     var am = el('div', 'msg err'); bd.appendChild(am);
@@ -4103,6 +4272,12 @@
     var ce = el('div', 'card'); ce.appendChild(el('h2', '', x.formato === 'composicao' ? 'Kits montáveis por loja' : 'Estoque por loja')); var te = el('table', 'ext');
     D.lojas.forEach(function (l) { var q = x.estoque[l] || 0, trr = el('tr'); trr.appendChild(el('td', '', l)); trr.appendChild(el('td', 'v' + (x.minimo && q < x.minimo ? ' s' : ''), x.formato === 'composicao' ? q + ' kit(s)' : unTxt(x, q))); te.appendChild(trr); });
     ce.appendChild(te); bd.appendChild(ce);
+    if (x.serial) {
+      var sl = (D.seriais || []).filter(function (z) { return z.p === x.id; }), cs2 = el('div', 'card'); cs2.appendChild(el('h2', '', 'Seriais em estoque (' + sl.length + ')'));
+      if (!sl.length) cs2.appendChild(el('div', 'hint', 'Nenhum serial em estoque.'));
+      D.lojas.forEach(function (l) { var ls = sl.filter(function (z) { return z.l === l; }); if (!ls.length) return; cs2.appendChild(el('div', 'k', l)); var chs = el('div', 'chips'); ls.forEach(function (z) { chs.appendChild(el('span', 'chip', z.s)); }); cs2.appendChild(chs); });
+      bd.appendChild(cs2);
+    }
     var am = el('div', 'msg err'); bd.appendChild(am);
     if (x.pai && M[x.pai]) opcaoDw(bd, '← ' + M[x.pai].nome, 'Voltar ao produto principal', '', function () { abrirAcess(M[x.pai]); });
     if (pode('vender') && x.formato !== 'variacoes' && x.total > 0) opcaoDw(bd, 'Vender', 'Abre a página Vendas com este produto', 'okc', function () { fecharDrawer(); S.vdPreAc = x; ir('vendas'); });
@@ -4146,13 +4321,18 @@
     var qt = inp('number', tipo === 'ajuste' ? 'Quantidade contada' : 'Quantidade'); qt.min = tipo === 'ajuste' ? 0 : 1; campo(bx, tipo === 'ajuste' ? 'Quantidade contada na loja' : 'Quantidade', qt);
     var cu = null; if (tipo === 'entrada') { cu = inpValor(x.custo || ''); campo(bx, 'Custo unitário desta compra', cu); }
     var ob = inp('text', tipo === 'saida' ? 'Ex.: capa com defeito' : 'Opcional (nota, fornecedor…)'); campo(bx, tipo === 'saida' ? 'Motivo *' : 'Observação', ob);
+    var csP = null;
+    if (x.serial) {
+      if (tipo === 'ajuste') bx.appendChild(el('div', 'hint', 'Produto com controle de serial: use Entrada ou Saída informando os seriais.'));
+      else { qt.readOnly = true; csP = caixaSeriais(bx, x, tipo === 'entrada' ? 'entrada' : 'saida', function () { return lj.value; }, function () { return D.seriais; }, function (sel) { qt.value = sel.length ? String(sel.length) : ''; if (typeof at === 'function') at(); }); }
+    }
     var hint = el('div', 'hint'); bx.appendChild(hint);
     var at = function () { var q = x.estoque[lj.value] || 0; hint.textContent = 'Hoje em ' + lj.value + ': ' + q + ' ' + String(x.unidade || 'un').toLowerCase() + '.' + (tipo === 'ajuste' && qt.value !== '' ? ' → ' + qt.value : ''); };
-    lj.onchange = at; qt.oninput = at; at();
+    lj.onchange = function () { if (csP) csP.redesenhar(); at(); }; qt.oninput = at; at();
     var ok = el('button', 'btn ok', 'Confirmar'); ok.type = 'button'; ok.style.marginTop = '10px'; bx.appendChild(ok); btn.after(bx);
     ok.onclick = function () {
       am.classList.remove('show'); ok.disabled = true; ok.textContent = 'Salvando…';
-      call('acEstoque', [S.token, x.id, { tipo: tipo, loja: lj.value, destino: de ? de.value : '', qtd: qt.value, custo: cu ? num(cu.input.value) : null, obs: ob.value }])
+      call('acEstoque', [S.token, x.id, { tipo: tipo, loja: lj.value, destino: de ? de.value : '', qtd: qt.value, custo: cu ? num(cu.input.value) : null, obs: ob.value, seriais: csP ? csP.get() : [] }])
         .then(function (d) { aposAcess(d); var nx = d.produtos.filter(function (y) { return y.id === x.id; })[0]; if (nx) abrirAcess(nx); else fecharDrawer(); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar'; am.textContent = e; am.classList.add('show'); });
     };
@@ -4297,6 +4477,11 @@
     var dl = el('datalist'); dl.id = 'undList'; ['UN', 'PC', 'KIT', 'CX', 'PAR', 'M', 'KG'].forEach(function (u) { var o = el('option'); o.value = u; dl.appendChild(o); }); c3.appendChild(dl);
     var cond = selIn(g3[1], 'Condição', ['Não especificado', 'Novo', 'Usado', 'Recondicionado'], x ? x.condicao : (S.prCond || 'Novo')); g3[1].firstChild.className = 'first'; S.prCond = '';
     var condAv = el('div', 'hint'); g3[1].appendChild(condAv);
+    var serOn = !!(x && x.serial), serTrava = serOn;
+    var serW = el('label', 'perm'), serCk = el('input'); serCk.type = 'checkbox'; serCk.checked = serOn; serCk.disabled = serTrava;
+    var serT = el('div', 't', 'Controle de serial'); serT.appendChild(el('small', '', serTrava ? 'Ligado: cada unidade tem serial na entrada e na venda. Não pode ser desligado.' : 'Pede o serial de cada unidade na entrada no estoque e na venda. Atenção: depois de salvo, não dá para desligar.'));
+    serW.appendChild(serCk); serW.appendChild(serT); serW.style.marginTop = '12px'; c3.appendChild(serW);
+    serCk.onchange = function () { serOn = serCk.checked; desenharSI(); };
     var avCond = function () {
       condAv.innerHTML = ''; if (cond.value !== 'Usado') return;
       condAv.appendChild(document.createTextNode('Produto usado aparece também na página Produtos Usados. '));
@@ -4339,6 +4524,7 @@
         var w = el('div', 'siln'); var gs = grade(w, 4);
         var dp = selIn(gs[0], 'Depósito', D.lojas, s2.loja); dp.onchange = function () { s2.loja = dp.value; };
         var q = inp('number', '0'); q.min = 0; q.value = s2.qtd; q.oninput = function () { s2.qtd = q.value; }; campo(gs[1], 'Quantidade', q);
+        if (serOn) { q.readOnly = true; var sta = el('textarea'); sta.rows = 3; sta.placeholder = 'Um serial por linha'; sta.value = s2.seriais || ''; var sw = el('div'); campo(sw, 'Seriais * (a quantidade é a contagem)', sta); w.appendChild(sw); sta.oninput = function () { s2.seriais = sta.value; s2.qtd = String(sta.value.split(/[\n,;]+/).map(serNorm).filter(Boolean).length || ''); q.value = s2.qtd; }; }
         var pu = inpValor(s2.precoUnit); pu.input.oninput = function () { s2.precoUnit = pu.input.value; }; campo(gs[2], 'Preço unitário', pu);
         var cc = inpValor(s2.custo); cc.input.oninput = function () { s2.custo = cc.input.value; }; campo(gs[3], 'Custo de compra', cc);
         var ob2 = campo(w, 'Observações do saldo inicial', inp('text', 'Ex.: contagem de abertura')); ob2.value = s2.obs; ob2.oninput = function () { s2.obs = ob2.value; };
@@ -4410,7 +4596,7 @@
         trib: { origem: orig.value, ncm: soDig(ncm.value), cest: soDig(cest.value), tipoItem: tipoIt.value, icmsBaseSt: num(ibst.input.value), icmsSt: num(ist.input.value), icmsProprio: num(ipr.input.value), tipiExc: tipi.value, pisFixo: num(pis.input.value), cofinsFixo: num(cof.input.value), infoAdic: inf.value },
         atributos: attrs.map(function (a) { return { nome: a.nome.trim(), valores: a.valores.split(',').map(function (v) { return v.trim(); }).filter(Boolean) }; }),
         variacoes: vars.map(function (v) { return { id: v.id, attrs: v.attrs, sku: v.sku, preco: num(v.preco) || 0 }; }),
-        componentes: comps, saldoInicial: formato === 'simples' && !temEstoque ? SI.filter(function (s2) { return +s2.qtd > 0; }).map(function (s2) { return { loja: s2.loja, qtd: +s2.qtd, precoUnit: num(s2.precoUnit), custo: num(s2.custo), obs: s2.obs }; }) : [] };
+        componentes: comps, saldoInicial: formato === 'simples' && !temEstoque ? SI.filter(function (s2) { return +s2.qtd > 0; }).map(function (s2) { return { loja: s2.loja, qtd: +s2.qtd, precoUnit: num(s2.precoUnit), custo: num(s2.custo), obs: s2.obs, seriais: serOn ? String(s2.seriais || '') : [] }; }) : [], serial: serOn };
       ok.disabled = cc.disabled = true; ok.textContent = 'Salvando…';
       call('acSalvar', [S.token, x ? x.id : '', d]).then(function (r) {
         aposAcess(r); ir('acess');
@@ -4433,8 +4619,8 @@
   };
   function icoForma(f) { return /pix/i.test(f.nome) ? ICO_FP.pix : /dinheiro|esp[eé]cie/i.test(f.nome) ? ICO_FP.din : (f.cartao === 'credito' || f.cartao === 'debito') ? ICO_FP.card : ICO_FP.out; }
   function pdvNovo() {
-    PDV = { loja: LS.get('loja', '') || (S.u.loja !== 'Manutenção' ? S.u.loja : ''), vendedorId: S.u.id, itens: [], acess: [], cli: null, credito: null,
-            desconto: '', descTipo: 'R$', despesas: '', pags: [], tela: 'itens', forma: '', plano: '1', valor: '', recebido: '' };
+    PDV = { loja: lojaUser(), vendedorId: S.u.id, itens: [], acess: [], cli: null, credito: null,
+            desconto: '', descTipo: 'R$', despesas: '', pags: [], tela: 'itens', forma: '', plano: '1', valor: '', recebido: '', bandeira: '', primeiroVenc: '' };
   }
   function pdvTot() {
     var t = 0, q = 0;
@@ -4452,7 +4638,15 @@
   });
   function pdvAdd(o) {
     if (o.tipo === 'a') { if (PDV.itens.some(function (i) { return i.imei === o.x.imei; })) return; if (!o.x.preco) { msg('topMsg', 'Aparelho sem preço na tabela: use a página Vendas.'); return; } PDV.itens.push({ linha: o.x.linha, imei: o.x.imei, nome: o.x.modelo + ' ' + String(o.x.cor || '').toUpperCase() + ' · ' + o.x.classif, preco: o.x.preco, loja: o.x.loja }); }
-    else { var x = o.x; if (!x.preco) { msg('topMsg', x.nome + ' está sem preço.'); return; } var j = PDV.acess.filter(function (a) { return a.id === x.id; })[0]; if (j) j.qtd++; else PDV.acess.push({ id: x.id, nome: x.nome, sku: x.sku, preco: x.preco, qtd: 1, estoque: x.estoque || {} }); }
+    else {
+      var x = o.x; if (!x.preco) { msg('topMsg', x.nome + ' está sem preço.'); return; } var j = PDV.acess.filter(function (a) { return a.id === x.id; })[0];
+      if (x.serial) {
+        if (o.serial && o.serLoja !== PDV.loja) { msg('topMsg', 'O serial ' + o.serial + ' está em ' + o.serLoja + ', não nesta loja.'); return; }
+        if (!j) { j = { id: x.id, nome: x.nome, sku: x.sku, preco: x.preco, qtd: 0, estoque: x.estoque || {}, serial: true, seriais: [] }; PDV.acess.push(j); }
+        if (o.serial && j.seriais.indexOf(o.serial) < 0) j.seriais.push(o.serial);
+        j.qtd = j.seriais.length;
+      } else if (j) j.qtd++; else PDV.acess.push({ id: x.id, nome: x.nome, sku: x.sku, preco: x.preco, qtd: 1, estoque: x.estoque || {} });
+    }
     PDV.pags = []; desenharPdv();
   }
   function desenharPdv() { if (PDV.tela === 'pag') return desenharPdvPag(); desenharPdvItens(); }
@@ -4460,10 +4654,10 @@
     var box = $('pdvCorpo'); box.innerHTML = '';
     var g = el('div', 'pdvg'), esq = el('div'), dir = el('div', 'pdvlado'); g.appendChild(esq); g.appendChild(dir); box.appendChild(g);
     var c1 = el('div', 'card'); esq.appendChild(c1);
-    var top = el('div', 'pdvtop2'), lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), PDV.loja, 'Escolha a loja…'); lj.onchange = function () { PDV.loja = lj.value; LS.set('loja', lj.value); desenharPdv(); };
+    var top = el('div', 'pdvtop2'); PDV.loja = lojaUser();
     var vs2 = el('select'), vends = (S.u.vendedores || []).slice(); if (!vends.some(function (x) { return x.id === S.u.id; })) vends.unshift({ id: S.u.id, nome: S.u.nome });
     vends.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; vs2.appendChild(o); }); vs2.value = PDV.vendedorId; vs2.onchange = function () { PDV.vendedorId = vs2.value; };
-    var w1 = el('div'), w2 = el('div'); campo(w1, 'Loja', lj, true); campo(w2, 'Vendedor', vs2, true); top.appendChild(w1); top.appendChild(w2); c1.appendChild(top);
+    var w1 = el('div'), w2 = el('div'); w1.appendChild(el('label', 'first', 'Loja')); w1.appendChild(el('div', 'lojafixa' + (PDV.loja ? '' : ' err'), PDV.loja || 'Usuário sem loja de venda')); campo(w2, 'Vendedor', vs2, true); top.appendChild(w1); top.appendChild(w2); c1.appendChild(top);
     var bs = inp('text', 'Leia o código de barras / IMEI ou digite o nome do produto'); bs.id = 'pdvBusca'; bs.className = 'pdvbusca'; bs.setAttribute('aria-label', 'Buscar produto'); c1.appendChild(bs);
     var rs = el('div'); c1.appendChild(rs);
     var buscar = function (enter) {
@@ -4498,9 +4692,10 @@
         var r = el('div', 'pdvl'), n0 = el('div', 'nm', it.nome); n0.appendChild(el('small', '', brl(it.preco) + ' un.' + (tem !== null && it.qtd > tem ? ' · SÓ TEM ' + tem + ' NA LOJA' : ''))); r.appendChild(n0);
         var qw = el('div', 'qt'), mn = el('button', '', '−'), pl = el('button', '', '+'); mn.type = pl.type = 'button';
         mn.onclick = function () { if (it.qtd > 1) it.qtd--; else PDV.acess.splice(i, 1); PDV.pags = []; desenharPdv(); }; pl.onclick = function () { it.qtd++; PDV.pags = []; desenharPdv(); };
-        qw.appendChild(mn); qw.appendChild(el('span', '', String(it.qtd))); qw.appendChild(pl); r.appendChild(qw);
+        if (it.serial) qw.appendChild(el('span', '', String(it.qtd))); else { qw.appendChild(mn); qw.appendChild(el('span', '', String(it.qtd))); qw.appendChild(pl); } r.appendChild(qw);
         r.appendChild(el('div', 'tt', brl(it.preco * it.qtd)));
         var x = el('button', 'x', '×'); x.type = 'button'; x.onclick = function () { PDV.acess.splice(i, 1); PDV.pags = []; desenharPdv(); }; r.appendChild(x); tb.appendChild(r);
+        if (it.serial) tb.appendChild(itemSeriais(it, PDV.loja, function () { PDV.pags = []; desenharPdv(); }, function (t) { msg('topMsg', t); }));
       });
       c1.appendChild(tb);
     }
@@ -4549,9 +4744,10 @@
     nv.onclick = function () { pdvNovo(); abrirPdv(); };
     pg.onclick = function () {
       m.classList.remove('show'); var erro = '';
-      if (!PDV.loja) erro = 'Escolha a loja.';
+      if (!PDV.loja) erro = 'Seu usuário não tem loja de venda definida (Configurações › Funcionários).';
       else if (!PDV.itens.length && !PDV.acess.length) erro = 'Carrinho vazio.';
       else if (PDV.itens.length && !PDV.cli) erro = 'Venda de aparelho: identifique o cliente (a garantia sai no nome dele).';
+      else if (PDV.acess.some(function (a) { return a.serial && !a.seriais.length; })) erro = 'Leia o serial dos produtos com controle de serial.';
       else if (PDV.acess.some(function (a) { return a.qtd > (a.estoque[PDV.loja] || 0); })) erro = 'Tem produto sem estoque suficiente nesta loja.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       PDV.tela = 'pag'; PDV.forma = PDV.forma || ''; desenharPdv(); window.scrollTo(0, 0);
@@ -4559,7 +4755,7 @@
   }
   function desenharPdvPag() {
     var box = $('pdvCorpo'); box.innerHTML = '';
-    var T = pdvTot(), formas = formasV().filter(function (f) { return f.cartao !== 'crediario'; });
+    var T = pdvTot(), formas = formasV();
     var hd = el('div', 'pdvpghd'), vt = el('button', 'lnk', '← Voltar aos produtos'); vt.type = 'button'; vt.onclick = function () { PDV.tela = 'itens'; desenharPdv(); };
     hd.appendChild(vt); var tt = el('div', 'tot'); tt.appendChild(el('span', '', 'Total da venda')); tt.appendChild(el('b', '', brl(T.venda))); hd.appendChild(tt); box.appendChild(hd);
     var c = el('div', 'card'); box.appendChild(c);
@@ -4571,25 +4767,39 @@
     formas.forEach(function (f) {
       var b = el('button', 'fpb' + ((f.id || f.nome) === PDV.forma ? ' on' : '')); b.type = 'button';
       var ic = el('span', 'ic'); ic.innerHTML = icoForma(f); b.appendChild(ic); b.appendChild(el('span', '', f.nome));
-      b.onclick = function () { PDV.forma = f.id || f.nome; PDV.plano = '1'; PDV.recebido = ''; desenharPdv(); };
+      b.onclick = function () { PDV.forma = f.id || f.nome; PDV.plano = '1'; PDV.recebido = ''; PDV.bandeira = ''; desenharPdv(); };
       fg.appendChild(b);
     });
+    var bls = bandeirasDe(fo);
+    if (bls.length) {
+      if (bls.indexOf(PDV.bandeira) < 0) PDV.bandeira = bls[0];
+      c.appendChild(el('div', 'k', 'Bandeira')); var bg = el('div', 'plgrid bandgrid'); c.appendChild(bg);
+      bls.forEach(function (b) { var bb = el('button', 'plb' + (b === PDV.bandeira ? ' on' : '')); bb.type = 'button'; bb.appendChild(el('b', '', b)); bb.onclick = function () { PDV.bandeira = b; desenharPdv(); }; bg.appendChild(bb); });
+    } else PDV.bandeira = '';
+    var credi = !!(fo && fo.cartao === 'crediario'), ccP = cfgCred();
     // planos
     var falta = Math.max(0, T.falta);
     var base = num(PDV.valor) > 0 ? num(PDV.valor) : falta;
     c.appendChild(el('div', 'k', 'Plano de pagamento'));
     var pgrid = el('div', 'plgrid'); c.appendChild(pgrid);
-    var maxP = fo && fo.cartao === 'credito' ? (fo.maxParc || 12) : 1;
+    var maxP = credi ? ccP.maxParcelas : fo && fo.cartao === 'credito' ? (fo.maxParc || 12) : 1;
     if (+PDV.plano > maxP) PDV.plano = '1';
     for (var n = 1; n <= maxP; n++) (function (n) {
-      var cp = fo ? calcPag({ formaId: fo.id, forma: fo.nome, valor: String(base), parcelas: String(n) }, isoHoje()) : null;
-      var cob = cp ? cp.cobrado : base, b = el('button', 'plb' + (String(n) === String(PDV.plano) ? ' on' : '')); b.type = 'button';
-      b.appendChild(el('b', '', n === 1 ? (fo && fo.cartao === 'credito' ? '1x' : 'À vista') : n + 'x'));
-      b.appendChild(el('span', '', n === 1 ? brl(cob) : n + 'x de ' + brl(cob / n)));
-      if (cp && cp.taxa && fo.repassa) b.appendChild(el('small', '', 'total ' + brl(cob)));
+      var cp = fo && !credi ? calcPag({ formaId: fo.id, forma: fo.nome, valor: String(base), parcelas: String(n), bandeira: PDV.bandeira }, isoHoje(), true) : null;
+      var pl0 = credi ? planoCred(base, n, ccP) : null, cob = credi ? pl0.total : cp ? cp.cobrado : base, b = el('button', 'plb' + (String(n) === String(PDV.plano) ? ' on' : '')); b.type = 'button';
+      b.appendChild(el('b', '', n === 1 ? (fo && (fo.cartao === 'credito' || credi) ? '1x' : 'À vista') : n + 'x'));
+      b.appendChild(el('span', '', n === 1 ? brl(cob) : n + 'x de ' + brl(credi ? pl0.parcela : cob / n)));
+      if (credi && pl0.juros) b.appendChild(el('small', '', 'total ' + brl(pl0.total)));
       b.onclick = function () { PDV.plano = String(n); desenharPdv(); };
       pgrid.appendChild(b);
     })(n);
+    if (credi) {
+      if (!PDV.primeiroVenc) PDV.primeiroVenc = isoAdd(isoHoje(), ccP.diasPrimeiro);
+      var dvw = el('div', 'pdvadd'), dvi = inpData(PDV.primeiroVenc); dvi.min = isoAdd(isoHoje(), 1); dvi.max = isoAdd(isoHoje(), 90); dvi.onchange = function () { PDV.primeiroVenc = dvi.value; };
+      var dw1 = el('div'); campo(dw1, '1º vencimento', dvi, true); dvw.appendChild(dw1); c.appendChild(dvw);
+      var crh = el('div', 'hint', !PDV.cli ? 'Crediário: identifique o cliente (volte aos produtos e toque em "Identificar cliente").' : PDV.credito && PDV.credito.limite ? 'Limite ' + brl(PDV.credito.limite) + ' · disponível ' + brl(Math.max(0, PDV.credito.disponivel)) + (PDV.credito.atrasado ? ' · ' + PDV.credito.qtdAtraso + ' fatura(s) atrasada(s)' : '') : 'Cliente sem limite de crédito: o crediário será bloqueado. Cadastre o limite em CRM.');
+      if (!PDV.cli || !(PDV.credito && PDV.credito.limite)) crh.style.color = 'var(--err)'; c.appendChild(crh);
+    }
     // valor e adicionar
     var ar = el('div', 'pdvadd'), vw = inpValor(PDV.valor !== '' ? PDV.valor : (falta ? String(falta.toFixed(2)).replace('.', ',') : '')); var w1 = el('div'); campo(w1, 'Valor nesta forma', vw, true); ar.appendChild(w1);
     var din = fo && /dinheiro|esp[eé]cie/i.test(fo.nome), rec = null;
@@ -4598,7 +4808,7 @@
     var info = el('div', 'hint'); c.appendChild(info);
     var at = function () {
       var v = num(vw.input.value) || 0; if (!fo || !v) { info.textContent = ''; return; }
-      var cp = calcPag({ formaId: fo.id, forma: fo.nome, valor: String(v), parcelas: PDV.plano }, isoHoje()), t = textoReceb(cp);
+      var cp = credi ? null : calcPag({ formaId: fo.id, forma: fo.nome, valor: String(v), parcelas: PDV.plano, bandeira: PDV.bandeira }, isoHoje(), true), t = textoReceb(cp);
       if (rec && num(rec.input.value)) { var tr = r2((num(rec.input.value) || 0) - v); t = (tr >= 0 ? 'TROCO: ' + brl(tr) : 'Falta ' + brl(-tr)) + (t ? ' · ' + t : ''); }
       info.textContent = t;
     };
@@ -4609,16 +4819,20 @@
       if (!fo) return;
       if (!(v > 0)) { m.textContent = 'Informe o valor.'; m.classList.add('show'); return; }
       if (v > falta + 0.009) { m.textContent = 'O valor passa do que falta pagar (' + brl(falta) + ').'; m.classList.add('show'); return; }
-      PDV.pags.push({ formaId: fo.id, forma: fo.nome, cartao: fo.cartao, valor: String(v.toFixed(2)).replace('.', ','), parcelas: fo.cartao === 'credito' ? PDV.plano : '', recebido: rec ? rec.input.value : '' });
+      if (credi && !PDV.cli) { m.textContent = 'Crediário: identifique o cliente antes (volte aos produtos).'; m.classList.add('show'); return; }
+      if (credi && PDV.pags.some(function (q) { return q.cartao === 'crediario'; })) { m.textContent = 'Use só uma linha de crediário por venda.'; m.classList.add('show'); return; }
+      if (credi && !PDV.primeiroVenc) { m.textContent = 'Informe o 1º vencimento.'; m.classList.add('show'); return; }
+      PDV.pags.push({ formaId: fo.id, forma: fo.nome, cartao: fo.cartao, valor: String(v.toFixed(2)).replace('.', ','), parcelas: fo.cartao === 'credito' || credi ? PDV.plano : '', recebido: rec ? rec.input.value : '',
+                      bandeira: PDV.bandeira || '', maquininha: fo.maquininha || '', primeiroVenc: credi ? PDV.primeiroVenc : '' });
       PDV.valor = ''; PDV.recebido = ''; desenharPdv();
     };
     // pagamentos adicionados
     var c3 = el('div', 'card'); box.appendChild(c3); c3.appendChild(el('div', 'k', 'Pagamentos adicionados'));
     if (!PDV.pags.length) c3.appendChild(el('div', 'hint', 'Nenhum ainda. Escolha a forma, o plano e toque em Adicionar.'));
     PDV.pags.forEach(function (p, i) {
-      var cp = calcPag(p, isoHoje()), r = el('div', 'pdvpl'), a = el('div');
+      var cp = calcPag(p, isoHoje(), true), r = el('div', 'pdvpl'), a = el('div');
       var ic = el('span', 'ic'); ic.innerHTML = icoForma({ nome: p.forma, cartao: p.cartao }); r.appendChild(ic);
-      a.appendChild(el('b', '', p.forma + (cp && cp.n > 1 ? ' · ' + cp.n + 'x de ' + brl(cp.cobrado / cp.n) : cp && p.cartao === 'credito' ? ' · 1x' : ' · à vista')));
+      a.appendChild(el('b', '', formaTxt(p) + (p.cartao === 'crediario' ? ' · 1º venc. ' + isoBR(p.primeiroVenc) : cp && cp.n > 1 ? ' · ' + cp.n + 'x de ' + brl(cp.cobrado / cp.n) : '')));
       var tr = num(p.recebido) ? r2(num(p.recebido) - num(p.valor)) : null;
       a.appendChild(el('small', '', [cp && cp.cobrado !== num(p.valor) ? 'cobrar ' + brl(cp.cobrado) + ' na maquininha' : '', tr !== null && tr > 0 ? 'troco ' + brl(tr) : '', cp ? 'líquido ' + brl(cp.liquido) : ''].filter(Boolean).join(' · ')));
       r.appendChild(a); r.appendChild(el('div', 'v', brl(num(p.valor))));
@@ -4649,8 +4863,8 @@
       var d = { origem: 'pdv', loja: PDV.loja, vendedorId: PDV.vendedorId || S.u.id, desconto: T4.desc, outrasDespesas: T4.despesas, dataVenda: isoHoje(), consumidorFinal: !PDV.cli,
         cliente: PDV.cli ? { id: PDV.cli.id || '', cpf: PDV.cli.cpf || '', nome: PDV.cli.nome, whats: PDV.cli.whats || '', cep: PDV.cli.cep || '', endereco: PDV.cli.endereco || '', bairro: PDV.cli.bairro || '', cidade: PDV.cli.cidade || '' } : {},
         itens: PDV.itens.map(function (i) { return { linha: i.linha, imei: i.imei, preco: i.preco, desconto: 0 }; }),
-        acessorios: PDV.acess.map(function (a) { return { id: a.id, qtd: a.qtd, preco: a.preco, desconto: 0 }; }), troca: [],
-        pagamentos: PDV.pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, categoria: catRec()[0] }; }), obs: '' };
+        acessorios: PDV.acess.map(function (a) { return { id: a.id, qtd: a.qtd, preco: a.preco, desconto: 0, seriais: a.seriais || [] }; }), troca: [],
+        pagamentos: PDV.pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, categoria: catRec()[0], bandeira: p.bandeira || '', primeiroVenc: p.primeiroVenc || '' }; }), obs: '' };
       call('vendaRegistrar', [S.token, d]).then(function (v) {
         S.disp = null; S.dash = null; S.vendas = null; S.fin = null; S.ac = null; S.cred = null; S.cx = null;
         pdvNovo(); desenharPdv(); abrirRecibo(v, true);
@@ -7004,18 +7218,18 @@
       pBox.innerHTML = '';
       if (prod) {
         var s2 = el('div', 'clisel'); s2.appendChild(el('div', 'pnome', prod.nome)); s2.appendChild(el('div', 'psub', [prod.sku ? 'SKU ' + prod.sku : '', prod.total + ' em estoque'].filter(Boolean).join(' · ')));
-        var tr = el('button', 'lnk', 'Trocar produto'); tr.type = 'button'; tr.onclick = function () { prod = null; desenharProd(); at(); }; s2.appendChild(tr); pBox.appendChild(s2); return;
+        var tr = el('button', 'lnk', 'Trocar produto'); tr.type = 'button'; tr.onclick = function () { prod = null; desenharProd(); desenharTipo(); }; s2.appendChild(tr); pBox.appendChild(s2); return;
       }
       var bq = campo(pBox, 'Produto', inp('text', 'Nome, SKU ou código de barras'), true), rq = el('div'); pBox.appendChild(rq);
       bq.oninput = function () {
         rq.innerHTML = ''; var q = bq.value.trim().toLowerCase(); if (q.length < 2) return;
         var reais = D.produtos.filter(function (y) { return y.formato === 'simples' || y.formato === 'variacao'; });
         var ex = reais.filter(function (y) { return y.codigo === q || (y.sku && y.sku.toLowerCase() === q); });
-        if (ex.length === 1) { prod = ex[0]; desenharProd(); at(); return; }
+        if (ex.length === 1) { prod = ex[0]; desenharProd(); desenharTipo(); return; }
         var ws = q.split(/\s+/), lst = el('div', 'vdres');
         reais.filter(function (y) { var t = (y.nome + ' ' + y.sku + ' ' + y.codigo).toLowerCase(); return ws.every(function (w) { return t.indexOf(w) > -1; }); }).slice(0, 8).forEach(function (y) {
           var b = el('button'), a = el('span', '', y.nome); b.type = 'button'; a.appendChild(el('small', '', [y.sku ? 'SKU ' + y.sku : '', y.total + ' em estoque'].filter(Boolean).join(' · '))); b.appendChild(a);
-          b.onclick = function () { prod = y; desenharProd(); at(); }; lst.appendChild(b);
+          b.onclick = function () { prod = y; desenharProd(); desenharTipo(); }; lst.appendChild(b);
         });
         if (lst.children.length) rq.appendChild(lst); else rq.appendChild(el('div', 'hint', 'Nada encontrado. Kits e produtos com variações: lance na variação / nos produtos do kit.'));
       };
@@ -7023,7 +7237,7 @@
     }
     var tb = el('div', 'seg'); tb.style.margin = '12px 0 4px'; c.appendChild(tb);
     var corpo = el('div'); c.appendChild(corpo);
-    var lj = el('select'), de = el('select'), qt = inp('number', ''), cu = inpValor(''), ob = inp('text', ''), hint = el('div', 'hint');
+    var lj = el('select'), de = el('select'), qt = inp('number', ''), cu = inpValor(''), ob = inp('text', ''), hint = el('div', 'hint'), csE = null;
     ob.maxLength = 150; qt.min = 0;
     opts(lj, D.lojas, $('esLoja').value || (D.lojas.indexOf(S.u.loja) > -1 ? S.u.loja : D.lojas[0]));
     function at() {
@@ -7037,14 +7251,18 @@
       corpo.innerHTML = '';
       campo(corpo, tipo === 'transferencia' ? 'Sai da loja' : 'Loja / depósito', lj);
       if (tipo === 'transferencia') { opts(de, D.lojas.filter(function (l) { return l !== lj.value; }), de.value); campo(corpo, 'Vai para a loja', de); }
-      campo(corpo, tipo === 'ajuste' ? 'Quantidade contada na loja' : 'Quantidade', qt); qt.min = tipo === 'ajuste' ? 0 : 1;
+      campo(corpo, tipo === 'ajuste' ? 'Quantidade contada na loja' : 'Quantidade', qt); qt.min = tipo === 'ajuste' ? 0 : 1; qt.readOnly = false; csE = null;
+      if (prod && prod.serial) {
+        if (tipo === 'ajuste') corpo.appendChild(el('div', 'hint', 'Produto com controle de serial: use Entrada ou Saída informando os seriais.'));
+        else { qt.readOnly = true; qt.value = ''; csE = caixaSeriais(corpo, prod, tipo === 'entrada' ? 'entrada' : 'saida', function () { return lj.value; }, function () { return D.seriais; }, function (sel) { qt.value = sel.length ? String(sel.length) : ''; at(); }); }
+      }
       if (tipo === 'entrada') { if (prod && !cu.input.value && prod.custo) cu.input.value = vs(prod.custo); campo(corpo, 'Custo unitário desta entrada (atualiza o custo médio)', cu); }
       ob.placeholder = tipo === 'saida' ? 'Ex.: produto com defeito, brinde, uso na loja' : 'Opcional (nota, fornecedor…)';
       campo(corpo, tipo === 'saida' ? 'Motivo *' : 'Observação', ob);
       corpo.appendChild(hint); at();
     }
     seg(tb, ['Entrada', 'Saída', 'Ajuste', 'Transferência'], 'Entrada', function (v) { tipo = { 'Entrada': 'entrada', 'Saída': 'saida', 'Ajuste': 'ajuste', 'Transferência': 'transferencia' }[v]; desenharTipo(); });
-    lj.onchange = function () { if (tipo === 'transferencia') opts(de, D.lojas.filter(function (l) { return l !== lj.value; }), de.value); at(); };
+    lj.onchange = function () { if (tipo === 'transferencia') opts(de, D.lojas.filter(function (l) { return l !== lj.value; }), de.value); if (csE) csE.redesenhar(); at(); };
     qt.oninput = at;
     var m = el('div', 'msg err'); c.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Confirmar lançamento'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(cc); ac.appendChild(ok); c.appendChild(ac);
@@ -7054,7 +7272,7 @@
       var erro = !prod ? 'Escolha o produto.' : qt.value === '' ? 'Informe a quantidade.' : tipo === 'saida' && ob.value.trim().length < 3 ? 'Diga o motivo da saída.' : '';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Salvando…';
-      call('acEstoque', [S.token, prod.id, { tipo: tipo, loja: lj.value, destino: tipo === 'transferencia' ? de.value : '', qtd: qt.value, custo: tipo === 'entrada' ? num(cu.input.value) : null, obs: ob.value, retorno: 'estoque' }])
+      call('acEstoque', [S.token, prod.id, { tipo: tipo, loja: lj.value, destino: tipo === 'transferencia' ? de.value : '', qtd: qt.value, custo: tipo === 'entrada' ? num(cu.input.value) : null, obs: ob.value, retorno: 'estoque', seriais: csE ? csE.get() : [] }])
         .then(function (d) { S.ac = null; S.dispProd = null; aposEstoque(d); fecharModal(); msg('topMsg', ''); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar lançamento'; m.textContent = e; m.classList.add('show'); });
     };
@@ -7259,6 +7477,12 @@
           inf.style.color = Math.abs(qe - Math.round(qe)) > 0.001 ? 'var(--err)' : '';
         }
         info();
+        if (p && p.serial) {
+          var sw = el('div', 'serbox'); sw.appendChild(el('label', '', 'Seriais * (um por linha; a quantidade que entra precisa bater)')); var sta = el('textarea'); sta.rows = 3; sta.value = it.seriais || ''; sta.placeholder = 'Leia ou digite cada serial'; sw.appendChild(sta);
+          var sinf = el('div', 'hint'); sw.appendChild(sinf); r.appendChild(sw);
+          var sup = function () { it.seriais = sta.value; var n = sta.value.split(/[\n,;]+/).map(serNorm).filter(Boolean).length; sinf.textContent = n + ' serial(is) informados'; };
+          sta.oninput = sup; sup();
+        }
         var det = el('details', 'fdet'); if (it.aberto) det.open = true; det.ontoggle = function () { it.aberto = det.open; };
         det.appendChild(el('summary', '', p ? 'Trocar produto / dados fiscais' : 'Cadastro do produto novo'));
         var dbx = el('div'); det.appendChild(dbx); r.appendChild(det);
@@ -7396,7 +7620,7 @@
         totalNota: CP.totalNota, atualizarCusto: CP.atualizarCusto, obs: CP.obs, xml: CP.xml,
         itens: CP.itens.map(function (it) { return { prodId: it.prodId, novo: it.prodId ? null : { nome: it.novo.nome, sku: it.novo.sku, gtin: it.novo.gtin, unidade: it.novo.unidade, markup: num(it.novo.markup) || 0, preco: num(it.novo.preco) || 0, condicao: it.novo.condicao },
           descricao: it.descricao || (it.novo ? it.novo.nome : ''), codForn: it.codForn, ean: it.ean, ncm: it.ncm, cfop: it.cfop, unidade: it.unidade, qtd: num(it.qtd), fator: num(it.fator) || 1, vUnit: num(it.vUnit) || 0,
-          desconto: num(it.desconto) || 0, ipi: num(it.ipi) || 0, st: num(it.st) || 0 }; }),
+          desconto: num(it.desconto) || 0, ipi: num(it.ipi) || 0, st: num(it.st) || 0, seriais: it.prodId && prodCp(it.prodId) && prodCp(it.prodId).serial ? String(it.seriais || '') : [] }; }),
         pagamento: { modo: P.modo, categoria: P.categoria, conta: P.conta, forma: P.forma, pagoEm: P.pagoEm, parcelas: P.parcelas.map(function (p) { return { venc: p.venc, valor: num(p.valor), doc: p.doc }; }) }
       };
       if (CP.totalNota !== null && Math.abs(r2(CP.totalNota - T.total)) > 0.05) {
@@ -7817,7 +8041,7 @@
     if (o.desconto) { var trd = el('tr'); trd.appendChild(el('td', '', 'Desconto')); trd.appendChild(el('td', 'v s', '− ' + brl(o.desconto))); to.appendChild(trd); }
     var trt = el('tr'); trt.appendChild(el('td', '', 'Total')); trt.appendChild(el('td', 'v', brl(T.total || 0))); to.appendChild(trt);
     if (!to.children.length) co.appendChild(el('div', 'hint', 'Sem serviços lançados ainda.')); else co.appendChild(to);
-    if (o.pagamentos && o.pagamentos.length) co.appendChild(el('div', 'hint', 'Pago: ' + o.pagamentos.map(function (p) { return p.forma + (p.parcelas > 1 ? ' ' + p.parcelas + 'x' : '') + ' ' + brl(p.valor); }).join(' + ')));
+    if (o.pagamentos && o.pagamentos.length) co.appendChild(el('div', 'hint', 'Pago: ' + o.pagamentos.map(function (p) { return formaTxt(p) + ' ' + brl(p.valor); }).join(' + ')));
     bd.appendChild(co);
     var am = el('div', 'msg err'); bd.appendChild(am);
     var erro = function (e) { am.textContent = e; am.classList.add('show'); };
@@ -7865,11 +8089,12 @@
       pags.forEach(function (p, i) {
         var r = el('div', 'pdvpg'), hd = el('div', 'hd'), fs = el('select');
         formas.forEach(function (f) { var o2 = el('option', '', f.nome); o2.value = f.id || f.nome; fs.appendChild(o2); }); fs.value = p.formaId || p.forma;
-        fs.onchange = function () { var f2 = formas.filter(function (f) { return (f.id || f.nome) === fs.value; })[0]; p.formaId = f2.id; p.forma = f2.nome; p.cartao = f2.cartao; p.parcelas = ''; desenhar(); };
+        fs.onchange = function () { var f2 = formas.filter(function (f) { return (f.id || f.nome) === fs.value; })[0]; p.formaId = f2.id; p.forma = f2.nome; p.cartao = f2.cartao; p.parcelas = ''; p.bandeira = ''; desenhar(); };
         hd.appendChild(fs); if (pags.length > 1) { var x = el('button', 'x', '×'); x.type = 'button'; x.onclick = function () { pags.splice(i, 1); desenhar(); }; hd.appendChild(x); } r.appendChild(hd);
         var vw = inpValor(p.valor); vw.input.oninput = function () { p.valor = vw.input.value; cb.textContent = textoReceb(calcPag(p, isoHoje())); conf(); }; r.appendChild(vw);
         var fo = formaDe(p);
         if (fo && fo.cartao === 'credito') { var ps = el('select'); for (var n = 1; n <= (fo.maxParc || 12); n++) { var o3 = el('option', '', n + 'x'); o3.value = String(n); ps.appendChild(o3); } if (!p.parcelas) p.parcelas = '1'; ps.value = p.parcelas; ps.onchange = function () { p.parcelas = ps.value; cb.textContent = textoReceb(calcPag(p, isoHoje())); }; r.appendChild(ps); }
+        var blo = bandeirasDe(fo); if (blo.length) { if (blo.indexOf(p.bandeira) < 0) p.bandeira = blo[0]; var bso = el('select'); bso.setAttribute('aria-label', 'Bandeira'); blo.forEach(function (b) { var o4 = el('option', '', b); o4.value = b; bso.appendChild(o4); }); bso.value = p.bandeira; bso.onchange = function () { p.bandeira = bso.value; cb.textContent = textoReceb(calcPag(p, isoHoje())); }; r.appendChild(bso); } else p.bandeira = '';
         var cb = el('div', 'cb', textoReceb(calcPag(p, isoHoje()))); r.appendChild(cb);
         lb.appendChild(r);
       });
@@ -7887,7 +8112,7 @@
       am.classList.remove('show');
       if (total && Math.abs(r2(total - soma(pags, function (p) { return num(p.valor) || 0; }))) > 0.009) { am.textContent = 'A soma dos pagamentos precisa ser igual ao total da OS.'; am.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Registrando…';
-      call('osEntregar', [S.token, o.id, { pagamentos: pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, categoria: p.categoria }; }) }])
+      call('osEntregar', [S.token, o.id, { pagamentos: pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, categoria: p.categoria, bandeira: p.bandeira || '' }; }) }])
         .then(function (r) { S.ac = null; S.est = null; S.fin = null; reabrir(r); var o2 = r.ordens.filter(function (x) { return x.id === o.id; })[0]; if (o2 && ckp.checked) imprimirOS(o2, true); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar entrega'; am.textContent = e; am.classList.add('show'); });
     };
@@ -7913,7 +8138,7 @@
     (o.pecas || []).forEach(function (p) { var tr = E('tr'); tr.appendChild(E('td', (p.qtd > 1 ? p.qtd + 'x ' : '') + p.desc)); tr.appendChild(E('td', brl(p.qtd * p.preco), 'v')); t.appendChild(tr); });
     if (o.desconto) { var trd = E('tr'); trd.appendChild(E('td', 'Desconto')); trd.appendChild(E('td', '− ' + brl(o.desconto), 'v')); t.appendChild(trd); }
     var tt = E('tr', undefined, 'tot'); tt.appendChild(E('td', 'Total')); tt.appendChild(E('td', T.total ? brl(T.total) : 'a orçar', 'v')); t.appendChild(tt); so.appendChild(t);
-    if (entrega) kv(sec('Pagamento e garantia'), [['Pagamento', (o.pagamentos || []).map(function (p) { return p.forma + (p.parcelas > 1 ? ' ' + p.parcelas + 'x' : '') + ' ' + brl(p.valor); }).join(' + ') || 'sem cobrança'],
+    if (entrega) kv(sec('Pagamento e garantia'), [['Pagamento', (o.pagamentos || []).map(function (p) { return formaTxt(p) + ' ' + brl(p.valor); }).join(' + ') || 'sem cobrança'],
       ['Garantia', o.garantiaAte ? o.garantiaDias + ' dias, até ' + isoBR(o.garantiaAte) + ' (serviço e peças trocadas)' : 'sem garantia']]);
     else if (o.garantiaDias) kv(sec('Garantia'), [['Prazo', o.garantiaDias + ' dias a partir da entrega (serviço e peças trocadas)']]);
     if (o.obs) kv(sec('Observações'), [['', o.obs]]);
