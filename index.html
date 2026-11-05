@@ -2093,18 +2093,19 @@
       if (f.cartao === 'credito') { var mp = inp('number', '12'); mp.min = 1; mp.max = 24; mp.value = f.maxParc; campo(g3[2], 'Máximo de parcelas', mp, true); mp.onchange = function () { f.maxParc = Math.min(24, Math.max(1, parseInt(mp.value, 10) || 1)); desenhar(); }; }
       var rp = el('label', 'perm'), rc = el('input'); rc.type = 'checkbox'; rc.checked = f.repassa; var rt = el('div', 't', 'Repassar a taxa ao cliente'); rt.appendChild(el('small', '', 'Ligado: o cliente paga o valor + taxa na maquininha e cai o valor cheio. Desligado: cai o valor menos a taxa.')); rp.appendChild(rc); rp.appendChild(rt); rp.style.marginTop = '10px'; corpo.appendChild(rp);
       rc.onchange = function () { f.repassa = rc.checked; };
-      corpo.appendChild(el('div', 'hint', f.cartao === 'credito' ? 'Taxa (%) por número de parcelas. Em branco = usa a tabela da Calculadora de Cartão.' : 'Taxa (%) cobrada nesta forma (em branco = sem taxa' + (f.cartao === 'debito' ? ', ou a do Débito da Calculadora' : '') + ').'));
+      var cartaoBand = f.cartao === 'credito' || f.cartao === 'debito';
+      if (!cartaoBand) corpo.appendChild(el('div', 'hint', 'Taxa (%) cobrada nesta forma (em branco = sem taxa).'));
       var gt = el('div', 'g6');
-      for (var n = 1; n <= (f.cartao === 'credito' ? f.maxParc : 1); n++) (function (n) {
+      if (!cartaoBand) for (var n = 1; n <= 1; n++) (function (n) {
         var w = el('div'), i = inp('text', f.cartao === 'credito' && taxa(n + 'x') ? nfmt(r2(taxa(n + 'x').taxa * 100)) : f.cartao === 'debito' && taxa('Débito') ? nfmt(r2(taxa('Débito').taxa * 100)) : '0'); i.inputMode = 'decimal';
         i.value = f.taxas[String(n)] !== undefined ? nfmt(f.taxas[String(n)]) : '';
         i.oninput = function () { var v = num(i.value); if (i.value.trim() === '' || v === null) delete f.taxas[String(n)]; else f.taxas[String(n)] = v; };
         var sw = el('div', 'suffix'); sw.appendChild(i); sw.appendChild(el('span', '', '%')); campo(w, f.cartao === 'credito' ? n + 'x' : 'Taxa', sw); gt.appendChild(w);
       })(n);
-      corpo.appendChild(gt);
-      if (f.cartao === 'credito' || f.cartao === 'debito') {
+      if (!cartaoBand) corpo.appendChild(gt);
+      if (cartaoBand) {
         corpo.appendChild(el('h3', 'ch', 'Bandeiras do cartão'));
-        corpo.appendChild(el('div', 'hint', 'Marque as bandeiras aceitas nesta maquininha. Na venda escolhe-se a bandeira e vale a taxa dela (em branco = taxa padrão acima).'));
+        corpo.appendChild(el('div', 'hint', 'Toque nas bandeiras aceitas nesta maquininha: as taxas de cada uma aparecem embaixo. Na venda escolhe-se a bandeira e vale a taxa dela. Campo em branco usa a tabela da Calculadora de Cartão (número em cinza).'));
         f.bandeiras = f.bandeiras || {};
         var todas = (D.bandeirasPadrao || []).slice(); Object.keys(f.bandeiras).forEach(function (b) { if (todas.indexOf(b) < 0) todas.push(b); });
         var bch = el('div', 'chips'); corpo.appendChild(bch);
@@ -2115,7 +2116,7 @@
           var det = el('details', 'fdet'); det.open = true; det.appendChild(el('summary', '', 'Taxas da bandeira ' + b)); corpo.appendChild(det);
           var gb = el('div', 'g6');
           for (var n3 = 1; n3 <= (f.cartao === 'credito' ? f.maxParc : 1); n3++) (function (n3) {
-            var w = el('div'), i = inp('text', f.taxas[String(n3)] !== undefined ? nfmt(f.taxas[String(n3)]) : 'padrão'); i.inputMode = 'decimal';
+            var w = el('div'), i = inp('text', f.cartao === 'credito' && taxa(n3 + 'x') ? nfmt(r2(taxa(n3 + 'x').taxa * 100)) : f.cartao === 'debito' && taxa('Débito') ? nfmt(r2(taxa('Débito').taxa * 100)) : '0'); i.inputMode = 'decimal';
             i.value = f.bandeiras[b][String(n3)] !== undefined ? nfmt(f.bandeiras[b][String(n3)]) : '';
             i.oninput = function () { var v = num(i.value); if (i.value.trim() === '' || v === null) delete f.bandeiras[b][String(n3)]; else f.bandeiras[b][String(n3)] = v; };
             var sw = el('div', 'suffix'); sw.appendChild(i); sw.appendChild(el('span', '', '%')); campo(w, f.cartao === 'credito' ? n3 + 'x' : 'Taxa', sw); gb.appendChild(w);
@@ -2133,7 +2134,9 @@
       m.classList.remove('show');
       var nome = f.nome.trim(), dup = L.some(function (x) { return x !== f && x.nome.trim().toLowerCase() === nome.toLowerCase(); });
       var erro = nome.length < 2 ? 'Dê um nome para a forma.' : dup ? 'Já existe uma forma com esse nome.' : !f.conta ? 'Escolha o caixa/banco.' : f.maquininha === '__nova' || (f.maquininha === '' && false) ? 'Digite o nome da nova maquininha.' : '';
+      if (!erro && (f.cartao === 'credito' || f.cartao === 'debito') && !Object.keys(f.bandeiras || {}).length) erro = 'Marque pelo menos uma bandeira do cartão e preencha as taxas dela.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      if (f.cartao === 'credito' || f.cartao === 'debito') f.taxas = {};
       f.nome = nome; sv.disabled = true; sv.textContent = 'Salvando…';
       call('formasSalvar', [S.token, L]).then(function (d) { aposFin(d); S.pagar = null; V = null; $('vdNova').innerHTML = ''; PDV = null; cfgFormas(box, '✓ ' + nome + (idx > -1 ? ' salva.' : ' cadastrada.')); window.scrollTo(0, 0); })
         .catch(function (x) { sv.disabled = false; sv.textContent = idx > -1 ? 'Salvar alterações' : 'Cadastrar forma'; m.textContent = x; m.classList.add('show'); });
@@ -4140,7 +4143,7 @@
   var ICO_AC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>';
   var FMT_NOME = { simples: 'Simples', variacoes: 'Com variações', composicao: 'Kit (composição)', variacao: 'Variação' };
   function carregarAcess(forcar) {
-    if (S.ac && !forcar) return renderAcess();
+    if (S.ac && !forcar) return aposAcess(S.ac);
     $('acLista').innerHTML = ''; $('acLista').appendChild(el('div', 'empty', 'Carregando produtos…')); $('acCont').textContent = '';
     call('acessorios', [S.token]).then(aposAcess).catch(function (e) { $('acLista').innerHTML = ''; $('acLista').appendChild(el('div', 'empty', e)); });
   }
