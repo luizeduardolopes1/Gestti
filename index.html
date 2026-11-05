@@ -711,6 +711,53 @@
   }
   :root[data-tema="escuro"] .lgrod{background:#1d2a45}
   :root[data-tema="escuro"] .lgbox .btn{background:var(--brand)}
+  .cepst{display:block;background:none!important;padding:0!important;font-size:12.5px;color:var(--muted);margin-top:4px;min-height:16px}.cepst.ok{color:var(--ok)}.cepst.err{color:var(--err)}
+  .ch{margin:18px 0 4px;font-size:15px}.card>.ch:first-child{margin-top:0}
+  .fmtab .prow{grid-template-columns:44px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) 20px;cursor:pointer}.fmtab .prow.off{opacity:.6}
+  .fmtab .prow.h{cursor:default}.fmtab .prow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .bdg.uso-receber{background:#E7EEFF;color:#2F5BFF}.bdg.uso-ambos{background:#E5F6EC;color:#1B7A3A}.bdg.uso-pagar{background:#FFF1E0;color:#B5560B}
+  [data-tema=escuro] .bdg.uso-receber{background:#1d2a55;color:#9fb4ff}[data-tema=escuro] .bdg.uso-ambos{background:#163a26;color:#7fd8a1}[data-tema=escuro] .bdg.uso-pagar{background:#3d2a12;color:#ffbf7a}
+  .fmtit{margin:10px 0 8px;font-size:20px}
+  .usog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:6px}
+  .usoop{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;margin:0;font-weight:400}
+  .usoop.on{border-color:var(--accent);background:var(--soft)}.usoop input{width:18px;height:18px;appearance:auto;-webkit-appearance:radio;accent-color:#2F5BFF;margin:2px 0 0;flex:0 0 auto}
+  .usoop b{display:block;font-size:14px}.usoop small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px;line-height:1.35}
+  .usoop:has(input:disabled){opacity:.45;cursor:not-allowed}
+  .cfrow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) 54px 30px;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+  .cfrow.h{border-top:0;padding-bottom:0}.cfrow.h div{font-size:12px;font-weight:700;color:var(--muted)}.cfrow input,.cfrow select{margin:0}
+  .cfrow .cfn small{display:block;color:var(--muted);font-size:12px;margin-top:2px}.cfrow .cfn b{font-size:14.5px}
+  .cfrow .x{border:0;background:none;font-size:22px;color:var(--muted);cursor:pointer}.cfrow .x:disabled{cursor:default}
+  .drfil{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:14px}.drfil>div{min-width:150px}.drfil label{margin-top:0}.drfil select,.drfil input{margin:0}
+  .drfil .seg{margin:0}.drfil .btn{width:auto;margin:0;padding:11px 18px}
+  .drres{border-radius:12px;padding:12px 14px;font-weight:700;margin:12px 0}.drres.pos{background:#E5F6EC;color:#1B7A3A}.drres.neg{background:#FDE8E8;color:#B42318}
+  [data-tema=escuro] .drres.pos{background:#163a26;color:#7fd8a1}[data-tema=escuro] .drres.neg{background:#4a1d1d;color:#ffaaaa}
+  .drav{margin:6px 0}
+  .drcard{padding:6px 0}.drtab{display:block}
+  .drl{display:grid;grid-template-columns:minmax(0,1fr) 140px 110px;gap:10px;align-items:center;padding:10px 16px;border-top:1px solid var(--line)}
+  .drl.h{border-top:0;font-size:12px;font-weight:700;color:var(--muted);padding-top:8px;padding-bottom:8px}
+  .drl .dv,.drl .dp{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.drl .dp{color:var(--muted);font-size:13px}
+  .drl.g{font-weight:600}.drl.sub{font-weight:800;background:var(--soft)}.drl.fim{font-size:16.5px;background:#E5F6EC}.drl.fim.neg{background:#FDE8E8}
+  [data-tema=escuro] .drl.fim{background:#163a26}[data-tema=escuro] .drl.fim.neg{background:#4a1d1d}
+  .drl .dv.neg{color:var(--err)}
+  .drl.c{padding-left:34px;font-size:14px}.drl.c .dn small{display:block;color:var(--muted);font-size:12px}.drl.vaz{color:var(--muted);font-size:13px;display:block}
+  .drl.clk{cursor:pointer}.drl.clk:hover{background:var(--soft)}.drl.clk:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .drar{color:var(--muted);margin-left:6px}
+  .drlanc .drlr{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line)}.drlanc .drlr:first-child{border-top:0}
+  .drlr b{display:block;font-weight:600;font-size:14px}.drlr small{display:block;color:var(--muted);font-size:12px;margin-top:2px}.drlr .dv{white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:600}
+  .kpi .s.neg{color:var(--err)}.kpi .s.pos{color:var(--ok)}
+  .auxtit{margin:10px 0 12px;font-size:20px}
+  .auxhub{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:10px}
+  .auxcard{display:flex;align-items:center;gap:12px;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;color:inherit;font:inherit}
+  .auxcard:hover{border-color:var(--accent)}.auxcard .ai{width:42px;height:42px;border-radius:10px;background:var(--soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .auxcard .ai svg{width:22px;height:22px}.auxcard .at{flex:1;min-width:0}.auxcard b{display:block;font-size:15px}.auxcard small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
+  .auxcard .chev{color:var(--muted);font-size:22px}
+  @media (max-width:700px){
+    .usog{grid-template-columns:1fr}
+    .fmtab .prow{grid-template-columns:40px minmax(0,1fr) 20px}.fmtab .prow>:nth-child(3),.fmtab .prow>:nth-child(4){display:none}.fmtab .prow.h{display:none}
+    .cfrow{grid-template-columns:minmax(0,1fr) 30px 30px}.cfrow>select{grid-column:1/2;grid-row:2}.cfrow.h{display:none}
+    .drl{grid-template-columns:minmax(0,1fr) auto;padding:10px 12px}.drl .dp{display:none}.drl.h>:nth-child(3){display:none}.drl.c{padding-left:24px}
+    .drfil>div{flex:1 1 140px}
+  }
 </style>
 </head>
 <body class="tela-login">
@@ -845,7 +892,7 @@
       <aside class="pfil" id="cFil">
         <h3>Filtros</h3>
         <label for="crBusca">Buscar</label>
-        <input id="crBusca" placeholder="Nome, CPF/CNPJ, WhatsApp ou cidade" autocomplete="off">
+        <input id="crBusca" placeholder="Nome, CPF/CNPJ, celular ou cidade" autocomplete="off">
         <label for="crTipo">Tipo</label>
         <select id="crTipo"><option value="">Todos</option><option value="Cliente">Clientes</option><option value="Fornecedor">Fornecedores</option></select>
         <label for="crPessoa">Pessoa</label>
@@ -904,7 +951,7 @@
       <aside class="pfil" id="cdFil">
         <h3>Filtros</h3>
         <label for="cdBusca">Buscar</label>
-        <input id="cdBusca" placeholder="Cliente, CPF, WhatsApp ou contrato" autocomplete="off">
+        <input id="cdBusca" placeholder="Cliente, CPF, celular ou contrato" autocomplete="off">
         <div id="cdSitW"><label for="cdSit">Situação</label>
         <select id="cdSit"><option value="">Em aberto</option><option value="atrasadas">Atrasadas</option><option value="7">Vencem em 7 dias</option><option value="Paga">Pagas</option><option value="Cancelada">Canceladas</option><option value="todas">Todas</option></select></div>
         <label for="cdLoja">Loja</label><select id="cdLoja"></select>
@@ -1046,7 +1093,7 @@
         <aside class="pfil" id="osFil">
           <h3>Filtros</h3>
           <label for="osBusca">Buscar</label>
-          <input id="osBusca" placeholder="Nº, cliente, WhatsApp, IMEI ou modelo" autocomplete="off">
+          <input id="osBusca" placeholder="Nº, cliente, celular, IMEI ou modelo" autocomplete="off">
           <label for="osLoja">Loja</label><select id="osLoja"></select>
           <label for="osTec">Técnico</label><select id="osTec"></select>
           <button type="button" class="btn ghost" id="osLimpar">Limpar filtros</button>
@@ -1075,6 +1122,20 @@
     <div class="crumb">Ordem de Serviço</div>
     <div class="ptopo"><h1>Cadastro de Auxiliares</h1></div>
     <div id="osaCorpo"></div>
+  </section>
+
+  <!-- DRE -->
+  <section id="vDre" class="hide">
+    <div class="crumb">Financeiro</div>
+    <div class="ptopo"><div><h1>DRE · Demonstração do Resultado</h1><div class="hint" id="drSub"></div></div><div class="tbtns"><button type="button" class="btn ghost" id="drImp">🖨 Imprimir</button></div></div>
+    <div class="drfil" id="drFil">
+      <div><label for="drPer">Período</label><select id="drPer"><option value="mes">Este mês</option><option value="mesant">Mês passado</option><option value="3m">Últimos 3 meses</option><option value="ano">Este ano</option><option value="anoant">Ano passado</option><option value="pers">Personalizado</option></select></div>
+      <div id="drDeW" class="hide"><label for="drDe">De</label><input type="date" id="drDe"></div>
+      <div id="drAteW" class="hide"><label for="drAte">Até</label><input type="date" id="drAte"></div>
+      <div><label for="drLoja">Loja</label><select id="drLoja"><option value="">Todas as lojas</option></select></div>
+      <div><label>Visão</label><div class="seg" id="drModo"></div></div>
+    </div>
+    <div id="drCorpo"></div>
   </section>
 
   <!-- METAS -->
@@ -1417,11 +1478,12 @@
     { id: 'oslista', sec: 'vOs', nome: 'Lista', perm: 'os', menu: 'Ordem de Serviço', desc: 'Todas as OS por status' },
     { id: 'os', sec: 'vOs', nome: 'Quadro', perm: 'os', menu: 'Ordem de Serviço', desc: 'Kanban das OS e usados em manutenção' },
     { id: 'osimei', sec: 'vOsImei', nome: 'Histórico por IMEI', perm: 'os', menu: 'Ordem de Serviço', desc: 'Serviços já feitos em um aparelho' },
-    { id: 'osaux', sec: 'vOsAux', nome: 'Cadastro de Auxiliares', perm: 'cancelar_os', menu: 'Ordem de Serviço', desc: 'Prazos de garantia e textos dos termos' },
+    { id: 'osaux', sec: 'vOsAux', nome: 'Cadastro de Auxiliares', perm: 'cancelar_os', menu: 'Ordem de Serviço', desc: 'Termos e prazos de garantia' },
     { id: 'bancos', sec: 'vBancos', nome: 'Caixas e Bancos', perm: 'financeiro', menu: 'Financeiro', desc: 'Saldos, extrato e lançamentos' },
     { id: 'pagar', sec: 'vPagar', nome: 'Contas a Pagar', perm: 'financeiro', menu: 'Financeiro', desc: 'Despesas, vencimentos e pagamentos' },
     { id: 'cred', sec: 'vCred', nome: 'Crediário', perm: 'crediario', menu: 'Financeiro', desc: 'Faturas, atrasos, recebimentos e limite dos clientes' },
     { id: 'conferencia', sec: 'vConfCx', nome: 'Auditoria de Caixa', perm: 'conferir_caixa', menu: 'Financeiro', desc: 'Caixas abertos, fechados e diferenças' },
+    { id: 'dre', sec: 'vDre', nome: 'DRE', perm: 'financeiro', perm2: 'ver_custos', menu: 'Financeiro', desc: 'Resultado do período: lucro ou prejuízo da loja' },
     { id: 'metas', sec: 'vMetas', nome: 'Metas das lojas', perm: 'metas', menu: 'Metas', desc: 'Meta da rede, das lojas e dos vendedores' },
     { id: 'comissoes', sec: 'vComissoes', nome: 'Comissões', perm: 'comissoes', menu: 'Metas', desc: 'Comissão a pagar e lançamento em Contas a Pagar' },
     { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos', menu: 'Tabela de Preços', desc: 'Preço e precificação dos produtos novos' },
@@ -1489,6 +1551,7 @@
   //  GESTTI: ÍCONES, MENU LATERAL (FIXO / MÓVEL)
   // =========================================================
   var ICO = {
+    dre: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/><path d="M15 8h4v4"/>',
     grafico: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
     mais: '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/>',
     celular: '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/>',
@@ -1534,7 +1597,7 @@
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
   var ICO_MENU = { 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular' };
-  var ICO_VIEW = { osnova: 'mais', osaux: 'conta', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
+  var ICO_VIEW = { dre: 'dre', osnova: 'mais', osaux: 'conta', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas' };
   var SBM = { aberto: {} };
@@ -1556,7 +1619,7 @@
     nav.classList.toggle('busca', !!q);
     var grupos = {};
     VIEWS.forEach(function (v) {
-      if (!pode(v.perm) || v.oculta || (v.id === 'cadastro' && pode('produtos'))) return;
+      if (!pode(v.perm) || (v.perm2 && !pode(v.perm2)) || v.oculta || (v.id === 'cadastro' && pode('produtos'))) return;
       if (q && semAc([v.nome, v.subNome, v.menu, v.sub, v.desc].join(' ')).indexOf(q) < 0) return;
       var it = itemMenu(v);
       if (!v.menu) { nav.appendChild(it); return; }
@@ -1672,9 +1735,9 @@
     var cur = {}; try { cur = JSON.parse(LS.get('contatos', '{}')); } catch (e) {}
     var g = grade(c, 2);
     var ig = campo(g[0], 'Instagram (@ da conta)', inp('text', 'Ex.: gestti'), true); ig.value = cur.instagram || '';
-    var su = campo(g[1], 'Suporte (WhatsApp, e-mail ou link https)', inp('text', 'Ex.: 22999990000'), true); su.value = cur.suporte || ''; su.maxLength = 200;
+    var su = campo(g[1], 'Suporte (celular, e-mail ou link https)', inp('text', 'Ex.: 22999990000'), true); su.value = cur.suporte || ''; su.maxLength = 200;
     var te = campo(g[0], 'Telefone para ligação (com DDD)', inp('tel', 'Ex.: 2225550000')); te.value = cur.telefone || '';
-    var wp = campo(g[1], 'WhatsApp de vendas (com DDD)', inp('tel', 'Ex.: 22999990000')); wp.value = cur.whatsapp || '';
+    var wp = campo(g[1], 'Celular de vendas (com DDD)', inp('tel', 'Ex.: 22999990000')); wp.value = cur.whatsapp || '';
     var m = el('div', 'msg'); c.appendChild(m);
     var b = el('button', 'btn', 'Salvar contatos'); b.type = 'button'; b.style.cssText = 'width:auto;margin-top:12px;padding:11px 20px'; c.appendChild(b);
     b.onclick = function () {
@@ -1838,6 +1901,367 @@
     };
   }
 
+  // =========================================================
+  //  DADOS DA EMPRESA (empresa única · CEP busca o endereço)
+  // =========================================================
+  function cfgEmpresa(box) {
+    var e = JSON.parse(JSON.stringify(((S.u.empresas || [])[0]) || { id: 'E1', fantasia: '', razao: '', cnpj: '' }));
+    if (!e.rua && !e.numero && e.endereco) e.rua = e.endereco;
+    if (!e.cidadeNome && e.cidade) { var mc = /^(.*?)\s*\/\s*([A-Za-z]{2})$/.exec(e.cidade); e.cidadeNome = mc ? mc[1] : e.cidade; e.uf = mc ? mc[2].toUpperCase() : (e.uf || ''); }
+    box.appendChild(el('div', 'hint', 'Estes dados saem no topo do recibo de venda, do PDV e da ordem de serviço de todas as lojas.'));
+    var c = el('div', 'card'); box.appendChild(c);
+    var t = function (bx, rot, k, ph, max, tipo) { var x = campo(bx, rot, inp(tipo || 'text', ph || ''), true); x.maxLength = max || 80; x.value = e[k] || ''; x.oninput = function () { e[k] = x.value; }; return x; };
+    c.appendChild(el('h3', 'ch', 'Identificação'));
+    var g = grade(c, 2); t(g[0], 'Nome fantasia *', 'fantasia'); t(g[1], 'Razão social', 'razao', '', 120);
+    var g2 = grade(c, 2); var cn = t(g2[0], 'CNPJ', 'cnpj', '00.000.000/0000-00', 18); cn.inputMode = 'numeric'; cn.value = fmtDoc(e.cnpj || ''); cn.oninput = function () { e.cnpj = soDig(cn.value); }; cn.onblur = function () { cn.value = fmtDoc(e.cnpj || ''); };
+    t(g2[1], 'Inscrição estadual', 'ie', '', 20);
+    c.appendChild(el('h3', 'ch', 'Endereço'));
+    var g3 = grade(c, 3);
+    var cp = t(g3[0], 'CEP', 'cep', '00000-000', 9); cp.inputMode = 'numeric'; cp.value = e.cep ? e.cep.slice(0, 5) + (e.cep.length > 5 ? '-' + e.cep.slice(5) : '') : '';
+    var cst = el('small', 'cepst'); g3[0].appendChild(cst);
+    var ru = t(g3[1], 'Endereço (rua, avenida…)', 'rua', 'Preenchido pelo CEP', 120);
+    var nu = t(g3[2], 'Número', 'numero', 'Ex.: 120', 10);
+    var g4 = grade(c, 4);
+    var co = t(g4[0], 'Complemento', 'complemento', 'Opcional', 40);
+    var ba = t(g4[1], 'Bairro', 'bairro', '', 60);
+    var ci = t(g4[2], 'Cidade', 'cidadeNome', '', 60);
+    var uf = t(g4[3], 'UF', 'uf', 'RJ', 2); uf.oninput = function () { uf.value = uf.value.toUpperCase().replace(/[^A-Z]/g, ''); e.uf = uf.value; };
+    var ultCep = '';
+    cp.oninput = function () {
+      var d = soDig(cp.value).slice(0, 8); e.cep = d; cp.value = d.length > 5 ? d.slice(0, 5) + '-' + d.slice(5) : d;
+      if (d.length !== 8) { cst.textContent = ''; cst.className = 'cepst'; return; }
+      if (d === ultCep) return; ultCep = d;
+      cst.className = 'cepst'; cst.textContent = 'Buscando endereço…';
+      fetch('https://viacep.com.br/ws/' + d + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) {
+        if (e.cep !== d) return;
+        if (!j || j.erro) { cst.className = 'cepst err'; cst.textContent = 'CEP não encontrado. Preencha o endereço à mão.'; return; }
+        e.rua = j.logradouro || e.rua || ''; e.bairro = j.bairro || e.bairro || ''; e.cidadeNome = j.localidade || ''; e.uf = j.uf || '';
+        if (j.complemento && !e.complemento) e.complemento = j.complemento;
+        ru.value = e.rua; ba.value = e.bairro; ci.value = e.cidadeNome; uf.value = e.uf; co.value = e.complemento || '';
+        cst.className = 'cepst ok'; cst.textContent = '✓ Endereço encontrado. Confira e informe o número.';
+        nu.focus();
+      }).catch(function () { cst.className = 'cepst err'; cst.textContent = 'Não foi possível buscar o CEP agora. Preencha à mão.'; });
+    };
+    c.appendChild(el('h3', 'ch', 'Contato'));
+    var g5 = grade(c, 2);
+    var tf = t(g5[0], 'Telefone', 'fone', '(22) 2555-0000', 16); tf.inputMode = 'tel'; tf.value = fmtFone(e.fone || ''); tf.oninput = function () { e.fone = soDig(tf.value).slice(0, 11); }; tf.onblur = function () { tf.value = fmtFone(e.fone || ''); };
+    var wz = t(g5[1], 'Celular', 'whats', '(22) 99999-9999', 16); wz.inputMode = 'tel'; wz.value = fmtFone(e.whats || ''); wz.oninput = function () { e.whats = soDig(wz.value).slice(0, 11); }; wz.onblur = function () { wz.value = fmtFone(e.whats || ''); };
+    var g6 = grade(c, 2); t(g6[0], 'E-mail', 'email', '', 80, 'email'); t(g6[1], 'Site / Instagram', 'site');
+    c.appendChild(el('h3', 'ch', 'Impressão'));
+    t(c, 'Mensagem no rodapé da impressão', 'rodape', 'Ex.: Obrigado pela preferência!', 200);
+    c.appendChild(el('label', '', 'Logo'));
+    var lw = el('div', 'logow'); c.appendChild(lw);
+    var pv = el('div'); lw.appendChild(pv);
+    var fi = el('input'); fi.type = 'file'; fi.accept = 'image/png,image/jpeg,image/webp'; fi.className = 'hide';
+    function desLogo() {
+      pv.innerHTML = ''; Array.prototype.slice.call(lw.querySelectorAll('button')).forEach(function (b) { b.remove(); });
+      if (e.logo) { var im = el('img'); im.src = e.logo; im.alt = 'Logo'; im.style.cssText = 'max-height:60px;max-width:200px'; pv.appendChild(im); } else pv.appendChild(el('span', 'hint', 'Sem logo'));
+      var bl = el('button', 'btn ghost mini', e.logo ? 'Trocar logo' : 'Enviar logo'); bl.type = 'button'; bl.onclick = function () { fi.click(); }; lw.appendChild(bl);
+      if (e.logo) { var bx = el('button', 'lnk', 'Tirar logo'); bx.type = 'button'; bx.onclick = function () { e.logo = ''; desLogo(); }; lw.appendChild(bx); }
+    }
+    lw.appendChild(fi); desLogo();
+    fi.onchange = function () {
+      var f = fi.files[0]; if (!f) return; var rd = new FileReader();
+      rd.onload = function () {
+        var img = new Image(); img.onload = function () {
+          var esc = Math.min(1, 360 / img.width, 140 / img.height), cv = document.createElement('canvas'); cv.width = Math.round(img.width * esc); cv.height = Math.round(img.height * esc);
+          var cx = cv.getContext('2d'); cx.drawImage(img, 0, 0, cv.width, cv.height);
+          var url = cv.toDataURL('image/png'); if (url.length > 44000) { cx.globalCompositeOperation = 'destination-over'; cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); url = cv.toDataURL('image/jpeg', 0.85); }
+          if (url.length > 44000) url = cv.toDataURL('image/jpeg', 0.6);
+          if (url.length > 44000) { msg('topMsg', 'Logo muito pesado mesmo reduzido. Use uma imagem mais simples.'); return; }
+          e.logo = url; desLogo();
+        }; img.src = rd.result;
+      };
+      rd.readAsDataURL(f);
+    };
+    var m = el('div', 'msg err'), ok = el('button', 'btn', 'Salvar dados da empresa'); ok.type = 'button'; ok.style.cssText = 'width:auto;padding:12px 24px'; box.appendChild(m); box.appendChild(ok);
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var erro = !(e.fantasia || '').trim() && !(e.razao || '').trim() ? 'Informe o nome fantasia.' : e.cep && e.cep.length !== 8 ? 'CEP incompleto.' : e.whats && (e.whats.length < 10 || e.whats.length > 11) ? 'Celular inválido (DDD + número).' : '';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('empresaSalvar', [S.token, [e]]).then(function (r) { S.u.empresas = r; ok.disabled = false; ok.textContent = '✓ Salvo'; setTimeout(function () { ok.textContent = 'Salvar dados da empresa'; }, 1500); })
+        .catch(function (x) { ok.disabled = false; ok.textContent = 'Salvar dados da empresa'; m.textContent = x; m.classList.add('show'); });
+    };
+  }
+
+  // =========================================================
+  //  FORMAS DE PAGAMENTO / RECEBIMENTO (lista + página de cada forma)
+  // =========================================================
+  var USO_FORMA = [['receber', 'Somente recebimento', 'Aparece nas vendas, PDV, OS, crediário e caixa'], ['ambos', 'Recebimento e pagamento', 'Aparece nas vendas e também em contas a pagar e compras'], ['pagar', 'Somente pagamento', 'Aparece só em contas a pagar e entrada de compras']];
+  var TIPO_FORMA = [['nao', 'Sem cartão (PIX, dinheiro, boleto…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)'], ['crediario', 'Crediário (parcelas com o cliente)']];
+  function rotulo(l, k) { var x = l.filter(function (z) { return z[0] === k; })[0]; return x ? x[1] : k; }
+  function copiaFormas() { return S.fin.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa, taxas: JSON.parse(JSON.stringify(f.taxas || {})), repassa: !!f.repassa, receb: f.receb || 'hora', maxParc: f.maxParc || 1, uso: f.uso || 'receber' }; }); }
+  function resumoForma(f) {
+    if (f.cartao === 'crediario') return 'regras em Financeiro › Crediário';
+    var rr = /^(dias|uteis):(\d+)$/.exec(f.receb), q = f.receb === 'hora' ? 'cai na hora' : f.receb === 'mensal' ? 'cai mensal (por parcela)' : rr ? 'cai em ' + rr[2] + ' dia(s) ' + (rr[1] === 'uteis' ? 'úteis' : 'corridos') : '';
+    var nT = Object.keys(f.taxas || {}).length;
+    return q + ' · ' + (nT ? nT + ' taxa(s)' : 'taxas da Calculadora') + (f.repassa ? ' · repassa ao cliente' : '');
+  }
+  function cfgFormas(box, ok) {
+    box.innerHTML = '';
+    if (ok) box.appendChild(el('div', 'msg ok show', ok));
+    var D = S.fin, L = copiaFormas();
+    var c = el('div', 'card'); box.appendChild(c);
+    c.appendChild(el('div', 'hint', 'Clique em uma forma para ver e alterar tudo dela. Em "Uso" você escolhe onde ela aparece: só nas vendas (recebimento), só nos pagamentos de contas e compras, ou nos dois.'));
+    var tab = el('div', 'ptab fmtab'), h = el('div', 'prow h');
+    ['', 'Forma', 'Uso', 'Entra / sai da conta', ''].forEach(function (x) { h.appendChild(el('div', '', x)); }); tab.appendChild(h);
+    L.forEach(function (f, i) {
+      var r = el('div', 'prow' + (f.ativa ? '' : ' off')); r.tabIndex = 0; r.setAttribute('role', 'button');
+      var ic = el('div', 'pimg'); ic.innerHTML = svgIco(f.cartao === 'nao' ? 'moedas' : 'cartao'); r.appendChild(ic);
+      var n = el('div'), nm = el('div', 'pnome', f.nome); if (!f.ativa) nm.appendChild(el('span', 'bdg off', 'Inativa')); n.appendChild(nm); n.appendChild(el('div', 'psub', rotulo(TIPO_FORMA, f.cartao).replace(/ \(.*\)$/, '') + ' · ' + resumoForma(f))); r.appendChild(n);
+      r.appendChild(el('div', 'psku', '')); r.lastChild.appendChild(el('span', 'bdg uso-' + f.uso, rotulo(USO_FORMA, f.uso)));
+      r.appendChild(el('div', 'psub', nomeConta(f.conta) || '—'));
+      r.appendChild(el('div', 'chev', '›'));
+      r.onclick = function () { formaPagina(box, i); };
+      r.onkeydown = function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); r.onclick(); } };
+      tab.appendChild(r);
+    });
+    c.appendChild(tab);
+    var add = el('button', 'btn', '+ Nova forma de pagamento'); add.type = 'button'; add.style.cssText = 'width:auto;padding:11px 20px;margin-top:14px'; add.onclick = function () { formaPagina(box, -1); }; c.appendChild(add);
+    c.appendChild(el('div', 'hint', 'Para tirar uma forma, abra e desmarque "Ativa" (as vendas antigas continuam com ela).'));
+  }
+  function formaPagina(box, idx) {
+    var D = S.fin, L = copiaFormas(), contas = D.contas.filter(function (c) { return c.ativa; });
+    var f = idx > -1 ? L[idx] : { id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true, taxas: {}, repassa: false, receb: 'hora', maxParc: 1, uso: 'receber' };
+    if (idx < 0) L.push(f);
+    box.innerHTML = '';
+    var vt = el('button', 'lnk', '← Todas as formas de pagamento'); vt.type = 'button'; vt.onclick = function () { cfgFormas(box); window.scrollTo(0, 0); }; box.appendChild(vt);
+    var tit = el('h3', 'fmtit', idx > -1 ? f.nome : 'Nova forma de pagamento'); box.appendChild(tit);
+    var c = el('div', 'card'); box.appendChild(c);
+    var corpo = el('div'); c.appendChild(corpo);
+    var RECEB = [['hora', 'Na hora (mesmo dia)'], ['dias', 'Em X dias corridos'], ['uteis', 'Em X dias úteis'], ['mensal', 'Mensal: uma parcela a cada 30 dias']];
+    function desenhar() {
+      corpo.innerHTML = '';
+      var g = grade(corpo, 2);
+      var nm = campo(g[0], 'Nome *', inp('text', 'Ex.: Boleto'), true); nm.maxLength = 40; nm.value = f.nome; nm.oninput = function () { f.nome = nm.value; tit.textContent = nm.value || 'Nova forma de pagamento'; };
+      var tp = el('select'); TIPO_FORMA.forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; tp.appendChild(op); }); tp.value = f.cartao; campo(g[1], 'Tipo', tp, true);
+      tp.onchange = function () { f.cartao = tp.value; if (f.cartao === 'crediario') f.uso = 'receber'; if (f.cartao === 'credito' && f.maxParc < 2) f.maxParc = 12; if (f.cartao === 'credito' && f.receb === 'hora') f.receb = 'mensal'; desenhar(); };
+      corpo.appendChild(el('label', '', 'Uso'));
+      var ug = el('div', 'usog'); corpo.appendChild(ug);
+      USO_FORMA.forEach(function (u) {
+        var lb = el('label', 'usoop' + (f.uso === u[0] ? ' on' : '')), rd = el('input'); rd.type = 'radio'; rd.name = 'fuso'; rd.value = u[0]; rd.checked = f.uso === u[0]; rd.disabled = f.cartao === 'crediario' && u[0] !== 'receber';
+        var tx = el('div'); tx.appendChild(el('b', '', u[1])); tx.appendChild(el('small', '', u[2])); lb.appendChild(rd); lb.appendChild(tx); ug.appendChild(lb);
+        rd.onchange = function () { f.uso = u[0]; Array.prototype.forEach.call(ug.children, function (z) { z.classList.toggle('on', z === lb); }); };
+      });
+      if (f.cartao === 'crediario') corpo.appendChild(el('div', 'hint', 'Crediário é sempre só de recebimento.'));
+      var g2 = grade(corpo, 2);
+      var co = el('select'); contas.forEach(function (x) { var op = el('option', '', x.nome); op.value = x.id; co.appendChild(op); }); if (!contas.some(function (x) { return x.id === f.conta; })) { var o2 = el('option', '', '(escolha)'); o2.value = ''; co.insertBefore(o2, co.firstChild); }
+      co.value = f.conta || ''; co.onchange = function () { f.conta = co.value; }; campo(g2[0], 'Caixa/banco onde o dinheiro entra (ou de onde sai)', co, true);
+      var al = el('label', 'perm'), at = el('input'); at.type = 'checkbox'; at.checked = f.ativa; var tt = el('div', 't', 'Ativa'); tt.appendChild(el('small', '', 'Desmarque para esconder esta forma (o histórico continua).')); al.appendChild(at); al.appendChild(tt); at.onchange = function () { f.ativa = at.checked; }; g2[1].appendChild(al); al.style.marginTop = '26px';
+      if (f.cartao === 'crediario') { corpo.appendChild(el('div', 'hint', 'Juros, multa e número de parcelas ficam em Financeiro › Crediário › ⚙ Regras. O dinheiro entra quando cada parcela é recebida.')); return; }
+      corpo.appendChild(el('h3', 'ch', 'Recebimento e taxas'));
+      var g3 = grade(corpo, 3);
+      var rb = el('select'); RECEB.forEach(function (o) { var q = el('option', '', o[1]); q.value = o[0]; rb.appendChild(q); });
+      var mm = /^(dias|uteis):(\d+)$/.exec(f.receb); rb.value = mm ? mm[1] : f.receb; campo(g3[0], 'Quando cai na conta', rb, true);
+      var nd = inp('number', 'Ex.: 1'); nd.min = 0; nd.max = 365; nd.value = mm ? mm[2] : '1'; campo(g3[1], 'X (dias)', nd, true);
+      var upd = function () { f.receb = rb.value === 'dias' || rb.value === 'uteis' ? rb.value + ':' + (parseInt(nd.value, 10) || 0) : rb.value; g3[1].style.visibility = rb.value === 'dias' || rb.value === 'uteis' ? '' : 'hidden'; };
+      rb.onchange = upd; nd.oninput = upd; upd();
+      if (f.cartao === 'credito') { var mp = inp('number', '12'); mp.min = 1; mp.max = 24; mp.value = f.maxParc; campo(g3[2], 'Máximo de parcelas', mp, true); mp.onchange = function () { f.maxParc = Math.min(24, Math.max(1, parseInt(mp.value, 10) || 1)); desenhar(); }; }
+      var rp = el('label', 'perm'), rc = el('input'); rc.type = 'checkbox'; rc.checked = f.repassa; var rt = el('div', 't', 'Repassar a taxa ao cliente'); rt.appendChild(el('small', '', 'Ligado: o cliente paga o valor + taxa na maquininha e cai o valor cheio. Desligado: cai o valor menos a taxa.')); rp.appendChild(rc); rp.appendChild(rt); rp.style.marginTop = '10px'; corpo.appendChild(rp);
+      rc.onchange = function () { f.repassa = rc.checked; };
+      corpo.appendChild(el('div', 'hint', f.cartao === 'credito' ? 'Taxa (%) por número de parcelas. Em branco = usa a tabela da Calculadora de Cartão.' : 'Taxa (%) cobrada nesta forma (em branco = sem taxa' + (f.cartao === 'debito' ? ', ou a do Débito da Calculadora' : '') + ').'));
+      var gt = el('div', 'g6');
+      for (var n = 1; n <= (f.cartao === 'credito' ? f.maxParc : 1); n++) (function (n) {
+        var w = el('div'), i = inp('text', f.cartao === 'credito' && taxa(n + 'x') ? nfmt(r2(taxa(n + 'x').taxa * 100)) : f.cartao === 'debito' && taxa('Débito') ? nfmt(r2(taxa('Débito').taxa * 100)) : '0'); i.inputMode = 'decimal';
+        i.value = f.taxas[String(n)] !== undefined ? nfmt(f.taxas[String(n)]) : '';
+        i.oninput = function () { var v = num(i.value); if (i.value.trim() === '' || v === null) delete f.taxas[String(n)]; else f.taxas[String(n)] = v; };
+        var sw = el('div', 'suffix'); sw.appendChild(i); sw.appendChild(el('span', '', '%')); campo(w, f.cartao === 'credito' ? n + 'x' : 'Taxa', sw); gt.appendChild(w);
+      })(n);
+      corpo.appendChild(gt);
+      corpo.appendChild(el('div', 'hint', 'Dias úteis não contam sábado e domingo (feriados não são descontados).'));
+    }
+    desenhar();
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), sv = el('button', 'btn', idx > -1 ? 'Salvar alterações' : 'Cadastrar forma'), cc = el('button', 'btn ghost', 'Voltar'); sv.type = cc.type = 'button'; ac.appendChild(sv); ac.appendChild(cc); c.appendChild(ac);
+    cc.onclick = function () { cfgFormas(box); window.scrollTo(0, 0); };
+    sv.onclick = function () {
+      m.classList.remove('show');
+      var nome = f.nome.trim(), dup = L.some(function (x) { return x !== f && x.nome.trim().toLowerCase() === nome.toLowerCase(); });
+      var erro = nome.length < 2 ? 'Dê um nome para a forma.' : dup ? 'Já existe uma forma com esse nome.' : !f.conta ? 'Escolha o caixa/banco.' : '';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      f.nome = nome; sv.disabled = true; sv.textContent = 'Salvando…';
+      call('formasSalvar', [S.token, L]).then(function (d) { aposFin(d); S.pagar = null; V = null; $('vdNova').innerHTML = ''; PDV = null; cfgFormas(box, '✓ ' + nome + (idx > -1 ? ' salva.' : ' cadastrada.')); window.scrollTo(0, 0); })
+        .catch(function (x) { sv.disabled = false; sv.textContent = idx > -1 ? 'Salvar alterações' : 'Cadastrar forma'; m.textContent = x; m.classList.add('show'); });
+    };
+    window.scrollTo(0, 0);
+  }
+
+  // =========================================================
+  //  CATEGORIAS FINANCEIRAS (contas a receber / a pagar)
+  // =========================================================
+  function cfgCatFin(box) {
+    box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
+    call('categoriasFinDados', [S.token]).then(function (d) { if (box.isConnected) desenharCatFin(box, d); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
+  }
+  function desenharCatFin(box, d, ok) {
+    box.innerHTML = '';
+    if (ok) box.appendChild(el('div', 'msg ok show', ok));
+    box.appendChild(el('div', 'hint', 'O grupo de cada categoria diz em que linha do DRE ela entra. As marcadas como "Sistema" são usadas automaticamente pelas vendas, OS, crediário, compras e comissões: dá para mudar o grupo, mas não excluir.'));
+    var E = { receber: d.receber.map(function (x) { return { id: x.id, nome: x.nome, grupo: x.grupo, ativa: x.ativa, sistema: x.sistema }; }), pagar: d.pagar.map(function (x) { return { id: x.id, nome: x.nome, grupo: x.grupo, ativa: x.ativa, sistema: x.sistema }; }) };
+    [['receber', 'Categorias de contas a receber', d.gruposRec, d.sisRec], ['pagar', 'Categorias de contas a pagar', d.gruposPag, d.sisPag]].forEach(function (t) {
+      var c = el('div', 'card'); box.appendChild(c); c.appendChild(el('h2', '', t[1]));
+      var lst = el('div'); c.appendChild(lst);
+      var des = function () {
+        lst.innerHTML = '';
+        var h = el('div', 'cfrow h'); ['Nome', 'Grupo no DRE', 'Ativa', ''].forEach(function (x) { h.appendChild(el('div', '', x)); }); lst.appendChild(h);
+        E[t[0]].forEach(function (x, i) {
+          var r = el('div', 'cfrow'), nw = el('div', 'cfn');
+          if (x.sistema) { nw.appendChild(el('b', '', x.nome)); nw.appendChild(el('small', '', 'Sistema · ' + (t[3][x.nome] || ''))); }
+          else { var n = inp('text', 'Nome da categoria'); n.maxLength = 60; n.value = x.nome; n.oninput = function () { x.nome = n.value; }; nw.appendChild(n); var u = (d.uso[t[0]] || {})[x.nome]; if (u) nw.appendChild(el('small', '', u + ' lançamento(s)')); }
+          var gs = el('select'); gs.setAttribute('aria-label', 'Grupo no DRE'); t[2].forEach(function (g) { var o = el('option', '', g[1]); o.value = g[0]; gs.appendChild(o); }); gs.value = x.grupo; gs.onchange = function () { x.grupo = gs.value; };
+          var aw = el('label', 'auxrad'); if (!x.sistema) { var ck = el('input'); ck.type = 'checkbox'; ck.checked = x.ativa; ck.setAttribute('aria-label', 'Ativa'); ck.style.cssText = 'width:20px;height:20px;appearance:auto;-webkit-appearance:checkbox;accent-color:#2F5BFF;margin:0'; ck.onchange = function () { x.ativa = ck.checked; }; aw.appendChild(ck); }
+          var xb = el('button', 'x', x.sistema ? '' : '×'); xb.type = 'button'; xb.disabled = !!x.sistema; if (!x.sistema) { xb.setAttribute('aria-label', 'Excluir categoria'); xb.onclick = function () { E[t[0]].splice(i, 1); des(); }; }
+          r.appendChild(nw); r.appendChild(gs); r.appendChild(aw); r.appendChild(xb); lst.appendChild(r);
+        });
+        var ad = el('button', 'lnk', '+ Nova categoria'); ad.type = 'button'; ad.onclick = function () { E[t[0]].push({ id: '', nome: '', grupo: t[0] === 'receber' ? 'rec_operacional' : 'desp_operacionais', ativa: true }); des(); var ins = lst.querySelectorAll('.cfrow:not(.h) input[type=text]'); if (ins.length) ins[ins.length - 1].focus(); }; lst.appendChild(ad);
+      };
+      des();
+    });
+    var m = el('div', 'msg err'); box.appendChild(m);
+    var sv = el('button', 'btn', 'Salvar categorias'); sv.type = 'button'; sv.style.cssText = 'width:auto;padding:12px 24px'; box.appendChild(sv);
+    sv.onclick = function () {
+      m.classList.remove('show');
+      if (E.receber.concat(E.pagar).some(function (x) { return x.nome.trim().length < 2; })) { m.textContent = 'Dê um nome para todas as categorias.'; m.classList.add('show'); return; }
+      sv.disabled = true; sv.textContent = 'Salvando…';
+      call('categoriasFinSalvar', [S.token, E]).then(function (r) {
+        S.pagar = null; S.fin = null; S.dre = null;
+        S.u.categoriasRec = r.receber.filter(function (x) { return x.ativa && x.nome !== 'Juros e multas do crediário'; }).map(function (x) { return x.nome; });
+        desenharCatFin(box, r, '✓ Categorias salvas.'); window.scrollTo(0, 0);
+      }).catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar categorias'; m.textContent = e; m.classList.add('show'); });
+    };
+  }
+
+  // =========================================================
+  //  DRE (sintético e analítico)
+  // =========================================================
+  var DREF = { per: 'mes', de: '', ate: '', loja: '', modo: 'Sintético' };
+  function isoMes(off) { var d = new Date(), x = new Date(d.getFullYear(), d.getMonth() + off, 1); return x.getFullYear() + '-' + ('0' + (x.getMonth() + 1)).slice(-2); }
+  function fimMes(ym) { var q = ym.split('-').map(Number), d = new Date(q[0], q[1], 0); return ym + '-' + ('0' + d.getDate()).slice(-2); }
+  function periodoDre() {
+    var h = isoHoje(), y = h.slice(0, 4);
+    if (DREF.per === 'mes') return [h.slice(0, 8) + '01', h];
+    if (DREF.per === 'mesant') { var m = isoMes(-1); return [m + '-01', fimMes(m)]; }
+    if (DREF.per === '3m') return [isoMes(-2) + '-01', h];
+    if (DREF.per === 'ano') return [y + '-01-01', h];
+    if (DREF.per === 'anoant') return [(+y - 1) + '-01-01', (+y - 1) + '-12-31'];
+    return [DREF.de || h.slice(0, 8) + '01', DREF.ate || h];
+  }
+  function montarDreFiltros() {
+    var b = $('drFil'); if (b.dataset.ok) return; b.dataset.ok = '1';
+    var ps = $('drPer'), de = $('drDe'), at = $('drAte'), lj = $('drLoja');
+    var cust = function () { var on = ps.value === 'pers'; show('drDeW', on); show('drAteW', on); };
+    ps.onchange = function () { DREF.per = ps.value; cust(); if (ps.value === 'pers') { var p = periodoDre(); de.value = DREF.de || p[0]; at.value = DREF.ate || p[1]; } else carregarDre(); };
+    de.onchange = at.onchange = function () { DREF.de = de.value; DREF.ate = at.value; if (de.value && at.value) carregarDre(); };
+    lj.onchange = function () { DREF.loja = lj.value; carregarDre(); };
+    seg($('drModo'), ['Sintético', 'Analítico'], DREF.modo, function (v) { DREF.modo = v; if (S.dre) renderDre(); });
+    $('drImp').onclick = function () { if (S.dre) imprimirDre(); };
+    cust();
+  }
+  function carregarDre() {
+    montarDreFiltros();
+    var p = periodoDre(), corpo = $('drCorpo');
+    corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', 'Calculando o resultado…'));
+    call('dre', [S.token, { de: p[0], ate: p[1], loja: DREF.loja }]).then(function (d) {
+      S.dre = d; var lj = $('drLoja'); if (lj.options.length <= 1) { opts(lj, d.lojas, DREF.loja, 'Todas as lojas'); }
+      if (S.view === 'dre') renderDre();
+    }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', e)); });
+  }
+  function pctRL(v, d) { return d.receitaLiquida ? (v / d.receitaLiquida * 100).toFixed(1).replace('.', ',') + '%' : '—'; }
+  function linhaDre(d, id) { return d.linhas.filter(function (l) { return l.id === id; })[0] || { total: 0 }; }
+  function renderDre() {
+    var d = S.dre, corpo = $('drCorpo'); corpo.innerHTML = '';
+    $('drSub').textContent = isoBR(d.de) + ' a ' + isoBR(d.ate) + ' · ' + (d.loja || 'todas as lojas');
+    var k = el('div', 'kpis'); corpo.appendChild(k);
+    var rl = d.receitaLiquida, lb = linhaDre(d, 'lucro_bruto').total, liq = d.liquido;
+    kpi(k, 'Receita líquida', brl(rl), 'vendas + OS − deduções');
+    kpi(k, 'Lucro bruto', brl(lb), rl ? 'margem ' + pctRL(lb, d) : '', lb < 0 ? 'neg' : '');
+    kpi(k, liq >= 0 ? 'Lucro líquido' : 'Prejuízo', brl(liq), rl ? 'margem ' + pctRL(liq, d) : '', liq < 0 ? 'neg' : 'pos');
+    var av = el('div', 'drres ' + (liq >= 0 ? 'pos' : 'neg'), liq > 0 ? 'A loja deu LUCRO no período.' : liq < 0 ? 'A loja deu PREJUÍZO no período: as despesas foram maiores que o que sobrou das vendas.' : 'Sem resultado no período.');
+    corpo.appendChild(av);
+    if (d.qtdSemCusto) corpo.appendChild(el('div', 'hint drav', '⚠ ' + d.qtdSemCusto + ' item(ns) vendido(s) sem custo cadastrado: o lucro pode estar maior que o real. Ex.: ' + d.semCusto.slice(0, 3).join('; ') + '.'));
+    if (d.loja) corpo.appendChild(el('div', 'hint drav', 'Filtrando uma loja: contas lançadas como "Geral (todas)" não entram. Veja "Todas as lojas" para o resultado completo.'));
+    var c = el('div', 'card drcard'), tb = el('div', 'drtab'); c.appendChild(tb); corpo.appendChild(c);
+    var hd = el('div', 'drl h'); ['Descrição', 'Valor', '% receita líq.'].forEach(function (x) { hd.appendChild(el('div', '', x)); }); tb.appendChild(hd);
+    var anal = DREF.modo === 'Analítico';
+    d.linhas.forEach(function (l) {
+      if (!anal && !l.subtotal && !l.total && ['rec_financeira', 'desp_financeiras', 'rec_outras', 'desp_outras', 'ir_csll', 'deducoes'].indexOf(l.id) > -1) return;
+      var r = el('div', 'drl' + (l.subtotal ? ' sub' : ' g') + (l.id === 'liquido' ? (l.total < 0 ? ' fim neg' : ' fim') : ''));
+      var nm = el('div', 'dn', l.nome);
+      var vv = el('div', 'dv' + (l.total < 0 ? ' neg' : ''), l.subtotal ? brl(l.total) : (l.total ? (l.sinal < 0 ? '− ' : '') + brl(l.total) : brl(0)));
+      r.appendChild(nm); r.appendChild(vv); r.appendChild(el('div', 'dp', pctRL(l.subtotal ? l.total : l.total * (l.sinal || 1), d)));
+      if (!l.subtotal && l.cats && l.cats.length) { r.classList.add('clk'); r.tabIndex = 0; r.setAttribute('role', 'button'); r.onclick = function () { abrirGrupoDre(l); }; r.onkeydown = function (ev) { if (ev.key === 'Enter') abrirGrupoDre(l); }; nm.appendChild(el('span', 'drar', '›')); }
+      tb.appendChild(r);
+      if (anal && !l.subtotal) {
+        if (!l.cats.length) { tb.appendChild(el('div', 'drl c vaz', 'Nenhum lançamento')); return; }
+        l.cats.forEach(function (ct) {
+          var rc = el('div', 'drl c clk'); rc.tabIndex = 0; rc.setAttribute('role', 'button');
+          var n2 = el('div', 'dn'); n2.appendChild(document.createTextNode(ct.nome)); n2.appendChild(el('small', '', ct.qtd + ' lançamento(s)')); rc.appendChild(n2);
+          rc.appendChild(el('div', 'dv', brl(ct.total))); rc.appendChild(el('div', 'dp', pctRL(ct.total, d)));
+          rc.onclick = function () { abrirCatDre(l, ct); }; rc.onkeydown = function (ev) { if (ev.key === 'Enter') abrirCatDre(l, ct); };
+          tb.appendChild(rc);
+        });
+      }
+    });
+    if (d.fora && d.fora.length) {
+      var cf = el('div', 'card'); corpo.appendChild(cf); cf.appendChild(el('h2', '', 'Movimentos que não entram no DRE'));
+      cf.appendChild(el('div', 'hint', 'Compras para estoque, aportes, retiradas e investimentos mexem no caixa, mas não são receita nem despesa do período (o custo da mercadoria entra quando ela é vendida).'));
+      d.fora.forEach(function (ct) { var r = el('div', 'drl c clk'); r.tabIndex = 0; var n2 = el('div', 'dn'); n2.appendChild(document.createTextNode(ct.nome)); n2.appendChild(el('small', '', ct.lanc.length + ' lançamento(s)')); r.appendChild(n2); r.appendChild(el('div', 'dv', brl(ct.total))); r.appendChild(el('div', 'dp', '')); r.onclick = function () { abrirCatDre({ nome: 'Fora do DRE' }, ct); }; cf.appendChild(r); });
+    }
+    corpo.appendChild(el('div', 'hint', 'Regime de competência: vendas e OS pela data da venda/entrega, contas a pagar pelo vencimento (pagas ou não), crediário pelos juros. Custo dos aparelhos = compra + peças; custo dos produtos = custo atual do cadastro. Os grupos de cada categoria ficam em Configurações › Categorias financeiras.'));
+  }
+  function abrirGrupoDre(l) {
+    var bd = abrirDw(l.nome.replace(/^\([−+]\)\s*/, ''), brl(l.total) + ' · ' + l.cats.length + ' categoria(s)');
+    l.cats.forEach(function (ct) { opcaoDw(bd, ct.nome, brl(ct.total) + ' · ' + ct.qtd + ' lançamento(s)', '', function () { abrirCatDre(l, ct); }); });
+  }
+  function abrirCatDre(l, ct) {
+    var bd = abrirDw(ct.nome, brl(ct.total) + ' · ' + ct.lanc.length + ' lançamento(s)');
+    var vt = el('button', 'lnk', '← ' + l.nome.replace(/^\([−+]\)\s*/, '')); vt.type = 'button'; if (l.cats) { vt.onclick = function () { abrirGrupoDre(l); }; bd.appendChild(vt); }
+    var c = el('div', 'card'), t = el('div', 'drlanc'); c.appendChild(t); bd.appendChild(c);
+    ct.lanc.slice(0, 500).forEach(function (x) {
+      var r = el('div', 'drlr'), a = el('div'); a.appendChild(el('b', '', x.desc)); a.appendChild(el('small', '', [isoBR(x.data), x.origem + ' ' + x.ref, x.loja].filter(Boolean).join(' · ')));
+      r.appendChild(a); r.appendChild(el('div', 'dv', brl(x.valor))); t.appendChild(r);
+    });
+    if (ct.lanc.length > 500) bd.appendChild(el('div', 'hint', 'Mostrando os 500 primeiros.'));
+  }
+  function imprimirDre() {
+    var d = S.dre, w = el('div');
+    w.appendChild(cabecalhoEmpresa(d.loja || '', 'DRE · ' + isoBR(d.de) + ' a ' + isoBR(d.ate)));
+    var tb = el('table'); w.appendChild(tb);
+    var anal = DREF.modo === 'Analítico';
+    var tr = function (a, b, c2, cls) { var r = el('tr', cls || ''); r.appendChild(el('td', '', a)); r.appendChild(el('td', 'v', b)); r.appendChild(el('td', 'v', c2)); tb.appendChild(r); };
+    tr('Descrição', 'Valor', '% rec. líq.', 'h');
+    d.linhas.forEach(function (l) {
+      tr(l.nome, l.subtotal ? brl(l.total) : (l.total && l.sinal < 0 ? '− ' : '') + brl(l.total), pctRL(l.subtotal ? l.total : l.total * (l.sinal || 1), d), l.subtotal ? 's' : 'g');
+      if (anal && l.cats) l.cats.forEach(function (ct) { tr('    ' + ct.nome, brl(ct.total), pctRL(ct.total, d), 'c'); });
+    });
+    imprimirHTML('DRE', w, 'table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}td{padding:6px 8px;border-bottom:1px solid #ddd}td.v{text-align:right;white-space:nowrap}tr.h td{font-weight:700;border-bottom:2px solid #111}tr.s td{font-weight:800;background:#f1f3f8}tr.g td{font-weight:600}tr.c td:first-child{padding-left:26px;color:#444;white-space:pre}.empcab h1{font-size:18px;margin:0}.empcab .lj{font-size:12px;color:#444}');
+  }
+
+  // =========================================================
+  //  OS › CADASTRO DE AUXILIARES (página inicial com os cadastros)
+  // =========================================================
+  var AUXP = '';
+  function renderAuxHub(box) {
+    box.innerHTML = '';
+    if (AUXP === 'termos') {
+      var vt = el('button', 'lnk', '← Cadastro de Auxiliares'); vt.type = 'button'; vt.onclick = function () { AUXP = ''; renderAuxHub(box); window.scrollTo(0, 0); }; box.appendChild(vt);
+      box.appendChild(el('h2', 'auxtit', 'Termos e prazos de garantia'));
+      var inner = el('div'); box.appendChild(inner); renderOsAux(inner);
+      return;
+    }
+    box.appendChild(el('div', 'hint', 'Cadastros de apoio usados na Ordem de Serviço.'));
+    var c = el('div', 'auxhub'); box.appendChild(c);
+    var C = (S.os && S.os.cfg) || {};
+    [['termos', 'conta', 'Termos e prazos de garantia', (C.garantias || []).length + ' prazo(s) de garantia · ' + (C.textos || []).length + ' texto(s) de termos']].forEach(function (a) {
+      var b = el('button', 'auxcard'); b.type = 'button';
+      var ic = el('span', 'ai'); ic.innerHTML = svgIco(a[1]); b.appendChild(ic);
+      var tx = el('span', 'at'); tx.appendChild(el('b', '', a[2])); tx.appendChild(el('small', '', a[3])); b.appendChild(tx); b.appendChild(el('span', 'chev', '›'));
+      b.onclick = function () { AUXP = a[0]; renderAuxHub(box); window.scrollTo(0, 0); };
+      c.appendChild(b);
+    });
+  }
+
   // ---------- login ----------
   function iniciar() {
     $('lUser').value = LS.get('usuario', '');
@@ -1960,7 +2384,8 @@
     if (id === 'estoque') carregarEstoque(false);
     if (id === 'compras') abaCompras(CP ? 'form' : 'lista');
     if (id === 'osnova') { OSM = 'Lista'; $('osTit').textContent = 'Ordem de Serviço · Lista'; garantirOS(function () { if (S.view === 'osnova') formOS(null); }); }
-    if (id === 'osaux') { var ob = $('osaCorpo'); ob.innerHTML = ''; ob.appendChild(el('div', 'empty', 'Carregando…')); garantirOS(function () { if (S.view === 'osaux') renderOsAux(ob); }); }
+    if (id === 'osaux') { var ob = $('osaCorpo'); ob.innerHTML = ''; ob.appendChild(el('div', 'empty', 'Carregando…')); AUXP = ''; garantirOS(function () { if (S.view === 'osaux') renderAuxHub(ob); }); }
+    if (id === 'dre') carregarDre();
     if (id === 'os' || id === 'oslista') { OSM = id === 'os' ? 'Quadro' : 'Lista'; $('osTit').textContent = 'Ordem de Serviço · ' + OSM; abaOS(OSF ? 'form' : 'lista'); }
     if (id === 'osimei') { var ib = $('oiCorpo'); ib.innerHTML = ''; renderImeiOS(ib); }
     if (id === 'metas') carregarMetas(S.mt ? S.mt.mes : '');
@@ -2114,7 +2539,7 @@
       ed.onclick = function () { V.cliModo = 'novo'; desenharVenda(); };
       c1.appendChild(sel);
     } else if (V.cliModo === 'busca') {
-      var bq = inp('text', 'Buscar cliente cadastrado: nome, CPF ou WhatsApp'); bq.setAttribute('aria-label', 'Buscar cliente'); c1.appendChild(bq);
+      var bq = inp('text', 'Buscar cliente cadastrado: nome, CPF ou celular'); bq.setAttribute('aria-label', 'Buscar cliente'); c1.appendChild(bq);
       var rq = el('div'); c1.appendChild(rq);
       var nv = el('button', 'btn ghost', '+ Cadastrar novo cliente'); nv.type = 'button'; nv.style.cssText = 'width:auto;margin-top:10px'; c1.appendChild(nv);
       nv.onclick = function () { V.cliModo = 'novo'; V.cli.id = ''; desenharVenda(); };
@@ -2139,7 +2564,7 @@
     } else {
       var vl = el('button', 'lnk', '← Buscar cliente cadastrado'); vl.type = 'button'; c1.appendChild(vl);
       vl.onclick = function () { V.cliModo = C.id ? 'sel' : 'busca'; desenharVenda(); };
-      c1.appendChild(el('div', 'hint', 'Venda de aparelho: CPF e WhatsApp são obrigatórios (a garantia sai no nome do cliente).'));
+      c1.appendChild(el('div', 'hint', 'Venda de aparelho: CPF e celular são obrigatórios (a garantia sai no nome do cliente).'));
       formCliente(c1, C, { exigeDoc: true, exigeWhats: true }, function (cli) { V.cli = cli; V.credito = cli.credito; V.credCpf = cli.cpf; V.cliModo = 'sel'; desenharVenda(); }, C.id ? function () { V.cliModo = 'sel'; desenharVenda(); } : null);
     }
     // ---- 2. vendedor e loja
@@ -2345,7 +2770,7 @@
       else if (V.cliModo === 'novo') erro = 'Termine o cadastro do cliente: toque em "Salvar cliente".';
       else if ((C2.nome || '').trim().length < 3) erro = 'Informe o nome do cliente.';
       else if (!C2.id && !cpfOk(C2.cpf)) erro = 'Informe um CPF válido.';
-      else if (!C2.id && soDig(C2.whats).length < 10) erro = 'Informe o WhatsApp do cliente com DDD.';
+      else if (!C2.id && soDig(C2.whats).length < 10) erro = 'Informe o celular do cliente com DDD.';
       else if (Math.abs(r2(T.pagar - T.pago)) > 0.009) erro = 'A soma dos pagamentos precisa ser igual ao valor a receber (' + brl(T.pagar) + ').';
       else if (V.pags.some(function (p) { return p.cartao === 'crediario' && !p.primeiroVenc; })) erro = 'Informe o 1º vencimento do crediário.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
@@ -2407,7 +2832,7 @@
     top.appendChild(a); top.appendChild(n); r.appendChild(top);
     if (v.situacao === 'Cancelada') { var cc = el('div', 'gar', 'VENDA CANCELADA · ' + v.cancelamento); cc.style.cssText = 'background:#fde7e5;color:#b3261e;font-weight:700;margin:0 0 8px'; r.appendChild(cc); }
     r.appendChild(el('h2', '', 'Cliente'));
-    r.appendChild(el('div', '', [v.cliente.nome, v.cliente.cpf ? (v.cliente.cpf.length === 14 ? 'CNPJ ' : 'CPF ') + fmtDoc(v.cliente.cpf) : '', v.cliente.whats ? 'WhatsApp ' + fmtFone(v.cliente.whats) : ''].filter(Boolean).join(' · ')));
+    r.appendChild(el('div', '', [v.cliente.nome, v.cliente.cpf ? (v.cliente.cpf.length === 14 ? 'CNPJ ' : 'CPF ') + fmtDoc(v.cliente.cpf) : '', v.cliente.whats ? 'Cel. ' + fmtFone(v.cliente.whats) : ''].filter(Boolean).join(' · ')));
     if (v.cliente.endereco) r.appendChild(el('div', '', v.cliente.endereco));
     if (v.itens.length) {
       r.appendChild(el('h2', '', 'Aparelhos'));
@@ -2555,7 +2980,7 @@
     var fx = el('button', '', '×'); fx.type = 'button'; fx.setAttribute('aria-label', 'Fechar'); fx.onclick = fecharDrawer; hd.appendChild(ht); hd.appendChild(fx); dw.appendChild(hd);
     var bd = el('div', 'dwb'); dw.appendChild(bd);
     var info = el('div', 'card'), kv = el('div', 'kv');
-    [['Cliente', v.cliente.nome], ['CPF/CNPJ', v.cliente.cpf ? fmtDoc(v.cliente.cpf) : ''], ['WhatsApp', fmtFone(v.cliente.whats)], ['Endereço', v.cliente.endereco], ['Vendedor', v.vendedor],
+    [['Cliente', v.cliente.nome], ['CPF/CNPJ', v.cliente.cpf ? fmtDoc(v.cliente.cpf) : ''], ['Celular', fmtFone(v.cliente.whats)], ['Endereço', v.cliente.endereco], ['Vendedor', v.vendedor],
      ['Aparelhos', v.itens.map(function (x) { return x.modelo + ' ' + x.classificacao + ' (IMEI ' + x.imei + ') ' + brl(x.preco); }).join('\n')],
      ['Produtos', (v.acessorios || []).map(function (x) { return x.qtd + 'x ' + x.nome + ' ' + brl(x.total); }).join('\n')],
      ['Troca', v.troca.map(function (x) { return x.modelo + ' (IMEI ' + x.imei + ') − ' + brl(x.valor); }).join('\n')],
@@ -2677,7 +3102,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('#crLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.id); });
     var bd = abrirDw(x.nome, x.tipo + ' · Pessoa ' + (x.pessoa || 'Física').toLowerCase() + ' · ' + x.id), fi = x.ficha || {}, pj = x.pessoa === 'Jurídica';
     var ln = function (v) { return v ? brl(v) : ''; };
-    kvCard(bd, [['Tipo', x.tipo], [pj ? 'CNPJ' : 'CPF', x.doc ? fmtDoc(x.doc) : ''], ['WhatsApp', x.whats ? fmtFone(x.whats) : ''], ['E-mail', x.email],
+    kvCard(bd, [['Tipo', x.tipo], [pj ? 'CNPJ' : 'CPF', x.doc ? fmtDoc(x.doc) : ''], ['Celular', x.whats ? fmtFone(x.whats) : ''], ['E-mail', x.email],
                 ['Endereço', [[x.endereco, fi.numero ? 'nº ' + fi.numero : '', fi.complemento].filter(Boolean).join(', '), x.bairro, x.cidade, x.cep ? 'CEP ' + x.cep : ''].filter(Boolean).join(' · ')],
                 ['Compras', x.compras ? x.compras + ' · ' + brl(x.total) : ''], ['1ª compra', x.primeira], ['Última compra', x.ultimaCompra ? dataBR(x.ultimaCompra) : ''],
                 ['Pago a ele', x.pago ? brl(x.pago) : ''], ['Em aberto', x.aberto ? brl(x.aberto) : '']]);
@@ -2825,7 +3250,7 @@
     // Contato e endereço
     var cC = el('div', 'card pecard'); cC.appendChild(el('h2', '', 'Contato e endereço')); dir.appendChild(cC);
     g = el('div', 'g2'); a = el('div'); b = el('div'); g.appendChild(a); g.appendChild(b); cC.appendChild(g);
-    var wpp = campo(a, 'WhatsApp', inp('text', '(22) 99999-9999')); wpp.inputMode = 'tel'; wpp.value = fmtFone(d.whats); a.firstChild.className = 'first';
+    var wpp = campo(a, 'Celular', inp('text', '(22) 99999-9999')); wpp.inputMode = 'tel'; wpp.value = fmtFone(d.whats); a.firstChild.className = 'first';
     var em = campo(b, 'E-mail', inp('email', 'opcional')); em.maxLength = 80; em.value = d.email; b.firstChild.className = 'first';
     g = el('div', 'g2'); a = el('div'); b = el('div'); g.appendChild(a); g.appendChild(b); cC.appendChild(g);
     var cep = campo(a, 'CEP', inp('text', '00000-000')); cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = d.cep;
@@ -2898,7 +3323,7 @@
       if (nome.value.trim().length < 2) erro = pj ? 'Informe a razão social.' : 'Informe o nome.';
       else if (k && !pj && !cpfOk(k)) erro = 'CPF inválido.';
       else if (k && pj && !(k.length === 14 && cnpjOk(k))) erro = 'CNPJ inválido.';
-      else if (w && (w.length < 10 || w.length > 11)) erro = 'WhatsApp inválido (DDD + número).';
+      else if (w && (w.length < 10 || w.length > 11)) erro = 'Celular inválido (DDD + número).';
       else if (em.value.trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.value.trim())) erro = 'E-mail inválido.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       var ficha = pj ? { regime: reg.value, contrib: ctb.value, ie: ie.value } :
@@ -2932,7 +3357,7 @@
     $('fbCorpo').innerHTML = ''; $('fbCorpo').appendChild(el('div', 'empty', 'Carregando saldos…'));
     call('financeiro', [S.token]).then(function (d) { aposFin(d); }).catch(function (e) { $('fbCorpo').innerHTML = ''; $('fbCorpo').appendChild(el('div', 'empty', e)); });
   }
-  function aposFin(d) { S.fin = d; S.u.formas = d.formas.filter(function (f) { return f.ativa; }); if ($('vBancos') && !$('vBancos').classList.contains('hide')) renderFin(); }
+  function aposFin(d) { S.fin = d; S.u.formas = d.formas.filter(function (f) { return f.ativa && f.uso !== 'pagar'; }); if ($('vBancos') && !$('vBancos').classList.contains('hide')) renderFin(); }
   function nomeConta(id) { var c = S.fin && S.fin.contas.filter(function (x) { return x.id === id; })[0]; return c ? c.nome : id; }
   $('fbConta').onclick = function () { formConta(null); };
   $('fbLanc').onclick = function () { formLanc(null, 'Entrada'); };
@@ -3017,14 +3442,16 @@
     var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
     var vi = inpValor(''); campo(a1, 'Valor *', vi); var dt = inpData(isoHoje()); campo(a2, 'Data', dt);
     var ds = campo(k, 'Descrição', inp('text', 'Ex.: troco inicial do caixa')); ds.maxLength = 120;
-    function ajustar() { dsw.classList.toggle('hide', T !== 'Transferência'); lco.previousSibling.textContent = T === 'Transferência' ? 'Da conta' : 'Conta'; if (T === 'Transferência' && de.value === co.value) { var o2 = contas.filter(function (x) { return x.id !== co.value; })[0]; if (o2) de.value = o2.id; } }
+    var ctw = el('div'); k.appendChild(ctw); var ct = el('select'); campo(ctw, 'Categoria * (define a linha do DRE)', ct);
+    function ajustar() { ctw.classList.toggle('hide', T === 'Transferência'); if (ct._t !== T) { opts(ct, ((S.fin.categorias || {})[T === 'Entrada' ? 'receber' : 'pagar']) || [], '', '— escolha a categoria —'); ct._t = T; } dsw.classList.toggle('hide', T !== 'Transferência'); lco.previousSibling.textContent = T === 'Transferência' ? 'Da conta' : 'Conta'; if (T === 'Transferência' && de.value === co.value) { var o2 = contas.filter(function (x) { return x.id !== co.value; })[0]; if (o2) de.value = o2.id; } }
     seg(sg, ['Entrada', 'Saída', 'Transferência'], T, function (v) { T = v; ajustar(); }); co.onchange = ajustar; ajustar();
     var m = el('div', 'msg err'); k.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Lançar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); k.appendChild(ac); sh.appendChild(k);
     cc.onclick = fecharModal;
     ok.onclick = function () {
+      if (T !== 'Transferência' && !ct.value) { m.textContent = 'Escolha a categoria do lançamento.'; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Lançando…';
-      call('movLancar', [S.token, { tipo: T, conta: co.value, destino: de.value, valor: num(vi.input.value), data: dt.value, desc: ds.value }])
+      call('movLancar', [S.token, { tipo: T, conta: co.value, destino: de.value, valor: num(vi.input.value), data: dt.value, desc: ds.value, categoria: ct.value }])
         .then(function (d) { aposFin(d); fecharModal(); renderFin(); var b = $('fbAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ Lançamento registrado.')); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Lançar'; m.textContent = e; m.classList.add('show'); });
     };
@@ -3050,7 +3477,7 @@
   function renderPagar() {
     var D = S.pagar; if (!D) return;
     var hoje = isoHoje();
-    opts($('pgCat'), D.categorias, $('pgCat').value, 'Todas as categorias');
+    opts($('pgCat'), D.todasCategorias || D.categorias, $('pgCat').value, 'Todas as categorias');
     opts($('pgLoja'), (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('pgLoja').value, 'Todas as lojas');
     var sit = $('pgSit').value, per = $('pgPer').value, cat = $('pgCat').value, lj = $('pgLoja').value, q = $('pgBusca').value.trim().toLowerCase();
     var mesIni = hoje.slice(0, 8) + '01', proxIni = isoAdd(mesIni, 32).slice(0, 8) + '01', proxFim = isoAdd(isoAdd(proxIni, 32).slice(0, 8) + '01', -1), mesFim = isoAdd(proxIni, -1);
@@ -3096,6 +3523,8 @@
     });
     box.appendChild(tab);
   }
+  function formasPgNomes() { var l = (S.pagar && S.pagar.formas) || []; return l.length ? l.map(function (f) { return f.nome; }) : ['PIX', 'Boleto', 'Transferência', 'Dinheiro', 'Cartão', 'Débito automático']; }
+  function contaDaFormaPg(nome) { var f = ((S.pagar && S.pagar.formas) || []).filter(function (x) { return x.nome === nome; })[0]; return f && S.pagar.financeiras.some(function (c) { return c.id === f.conta; }) ? f.conta : ''; }
   function nomeContaPg(id) { var c = S.pagar && S.pagar.financeiras.filter(function (x) { return x.id === id; })[0]; return c ? c.nome : (id ? nomeConta(id) : ''); }
   function abrirPagar(x) {
     Array.prototype.forEach.call(document.querySelectorAll('#pgLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.id); });
@@ -3111,7 +3540,8 @@
         var co = el('select'); S.pagar.financeiras.forEach(function (c) { var o = el('option', '', c.nome); o.value = c.id; co.appendChild(o); }); campo(bx, 'Saiu da conta', co, true);
         var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); bx.appendChild(lr);
         var dt = inpData(hoje); campo(a1, 'Data do pagamento', dt); var vi = inpValor(x.valor); campo(a2, 'Valor pago', vi);
-        var fo = el('select'); ['PIX', 'Boleto', 'Transferência', 'Dinheiro', 'Cartão', 'Débito automático'].forEach(function (f2) { var o = el('option', '', f2); o.value = f2; fo.appendChild(o); }); campo(bx, 'Como foi pago', fo);
+        var fo = el('select'); formasPgNomes().forEach(function (f2) { var o = el('option', '', f2); o.value = f2; fo.appendChild(o); }); campo(bx, 'Como foi pago', fo);
+        fo.onchange = function () { var c2 = contaDaFormaPg(fo.value); if (c2) co.value = c2; }; fo.onchange();
         var ok = el('button', 'btn ok', 'Confirmar pagamento'); ok.type = 'button'; ok.style.marginTop = '10px'; bx.appendChild(ok); bp.after(bx);
         ok.onclick = function () {
           ok.disabled = true; ok.textContent = 'Salvando…';
@@ -3143,7 +3573,7 @@
     var nf = inp('text', 'Nome do novo fornecedor'); nf.className = 'hide'; nf.style.marginTop = '6px'; k.appendChild(nf);
     fo.onchange = function () { nf.classList.toggle('hide', fo.value !== '__novo'); if (fo.value === '__novo') nf.focus(); };
     var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
-    var ca = el('select'); opts(ca, D.categorias, x ? x.categoria : 'Outros'); campo(a1, 'Categoria', ca);
+    var ca = el('select'); opts(ca, x && D.categorias.indexOf(x.categoria) < 0 ? D.categorias.concat([x.categoria]) : D.categorias, x ? x.categoria : 'Outros'); campo(a1, 'Categoria', ca);
     var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x ? x.loja : '', 'Geral (todas)'); campo(a2, 'Loja', lj);
     var lv = el('div', 'row'), b1 = el('div'), b2 = el('div'); lv.appendChild(b1); lv.appendChild(b2); k.appendChild(lv);
     var vi = inpValor(x ? x.valor : ''); campo(b1, 'Valor *', vi); var ve = inpData(x ? x.venc : isoHoje()); campo(b2, 'Vencimento *', ve);
@@ -3157,7 +3587,8 @@
       pc = el('select'); D.financeiras.forEach(function (c) { var o = el('option', '', c.nome); o.value = c.id; pc.appendChild(o); }); campo(pbox, 'Saiu da conta', pc);
       var lp = el('div', 'row'), c1 = el('div'), c2 = el('div'); lp.appendChild(c1); lp.appendChild(c2); pbox.appendChild(lp);
       pd = inpData(isoHoje()); campo(c1, 'Pago em', pd);
-      pf = el('select'); ['PIX', 'Boleto', 'Transferência', 'Dinheiro', 'Cartão', 'Débito automático'].forEach(function (f2) { var o = el('option', '', f2); o.value = f2; pf.appendChild(o); }); campo(c2, 'Como', pf);
+      pf = el('select'); formasPgNomes().forEach(function (f2) { var o = el('option', '', f2); o.value = f2; pf.appendChild(o); }); campo(c2, 'Como', pf);
+      pf.onchange = function () { var c3 = contaDaFormaPg(pf.value); if (c3) pc.value = c3; }; pf.onchange();
       pg.onchange = function () { pbox.classList.toggle('hide', !pg.checked); };
     }
     var m = el('div', 'msg err'); k.appendChild(m);
@@ -3317,7 +3748,7 @@
     var bd = abrirDw(p.cliente, 'Parcela ' + p.parcela + ' · ' + p.contrato + ' · ' + st);
     kvCard(bd, [['Situação', st + (st === 'Atrasada' ? ' há ' + e.dias + ' dia(s)' : '')], ['Vencimento', isoBR(p.venc)], ['Valor da parcela', brl(p.valor)], ['Já recebido', p.recebido ? brl(p.recebido) : ''],
                 ['Saldo', p.situacao === 'Em aberto' ? brl(p.saldo) : ''], ['Multa', e.multa ? brl(e.multa) : ''], ['Juros de mora', e.juros ? brl(e.juros) : ''], ['Total hoje', p.situacao === 'Em aberto' ? brl(r2(p.saldo + e.multa + e.juros)) : ''],
-                ['CPF/CNPJ', p.doc ? fmtDoc(p.doc) : ''], ['WhatsApp', p.whats ? fmtFone(p.whats) : ''], ['Loja', p.loja], ['Origem', p.origem === 'Venda' ? 'Venda ' + p.contrato : 'Lançado à mão'], ['Descrição', p.desc]]);
+                ['CPF/CNPJ', p.doc ? fmtDoc(p.doc) : ''], ['Celular', p.whats ? fmtFone(p.whats) : ''], ['Loja', p.loja], ['Origem', p.origem === 'Venda' ? 'Venda ' + p.contrato : 'Lançado à mão'], ['Descrição', p.desc]]);
     if ((p.recs || []).length) {
       var c = el('div', 'card'); c.appendChild(el('h2', '', 'Recebimentos'));
       var t = el('table', 'ext');
@@ -3375,7 +3806,7 @@
     var bd = abrirDw(c.nome, 'Crediário' + (c.doc ? ' · ' + fmtDoc(c.doc) : ''));
     kvCard(bd, [['Limite de crédito', c.limite ? brl(c.limite) : 'Sem limite cadastrado'], ['Tolerância', c.tolerancia ? brl(c.tolerancia) : ''], ['Em aberto', brl(c.emAberto)],
                 ['Disponível', c.limite ? brl(Math.max(0, c.disponivel)) : ''], ['Atrasado', c.atrasado ? brl(c.atrasado) + ' (' + c.qtdAtraso + ' fatura' + (c.qtdAtraso === 1 ? '' : 's') + ')' : 'Nada'],
-                ['WhatsApp', c.whats ? fmtFone(c.whats) : ''], ['Cidade', c.cidade]]);
+                ['Celular', c.whats ? fmtFone(c.whats) : ''], ['Cidade', c.cidade]]);
     var minhas = D.parcelas.filter(function (p) { return p.cliId === c.id; }).sort(function (a, b) { return a.venc < b.venc ? -1 : 1; });
     var ab = minhas.filter(function (p) { return p.situacao === 'Em aberto'; });
     if (minhas.length) {
@@ -4083,7 +4514,7 @@
       var ib = el('div', 'hide'); c2.appendChild(ib);
       idb.onclick = function () {
         ib.classList.remove('hide'); ib.innerHTML = '';
-        var q = inp('text', 'Nome, CPF ou WhatsApp'); ib.appendChild(q); var rr = el('div'); ib.appendChild(rr);
+        var q = inp('text', 'Nome, CPF ou celular'); ib.appendChild(q); var rr = el('div'); ib.appendChild(rr);
         var nb = el('button', 'lnk', '+ Cadastrar cliente novo'); nb.type = 'button'; ib.appendChild(nb);
         var tm = null;
         q.oninput = function () { clearTimeout(tm); rr.innerHTML = ''; var t = q.value.trim(); if (t.length < 2) return; tm = setTimeout(function () { call('clientesBusca', [S.token, t]).then(function (l) { rr.innerHTML = ''; var lst = el('div', 'vdres'); l.forEach(function (x) { var b = el('button'); b.type = 'button'; var a = el('span', '', x.nome); a.appendChild(el('small', '', [x.cpf ? fmtDoc(x.cpf) : '', x.whats ? fmtFone(x.whats) : ''].filter(Boolean).join(' · '))); b.appendChild(a); b.onclick = function () { PDV.cli = x; PDV.credito = x.credito; desenharPdv(); }; lst.appendChild(b); }); if (!l.length) rr.appendChild(el('div', 'hint', 'Ninguém encontrado.')); else rr.appendChild(lst); }); }, 300); };
@@ -7182,13 +7613,13 @@
     var c1 = el('div', 'card pecard'); c1.appendChild(el('h2', '', 'Cliente')); W.appendChild(c1);
     var C = OSF.cli;
     if (OSF.cliModo === 'sel') {
-      var sl = el('div', 'clisel'); sl.appendChild(el('div', 'pnome', C.nome)); sl.appendChild(el('div', 'psub', [C.whats ? fmtFone(C.whats) : 'sem WhatsApp', C.cpf ? fmtDoc(C.cpf) : ''].filter(Boolean).join(' · ')));
+      var sl = el('div', 'clisel'); sl.appendChild(el('div', 'pnome', C.nome)); sl.appendChild(el('div', 'psub', [C.whats ? fmtFone(C.whats) : 'sem celular', C.cpf ? fmtDoc(C.cpf) : ''].filter(Boolean).join(' · ')));
       var bt = el('div', 'clibt'), tr = el('button', 'lnk', 'Trocar cliente'), ed = el('button', 'lnk', 'Editar dados'); tr.type = ed.type = 'button'; bt.appendChild(ed); bt.appendChild(tr); sl.appendChild(bt);
       tr.onclick = function () { OSF.cli = { id: '', cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' }; OSF.cliModo = 'busca'; desenharOS(); };
       ed.onclick = function () { OSF.cliModo = 'novo'; desenharOS(); };
       c1.appendChild(sl);
     } else if (OSF.cliModo === 'busca') {
-      var bq = inp('text', 'Buscar cliente cadastrado: nome, CPF ou WhatsApp'); bq.setAttribute('aria-label', 'Buscar cliente'); c1.appendChild(bq);
+      var bq = inp('text', 'Buscar cliente cadastrado: nome, CPF ou celular'); bq.setAttribute('aria-label', 'Buscar cliente'); c1.appendChild(bq);
       var rq = el('div'); c1.appendChild(rq);
       var nv = el('button', 'btn ghost', '+ Cadastrar novo cliente'); nv.type = 'button'; nv.style.cssText = 'width:auto;margin-top:10px'; c1.appendChild(nv);
       nv.onclick = function () { OSF.cliModo = 'novo'; OSF.cli.id = ''; if (/^\D{3,}/.test(bq.value)) OSF.cli.nome = bq.value.trim(); desenharOS(); };
@@ -7332,7 +7763,7 @@
       if (OSF.cliModo === 'busca') erro = 'Escolha o cliente (busca) ou cadastre um novo.';
       else if (OSF.cliModo === 'novo') erro = 'Termine o cadastro do cliente: toque em "Salvar cliente".';
       else if ((C2.nome || '').trim().length < 3) erro = 'Informe o nome do cliente.';
-      else if (!C2.id && soDig(C2.whats).length < 10) erro = 'Informe o WhatsApp do cliente com DDD.';
+      else if (!C2.id && soDig(C2.whats).length < 10) erro = 'Informe o celular do cliente com DDD.';
       else if (C2.cpf && C2.cpf.length === 11 && !cpfOk(C2.cpf)) erro = 'CPF inválido.';
       else if (!OSF.aparelho.modelo.trim()) erro = 'Informe o modelo do aparelho.';
       else if (OSF.defeito.trim().length < 3) erro = 'Descreva o defeito relatado pelo cliente.';
@@ -7374,7 +7805,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('#osLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === o.id); });
     var bd = abrirDw(o.id + ' · ' + (o.cliente || {}).nome, o.status + ' · ' + apTxt(o) + ' · ' + (T.total ? brl(T.total) : 'a orçar'));
     var a = o.aparelho || {}, c = o.cliente || {};
-    kvCard(bd, [['Status', o.status], ['Cliente', c.nome], ['WhatsApp', c.whats ? fmtFone(c.whats) : ''], ['CPF/CNPJ', c.cpf ? fmtDoc(c.cpf) : ''], ['Aparelho', apTxt(o)], ['IMEI / série', [a.imei, a.serial].filter(Boolean).join(' · ')],
+    kvCard(bd, [['Status', o.status], ['Cliente', c.nome], ['Celular', c.whats ? fmtFone(c.whats) : ''], ['CPF/CNPJ', c.cpf ? fmtDoc(c.cpf) : ''], ['Aparelho', apTxt(o)], ['IMEI / série', [a.imei, a.serial].filter(Boolean).join(' · ')],
       ['Acessórios deixados', (a.acessorios || []).join(', ') || 'nenhum'], ['Entrou ligado', a.ligado === 'SIM' ? 'sim' : a.ligado === 'NÃO' ? 'não' : ''], ['Checklist de entrada', Object.keys(a.checklist || {}).map(function (k) { return k + ': ' + (a.checklist[k] === 'SIM' ? 'ok' : 'NÃO'); }).join(' · ')], ['Estado na entrada', Object.keys(a.estado || {}).map(function (k) { return k + ': ' + (a.estado[k] === 'SIM' ? 'sim' : 'não'); }).join(' · ') + (a.estadoObs ? (Object.keys(a.estado || {}).length ? '\n' : '') + a.estadoObs : '')],
       ['Senha informada', o.senhaInformada ? 'sim (anotada no papel)' : ''], ['Defeito relatado', o.defeito], ['Diagnóstico', o.diagnostico], ['Loja', o.loja], ['Técnico', o.tecnico && o.tecnico.nome ? o.tecnico.nome : 'a definir'],
       ['Aberta em', o.aberta + (o.atendente ? ' por ' + o.atendente.replace(/ \(.*\)$/, '') : '')], ['Entrega prevista', prevTxt(o)], ['Entregue em', o.entregueEm ? isoBR(o.entregueEm) + (o.entreguePor ? ' por ' + o.entreguePor : '') : ''],
@@ -7473,7 +7904,7 @@
     var top = E('div', undefined, 'top'), tl = cabecalhoEmpresa(o.loja, entrega ? 'Comprovante de entrega' : 'Ordem de serviço');
     var tn = E('div', undefined, 'n'); tn.appendChild(E('div', o.id)); tn.appendChild(E('div', (entrega ? 'Entregue ' + isoBR(o.entregueEm) : 'Entrada ' + String(o.aberta || '').slice(0, 16)), ''));
     top.appendChild(tl); top.appendChild(tn); w.appendChild(top);
-    kv(sec('Cliente'), [['Nome', c.nome], ['WhatsApp', c.whats ? fmtFone(c.whats) : ''], ['CPF/CNPJ', c.cpf ? fmtDoc(c.cpf) : ''], ['Endereço', [c.endereco, c.bairro, c.cidade].filter(Boolean).join(' · ')]]);
+    kv(sec('Cliente'), [['Nome', c.nome], ['Celular', c.whats ? fmtFone(c.whats) : ''], ['CPF/CNPJ', c.cpf ? fmtDoc(c.cpf) : ''], ['Endereço', [c.endereco, c.bairro, c.cidade].filter(Boolean).join(' · ')]]);
     kv(sec('Aparelho'), [['Aparelho', apTxt(o)], ['IMEI / série', [a.imei, a.serial].filter(Boolean).join(' · ')], ['Acessórios', (a.acessorios || []).join(', ') || 'nenhum'],
       ['Estado', Object.keys(a.estado || {}).map(function (k) { return k + ': ' + (a.estado[k] === 'SIM' ? 'sim' : 'não'); }).join(' · ')], ['Obs. do estado', a.estadoObs], ['Entrou ligado', a.ligado === 'SIM' ? 'sim' : a.ligado === 'NÃO' ? 'não (checklist não realizado)' : ''], ['Checklist', Object.keys(a.checklist || {}).map(function (k) { return k + ': ' + (a.checklist[k] === 'SIM' ? 'ok' : 'NÃO'); }).join(' · ')], ['Senha', o.senhaInformada && !entrega ? '____________________' : '']]);
     kv(sec('Serviço'), [['Defeito relatado', o.defeito], ['Diagnóstico', o.diagnostico], ['Técnico', o.tecnico && o.tecnico.nome], ['Entrega prevista', !entrega ? prevTxt(o) : '']]);
@@ -7541,7 +7972,7 @@
     pessoa();
     sec('Contato');
     var g2 = grade(w, 2);
-    var wp = campo(g2[0], 'WhatsApp' + (op.exigeWhats ? ' *' : ''), inp('text', '(22) 99999-9999'), true); wp.inputMode = 'tel'; wp.maxLength = 16; wp.value = fmtFone(F.whats);
+    var wp = campo(g2[0], 'Celular' + (op.exigeWhats ? ' *' : ''), inp('text', '(22) 99999-9999'), true); wp.inputMode = 'tel'; wp.maxLength = 16; wp.value = fmtFone(F.whats);
     wp.oninput = function () { F.whats = soDig(wp.value).slice(0, 11); }; wp.onblur = function () { wp.value = fmtFone(F.whats); };
     var em = campo(g2[1], 'E-mail', inp('email', 'Opcional'), true); em.maxLength = 80; em.value = F.email; em.oninput = function () { F.email = em.value.trim(); };
     sec('Endereço');
@@ -7574,8 +8005,8 @@
       if (F.nome.trim().length < 3) erro = 'Informe o nome.';
       else if (op.exigeDoc && !F.doc) erro = 'Informe o ' + (pf ? 'CPF' : 'CNPJ') + '.';
       else if (F.doc && (pf ? !cpfOk(F.doc) : !cnpjOk(F.doc))) erro = (pf ? 'CPF' : 'CNPJ') + ' inválido.';
-      else if (op.exigeWhats && F.whats.length < 10) erro = 'Informe o WhatsApp com DDD.';
-      else if (F.whats && (F.whats.length < 10 || F.whats.length > 11)) erro = 'WhatsApp inválido.';
+      else if (op.exigeWhats && F.whats.length < 10) erro = 'Informe o celular com DDD.';
+      else if (F.whats && (F.whats.length < 10 || F.whats.length > 11)) erro = 'Celular inválido.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Salvando…';
       call('clienteCadastrar', [S.token, { id: F.id, pessoa: F.pessoa, doc: F.doc, nome: F.nome, nasc: pf ? F.nasc : '', sexo: F.sexo, civil: F.civil, whats: F.whats, email: F.email, cep: F.cep, endereco: F.rua,
@@ -7601,65 +8032,11 @@
     w.appendChild(el('h1', '', e.fantasia || e.razao));
     var l1 = [e.razao && e.fantasia ? e.razao : '', e.cnpj ? (e.cnpj.length === 14 ? 'CNPJ ' : 'CPF ') + fmtDoc(e.cnpj) : '', e.ie ? 'IE ' + e.ie : ''].filter(Boolean).join(' · ');
     var l2 = [e.endereco, e.cidade, e.cep ? 'CEP ' + e.cep.slice(0, 5) + '-' + e.cep.slice(5) : ''].filter(Boolean).join(' · ');
-    var l3 = [e.fone ? 'Tel. ' + fmtFone(e.fone) : '', e.whats ? 'WhatsApp ' + fmtFone(e.whats) : '', e.email, e.site].filter(Boolean).join(' · ');
+    var l3 = [e.fone ? 'Tel. ' + fmtFone(e.fone) : '', e.whats ? 'Cel. ' + fmtFone(e.whats) : '', e.email, e.site].filter(Boolean).join(' · ');
     [l1, l2, l3, loja + (sub ? ' · ' + sub : '')].forEach(function (t) { if (t) w.appendChild(el('div', 'lj', t)); });
     return w;
   }
   function rodapeEmpresa(loja) { var e = empresaDe(loja); return e && e.rodape ? e.rodape : ''; }
-  function cfgEmpresa(box) {
-    var L = JSON.parse(JSON.stringify((S.u.empresas || [])));
-    if (!L.length) L.push({ id: 'E1', fantasia: 'Tec-Cell', razao: '', cnpj: '', lojas: (S.u.lojas || []).filter(function (l) { return /^Tec-Cell/.test(l); }) }, { id: 'E2', fantasia: 'Find Cell', razao: '', cnpj: '', lojas: (S.u.lojas || []).filter(function (l) { return /^Find Cell/.test(l); }) });
-    box.appendChild(el('div', 'hint', 'Estes dados saem no topo do recibo de venda, do PDV e da ordem de serviço. Cadastre uma empresa por CNPJ e marque as lojas de cada uma.'));
-    var lb = el('div'); box.appendChild(lb);
-    function desenhar() {
-      lb.innerHTML = '';
-      L.forEach(function (e, i) {
-        var c = el('div', 'card'); lb.appendChild(c);
-        var hd = el('div', 'tbacoes'); hd.appendChild(el('h3', 'ch', 'Empresa ' + (i + 1))); if (L.length > 1) { var rm = el('button', 'lnk', 'Remover'); rm.type = 'button'; rm.onclick = function () { L.splice(i, 1); desenhar(); }; hd.appendChild(rm); } c.appendChild(hd);
-        var g = grade(c, 2), t = function (bx, rot, k, ph, max) { var x = campo(bx, rot, inp('text', ph || ''), true); x.maxLength = max || 80; x.value = e[k] || ''; x.oninput = function () { e[k] = x.value; }; return x; };
-        t(g[0], 'Nome fantasia *', 'fantasia'); t(g[1], 'Razão social', 'razao', '', 120);
-        var g2 = grade(c, 3); var cn = t(g2[0], 'CNPJ', 'cnpj', '00.000.000/0000-00', 18); cn.value = fmtDoc(e.cnpj || ''); cn.oninput = function () { e.cnpj = soDig(cn.value); };
-        t(g2[1], 'Inscrição estadual', 'ie', '', 20); var tf = t(g2[2], 'Telefone', 'fone', '(22) 2555-0000', 16); tf.value = fmtFone(e.fone || ''); tf.oninput = function () { e.fone = soDig(tf.value); };
-        var g3 = grade(c, 3); t(g3[0], 'Endereço (rua, nº, bairro)', 'endereco', '', 160); t(g3[1], 'Cidade/UF', 'cidade'); var cp = t(g3[2], 'CEP', 'cep', '', 9); cp.oninput = function () { e.cep = soDig(cp.value); };
-        var g4 = grade(c, 3); var wz = t(g4[0], 'WhatsApp', 'whats', '', 16); wz.value = fmtFone(e.whats || ''); wz.oninput = function () { e.whats = soDig(wz.value); }; t(g4[1], 'E-mail', 'email'); t(g4[2], 'Site / Instagram', 'site');
-        t(c, 'Mensagem no rodapé da impressão', 'rodape', 'Ex.: Obrigado pela preferência!', 200);
-        c.appendChild(el('label', '', 'Lojas desta empresa'));
-        var ch = el('div', 'chips'); c.appendChild(ch); e.lojas = e.lojas || [];
-        (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }).forEach(function (l) { var b = el('button', 'chip' + (e.lojas.indexOf(l) > -1 ? ' on' : ''), l); b.type = 'button'; b.onclick = function () { var k = e.lojas.indexOf(l); if (k > -1) e.lojas.splice(k, 1); else e.lojas.push(l); b.classList.toggle('on', k < 0); }; ch.appendChild(b); });
-        c.appendChild(el('label', '', 'Logo'));
-        var lw = el('div', 'logow'); c.appendChild(lw);
-        var pv = el('div'); lw.appendChild(pv);
-        var mostra = function () { pv.innerHTML = ''; if (e.logo) { var im = el('img'); im.src = e.logo; im.style.cssText = 'max-height:60px;max-width:200px'; pv.appendChild(im); } else pv.appendChild(el('span', 'hint', 'Sem logo')); };
-        mostra();
-        var fi = el('input'); fi.type = 'file'; fi.accept = 'image/png,image/jpeg,image/webp'; fi.className = 'hide'; lw.appendChild(fi);
-        var bl = el('button', 'btn ghost mini', e.logo ? 'Trocar logo' : 'Enviar logo'); bl.type = 'button'; bl.onclick = function () { fi.click(); }; lw.appendChild(bl);
-        if (e.logo) { var bx = el('button', 'lnk', 'Tirar logo'); bx.type = 'button'; bx.onclick = function () { e.logo = ''; desenhar(); }; lw.appendChild(bx); }
-        fi.onchange = function () {
-          var f = fi.files[0]; if (!f) return; var rd = new FileReader();
-          rd.onload = function () {
-            var img = new Image(); img.onload = function () {
-              var esc = Math.min(1, 360 / img.width, 140 / img.height), cv = document.createElement('canvas'); cv.width = Math.round(img.width * esc); cv.height = Math.round(img.height * esc);
-              var cx = cv.getContext('2d'); cx.drawImage(img, 0, 0, cv.width, cv.height);
-              var url = cv.toDataURL('image/png'); if (url.length > 44000) { cx.globalCompositeOperation = 'destination-over'; cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); url = cv.toDataURL('image/jpeg', 0.85); }
-              if (url.length > 44000) url = cv.toDataURL('image/jpeg', 0.6);
-              if (url.length > 44000) { msg('topMsg', 'Logo muito pesado mesmo reduzido. Use uma imagem mais simples.'); return; }
-              e.logo = url; desenhar();
-            }; img.src = rd.result;
-          };
-          rd.readAsDataURL(f);
-        };
-      });
-    }
-    desenhar();
-    var ad = el('button', 'lnk', '+ Outra empresa (outro CNPJ)'); ad.type = 'button'; ad.onclick = function () { L.push({ id: 'E' + (Date.now() % 100000), fantasia: '', lojas: [] }); desenhar(); }; box.appendChild(ad);
-    var m = el('div', 'msg err'), ok = el('button', 'btn', 'Salvar dados da empresa'); ok.type = 'button'; box.appendChild(m); box.appendChild(ok);
-    ok.onclick = function () {
-      m.classList.remove('show'); ok.disabled = true; ok.textContent = 'Salvando…';
-      call('empresaSalvar', [S.token, L]).then(function (r) { S.u.empresas = r; ok.disabled = false; ok.textContent = '✓ Salvo'; setTimeout(function () { ok.textContent = 'Salvar dados da empresa'; }, 1500); })
-        .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar dados da empresa'; m.textContent = e; m.classList.add('show'); });
-    };
-  }
-
   // =========================================================
   //  QUADRO (KANBAN) DA ORDEM DE SERVIÇO
   // =========================================================
@@ -8009,11 +8386,11 @@
     var l = [['conta', 'Minha conta', 'Aparência e troca de senha']];
     if (pode('equipe')) l.push(['func', 'Funcionários', S.u.pedidosSenha ? '⚠ ' + S.u.pedidosSenha + ' pedido(s) de nova senha' : 'Cadastro, senhas e permissões'], ['acesso', 'Grupos de acesso', 'Permissões de cada grupo de funcionários']);
     if (pode('grupos_tags')) l.push(['grupos', 'Grupo de Produtos', 'Grupos e subgrupos dos produtos'], ['tags', 'Tags', 'Tags e subtags dos produtos']);
-    if (pode('financeiro')) l.push(['formas', 'Formas de pagamento/recebimento', 'Formas aceitas e em qual caixa/banco o dinheiro entra']);
+    if (pode('financeiro')) l.push(['formas', 'Formas de pagamento/recebimento', 'Formas, uso (receber/pagar) e caixa/banco de cada uma'], ['categorias', 'Categorias financeiras', 'Contas a receber e a pagar e o grupo de cada uma no DRE']);
     if (pode('conferir_caixa')) l.push(['caixa', 'Caixa', 'Abertura e fechamento: por loja (tudo junto) ou por funcionário']);
     if (pode('equipe')) l.push(['depositos', 'Depósitos (lojas)', 'Criar, renomear e excluir lojas e locais de estoque']);
-    if (pode('cancelar_os')) l.push(['osaux', 'Ordem de Serviço', 'Prazos de garantia e textos dos termos']);
-    if (pode('equipe')) l.push(['empresa', 'Dados da empresa', 'Nome, CNPJ, endereço e logo na impressão de vendas e OS'], ['login', 'Tela de entrada', 'Contatos do rodapé "fale com a gente!"']);
+    if (pode('cancelar_os')) l.push(['osaux', 'Ordem de Serviço', 'Termos e prazos de garantia']);
+    if (pode('equipe')) l.push(['empresa', 'Dados da empresa', 'Nome, CNPJ, endereço (busca pelo CEP) e logo da impressão'], ['login', 'Tela de entrada', 'Contatos do rodapé "fale com a gente!"']);
     return l;
   }
   function desenharCfg() {
@@ -8039,6 +8416,7 @@
     else if (ab === 'empresa') cfgEmpresa(box);
     else if (ab === 'login') cfgContatos(box);
     else if (ab === 'depositos') cfgDepositos(box);
+    else if (ab === 'categorias') cfgCatFin(box);
     else if (ab === 'osaux') { box.appendChild(el('div', 'empty', 'Carregando…')); garantirOS(function () { if (CFG.aba === 'osaux' && box.isConnected) renderOsAux(box); }); }
     else if (ab === 'caixa') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
@@ -8208,66 +8586,6 @@
     box.appendChild(c);
   }
 
-  function cfgFormas(box) {
-    var D = S.fin, L = D.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa, taxas: JSON.parse(JSON.stringify(f.taxas || {})), repassa: !!f.repassa, receb: f.receb || 'hora', maxParc: f.maxParc || 1 }; });
-    var contas = D.contas.filter(function (c) { return c.ativa; });
-    var c = el('div', 'card'); box.appendChild(c);
-    c.appendChild(el('div', 'hint', 'Estas são as formas que aparecem no pagamento da venda e no PDV. Em "Taxas e recebimento" você define a taxa de cada parcela e quando o dinheiro cai na conta: a venda mostra o valor líquido, e ele entra em Caixas e Bancos na data certa.'));
-    var lst = el('div'); lst.style.marginTop = '12px'; c.appendChild(lst);
-    var RECEB = [['hora', 'Na hora (mesmo dia)'], ['dias', 'Em X dias corridos'], ['uteis', 'Em X dias úteis'], ['mensal', 'Mensal: uma parcela a cada 30 dias']];
-    function desenhar() {
-      lst.innerHTML = '';
-      var h = el('div', 'frow'); ['Nome', 'Tipo', 'Entra na conta', ''].forEach(function (t) { var d = el('div', '', t); d.style.cssText = 'font-size:12px;font-weight:700;color:var(--muted)'; h.appendChild(d); }); lst.appendChild(h);
-      L.forEach(function (f) {
-        var r = el('div', 'frow'), nm = inp('text', 'Ex.: Boleto'); nm.value = f.nome; nm.maxLength = 40; nm.oninput = function () { f.nome = nm.value; };
-        var tp = el('select'); [['nao', 'Sem cartão (PIX, dinheiro…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)'], ['crediario', 'Crediário (parcelas com o cliente)']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; tp.appendChild(op); }); tp.value = f.cartao;
-        tp.onchange = function () { f.cartao = tp.value; if (f.cartao === 'credito' && f.maxParc < 2) f.maxParc = 12; if (f.cartao === 'credito' && f.receb === 'hora') f.receb = 'mensal'; desenhar(); };
-        var co = el('select'); contas.forEach(function (x) { var op = el('option', '', x.nome); op.value = x.id; co.appendChild(op); }); if (!contas.some(function (x) { return x.id === f.conta; })) { var op2 = el('option', '', '(escolha)'); op2.value = ''; co.insertBefore(op2, co.firstChild); } co.value = f.conta || ''; co.onchange = function () { f.conta = co.value; };
-        var al = el('label', 'ck'), at = el('input'); at.type = 'checkbox'; at.checked = f.ativa; at.onchange = function () { f.ativa = at.checked; }; al.appendChild(at); al.appendChild(document.createTextNode('Ativa'));
-        r.appendChild(nm); r.appendChild(tp); r.appendChild(co); r.appendChild(al); lst.appendChild(r);
-        if (f.cartao === 'crediario') { lst.appendChild(el('div', 'hint fdet', 'Crediário: juros, multa e parcelas ficam em Financeiro › Crediário › ⚙ Regras. O dinheiro entra quando cada parcela é recebida.')); return; }
-        var det = el('details', 'fdet'), sm = el('summary', '', 'Taxas e recebimento: ' + resumoForma(f)); det.appendChild(sm); lst.appendChild(det);
-        var g = el('div', 'g3'), a1 = el('div'), a2 = el('div'), a3 = el('div'); [a1, a2, a3].forEach(function (z) { g.appendChild(z); }); det.appendChild(g);
-        var rb = el('select'); RECEB.forEach(function (o) { var q = el('option', '', o[1]); q.value = o[0]; rb.appendChild(q); });
-        var mm = /^(dias|uteis):(\d+)$/.exec(f.receb); rb.value = mm ? mm[1] : f.receb; campo(a1, 'Quando cai na conta', rb, true);
-        var nd = inp('number', 'Ex.: 1'); nd.min = 0; nd.max = 365; nd.value = mm ? mm[2] : '1'; campo(a2, 'X (dias)', nd, true);
-        var upd = function () { f.receb = rb.value === 'dias' || rb.value === 'uteis' ? rb.value + ':' + (parseInt(nd.value, 10) || 0) : rb.value; a2.style.visibility = rb.value === 'dias' || rb.value === 'uteis' ? '' : 'hidden'; sm.textContent = 'Taxas e recebimento: ' + resumoForma(f); };
-        rb.onchange = upd; nd.oninput = upd; upd();
-        if (f.cartao === 'credito') { var mp = inp('number', '12'); mp.min = 1; mp.max = 24; mp.value = f.maxParc; campo(a3, 'Máximo de parcelas', mp, true); mp.onchange = function () { f.maxParc = Math.min(24, Math.max(1, parseInt(mp.value, 10) || 1)); desenhar(); }; }
-        var rp = el('label', 'perm'), rc = el('input'); rc.type = 'checkbox'; rc.checked = f.repassa; var rt = el('div', 't', 'Repassar a taxa ao cliente'); rt.appendChild(el('small', '', 'Ligado: o cliente paga o valor + taxa na maquininha e cai o valor cheio. Desligado: cai o valor menos a taxa.')); rp.appendChild(rc); rp.appendChild(rt); rp.style.marginTop = '10px'; det.appendChild(rp);
-        rc.onchange = function () { f.repassa = rc.checked; sm.textContent = 'Taxas e recebimento: ' + resumoForma(f); };
-        det.appendChild(el('div', 'hint', f.cartao === 'credito' ? 'Taxa (%) por número de parcelas. Em branco = usa a tabela da Calculadora de Cartão.' : 'Taxa (%) cobrada nesta forma (em branco = sem taxa' + (f.cartao === 'debito' ? ', ou a do Débito da Calculadora' : '') + ').'));
-        var gt = el('div', 'g6');
-        for (var n = 1; n <= (f.cartao === 'credito' ? f.maxParc : 1); n++) (function (n) {
-          var w = el('div'), i = inp('text', f.cartao === 'credito' && taxa(n + 'x') ? nfmt(r2(taxa(n + 'x').taxa * 100)) : f.cartao === 'debito' && taxa('Débito') ? nfmt(r2(taxa('Débito').taxa * 100)) : '0'); i.inputMode = 'decimal';
-          i.value = f.taxas[String(n)] !== undefined ? nfmt(f.taxas[String(n)]) : '';
-          i.oninput = function () { var v = num(i.value); if (i.value.trim() === '' || v === null) delete f.taxas[String(n)]; else f.taxas[String(n)] = v; sm.textContent = 'Taxas e recebimento: ' + resumoForma(f); };
-          var sw = el('div', 'suffix'); sw.appendChild(i); sw.appendChild(el('span', '', '%')); campo(w, f.cartao === 'credito' ? n + 'x' : 'Taxa', sw); gt.appendChild(w);
-        })(n);
-        det.appendChild(gt);
-      });
-    }
-    function resumoForma(f) {
-      var rr = /^(dias|uteis):(\d+)$/.exec(f.receb), q = f.receb === 'hora' ? 'cai na hora' : f.receb === 'mensal' ? 'cai mensal (por parcela)' : rr ? 'cai em ' + rr[2] + ' dia(s) ' + (rr[1] === 'uteis' ? 'úteis' : 'corridos') : '';
-      var nT = Object.keys(f.taxas || {}).length;
-      return q + ' · ' + (nT ? nT + ' taxa(s) cadastrada(s)' : 'taxas da Calculadora') + (f.repassa ? ' · repassa ao cliente' : '');
-    }
-    desenhar();
-    var add = el('button', 'lnk', '+ Nova forma de pagamento'); add.type = 'button';
-    add.onclick = function () { L.push({ id: '', nome: '', cartao: 'nao', conta: contas[0] ? contas[0].id : '', ativa: true, taxas: {}, repassa: false, receb: 'hora', maxParc: 1 }); desenhar(); var ins = lst.querySelectorAll('.frow input[type=text]'); ins[ins.length - 1].focus(); };
-    c.appendChild(add);
-    c.appendChild(el('div', 'hint', 'Para tirar uma forma, desmarque "Ativa" (as vendas antigas continuam com ela). Dias úteis não contam sábado e domingo (feriados não são descontados).'));
-    var m = el('div', 'msg err'); c.appendChild(m);
-    var sv = el('button', 'btn', 'Salvar formas de pagamento'); sv.type = 'button'; sv.style.marginTop = '10px'; c.appendChild(sv);
-    sv.onclick = function () {
-      m.classList.remove('show');
-      if (L.some(function (f) { return f.nome.trim().length < 2; })) { m.textContent = 'Dê um nome para todas as formas.'; m.classList.add('show'); return; }
-      if (L.some(function (f) { return !f.conta; })) { m.textContent = 'Escolha a conta de todas as formas.'; m.classList.add('show'); return; }
-      sv.disabled = true; sv.textContent = 'Salvando…';
-      call('formasSalvar', [S.token, L]).then(function (d) { aposFin(d); box.innerHTML = ''; cfgFormas(box); box.insertBefore(el('div', 'msg ok show', '✓ Formas de pagamento salvas.'), box.firstChild); V = null; $('vdNova').innerHTML = ''; PDV = null; })
-        .catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar formas de pagamento'; m.textContent = e; m.classList.add('show'); });
-    };
-  }
   function cfgCat(box, d, tipo) {
     var lista = tipo === 'tag' ? d.tags : d.grupos, uso = (d.uso && d.uso[tipo === 'tag' ? 'tags' : 'grupos']) || {};
     var R = tipo === 'tag'
