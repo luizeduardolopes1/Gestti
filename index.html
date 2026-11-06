@@ -887,6 +887,7 @@
       <div><label for="dbPer">Período</label><select id="dbPer">
         <option value="hoje">Hoje</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option>
         <option value="mes">Este mês</option><option value="mespass">Mês passado</option><option value="90">Últimos 90 dias</option><option value="365">Últimos 12 meses</option></select></div>
+      <div id="dbEmpW" class="hide"><label for="dbEmp">Empresa</label><select id="dbEmp"></select></div>
       <div><label for="dbLoja">Loja</label><select id="dbLoja"></select></div>
     </div>
     <div class="stabs dbrel" id="dbRel" role="tablist" aria-label="Relatórios"></div>
@@ -1599,7 +1600,7 @@
   function call(fn, args) {
     return new Promise(function (ok, fail) {
       var ctl = ('AbortController' in window) ? new AbortController() : null;
-      var timer = setTimeout(function () { if (ctl) ctl.abort(); }, (fn === 'depositoSalvar' || fn === 'empresaCriar') ? 300000 : fn === 'dre' ? 120000 : 45000);
+      var timer = setTimeout(function () { if (ctl) ctl.abort(); }, (fn === 'depositoSalvar' || fn === 'empresaCriar') ? 300000 : (fn === 'dre' || fn === 'dashboard' || fn === 'compartSalvar') ? 120000 : 45000);
       fetch(API, {
         method: 'POST', credentials: 'omit', redirect: 'follow',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1892,6 +1893,8 @@
       };
       k.appendChild(rn); c.appendChild(k);
     });
+    var cp = el('div', 'card'); box.appendChild(cp); cp.appendChild(el('div', 'empty', 'Carregando compartilhamento…'));
+    call('compartDados', [S.token]).then(function (r) { desenharCompart(cp, r); }).catch(function (e) { cp.innerHTML = ''; cp.appendChild(el('div', 'empty', String(e))); });
     var n = el('div', 'card'); box.appendChild(n);
     n.appendChild(el('h2', '', 'Nova empresa'));
     var nm = campo(n, 'Nome da empresa', inp('text', 'Ex.: Find Cell Comércio'), true);
@@ -1909,6 +1912,31 @@
         window.scrollTo(0, 0);
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Criar empresa'; mm.textContent = e; mm.classList.add('show'); });
     };
+  }
+  function desenharCompart(c, r, okTxt) {
+    c.innerHTML = '';
+    c.appendChild(el('h2', '', 'Cadastros compartilhados'));
+    c.appendChild(el('div', 'hint', 'Ligado: a empresa usa o mesmo cadastro da ' + r.principal + ' — o que for cadastrado ou alterado em uma aparece na outra na hora. Vendas, estoque, caixa e financeiro nunca se misturam.'));
+    var m = el('div', okTxt ? 'msg ok show' : 'msg'); m.textContent = okTxt || ''; c.appendChild(m);
+    if (!r.empresas.length) { c.appendChild(el('div', 'hint', 'Crie outra empresa abaixo para poder compartilhar.')); return; }
+    r.grupos.forEach(function (g) {
+      var k = el('div', 'empcard'), info = el('div'); k.appendChild(info);
+      info.appendChild(el('h3', '', g.nome)); info.appendChild(el('div', 'hint', g.desc));
+      var ch = el('div', 'chips'); ch.style.marginTop = '8px'; info.appendChild(ch);
+      r.empresas.forEach(function (e) {
+        var on = g.empresas.indexOf(e.id) > -1, bt = el('button', 'chip' + (on ? ' on' : ''), (on ? '✓ Compartilhado com ' : 'Compartilhar com ') + e.nome); bt.type = 'button'; bt.setAttribute('aria-pressed', on ? 'true' : 'false');
+        bt.onclick = function () {
+          if (on && !confirm('Parar de compartilhar "' + g.nome + '" com ' + e.nome + '?\n\nA ' + e.nome + ' fica com uma cópia do cadastro como está hoje e, daqui pra frente, cada empresa altera o seu.')) return;
+          Array.prototype.forEach.call(c.querySelectorAll('button'), function (b) { b.disabled = true; });
+          m.className = 'msg ok show'; m.textContent = on ? 'Separando os cadastros… pode levar até 1 minuto.' : 'Ligando o compartilhamento…';
+          call('compartSalvar', [S.token, { grupo: g.id, empresa: e.id, ligar: !on }]).then(function (r2) { limparCaches(); desenharCompart(c, r2, (on ? 'Compartilhamento desligado: ' : 'Compartilhamento ligado: ') + g.nome + ' · ' + e.nome + '.'); })
+            .catch(function (er) { Array.prototype.forEach.call(c.querySelectorAll('button'), function (b) { b.disabled = false; }); m.className = 'msg err show'; m.textContent = String(er); });
+        };
+        ch.appendChild(bt);
+      });
+      c.appendChild(k);
+    });
+    c.appendChild(el('div', 'hint', 'Para ligar produtos ou clientes, a outra empresa precisa estar com esse cadastro vazio (assim nenhum código se repete). Ao compartilhar produtos, cada empresa continua vendo só o estoque das próprias lojas — por isso o nome das lojas não pode se repetir entre elas.'));
   }
   function atualizarEmpPerfil() {
     call('retomar', [S.token]).then(function (u) { if (u && u.empresa) { S.u.empresa = u.empresa; montarEmpresa(); } }).catch(function () {});
@@ -2108,7 +2136,7 @@
   var USO_FORMA = [['receber', 'Somente recebimento', 'Aparece nas vendas, PDV, OS, crediário e caixa'], ['ambos', 'Recebimento e pagamento', 'Aparece nas vendas e também em contas a pagar e compras'], ['pagar', 'Somente pagamento', 'Aparece só em contas a pagar e entrada de compras']];
   var TIPO_FORMA = [['nao', 'Sem cartão (PIX, dinheiro, boleto…)'], ['debito', 'Cartão de débito'], ['credito', 'Cartão de crédito (parcelas)'], ['crediario', 'Crediário (parcelas com o cliente)']];
   function rotulo(l, k) { var x = l.filter(function (z) { return z[0] === k; })[0]; return x ? x[1] : k; }
-  function copiaFormas() { return S.fin.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa, taxas: JSON.parse(JSON.stringify(f.taxas || {})), repassa: !!f.repassa, receb: f.receb || 'hora', maxParc: f.maxParc || 1, uso: f.uso || 'receber', maquininha: f.maquininha || '', bandeiras: JSON.parse(JSON.stringify(f.bandeiras || {})), destino: f.destino || 'caixa' }; }); }
+  function copiaFormas() { return S.fin.formas.map(function (f) { return { id: f.id, nome: f.nome, cartao: f.cartao, conta: f.conta, ativa: f.ativa, taxas: JSON.parse(JSON.stringify(f.taxas || {})), repassa: !!f.repassa, receb: f.receb || 'hora', maxParc: f.maxParc || 1, uso: f.uso || 'receber', maquininha: f.maquininha || '', bandeiras: JSON.parse(JSON.stringify(f.bandeiras || {})), destino: f.destino || 'caixa', replicar: (f.replicar || []).slice() }; }); }
   function resumoForma(f) {
     if (f.cartao === 'crediario') return 'regras em Financeiro › Crediário';
     var rr = /^(dias|uteis):(\d+)$/.exec(f.receb), q = f.receb === 'hora' ? 'cai na hora' : f.receb === 'mensal' ? 'cai mensal (por parcela)' : rr ? 'cai em ' + rr[2] + ' dia(s) ' + (rr[1] === 'uteis' ? 'úteis' : 'corridos') : '';
@@ -2175,6 +2203,17 @@
       var co = el('select'); contas.forEach(function (x) { var op = el('option', '', x.nome); op.value = x.id; co.appendChild(op); }); if (!contas.some(function (x) { return x.id === f.conta; })) { var o2 = el('option', '', '(escolha)'); o2.value = ''; co.insertBefore(o2, co.firstChild); }
       co.value = f.conta || ''; co.onchange = function () { f.conta = co.value; }; campo(g2[0], 'Caixa/banco onde o dinheiro entra (ou de onde sai)', co, true);
       var al = el('label', 'perm'), at = el('input'); at.type = 'checkbox'; at.checked = f.ativa; var tt = el('div', 't', 'Ativa'); tt.appendChild(el('small', '', 'Desmarque para esconder esta forma (o histórico continua).')); al.appendChild(at); al.appendChild(tt); at.onchange = function () { f.ativa = at.checked; }; g2[1].appendChild(al); al.style.marginTop = '26px';
+      if ((D.empresas || []).length && f.cartao !== 'crediario') {
+        f.replicar = f.replicar || [];
+        corpo.appendChild(el('label', '', 'Replicar esta forma nas outras empresas'));
+        var rpw = el('div', 'chips'); corpo.appendChild(rpw);
+        D.empresas.forEach(function (e) {
+          var on = f.replicar.indexOf(e.id) > -1, bt = el('button', 'chip' + (on ? ' on' : ''), (on ? '✓ ' : '') + e.nome); bt.type = 'button'; bt.setAttribute('aria-pressed', on ? 'true' : 'false');
+          bt.onclick = function () { var i = f.replicar.indexOf(e.id); if (i > -1) f.replicar.splice(i, 1); else f.replicar.push(e.id); desenhar(); };
+          rpw.appendChild(bt);
+        });
+        corpo.appendChild(el('div', 'hint', 'Marcada: ao salvar, o nome, as taxas, as bandeiras, a maquininha, o prazo de recebimento e o destino desta forma são copiados para a empresa (lá ela continua no caixa/banco que já usa). Fica sincronizado: toda alteração salva aqui é repetida nela.'));
+      }
       if (f.cartao !== 'crediario') {
         var maqs = (D.maquininhas || []).slice(); if (f.maquininha && maqs.indexOf(f.maquininha) < 0) maqs.push(f.maquininha);
         var mq = el('select'), mo0 = el('option', '', '— Sem maquininha —'); mo0.value = ''; mq.appendChild(mo0);
@@ -2243,7 +2282,7 @@
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       if (f.cartao === 'credito' || f.cartao === 'debito') f.taxas = {};
       f.nome = nome; sv.disabled = true; sv.textContent = 'Salvando…';
-      call('formasSalvar', [S.token, L]).then(function (d) { aposFin(d); S.pagar = null; V = null; $('vdNova').innerHTML = ''; PDV = null; cfgFormas(box, '✓ ' + nome + (idx > -1 ? ' salva.' : ' cadastrada.')); window.scrollTo(0, 0); })
+      call('formasSalvar', [S.token, L]).then(function (d) { aposFin(d); S.pagar = null; V = null; $('vdNova').innerHTML = ''; PDV = null; cfgFormas(box, '✓ ' + nome + (idx > -1 ? ' salva' : ' cadastrada') + ((d.replicadas || []).length ? ' e replicada em ' + d.replicadas.join(', ') : '') + '.'); window.scrollTo(0, 0); })
         .catch(function (x) { sv.disabled = false; sv.textContent = idx > -1 ? 'Salvar alterações' : 'Cadastrar forma'; m.textContent = x; m.classList.add('show'); });
     };
     window.scrollTo(0, 0);
@@ -5466,14 +5505,23 @@
   // =========================================================
   //  DASHBOARD
   // =========================================================
-  var REL = [['geral', 'Visão geral'], ['vendas', 'Vendas'], ['estoque', 'Estoque'], ['parado', 'Estoque parado'], ['compras', 'Cadastros e compras'],
+  var REL = [['geral', 'Visão geral'], ['vendas', 'Vendas'], ['fin', 'Financeiro'], ['prod', 'Produtos'], ['os', 'Ordens de serviço'], ['estoque', 'Estoque de usados'], ['parado', 'Estoque parado'], ['compras', 'Cadastros e compras'],
              ['manut', 'Manutenção'], ['grupos', 'Grupos e tags'], ['novos', 'Produtos novos'], ['agenda', 'Agenda de entregas']];
   var DIA = 864e5;
   function carregarDash(forcar) {
-    if (S.dash && !forcar && Date.now() - S.dash.agora < 5 * 60e3) return renderDash();
-    $('dbCorpo').innerHTML = ''; $('dbCorpo').appendChild(el('div', 'empty', 'Carregando relatórios…'));
-    call('dashboard', [S.token]).then(function (d) {
-      S.dash = d;
+    var E = S.u && S.u.empresa, es = $('dbEmp');
+    show('dbEmpW', !!(E && E.lista && E.lista.length > 1));
+    if (E && E.lista && E.lista.length > 1 && !es.options.length) {
+      var o1 = el('option', '', E.nome || 'Esta empresa'); o1.value = ''; es.appendChild(o1);
+      var o2 = el('option', '', 'Todas as empresas'); o2.value = 'todas'; es.appendChild(o2);
+      es.value = LS.get('dbEmp', '') === 'todas' ? 'todas' : '';
+      es.onchange = function () { LS.set('dbEmp', es.value); $('dbLoja').innerHTML = ''; carregarDash(true); };
+    }
+    var emp = es.value || '';
+    if (S.dash && !forcar && S.dashEmp === emp && Date.now() - S.dash.agora < 5 * 60e3) return renderDash();
+    $('dbCorpo').innerHTML = ''; $('dbCorpo').appendChild(el('div', 'empty', emp === 'todas' ? 'Somando as empresas…' : 'Carregando relatórios…'));
+    call('dashboard', [S.token, { empresa: emp }]).then(function (d) {
+      S.dash = d; S.dashEmp = emp;
       opts($('dbLoja'), (d.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('dbLoja').value, 'Todas as lojas');
       renderDash();
     }).catch(function (e) { $('dbCorpo').innerHTML = ''; $('dbCorpo').appendChild(el('div', 'empty', e)); });
@@ -5578,57 +5626,146 @@
     REL.forEach(function (r) { var b = el('button', r[0] === rel ? 'on' : '', r[1]); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', r[0] === rel ? 'true' : 'false'); b.onclick = function () { LS.set('dbRel', r[0]); renderDash(); }; abas.appendChild(b); });
     var P = periodo($('dbPer').value), ini = P[0], fim = P[1], dur = fim - ini, loja = $('dbLoja').value, C = D.custos;
     var naLoja = function (x) { return !loja || x.l === loja; };
+    if (rel === 'fin' && !D.fin) rel = 'geral';
+    var noPer = function (x) { return x.d >= ini && x.d <= fim && naLoja(x); }, noAnt = function (x) { return x.d >= ini - dur - 1 && x.d < ini && naLoja(x); };
+    var F = D.fin ? { hoje: D.fin.hoje, contas: D.fin.contas.filter(function (x) { return !loja || x.l === loja; }), receber: D.fin.receber.filter(naLoja), cred: D.fin.cred.filter(naLoja), pagar: D.fin.pagar.filter(naLoja), pagos: D.fin.pagos.filter(noPer) } : null;
     var ctx = {
-      D: D, C: C, ini: ini, fim: fim, rotulo: P[2], loja: loja,
-      vendas: D.vendas.filter(function (v) { return v.d >= ini && v.d <= fim && naLoja(v); }),
-      vendasAnt: D.vendas.filter(function (v) { return v.d >= ini - dur - 1 && v.d < ini && naLoja(v); }),
+      D: D, C: C, F: F, ini: ini, fim: fim, rotulo: P[2], loja: loja,
+      vendas: D.vendas.filter(noPer), vendasAnt: D.vendas.filter(noAnt),
+      docs: (D.docs || []).filter(noPer), docsAnt: (D.docs || []).filter(noAnt),
+      os: (D.os || []).filter(naLoja), compras: (D.compras || []).filter(noPer),
+      produtos: (D.produtos || []).map(function (x) { var o = Object.assign({}, x); o.qt = loja ? ((x.e || {})[loja] || 0) : (x.t || 0); return o; }),
       estoque: D.itens.filter(function (x) { return (x.s === 'Disponível' || x.s === 'Manutenção') && (!loja || x.l === loja); }),
       cadastros: D.itens.filter(function (x) { return x.d && x.d >= ini && x.d <= fim && naLoja(x); })
     };
     var box = $('dbCorpo'); box.innerHTML = '';
-    ({ geral: relGeral, vendas: relVendas, estoque: relEstoque, parado: relParado, compras: relCompras, manut: relManut, grupos: relGrupos, novos: relNovos, agenda: relAgenda })[rel](box, ctx);
-    $('dbRodape').textContent = 'Atualizado às ' + new Date(D.agora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + '. Valor das vendas = preço da Tabela de Preços no momento da venda' + (C ? '; lucro = valor − custo total (custo + peça).' : '.');
+    ({ geral: relGeral, vendas: relVendas, fin: relFin, prod: relProd, os: relOS, estoque: relEstoque, parado: relParado, compras: relCompras, manut: relManut, grupos: relGrupos, novos: relNovos, agenda: relAgenda })[rel](box, ctx);
+    $('dbRodape').textContent = 'Atualizado às ' + new Date(D.agora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + (D.todas ? ' · somando ' + D.empresas.join(' + ') : '') + '. Faturamento = vendas (Vendas e PDV, já com desconto) + ordens de serviço entregues; vendas canceladas não entram' + (C ? '. Lucro bruto = faturamento − custo (aparelho: custo + peça; produto: custo do cadastro; OS: custo das peças).' : '.');
   }
   function kpisVendas(k, ctx) {
-    var V = ctx.vendas, A = ctx.vendasAnt, fat = soma(V, function (v) { return v.v; }), fatA = soma(A, function (v) { return v.v; });
-    var q = variacao(V.length, A.length), f = variacao(fat, fatA);
-    kpi(k, 'Aparelhos vendidos', inteiro(V.length), q[0], q[1]);
-    kpi(k, 'Valor vendido', brl(fat), f[0], f[1]);
-    kpi(k, 'Ticket médio', V.length ? brl(fat / V.length) : '—', ctx.rotulo);
-    if (ctx.C) { var lc = V.filter(function (v) { return lucroVenda(v) !== null; }), lu = soma(lc, lucroVenda), fl = soma(lc, function (v) { return v.v; }); kpi(k, 'Lucro estimado', brl(lu), fl ? 'margem ' + pct(lu / fl) : ''); }
+    var Dc = ctx.docs, A = ctx.docsAnt, fat = soma(Dc, function (d) { return d.liq; }), fatA = soma(A, function (d) { return d.liq; });
+    var q = variacao(Dc.length, A.length), f = variacao(fat, fatA);
+    kpi(k, 'Faturamento', brl(fat), f[0], f[1]);
+    kpi(k, 'Vendas e OS', inteiro(Dc.length), q[0], q[1]);
+    kpi(k, 'Ticket médio', Dc.length ? brl(fat / Dc.length) : '—', ctx.rotulo);
+    if (ctx.C) {
+      var cu = soma(ctx.vendas, function (v) { return v.cu; }), sem = ctx.vendas.filter(function (v) { return (v.cu === null || v.cu === undefined) && v.v; }).length, lu = fat - cu;
+      kpi(k, 'Lucro bruto', brl(lu), (fat ? 'margem ' + pct(lu / fat) : '') + (sem ? ' · ' + sem + ' item(ns) sem custo' : ''), lu < 0 ? 'down' : '');
+    }
   }
+  function isoMs(iso) { return iso ? new Date(iso + 'T12:00:00').getTime() : null; }
+  function finResumo(F) {
+    var h = F.hoje, em7 = new Date(isoMs(h) + 7 * DIA).toISOString().slice(0, 10), rec = F.receber.concat(F.cred);
+    return { saldo: soma(F.contas, function (c) { return c.saldo; }), rec: soma(rec, function (x) { return x.v; }), recV: soma(rec.filter(function (x) { return x.venc && x.venc < h; }), function (x) { return x.v; }),
+             rec7: soma(rec.filter(function (x) { return x.venc >= h && x.venc <= em7; }), function (x) { return x.v; }),
+             pag: soma(F.pagar, function (x) { return x.v; }), pagV: soma(F.pagar.filter(function (x) { return x.venc && x.venc < h; }), function (x) { return x.v; }),
+             pag7: soma(F.pagar.filter(function (x) { return x.venc >= h && x.venc <= em7; }), function (x) { return x.v; }), recL: rec };
+  }
+  function linhaValor(x, f, n) { var v = soma(x.itens, f); return { rot: x.k, val: v, txt: brl(v), sub: n ? n(x) : inteiro(x.itens.length) }; }
   function diasParado(x, agora) { return x.d ? Math.floor((agora - x.d) / DIA) : null; }
 
   function relGeral(box, ctx) {
     var k = el('div', 'kpis'); box.appendChild(k);
     kpisVendas(k, ctx);
+    if (ctx.F) { var R2 = finResumo(ctx.F); kpi(k, 'Saldo em caixas e bancos', brl(R2.saldo), 'hoje'); kpi(k, 'A receber vencido', brl(R2.recV), 'de ' + brl(R2.rec) + ' em aberto', R2.recV ? 'down' : ''); kpi(k, 'A pagar vencido', brl(R2.pagV), 'de ' + brl(R2.pag) + ' em aberto', R2.pagV ? 'down' : ''); }
     var E = ctx.estoque, disp = E.filter(function (x) { return x.s === 'Disponível'; }), man = E.filter(function (x) { return x.s === 'Manutenção'; });
-    kpi(k, 'Em estoque', inteiro(disp.length), man.length ? '+ ' + man.length + ' em manutenção' : 'disponíveis');
-    if (ctx.C) kpi(k, 'Capital parado', brl(soma(E, function (x) { return x.cu; })), 'custo do estoque atual');
-    kpi(k, 'Valor do estoque', brl(soma(E, function (x) { return x.p; })), 'pela tabela de preços');
-    var p60 = E.filter(function (x) { var d = diasParado(x, ctx.D.agora); return d !== null && d > 60; }).length;
-    kpi(k, 'Parados +60 dias', inteiro(p60), p60 ? 'veja "Estoque parado"' : 'nenhum', p60 ? 'down' : '');
+    kpi(k, 'Usados em estoque', inteiro(disp.length), man.length ? '+ ' + man.length + ' em manutenção' : 'disponíveis');
+    var P = ctx.produtos.filter(function (x) { return x.qt > 0; });
+    kpi(k, 'Produtos em estoque', inteiro(soma(P, function (x) { return x.qt; })) + ' un.', ctx.C ? 'custo ' + brl(soma(P, function (x) { return (x.cu || 0) * x.qt; })) : inteiro(P.length) + ' produtos');
+    var ab = ctx.os.filter(function (o) { return o.st !== 'Entregue' && !/cancel/i.test(o.st); });
+    kpi(k, 'OS em aberto', inteiro(ab.length), ab.filter(function (o) { return o.prev && o.prev < ctx.D.agora - DIA; }).length + ' com previsão vencida');
     var g = el('div', 'dbgrid'); box.appendChild(g);
-    var st = serieTempo(ctx.vendas, ctx.ini, ctx.fim, function () { return 1; }, function (n) { return inteiro(n) + ' vendido' + (n === 1 ? '' : 's'); });
-    colunas(g, 'Vendas por ' + st.passo, st.serie);
-    barras(g, 'Modelos mais vendidos', agrupar(ctx.vendas, function (v) { return v.m; }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length) }; }), 5);
-    barras(g, 'Vendas por vendedor', agrupar(ctx.vendas, function (v) { return v.quem; }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: brl(soma(x.itens, function (v) { return v.v; })) }; }), 5);
-    barras(g, 'Estoque por loja', agrupar(ctx.estoque, function (x) { return x.l; }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: ctx.C ? brl(soma(x.itens, function (i) { return i.cu; })) : '' }; }));
+    var st = serieTempo(ctx.docs, ctx.ini, ctx.fim, function (d) { return d.liq; }, brl);
+    colunas(g, 'Faturamento por ' + st.passo, st.serie);
+    barras(g, 'Faturamento por tipo', agrupar(ctx.vendas, function (v) { return v.tp; }).map(function (x) { return linhaValor(x, function (v) { return v.v; }, function (x) { return inteiro(soma(x.itens, function (v) { return v.q || 1; })) + ' item(ns)'; }); }));
+    if (ctx.D.todas) barras(g, 'Faturamento por empresa', agrupar(ctx.docs, function (d) { return d.emp; }).map(function (x) { return linhaValor(x, function (d) { return d.liq; }, function (x) { return inteiro(x.itens.length) + ' venda(s)'; }); }));
+    barras(g, 'Faturamento por loja', agrupar(ctx.docs, function (d) { return d.l; }).map(function (x) { return linhaValor(x, function (d) { return d.liq; }, function (x) { return inteiro(x.itens.length) + ' venda(s)'; }); }));
+    barras(g, 'Mais vendidos', agrupar(ctx.vendas.filter(function (v) { return v.tp !== 'Serviço'; }), function (v) { return v.m; }).map(function (x) { var q = soma(x.itens, function (v) { return v.q || 1; }); return { rot: x.k, val: q, txt: inteiro(q), sub: brl(soma(x.itens, function (v) { return v.v; })) }; }), 6);
+    barras(g, 'Faturamento por vendedor', agrupar(ctx.docs, function (d) { return d.quem; }).map(function (x) { return linhaValor(x, function (d) { return d.liq; }, function (x) { return inteiro(x.itens.length) + ' venda(s)'; }); }), 6);
   }
   function relVendas(box, ctx) {
     var k = el('div', 'kpis'); box.appendChild(k); kpisVendas(k, ctx);
-    var g = el('div', 'dbgrid'), V = ctx.vendas; box.appendChild(g);
-    var st = serieTempo(V, ctx.ini, ctx.fim, function (v) { return v.v || 0; }, brl);
-    colunas(g, 'Valor vendido por ' + st.passo, st.serie);
-    var linha = function (x) { var o = { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length), sub: brl(soma(x.itens, function (v) { return v.v; })) }; if (ctx.C) o.sub += ' · lucro ' + brl(soma(x.itens, lucroVenda)); return o; };
+    var V = ctx.vendas, Dc = ctx.docs;
+    kpi(k, 'Itens vendidos', inteiro(soma(V, function (v) { return v.q || 1; })), inteiro(V.filter(function (v) { return v.tp === 'Aparelho'; }).length) + ' aparelho(s)');
+    var dsc = soma(Dc, function (d) { return d.desc; }); if (dsc) kpi(k, 'Descontos dados', brl(dsc), pct(dsc / (soma(Dc, function (d) { return d.liq; }) + dsc || 1)) + ' do bruto', 'down');
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    var st = serieTempo(Dc, ctx.ini, ctx.fim, function (d) { return d.liq; }, brl);
+    colunas(g, 'Faturamento por ' + st.passo, st.serie);
+    var linha = function (x) { var o = linhaValor(x, function (v) { return v.v; }, function (x) { return inteiro(soma(x.itens, function (v) { return v.q || 1; })) + ' un.'; }); if (ctx.C) o.sub += ' · lucro ' + brl(soma(x.itens, lucroVenda)); return o; };
+    barras(g, 'Por tipo', agrupar(V, function (v) { return v.tp; }).map(linha));
+    var pgs = []; Dc.forEach(function (d) { (d.pg || []).forEach(function (p) { pgs.push({ f: p.f, v: p.v }); }); });
+    barras(g, 'Por forma de pagamento', agrupar(pgs, function (p) { return p.f; }).map(function (x) { return linhaValor(x, function (p) { return p.v; }); }));
     barras(g, 'Por vendedor', agrupar(V, function (v) { return v.quem; }).map(linha));
     barras(g, 'Por loja', agrupar(V, function (v) { return v.l; }).map(linha));
-    barras(g, 'Por modelo', agrupar(V, function (v) { return v.m; }).map(linha));
-    barras(g, 'Por classificação', agrupar(V, function (v) { return v.c; }).map(linha));
-    var cab = ['Data', 'Modelo', 'Classificação', 'Loja', 'Vendedor', 'Valor'].concat(ctx.C ? ['Custo', 'Lucro'] : []);
-    tabela(box, 'Vendas do período (' + V.length + ')', cab, V.slice().sort(function (a, b) { return b.d - a.d; }).map(function (v) {
-      return [dataBR(v.d), v.m, v.c, v.l, v.quem, v.v ? brl(v.v) : '—'].concat(ctx.C ? [v.cu ? brl(v.cu) : '—', lucroVenda(v) !== null ? brl(lucroVenda(v)) : '—'] : []);
+    if (ctx.D.todas) barras(g, 'Por empresa', agrupar(V, function (v) { return v.emp; }).map(linha));
+    barras(g, 'Por produto / modelo', agrupar(V, function (v) { return v.m; }).map(linha));
+    barras(g, 'Aparelhos por classificação', agrupar(V.filter(function (v) { return v.tp === 'Aparelho'; }), function (v) { return v.c; }).map(linha));
+    var cab = ['Data', 'Venda/OS', 'Tipo', 'Item', 'Qtd', 'Loja', 'Vendedor', 'Valor'].concat(ctx.C ? ['Custo', 'Lucro'] : []).concat(ctx.D.todas ? ['Empresa'] : []);
+    tabela(box, 'Itens vendidos no período (' + V.length + ')', cab, V.slice().sort(function (a, b) { return b.d - a.d; }).map(function (v) {
+      return [dataBR(v.d), v.vd || '—', v.tp, v.m, v.q || 1, v.l, v.quem, v.v ? brl(v.v) : '—'].concat(ctx.C ? [v.cu ? brl(v.cu) : '—', lucroVenda(v) !== null ? brl(lucroVenda(v)) : '—'] : []).concat(ctx.D.todas ? [v.emp] : []);
     }), 'vendas');
+  }
+  function relFin(box, ctx) {
+    var F = ctx.F, R2 = finResumo(F), k = el('div', 'kpis'); box.appendChild(k);
+    kpi(k, 'Saldo em caixas e bancos', brl(R2.saldo), ctx.loja ? 'contas da loja' : 'todas as contas', R2.saldo < 0 ? 'down' : '');
+    kpi(k, 'A receber em aberto', brl(R2.rec), 'vencido ' + brl(R2.recV), R2.recV ? 'down' : '');
+    kpi(k, 'A pagar em aberto', brl(R2.pag), 'vencido ' + brl(R2.pagV), R2.pagV ? 'down' : '');
+    kpi(k, 'Próximos 7 dias', brl(R2.rec7 - R2.pag7), 'entra ' + brl(R2.rec7) + ' · sai ' + brl(R2.pag7), R2.rec7 - R2.pag7 < 0 ? 'down' : 'up');
+    kpi(k, 'Despesas pagas', brl(soma(F.pagos, function (x) { return x.v; })), ctx.rotulo);
+    if (ctx.compras.length && ctx.C) kpi(k, 'Compras lançadas', brl(soma(ctx.compras, function (x) { return x.v; })), inteiro(ctx.compras.length) + ' nota(s) · ' + ctx.rotulo);
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    barras(g, 'Saldo por caixa/banco', F.contas.map(function (c) { return { rot: c.nome + (ctx.D.todas ? ' (' + c.emp + ')' : ''), val: Math.abs(c.saldo), txt: brl(c.saldo), sub: c.futuro ? '+ ' + brl(c.futuro) + ' a cair' : '' }; }));
+    var h = F.hoje, ini = isoMs(h), fim = ini + 30 * DIA;
+    var futP = F.pagar.filter(function (x) { return x.venc >= h; }).map(function (x) { return { d: isoMs(x.venc), v: x.v }; }).filter(function (x) { return x.d <= fim; });
+    var futR = R2.recL.filter(function (x) { return x.venc >= h; }).map(function (x) { return { d: isoMs(x.venc), v: x.v }; }).filter(function (x) { return x.d <= fim; });
+    var sp = serieTempo(futP, ini, fim, function (x) { return x.v; }, brl); colunas(g, 'A pagar nos próximos 30 dias (por ' + sp.passo + ')', sp.serie);
+    var sr = serieTempo(futR, ini, fim, function (x) { return x.v; }, brl); colunas(g, 'A receber nos próximos 30 dias (por ' + sr.passo + ')', sr.serie);
+    barras(g, 'A pagar em aberto por categoria', agrupar(F.pagar, function (x) { return x.cat; }).map(function (x) { return linhaValor(x, function (y) { return y.v; }, function (x) { return inteiro(x.itens.length) + ' conta(s)'; }); }));
+    barras(g, 'Despesas pagas por categoria (' + ctx.rotulo + ')', agrupar(F.pagos, function (x) { return x.cat; }).map(function (x) { return linhaValor(x, function (y) { return y.v; }); }));
+    if (ctx.compras.length) barras(g, 'Compras por fornecedor (' + ctx.rotulo + ')', agrupar(ctx.compras, function (x) { return x.forn; }).map(function (x) { return ctx.C ? linhaValor(x, function (y) { return y.v; }, function (x) { return inteiro(x.itens.length) + ' nota(s)'; }) : { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length) + ' nota(s)' }; }));
+    var venc = [];
+    F.pagar.filter(function (x) { return x.venc && x.venc < h; }).forEach(function (x) { venc.push(['A pagar', isoBR(x.venc), x.desc + (x.forn ? ' · ' + x.forn : ''), brl(x.v), x.l || '—'].concat(ctx.D.todas ? [x.emp] : [])); });
+    F.receber.filter(function (x) { return x.venc && x.venc < h; }).forEach(function (x) { venc.push(['A receber', isoBR(x.venc), x.desc + (x.cli ? ' · ' + x.cli : ''), brl(x.v), x.l || '—'].concat(ctx.D.todas ? [x.emp] : [])); });
+    F.cred.filter(function (x) { return x.venc && x.venc < h; }).forEach(function (x) { venc.push(['Crediário', isoBR(x.venc), x.cli, brl(x.v), x.l || '—'].concat(ctx.D.todas ? [x.emp] : [])); });
+    venc.sort(function (a, b) { return a[1].split('/').reverse().join('') < b[1].split('/').reverse().join('') ? -1 : 1; });
+    tabela(box, 'Contas vencidas (' + venc.length + ')', ['Tipo', 'Vencimento', 'Descrição', 'Valor', 'Loja'].concat(ctx.D.todas ? ['Empresa'] : []), venc, 'contas-vencidas');
+  }
+  function relProd(box, ctx) {
+    var P = ctx.produtos, comE = P.filter(function (x) { return x.qt > 0; }), k = el('div', 'kpis'); box.appendChild(k);
+    kpi(k, 'Produtos com estoque', inteiro(comE.length), 'de ' + inteiro(P.length) + ' cadastrados');
+    kpi(k, 'Unidades', inteiro(soma(comE, function (x) { return x.qt; })), ctx.loja || 'todas as lojas');
+    if (ctx.C) kpi(k, 'Valor de custo', brl(soma(comE, function (x) { return (x.cu || 0) * x.qt; })), 'capital em produtos');
+    kpi(k, 'Valor de venda', brl(soma(comE, function (x) { return (x.p || 0) * x.qt; })), 'pelo preço do cadastro');
+    var baixo = P.filter(function (x) { return x.mi > 0 && x.qt < x.mi; });
+    kpi(k, 'Abaixo do mínimo', inteiro(baixo.length), baixo.length ? 'repor estoque' : 'tudo ok', baixo.length ? 'down' : '');
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    var porLoja = {}; P.forEach(function (x) { Object.keys(x.e || {}).forEach(function (l) { if (!ctx.loja || l === ctx.loja) { porLoja[l] = porLoja[l] || { u: 0, v: 0 }; porLoja[l].u += x.e[l]; porLoja[l].v += x.e[l] * (ctx.C ? (x.cu || 0) : (x.p || 0)); } }); });
+    barras(g, 'Estoque por loja', Object.keys(porLoja).map(function (l) { return { rot: l, val: porLoja[l].u, txt: inteiro(porLoja[l].u) + ' un.', sub: brl(porLoja[l].v) }; }));
+    var pai = function (gp) { return gp ? gp.split(SEP)[0] : 'Sem grupo'; };
+    barras(g, 'Estoque por grupo', agrupar(comE, function (x) { return pai(x.g); }).map(function (x) { var u = soma(x.itens, function (i) { return i.qt; }); return { rot: x.k, val: u, txt: inteiro(u) + ' un.', sub: brl(soma(x.itens, function (i) { return i.qt * (ctx.C ? (i.cu || 0) : (i.p || 0)); })) }; }));
+    var PV = ctx.vendas.filter(function (v) { return v.tp === 'Produto'; });
+    barras(g, 'Produtos mais vendidos (' + ctx.rotulo + ')', agrupar(PV, function (v) { return v.m; }).map(function (x) { var q = soma(x.itens, function (v) { return v.q || 1; }); var o = { rot: x.k, val: q, txt: inteiro(q) + ' un.', sub: brl(soma(x.itens, function (v) { return v.v; })) }; if (ctx.C) o.sub += ' · lucro ' + brl(soma(x.itens, lucroVenda)); return o; }));
+    var vend = {}; PV.forEach(function (v) { vend[v.m] = 1; });
+    var parados = comE.filter(function (x) { return !vend[x.n]; });
+    tabela(box, 'Abaixo do estoque mínimo (' + baixo.length + ')', ['Produto', 'Estoque', 'Mínimo', 'Falta'].concat(ctx.D.todas ? ['Empresa'] : []), baixo.map(function (x) { return [x.n, x.qt, x.mi, x.mi - x.qt].concat(ctx.D.todas ? [x.emp] : []); }), 'abaixo-minimo');
+    tabela(box, 'Com estoque e sem venda no período (' + parados.length + ')', ['Produto', 'Estoque', 'Preço'].concat(ctx.C ? ['Custo parado'] : []), parados.sort(function (a, b) { return (b.cu || 0) * b.qt - (a.cu || 0) * a.qt; }).map(function (x) { return [x.n, x.qt, x.p ? brl(x.p) : '—'].concat(ctx.C ? [brl((x.cu || 0) * x.qt)] : []); }), 'produtos-sem-venda');
+  }
+  function relOS(box, ctx) {
+    var O = ctx.os, ag = ctx.D.agora, ab = O.filter(function (o) { return o.st !== 'Entregue' && !/cancel/i.test(o.st); });
+    var ent = O.filter(function (o) { return o.st === 'Entregue' && o.ent >= ctx.ini && o.ent <= ctx.fim; }), atr = ab.filter(function (o) { return o.prev && o.prev < ag - DIA; });
+    var k = el('div', 'kpis'); box.appendChild(k);
+    kpi(k, 'Em aberto', inteiro(ab.length), atr.length + ' com previsão vencida', atr.length ? 'down' : '');
+    kpi(k, 'Entregues', inteiro(ent.length), ctx.rotulo);
+    var fo = soma(ent, function (o) { return o.v; }); kpi(k, 'Faturamento de OS', brl(fo), ent.length ? 'ticket médio ' + brl(fo / ent.length) : '');
+    var da = ab.filter(function (o) { return o.a; }); kpi(k, 'Tempo médio em aberto', da.length ? inteiro(soma(da, function (o) { return (ag - o.a) / DIA; }) / da.length) + ' dias' : '—', 'das abertas');
+    var g = el('div', 'dbgrid'); box.appendChild(g);
+    barras(g, 'Abertas por status', agrupar(ab, function (o) { return o.st; }).map(function (x) { return { rot: x.k, val: x.itens.length, txt: inteiro(x.itens.length) }; }));
+    barras(g, 'Entregues por técnico', agrupar(ent, function (o) { return o.tec || 'Sem técnico'; }).map(function (x) { return linhaValor(x, function (o) { return o.v; }, function (x) { return inteiro(x.itens.length) + ' OS'; }); }));
+    barras(g, 'Entregues por loja', agrupar(ent, function (o) { return o.l; }).map(function (x) { return linhaValor(x, function (o) { return o.v; }, function (x) { return inteiro(x.itens.length) + ' OS'; }); }));
+    var st = serieTempo(ent.map(function (o) { return { d: o.ent, v: o.v }; }), ctx.ini, ctx.fim, function (x) { return x.v; }, brl); colunas(g, 'Faturamento de OS por ' + st.passo, st.serie);
+    tabela(box, 'Abertas há mais tempo', ['OS', 'Aparelho', 'Status', 'Dias aberta', 'Previsão', 'Técnico', 'Loja'].concat(ctx.D.todas ? ['Empresa'] : []), da.sort(function (a, b) { return a.a - b.a; }).map(function (o) {
+      return [o.id, o.m || '—', o.st, Math.floor((ag - o.a) / DIA), o.prev ? dataBR(o.prev) : '—', o.tec || '—', o.l].concat(ctx.D.todas ? [o.emp] : []);
+    }), 'os-abertas');
   }
   function relEstoque(box, ctx) {
     var E = ctx.estoque, k = el('div', 'kpis'); box.appendChild(k);
@@ -5668,6 +5805,7 @@
   }
   function relCompras(box, ctx) {
     var L = ctx.cadastros, k = el('div', 'kpis'); box.appendChild(k);
+    kpi(k, 'Notas de compra', inteiro(ctx.compras.length), ctx.C && ctx.compras.length ? brl(soma(ctx.compras, function (x) { return x.v; })) + ' · ' + inteiro(soma(ctx.compras, function (x) { return x.q; })) + ' itens' : 'Entrada de Compras');
     kpi(k, 'Aparelhos cadastrados', inteiro(L.length), ctx.rotulo);
     if (ctx.C) { var tot = soma(L, function (x) { return x.cu; }); kpi(k, 'Total investido', brl(tot), L.length ? 'média ' + brl(tot / L.length) : ''); }
     var vend = L.filter(function (x) { return x.s === 'Vendido'; }).length;
