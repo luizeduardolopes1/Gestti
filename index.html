@@ -1244,60 +1244,64 @@
 
   <!-- CADASTRO -->
   <section id="vCadastro" class="hide">
+    <div class="crumb">Suprimento › Produtos Usados</div>
     <div class="ptopo"><h1>Novo produto usado</h1><button type="button" class="btn ghost" id="cVoltar">← Voltar para Produtos Usados</button></div>
     <form id="form" novalidate>
       <div class="msg err" id="formMsg"></div>
-      <div class="col2"><div>
-      <div class="card">
-        <h2>Quem está cadastrando</h2>
-        <div class="eu" id="eu"></div>
-        <label for="loja">Loja <span class="req">*</span></label>
-        <select id="loja"></select>
+      <div class="card pecard">
+        <h2>Produto</h2>
+        <div class="hint" id="eu" style="margin-top:0"></div>
+        <div class="g2"><div>
+          <label for="modelo">Modelo <span class="req">*</span></label>
+          <input id="modelo" list="modeloList" autocomplete="off" maxlength="80" placeholder="Ex.: IPHONE 13 128GB" style="text-transform:uppercase">
+          <datalist id="modeloList"></datalist>
+          <div class="hint" id="modeloHint">Digite o modelo. Use o nome igual ao da Tabela de Preços (aparece nas sugestões) para o preço de venda sair sozinho.</div>
+        </div><div>
+          <label for="cor">Cor <span class="req">*</span></label>
+          <input id="cor" list="corList" autocomplete="off" maxlength="30" placeholder="Ex.: Preto">
+          <datalist id="corList"></datalist>
+        </div></div>
+        <div class="g2"><div>
+          <label for="sku">SKU (código interno)</label>
+          <input id="sku" autocomplete="off" maxlength="40" placeholder="Ex.: IP13-128-PRT">
+        </div><div>
+          <label for="cCond">Condição</label>
+          <select id="cCond"><option>Usado</option><option>Novo</option><option>Recondicionado</option><option>Não especificado</option></select>
+          <div class="hint">Usado = aparelho com IMEI. Trocando a condição, o cadastro continua como produto comum.</div>
+        </div></div>
       </div>
-      <div class="card">
-        <h2>Aparelho</h2>
-        <label class="first" for="modelo">Modelo <span class="req">*</span></label>
-        <select id="modelo"></select>
-        <div class="hint">Modelo fora da lista? Avise o gerente para incluir na aba Venda.</div>
-        <label for="cor">Cor <span class="req">*</span></label>
-        <select id="cor"></select>
-        <label for="imei">IMEI1 <span class="req">*</span></label>
-        <input id="imei" class="imei" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="15 números">
-        <div class="hint">Disque <b>*#06#</b> no aparelho para ver o IMEI.</div>
-        <div class="status" id="imeiStatus"></div>
-        <label for="imei2">IMEI2 <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
-        <input id="imei2" class="imei" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="15 números (aparelho com 2 chips)">
-        <div class="status" id="imei2Status"></div>
+      <div class="card pecard">
+        <h2>Identificação</h2>
+        <div class="g2"><div>
+          <label for="imei">IMEI1 <span class="req">*</span></label>
+          <input id="imei" class="imei" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="15 números">
+          <div class="hint">Disque <b>*#06#</b> no aparelho para ver o IMEI.</div>
+          <div class="status" id="imeiStatus"></div>
+        </div><div>
+          <label for="imei2">IMEI2 <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+          <input id="imei2" class="imei" inputmode="numeric" autocomplete="off" maxlength="17" placeholder="15 números (aparelho com 2 chips)">
+          <div class="status" id="imei2Status"></div>
+        </div></div>
         <label for="serial">Serial <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
         <input id="serial" autocomplete="off" maxlength="30" placeholder="Número de série" style="text-transform:uppercase">
-        <label for="sku">SKU <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
-        <input id="sku" autocomplete="off" maxlength="40" placeholder="Código do produto (ex.: do Bling)">
-        <label>Grupo de produtos <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
-        <div id="cGrupo"></div>
-        <label>Tags <span style="font-weight:400;color:var(--muted)">(toque para marcar)</span></label>
-        <div id="cTags"></div>
-        <div class="row">
-          <div>
-            <label for="bateria">Bateria <span class="req">*</span></label>
-            <div class="suffix"><input id="bateria" type="number" inputmode="numeric" min="0" max="100" placeholder="Ex.: 87"><span>%</span></div>
-          </div>
-          <div>
-            <label for="custo">Valor pago</label>
-            <div class="prefix"><span>R$</span><input id="custo" inputmode="decimal" placeholder="0,00"></div>
-          </div>
-        </div>
       </div>
-      </div><div>
-      <div class="card">
+      <div class="card pecard">
         <h2>Avaliação</h2>
-        <label class="first">Classificação <span class="req">*</span></label>
+        <div class="g2"><div>
+          <label for="bateria">Bateria <span class="req">*</span></label>
+          <div class="suffix"><input id="bateria" type="number" inputmode="numeric" min="0" max="100" placeholder="Ex.: 87"><span>%</span></div>
+        </div><div>
+          <label for="custo">Valor pago</label>
+          <div class="prefix"><span>R$</span><input id="custo" inputmode="decimal" placeholder="0,00"></div>
+        </div></div>
+        <label>Classificação <span class="req">*</span></label>
         <div class="seg" id="classif"></div>
         <label>Tipo de compra <span class="req">*</span></label>
         <div class="seg" id="tipo"></div>
         <label for="obs">Observação</label>
         <textarea id="obs" placeholder="Ex.: tela com risco leve, sem caixa"></textarea>
       </div>
-      <div class="card hide" id="cBox">
+      <div class="card pecard hide" id="cBox">
         <h2>Consulta do IMEI <span class="req">*</span></h2>
         <div class="hint" style="margin-top:0">Restrição por roubo, furto ou perda. Obrigatória para cadastrar.</div>
         <div class="consulta">
@@ -1307,7 +1311,7 @@
           <div class="status" id="cStatus"></div>
         </div>
       </div>
-      <div class="card ckbox">
+      <div class="card pecard ckbox">
         <h2>Checklist de testes <span style="text-transform:none;font-weight:500;letter-spacing:0">(opcional)</span></h2>
         <button type="button" class="btn ghost" id="ckAbrir">Fazer checklist</button>
         <div class="hide" id="ckArea">
@@ -1317,8 +1321,25 @@
           <button type="button" class="lnk" id="ckLimpar">Limpar respostas</button>
         </div>
       </div>
-      <button class="btn" id="enviar" type="submit">Cadastrar aparelho</button>
-      </div></div>
+      <div class="card pecard">
+        <h2>Descrição e organização</h2>
+        <label>Grupo de produtos</label>
+        <div id="cGrupo"></div>
+        <label>Tags <span style="font-weight:400;color:var(--muted)">(toque para marcar)</span></label>
+        <div id="cTags"></div>
+      </div>
+      <div class="card pecard">
+        <h2>Estoque</h2>
+        <div class="g2"><div>
+          <label for="loja">Depósito (local de estoque) <span class="req">*</span></label>
+          <select id="loja"></select>
+          <div class="hint" id="lojaHint"></div>
+        </div><div>
+          <label for="cLocal">Localização <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+          <input id="cLocal" autocomplete="off" maxlength="40" placeholder="Ex.: Vitrine 1, gaveta B">
+        </div></div>
+      </div>
+      <div class="peacoes"><div class="acoes"><button class="btn" id="enviar" type="submit">Salvar produto usado</button><button class="btn ghost" id="cCancelar" type="button">Cancelar</button></div></div>
     </form>
     <section id="sucesso" class="card done hide">
       <div class="ico">✓</div>
@@ -2431,6 +2452,7 @@
     if (ant === 'pdv') PDV = null;
     if (osv.indexOf(ant) > -1 && (osv.indexOf(novo) < 0 || ant === 'osnova')) OSF = null;
     if (ant === 'compras') CP = null;
+    if (ant === 'cadastro' && novo !== 'cadastro') { try { limparCadastro(); } catch (e) {} }
     if (!$('fModal').classList.contains('hide')) fecharModal();
   }
   function serNorm(s) { return String(s == null ? '' : s).replace(/[\u0000-\u001F]/g, '').trim().slice(0, 60); }
@@ -2721,6 +2743,7 @@
     fecharMenuNav();
     marcarMenu(id);
     if (id === 'disp') carregarDisp(false);
+    if (id === 'cadastro' && S.cadPre) aplicarPreCadastro();
     show('dNovo', pode('cadastro')); show('dNovoP', pode('editar_acessorios')); show('cVoltar', pode('produtos'));
     if (id === 'novos') { carregarNovos(false); show('nNovo', pode('editar_precos')); show('nPrec', pode('editar_precos')); }
     if (id === 'venda') carregarVenda(false);
@@ -4846,6 +4869,12 @@
     }
     desSerTipo();
     serCk.onchange = function () { serOn = serCk.checked; desSerTipo(); desenharSI(); };
+    if (!x && S.prPre) { var pp = S.prPre; S.prPre = null; nome.value = pp.nome || ''; sku.value = pp.sku || ''; if (pp.compra) compraI.value = pp.compra; if (pp.grupo || (pp.tags || []).length) S.prPreCat = pp; }
+    cond.addEventListener('change', function () {
+      if (x || cond.value !== 'Usado' || !pode('cadastro')) return;
+      S.cadPre = { modelo: nome.value.trim(), sku: sku.value.trim(), grupo: pGrupo ? pGrupo.get() : '', tags: pTags ? pTags.get() : [], custo: compraI.value.trim() };
+      cond.value = 'Novo'; PR = null; ir('cadastro');
+    });
     var avCond = function () {
       condAv.innerHTML = ''; if (cond.value !== 'Usado') return;
       condAv.appendChild(document.createTextNode('Produto usado aparece também na página Produtos Usados. '));
@@ -4870,8 +4899,9 @@
     var dc = campo(c5, 'Descrição curta', inp('text', 'Ex.: Capa com bordas reforçadas e cantos com ar'), true); dc.maxLength = 200; dc.value = fi.descCurta || '';
     var dcomp = el('textarea'); dcomp.maxLength = 600; dcomp.placeholder = 'Ex.: Compatível com iPhone 13. Garantia de 90 dias contra defeito de fabricação.'; dcomp.value = fi.descComp || ''; campo(c5, 'Descrição complementar (sai na venda, no recibo)', dcomp);
     var obs = el('textarea'); obs.maxLength = 600; obs.placeholder = 'Uso interno'; obs.value = fi.obs || ''; campo(c5, 'Observações', obs);
-    var tBox = campo(c5, 'Tags', el('div')), pTags = seletorTags(tBox, x ? x.tags || [] : []);
-    var gBox = campo(c5, 'Categoria', el('div')), pGrupo = seletorGrupo(gBox, x ? x.grupo || '' : '');
+    var tBox = campo(c5, 'Tags', el('div')), pTags = seletorTags(tBox, x ? x.tags || [] : (preCat ? preCat.tags || [] : []));
+    var preCat = !x && S.prPreCat ? S.prPreCat : null; S.prPreCat = null;
+    var gBox = campo(c5, 'Categoria', el('div')), pGrupo = seletorGrupo(gBox, x ? x.grupo || '' : (preCat ? preCat.grupo || '' : ''));
     // ---- estoque
     var c6 = secao(corpo, 'Estoque', !x);
     var g8 = grade(c6, 3);
@@ -5995,12 +6025,13 @@
   //  CADASTRO
   // =========================================================
   function montarCadastro(d) {
-    $('eu').textContent = d.nome + ' (' + d.id + ')';
-    opts($('loja'), d.lojas, LS.get('loja', '') || d.loja, 'Selecione…');
-    opts($('modelo'), d.modelos, $('modelo').value, 'Selecione…');
+    $('eu').textContent = 'Cadastrando como ' + d.nome + ' (' + d.id + ')';
+    var lojaPad = LS.get('loja', ''); if ((d.lojas || []).indexOf(lojaPad) < 0) lojaPad = d.loja;
+    opts($('loja'), d.lojas, $('loja').value || lojaPad, 'Selecione…'); lojaHint();
+    var dlm = $('modeloList'); dlm.innerHTML = ''; (d.modelos || []).forEach(function (m2) { if (/^\(/.test(m2)) return; var o = el('option'); o.value = m2; dlm.appendChild(o); });
     seg($('classif'), d.classificacoes, S.classificacao, function (v) { S.classificacao = v; });
     seg($('tipo'), d.tipos, S.tipo, function (v) { S.tipo = v; });
-    opts($('cor'), CORES, $('cor').value, 'Selecione a cor…');
+    var dlc = $('corList'); dlc.innerHTML = ''; CORES.forEach(function (c2) { if (c2 === 'Outra') return; var o = el('option'); o.value = c2; dlc.appendChild(o); });
     seg($('cRes'), ['Nada consta', 'Consta restrição'], S.consulta, marcarConsulta);
     montarCkCadastro();
     if (!S.cGrupo) montarCatCadastro();
@@ -6051,7 +6082,30 @@
   }
   $('ckAbrir').onclick = function () { var ab = $('ckArea').classList.contains('hide'); show('ckArea', ab); this.textContent = ab ? 'Esconder checklist' : 'Fazer checklist'; };
   $('ckLimpar').onclick = function () { S.ck = {}; montarCkCadastro(); };
-  $('loja').addEventListener('change', function () { LS.set('loja', this.value); });
+  function lojaHint() { var v = $('loja').value; $('lojaHint').textContent = v === 'Manutenção' ? 'Vai direto para o quadro de Manutenção (Produtos Usados › Manutenção). Quando terminar o conserto, o aparelho vai para a loja escolhida lá.' : 'Escolha "Manutenção" para mandar o aparelho direto para conserto.'; }
+  $('loja').addEventListener('change', function () { if (this.value !== 'Manutenção') LS.set('loja', this.value); lojaHint(); });
+  $('modelo').addEventListener('change', function () {
+    var v = this.value.trim().toUpperCase().replace(/\s+/g, ' '); this.value = v;
+    var ok = !v || (S.u.modelos || []).indexOf(v) > -1;
+    $('modeloHint').textContent = ok ? 'Digite o modelo. Use o nome igual ao da Tabela de Preços (aparece nas sugestões) para o preço de venda sair sozinho.' : 'Modelo fora da Tabela de Preços: o aparelho é cadastrado, mas fica sem preço de venda até o modelo entrar na tabela (Tabela de Preços › Produtos Usados).';
+    $('modeloHint').style.color = ok ? '' : 'var(--warn)';
+  });
+  $('cCancelar').onclick = function () { limparCadastro(); ir(pode('produtos') ? 'disp' : 'dash'); };
+  $('cCond').onchange = function () {
+    var v = this.value; if (v === 'Usado') return;
+    if (!pode('editar_acessorios')) { this.value = 'Usado'; msg('formMsg', 'Você não tem permissão para cadastrar produtos comuns.'); return; }
+    var pre = { nome: $('modelo').value.trim() + ($('cor').value.trim() ? ' ' + $('cor').value.trim().toUpperCase() : ''), sku: $('sku').value.trim(), grupo: S.cGrupo ? S.cGrupo.get() : '', tags: S.cTags ? S.cTags.get() : [], compra: $('custo').value.trim() };
+    this.value = 'Usado';
+    var abrir = function () { S.prCond = v; S.prPre = pre; formProduto(null); };
+    if (S.ac) return abrir();
+    call('acessorios', [S.token]).then(function (d) { S.ac = d; abrir(); }).catch(function (e) { msg('formMsg', e); });
+  };
+  function aplicarPreCadastro() {
+    var p2 = S.cadPre; S.cadPre = null; if (!p2) return;
+    $('modelo').value = (p2.modelo || '').toUpperCase(); $('sku').value = p2.sku || ''; $('custo').value = p2.custo || '';
+    S.cGrupo = seletorGrupo($('cGrupo'), p2.grupo || ''); S.cTags = seletorTags($('cTags'), p2.tags || []);
+    if (p2.loja && (S.u.lojas || []).indexOf(p2.loja) > -1) { $('loja').value = p2.loja; lojaHint(); }
+  }
 
   function luhn(s) {
     if (!/^\d{15}$/.test(s)) return false;
@@ -6090,9 +6144,10 @@
     var d = { loja: $('loja').value, modelo: $('modelo').value, cor: $('cor').value.trim(), imei: $('imei').value.replace(/\D/g, ''),
               bateria: $('bateria').value.trim(), custo: $('custo').value.trim(), classificacao: S.classificacao, tipo: S.tipo, obs: $('obs').value.trim(), sku: $('sku').value.trim(),
               imei2: $('imei2').value.replace(/\D/g, ''), serial: $('serial').value.trim().toUpperCase(),
-              consultaImei: S.consulta, checklist: S.ck, grupo: S.cGrupo ? S.cGrupo.get() : '', tags: S.cTags ? S.cTags.get() : [] };
+              consultaImei: S.consulta, checklist: S.ck, grupo: S.cGrupo ? S.cGrupo.get() : '', tags: S.cTags ? S.cTags.get() : [], localizacao: $('cLocal').value.trim() };
+    d.modelo = d.modelo.trim().toUpperCase().replace(/\s+/g, ' ');
     var falta = [];
-    if (!d.loja) falta.push('loja'); if (!d.modelo) falta.push('modelo'); if (!d.cor) falta.push('cor');
+    if (!d.loja) falta.push('depósito'); if (!d.modelo) falta.push('modelo'); if (!d.cor) falta.push('cor');
     if (!d.imei) falta.push('IMEI'); if (d.bateria === '') falta.push('bateria');
     if (!d.classificacao) falta.push('classificação'); if (!d.tipo) falta.push('tipo de compra');
     if (falta.length) { msg('formMsg', 'Preencha: ' + falta.join(', ') + '.'); window.scrollTo(0, 0); return; }
@@ -6103,21 +6158,25 @@
     var b = +d.bateria; if (isNaN(b) || b < 0 || b > 100) { msg('formMsg', 'Bateria deve ser de 0 a 100.'); window.scrollTo(0, 0); return; }
     var btn = $('enviar'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Salvando…';
     call('registrarAparelho', [S.token, d]).then(function (r) {
-      btn.disabled = false; btn.textContent = 'Cadastrar aparelho';
-      LS.set('loja', d.loja); S.disp = null;
-      $('sucessoTxt').textContent = r.modelo + ' · IMEI ' + r.imei + ' entrou no estoque como Disponível.' + (r.avisos && r.avisos.length ? ' (' + r.avisos.join('; ') + ')' : '');
+      btn.disabled = false; btn.textContent = 'Salvar produto usado';
+      if (d.loja !== 'Manutenção') LS.set('loja', d.loja); S.disp = null; S.mt = null; S.ac = null;
+      $('sucessoTxt').textContent = r.modelo + ' · IMEI ' + r.imei + (d.loja === 'Manutenção' ? ' entrou no quadro de Manutenção.' : ' entrou no estoque como Disponível em ' + d.loja + '.') + (r.avisos && r.avisos.length ? ' (' + r.avisos.join('; ') + ')' : '');
       show('form', false); show('sucesso', true); window.scrollTo(0, 0);
     }).catch(function (err) {
-      btn.disabled = false; btn.textContent = 'Cadastrar aparelho';
+      btn.disabled = false; btn.textContent = 'Salvar produto usado';
       msg('formMsg', err); window.scrollTo(0, 0);
     });
   });
-  $('outro').onclick = function () {
-    ['modelo', 'cor', 'imei', 'imei2', 'serial', 'sku', 'bateria', 'custo', 'obs'].forEach(function (k) { $(k).value = ''; }); $('imei2Status').className = 'status'; $('imei2Status').textContent = '';
+  function limparCadastro() {
+    ['modelo', 'cor', 'imei', 'imei2', 'serial', 'sku', 'bateria', 'custo', 'obs', 'cLocal'].forEach(function (k) { $(k).value = ''; }); $('imei2Status').className = 'status'; $('imei2Status').textContent = '';
+    $('cCond').value = 'Usado'; msg('formMsg', ''); $('modelo').dispatchEvent(new Event('change'));
+    var lp = LS.get('loja', ''); if ((S.u.lojas || []).indexOf(lp) > -1) $('loja').value = lp; else $('loja').value = S.u.loja || ''; lojaHint();
+    show('ckArea', false); $('ckAbrir').textContent = 'Fazer checklist';
     S.classificacao = ''; S.tipo = ''; S.ck = {}; resetConsulta(); S.imeiConsultado = ''; show('cBox', false); montarCkCadastro(); montarCatCadastro();
     Array.prototype.forEach.call(document.querySelectorAll('#classif button,#tipo button,.chip'), function (c) { c.classList.remove('on'); });
     imeiStatus('', ''); show('sucesso', false); show('form', true); window.scrollTo(0, 0);
-  };
+  }
+  $('outro').onclick = limparCadastro;
 
   // =========================================================
   //  DISPONÍVEIS
@@ -6283,7 +6342,7 @@
 
     var info = el('div', 'card'), kv = el('div', 'kv');
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
-    [['SKU', x.sku || '—'], ['IMEI1', x.imei], ['IMEI2', x.imei2 || ''], ['Serial', x.serial || ''], ['Classificação', x.classif], ['Bateria', bat], ['Loja', x.loja], ['Situação', x.manut ? 'Em manutenção' : 'Disponível'],
+    [['SKU', x.sku || '—'], ['IMEI1', x.imei], ['IMEI2', x.imei2 || ''], ['Serial', x.serial || ''], ['Classificação', x.classif], ['Bateria', bat], ['Loja', x.loja], ['Localização', x.local || ''], ['Situação', x.manut ? 'Em manutenção' : 'Disponível'],
      ['Tipo', x.tipo], ['Custo', pode('ver_custos') && x.custo !== null && x.custo !== undefined ? brl((x.custo || 0) + (x.peca || 0)) : ''], ['Observação', x.obs]]
       .forEach(function (p) { if (p[1] === '' || p[1] === undefined || p[1] === null) return; kv.appendChild(el('div', 'k', p[0])); kv.appendChild(el('div', '', String(p[1]))); });
     info.appendChild(kv); bd.appendChild(info);
@@ -6380,9 +6439,9 @@
     var c = el('div', 'card');
     var sel = function (rot, lista, val, first) { var s2 = el('select'); var l = lista.slice(); if (val && l.indexOf(val) < 0) l.unshift(val); opts(s2, l, val); campo(c, rot, s2, first); return s2; };
     var loja = sel('Loja', S.u.lojas || [], x.loja, true);
-    var modelo = sel('Modelo', S.u.modelos || [], x.modelo);
-    var corAtual = CORES.filter(function (k) { return k.toUpperCase() === String(x.cor).toUpperCase(); })[0] || x.cor;
-    var cor = sel('Cor', CORES, corAtual);
+    var txtL = function (rot, lista, val, idl) { var i2 = inp('text'); i2.maxLength = rot === 'Cor' ? 30 : 80; i2.value = val || ''; i2.setAttribute('list', idl); i2.autocomplete = 'off'; var dl2 = el('datalist'); dl2.id = idl; lista.forEach(function (v2) { if (/^\(/.test(v2) || v2 === 'Outra') return; var o = el('option'); o.value = v2; dl2.appendChild(o); }); campo(c, rot, i2); c.appendChild(dl2); return i2; };
+    var modelo = txtL('Modelo', S.u.modelos || [], x.modelo, 'dlModeloE'); modelo.style.textTransform = 'uppercase';
+    var cor = txtL('Cor', CORES, x.cor, 'dlCorE');
     var imei = campo(c, 'IMEI1', inp('text')); imei.value = x.imei; imei.inputMode = 'numeric'; imei.maxLength = 17;
     var im = el('div', 'status'); c.appendChild(im);
     var imei2E = campo(c, 'IMEI2', inp('text', 'Opcional')); imei2E.value = x.imei2 || ''; imei2E.inputMode = 'numeric'; imei2E.maxLength = 17;
