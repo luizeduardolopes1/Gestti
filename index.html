@@ -576,6 +576,19 @@
   .hbtn svg{width:22px;height:22px}
   .hbtn:hover{background:rgba(255,255,255,.18)}
   .who{display:flex;align-items:center;gap:9px;text-align:left}
+  .empbtn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22);border-radius:10px;height:38px;padding:0 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;max-width:240px;flex:0 1 auto;min-width:0}
+  .empbtn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.empbtn:hover{background:rgba(255,255,255,.2)}
+  .empbtn svg{width:17px;height:17px;flex:0 0 auto}
+  .empmenu{position:fixed;z-index:80;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.22);padding:6px;min-width:240px;max-width:calc(100vw - 32px)}
+  .empmenu button{display:flex;width:100%;align-items:center;gap:8px;background:none;border:0;border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;color:inherit;text-align:left;cursor:pointer}
+  .empmenu button:hover{background:var(--bg)}.empmenu button.on{font-weight:700;color:var(--brand)}.empmenu .sep{border-top:1px solid var(--line);margin:4px 0}
+  .empmenu small{display:block;color:var(--muted);font-size:12px;padding:4px 12px 6px}
+  .emptroca{position:fixed;inset:0;z-index:90;background:rgba(10,20,40,.55);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;padding:16px;text-align:center}
+  .empcard{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}
+  .empcard h3{margin:0 0 4px;font-size:15px}.empcard .hint{margin:0}
+  .empbadge{display:inline-block;font-size:11px;font-weight:700;border-radius:20px;padding:2px 8px;background:var(--bg);color:var(--muted);margin-left:6px;vertical-align:middle}
+  .empcard>div{flex:1;min-width:0}.empcard>.btn{width:auto;flex:0 0 auto;margin:0;padding:0 16px;height:40px}
+  @media (max-width:600px){.empbtn{padding:0 9px;gap:4px}.empbtn span{display:none}}
   .who .uic{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
   .who .uic svg{width:20px;height:20px}
   #whoNome{font-weight:700;font-size:13.5px}.who .wl{font-size:12px;opacity:.75}
@@ -802,6 +815,7 @@
     <button type="button" class="hbrand irhome" title="Ir para o Dashboard" aria-label="Gestti: ir para o Dashboard"><span id="hLogo" style="display:flex"></span><span class="wm">gestti</span></button>
     <div class="htit" id="topTit"></div>
     <div class="hdir">
+      <button class="empbtn hide" id="empBtn" type="button" aria-haspopup="menu" title="Trocar de empresa"></button>
       <div class="who hide" id="who"><span class="uic" id="whoIc"></span><div class="wtx"><div id="whoNome"></div><div class="wl" id="whoLoja"></div></div></div>
       <button class="gear hide" id="gear" type="button" title="Configurações" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
       <button class="hbtn" id="sair" type="button" title="Sair" aria-label="Sair"></button>
@@ -1186,7 +1200,8 @@
       <div><label for="drPer">Período</label><select id="drPer"><option value="mes">Este mês</option><option value="mesant">Mês passado</option><option value="3m">Últimos 3 meses</option><option value="ano">Este ano</option><option value="anoant">Ano passado</option><option value="pers">Personalizado</option></select></div>
       <div id="drDeW" class="hide"><label for="drDe">De</label><input type="date" id="drDe"></div>
       <div id="drAteW" class="hide"><label for="drAte">Até</label><input type="date" id="drAte"></div>
-      <div><label for="drLoja">Loja</label><select id="drLoja"><option value="">Todas as lojas</option></select></div>
+      <div id="drEmpW" class="hide"><label for="drEmp">Empresa</label><select id="drEmp"></select></div>
+      <div id="drLojaW"><label for="drLoja">Loja</label><select id="drLoja"><option value="">Todas as lojas</option></select></div>
       <div><label>Visão</label><div class="seg" id="drModo"></div></div>
     </div>
     <div id="drCorpo"></div>
@@ -1584,7 +1599,7 @@
   function call(fn, args) {
     return new Promise(function (ok, fail) {
       var ctl = ('AbortController' in window) ? new AbortController() : null;
-      var timer = setTimeout(function () { if (ctl) ctl.abort(); }, fn === 'depositoSalvar' ? 300000 : 45000);
+      var timer = setTimeout(function () { if (ctl) ctl.abort(); }, (fn === 'depositoSalvar' || fn === 'empresaCriar') ? 300000 : fn === 'dre' ? 120000 : 45000);
       fetch(API, {
         method: 'POST', credentials: 'omit', redirect: 'follow',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1853,6 +1868,52 @@
   // =========================================================
   //  DEPÓSITOS (configuração)
   // =========================================================
+  function cfgEmpresas(box, okTxt) {
+    box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
+    call('empresasDados', [S.token]).then(function (d) { desenharEmpresas(box, d, okTxt); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
+  }
+  function desenharEmpresas(box, d, okTxt) {
+    box.innerHTML = '';
+    var c = el('div', 'card'); box.appendChild(c);
+    c.appendChild(el('div', 'hint', 'Cada empresa tem os próprios dados (produtos, estoque, clientes, vendas, financeiro e lojas), guardados numa planilha separada. O sistema é um só: toda atualização vale para todas as empresas ao mesmo tempo. Os usuários e grupos de acesso também são os mesmos — em Funcionários você escolhe quem entra em cada empresa e em qual loja.'));
+    var m = el('div', okTxt ? 'msg ok show' : 'msg'); m.textContent = okTxt || ''; c.appendChild(m);
+    d.lista.forEach(function (e) {
+      var k = el('div', 'empcard'), info = el('div');
+      var h = el('h3', '', e.nome); if (e.principal) h.appendChild(el('span', 'empbadge', 'Principal')); if (S.u.empresa && S.u.empresa.atual === e.id) h.appendChild(el('span', 'empbadge', 'Você está aqui'));
+      info.appendChild(h);
+      info.appendChild(el('div', 'hint', (e.lojas.length ? 'Lojas: ' + e.lojas.join(', ') : 'Sem lojas') + ' · ' + e.usuarios + ' usuário(s) com acesso' + (e.criada ? ' · criada em ' + e.criada : '')));
+      k.appendChild(info);
+      var rn = el('button', 'btn ghost', 'Renomear'); rn.type = 'button'; rn.style.flex = '0 0 auto';
+      rn.onclick = function () {
+        if (k.querySelector('input')) return;
+        var w = el('div'); w.style.marginTop = '8px'; var i = inp('text', 'Nome da empresa'); i.value = e.nome; w.appendChild(i);
+        var sv = el('button', 'btn', 'Salvar nome'); sv.type = 'button'; sv.style.marginTop = '8px'; w.appendChild(sv); info.appendChild(w); i.focus();
+        sv.onclick = function () { sv.disabled = true; call('empresaRenomear', [S.token, { id: e.id, nome: i.value }]).then(function (r) { atualizarEmpPerfil(); desenharEmpresas(box, r, 'Nome alterado.'); }).catch(function (er) { sv.disabled = false; m.className = 'msg err show'; m.textContent = er; }); };
+      };
+      k.appendChild(rn); c.appendChild(k);
+    });
+    var n = el('div', 'card'); box.appendChild(n);
+    n.appendChild(el('h2', '', 'Nova empresa'));
+    var nm = campo(n, 'Nome da empresa', inp('text', 'Ex.: Find Cell Comércio'), true);
+    n.appendChild(el('div', 'hint', 'A nova empresa já nasce com as configurações desta: formas de pagamento, maquininhas e taxas, categorias financeiras, caixas e bancos (com saldo zero), grupos de produtos e tags, precificação, tabelas de preço dos usados, termos de garantia e quadro de manutenção. Produtos, estoque, clientes, vendas, OS, contas e histórico começam vazios. Ela começa com uma loja com o nome da empresa — renomeie ou crie outras em Depósitos (lojas) depois de entrar nela.'));
+    var mm = el('div', 'msg err'); n.appendChild(mm);
+    var ok = el('button', 'btn', 'Criar empresa'); ok.type = 'button'; ok.style.marginTop = '10px'; n.appendChild(ok);
+    ok.onclick = function () {
+      mm.classList.remove('show');
+      var nome = nm.value.trim();
+      if (nome.length < 2) { mm.textContent = 'Informe o nome da empresa.'; mm.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Criando… (pode levar até 1 minuto)';
+      call('empresaCriar', [S.token, { nome: nome }]).then(function (r) {
+        atualizarEmpPerfil();
+        desenharEmpresas(box, r, 'Empresa "' + nome + '" criada. Você já tem acesso a ela: troque pelo botão da empresa no topo. Para liberar outros funcionários, abra Funcionários e escolha a loja deles nessa empresa.');
+        window.scrollTo(0, 0);
+      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Criar empresa'; mm.textContent = e; mm.classList.add('show'); });
+    };
+  }
+  function atualizarEmpPerfil() {
+    call('retomar', [S.token]).then(function (u) { if (u && u.empresa) { S.u.empresa = u.empresa; montarEmpresa(); } }).catch(function () {});
+  }
+
   function cfgDepositos(box) {
     box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
     call('depositosDados', [S.token]).then(function (d) { desenharDep(box, d); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
@@ -2198,7 +2259,7 @@
   // =========================================================
   //  DRE (sintético e analítico)
   // =========================================================
-  var DREF = { per: 'mes', de: '', ate: '', loja: '', modo: 'Sintético' };
+  var DREF = { per: 'mes', de: '', ate: '', loja: '', modo: 'Sintético', emp: '' };
   function isoMes(off) { var d = new Date(), x = new Date(d.getFullYear(), d.getMonth() + off, 1); return x.getFullYear() + '-' + ('0' + (x.getMonth() + 1)).slice(-2); }
   function fimMes(ym) { var q = ym.split('-').map(Number), d = new Date(q[0], q[1], 0); return ym + '-' + ('0' + d.getDate()).slice(-2); }
   function periodoDre() {
@@ -2217,6 +2278,14 @@
     ps.onchange = function () { DREF.per = ps.value; cust(); if (ps.value === 'pers') { var p = periodoDre(); de.value = DREF.de || p[0]; at.value = DREF.ate || p[1]; } else carregarDre(); };
     de.onchange = at.onchange = function () { DREF.de = de.value; DREF.ate = at.value; if (de.value && at.value) carregarDre(); };
     lj.onchange = function () { DREF.loja = lj.value; carregarDre(); };
+    var E = S.u && S.u.empresa, es = $('drEmp');
+    show('drEmpW', !!(E && E.consolidado));
+    if (E && E.consolidado && !es.options.length) {
+      es.innerHTML = ''; var o1 = el('option', '', E.nome || 'Esta empresa'); o1.value = ''; es.appendChild(o1);
+      var o2 = el('option', '', 'Todas as empresas (consolidado)'); o2.value = 'todas'; es.appendChild(o2);
+      es.value = DREF.emp; es.onchange = function () { DREF.emp = es.value; show('drLojaW', DREF.emp !== 'todas'); carregarDre(); };
+    }
+    show('drLojaW', DREF.emp !== 'todas');
     seg($('drModo'), ['Sintético', 'Analítico'], DREF.modo, function (v) { DREF.modo = v; if (S.dre) renderDre(); });
     $('drImp').onclick = function () { if (S.dre) imprimirDre(); };
     cust();
@@ -2225,8 +2294,8 @@
     montarDreFiltros();
     var p = periodoDre(), corpo = $('drCorpo');
     corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', 'Calculando o resultado…'));
-    call('dre', [S.token, { de: p[0], ate: p[1], loja: DREF.loja }]).then(function (d) {
-      S.dre = d; var lj = $('drLoja'); if (lj.options.length <= 1) { opts(lj, d.lojas, DREF.loja, 'Todas as lojas'); }
+    call('dre', [S.token, { de: p[0], ate: p[1], loja: DREF.emp === 'todas' ? '' : DREF.loja, empresa: DREF.emp }]).then(function (d) {
+      S.dre = d; var lj = $('drLoja'); if (lj.options.length <= 1 && !d.consolidado) { opts(lj, d.lojas, DREF.loja, 'Todas as lojas'); }
       if (S.view === 'dre') renderDre();
     }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', e)); });
   }
@@ -2234,7 +2303,7 @@
   function linhaDre(d, id) { return d.linhas.filter(function (l) { return l.id === id; })[0] || { total: 0 }; }
   function renderDre() {
     var d = S.dre, corpo = $('drCorpo'); corpo.innerHTML = '';
-    $('drSub').textContent = isoBR(d.de) + ' a ' + isoBR(d.ate) + ' · ' + (d.loja || 'todas as lojas');
+    $('drSub').textContent = isoBR(d.de) + ' a ' + isoBR(d.ate) + ' · ' + (d.consolidado ? 'consolidado: ' + d.empresas.join(' + ') : (d.empresaNome && S.u.empresa && S.u.empresa.lista.length > 1 ? d.empresaNome + ' · ' : '') + (d.loja || 'todas as lojas'));
     var k = el('div', 'kpis'); corpo.appendChild(k);
     var rl = d.receitaLiquida, lb = linhaDre(d, 'lucro_bruto').total, liq = d.liquido;
     kpi(k, 'Receita líquida', brl(rl), 'vendas + OS − deduções');
@@ -2503,6 +2572,44 @@
   $('sair').onclick = function () { var t = S.token; sairLocal(''); call('sair', [t]).catch(function () {}); };
 
   function pode(p) { return !!(S.u && (S.u.perms || []).indexOf(p) > -1); }
+  // ---------- várias empresas ----------
+  var ICO_EMP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h1M14 9h1M9 13h1M14 13h1M9 17h1M14 17h1"/></svg>';
+  function montarEmpresa() {
+    var b = $('empBtn'), E = S.u && S.u.empresa;
+    var mostrar = !!(E && E.lista && E.lista.length > 1);
+    b.classList.toggle('hide', !mostrar);
+    if (!mostrar) return;
+    b.innerHTML = ICO_EMP; b.appendChild(el('span', '', E.nome || 'Empresa')); b.appendChild(el('b', '', '▾'));
+    b.onclick = function (ev) { ev.stopPropagation(); abrirMenuEmpresa(b); };
+  }
+  function fecharMenuEmpresa() { var m = $('empMenu'); if (m) m.remove(); }
+  function abrirMenuEmpresa(b) {
+    if ($('empMenu')) { fecharMenuEmpresa(); return; }
+    var E = S.u.empresa, m = el('div', 'empmenu'); m.id = 'empMenu'; m.setAttribute('role', 'menu');
+    m.appendChild(el('small', '', 'Você está em:'));
+    E.lista.forEach(function (x) {
+      var it = el('button', x.id === E.atual ? 'on' : '', (x.id === E.atual ? '✓ ' : '') + x.nome); it.type = 'button'; it.setAttribute('role', 'menuitem');
+      it.onclick = function () { fecharMenuEmpresa(); if (x.id !== E.atual) trocarEmpresa(x); };
+      m.appendChild(it);
+    });
+    if (E.gerir) {
+      m.appendChild(el('div', 'sep'));
+      var g = el('button', '', 'Gerenciar empresas'); g.type = 'button';
+      g.onclick = function () { fecharMenuEmpresa(); CFG.aba = 'empresas'; CFG.eq = null; ir('config'); };
+      m.appendChild(g);
+    }
+    document.body.appendChild(m);
+    var r = b.getBoundingClientRect();
+    m.style.top = (r.bottom + 6) + 'px';
+    m.style.left = Math.max(16, Math.min(r.left, window.innerWidth - m.offsetWidth - 16)) + 'px';
+    setTimeout(function () { document.addEventListener('click', fecharMenuEmpresa, { once: true }); }, 0);
+  }
+  function trocarEmpresa(x) {
+    var ov = el('div', 'emptroca', 'Abrindo ' + x.nome + '…'); document.body.appendChild(ov);
+    call('empresaTrocar', [S.token, x.id]).then(function () { location.reload(); })
+      .catch(function (e) { ov.remove(); msg('topMsg', String(e)); });
+  }
+
   function abrirApp(d) {
     S.u = d;
     show('vCarregando', false); show('vLogin', false);
@@ -2515,7 +2622,7 @@
       show('vNovaSenha', true); (S.senhaInicial ? $('nsNova') : $('nsAtual')).focus();
       return;
     }
-    show('vNovaSenha', false); show('gear', true);
+    show('vNovaSenha', false); show('gear', true); montarEmpresa();
     $('sbBusca').value = ''; montarMenu();
     show('nav', true); document.body.classList.add('logado'); avisoPedidos();
     montarCadastro(d); montarAval(); montarCartao(); if (pode('compra')) montarCompra();
@@ -8851,6 +8958,7 @@
     if (pode('conferir_caixa')) l.push(['caixa', 'Caixa', 'Abertura e fechamento: por loja (tudo junto) ou por funcionário']);
     if (pode('equipe')) l.push(['depositos', 'Depósitos (lojas)', 'Criar, renomear e excluir lojas e locais de estoque']);
     if (pode('cancelar_os')) l.push(['osaux', 'Ordem de Serviço', 'Termos e prazos de garantia']);
+    if (pode('equipe')) l.push(['empresas', 'Empresas', 'Outras empresas com dados separados (mesmo sistema e atualizações)']);
     if (pode('equipe')) l.push(['empresa', 'Dados da empresa', 'Nome, CNPJ, endereço (busca pelo CEP) e logo da impressão'], ['login', 'Tela de entrada', 'Contatos do rodapé "fale com a gente!"']);
     return l;
   }
@@ -8875,6 +8983,7 @@
     var ab = CFG.aba;
     if (ab === 'conta') { cfgTema(box); cfgSenha(box); }
     else if (ab === 'empresa') cfgEmpresa(box);
+    else if (ab === 'empresas') cfgEmpresas(box);
     else if (ab === 'login') cfgContatos(box);
     else if (ab === 'depositos') cfgDepositos(box);
     else if (ab === 'categorias') cfgCatFin(box);
@@ -8991,7 +9100,15 @@
     if (x) usu.disabled = true;
     else nome.oninput = function () { if (!usu.dataset.mexeu) usu.value = (nome.value.trim().split(' ')[0] || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9._]/g, ''); };
     usu.oninput = function () { usu.dataset.mexeu = '1'; };
-    var loja = el('select'); opts(loja, CFG.eq.lojas, x ? x.loja : (S.u.loja || ''), 'Selecione…'); campo(c, 'Loja', loja);
+    var outrasEmp = CFG.eq.empresas || [];
+    var lojaPadrao = x ? x.loja : ((S.u.empresa && S.u.empresa.atual !== 'E1') ? '' : (S.u.loja || ''));
+    var loja = el('select'); opts(loja, CFG.eq.lojas, lojaPadrao, 'Selecione…'); campo(c, outrasEmp.length ? 'Loja em ' + (CFG.eq.empresaPrincipal || 'empresa principal') : 'Loja', loja);
+    var empSel = {};
+    outrasEmp.forEach(function (e) {
+      var s2 = el('select'); opts(s2, e.lojas, (x && x.emp && x.emp[e.id]) || '', 'Sem acesso a esta empresa');
+      campo(c, 'Loja em ' + e.nome, s2); empSel[e.id] = s2;
+    });
+    if (outrasEmp.length) c.appendChild(el('div', 'hint', 'Escolha a loja em cada empresa que a pessoa pode acessar. "Sem acesso" esconde a empresa para ela. O grupo e as permissões valem para todas.'));
     var grupo = el('select'); opts(grupo, CFG.eq.grupos.map(function (g) { return g.nome; }), x ? x.grupo : 'Vendedor'); campo(c, 'Grupo', grupo);
     var pers = x && x.custom ? x.custom.slice() : permsGrupo(grupo.value).slice();
     var ck = el('label', 'perm'); var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!(x && x.custom);
@@ -9034,6 +9151,7 @@
     ok.onclick = function () {
       m.classList.remove('show');
       var d = { nome: nome.value.trim(), usuario: usu.value.trim(), loja: loja.value, grupo: grupo.value, personalizar: cb.checked, perms: pers };
+      if (outrasEmp.length) { d.emp = {}; Object.keys(empSel).forEach(function (k) { d.emp[k] = empSel[k].value; }); }
       if (x) d.ativo = ativo.checked;
       if (d.nome.length < 2) { m.textContent = 'Informe o nome.'; m.classList.add('show'); return; }
       if (!x && d.usuario.length < 3) { m.textContent = 'O usuário precisa ter pelo menos 3 letras.'; m.classList.add('show'); return; }
