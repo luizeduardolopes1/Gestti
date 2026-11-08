@@ -727,7 +727,7 @@
   }
   :root[data-tema="escuro"] .lgrod{background:#1d2a45}
   /* ===== escolha da empresa (depois do login) ===== */
-  .esel{position:fixed;inset:0;z-index:26;background:var(--sb);overflow:auto;max-width:none;margin:0}
+  .esel{position:fixed;inset:0;z-index:26;background:var(--card);overflow:auto;max-width:none;margin:0}
   .eselcol{min-height:100%;max-width:1200px;margin:0 auto;background:var(--card);display:flex;flex-direction:column;align-items:center;padding:56px 24px 28px}
   .esellogo{display:flex;align-items:center;gap:12px;color:var(--ink);margin-bottom:56px}
   .esellogo svg{width:44px;height:44px}.esellogo .wm{font-size:38px}
@@ -744,12 +744,12 @@
   .eselit:hover,.eselit:focus-visible{background:var(--bg);outline:none}
   .eselit .n{display:flex;align-items:center;gap:10px;font-size:19px;color:var(--ink);text-transform:uppercase;letter-spacing:.01em}
   .eselit .n em{font-style:normal;font-size:11.5px;font-weight:700;text-transform:none;color:var(--brand);border:1px solid var(--brand);border-radius:20px;padding:1px 8px;letter-spacing:0}
-  .eselit .d{font-size:15px;color:var(--muted);margin-top:5px;min-height:19px}
+  .eselit .d{font-size:15px;color:var(--muted);margin-top:5px}
   .eselit.vai{opacity:.6;pointer-events:none}
   .eselvazio{padding:22px;color:var(--muted)}
   .eselvoltar{margin-top:40px;background:none;border:0;color:var(--sb);font-weight:700;font-size:16px;cursor:pointer;font-family:inherit;padding:8px}
   :root[data-tema="escuro"] .eselvoltar{color:var(--brand)}
-  @media (max-width:899px){.esel{background:var(--card)}.eselcol{padding:36px 16px 20px}.esellogo{margin-bottom:36px}.eselit{padding:16px 10px}.eselit .n{font-size:16.5px}.eselit .d{font-size:14px}}
+  @media (max-width:899px){.eselcol{padding:36px 16px 20px}.esellogo{margin-bottom:36px}.eselit{padding:16px 10px}.eselit .n{font-size:16.5px}.eselit .d{font-size:14px}}
   :root[data-tema="escuro"] .lgbox .btn{background:var(--brand)}
   .cepst{display:block;background:none!important;padding:0!important;font-size:12.5px;color:var(--muted);margin-top:4px;min-height:16px}.cepst.ok{color:var(--ok)}.cepst.err{color:var(--err)}
   .ch{margin:18px 0 4px;font-size:15px}.card>.ch:first-child{margin-top:0}
@@ -2710,16 +2710,15 @@
     var q = semAc($('eselBusca').value.trim()), qd = q.replace(/\D/g, ''), box = $('eselLista'); box.innerHTML = '';
     var l = ESEL.lista.filter(function (x) {
       if (!q) return true;
-      var t = semAc([x.num + ' - ' + x.nome, x.fantasia || '', (x.lojas || []).join(' ')].join(' '));
+      var t = semAc([x.num + ' - ' + x.nome, x.fantasia || ''].join(' '));
       return t.indexOf(q) > -1 || (qd.length >= 2 && String(x.cnpj || '').indexOf(qd) > -1);
     });
     if (!l.length) { box.appendChild(el('div', 'eselvazio', 'Nenhuma empresa encontrada.')); return; }
     l.forEach(function (x) {
       var b = el('button', 'eselit'); b.type = 'button'; b.setAttribute('role', 'listitem');
-      var n = el('div', 'n', x.num + ' - ' + x.nome); if (x.id === ESEL.d.empresa.atual) n.appendChild(el('em', '', 'último acesso'));
+      var n = el('div', 'n', x.num + ' - ' + x.nome); if (x.ultimo) n.appendChild(el('em', '', 'último acesso'));
       b.appendChild(n);
-      var sub = x.cnpj ? 'CNPJ: ' + fmtCnpj(x.cnpj) : x.lojas ? (x.lojas.length ? 'Lojas: ' + x.lojas.join(' · ') : 'Sem lojas cadastradas') : 'Carregando…';
-      b.appendChild(el('div', 'd', sub));
+      if (x.cnpj) b.appendChild(el('div', 'd', 'CNPJ: ' + fmtCnpj(x.cnpj)));
       b.onclick = function () { entrarNaEmpresa(x, b); };
       box.appendChild(b);
     });
@@ -2727,9 +2726,9 @@
   function entrarNaEmpresa(x, b) {
     var d = ESEL.d; msg('eselMsg', '');
     var fim = function (p) { ESEL.d = null; show('vEmpSel', false); abrirApp(p); };
-    if (x.id === d.empresa.atual) return fim(d);
+    // passa sempre pelo servidor: assim ele grava esta empresa como o "último acesso"
     Array.prototype.forEach.call(document.querySelectorAll('.eselit'), function (z) { z.classList.add('vai'); });
-    b.querySelector('.d').textContent = 'Abrindo…';
+    var ab = el('div', 'd', 'Abrindo…'); var dd = b.querySelector('.d'); if (dd) dd.replaceWith(ab); else b.appendChild(ab);
     call('empresaTrocar', [S.token, x.id]).then(fim).catch(function (e) { desenharEsel(); msg('eselMsg', String(e)); });
   }
   $('eselBusca').addEventListener('input', desenharEsel);
