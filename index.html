@@ -726,6 +726,30 @@
     .lgrod a b{font-size:16px}.lgrod a svg{width:28px;height:28px}
   }
   :root[data-tema="escuro"] .lgrod{background:#1d2a45}
+  /* ===== escolha da empresa (depois do login) ===== */
+  .esel{position:fixed;inset:0;z-index:26;background:var(--sb);overflow:auto;max-width:none;margin:0}
+  .eselcol{min-height:100%;max-width:1200px;margin:0 auto;background:var(--card);display:flex;flex-direction:column;align-items:center;padding:56px 24px 28px}
+  .esellogo{display:flex;align-items:center;gap:12px;color:var(--ink);margin-bottom:56px}
+  .esellogo svg{width:44px;height:44px}.esellogo .wm{font-size:38px}
+  .eselin{width:100%;max-width:690px;flex:1}
+  .eselin label{display:block;font-weight:700;font-size:15px;color:var(--ink);margin:0 0 8px}
+  .eselbusca{position:relative}
+  .eselbusca span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);display:flex}
+  .eselbusca svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+  .eselbusca input{margin:0;padding:14px 14px 14px 44px;border-radius:6px;font-size:16px}
+  .eselbusca input:focus{border-color:var(--brand);outline:none;box-shadow:0 0 0 3px rgba(47,91,255,.18)}
+  .eselin h2{font-size:20px;font-weight:600;color:var(--ink);margin:40px 0 8px}
+  .eselit{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:18px 22px;cursor:pointer;font-family:inherit;border-radius:0;transition:background .12s}
+  .eselit:last-child{border-bottom:0}
+  .eselit:hover,.eselit:focus-visible{background:var(--bg);outline:none}
+  .eselit .n{display:flex;align-items:center;gap:10px;font-size:19px;color:var(--ink);text-transform:uppercase;letter-spacing:.01em}
+  .eselit .n em{font-style:normal;font-size:11.5px;font-weight:700;text-transform:none;color:var(--brand);border:1px solid var(--brand);border-radius:20px;padding:1px 8px;letter-spacing:0}
+  .eselit .d{font-size:15px;color:var(--muted);margin-top:5px;min-height:19px}
+  .eselit.vai{opacity:.6;pointer-events:none}
+  .eselvazio{padding:22px;color:var(--muted)}
+  .eselvoltar{margin-top:40px;background:none;border:0;color:var(--sb);font-weight:700;font-size:16px;cursor:pointer;font-family:inherit;padding:8px}
+  :root[data-tema="escuro"] .eselvoltar{color:var(--brand)}
+  @media (max-width:899px){.esel{background:var(--card)}.eselcol{padding:36px 16px 20px}.esellogo{margin-bottom:36px}.eselit{padding:16px 10px}.eselit .n{font-size:16.5px}.eselit .d{font-size:14px}}
   :root[data-tema="escuro"] .lgbox .btn{background:var(--brand)}
   .cepst{display:block;background:none!important;padding:0!important;font-size:12.5px;color:var(--muted);margin-top:4px;min-height:16px}.cepst.ok{color:var(--ok)}.cepst.err{color:var(--err)}
   .ch{margin:18px 0 4px;font-size:15px}.card>.ch:first-child{margin-top:0}
@@ -860,6 +884,19 @@
       </div>
     </div></div>
     <footer class="lgrod hide" id="lgRod"><div class="fale">fale com a gente!</div><div class="itens" id="lgItens"></div></footer>
+  </section>
+  <section id="vEmpSel" class="esel hide" aria-label="Selecionar empresa">
+    <div class="eselcol">
+      <div class="esellogo" id="eselLogo"></div>
+      <div class="eselin">
+        <label for="eselBusca">Selecione uma empresa</label>
+        <div class="eselbusca"><span id="eselIc"></span><input id="eselBusca" placeholder="Nome da empresa ou CNPJ" autocomplete="off" spellcheck="false"></div>
+        <div class="msg err" id="eselMsg"></div>
+        <h2>Empresas</h2>
+        <div id="eselLista" role="list"></div>
+      </div>
+      <button type="button" class="eselvoltar" id="eselVoltar">← Voltar para o login</button>
+    </div>
   </section>
 
   <section id="vCarregando" class="card hide"><div class="empty">Carregando…</div></section>
@@ -2650,17 +2687,60 @@
       b.disabled = false; b.textContent = 'Entrar';
       S.token = d.token; LS.set('token', d.token); LS.set('usuario', u); $('lPass').value = '';
       S.senhaInicial = p;
-      abrirApp(d);
+      if (!d.trocarSenha && d.empresa && d.empresa.lista && d.empresa.lista.length > 1) escolherEmpresa(d); else abrirApp(d);
     }).catch(function (e) { b.disabled = false; b.textContent = 'Entrar'; msg('loginMsg', e); });
   };
   $('lPass').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('lBtn').click(); });
   $('lUser').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('lPass').focus(); });
 
+  // ---------- escolha da empresa (logo depois do login) ----------
+  $('eselLogo').innerHTML = logoSvg(false) + '<span class="wm">gestti</span>';
+  $('eselIc').innerHTML = svgIco('busca');
+  var ESEL = { d: null, lista: [] };
+  function fmtCnpj(c) { c = String(c || '').replace(/\D/g, ''); return c.length === 14 ? c.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5') : c.length === 11 ? c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : c; }
+  function escolherEmpresa(d) {
+    ESEL.d = d; ESEL.lista = d.empresa.lista.map(function (x, i) { return { id: x.id, nome: x.nome, num: i + 1, cnpj: '', lojas: null }; });
+    show('vLogin', false); telaLogin(true); show('vEmpSel', true);
+    $('eselBusca').value = ''; msg('eselMsg', ''); desenharEsel();
+    if (window.innerWidth > 899) $('eselBusca').focus();
+    call('empresasLogin', [S.token]).then(function (l) { if (ESEL.d !== d) return; ESEL.lista = l; desenharEsel(); })
+      .catch(function () { ESEL.lista.forEach(function (x) { if (!x.lojas) x.lojas = []; }); desenharEsel(); });
+  }
+  function desenharEsel() {
+    var q = semAc($('eselBusca').value.trim()), qd = q.replace(/\D/g, ''), box = $('eselLista'); box.innerHTML = '';
+    var l = ESEL.lista.filter(function (x) {
+      if (!q) return true;
+      var t = semAc([x.num + ' - ' + x.nome, x.fantasia || '', (x.lojas || []).join(' ')].join(' '));
+      return t.indexOf(q) > -1 || (qd.length >= 2 && String(x.cnpj || '').indexOf(qd) > -1);
+    });
+    if (!l.length) { box.appendChild(el('div', 'eselvazio', 'Nenhuma empresa encontrada.')); return; }
+    l.forEach(function (x) {
+      var b = el('button', 'eselit'); b.type = 'button'; b.setAttribute('role', 'listitem');
+      var n = el('div', 'n', x.num + ' - ' + x.nome); if (x.id === ESEL.d.empresa.atual) n.appendChild(el('em', '', 'último acesso'));
+      b.appendChild(n);
+      var sub = x.cnpj ? 'CNPJ: ' + fmtCnpj(x.cnpj) : x.lojas ? (x.lojas.length ? 'Lojas: ' + x.lojas.join(' · ') : 'Sem lojas cadastradas') : 'Carregando…';
+      b.appendChild(el('div', 'd', sub));
+      b.onclick = function () { entrarNaEmpresa(x, b); };
+      box.appendChild(b);
+    });
+  }
+  function entrarNaEmpresa(x, b) {
+    var d = ESEL.d; msg('eselMsg', '');
+    var fim = function (p) { ESEL.d = null; show('vEmpSel', false); abrirApp(p); };
+    if (x.id === d.empresa.atual) return fim(d);
+    Array.prototype.forEach.call(document.querySelectorAll('.eselit'), function (z) { z.classList.add('vai'); });
+    b.querySelector('.d').textContent = 'Abrindo…';
+    call('empresaTrocar', [S.token, x.id]).then(fim).catch(function (e) { desenharEsel(); msg('eselMsg', String(e)); });
+  }
+  $('eselBusca').addEventListener('input', desenharEsel);
+  $('eselBusca').addEventListener('keydown', function (e) { if (e.key === 'Enter') { var its = document.querySelectorAll('.eselit'); if (its.length === 1) its[0].click(); } });
+  $('eselVoltar').onclick = function () { var t = S.token; ESEL.d = null; sairLocal(''); call('sair', [t]).catch(function () {}); };
+
   function sairLocal(motivo) {
     S.token = ''; S.u = null; S.disp = null; S.venda = null; S.manut = null; S.novos = null; S.prec = null;
     LS.del('token'); LS.del('loja'); LS.del('hist');
     VIEWS.forEach(function (v) { show(v.sec, false); });
-    show('nav', false); show('who', false); show('gear', false); show('vConfig', false); show('vNovaSenha', false); show('vCarregando', false); show('vLogin', true);
+    show('nav', false); show('who', false); show('gear', false); show('vConfig', false); show('vNovaSenha', false); show('vCarregando', false); show('vEmpSel', false); show('vLogin', true);
     telaLogin(true); painelLogin('lgEntrar'); fecharSb(); $('sbBusca').value = '';
     $('fModal').classList.add('hide'); document.body.style.overflow = ''; S.senhaInicial = '';
     msg('loginMsg', motivo || '');
