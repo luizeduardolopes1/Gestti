@@ -1100,6 +1100,29 @@
   </section>
 
   <!-- CONTROLE DE ESTOQUE -->
+  <section id="vSaldo" class="hide">
+    <div class="pgrid">
+      <aside class="pfil">
+        <h3>Filtros</h3>
+        <label for="sdData">Saldo no fim do dia</label>
+        <input id="sdData" type="date">
+        <label>Depósitos <span style="font-weight:400;color:var(--muted)">(nenhum marcado = todos)</span></label>
+        <div class="chips" id="sdLojas"></div>
+        <label for="sdSit">Exibir apenas</label>
+        <select id="sdSit"><option value="">Todos os produtos</option><option value="pos">Saldo maior que zero</option><option value="zero">Saldo igual a zero</option><option value="neg">Saldo menor que zero</option></select>
+        <label>Tags</label>
+        <div class="chips" id="sdTags"></div>
+        <label for="sdBusca">Nome, SKU ou código de barras</label>
+        <input id="sdBusca" placeholder="Ex.: capa 13" autocomplete="off">
+        <button type="button" class="btn ghost" id="sdLimpar" style="margin-top:14px">Limpar filtros</button>
+      </aside>
+      <div>
+        <div class="hint" id="sdInfo" style="margin:0 0 10px"></div>
+        <div class="kpis" id="sdKpis"></div>
+        <div id="sdCorpo"><div class="empty">Carregando…</div></div>
+      </div>
+    </div>
+  </section>
   <section id="vEstoque" class="hide">
     <div class="pgrid">
       <aside class="pfil" id="esFil">
@@ -1526,7 +1549,7 @@
         <label for="vBusca">Modelo</label>
         <input id="vBusca" placeholder="Ex.: 13 128" autocomplete="off">
         <label for="vSit">Situação</label>
-        <select id="vSit"><option value="">Com estoque</option><option value="todos">Todos os modelos</option><option value="sem">Sem estoque</option><option value="sempreco">Com estoque e sem preço</option></select>
+        <select id="vSit"><option value="todos">Todos os modelos</option><option value="">Com estoque</option><option value="sem">Sem estoque</option><option value="sempreco">Com estoque e sem preço</option></select>
         <div id="vMgBox" class="hide">
           <label for="vMg">Margem</label>
           <select id="vMg"><option value="">Todas</option><option value="ok">Na meta</option><option value="abaixo">Abaixo da meta</option><option value="prej">Com prejuízo</option></select>
@@ -1568,11 +1591,12 @@
     { id: 'dash', sec: 'vDash', nome: 'Dashboard', perm: 'dashboard' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
+    { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios', menu: 'Suprimento', desc: 'Cadastro, preço e estoque dos produtos' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Produtos', desc: 'Aparelhos seminovos e outros produtos usados' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Manutenção', desc: 'Quadro de conserto dos aparelhos usados' },
-    { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios', menu: 'Suprimento', desc: 'Cadastro, preço e estoque dos produtos' },
     { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Suprimento', desc: 'Saldo de cada produto por loja e lançamentos' },
     { id: 'compras', sec: 'vCompras', nome: 'Entrada de Compras', perm: 'compras', menu: 'Suprimento', desc: 'Lançar nota de compra (XML da NF-e ou manual)' },
+    { id: 'saldo', sec: 'vSaldo', nome: 'Saldo de Estoque', perm: 'estoque', menu: 'Suprimento', sub: 'Relatórios', subNome: 'Saldo de Estoque', desc: 'Como estava o estoque em um dia, por depósito' },
     { id: 'vendas', sec: 'vVendas', nome: 'Vendas', perm: 'vender', menu: 'Faturamento', desc: 'Venda completa com troca, entrega e crediário' },
     { id: 'pdv', sec: 'vPdv', nome: 'PDV', perm: 'vender', menu: 'Faturamento', desc: 'Venda rápida no balcão' },
     { id: 'caixa', sec: 'vCaixa', nome: 'Conferência de Caixa', perm: 'caixa', menu: 'Faturamento', desc: 'Abrir, movimentar e fechar o caixa' },
@@ -1700,10 +1724,10 @@
     var b = escuro ? '#FFFFFF' : '#0F1B2D', a = escuro ? '#7D97FF' : '#2F5BFF', s = escuro ? '#0F1B2D' : '#FFFFFF';
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
-  var ICO_MENU = { 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta' };
+  var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta' };
   var ICO_VIEW = { receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
-                   cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas' };
+                   cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas' };
   var SBM = { aberto: {} };
   function semAc(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function itemMenu(v) {
@@ -2768,6 +2792,7 @@
     if (id === 'pdv') abrirPdv();
     if (id === 'acess') carregarAcess(false);
     if (id === 'estoque') carregarEstoque(false);
+    if (id === 'saldo') carregarSaldo();
     if (id === 'compras') abaCompras(CP ? 'form' : 'lista');
     if (id === 'osnova') { OSM = 'Lista'; $('osTit').textContent = 'Ordem de Serviço · Lista'; garantirOS(function () { if (S.view === 'osnova') formOS(null); }); }
     if (id === 'osaux') { var ob = $('osaCorpo'); ob.innerHTML = ''; ob.appendChild(el('div', 'empty', 'Carregando…')); garantirOS(function () { if (S.view === 'osaux') renderOsAux(ob); }); }
@@ -6511,6 +6536,64 @@
     if (window.innerWidth < 820) document.body.style.overflow = 'hidden';
   }
 
+  // ---- relatório: saldo de estoque em um dia
+  var SD = { lojas: [], tags: [] };
+  function carregarSaldo() {
+    if (!$('sdData').value) $('sdData').value = hojeISOcli();
+    $('sdData').max = hojeISOcli();
+    $('sdCorpo').innerHTML = ''; $('sdCorpo').appendChild(el('div', 'empty', 'Calculando o saldo…')); $('sdKpis').innerHTML = '';
+    call('saldoEstoque', [S.token, { data: $('sdData').value }]).then(function (d) { S.saldo = d; montarFiltrosSaldo(); renderSaldo(); })
+      .catch(function (e) { $('sdCorpo').innerHTML = ''; $('sdCorpo').appendChild(el('div', 'empty', String(e))); });
+  }
+  function hojeISOcli() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function chipsMulti(box, lista, sel, fn) {
+    box.innerHTML = '';
+    lista.forEach(function (v) {
+      var on = sel.indexOf(v) > -1, b = el('button', 'chip' + (on ? ' on' : ''), (on ? '✓ ' : '') + v); b.type = 'button'; b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.onclick = function () { var i = sel.indexOf(v); if (i > -1) sel.splice(i, 1); else sel.push(v); chipsMulti(box, lista, sel, fn); fn(); };
+      box.appendChild(b);
+    });
+    if (!lista.length) box.appendChild(el('div', 'hint', 'Nenhuma.'));
+  }
+  function montarFiltrosSaldo() {
+    var d = S.saldo; SD.lojas = SD.lojas.filter(function (l) { return d.lojas.indexOf(l) > -1; });
+    chipsMulti($('sdLojas'), d.lojas, SD.lojas, renderSaldo);
+    var tags = {}; d.produtos.forEach(function (p) { (p.tags || []).forEach(function (t) { tags[t] = 1; }); }); ((S.u.catalogo || {}).tags || []).forEach(function (t) { tags[t.nome || t] = 1; });
+    var tl = Object.keys(tags).sort(); SD.tags = SD.tags.filter(function (t) { return tl.indexOf(t) > -1; });
+    chipsMulti($('sdTags'), tl, SD.tags, renderSaldo);
+  }
+  function renderSaldo() {
+    var d = S.saldo; if (!d) return;
+    var lojas = SD.lojas.length ? SD.lojas : d.lojas, sit = $('sdSit').value, C = d.custos;
+    var ws = semAc($('sdBusca').value.trim()).split(/\s+/).filter(Boolean);
+    var L = d.produtos.map(function (p) { var t = lojas.reduce(function (a, l) { return a + (p.saldo[l] || 0); }, 0); return { p: p, t: t }; }).filter(function (x) {
+      if (sit === 'pos' && !(x.t > 0)) return false;
+      if (sit === 'zero' && x.t !== 0) return false;
+      if (sit === 'neg' && !(x.t < 0)) return false;
+      if (SD.tags.length && !SD.tags.some(function (t) { return (x.p.tags || []).indexOf(t) > -1; })) return false;
+      if (ws.length) { var txt = semAc([x.p.nome, x.p.sku, x.p.codigo].join(' ')); if (!ws.every(function (w) { return txt.indexOf(w) > -1; })) return false; }
+      return true;
+    }).sort(function (a, b) { return a.p.nome.localeCompare(b.p.nome); });
+    var dataTxt = d.data.split('-').reverse().join('/');
+    $('sdInfo').textContent = (d.data === d.hoje ? 'Saldo de hoje (' + dataTxt + ')' : 'Saldo no fim do dia ' + dataTxt) + ' · ' + (SD.lojas.length ? SD.lojas.join(', ') : 'todos os depósitos') + '. Conta só os produtos da página Produtos (os aparelhos usados ficam em Produtos Usados).';
+    var k = $('sdKpis'); k.innerHTML = '';
+    kpi(k, 'Produtos', inteiro(L.length), 'no filtro');
+    kpi(k, 'Unidades', inteiro(L.reduce(function (a, x) { return a + x.t; }, 0)), dataTxt);
+    if (C) kpi(k, 'Valor de custo', brl(L.reduce(function (a, x) { return a + x.t * (x.p.custo || 0); }, 0)), 'custo atual do cadastro');
+    kpi(k, 'Valor de venda', brl(L.reduce(function (a, x) { return a + x.t * (x.p.preco || 0); }, 0)), 'preço atual do cadastro');
+    var cab = ['Produto', 'SKU', 'Grupo'].concat(lojas.length > 1 ? lojas.map(function (l) { return l.replace(/^.*\| /, ''); }) : []).concat(['Saldo', 'Un.']).concat(C ? ['Custo unit.', 'Custo total'] : []).concat(['Preço', 'Valor de venda']);
+    var linhas = L.map(function (x) {
+      return [x.p.nome, x.p.sku || '—', x.p.grupo ? x.p.grupo.split(SEP).join(' › ') : '—'].concat(lojas.length > 1 ? lojas.map(function (l) { return x.p.saldo[l] || 0; }) : [])
+        .concat([x.t, x.p.unidade]).concat(C ? [brl(x.p.custo || 0), brl(x.t * (x.p.custo || 0))] : []).concat([x.p.preco ? brl(x.p.preco) : '—', brl(x.t * (x.p.preco || 0))]);
+    });
+    var box = $('sdCorpo'); box.innerHTML = '';
+    tabela(box, 'Saldo de estoque · ' + dataTxt + ' (' + L.length + ')', cab, linhas, 'saldo-de-estoque-' + d.data);
+  }
+  $('sdData').addEventListener('change', function () { if ($('sdData').value) carregarSaldo(); });
+  $('sdSit').addEventListener('change', renderSaldo);
+  $('sdBusca').addEventListener('input', renderSaldo);
+  $('sdLimpar').onclick = function () { SD.lojas = []; SD.tags = []; $('sdSit').value = ''; $('sdBusca').value = ''; if ($('sdData').value !== hojeISOcli()) { $('sdData').value = hojeISOcli(); carregarSaldo(); } else { montarFiltrosSaldo(); renderSaldo(); } };
+
   // ---- baixa, alteração e exclusão de aparelhos
   function aposAparelhos(l) { S.disp = l; if (S.ac) S.ac.aparelhos = l; if (S.view === 'acess') renderAcess(); else if (S.view === 'disp') renderDisp(); }
   function avisoBaixa(x) {
@@ -7046,7 +7129,7 @@
   ['vSit', 'vMg'].forEach(function (k) { $(k).addEventListener('change', renderVenda); });
   $('vOrdem').addEventListener('change', function () { LS.set('ordemUsados', this.value); renderVenda(); });
   $('vOrdem').value = LS.get('ordemUsados', 'az');
-  $('vLimpar').onclick = function () { $('vBusca').value = ''; $('vSit').value = ''; $('vMg').value = ''; renderVenda(); };
+  $('vLimpar').onclick = function () { $('vBusca').value = ''; $('vSit').value = 'todos'; $('vMg').value = ''; renderVenda(); };
   $('vFilBtn').onclick = function () { var on = !$('vFil').classList.contains('on'); $('vFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
   botaoEsconderFiltros($('vFilEsc'), 'vFil', 'semFilPrecos');
   function stCls(s) {
