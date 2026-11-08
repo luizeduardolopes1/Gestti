@@ -579,6 +579,9 @@
   .empbtn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22);border-radius:10px;height:38px;padding:0 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;max-width:240px;flex:0 1 auto;min-width:0}
   .empbtn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.empbtn:hover{background:rgba(255,255,255,.2)}
   .empbtn svg{width:17px;height:17px;flex:0 0 auto}
+  .movs .mov{border-bottom:1px solid var(--line);padding:8px 0}.movs .mov:last-child{border:0}.movs .mov b{font-size:13.5px}.movs .mov small{display:block;color:var(--muted);font-size:12px}
+  .pcl{display:grid;grid-template-columns:minmax(0,1fr) 150px 70px 30px;gap:8px;align-items:end;border-bottom:1px solid var(--line);padding:8px 0}.pcl b{font-size:13.5px}.pcl small{display:block;color:var(--muted);font-size:12px}
+  @media (max-width:520px){.pcl{grid-template-columns:minmax(0,1fr) 70px 30px}.pcl .pdep{grid-column:1/-1}}
   .empmenu{position:fixed;z-index:80;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.22);padding:6px;min-width:240px;max-width:calc(100vw - 32px)}
   .empmenu button{display:flex;width:100%;align-items:center;gap:8px;background:none;border:0;border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;color:inherit;text-align:left;cursor:pointer}
   .empmenu button:hover{background:var(--bg)}.empmenu button.on{font-weight:700;color:var(--brand)}.empmenu .sep{border-top:1px solid var(--line);margin:4px 0}
@@ -1290,10 +1293,7 @@
         <div class="g2"><div>
           <label for="bateria">Bateria <span class="req">*</span></label>
           <div class="suffix"><input id="bateria" type="number" inputmode="numeric" min="0" max="100" placeholder="Ex.: 87"><span>%</span></div>
-        </div><div>
-          <label for="custo">Valor pago</label>
-          <div class="prefix"><span>R$</span><input id="custo" inputmode="decimal" placeholder="0,00"></div>
-        </div></div>
+        </div><div></div></div>
         <label>Classificação <span class="req">*</span></label>
         <div class="seg" id="classif"></div>
         <label>Tipo de compra <span class="req">*</span></label>
@@ -1330,14 +1330,25 @@
       </div>
       <div class="card pecard">
         <h2>Estoque</h2>
-        <div class="g2"><div>
-          <label for="loja">Depósito (local de estoque) <span class="req">*</span></label>
+        <div class="g4 siln"><div>
+          <label for="loja">Depósito <span class="req">*</span></label>
           <select id="loja"></select>
-          <div class="hint" id="lojaHint"></div>
         </div><div>
-          <label for="cLocal">Localização <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
-          <input id="cLocal" autocomplete="off" maxlength="40" placeholder="Ex.: Vitrine 1, gaveta B">
+          <label for="cQtd">Quantidade</label>
+          <input id="cQtd" value="1" readonly>
+        </div><div>
+          <label for="cPu">Preço unitário</label>
+          <div class="prefix"><span>R$</span><input id="cPu" inputmode="decimal" placeholder="0,00"></div>
+        </div><div>
+          <label for="custo">Custo de compra</label>
+          <div class="prefix"><span>R$</span><input id="custo" inputmode="decimal" placeholder="0,00"></div>
         </div></div>
+        <div class="hint" id="lojaHint"></div>
+        <label for="cObsSI">Observações do saldo inicial</label>
+        <input id="cObsSI" autocomplete="off" maxlength="120" placeholder="Ex.: comprado de cliente na loja">
+        <label for="cLocal">Localização <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+        <input id="cLocal" autocomplete="off" maxlength="40" placeholder="Ex.: Vitrine 1, gaveta B">
+        <div class="hint">Aparelho com IMEI entra sempre 1 por cadastro. O custo do aparelho é o custo de compra (ou o preço unitário, se o custo ficar em branco).</div>
       </div>
       <div class="peacoes"><div class="acoes"><button class="btn" id="enviar" type="submit">Salvar produto usado</button><button class="btn ghost" id="cCancelar" type="button">Cancelar</button></div></div>
     </form>
@@ -4739,7 +4750,7 @@
     function onFmt(v) {
       var nv = { 'Simples': 'simples', 'Com variações': 'variacoes', 'Com composição': 'composicao' }[v];
       if (x && nv !== x.formato && (temEstoque || (x.filhos || []).length)) { fmtHint.textContent = 'Não dá para trocar o formato de um produto que já tem estoque ou variações.'; fmtHint.style.color = 'var(--err)'; seg(fw, FMTS, FMT_R[formato], onFmt); return; }
-      formato = nv; mostrarFormato(); atualPreco();
+      formato = nv; mostrarFormato(); atualPreco(); if (tnW) desTN();
     }
     seg(fw, FMTS, FMT_R[formato], onFmt);
     // variações
@@ -4881,6 +4892,34 @@
       if (pode('cadastro')) { var lk = el('button', 'lnk', 'Celular com IMEI? Cadastre como aparelho →'); lk.type = 'button'; lk.onclick = function () { PR = null; ir('cadastro'); }; condAv.appendChild(lk); }
     };
     cond.addEventListener('change', avCond); avCond();
+    // ---- tabela de preços dos produtos novos (uma linha por modelo; a cor diferencia os produtos)
+    var tn = x && x.ficha && x.ficha.tabelaNovos ? { modelo: x.ficha.tabelaNovos.modelo, cor: x.ficha.tabelaNovos.cor || '' } : null, tnOn = !!tn;
+    var tnW = el('div'); c3.appendChild(tnW);
+    function desTN() {
+      tnW.innerHTML = '';
+      if (cond.value === 'Usado' || formato !== 'simples') { tnOn = false; nome.readOnly = false; return; }
+      var lb = el('label', 'perm'), ck = el('input'); ck.type = 'checkbox'; ck.checked = tnOn;
+      var tt = el('div', 't', 'Mostrar na Tabela de Preços (Produtos Novos)'); tt.appendChild(el('small', '', 'O preço de venda passa a vir da Tabela de Preços › Produtos Novos. Uma linha por modelo vale para todas as cores.'));
+      lb.appendChild(ck); lb.appendChild(tt); lb.style.marginTop = '12px'; tnW.appendChild(lb);
+      ck.onchange = function () { tnOn = ck.checked; if (tnOn && !tn) tn = { modelo: nome.value.trim().toUpperCase(), cor: '' }; desTN(); };
+      if (!tnOn) { nome.readOnly = false; return; }
+      var g = grade(tnW, 2);
+      var mo = campo(g[0], 'Modelo (nome na tabela) *', inp('text', 'Ex.: IPHONE 16 128GB')); mo.maxLength = 100; mo.value = tn.modelo; mo.setAttribute('list', 'tnList'); mo.style.textTransform = 'uppercase';
+      var co = campo(g[1], 'Cor', inp('text', 'Ex.: Preto')); co.maxLength = 30; co.value = tn.cor; co.setAttribute('list', 'corList');
+      var dl2 = el('datalist'); dl2.id = 'tnList'; tnW.appendChild(dl2);
+      var hn = el('div', 'hint'); tnW.appendChild(hn);
+      var up = function () {
+        tn.modelo = mo.value.trim().toUpperCase().replace(/\s+/g, ' '); tn.cor = co.value.trim().toUpperCase().replace(/\s+/g, ' ');
+        nome.value = (tn.modelo + (tn.cor ? ' ' + tn.cor : '')).trim();
+        var rr = S.tnNov && (S.tnNov.produtos || []).filter(function (n) { return n.nome.toUpperCase() === tn.modelo; })[0];
+        hn.textContent = rr ? 'Na tabela: ' + (rr.preco ? brl(rr.preco) : 'sem preço') + '. Este produto (e as outras cores do modelo) usa esse preço.' : (tn.modelo ? 'Modelo novo: ao salvar, ele entra na Tabela de Preços com o preço calculado pela precificação.' : 'Digite o modelo igual ao da tabela (as sugestões aparecem ao digitar).');
+      };
+      var carregar = function (l) { dl2.innerHTML = ''; l.forEach(function (n) { var o = el('option'); o.value = n.nome; dl2.appendChild(o); }); up(); };
+      if (!S.tnNov && Array.isArray(S.novos)) S.tnNov = { produtos: S.novos };
+      if (S.tnNov) carregar(S.tnNov.produtos || []); else if (pode('novos')) call('novos', [S.token]).then(function (d) { S.tnNov = d; carregar(d.produtos || []); }).catch(function () {});
+      mo.oninput = co.oninput = up; up(); nome.readOnly = true;
+    }
+    cond.addEventListener('change', desTN); desTN();
     // ---- características
     var c4 = secao(corpo, 'Características', !!(ca.marca || ca.pesoLiq || x && x.codigo));
     var g4 = grade(c4, 3);
@@ -4980,13 +5019,13 @@
       m.classList.remove('show');
       var erro = nome.value.trim().length < 2 ? 'Informe o nome do produto.' : formato !== 'composicao' && !(num(compraI.value) > 0) ? 'Informe o preço de compra.' :
         formato === 'composicao' && !comps.length ? 'Adicione os produtos do kit.' : formato === 'variacoes' && !vars.length ? 'Clique em "Gerar variações".' :
-        !(num(pvI.value) > 0) ? 'Informe o mark-up ou o preço de venda.' : '';
+        !(num(pvI.value) > 0) && !tnOn ? 'Informe o mark-up ou o preço de venda.' : tnOn && !(tn && tn.modelo) ? 'Informe o modelo da Tabela de Preços (ou desligue a opção).' : '';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       var custos = {}; Object.keys(cIn).forEach(function (k) { var v = num(cIn[k].i.value); if (v) custos[k] = { v: v, t: cIn[k].t.value }; });
       var d = { nome: nome.value, sku: sku.value, formato: formato, gtin: soDig(gtin.value), unidade: und.value, condicao: cond.value, compra: num(compraI.value) || 0, custos: custos, modo: modo,
         markup: num(mkI.value) || 0, preco: num(pvI.value) || 0, minimo: num(mn.value) || 0, maximo: num(mx.value) || 0, localizacao: loc.value, grupo: pGrupo.get(), tags: pTags.get(),
         carac: { marca: marca.value, producao: prod.value, pesoLiq: num(pl.value), pesoBruto: num(pb.value), largura: num(lar.value), altura: num(alt.value), profundidade: num(prof.value), volumes: num(vol.value), itensCaixa: num(ipc.value), medida: med.value, gtinTrib: soDig(gtinT.value) },
-        descCurta: dc.value, descComp: dcomp.value, obs: obs.value, fornecedores: FO, novosFornecedores: NOVOS,
+        descCurta: dc.value, descComp: dcomp.value, obs: obs.value, fornecedores: FO, novosFornecedores: NOVOS, tabelaNovos: tnOn && tn && tn.modelo ? { modelo: tn.modelo, cor: tn.cor } : null,
         trib: { origem: orig.value, ncm: soDig(ncm.value), cest: soDig(cest.value), tipoItem: tipoIt.value, icmsBaseSt: num(ibst.input.value), icmsSt: num(ist.input.value), icmsProprio: num(ipr.input.value), tipiExc: tipi.value, pisFixo: num(pis.input.value), cofinsFixo: num(cof.input.value), infoAdic: inf.value },
         atributos: attrs.map(function (a) { return { nome: a.nome.trim(), valores: a.valores.split(',').map(function (v) { return v.trim(); }).filter(Boolean) }; }),
         variacoes: vars.map(function (v) { return { id: v.id, attrs: v.attrs, sku: v.sku, preco: num(v.preco) || 0 }; }),
@@ -6145,6 +6184,9 @@
               bateria: $('bateria').value.trim(), custo: $('custo').value.trim(), classificacao: S.classificacao, tipo: S.tipo, obs: $('obs').value.trim(), sku: $('sku').value.trim(),
               imei2: $('imei2').value.replace(/\D/g, ''), serial: $('serial').value.trim().toUpperCase(),
               consultaImei: S.consulta, checklist: S.ck, grupo: S.cGrupo ? S.cGrupo.get() : '', tags: S.cTags ? S.cTags.get() : [], localizacao: $('cLocal').value.trim() };
+    var puV = $('cPu').value.trim(), siO = $('cObsSI').value.trim();
+    if (!d.custo && puV) d.custo = puV;
+    d.obs = [d.obs, puV ? 'Preço unitário R$ ' + puV : '', siO ? 'Saldo inicial: ' + siO : ''].filter(Boolean).join(' · ');
     d.modelo = d.modelo.trim().toUpperCase().replace(/\s+/g, ' ');
     var falta = [];
     if (!d.loja) falta.push('depósito'); if (!d.modelo) falta.push('modelo'); if (!d.cor) falta.push('cor');
@@ -6168,7 +6210,7 @@
     });
   });
   function limparCadastro() {
-    ['modelo', 'cor', 'imei', 'imei2', 'serial', 'sku', 'bateria', 'custo', 'obs', 'cLocal'].forEach(function (k) { $(k).value = ''; }); $('imei2Status').className = 'status'; $('imei2Status').textContent = '';
+    ['modelo', 'cor', 'imei', 'imei2', 'serial', 'sku', 'bateria', 'custo', 'obs', 'cLocal', 'cPu', 'cObsSI'].forEach(function (k) { $(k).value = ''; }); $('imei2Status').className = 'status'; $('imei2Status').textContent = '';
     $('cCond').value = 'Usado'; msg('formMsg', ''); $('modelo').dispatchEvent(new Event('change'));
     var lp = LS.get('loja', ''); if ((S.u.lojas || []).indexOf(lp) > -1) $('loja').value = lp; else $('loja').value = S.u.loja || ''; lojaHint();
     show('ckArea', false); $('ckAbrir').textContent = 'Fazer checklist';
@@ -6365,9 +6407,9 @@
     // 4. Editar produto
     if (pode('editar_aparelho') && x.linha) opcao('Editar produto', 'Corrigir modelo, cor, IMEI, bateria, classificação…', '', function () { fecharDrawer(); abrirEdicao(x); });
 
-    // 3. Alterar loja
+    // 3. Transferir estoque (troca a loja / depósito)
     if (pode('mudar_loja')) {
-      var bl = opcao('Alterar loja', 'Agora em: ' + x.loja);
+      var bl = opcao('Transferir estoque', 'Agora em: ' + x.loja);
       bl.onclick = painel(bl, function (box) {
         var tr = el('div', 'trl'), sl = el('select'), bt = el('button', 'btn', 'Salvar'); bt.type = 'button';
         opts(sl, S.u.lojas || [], x.loja); tr.appendChild(sl); tr.appendChild(bt); box.appendChild(tr);
@@ -6376,13 +6418,63 @@
           if (sl.value === x.loja) return;
           bt.disabled = true; bt.textContent = '…';
           call('alterarLoja', [S.token, x.imei, sl.value]).then(function (l) {
-            S.disp = l; S.manut = null; renderDisp();
+            aposAparelhos(l); S.manut = null;
             var novo = l.filter(function (y) { return y.linha === x.linha && y.imei === x.imei; })[0];
             if (novo) abrirDrawer(novo); else fecharDrawer();
           }).catch(function (e) { bt.disabled = false; bt.textContent = 'Salvar'; erro(e); });
         };
       });
     }
+
+    // Ajuste de estoque: baixa com motivo ou correção de custo
+    if ((pode('editar_aparelho') || pode('editar_acessorios')) && x.linha) {
+      var ba = opcao('Ajuste de estoque', 'Baixa (perda, defeito, devolução…)' + (pode('ver_custos') ? ' ou correção de custo' : ''));
+      ba.onclick = painel(ba, function (box) {
+        var modo = 'baixa', area = el('div'), sg = el('div', 'seg');
+        if (pode('ver_custos')) { box.appendChild(sg); seg(sg, ['Baixa do estoque', 'Corrigir custo'], 'Baixa do estoque', function (v) { modo = v === 'Corrigir custo' ? 'custo' : 'baixa'; des(); }); }
+        box.appendChild(area);
+        function des() {
+          area.innerHTML = '';
+          if (modo === 'baixa') {
+            var mt = el('select'); opts(mt, ['Perda ou roubo', 'Defeito sem conserto', 'Devolução ao fornecedor', 'Uso interno', 'Outro'], '', 'Escolha o motivo…'); campo(area, 'Motivo', mt, true);
+            var ob = inp('text', 'Detalhe (obrigatório em "Outro")'); ob.maxLength = 200; campo(area, 'Observação', ob);
+            area.appendChild(el('div', 'hint', 'O aparelho sai do estoque e fica registrado no histórico. Dá para desfazer logo depois.'));
+            var bt = el('button', 'btn', 'Dar baixa'); bt.type = 'button'; bt.style.marginTop = '8px'; area.appendChild(bt);
+            bt.onclick = function () {
+              if (!mt.value) return erro('Escolha o motivo da baixa.');
+              bt.disabled = true; bt.textContent = 'Salvando…';
+              call('aparelhoAjuste', [S.token, x.linha, x.imei, { tipo: 'baixa', motivo: mt.value, obs: ob.value.trim() }]).then(function (l) { fecharDrawer(); aposAparelhos(l); avisoBaixa(x); })
+                .catch(function (e) { bt.disabled = false; bt.textContent = 'Dar baixa'; erro(e); });
+            };
+          } else {
+            var g = grade(area, 2);
+            var cu = inpValor(x.custo === null || x.custo === undefined ? '' : vs(x.custo)); campo(g[0], 'Custo de compra', cu, true);
+            var pc = inpValor(x.peca === null || x.peca === undefined ? '' : vs(x.peca)); campo(g[1], 'Peças', pc, true);
+            var ob2 = inp('text', 'Ex.: valor pago estava errado'); ob2.maxLength = 200; campo(area, 'Motivo do ajuste *', ob2);
+            var bt2 = el('button', 'btn', 'Salvar custo'); bt2.type = 'button'; bt2.style.marginTop = '8px'; area.appendChild(bt2);
+            bt2.onclick = function () {
+              bt2.disabled = true; bt2.textContent = 'Salvando…';
+              call('aparelhoAjuste', [S.token, x.linha, x.imei, { tipo: 'custo', custo: cu.input.value.trim(), peca: pc.input.value.trim(), obs: ob2.value.trim() }]).then(function (l) {
+                aposAparelhos(l); var nv = l.filter(function (y) { return y.linha === x.linha && y.imei === x.imei; })[0]; if (nv) abrirDrawer(nv); else fecharDrawer();
+              }).catch(function (e) { bt2.disabled = false; bt2.textContent = 'Salvar custo'; erro(e); });
+            };
+          }
+        }
+        des();
+      });
+    }
+    // Histórico de movimentações
+    var bh = opcao('Histórico de movimentações', 'Cadastro, transferências, manutenção, vendas e ajustes');
+    bh.onclick = painel(bh, function (box) {
+      box.appendChild(el('div', 'hint', 'Carregando…'));
+      call('aparelhoHistorico', [S.token, x.imei]).then(function (l) {
+        box.innerHTML = '';
+        if (!l.length) { box.appendChild(el('div', 'hint', 'Sem movimentações registradas.')); return; }
+        var t = el('div', 'movs');
+        l.forEach(function (m2) { var r = el('div', 'mov'); var a = el('div'); a.appendChild(el('b', '', m2.acao)); a.appendChild(el('small', '', [m2.data, m2.quem, m2.loja].filter(Boolean).join(' · '))); r.appendChild(a); if (m2.det) r.appendChild(el('div', 'hint', m2.det)); t.appendChild(r); });
+        box.appendChild(t);
+      }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'hint', String(e))); });
+    });
 
     // 2. Cálculo de cartão
     var bc = opcao('Cálculo de cartão', x.preco ? 'Total e parcelas de 1x a 18x' : 'Sem preço de venda cadastrado');
@@ -6420,6 +6512,17 @@
   }
 
   // ---- baixa, alteração e exclusão de aparelhos
+  function aposAparelhos(l) { S.disp = l; if (S.ac) S.ac.aparelhos = l; if (S.view === 'acess') renderAcess(); else if (S.view === 'disp') renderDisp(); }
+  function avisoBaixa(x) {
+    var box = $(S.view === 'acess' ? 'acAviso' : 'dAviso'); if (!box) return; box.innerHTML = '';
+    var a = el('div', 'aviso'), t = el('div', '', '✓ ' + x.modelo + ' (IMEI final ' + String(x.imei).slice(-4) + ') baixado do estoque.');
+    var u = el('button', '', 'Desfazer'); u.type = 'button';
+    u.onclick = function () {
+      u.disabled = true; u.textContent = '…';
+      call('aparelhoBaixaDesfazer', [S.token, x.linha, x.imei]).then(function (l) { box.innerHTML = ''; aposAparelhos(l); }).catch(function (e) { u.disabled = false; u.textContent = 'Desfazer'; t.textContent = String(e); });
+    };
+    a.appendChild(t); a.appendChild(u); box.appendChild(a); window.scrollTo(0, 0);
+  }
   function mostrarAvisoVenda() {
     var box = $('dAviso'); box.innerHTML = '';
     var x = S.ultVenda; if (!x) return;
@@ -6597,7 +6700,7 @@
       var r = el('div', 'prow'); r.dataset.k = x.linha + '|' + x.nome;
       var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
       var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome)); if (x.indisp) nm.appendChild(el('span', 'badge-m', 'Não disponível')); nm.appendChild(botaoCopiar(x.nome, 'Copiar nome')); n.appendChild(nm);
-      var sub = [x.grupo, ver && x.manual ? 'Preço definido manualmente' : ''].filter(Boolean).join(' · ');
+      var sub = [x.grupo, ver && x.manual ? 'Preço definido manualmente' : '', (x.vinc || []).length ? x.vinc.length + ' cor(es) no cadastro · ' + soma(x.vinc, function (v) { return v.total; }) + ' em estoque' : ''].filter(Boolean).join(' · ');
       if (sub) n.appendChild(el('div', 'psub', sub));
       tagsMini(n, x.tags);
       r.appendChild(n);
@@ -6637,6 +6740,12 @@
         .forEach(function (p) { if (!p[1]) return; kv.appendChild(el('div', 'k', p[0])); kv.appendChild(el('div', '', p[1])); });
       info.appendChild(kv); bd.appendChild(info);
     }
+    var cvn = el('div', 'card'); cvn.appendChild(el('h3', 'ch', 'Cores no cadastro de produtos')); bd.appendChild(cvn);
+    if ((x.vinc || []).length) {
+      var mvs = el('div', 'movs'); cvn.appendChild(mvs);
+      x.vinc.forEach(function (v) { var r = el('div', 'mov'), a = el('div'); a.appendChild(el('b', '', v.cor || v.nome)); a.appendChild(el('small', '', v.total + ' em estoque' + (Object.keys(v.estoque || {}).length ? ' · ' + Object.keys(v.estoque).map(function (l) { return l.replace(/^.*\| /, '') + ': ' + v.estoque[l]; }).join(', ') : ''))); r.appendChild(a); mvs.appendChild(r); });
+      cvn.appendChild(el('div', 'hint', 'O preço desta linha vale para todas as cores. Outra cor: cadastre em Produtos e ligue "Mostrar na Tabela de Preços".'));
+    } else cvn.appendChild(el('div', 'hint', 'Nenhum produto do cadastro ligado a este modelo. Em Produtos › Novo produto, ligue "Mostrar na Tabela de Preços" e use este nome como Modelo.'));
     var am = el('div', 'msg err'); bd.appendChild(am);
     function opcao(titulo, sub, cls, onClick) {
       var b = el('button', 'opc' + (cls ? ' ' + cls : '')); b.type = 'button';
@@ -7395,11 +7504,43 @@
     sh.appendChild(el('h2', 'tt', 'Finalizar conserto'));
     sh.appendChild(el('div', 'sub', x.modelo + ' · ' + [x.cor, 'IMEI ' + x.imei].filter(Boolean).join(' · ')));
 
-    var c1 = el('div', 'card');
-    var lp = el('label', 'first', 'Valor da peça usada neste conserto'); c1.appendChild(lp);
-    var pw = el('div', 'prefix'); pw.appendChild(el('span', '', 'R$')); var peca = el('input'); peca.inputMode = 'decimal'; peca.placeholder = '0,00 (sem peça)'; pw.appendChild(peca); c1.appendChild(pw);
-    c1.appendChild(el('div', 'hint', 'Soma na coluna Peça do Estoque e entra no custo total e no custo médio do modelo.' +
-      (pode('ver_custos') && x.peca ? ' Já lançado antes neste aparelho: ' + brl(x.peca) + '.' : '')));
+    var c1 = el('div', 'card'), PC = [];
+    c1.appendChild(el('label', 'first', 'Peças usadas neste conserto (do estoque)'));
+    var pq = inp('text', 'Buscar peça: nome, SKU ou código de barras'), pres = el('div'), plst = el('div'), ptot = el('div', 'hint');
+    c1.appendChild(pq); c1.appendChild(pres); c1.appendChild(plst); c1.appendChild(ptot);
+    var peca = inp('text', '0,00'); peca.inputMode = 'decimal'; var pmW = el('div', 'hide');
+    var pw = el('div', 'prefix'); pw.appendChild(el('span', '', 'R$')); pw.appendChild(peca); campo(pmW, 'Peça sem cadastro (valor à mão)', pw); c1.appendChild(pmW);
+    function prodsPeca() { return ((S.ac && S.ac.produtos) || []).filter(function (p) { return (p.formato === 'simples' || p.formato === 'variacao') && p.total > 0; }); }
+    function desPecas() {
+      plst.innerHTML = '';
+      PC.forEach(function (it, i) {
+        var r = el('div', 'pcl'), a = el('div'); a.appendChild(el('b', '', it.p.nome)); a.appendChild(el('small', '', pode('ver_custos') ? 'custo ' + brl(it.p.custo || 0) + ' cada' : (it.p.sku ? 'SKU ' + it.p.sku : ''))); r.appendChild(a);
+        var dw2 = el('div', 'pdep'), dp = el('select'), comE = Object.keys(it.p.estoque || {}).filter(function (l) { return it.p.estoque[l] > 0; });
+        comE.forEach(function (l) { var o = el('option', '', l + ' (' + it.p.estoque[l] + ')'); o.value = l; dp.appendChild(o); }); dp.value = it.loja; dp.onchange = function () { it.loja = dp.value; }; dw2.appendChild(dp); r.appendChild(dw2);
+        var q = inp('number', '1'); q.min = 1; q.value = it.qtd; q.oninput = function () { it.qtd = parseInt(q.value, 10) || 0; tot(); }; r.appendChild(q);
+        var xb = el('button', 'lnk', '×'); xb.type = 'button'; xb.style.color = 'var(--err)'; xb.onclick = function () { PC.splice(i, 1); desPecas(); }; r.appendChild(xb);
+        plst.appendChild(r);
+      });
+      tot();
+    }
+    function tot() { var t = PC.reduce(function (a, it) { return a + (it.p.custo || 0) * (it.qtd || 0); }, 0); ptot.textContent = PC.length ? (pode('ver_custos') ? 'Custo das peças: ' + brl(t) + ' — soma no custo do aparelho. ' : '') + 'As peças saem do estoque do depósito escolhido.' : 'Sem peça? Deixe em branco.' + (pode('ver_custos') && x.peca ? ' Já lançado antes neste aparelho: ' + brl(x.peca) + '.' : ''); }
+    pq.oninput = function () {
+      pres.innerHTML = ''; var q = pq.value.trim().toLowerCase(); if (q.length < 2) return;
+      var ws = q.split(/\s+/), lst = el('div', 'vdres');
+      prodsPeca().filter(function (p) { var t = (p.nome + ' ' + p.sku + ' ' + p.codigo).toLowerCase(); return ws.every(function (w) { return t.indexOf(w) > -1; }); }).slice(0, 8).forEach(function (p) {
+        var b = el('button'), a = el('span', '', p.nome); b.type = 'button'; a.appendChild(el('small', '', [p.total + ' em estoque', pode('ver_custos') && p.custo ? 'custo ' + brl(p.custo) : ''].filter(Boolean).join(' · '))); b.appendChild(a);
+        b.onclick = function () {
+          var ls = Object.keys(p.estoque || {}).filter(function (l) { return p.estoque[l] > 0; });
+          var lj0 = ls.indexOf(x.loja) > -1 ? x.loja : ls.indexOf('Manutenção') > -1 ? 'Manutenção' : ls.indexOf(LS.get('loja', '')) > -1 ? LS.get('loja', '') : ls[0];
+          PC.push({ p: p, loja: lj0, qtd: 1 }); pq.value = ''; pres.innerHTML = ''; desPecas();
+        };
+        lst.appendChild(b);
+      });
+      if (!lst.children.length) pres.appendChild(el('div', 'hint', 'Nenhuma peça com estoque encontrada.')); else pres.appendChild(lst);
+    };
+    if (!S.ac && pode('acessorios')) call('acessorios', [S.token]).then(function (d) { S.ac = d; }).catch(function () {});
+    if (!pode('acessorios')) { pq.classList.add('hide'); pmW.classList.remove('hide'); }
+    tot();
     c1.appendChild(el('label', '', 'Vai para a loja'));
     var lj = el('select'); opts(lj, (M.lojas || S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x.loja !== 'Manutenção' ? x.loja : (LS.get('loja', '') || ''), 'Escolha a loja…'); c1.appendChild(lj);
     sh.appendChild(c1);
@@ -7447,14 +7588,15 @@
       var erro = '';
       var vp = peca.value.trim() ? num(peca.value) : 0;
       if (vp === null || vp < 0) erro = 'Valor da peça inválido.';
+      else if (PC.some(function (it) { return !(it.qtd > 0) || it.qtd > ((it.p.estoque || {})[it.loja] || 0); })) erro = 'Confira as peças: quantidade maior que o estoque do depósito.';
       else if (!lj.value) erro = 'Escolha para qual loja o aparelho vai.';
       else if (falta.length) erro = 'Falta testar ' + falta.length + ' ite' + (falta.length === 1 ? 'm' : 'ns') + ': ' + falta.map(function (it) { return it.item; }).join(', ') + '.';
       else if (probs().length && !obs.value.trim()) erro = 'Descreva na observação os itens fora do esperado.';
       else if (probs().length && !cb.checked) erro = 'Confirme que está ciente dos itens fora do esperado.';
       if (erro) { er.textContent = erro; er.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Finalizando…';
-      call('manutFinalizar', [S.token, x.imei, { peca: vp, loja: lj.value, respostas: R, obs: obs.value.trim(), ciente: cb.checked }]).then(function (d) {
-        S.manut = d; S.disp = null; S.venda = null; fechar(); renderManut();
+      call('manutFinalizar', [S.token, x.imei, { peca: vp, pecas: PC.map(function (it) { return { id: it.p.id, loja: it.loja, qtd: it.qtd }; }), loja: lj.value, respostas: R, obs: obs.value.trim(), ciente: cb.checked }]).then(function (d) {
+        S.manut = d; S.disp = null; S.venda = null; if (PC.length) { S.ac = null; S.est = null; } fechar(); renderManut();
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Finalizar e enviar para a loja'; er.textContent = e; er.classList.add('show'); });
     };
     $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; sh.scrollTop = 0;
@@ -7972,15 +8114,85 @@
         var b = el('button'), a = el('span', '', p.nome); b.type = 'button'; a.appendChild(el('small', '', [p.sku ? 'SKU ' + p.sku : '', p.total + ' em estoque', D.ver && p.custo ? 'custo ' + brl(p.custo) : ''].filter(Boolean).join(' · '))); b.appendChild(a);
         b.onclick = function () { addItemCp(p); }; lst.appendChild(b);
       });
+      var qi = soDig(busca.value);
+      if (qi.length === 15) { var ba = el('button'); ba.type = 'button'; var aa = el('span', '', 'Aparelho usado IMEI ' + qi); aa.appendChild(el('small', '', 'Dar entrada no aparelho (se já passou pela loja, os dados vêm preenchidos)')); ba.appendChild(aa); ba.onclick = function () { addAparelhoCp(qi); }; lst.insertBefore(ba, lst.firstChild); }
+      var bu = el('button'); bu.type = 'button'; var au = el('span', '', '+ Aparelho usado (com IMEI)'); au.appendChild(el('small', '', 'Cadastro completo: IMEI, modelo, cor, bateria, avaliação e consulta')); bu.appendChild(au); bu.onclick = function () { addAparelhoCp(qi.length === 15 ? qi : ''); }; lst.appendChild(bu);
       var bn = el('button'); bn.type = 'button'; var an = el('span', '', '+ Cadastrar produto novo: "' + busca.value.trim() + '"'); an.appendChild(el('small', '', 'O produto é criado no cadastro quando a entrada for lançada')); bn.appendChild(an);
       bn.onclick = function () { addItemCp(null, busca.value.trim()); }; lst.appendChild(bn);
       res.appendChild(lst);
     };
+    function addAparelhoCp(imei) {
+      var it = { aparelho: { imei: imei || '', imei2: '', serial: '', modelo: '', cor: '', bateria: '', classificacao: '', tipo: 'Distribuidor', consulta: '', obs: '', sku: '', existe: false },
+                 prodId: '', novo: null, descricao: '', codForn: '', ean: '', ncm: '', cfop: '', unidade: 'UN', qtd: '1', fator: '1', vUnit: '', desconto: '', ipi: '', st: '', aberto: true };
+      CP.itens.push(it); busca.value = ''; res.innerHTML = ''; desenharItens(); totais();
+      if (imei) buscarImeiCp(it);
+    }
+    function buscarImeiCp(it, depois) {
+      var A = it.aparelho; A.msg = 'Verificando o IMEI…'; A.msgC = 'info'; if (depois) depois();
+      call('consultarImei', [S.token, A.imei]).then(function (r) {
+        var ex = r.existente;
+        if (ex && ex.status !== 'Vendido' && ex.status !== 'Baixado') { A.existe = false; A.msg = 'Já está no estoque como "' + ex.status + '" (' + ex.loja + '). Não dá entrada de novo.'; A.msgC = 'err'; }
+        else if (ex) { A.existe = true; if (!A.modelo) A.modelo = ex.modelo; if (!A.cor) A.cor = ex.cor; if (!A.classificacao && (S.u.classificacoes || []).indexOf(ex.classif) > -1) A.classificacao = ex.classif; A.tipo = 'Recompra'; A.msg = 'Este aparelho já passou pela loja (' + ex.status + '). Dados preenchidos: confira bateria e avaliação e dê entrada.'; A.msgC = 'ok'; }
+        else { A.existe = false; A.msg = 'Aparelho novo no sistema: preencha o cadastro completo.'; A.msgC = 'info'; }
+        desenharItens(); totais();
+      }).catch(function (e) { A.msg = String(e); A.msgC = 'err'; desenharItens(); });
+    }
+    function itemAparelhoCp(it, i) {
+      var A = it.aparelho, T = calcCp(), o = T.itens[i] || {}, r = el('div', 'cpit');
+      var hd = el('div', 'cphd'), nmw = el('div', 'nm');
+      nmw.appendChild(document.createTextNode((i + 1) + '. ' + (A.modelo ? A.modelo + (A.cor ? ' ' + A.cor.toUpperCase() : '') : 'Aparelho usado')));
+      nmw.appendChild(el('span', 'bdg ' + (A.existe ? 'ok' : 'warn'), A.existe ? 'Já passou pela loja' : 'Aparelho usado'));
+      nmw.appendChild(el('small', '', A.imei ? 'IMEI ' + A.imei : 'Informe o IMEI'));
+      hd.appendChild(nmw);
+      var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar item'; x.onclick = function () { CP.itens.splice(i, 1); desenharItens(); totais(); }; hd.appendChild(x);
+      r.appendChild(hd);
+      if (it.salvo) {
+        var rs = el('div', 'cpres');
+        [['Valor', brl(num(it.vUnit) || 0)], ['Desconto', brl(num(it.desconto) || 0)], ['Total do item', brl(o.total || 0)], ['Classificação', A.classificacao], ['Bateria', (A.bateria || '—') + '%'], ['Consulta', A.consulta]].forEach(function (a) { var dd = el('div'); dd.appendChild(el('small', '', a[0])); dd.appendChild(el('b', '', a[1] || '—')); rs.appendChild(dd); });
+        var edB = el('button', 'btn ghost mini', 'Editar'); edB.type = 'button'; edB.onclick = function () { it.salvo = false; desenharItens(); totais(); }; rs.appendChild(edB);
+        r.appendChild(rs); r.classList.add('salvo'); return r;
+      }
+      var gl = el('div', 'cpln');
+      var mk = function (rot, k, ph) { var w = el('div'), ii = inp('text', ph || ''); ii.inputMode = 'decimal'; ii.value = it[k]; w.appendChild(el('label', '', rot)); w.appendChild(ii); ii.oninput = function () { it[k] = ii.value; totais(); }; gl.appendChild(w); return ii; };
+      mk('Valor do aparelho', 'vUnit', '0,00'); mk('Desconto', 'desconto', '0,00'); mk('IPI', 'ipi', '0,00'); mk('ICMS ST', 'st', '0,00');
+      r.appendChild(gl);
+      var g1 = grade(r, 3);
+      var im = campo(g1[0], 'IMEI1 *', inp('text', '15 números')); im.inputMode = 'numeric'; im.maxLength = 17; im.value = A.imei;
+      var st = el('div', 'status' + (A.msg ? ' show ' + A.msgC : ''), A.msg || ''); g1[0].appendChild(st);
+      im.oninput = function () { var d = soDig(im.value).slice(0, 15); if (im.value !== d) im.value = d; if (d !== A.imei) { A.consulta = ''; } A.imei = d; if (d.length === 15) { if (!luhn(d)) { st.className = 'status show err'; st.textContent = 'IMEI inválido: confira os números.'; return; } buscarImeiCp(it); } };
+      var i2 = campo(g1[1], 'IMEI2', inp('text', 'Opcional')); i2.inputMode = 'numeric'; i2.maxLength = 17; i2.value = A.imei2; i2.oninput = function () { A.imei2 = soDig(i2.value).slice(0, 15); };
+      var se = campo(g1[2], 'Serial', inp('text', 'Opcional')); se.maxLength = 30; se.value = A.serial; se.style.textTransform = 'uppercase'; se.oninput = function () { A.serial = se.value.trim().toUpperCase(); };
+      var g2 = grade(r, 3);
+      var mo = campo(g2[0], 'Modelo *', inp('text', 'Ex.: IPHONE 13 128GB')); mo.maxLength = 80; mo.value = A.modelo; mo.setAttribute('list', 'modeloList'); mo.style.textTransform = 'uppercase'; mo.oninput = function () { A.modelo = mo.value.trim().toUpperCase().replace(/\s+/g, ' '); };
+      var co = campo(g2[1], 'Cor *', inp('text', 'Ex.: Preto')); co.maxLength = 30; co.value = A.cor; co.setAttribute('list', 'corList'); co.oninput = function () { A.cor = co.value.trim(); };
+      var bt = campo(g2[2], 'Bateria (%) *', inp('number', 'Ex.: 87')); bt.min = 0; bt.max = 100; bt.value = A.bateria; bt.oninput = function () { A.bateria = bt.value; };
+      var g3 = grade(r, 3);
+      var cl = selIn(g3[0], 'Classificação *', [['', 'Escolha…']].concat(S.u.classificacoes || []), A.classificacao); cl.onchange = function () { A.classificacao = cl.value; };
+      var tp = selIn(g3[1], 'Tipo de compra', S.u.tipos || ['Recompra', 'Distribuidor'], A.tipo); tp.onchange = function () { A.tipo = tp.value; };
+      var sk = campo(g3[2], 'SKU', inp('text', 'Opcional')); sk.maxLength = 40; sk.value = A.sku; sk.oninput = function () { A.sku = sk.value; };
+      var ob = campo(r, 'Observação', inp('text', 'Ex.: tela com risco leve')); ob.maxLength = 300; ob.value = A.obs; ob.oninput = function () { A.obs = ob.value; };
+      var cw = el('div', 'consulta'); r.appendChild(el('label', '', 'Consulta do IMEI (roubo, furto ou perda) *')); r.appendChild(cw);
+      var cab = el('button', 'btn ghost', 'Copiar IMEI e abrir a consulta oficial'); cab.type = 'button'; cw.appendChild(cab);
+      cab.onclick = function () { if (navigator.clipboard && A.imei) navigator.clipboard.writeText(A.imei).catch(function () {}); window.open(CONSULTA_URL, '_blank', 'noopener'); };
+      var cr = el('div', 'seg'); cw.appendChild(cr);
+      seg(cr, ['Nada consta', 'Consta restrição'], A.consulta, function (v) { A.consulta = v; });
+      var svw = el('div', 'cpsv'), svm = el('div', 'msg err'), svB = el('button', 'btn mini', 'Salvar item'); svB.type = 'button'; svw.appendChild(svm); svw.appendChild(svB); r.appendChild(svw);
+      svB.onclick = function () {
+        svm.classList.remove('show');
+        var b = parseInt(A.bateria, 10);
+        var e = !(num(it.vUnit) > 0) ? 'Informe o valor do aparelho.' : !(A.imei.length === 15 && luhn(A.imei)) ? 'IMEI inválido.' : A.msgC === 'err' ? A.msg : !A.modelo ? 'Informe o modelo.' : !A.cor ? 'Informe a cor.' :
+                isNaN(b) || b < 0 || b > 100 ? 'Bateria de 0 a 100.' : !A.classificacao ? 'Escolha a classificação.' : A.consulta === 'Consta restrição' ? 'IMEI com restrição: o aparelho não pode entrar.' : A.consulta !== 'Nada consta' ? 'Faça a consulta do IMEI e marque o resultado.' : '';
+        if (e) { svm.textContent = e; svm.classList.add('show'); return; }
+        it.descricao = A.modelo + ' ' + A.cor.toUpperCase(); it.salvo = true; it.aberto = false; desenharItens(); totais();
+      };
+      return r;
+    }
     function desenharItens() {
       itBox.innerHTML = '';
       if (!CP.itens.length) { itBox.appendChild(el('div', 'hint', 'Nenhum item ainda. Busque o produto acima, leia o código de barras ou importe o XML da nota.')); return; }
       var T = calcCp();
       CP.itens.forEach(function (it, i) {
+        if (it.aparelho) { itBox.appendChild(itemAparelhoCp(it, i)); return; }
         var o = T.itens[i], p = it.prodId ? prodCp(it.prodId) : null, r = el('div', 'cpit');
         var hd = el('div', 'cphd'), nmw = el('div', 'nm');
         nmw.appendChild(document.createTextNode((i + 1) + '. ' + (p ? p.nome : (it.novo ? it.novo.nome || 'Produto novo' : '?'))));
@@ -8148,7 +8360,8 @@
       else if (CP.modelo !== 'Sem nota (recibo)' && !CP.numero) erro = 'Informe o número da nota.';
       else if (CP.chave && CP.chave.length !== 44) erro = 'A chave de acesso tem 44 números.';
       else if (!CP.itens.length) erro = 'Adicione os itens da nota.';
-      else if (CP.itens.some(function (it) { return !it.prodId && !(it.novo && it.novo.nome.trim().length >= 2); })) erro = 'Tem item sem produto: vincule ou informe o nome do produto novo.';
+      else if (CP.itens.some(function (it) { return !it.aparelho && !it.prodId && !(it.novo && it.novo.nome.trim().length >= 2); })) erro = 'Tem item sem produto: vincule ou informe o nome do produto novo.';
+      else if (CP.itens.some(function (it) { return it.aparelho && !it.salvo; })) erro = 'Confira e clique em "Salvar item" nos aparelhos usados da nota.';
       else if (T.itens.some(function (o) { return !(o.q > 0) || Math.abs(o.qe - Math.round(o.qe)) > 0.001 || o.qe < 1; })) erro = 'Confira as quantidades: o que entra no estoque precisa ser um número inteiro.';
       else if (P.modo === 'prazo' && T.total > 0 && !P.parcelas.length) erro = 'Gere as parcelas a pagar.';
       else if (P.modo === 'prazo' && T.total > 0 && Math.abs(r2(T.total - soma(P.parcelas, function (p) { return num(p.valor) || 0; }))) > 0.009) erro = 'A soma das parcelas precisa ser igual ao total da nota.';
@@ -8158,7 +8371,8 @@
         fornId: CP.fornModo === 'sel' ? CP.fornId : '', fornNovo: CP.fornModo === 'novo' ? CP.fornNovo : null, modelo: CP.modelo, numero: CP.numero, serie: CP.serie, chave: CP.chave,
         emissao: CP.emissao, entrada: CP.entrada, natureza: CP.natureza, loja: CP.loja, frete: num(CP.frete) || 0, seguro: num(CP.seguro) || 0, outras: num(CP.outras) || 0, descontoNota: num(CP.descontoNota) || 0,
         totalNota: CP.totalNota, atualizarCusto: CP.atualizarCusto, obs: CP.obs, xml: CP.xml,
-        itens: CP.itens.map(function (it) { return { prodId: it.prodId, novo: it.prodId ? null : { nome: it.novo.nome, sku: it.novo.sku, gtin: it.novo.gtin, unidade: it.novo.unidade, markup: num(it.novo.markup) || 0, preco: num(it.novo.preco) || 0, condicao: it.novo.condicao },
+        itens: CP.itens.map(function (it) { return { aparelho: it.aparelho ? { imei: it.aparelho.imei, imei2: it.aparelho.imei2, serial: it.aparelho.serial, modelo: it.aparelho.modelo, cor: it.aparelho.cor, bateria: it.aparelho.bateria, classificacao: it.aparelho.classificacao, tipo: it.aparelho.tipo, consulta: it.aparelho.consulta, obs: it.aparelho.obs, sku: it.aparelho.sku } : null,
+          prodId: it.prodId, novo: it.prodId || !it.novo ? null : { nome: it.novo.nome, sku: it.novo.sku, gtin: it.novo.gtin, unidade: it.novo.unidade, markup: num(it.novo.markup) || 0, preco: num(it.novo.preco) || 0, condicao: it.novo.condicao },
           descricao: it.descricao || (it.novo ? it.novo.nome : ''), codForn: it.codForn, ean: it.ean, ncm: it.ncm, cfop: it.cfop, unidade: it.unidade, qtd: num(it.qtd), fator: num(it.fator) || 1, vUnit: num(it.vUnit) || 0,
           desconto: num(it.desconto) || 0, ipi: num(it.ipi) || 0, st: num(it.st) || 0, seriais: it.prodId && prodCp(it.prodId) && prodCp(it.prodId).serial ? String(it.seriais || '') : [] }; }),
         pagamento: { modo: P.modo, categoria: P.categoria, conta: P.conta, forma: P.forma, pagoEm: P.pagoEm, parcelas: P.parcelas.map(function (p) { return { venc: p.venc, valor: num(p.valor), doc: p.doc }; }) }
