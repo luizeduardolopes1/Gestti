@@ -1059,7 +1059,7 @@
         <label for="acSit">Estoque</label>
         <select id="acSit"><option value="">Todos</option><option value="com">Com estoque</option><option value="sem">Sem estoque</option><option value="min">Abaixo do mínimo (repor)</option></select>
         <label for="acOrdem">Ordenar por</label>
-        <select id="acOrdem"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="estoque">Mais estoque</option></select>
+        <select id="acOrdem"><option value="recentes">Últimos cadastrados primeiro</option><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="estoque">Mais estoque</option></select>
         <button type="button" class="btn ghost" id="acLimpar">Limpar filtros</button>
       </aside>
       <div>
@@ -4564,8 +4564,8 @@
   }
   $('acBusca').addEventListener('input', renderAcess);
   ['acGrupo', 'acTag', 'acLoja', 'acSit', 'acFmt', 'acCond'].forEach(function (k) { $(k).addEventListener('change', renderAcess); });
-  $('acOrdem').addEventListener('change', function () { LS.set('ordemAc', this.value); renderAcess(); });
-  $('acOrdem').value = LS.get('ordemAc', 'az');
+  $('acOrdem').addEventListener('change', function () { LS.set('ordemAc2', this.value); renderAcess(); });
+  $('acOrdem').value = LS.get('ordemAc2', 'recentes');
   $('acLimpar').onclick = function () { ['acBusca', 'acGrupo', 'acTag', 'acLoja', 'acSit', 'acFmt', 'acCond'].forEach(function (k) { $(k).value = ''; }); renderAcess(); };
   $('acFilBtn').onclick = function () { var on = !$('acFil').classList.contains('on'); $('acFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
   botaoEsconderFiltros($('acFilEsc'), 'acFil', 'semFilAc');
@@ -4596,6 +4596,7 @@
       if (ordem === 'menor') return (a.preco || Infinity) - (b.preco || Infinity) || a.nome.localeCompare(b.nome);
       if (ordem === 'maior') return (b.preco || 0) - (a.preco || 0) || a.nome.localeCompare(b.nome);
       if (ordem === 'estoque') return qtdLoja(b, lj) - qtdLoja(a, lj) || a.nome.localeCompare(b.nome);
+      if (ordem === 'recentes') return (b.cad || 0) - (a.cad || 0) || (b.ord || 0) - (a.ord || 0);
       return a.nome.localeCompare(b.nome);
     });
     // aparelhos seminovos (página Produtos Usados) aparecem junto, como condição "Usado"
@@ -4609,12 +4610,13 @@
       var t = [a.modelo, a.cor, a.classif, a.imei, a.imei2, a.sku, a.serial, a.grupo, 'usado seminovo aparelho celular'].join(' ').toLowerCase();
       return termos.every(function (k) { return t.indexOf(k) > -1; });
     });
-    var mix = l.map(function (x) { return { t: 'p', x: x, n: x.nome, p: x.preco, q: qtdLoja(x, lj) }; }).concat(la.map(function (a) { return { t: 'a', x: a, n: a.modelo + ' ' + a.cor, p: a.preco, q: 1 }; }));
+    var mix = l.map(function (x) { return { t: 'p', x: x, n: x.nome, p: x.preco, q: qtdLoja(x, lj), c: x.cad || 0, o: x.ord || 0 }; }).concat(la.map(function (a) { return { t: 'a', x: a, n: a.modelo + ' ' + a.cor, p: a.preco, q: 1, c: a.cad || 0, o: a.linha || 0 }; }));
     mix.sort(function (a, b) {
       if (ordem === 'za') return b.n.localeCompare(a.n);
       if (ordem === 'menor') return (a.p || Infinity) - (b.p || Infinity) || a.n.localeCompare(b.n);
       if (ordem === 'maior') return (b.p || 0) - (a.p || 0) || a.n.localeCompare(b.n);
       if (ordem === 'estoque') return b.q - a.q || a.n.localeCompare(b.n);
+      if (ordem === 'recentes') return b.c - a.c || (a.t === b.t ? b.o - a.o : 0);
       return a.n.localeCompare(b.n);
     });
     var reais = D.produtos.filter(function (x) { return x.formato === 'simples' || x.formato === 'variacao'; });
@@ -6293,7 +6295,7 @@
       if (imeiTxt && [x.imei, x.imei2, x.sku, x.serial].join(' ').toLowerCase().indexOf(imeiTxt) < 0) return false;
       var m = x.modelo.toLowerCase();
       return termos.every(function (t) { return m.indexOf(t) > -1; });
-    }).sort(function (a, b) { return a.modelo.localeCompare(b.modelo) || (a.preco || 0) - (b.preco || 0); });
+    }).sort(function (a, b) { return (b.cad || 0) - (a.cad || 0) || (b.linha || 0) - (a.linha || 0); }); // últimos cadastrados primeiro
     var nm = l.filter(function (x) { return x.manut; }).length;
     // produtos cadastrados em Produtos com condição "Usado"
     var lp = (S.dispProd || []).filter(function (x) {
@@ -6305,7 +6307,7 @@
       if (imeiTxt && [x.sku, x.codigo].join(' ').toLowerCase().indexOf(imeiTxt) < 0) return false;
       var m = x.nome.toLowerCase();
       return termos.every(function (t) { return m.indexOf(t) > -1; });
-    }).sort(function (a, b) { return (b.total > 0) - (a.total > 0) || a.nome.localeCompare(b.nome); });
+    }).sort(function (a, b) { return (b.cad || 0) - (a.cad || 0) || (b.ord || 0) - (a.ord || 0); });
     $('dCont').textContent = l.length + ' aparelho' + (l.length === 1 ? '' : 's') + (nm ? ' · ' + nm + ' em manutenção' : '') + (lp.length ? ' · ' + lp.length + ' outro' + (lp.length === 1 ? '' : 's') + ' produto' + (lp.length === 1 ? '' : 's') + ' usado' + (lp.length === 1 ? '' : 's') : '');
     if (S.ac) { S.ac.aparelhos = S.disp; if (S.view === 'acess') renderAcess(); }
     var box = $('dLista'); box.innerHTML = '';
