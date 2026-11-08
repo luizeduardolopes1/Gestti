@@ -6575,7 +6575,7 @@
       return true;
     }).sort(function (a, b) { return a.p.nome.localeCompare(b.p.nome); });
     var dataTxt = d.data.split('-').reverse().join('/');
-    $('sdInfo').textContent = (d.data === d.hoje ? 'Saldo de hoje (' + dataTxt + ')' : 'Saldo no fim do dia ' + dataTxt) + ' · ' + (SD.lojas.length ? SD.lojas.join(', ') : 'todos os depósitos') + '. Conta só os produtos da página Produtos (os aparelhos usados ficam em Produtos Usados).';
+    $('sdInfo').textContent = (d.data === d.hoje ? 'Saldo de hoje (' + dataTxt + ')' : 'Saldo no fim do dia ' + dataTxt) + ' · ' + (SD.lojas.length ? SD.lojas.join(', ') : 'todos os depósitos') + '. Produtos e aparelhos usados (agrupados por modelo e classificação).';
     var k = $('sdKpis'); k.innerHTML = '';
     kpi(k, 'Produtos', inteiro(L.length), 'no filtro');
     kpi(k, 'Unidades', inteiro(L.reduce(function (a, x) { return a + x.t; }, 0)), dataTxt);
@@ -6583,7 +6583,7 @@
     kpi(k, 'Valor de venda', brl(L.reduce(function (a, x) { return a + x.t * (x.p.preco || 0); }, 0)), 'preço atual do cadastro');
     var cab = ['Produto', 'SKU', 'Grupo'].concat(lojas.length > 1 ? lojas.map(function (l) { return l.replace(/^.*\| /, ''); }) : []).concat(['Saldo', 'Un.']).concat(C ? ['Custo unit.', 'Custo total'] : []).concat(['Preço', 'Valor de venda']);
     var linhas = L.map(function (x) {
-      return [x.p.nome, x.p.sku || '—', x.p.grupo ? x.p.grupo.split(SEP).join(' › ') : '—'].concat(lojas.length > 1 ? lojas.map(function (l) { return x.p.saldo[l] || 0; }) : [])
+      return [x.p.nome, x.p.usado ? 'Usado' : (x.p.sku || '—'), x.p.grupo ? x.p.grupo.split(SEP).join(' › ') : '—'].concat(lojas.length > 1 ? lojas.map(function (l) { return x.p.saldo[l] || 0; }) : [])
         .concat([x.t, x.p.unidade]).concat(C ? [brl(x.p.custo || 0), brl(x.t * (x.p.custo || 0))] : []).concat([x.p.preco ? brl(x.p.preco) : '—', brl(x.t * (x.p.preco || 0))]);
     });
     var box = $('sdCorpo'); box.innerHTML = '';
@@ -7210,6 +7210,7 @@
     var r = el('div', 'prow'); r.dataset.k = x.modelo;
     var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
     var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.modelo)); nm.appendChild(botaoCopiar(x.modelo, 'Copiar modelo')); n.appendChild(nm);
+    if (x.foraTabela) { var ft = el('div', 'psub', 'Novo na tabela · defina os preços'); ft.style.color = 'var(--warn, #b26a00)'; n.appendChild(ft); }
     var porCl = CL.filter(function (k) { return vz(x[k[0]]).qtd; }).map(function (k) { return k[1] + ' ' + vz(x[k[0]]).qtd; });
     if (porCl.length) n.appendChild(el('div', 'psub', porCl.join(' · ')));
     r.appendChild(n);
