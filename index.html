@@ -1466,6 +1466,10 @@
         <input id="cLocal" autocomplete="off" maxlength="40" placeholder="Ex.: Vitrine 1, gaveta B">
         <div class="hint">Aparelho com IMEI entra sempre 1 por cadastro. O custo do aparelho é o custo de compra (ou o preço unitário, se o custo ficar em branco).</div>
       </div>
+      <div class="card pecard hide" id="cPrecoBox">
+        <h2>Preço de venda</h2>
+        <div id="cPrecoCorpo"></div>
+      </div>
       <div class="peacoes"><div class="acoes"><button class="btn" id="enviar" type="submit">Salvar produto usado</button><button class="btn ghost" id="cCancelar" type="button">Cancelar</button></div></div>
     </form>
     <section id="sucesso" class="card done hide">
@@ -1497,7 +1501,7 @@
         <label for="dTag">Tag</label>
         <select id="dTag"></select>
         <label for="dSit">Situação</label>
-        <select id="dSit"><option value="">Disponíveis e em manutenção</option><option value="disp">Só disponíveis</option><option value="manut">Só em manutenção</option><option value="res">Reservados</option><option value="livres">Disponíveis sem reserva</option></select>
+        <select id="dSit"><option value="">Disponíveis e em manutenção</option><option value="disp">Só disponíveis</option><option value="manut">Só em manutenção</option><option value="res">Reservados</option><option value="livres">Disponíveis sem reserva</option><option value="sempreco">Aguardando preço</option><option value="parados">Parados</option><option value="p60">Parados há +60 dias</option><option value="p90">Parados há +90 dias</option></select>
         <button type="button" class="btn ghost" id="dLimpar">Limpar filtros</button>
       </aside>
       <div>
@@ -1653,7 +1657,7 @@
       </aside>
       <div>
         <div class="crumb">Tabela de Preços</div>
-        <div class="ptopo"><h1>Produtos Usados</h1><div class="tbtns"><button type="button" class="btn ghost hide" id="vPrec">⚙ Precificação</button><button type="button" class="btn hide" id="vNovoBtn">+ Incluir modelo</button></div></div>
+        <div class="ptopo"><h1>Produtos Usados</h1><div class="tbtns"><button type="button" class="btn ghost hide" id="vSug">✦ Preencher sem preço com o sugerido</button><button type="button" class="btn ghost hide" id="vPrec">⚙ Precificação</button><button type="button" class="btn hide" id="vNovoBtn">+ Incluir modelo</button></div></div>
         <div id="vResumo" class="hint" style="margin:-6px 2px 10px"></div>
         <div class="fbar"><div class="cont" id="vCont"></div><button type="button" class="lnk bfil" id="vFilBtn">Filtros ▾</button><button type="button" class="lnk bfil2" id="vFilEsc"></button></div>
         <div id="vAviso"></div>
@@ -1735,6 +1739,8 @@
       var d = el('div', 'ln' + (r[2] ? ' ' + r[2] : '')); d.appendChild(el('span', '', r[0])); d.appendChild(el('span', '', r[1])); box.appendChild(d);
     });
   }
+  function diasCfgParado() { return (S.u && S.u.reservaCfg && S.u.reservaCfg.diasParado) || 30; }
+  function diasEstoque(x) { var d = x.cad || x.d; return d ? Math.floor((Date.now() - d) / 864e5) : 0; }
   function grupoOp(g, k) { var o = (S.u && S.u.grupoOpcoes) || {}, p = String(g || '').split(' › ')[0]; return !!((o[g] && o[g][k]) || (o[p] && o[p][k])); }
   // ---------- liberação (desconto acima do limite, sinal…) ----------
   function comLiberacao(fn, args, iDados) {
@@ -6398,6 +6404,16 @@
       cadastros: D.itens.filter(function (x) { return x.d && x.d >= ini && x.d <= fim && naLoja(x); })
     };
     var box = $('dbCorpo'); box.innerHTML = '';
+    if (C && rel !== 'parado') {
+      var lim = diasCfgParado(), par = ctx.estoque.filter(function (x) { return x.d && (Date.now() - x.d) / 864e5 >= lim; });
+      if (par.length) {
+        var vp = soma(par, function (x) { return x.cu || 0; }), avp = el('div', 'aviso');
+        avp.style.cssText = 'background:var(--warn-bg);color:var(--warn);cursor:pointer;margin-bottom:12px';
+        avp.textContent = '⚠ ' + par.length + ' aparelho(s) parado(s) há mais de ' + lim + ' dias · ' + brl(vp) + ' de custo empatado. Toque para ver o relatório.';
+        avp.onclick = function () { LS.set('dbRel', 'parado'); renderDash(); };
+        box.appendChild(avp);
+      }
+    }
     ({ geral: relGeral, vendas: relVendas, fin: relFin, prod: relProd, os: relOS, estoque: relEstoque, parado: relParado, compras: relCompras, manut: relManut, grupos: relGrupos, novos: relNovos, agenda: relAgenda })[rel](box, ctx);
     $('dbRodape').textContent = 'Atualizado às ' + new Date(D.agora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + (D.todas ? ' · somando ' + D.empresas.join(' + ') : '') + '. Faturamento = vendas (Vendas e PDV, já com desconto) + ordens de serviço entregues; vendas canceladas não entram' + (C ? '. Lucro bruto = faturamento − custo (aparelho: custo + peça; produto: custo do cadastro; OS: custo das peças).' : '.');
   }
@@ -6874,6 +6890,7 @@
               bateria: $('bateria').value.trim(), custo: $('custo').value.trim(), classificacao: S.classificacao, tipo: S.tipo, obs: $('obs').value.trim(), sku: $('sku').value.trim(),
               imei2: $('imei2').value.replace(/\D/g, ''), serial: $('serial').value.trim().toUpperCase(),
               consultaImei: S.consulta, checklist: S.ck, grupo: S.cGrupo ? S.cGrupo.get() : '', tags: S.cTags ? S.cTags.get() : [], localizacao: $('cLocal').value.trim() };
+    if ($('cPrecoV') && $('cPrecoV').value.trim()) d.precoVenda = $('cPrecoV').value.trim();
     var puV = $('cPu').value.trim(), siO = $('cObsSI').value.trim();
     if (!d.custo && puV) d.custo = puV;
     d.obs = [d.obs, puV ? 'Preço unitário R$ ' + puV : '', siO ? 'Saldo inicial: ' + siO : ''].filter(Boolean).join(' · ');
@@ -6892,14 +6909,41 @@
     call('registrarAparelho', [S.token, d]).then(function (r) {
       btn.disabled = false; btn.textContent = 'Salvar produto usado';
       if (d.loja !== 'Manutenção') LS.set('loja', d.loja); S.disp = null; S.mt = null; S.ac = null;
-      $('sucessoTxt').textContent = r.modelo + ' · IMEI ' + r.imei + (d.loja === 'Manutenção' ? ' entrou no quadro de Manutenção.' : ' entrou no estoque como Disponível em ' + d.loja + '.') + (r.avisos && r.avisos.length ? ' (' + r.avisos.join('; ') + ')' : '');
+      $('sucessoTxt').textContent = r.modelo + ' · IMEI ' + r.imei + (d.loja === 'Manutenção' ? ' entrou no quadro de Manutenção.' : ' entrou no estoque como Disponível em ' + d.loja + '.') + (r.avisos && r.avisos.length ? ' (' + r.avisos.join('; ') + ')' : '') +
+        (r.precoDefinido ? ' Preço de venda definido na tabela: ' + brl(r.precoDefinido) + '.' : r.aguardandoPreco ? ' Este modelo ainda não tem preço nesta classificação: o aparelho ficou em "Aguardando preço" e o gerente define na Tabela de Preços.' : '');
+      S.venda = null;
       show('form', false); show('sucesso', true); window.scrollTo(0, 0);
     }).catch(function (err) {
       btn.disabled = false; btn.textContent = 'Salvar produto usado';
       msg('formMsg', err); window.scrollTo(0, 0);
     });
   });
+  // ---- preço de venda no cadastro (modelo sem preço: gerente define; vendedor deixa aguardando) ----
+  var cpT = null, cpN = 0;
+  function agendarPrecoCad() { clearTimeout(cpT); cpT = setTimeout(precoCad, 500); }
+  function precoCad() {
+    var box = $('cPrecoBox'), corpo = $('cPrecoCorpo'), mod = $('modelo').value.trim(), cl = S.classificacao;
+    if (!mod || !cl) { box.classList.add('hide'); return; }
+    var custo = $('custo').value.trim() || $('cPu').value.trim(), n = ++cpN, ant = $('cPrecoV') ? $('cPrecoV').value : '';
+    call('precoCadastro', [S.token, mod, cl, custo, S.tipo || '']).then(function (r) {
+      if (n !== cpN) return;
+      corpo.innerHTML = ''; box.classList.remove('hide');
+      if (r.preco) { corpo.appendChild(el('div', 'hint', 'Preço na tabela para ' + cl + ': ' + brl(r.preco) + '.')); return; }
+      if (r.podeDefinir) {
+        corpo.appendChild(el('div', 'hint', 'Este modelo ainda não tem preço em ' + cl + '. Defina agora (vai para a Tabela de Preços):'));
+        var w = el('div', 'prefix'), i = el('input'); i.id = 'cPrecoV'; i.inputMode = 'decimal'; i.placeholder = '0,00'; w.appendChild(el('span', '', 'R$')); w.appendChild(i); corpo.appendChild(w);
+        i.value = ant || (r.sugerido ? String(r.sugerido).replace('.', ',') : '');
+        corpo.appendChild(el('div', 'hint', r.sugerido ? 'Sugerido pela meta de margem: ' + brl(r.sugerido) + '.' : 'Informe o custo para ver o preço sugerido.'));
+        corpo.appendChild(el('div', 'hint', 'Em branco: o aparelho fica em "Aguardando preço".'));
+      } else {
+        var av = el('div', 'aviso', 'Este modelo ainda não tem preço em ' + cl + '. O aparelho vai entrar em "Aguardando preço" e o gerente define na Tabela de Preços.'); av.style.cssText = 'background:var(--warn-bg);color:var(--warn)'; corpo.appendChild(av);
+      }
+    }).catch(function () { if (n === cpN) box.classList.add('hide'); });
+  }
+  ['modelo', 'custo', 'cPu'].forEach(function (k) { $(k).addEventListener('input', agendarPrecoCad); $(k).addEventListener('change', agendarPrecoCad); });
+  ['classif', 'tipo'].forEach(function (k) { $(k).addEventListener('click', function () { setTimeout(agendarPrecoCad, 0); }); });
   function limparCadastro() {
+    $('cPrecoBox').classList.add('hide'); $('cPrecoCorpo').innerHTML = '';
     ['modelo', 'cor', 'imei', 'imei2', 'serial', 'sku', 'bateria', 'custo', 'obs', 'cLocal', 'cPu', 'cObsSI'].forEach(function (k) { $(k).value = ''; }); $('imei2Status').className = 'status'; $('imei2Status').textContent = '';
     $('cCond').value = 'Usado'; msg('formMsg', ''); $('modelo').dispatchEvent(new Event('change'));
     var lp = LS.get('loja', ''); if ((S.u.lojas || []).indexOf(lp) > -1) $('loja').value = lp; else $('loja').value = S.u.loja || ''; lojaHint();
@@ -6955,6 +6999,10 @@
       if (sit === 'manut' && !x.manut) return false;
       if (sit === 'res' && !x.reserva) return false;
       if (sit === 'livres' && (x.reserva || x.manut)) return false;
+      if (sit === 'sempreco' && x.preco) return false;
+      if (sit === 'parados' && diasEstoque(x) < diasCfgParado()) return false;
+      if (sit === 'p60' && diasEstoque(x) < 60) return false;
+      if (sit === 'p90' && diasEstoque(x) < 90) return false;
       if (gru && !casaCat(x.grupo, gru)) return false;
       if (tag && !(x.tags || []).some(function (t) { return casaCat(t, tag); })) return false;
       if (imeiTxt && [x.imei, x.imei2, x.sku, x.serial].join(' ').toLowerCase().indexOf(imeiTxt) < 0) return false;
@@ -7012,6 +7060,8 @@
     var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(nomeProduto(x)));
     if (x.manut) nm.appendChild(el('span', 'badge-m', 'Em manutenção'));
     if (x.precoAparelho) nm.appendChild(el('span', 'bdg warn', 'Preço especial'));
+    if (!x.preco) nm.appendChild(el('span', 'bdg warn', 'Aguardando preço'));
+    var dpz = diasEstoque(x); if (dpz >= diasCfgParado()) nm.appendChild(el('span', 'bdg off', 'Parado há ' + dpz + ' dias'));
     if (x.reserva) { var rb = el('span', 'bdg ' + (x.reserva.vencida ? 'warn' : 'res'), (x.reserva.vencida ? 'Reserva vencida · ' : 'Reservado · ') + x.reserva.vendedor.split(' ')[0]); rb.title = txtRes(x.reserva); nm.appendChild(rb); }
     nm.appendChild(botaoCopiar(nomeProduto(x), 'Copiar nome'));
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
@@ -7885,6 +7935,13 @@
 
   function renderVenda() {
     if (!S.venda) return;
+    var fila = [];
+    S.venda.forEach(function (x) { CL.forEach(function (k) { var b = vz(x[k[0]]); if (b.qtd && !b.preco) fila.push({ modelo: x.modelo, k: k, b: b }); }); });
+    var nAg = fila.reduce(function (a, f) { return a + f.b.qtd; }, 0), avb = $('vAgu');
+    if (!avb) { avb = el('div'); avb.id = 'vAgu'; $('vAviso').before(avb); }
+    avb.innerHTML = '';
+    if (nAg) { var av = el('div', 'aviso', nAg + ' aparelho(s) aguardando preço em ' + fila.length + ' modelo/classificação. Toque para ver.'); av.style.cssText = 'background:var(--warn-bg);color:var(--warn);cursor:pointer'; av.onclick = function () { $('vSit').value = 'sempreco'; renderVenda(); }; avb.appendChild(av); }
+    show('vSug', pode('editar_precos') && pode('ver_custos') && fila.some(function (f) { return f.b.sugerido; }));
     var g = pode('ver_custos');
     var termos = $('vBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean), sit = $('vSit').value, mg = g ? $('vMg').value : '', ordem = $('vOrdem').value;
     var re = { ok: /DENTRO/, abaixo: /ABAIXO/, prej: /PREJU/ }[mg];
@@ -8054,6 +8111,43 @@
       (P.preparo ? ' · preparação ' + brl(P.preparo) : '') + ' · meta de margem ' + pct(P.margem || 0) + '.';
   }
   $('vPrec').onclick = function () { abrirPrecUsados(); };
+  $('vSug').onclick = function () { abrirSugeridos(); };
+  /** Revisa e salva o preço sugerido (meta de margem) de cada modelo/classificação com estoque e sem preço. */
+  function abrirSugeridos() {
+    var L = [];
+    (S.venda || []).forEach(function (x) { CL.forEach(function (k) { var b = vz(x[k[0]]); if (b.qtd && !b.preco && b.sugerido) L.push({ modelo: x.modelo, k: k, b: b, on: true, v: String(b.sugerido) }); }); });
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Preencher com o preço sugerido'));
+    sh.appendChild(el('div', 'sub', 'Preço que dá a meta de margem sobre o custo médio do estoque (terminando em 9). Confira, ajuste o que quiser e salve.'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    L.forEach(function (it) {
+      var r = el('div'); r.style.cssText = 'display:grid;grid-template-columns:auto minmax(0,1fr) 120px;gap:8px 10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)';
+      var cb = el('input'); cb.type = 'checkbox'; cb.checked = true; cb.onchange = function () { it.on = cb.checked; };
+      var t = el('div'); t.appendChild(el('b', '', it.modelo + ' · ' + (it.k[1] === 'Recond.' ? 'Recondicionado' : it.k[1]))); t.appendChild(el('div', 'hint', it.b.qtd + ' em estoque · custo médio ' + brl(it.b.custo) + (it.b.distrib ? ' · ' + it.b.distrib + ' de distribuidor' : '')));
+      var mg = el('div', 'hint'); t.appendChild(mg);
+      var w = el('div', 'prefix'), i = el('input'); i.inputMode = 'decimal'; i.value = it.v.replace('.', ','); w.appendChild(el('span', '', 'R$')); w.appendChild(i);
+      var at = function () { it.v = i.value; var s2 = simPreco(it.b, num(i.value)); mg.textContent = s2.pct == null ? '' : 'margem ' + pct(s2.pct) + ' · lucro ' + brl(s2.lucro); mg.style.color = /DENTRO/.test(s2.status) ? 'var(--ok)' : /ABAIXO/.test(s2.status) ? 'var(--warn)' : 'var(--err)'; };
+      i.oninput = at; at();
+      r.appendChild(cb); r.appendChild(t); r.appendChild(w); c.appendChild(r);
+    });
+    if (!L.length) c.appendChild(el('div', 'hint', 'Nenhum modelo sem preço com custo no estoque.'));
+    var m = el('div', 'msg err'); sh.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar preços marcados'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); sh.appendChild(ac);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var porModelo = {};
+      L.filter(function (it) { return it.on; }).forEach(function (it) { var v = num(it.v); if (!(v > 0)) return; (porModelo[it.modelo] = porModelo[it.modelo] || {})[it.k[0]] = v; });
+      var lista = Object.keys(porModelo).map(function (mo) { return { modelo: mo, precos: porModelo[mo] }; });
+      if (!lista.length) { m.textContent = 'Marque pelo menos um preço.'; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('salvarPrecosLote', [S.token, lista]).then(function (l) {
+        aposSalvar(l); fecharModal(); renderVenda();
+        var av = $('vAviso'); av.innerHTML = ''; av.appendChild(el('div', 'aviso', '✓ Preço definido em ' + lista.length + ' modelo(s).'));
+      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar preços marcados'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal();
+  }
   function abrirPrecUsados() {
     var P = S.u.params || {};
     var sh = $('fSheet'); sh.innerHTML = '';
