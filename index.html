@@ -448,8 +448,18 @@
   .vdac .qp{display:grid;grid-template-columns:90px 1fr;gap:8px}.vdac .qp label{margin-top:6px}
   .p4 b{font-weight:700;color:var(--ink);background:none;padding:0}.p4 b.ok{color:var(--ok)}.p4 b.warn{color:var(--warn)}.p4 b.err{color:var(--err)}
   #vLista .prow{grid-template-columns:52px minmax(0,1fr) 440px 96px 24px}
-  @media (max-width:1100px){#vLista .prow{grid-template-columns:52px minmax(0,1fr) 96px 24px}#vLista .prow .p4{grid-column:2 / span 3;grid-row:2}#vLista .prow .ppre{grid-column:3;grid-row:1}#vLista .prow .chev{grid-column:4;grid-row:1}#vLista .prow.h>div:nth-child(3){display:none}}
-  @media (max-width:820px){#vLista .prow{grid-template-columns:44px minmax(0,1fr) auto}#vLista .prow .p4{grid-column:1 / -1;grid-row:3}#vLista .prow .ppre{grid-column:3;grid-row:1 / span 2}.p4 span b{font-size:13px}}
+  #vLista .prow.c5{grid-template-columns:52px minmax(0,1fr) 580px 96px 24px}
+  @media (max-width:1560px){#vLista .prow.c5{grid-template-columns:52px minmax(0,1fr) 96px 24px}#vLista .prow.c5 .p4{grid-column:2 / span 3;grid-row:2}#vLista .prow.c5 .ppre{grid-column:3;grid-row:1}#vLista .prow.c5 .chev{grid-column:4;grid-row:1}}
+  .p4.p5{grid-template-columns:repeat(4,minmax(0,1fr)) minmax(158px,1.35fr)}
+  .p4 span.pp{background:none;border:1px dashed var(--line);justify-content:center;gap:5px;white-space:normal;word-break:normal;overflow-wrap:normal;hyphens:none}
+  .p4 span.pp *{word-break:normal;overflow-wrap:normal}
+  .p4 span.pp.on{border:1px solid var(--brand);background:rgba(47,91,255,.06)}
+  .p4 span.pp .pps{font-size:10.5px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.03em;line-height:1.25}
+  .p4 span.pp button{font:inherit;font-size:11.5px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 8px;cursor:pointer;line-height:1.2}
+  .p4 span.pp button:hover{border-color:var(--brand);color:var(--brand)}
+  .p4 span.pp button:disabled{opacity:.6;cursor:wait}
+  @media (max-width:1100px){#vLista .prow,#vLista .prow.c5{grid-template-columns:52px minmax(0,1fr) 96px 24px}#vLista .prow .p4{grid-column:2 / span 3;grid-row:2}#vLista .prow .ppre{grid-column:3;grid-row:1}#vLista .prow .chev{grid-column:4;grid-row:1}#vLista .prow.h>div:nth-child(3){display:none}}
+  @media (max-width:820px){#vLista .prow,#vLista .prow.c5{grid-template-columns:44px minmax(0,1fr) auto}.p4.p5{grid-template-columns:repeat(4,minmax(0,1fr))}.p4 span.pp{grid-column:1 / -1;flex-direction:row;flex-wrap:wrap;padding:6px}#vLista .prow .p4{grid-column:1 / -1;grid-row:3}#vLista .prow .ppre{grid-column:3;grid-row:1 / span 2}.p4 span b{font-size:13px}}
   .ppre.est{color:var(--ink)}.ppre.est.zero{color:var(--muted);font-weight:600;font-size:14px}
   .ppre .st{margin-top:4px;display:inline-block}
   .pt{background:var(--card);border-radius:12px;padding:9px 9px 8px;box-shadow:0 1px 2px rgba(16,24,40,.06);cursor:pointer;min-width:0}
@@ -7305,6 +7315,29 @@
       if (!b.qtd) sp.classList.add('semq');
       p4.appendChild(sp);
     });
+    // Preço próprio desta empresa (logo depois do Recondicionado)
+    if (x.proprioPermitido && !x.foraTabela && (x.proprio || pode('editar_precos'))) {
+      r.classList.add('c5'); p4.classList.add('p5');
+      var pp = el('span', 'pp' + (x.proprio ? ' on' : ''));
+      pp.onclick = function (e) { e.stopPropagation(); };
+      if (x.proprio) pp.appendChild(el('div', 'pps', 'Preço próprio desta empresa'));
+      if (pode('editar_precos')) {
+        var bp = el('button', '', x.proprio ? 'Voltar ao preço do grupo' : 'Usar preço próprio'); bp.type = 'button';
+        bp.title = x.proprio ? 'O modelo volta a seguir a tabela do grupo' : 'Este modelo passa a ter preço só desta empresa (começa com o preço do grupo)';
+        bp.onclick = function (e) {
+          e.stopPropagation();
+          if (x.proprio && !confirm('Voltar ' + x.modelo + ' ao preço do grupo? O preço próprio desta empresa será apagado.')) return;
+          bp.disabled = true; bp.textContent = 'Salvando…';
+          call(x.proprio ? 'precoProprioRemover' : 'precoProprioUsar', [S.token, x.modelo]).then(function (l) {
+            aposSalvar(l); renderVenda();
+            var av = $('vAviso'); av.innerHTML = '';
+            av.appendChild(el('div', 'aviso', x.proprio ? '✓ ' + x.modelo + ' voltou ao preço do grupo.' : '✓ ' + x.modelo + ' agora tem preço próprio nesta empresa. Edite os preços normalmente: só esta empresa é afetada.'));
+          }).catch(function (er) { bp.disabled = false; bp.textContent = x.proprio ? 'Voltar ao preço do grupo' : 'Usar preço próprio'; alert(String(er)); });
+        };
+        pp.appendChild(bp);
+      }
+      p4.appendChild(pp);
+    }
     r.appendChild(p4);
     var q = qtdModelo(x), est = el('div', 'ppre est' + (q ? '' : ' zero'), q ? String(q) : 'Sem estoque');
     if (q) est.appendChild(el('small', '', 'em estoque'));
@@ -7393,6 +7426,8 @@
     var sh = $('fSheet'); sh.innerHTML = '';
     sh.appendChild(el('h2', 'tt', 'Editar produto e precificação'));
     sh.appendChild(el('div', 'sub', x.modelo + ' · deixe em branco a classificação que não tem preço.'));
+    if (x.proprio) sh.appendChild(el('div', 'aviso', 'Preço próprio desta empresa: o que você salvar aqui vale só nesta empresa. Preço do grupo: ' +
+      CL.map(function (k) { var v = x.grupo && x.grupo[k[0]]; return (k[1] === 'Recond.' ? 'Recondicionado' : k[1]) + ' ' + (v ? nc(v) : '—'); }).join(' · ') + '.'));
     var c = el('div', 'card'), grade = el('div', 'epgrid'); c.appendChild(grade);
     var ins = {};
     CL.forEach(function (k) {
