@@ -449,6 +449,19 @@
   .p4 b{font-weight:700;color:var(--ink);background:none;padding:0}.p4 b.ok{color:var(--ok)}.p4 b.warn{color:var(--warn)}.p4 b.err{color:var(--err)}
   #vLista .prow{grid-template-columns:52px minmax(0,1fr) 440px 96px 24px}
   #vLista .prow.c5{grid-template-columns:52px minmax(0,1fr) 580px 96px 24px}
+  .pdif{display:inline-flex;align-items:center;gap:4px;margin-top:4px;font-size:11.5px;font-weight:700;color:var(--warn);background:var(--warn-bg,#fff4e0);border:0;border-radius:20px;padding:2px 9px;cursor:pointer;font-family:inherit}
+  .p4 span b.edt{cursor:text;border-bottom:1px dashed var(--line)}
+  .p4 span input.pin{width:100%;max-width:110px;margin:2px 0 0;padding:4px 6px;font-size:13px;text-align:center;border-radius:7px}
+  .p4 span .pmg{font-size:10.5px;font-weight:700;margin-top:2px}
+  .ppre s{display:block;font-size:11px;color:var(--muted);font-weight:500}
+  .libov{position:fixed;inset:0;z-index:60;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+  .libbox{background:var(--card);border-radius:16px;max-width:460px;width:100%;max-height:92vh;overflow:auto;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+  .libbox h2{margin:0 0 6px;font-size:19px}
+  .libbox pre{white-space:pre-wrap;font-family:inherit;font-size:13.5px;background:var(--bg);border-radius:10px;padding:10px 12px;margin:10px 0;line-height:1.45}
+  .libbox .libsec{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+  .libbox .libsec h3{margin:0 0 6px;font-size:14.5px}
+  .limg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .limg label{margin-top:4px}
   @media (max-width:1560px){#vLista .prow.c5{grid-template-columns:52px minmax(0,1fr) 96px 24px}#vLista .prow.c5 .p4{grid-column:2 / span 3;grid-row:2}#vLista .prow.c5 .ppre{grid-column:3;grid-row:1}#vLista .prow.c5 .chev{grid-column:4;grid-row:1}}
   .p4.p5{grid-template-columns:repeat(4,minmax(0,1fr)) minmax(158px,1.35fr)}
   .p4 span.pp{background:none;border:1px dashed var(--line);justify-content:center;gap:5px;white-space:normal;word-break:normal;overflow-wrap:normal;hyphens:none}
@@ -1596,7 +1609,7 @@
         <label for="vBusca">Modelo</label>
         <input id="vBusca" placeholder="Ex.: 13 128" autocomplete="off">
         <label for="vSit">Situação</label>
-        <select id="vSit"><option value="todos">Todos os modelos</option><option value="">Com estoque</option><option value="sem">Sem estoque</option><option value="sempreco">Com estoque e sem preço</option></select>
+        <select id="vSit"><option value="todos">Todos os modelos</option><option value="">Com estoque</option><option value="sem">Sem estoque</option><option value="sempreco">Com estoque e sem preço</option><option value="difer">Aparelhos com preço diferente da tabela</option></select>
         <div id="vMgBox" class="hide">
           <label for="vMg">Margem</label>
           <select id="vMg"><option value="">Todas</option><option value="ok">Na meta</option><option value="abaixo">Abaixo da meta</option><option value="prej">Com prejuízo</option></select>
@@ -1686,6 +1699,85 @@
     rows.forEach(function (r) {
       var d = el('div', 'ln' + (r[2] ? ' ' + r[2] : '')); d.appendChild(el('span', '', r[0])); d.appendChild(el('span', '', r[1])); box.appendChild(d);
     });
+  }
+  function grupoOp(g, k) { var o = (S.u && S.u.grupoOpcoes) || {}, p = String(g || '').split(' › ')[0]; return !!((o[g] && o[g][k]) || (o[p] && o[p][k])); }
+  // ---------- liberação (desconto acima do limite, sinal…) ----------
+  function comLiberacao(fn, args, iDados) {
+    return call(fn, args).catch(function (e) {
+      e = String(e);
+      if (e.indexOf('LIBERACAO|') !== 0) throw e;
+      var ped; try { ped = JSON.parse(e.slice(10)); } catch (x) { throw 'Pedido de liberação inválido.'; }
+      return pedirLiberacaoUI(ped).then(function (tok) { args[iDados] = Object.assign({}, args[iDados], { liberacao: tok }); return comLiberacao(fn, args, iDados); });
+    });
+  }
+  function pedirLiberacaoUI(ped) {
+    return new Promise(function (ok, fail) {
+      var ov = el('div', 'libov'), bx = el('div', 'libbox'); ov.appendChild(bx); document.body.appendChild(ov);
+      var vivo = true, timer = null;
+      function fim(tok, erro) { vivo = false; if (timer) clearTimeout(timer); ov.remove(); if (tok) ok(tok); else fail(erro || 'Operação não concluída: aguardando liberação.'); }
+      bx.appendChild(el('h2', '', 'Precisa de liberação'));
+      bx.appendChild(el('div', 'hint', 'Um gerente ou supervisor precisa aprovar. Escolha como:'));
+      bx.appendChild(el('pre', '', ped.resumo));
+      var s1 = el('div', 'libsec'); s1.appendChild(el('h3', '', '1. Pedir pelo WhatsApp'));
+      s1.appendChild(el('div', 'hint', 'Manda um link para o gerente aprovar de onde estiver. Esta tela segue sozinha quando ele aprovar.'));
+      var bw = el('button', 'btn', 'Pedir liberação pelo WhatsApp'); bw.type = 'button'; s1.appendChild(bw);
+      var st = el('div', 'hint'); s1.appendChild(st); bx.appendChild(s1);
+      var s2 = el('div', 'libsec'); s2.appendChild(el('h3', '', '2. O gerente libera aqui, com a senha dele'));
+      var us = inp('text', 'Usuário do gerente ou supervisor'), sn = inp('password', 'Senha'); us.autocomplete = 'off'; sn.autocomplete = 'new-password'; sn.maxLength = 40;
+      campo(s2, 'Usuário', us, true); campo(s2, 'Senha', sn);
+      var bs = el('button', 'btn', 'Liberar'); bs.type = 'button'; bs.style.marginTop = '10px'; s2.appendChild(bs);
+      s2.appendChild(el('div', 'hint', 'A senha só confere a liberação: o gerente não fica conectado neste aparelho.'));
+      var m = el('div', 'msg err'); s2.appendChild(m); bx.appendChild(s2);
+      var bc = el('button', 'btn ghost', 'Cancelar'); bc.type = 'button'; bc.style.marginTop = '14px'; bx.appendChild(bc);
+      bc.onclick = function () { fim(null); };
+      bs.onclick = function () {
+        m.classList.remove('show'); if (!us.value.trim() || !sn.value) { m.textContent = 'Informe usuário e senha.'; m.classList.add('show'); return; }
+        bs.disabled = true; bs.textContent = 'Conferindo…';
+        call('liberacaoSenha', [S.token, ped, us.value.trim(), sn.value]).then(function (r) { sn.value = ''; fim(r.liberacao); })
+          .catch(function (er) { sn.value = ''; bs.disabled = false; bs.textContent = 'Liberar'; m.textContent = er; m.classList.add('show'); });
+      };
+      bw.onclick = function () {
+        bw.disabled = true; bw.textContent = 'Gerando o pedido…';
+        call('liberacaoPedir', [S.token, ped]).then(function (r) {
+          bw.textContent = 'Reenviar pelo WhatsApp'; bw.disabled = false;
+          bw.onclick = function () { window.open('https://wa.me/?text=' + encodeURIComponent(r.texto), '_blank'); };
+          window.open('https://wa.me/?text=' + encodeURIComponent(r.texto), '_blank');
+          st.textContent = 'Aguardando a aprovação do gerente… (o pedido vale 2 horas)';
+          (function olhar() {
+            if (!vivo) return;
+            call('liberacaoStatus', [S.token, r.id]).then(function (x) {
+              if (!vivo) return;
+              if (x.status === 'aprovado' && x.liberacao) return fim(x.liberacao);
+              if (x.status === 'recusado') { st.textContent = 'Recusado por ' + x.aprovador + (x.obs ? ': ' + x.obs : '') + '.'; return; }
+              if (x.status === 'vencido') { st.textContent = 'O pedido venceu. Peça de novo.'; return; }
+              timer = setTimeout(olhar, 4000);
+            }).catch(function () { timer = setTimeout(olhar, 8000); });
+          })();
+        }).catch(function (er) { bw.disabled = false; bw.textContent = 'Pedir liberação pelo WhatsApp'; st.textContent = String(er); });
+      };
+    });
+  }
+  /** Quem aprova abre o link ?lib=… já logado */
+  function checarLinkLiberacao() {
+    var id = (location.search.match(/[?&]lib=(\w+)/) || [])[1]; if (!id) return;
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    var ov = el('div', 'libov'), bx = el('div', 'libbox'); ov.appendChild(bx); document.body.appendChild(ov);
+    bx.appendChild(el('h2', '', 'Pedido de liberação'));
+    var corpo = el('div', '', 'Carregando…'); bx.appendChild(corpo);
+    var fechar = el('button', 'btn ghost', 'Fechar'); fechar.type = 'button'; fechar.style.marginTop = '14px'; fechar.onclick = function () { ov.remove(); }; bx.appendChild(fechar);
+    if (!pode('liberar')) { corpo.textContent = 'Seu usuário não pode aprovar liberações. Peça para o gerente ou supervisor abrir o link.'; return; }
+    function mostrar(r) {
+      corpo.innerHTML = '';
+      corpo.appendChild(el('div', 'hint', 'Pedido de ' + r.porNome + ' em ' + r.em));
+      corpo.appendChild(el('pre', '', r.resumo));
+      if (r.status !== 'pendente') { corpo.appendChild(el('div', 'aviso', r.status === 'aprovado' ? '✓ Aprovado' + (r.aprovador ? ' por ' + r.aprovador : '') + '.' : r.status === 'recusado' ? 'Recusado' + (r.aprovador ? ' por ' + r.aprovador : '') + '.' : 'Este pedido venceu.')); return; }
+      var ob = inp('text', 'Observação (opcional)'); ob.maxLength = 200; campo(corpo, 'Observação', ob, true);
+      var ac = el('div', 'acoes'), ap = el('button', 'btn', 'Aprovar'), rc = el('button', 'btn ghost', 'Recusar'); ap.type = rc.type = 'button'; ac.appendChild(ap); ac.appendChild(rc); corpo.appendChild(ac);
+      var m = el('div', 'msg err'); corpo.appendChild(m);
+      function decidir(sim) { ap.disabled = rc.disabled = true; call('liberacaoDecidir', [S.token, id, sim, ob.value.trim()]).then(mostrar).catch(function (e) { ap.disabled = rc.disabled = false; m.textContent = e; m.classList.add('show'); }); }
+      ap.onclick = function () { decidir(true); }; rc.onclick = function () { decidir(false); };
+    }
+    call('liberacaoVer', [S.token, id]).then(mostrar).catch(function (e) { corpo.textContent = String(e); });
   }
   function seg(box, list, cur, onPick) {
     box.innerHTML = '';
@@ -2816,6 +2908,7 @@
     if (ult !== 'config' && !permitidas.some(function (v) { return v.id === ult; })) ult = permitidas.length ? permitidas[0].id : '';
     if (!ult) { show('nav', false); document.body.classList.remove('logado'); msg('topMsg', 'Seu usuário ainda não tem nenhuma página liberada. Fale com o gerente.'); return; }
     ir(ult);
+    setTimeout(checarLinkLiberacao, 300);
   }
 
   // menu suspenso da barra de cima (ex.: Tabela de Preços → Produtos Novos / Produtos Usados)
@@ -3298,7 +3391,7 @@
         cliente: { id: C2.id, cpf: C2.cpf, nome: C2.nome, whats: C2.whats, cep: C2.cep, endereco: C2.endereco, bairro: C2.bairro, cidade: C2.cidade },
         pagamentos: V.pags.filter(function (p) { return p.formaId !== UPG; }).map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, primeiroVenc: p.primeiroVenc || '', categoria: p.categoria, bandeira: p.bandeira || '' }; })
       };
-      call('vendaRegistrar', [S.token, d]).then(function (v) {
+      comLiberacao('vendaRegistrar', [S.token, d], 1).then(function (v) {
         S.disp = null; S.dash = null; S.venda = null; S.vendas = null; S.fin = null; S.crm = null; S.ac = null; S.cred = null;
         V = null; novaVenda(); abrirRecibo(v, true);
       }).catch(function (e) { fin.disabled = false; fin.textContent = 'Finalizar venda'; m.textContent = e; m.classList.add('show'); });
@@ -4737,7 +4830,7 @@
       if (!lj) { var lo = Object.keys(x.estoque).map(function (k) { return k.replace(/^.*\| /, '') + ' ' + x.estoque[k]; }).join(' · '); if (lo) es.appendChild(el('div', 'psub', lo)); }
       r.appendChild(es);
       var pr = el('div', 'ppre' + (x.preco ? '' : ' sem'), x.preco ? brl(x.preco) : 'Consultar');
-      if (x.preco && t12) pr.appendChild(el('small', '', '12x ' + brl(x.preco / (1 - t12.taxa) / 12)));
+      if (x.preco && t12 && grupoOp(x.grupo, 'cartao')) pr.appendChild(el('small', '', '12x ' + brl(x.preco / (1 - t12.taxa) / 12)));
       r.appendChild(pr); r.appendChild(el('div', 'chev', '›'));
       r.onclick = function () { abrirAcess(x); };
       tab.appendChild(r);
@@ -5414,7 +5507,7 @@
         itens: PDV.itens.map(function (i) { return { linha: i.linha, imei: i.imei, preco: i.preco, desconto: 0 }; }),
         acessorios: PDV.acess.map(function (a) { return { id: a.id, qtd: a.qtd, preco: a.preco, desconto: 0, seriais: a.seriais || [] }; }), troca: [],
         pagamentos: PDV.pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, categoria: catRec()[0], bandeira: p.bandeira || '', primeiroVenc: p.primeiroVenc || '' }; }), obs: '' };
-      call('vendaRegistrar', [S.token, d]).then(function (v) {
+      comLiberacao('vendaRegistrar', [S.token, d], 1).then(function (v) {
         S.disp = null; S.dash = null; S.vendas = null; S.fin = null; S.ac = null; S.cred = null; S.cx = null;
         pdvNovo(); desenharPdv(); abrirRecibo(v, true);
       }).catch(function (e) { fin.disabled = false; fin.textContent = 'Finalizar (F2)'; m2.textContent = e; m2.classList.add('show'); });
@@ -6435,6 +6528,7 @@
     var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
     var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(nomeProduto(x)));
     if (x.manut) nm.appendChild(el('span', 'badge-m', 'Em manutenção'));
+    if (x.precoAparelho) nm.appendChild(el('span', 'bdg warn', 'Preço especial'));
     nm.appendChild(botaoCopiar(nomeProduto(x), 'Copiar nome'));
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
     n.appendChild(nm); n.appendChild(el('div', 'psub', [x.loja, bat ? 'bateria ' + bat : '', x.grupo].filter(Boolean).join(' · ')));
@@ -6443,6 +6537,7 @@
     var cod = x.sku || x.imei;
     var sku = el('div', 'psku', cod); sku.appendChild(botaoCopiar(cod, 'Copiar SKU')); r.appendChild(sku);
     var pr = el('div', 'ppre' + (x.preco ? '' : ' sem'), x.preco ? brl(x.preco) : 'Consultar');
+    if (x.precoAparelho && x.precoTabela) pr.appendChild(el('s', '', 'tabela ' + brl(x.precoTabela)));
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     if (x.preco && t12) pr.appendChild(el('small', '', '12x ' + brl(x.preco / (1 - t12.taxa) / 12)));
     r.appendChild(pr);
@@ -6501,7 +6596,8 @@
     var info = el('div', 'card'), kv = el('div', 'kv');
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
     [['SKU', x.sku || '—'], ['IMEI1', x.imei], ['IMEI2', x.imei2 || ''], ['Serial', x.serial || ''], ['Classificação', x.classif], ['Bateria', bat], ['Loja', x.loja], ['Localização', x.local || ''], ['Situação', x.manut ? 'Em manutenção' : 'Disponível'],
-     ['Tipo', x.tipo], ['Custo', pode('ver_custos') && x.custo !== null && x.custo !== undefined ? brl((x.custo || 0) + (x.peca || 0)) : ''], ['Observação', x.obs]]
+     ['Tipo', x.tipo], ['Custo', pode('ver_custos') && x.custo !== null && x.custo !== undefined ? brl((x.custo || 0) + (x.peca || 0)) : ''], ['Observação', x.obs],
+     ['Preço da tabela', x.precoAparelho ? (x.precoTabela ? brl(x.precoTabela) : 'sem preço') : ''], ['Preço deste aparelho', x.precoAparelho ? brl(x.precoAparelho) + ' · ' + x.precoMotivo : '']]
       .forEach(function (p) { if (p[1] === '' || p[1] === undefined || p[1] === null) return; kv.appendChild(el('div', 'k', p[0])); kv.appendChild(el('div', '', String(p[1]))); });
     info.appendChild(kv); bd.appendChild(info);
     var am = el('div', 'msg err'); bd.appendChild(am);
@@ -6518,6 +6614,37 @@
         if (aberto) { aberto.remove(); aberto = null; return; }
         aberto = el('div', 'opc-box'); montar(aberto); botao.after(aberto);
       };
+    }
+
+    // Preço só deste aparelho (diferente da tabela)
+    if (pode('editar_precos') && x.linha && x.status !== 'Vendido' && x.status !== 'Baixado') {
+      var bpz = opcao('Preço deste aparelho', x.precoAparelho ? 'Preço especial: ' + brl(x.precoAparelho) + ' · tabela ' + (x.precoTabela ? brl(x.precoTabela) : 'sem preço') : 'Tabela: ' + (x.precoTabela ? brl(x.precoTabela) : 'sem preço') + ' · dar um preço diferente só para ele');
+      bpz.onclick = painel(bpz, function (box) {
+        var pv = inp('text', 'Ex.: 2.300,00'); pv.inputMode = 'decimal'; pv.value = x.precoAparelho ? String(x.precoAparelho).replace('.', ',') : (x.precoTabela ? String(x.precoTabela).replace('.', ',') : '');
+        var mo = inp('text', 'Ex.: risco na tampa, bateria 79%, caixa original'); mo.maxLength = 120; mo.value = x.precoMotivo || '';
+        campo(box, 'Preço deste aparelho (R$)', pv, true); campo(box, 'Motivo (o vendedor vê)', mo);
+        var mg = el('div', 'hint'); box.appendChild(mg);
+        function marg() {
+          var v = num(pv.value); mg.textContent = '';
+          if (!(v > 0)) return;
+          var t = x.precoTabela ? ' · ' + (v >= x.precoTabela ? '+' : '−') + brl(Math.abs(v - x.precoTabela)) + ' em relação à tabela' : '';
+          var c = pode('ver_custos') && x.custo != null ? ' · lucro bruto ' + brl(v - (x.custo || 0) - (x.peca || 0)) : '';
+          mg.textContent = brl(v) + t + c;
+        }
+        pv.oninput = marg; marg();
+        var ac2 = el('div', 'acoes'), sv2 = el('button', 'btn', 'Salvar preço'); sv2.type = 'button'; ac2.appendChild(sv2);
+        if (x.precoAparelho) { var rm = el('button', 'btn ghost', 'Voltar ao preço da tabela'); rm.type = 'button'; ac2.appendChild(rm);
+          rm.onclick = function () { rm.disabled = true; call('aparelhoPreco', [S.token, x.linha, x.imei, { preco: '' }]).then(function (l) { aposAparelhos(l); S.venda = null; var nv = l.filter(function (y) { return y.linha === x.linha && y.imei === x.imei; })[0]; if (nv) abrirDrawer(nv); else fecharDrawer(); }).catch(function (e) { rm.disabled = false; erro(e); }); }; }
+        box.appendChild(ac2);
+        sv2.onclick = function () {
+          am.classList.remove('show');
+          sv2.disabled = true; sv2.textContent = 'Salvando…';
+          call('aparelhoPreco', [S.token, x.linha, x.imei, { preco: pv.value.trim(), motivo: mo.value.trim() }]).then(function (l) {
+            aposAparelhos(l); S.venda = null;
+            var nv = l.filter(function (y) { return y.linha === x.linha && y.imei === x.imei; })[0]; if (nv) abrirDrawer(nv); else fecharDrawer();
+          }).catch(function (e) { sv2.disabled = false; sv2.textContent = 'Salvar preço'; erro(e); });
+        };
+      });
     }
 
     // 4. Editar produto
@@ -7277,6 +7404,7 @@
       if (!termos.every(function (t) { return m.indexOf(t) > -1; })) return false;
       if (sit === '' && !q) return false;
       if (sit === 'sem' && q) return false;
+      if (sit === 'difer' && !(x.difs && x.difs.length)) return false;
       if (sit === 'sempreco' && !CL.some(function (k) { var b = vz(x[k[0]]); return b.qtd && !b.preco; })) return false;
       if (re && !CL.some(function (k) { var b = vz(x[k[0]]); return b.qtd && re.test(b.status || ''); })) return false;
       return true;
@@ -7290,6 +7418,12 @@
     var tq = l.reduce(function (a, x) { return a + qtdModelo(x); }, 0);
     $('vCont').textContent = l.length + ' modelo' + (l.length === 1 ? '' : 's') + ' · ' + tq + ' aparelho' + (tq === 1 ? '' : 's') + ' em estoque';
     var box = $('vLista'); box.innerHTML = '';
+    if (sit === 'difer') {
+      var D = []; l.forEach(function (x) { (x.difs || []).forEach(function (d) { D.push(Object.assign({ modelo: x.modelo }, d)); }); });
+      $('vCont').textContent = D.length + ' aparelho' + (D.length === 1 ? '' : 's') + ' com preço diferente da tabela';
+      if (!D.length) { box.appendChild(el('div', 'empty', 'Nenhum aparelho com preço diferente da tabela. Para dar um preço especial, abra o aparelho em Produtos Usados.')); return; }
+      box.appendChild(tabelaDifs(D, true)); return;
+    }
     if (!l.length) { box.appendChild(el('div', 'empty', sit === '' ? 'Nenhum modelo com estoque. Em "Situação", escolha "Todos os modelos" para ver todos.' : 'Nenhum modelo encontrado.')); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
     ['', 'Modelo', 'Preços por classificação', 'Estoque', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
@@ -7304,12 +7438,18 @@
     if (x.foraTabela) { var ft = el('div', 'psub', 'Novo na tabela · defina os preços'); ft.style.color = 'var(--warn, #b26a00)'; n.appendChild(ft); }
     var porCl = CL.filter(function (k) { return vz(x[k[0]]).qtd; }).map(function (k) { return k[1] + ' ' + vz(x[k[0]]).qtd; });
     if (porCl.length) n.appendChild(el('div', 'psub', porCl.join(' · ')));
+    if (x.difs && x.difs.length) {
+      var bd = el('button', 'pdif', x.difs.length + ' com preço diferente'); bd.type = 'button';
+      bd.onclick = function (e) { e.stopPropagation(); abrirDifs(x); };
+      n.appendChild(bd);
+    }
     r.appendChild(n);
     var p4 = el('div', 'psku p4'), t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     CL.forEach(function (k) {
       var b = vz(x[k[0]]), sp = el('span'); sp.appendChild(el('i', '', k[1]));
       var cls = g && b.qtd ? (/DENTRO/.test(b.status) ? 'ok' : /ABAIXO/.test(b.status) ? 'warn' : /PREJU/.test(b.status) ? 'err' : '') : '';
-      sp.appendChild(el('b', cls, b.preco ? nc(b.preco) : '—'));
+      var bv = el('b', cls, b.preco ? nc(b.preco) : '—'); sp.appendChild(bv);
+      if (pode('editar_precos') && !x.foraTabela) { bv.classList.add('edt'); bv.title = 'Clique para mudar o preço'; bv.onclick = function (e) { e.stopPropagation(); precoInline(x, k, b, sp, bv, g); }; }
       sp.appendChild(el('small', '', b.preco && t12 ? '12x ' + brl(b.preco / (1 - t12.taxa) / 12) : ''));
       if (g) { var tx = b.qtd ? stTxt(b.status) : ''; sp.appendChild(tx ? el('em', stCls(b.status), tx) : el('em', 'st st-vazio', b.qtd ? '' : 'sem estoque')); }
       if (!b.qtd) sp.classList.add('semq');
@@ -7345,6 +7485,67 @@
     r.appendChild(el('div', 'chev', '›'));
     r.onclick = function () { abrirDrawerPreco(x.modelo); };
     return r;
+  }
+  /** Edição rápida: clica no preço, digita, Enter salva (Esc cancela). */
+  function precoInline(x, k, b, sp, bv, g) {
+    if (sp.querySelector('input')) return;
+    var ip = el('input', 'pin'); ip.inputMode = 'decimal'; ip.value = b.preco ? String(b.preco).replace('.', ',') : '';
+    var mg = el('div', 'pmg'); bv.style.display = 'none'; sp.insertBefore(ip, bv.nextSibling); sp.insertBefore(mg, ip.nextSibling);
+    ip.onclick = function (e) { e.stopPropagation(); };
+    function marg() {
+      var v = num(ip.value); mg.textContent = ''; mg.className = 'pmg';
+      if (!g || !(v > 0)) return;
+      var r2 = simPreco(b, v); if (r2.pct === null) { mg.textContent = r2.status; return; }
+      mg.textContent = 'margem ' + pct(r2.pct); mg.className = 'pmg ' + (/DENTRO/.test(r2.status) ? 'ok' : /ABAIXO/.test(r2.status) ? 'warn' : 'err');
+      mg.style.color = /DENTRO/.test(r2.status) ? 'var(--ok)' : /ABAIXO/.test(r2.status) ? 'var(--warn)' : 'var(--err)';
+    }
+    var feito = false;
+    function sair() { if (feito) return; feito = true; ip.remove(); mg.remove(); bv.style.display = ''; }
+    ip.oninput = marg; marg();
+    ip.onblur = function () { setTimeout(sair, 150); };
+    ip.onkeydown = function (e) {
+      if (e.key === 'Escape') { sair(); return; }
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      var v = ip.value.trim(); if (v && !(num(v) > 0)) { mg.textContent = 'Valor inválido'; return; }
+      if ((num(v) || 0) === (b.preco || 0)) { sair(); return; }
+      feito = true; ip.disabled = true; mg.textContent = 'Salvando…';
+      var p = {}; p[k[0]] = v;
+      call('salvarPrecos', [S.token, x.modelo, p]).then(function (l) {
+        aposSalvar(l); renderVenda();
+        var av = $('vAviso'); av.innerHTML = ''; av.appendChild(el('div', 'aviso', '✓ ' + x.modelo + ' · ' + (k[1] === 'Recond.' ? 'Recondicionado' : k[1]) + ': ' + (v ? brl(num(v)) : 'sem preço') + '.'));
+      }).catch(function (er) { feito = false; ip.disabled = false; mg.textContent = String(er); ip.focus(); });
+    };
+    ip.focus(); ip.select();
+  }
+  function tabelaDifs(D, comModelo) {
+    var w = el('div');
+    D.forEach(function (d) {
+      var c = el('div', 'card'); c.style.cssText = 'padding:12px 14px;margin-bottom:8px;cursor:pointer';
+      var t = el('div'); t.style.cssText = 'display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap';
+      t.appendChild(el('b', '', (comModelo ? d.modelo + ' · ' : '') + d.classif + (d.cor ? ' · ' + d.cor : '')));
+      var dif = d.precoTabela ? d.preco - d.precoTabela : null;
+      var pv = el('span'); pv.style.fontWeight = '700'; pv.textContent = brl(d.preco) + (dif === null ? '' : '  (' + (dif >= 0 ? '+' : '−') + brl(Math.abs(dif)) + ')'); pv.style.color = dif !== null && dif < 0 ? 'var(--err)' : 'var(--ok)';
+      t.appendChild(pv); c.appendChild(t);
+      c.appendChild(el('div', 'hint', 'IMEI ' + d.imei + ' · ' + (d.loja || '') + ' · tabela ' + (d.precoTabela ? brl(d.precoTabela) : 'sem preço')));
+      c.appendChild(el('div', 'hint', 'Motivo: ' + (d.motivo || '—')));
+      c.onclick = function () {
+        fecharModal();
+        var a = (S.disp || []).filter(function (y) { return y.imei === d.imei; })[0];
+        if (a) { abrirDrawer(a); return; }
+        call('disponiveis', [S.token]).then(function (l) { S.disp = l; var a2 = l.filter(function (y) { return y.imei === d.imei; })[0]; if (a2) abrirDrawer(a2); }).catch(function (e) { alert(String(e)); });
+      };
+      w.appendChild(c);
+    });
+    return w;
+  }
+  function abrirDifs(x) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', x.modelo));
+    sh.appendChild(el('div', 'sub', x.difs.length + ' aparelho' + (x.difs.length === 1 ? '' : 's') + ' com preço diferente da tabela. Toque para abrir o aparelho.'));
+    sh.appendChild(tabelaDifs(x.difs, false));
+    var cc = el('button', 'btn ghost', 'Fechar'); cc.type = 'button'; cc.onclick = fecharModal; sh.appendChild(cc);
+    abrirModal();
   }
   // mesma conta da aba Venda (margem ao digitar)
   function simPreco(b, preco) {
@@ -7933,6 +8134,7 @@
     var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
     var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(nomeProduto(a))); nm.appendChild(el('span', 'bdg inf', 'Usado'));
     if (a.manut) nm.appendChild(el('span', 'badge-m', 'Em manutenção'));
+    if (a.precoAparelho) nm.appendChild(el('span', 'bdg warn', 'Preço especial'));
     var bat = typeof a.bateria === 'number' ? a.bateria + '%' : a.bateria;
     n.appendChild(nm); n.appendChild(el('div', 'psub', ['Aparelho seminovo (Produtos Usados)', bat ? 'bateria ' + bat : '', a.grupo].filter(Boolean).join(' · '))); tagsMini(n, a.tags); r.appendChild(n);
     var es = el('div', 'psku'); es.appendChild(el('div', '', '1 un.')); es.appendChild(el('div', 'psub', String(a.loja || '').replace(/^.*\| /, ''))); r.appendChild(es);
@@ -9738,6 +9940,14 @@
       var at = el('div', 't', 'Acesso ativo'); at.appendChild(el('small', '', 'Desmarque para bloquear a entrada desta pessoa (ex.: saiu da empresa).'));
       al.appendChild(ativo); al.appendChild(at); al.style.marginTop = '8px'; c.appendChild(al);
     }
+    var limCb = null, limLer = null;
+    if (x) {
+      var ll = el('label', 'perm'); limCb = el('input'); limCb.type = 'checkbox'; limCb.checked = !!x.limiteProprio;
+      var lt = el('div', 't', 'Limite de desconto próprio'); lt.appendChild(el('small', '', 'Desmarcado, vale o limite do grupo. Marcado, vale este (em branco = sem limite).'));
+      ll.appendChild(limCb); ll.appendChild(lt); ll.style.marginTop = '8px'; c.appendChild(ll);
+      var lbx = el('div'); c.appendChild(lbx); limLer = camposLimite(lbx, x.limiteProprio);
+      var lv = function () { lbx.style.display = limCb.checked ? '' : 'none'; }; limCb.onchange = lv; lv();
+    }
     var m = el('div', 'msg err'); c.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', x ? 'Salvar' : 'Cadastrar e gerar senha'), cc = el('button', 'btn ghost', 'Voltar'); ok.type = cc.type = 'button';
     ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
@@ -9764,6 +9974,7 @@
       var d = { nome: nome.value.trim(), usuario: usu.value.trim(), loja: loja.value, grupo: grupo.value, personalizar: cb.checked, perms: pers };
       if (outrasEmp.length) { d.emp = {}; Object.keys(empSel).forEach(function (k) { d.emp[k] = empSel[k].value; }); }
       if (x) d.ativo = ativo.checked;
+      if (x) d.limite = limCb.checked ? (limLer() || { usado: null, produto: null, total: null }) : null;
       if (d.nome.length < 2) { m.textContent = 'Informe o nome.'; m.classList.add('show'); return; }
       if (!x && d.usuario.length < 3) { m.textContent = 'O usuário precisa ter pelo menos 3 letras.'; m.classList.add('show'); return; }
       if (!d.loja) { m.textContent = 'Escolha a loja.'; m.classList.add('show'); return; }
@@ -9788,13 +9999,27 @@
     var c = el('div', 'card'); box.appendChild(c);
     c.appendChild(el('div', 'hint', tipo === 'tag'
       ? 'Organize em tags principais e subtags. No cadastro do produto, o vendedor toca em "Selecionar tags" e só as marcadas aparecem.'
-      : 'Organize em grupos e subgrupos (ex.: Acessórios › Capas). Filtrar por um grupo mostra também os produtos dos subgrupos.'));
+      : 'Organize em grupos e subgrupos (ex.: Acessórios › Capas). Filtrar por um grupo mostra também os produtos dos subgrupos. "12x no cartão" e "Permitir reserva" valem para o grupo e todos os subgrupos dele (salvam na hora).'));
     var lst = el('div'); lst.style.marginTop = '12px'; c.appendChild(lst);
+    var m = el('div', 'msg err');
     function linha(item, sub, arr, i) {
       var r = el('div', 'catrow' + (sub ? ' sub' : '')), ip = inp('text', sub ? R.phs : R.ph); ip.maxLength = 40; ip.value = item.nome;
       ip.oninput = function () { item.nome = ip.value; };
       var q = item.orig ? qtd(item.orig, !sub) : 0;
       r.appendChild(ip); r.appendChild(el('div', 'n', item.orig ? q + ' produto' + (q === 1 ? '' : 's') : 'novo'));
+      if (tipo === 'grupo' && !sub && item.orig) {
+        var op = (d.opcoes || {})[item.orig] || {};
+        [['cartao', '12x no cartão', 'Mostra o valor em 12x na página Produtos'], ['reserva', 'Permitir reserva', 'Produtos com serial deste grupo podem ser reservados']].forEach(function (o) {
+          var lb = el('label', 'lnk'); lb.title = o[2]; lb.style.cssText = 'display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:pointer;font-size:12.5px';
+          var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!op[o[0]]; lb.appendChild(cb); lb.appendChild(document.createTextNode(o[1]));
+          cb.onchange = function () {
+            cb.disabled = true; var nv = { cartao: !!op.cartao, reserva: !!op.reserva }; nv[o[0]] = cb.checked;
+            call('grupoOpcoesSalvar', [S.token, item.orig, nv]).then(function (oo) { d.opcoes = oo; op = oo[item.orig] || {}; S.u.grupoOpcoes = oo; cb.disabled = false; S.ac = null; })
+              .catch(function (e) { cb.checked = !cb.checked; cb.disabled = false; m.textContent = e; m.classList.add('show'); });
+          };
+          r.appendChild(lb);
+        });
+      }
       if (!sub) {
         var as = el('button', 'lnk', '+ ' + R.Sub); as.type = 'button';
         as.onclick = function () { item.filhos.push({ nome: '', orig: '' }); desenhar(); var g = lst.children[i].querySelectorAll('input'); g[g.length - 1].focus(); };
@@ -9822,7 +10047,7 @@
     var add = el('button', 'lnk', R.novo); add.type = 'button';
     add.onclick = function () { T.push({ nome: '', orig: '', filhos: [] }); desenhar(); var ins = lst.querySelectorAll('.catgrp:last-child input'); ins[0].focus(); };
     c.appendChild(add);
-    var m = el('div', 'msg err'); c.appendChild(m);
+    c.appendChild(m);
     var sv = el('button', 'btn', 'Salvar ' + R.tit); sv.type = 'button'; sv.style.marginTop = '12px'; c.appendChild(sv);
     c.appendChild(el('div', 'hint', 'Renomear muda em todos os produtos que usam. Excluir tira dos produtos (o produto continua cadastrado). Excluir um principal exclui os subs dele.'));
     sv.onclick = function () {
@@ -9845,8 +10070,21 @@
       }).catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar ' + R.tit; m.textContent = e; m.classList.add('show'); });
     };
   }
+  /** Campos de limite de desconto (usado / produto / total). Em branco = sem limite. */
+  function camposLimite(box, lim, onMuda) {
+    var gr = el('div', 'limg'), I = {};
+    [['usado', 'Aparelho usado'], ['produto', 'Produto'], ['total', 'Venda inteira']].forEach(function (k) {
+      var w = el('div'), sb = el('div', 'suffix'), i = el('input'); i.inputMode = 'decimal'; i.placeholder = 'sem limite';
+      i.value = lim && lim[k[0]] != null ? String(lim[k[0]]).replace('.', ',') : '';
+      sb.appendChild(i); sb.appendChild(el('span', '', '%')); w.appendChild(el('label', '', k[1])); w.appendChild(sb); gr.appendChild(w); I[k[0]] = i;
+      i.oninput = function () { if (onMuda) onMuda(ler()); };
+    });
+    function ler() { var o = {}, algum = false; Object.keys(I).forEach(function (k) { var v = I[k].value.trim(); o[k] = v === '' ? null : num(v); if (v !== '') algum = true; }); return algum ? o : null; }
+    box.appendChild(gr);
+    return ler;
+  }
   function cfgGrupos(box) {
-    var G = CFG.eq.grupos.map(function (g) { return { nome: g.nome, orig: g.nome, perms: g.perms.slice() }; });
+    var G = CFG.eq.grupos.map(function (g) { return { nome: g.nome, orig: g.nome, perms: g.perms.slice(), limite: g.limite || null }; });
     var lista = el('div'); box.appendChild(lista);
     var m = el('div', 'msg err');
     function uso(nome) { return CFG.eq.funcionarios.filter(function (x) { return x.grupo === nome; }).length; }
@@ -9856,7 +10094,7 @@
         var c = el('div', 'gcard'), h = el('div', 'gh'), nm = inp('text', 'Nome do grupo'); nm.value = g.nome; nm.maxLength = 30;
         nm.oninput = function () { g.nome = nm.value; };
         var dup = el('button', 'lnk', 'Duplicar'), del = el('button', 'lnk', 'Excluir'); dup.type = del.type = 'button'; del.style.color = 'var(--err)';
-        dup.onclick = function () { G.splice(i + 1, 0, { nome: g.nome + ' (cópia)', orig: '', perms: g.perms.slice() }); desenhar(); };
+        dup.onclick = function () { G.splice(i + 1, 0, { nome: g.nome + ' (cópia)', orig: '', perms: g.perms.slice(), limite: g.limite ? Object.assign({}, g.limite) : null }); desenhar(); };
         del.onclick = function () {
           if (g.orig && uso(g.orig)) { m.textContent = 'O grupo "' + g.orig + '" tem ' + uso(g.orig) + ' funcionário(s). Mude o grupo deles antes de excluir.'; m.classList.add('show'); return; }
           G.splice(i, 1); desenhar();
@@ -9865,12 +10103,17 @@
         c.appendChild(el('div', 'hint', (g.orig ? uso(g.orig) : 0) + ' funcionário(s) neste grupo · ' + g.perms.length + ' de ' + CFG.eq.permissoes.length + ' permissões'));
         var det = el('details'); var sm = el('summary', '', 'Permissões'); sm.style.cssText = 'cursor:pointer;font-weight:600;font-size:14px;margin-top:6px;color:var(--accent)';
         det.appendChild(sm); listaPerms(det, g.perms, false); c.appendChild(det);
+        var dl = el('details'), sl = el('summary', '', 'Limite de desconto · ' + (g.limite ? ['usado', 'produto', 'total'].map(function (k) { return g.limite[k] == null ? '' : ({ usado: 'usado ', produto: 'produto ', total: 'venda ' })[k] + String(g.limite[k]).replace('.', ',') + '%'; }).filter(Boolean).join(' · ') : 'sem limite'));
+        sl.style.cssText = 'cursor:pointer;font-weight:600;font-size:14px;margin-top:6px;color:var(--accent)'; dl.appendChild(sl);
+        dl.appendChild(el('div', 'hint', 'Máximo de desconto, em % do preço, sem precisar de liberação. Deixe em branco para não ter limite. Acima disso, um gerente ou supervisor libera na hora.'));
+        camposLimite(dl, g.limite, function (v) { g.limite = v; });
+        c.appendChild(dl);
         lista.appendChild(c);
       });
     }
     desenhar();
     var add = el('button', 'btn ghost', '+ Novo grupo'); add.type = 'button';
-    add.onclick = function () { G.push({ nome: '', orig: '', perms: [] }); desenhar(); var ins = lista.querySelectorAll('.gh input'); ins[ins.length - 1].focus(); };
+    add.onclick = function () { G.push({ nome: '', orig: '', perms: [], limite: null }); desenhar(); var ins = lista.querySelectorAll('.gh input'); ins[ins.length - 1].focus(); };
     box.appendChild(add); box.appendChild(m);
     var sv = el('button', 'btn', 'Salvar grupos'); sv.type = 'button'; sv.style.marginTop = '10px'; box.appendChild(sv);
     box.appendChild(el('div', 'hint', 'Renomear um grupo leva os funcionários junto. Dica: use "Duplicar" para criar um grupo parecido com um que já existe.'));
@@ -9880,7 +10123,7 @@
       if (nomes.some(function (n) { return !n; })) { m.textContent = 'Dê um nome para todos os grupos.'; m.classList.add('show'); return; }
       if (nomes.some(function (n, i) { return nomes.indexOf(n) !== i; })) { m.textContent = 'Há grupos com o mesmo nome.'; m.classList.add('show'); return; }
       sv.disabled = true; sv.textContent = 'Salvando…';
-      call('gruposSalvar', [S.token, G.map(function (g) { return { nome: g.nome.trim(), orig: g.orig, perms: g.perms }; })]).then(function (d) {
+      call('gruposSalvar', [S.token, G.map(function (g) { return { nome: g.nome.trim(), orig: g.orig, perms: g.perms, limite: g.limite }; })]).then(function (d) {
         CFG.eq = d; sv.disabled = false; sv.textContent = 'Salvar grupos';
         call('retomar', [S.token]).then(function (u) { S.u = u; }).catch(function () {});
         box.innerHTML = ''; cfgGrupos(box); var ok = el('div', 'msg ok show', '✓ Grupos salvos.'); box.insertBefore(ok, box.firstChild);
