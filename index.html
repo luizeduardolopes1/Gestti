@@ -1156,6 +1156,14 @@
     <div id="cxCorpo"></div>
   </section>
 
+  <!-- ENCOMENDAS -->
+  <section id="vEncomendas" class="hide">
+    <div class="crumb">Faturamento</div>
+    <div class="ptopo"><h1>Encomendas</h1><div class="tbtns"><button type="button" class="btn ghost" id="enAtual" style="width:auto;padding:9px 16px;margin:0">↻ Atualizar</button><button type="button" class="btn" id="enNova" style="width:auto;padding:9px 16px;margin:0">+ Nova encomenda</button></div></div>
+    <div class="hint">Produto que a loja ainda não tem: o preço fica travado, o cliente assina o termo e, quando chega pela Entrada de Compras, o produto já fica separado para ele.</div>
+    <div id="enCorpo"></div>
+  </section>
+
   <!-- RESERVAS -->
   <section id="vReservas" class="hide">
     <div class="crumb">Faturamento</div>
@@ -1684,6 +1692,7 @@
     { id: 'saldo', sec: 'vSaldo', nome: 'Saldo de Estoque', perm: 'estoque', menu: 'Suprimento', sub: 'Relatórios', subNome: 'Saldo de Estoque', desc: 'Como estava o estoque em um dia, por depósito' },
     { id: 'vendas', sec: 'vVendas', nome: 'Vendas', perm: 'vender', menu: 'Faturamento', desc: 'Venda completa com troca, entrega e crediário' },
     { id: 'pdv', sec: 'vPdv', nome: 'PDV', perm: 'vender', menu: 'Faturamento', desc: 'Venda rápida no balcão' },
+    { id: 'encomendas', sec: 'vEncomendas', nome: 'Encomendas', perm: 'vender', menu: 'Faturamento', desc: 'Pedidos de clientes: sinal, termo, fornecedor e chegada' },
     { id: 'reservas', sec: 'vReservas', nome: 'Reservas', perm: 'vender', menu: 'Faturamento', desc: 'Aparelhos e produtos reservados, sinal e termo assinado' },
     { id: 'caixa', sec: 'vCaixa', nome: 'Conferência de Caixa', perm: 'caixa', menu: 'Faturamento', desc: 'Abrir, movimentar e fechar o caixa' },
     { id: 'osnova', sec: 'vOs', nome: 'Nova Ordem de Serviço', perm: 'os', menu: 'Ordem de Serviço', desc: 'Abrir uma OS' },
@@ -1888,7 +1897,7 @@
     var fx = el('button', 'btn ghost', 'Fechar'); fx.type = 'button'; fx.style.marginTop = '10px'; fx.onclick = fecharModal; sh.appendChild(fx);
     abrirModal();
   }
-  function painelCancelarRes(r, m) {
+  function painelCancelarRes(r, m, fn, depois) {
     var bx = el('div', 'card'); bx.appendChild(el('h2', '', 'Cancelar a reserva'));
     var mo = campo(bx, 'Motivo', inp('text', 'Ex.: cliente desistiu'), true); mo.maxLength = 200;
     var dest = '';
@@ -1905,7 +1914,7 @@
       if (mo.value.trim().length < 3) { m.textContent = 'Informe o motivo.'; m.classList.add('show'); return; }
       if (r.sinal && !dest) { m.textContent = 'Escolha o que fazer com o sinal.'; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Cancelando…';
-      comLiberacao('reservaCancelar', [S.token, r.id, { motivo: mo.value.trim(), destino: dest }], 2).then(function (l) { S.resv = l; fecharModal(); aposReserva(); msg('topMsg', ''); })
+      comLiberacao(fn || 'reservaCancelar', [S.token, r.id, { motivo: mo.value.trim(), destino: dest }], 2).then(function (l) { if (depois) depois(l); else { S.resv = l; aposReserva(); } fecharModal(); msg('topMsg', ''); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar cancelamento'; m.textContent = e; m.classList.add('show'); });
     };
     return bx;
@@ -1981,6 +1990,201 @@
         box.innerHTML = ''; cfgReservas(box, r); box.insertBefore(el('div', 'msg ok show', '✓ Configuração salva.'), box.firstChild);
       }).catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
     };
+  }
+  // =========================================================
+  //  ENCOMENDAS
+  // =========================================================
+  var ENF = 'abertas';
+  $('enAtual').onclick = function () { carregarEncomendas(true); };
+  $('enNova').onclick = function () { abrirNovaEncomenda(); };
+  function carregarEncomendas(forcar) {
+    var box = $('enCorpo');
+    if (!S.enc || forcar) { box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…')); call('encomendasListar', [S.token]).then(function (l) { S.enc = l; renderEncomendas(); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); }); return; }
+    renderEncomendas();
+  }
+  function filtroEnc(e, f) {
+    return f === 'abertas' ? e.ativa : f === 'atrasadas' ? e.atrasada : f === 'encerradas' ? !e.ativa : f === 'minhas' ? e.ativa && e.vendedorId === S.u.id : e.situacao === f;
+  }
+  function corEnc(e) { return e.atrasada ? 'err' : e.situacao === 'Chegou' ? 'ok' : e.situacao === 'Pedido ao fornecedor' ? 'inf' : e.situacao === 'Aguardando assinatura' || e.situacao === 'A pedir' ? 'warn' : 'off'; }
+  function renderEncomendas() {
+    var box = $('enCorpo'); box.innerHTML = '';
+    var L = S.enc || [], atr = L.filter(function (e) { return e.atrasada; }), ap = L.filter(function (e) { return e.situacao === 'A pedir'; }), ch = L.filter(function (e) { return e.situacao === 'Chegou'; });
+    if (atr.length) { var av = el('div', 'aviso', '⚠ ' + atr.length + ' encomenda(s) atrasada(s): passou da data prevista. Cobre o fornecedor e avise o cliente.'); av.style.cssText = 'background:var(--err-bg);color:var(--err)'; box.appendChild(av); }
+    if (ap.length && pode('compras')) { var av2 = el('div', 'aviso', ap.length + ' encomenda(s) assinada(s) esperando o pedido ao fornecedor.'); av2.style.cssText = 'background:var(--warn-bg);color:var(--warn)'; box.appendChild(av2); }
+    if (ch.length) box.appendChild(el('div', 'aviso', '✓ ' + ch.length + ' encomenda(s) chegaram: avise o cliente e venda pela encomenda.'));
+    var fil = el('div', 'resfil');
+    [['abertas', 'Abertas'], ['minhas', 'Minhas'], ['Aguardando assinatura', 'Aguardando assinatura'], ['A pedir', 'A pedir'], ['Pedido ao fornecedor', 'Pedido ao fornecedor'], ['atrasadas', 'Atrasadas'], ['Chegou', 'Chegou'], ['encerradas', 'Encerradas']].forEach(function (o) {
+      var n = L.filter(function (e) { return filtroEnc(e, o[0]); }).length;
+      var b = el('button', 'chip' + (ENF === o[0] ? ' on' : ''), o[1] + ' (' + n + ')'); b.type = 'button'; b.onclick = function () { ENF = o[0]; renderEncomendas(); }; fil.appendChild(b);
+    });
+    box.appendChild(fil);
+    var l = L.filter(function (e) { return filtroEnc(e, ENF); });
+    if (!l.length) { box.appendChild(el('div', 'empty', 'Nenhuma encomenda aqui.')); return; }
+    l.forEach(function (e) {
+      var d = el('div', 'resl' + (e.atrasada ? ' resal' : '')), a = el('div');
+      a.appendChild(el('b', '', e.produto));
+      a.appendChild(el('div', 'hint', e.id + ' · ' + e.cliente + ' · ' + e.vendedor + (e.pedido ? ' · ' + e.pedido.fornecedor : '') + (e.previstaTxt && e.ativa ? ' · previsão ' + e.previstaTxt : '')));
+      var bd = el('div'), bg = el('span', 'bdg ' + corEnc(e), e.atrasada ? 'Atrasada ' + e.diasAtraso + ' dia(s)' : e.situacao); bg.style.marginLeft = '0'; bd.appendChild(bg); a.appendChild(bd);
+      d.appendChild(a); d.appendChild(el('div', 'v', brl(e.preco) + (e.sinal ? ' · sinal ' + brl(e.sinal) : '')));
+      d.onclick = function () { abrirEncomenda(e); };
+      box.appendChild(d);
+    });
+  }
+  function aposEnc(l) { if (l) S.enc = l; S.disp = null; S.cp = null; if (S.view === 'encomendas') renderEncomendas(); }
+  function abrirNovaEncomenda() {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    var cfg = S.u.reservaCfg || { sinalMinEnc: 30 };
+    sh.appendChild(el('h2', 'tt', 'Nova encomenda'));
+    sh.appendChild(el('div', 'sub', 'O preço fica travado. Sinal mínimo: ' + cfg.sinalMinEnc + '% do preço.'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var modo = pode('acessorios') ? 'livre' : 'livre', ITEM = { origem: 'livre' };
+    var sg = el('div', 'seg'); c.appendChild(el('label', 'first', 'Produto')); c.appendChild(sg);
+    var ib = el('div'); c.appendChild(ib);
+    function desenharItem() {
+      ib.innerHTML = '';
+      if (modo === 'produto') {
+        var bu = inp('text', 'Buscar no cadastro de produtos'); ib.appendChild(bu); var rs = el('div'); ib.appendChild(rs);
+        var sel = el('div', 'hint', ITEM.produtoId ? '✓ ' + ITEM.nome : 'Escolha o produto.'); ib.appendChild(sel);
+        bu.oninput = function () {
+          rs.innerHTML = ''; var q = bu.value.trim().toLowerCase(); if (q.length < 2 || !S.ac) return;
+          var lst = el('div', 'vdres');
+          S.ac.produtos.filter(function (p) { return p.formato !== 'variacoes' && p.formato !== 'composicao' && (p.nome + ' ' + p.sku).toLowerCase().indexOf(q) > -1; }).slice(0, 8).forEach(function (p) {
+            var b = el('button'), a = el('span', '', p.nome); b.type = 'button'; a.appendChild(el('small', '', (p.preco ? brl(p.preco) : 'sem preço') + ' · ' + p.total + ' em estoque')); b.appendChild(a);
+            b.onclick = function () { ITEM = { origem: 'produto', produtoId: p.id, nome: p.nome }; if (p.preco && !pr.value) pr.value = String(p.preco).replace('.', ','); rs.innerHTML = ''; bu.value = ''; sel.textContent = '✓ ' + p.nome; minimo(); };
+            lst.appendChild(b);
+          });
+          rs.appendChild(lst);
+        };
+        if (!S.ac) call('acessorios', [S.token]).then(function (d) { S.ac = d; }).catch(function () {});
+      } else {
+        var g = el('div', 'g2'), a1 = el('div'), a2 = el('div'), a3 = el('div'), a4 = el('div'); [a1, a2, a3, a4].forEach(function (z) { g.appendChild(z); }); ib.appendChild(g);
+        var mo = campo(a1, 'Modelo', inp('text', 'Ex.: iPhone 15 Pro'), true); mo.value = ITEM.modelo || ''; mo.oninput = function () { ITEM.modelo = mo.value; };
+        var ar = campo(a2, 'Armazenamento', inp('text', 'Ex.: 256GB'), true); ar.value = ITEM.armazenamento || ''; ar.oninput = function () { ITEM.armazenamento = ar.value; };
+        var co = campo(a3, 'Cor', inp('text', 'Ex.: Titânio natural')); co.value = ITEM.cor || ''; co.oninput = function () { ITEM.cor = co.value; };
+        var cd = el('select'); ['Novo', 'Seminovo', 'Recondicionado'].forEach(function (o) { var op = el('option', '', o); op.value = o; cd.appendChild(op); }); cd.value = ITEM.condicao || 'Novo'; ITEM.condicao = cd.value; cd.onchange = function () { ITEM.condicao = cd.value; }; campo(a4, 'Condição', cd);
+      }
+    }
+    [['livre', 'Digitar o produto'], ['produto', 'Do cadastro de produtos']].forEach(function (o) {
+      if (o[0] === 'produto' && !pode('acessorios')) return;
+      var b = el('button', modo === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { modo = o[0]; ITEM = { origem: o[0] }; Array.prototype.forEach.call(sg.children, function (z) { z.classList.toggle('on', z === b); }); desenharItem(); }; sg.appendChild(b);
+    });
+    desenharItem();
+    var c2 = el('div', 'card'); sh.appendChild(c2);
+    var nm = campo(c2, 'Nome do cliente', inp('text', 'Ex.: João da Silva'), true); nm.maxLength = 80;
+    var wh = campo(c2, 'WhatsApp do cliente', inp('tel', '(22) 99999-9999'));
+    var pr = campo(c2, 'Preço combinado (R$)', inp('text', 'Ex.: 5.000,00')); pr.inputMode = 'decimal';
+    var pv = inpData(''); pv.value = ''; pv.min = isoHoje(); campo(c2, 'Previsão de chegada (se já souber)', pv);
+    var c3 = el('div', 'card'); sh.appendChild(c3); c3.appendChild(el('h2', '', 'Sinal'));
+    var fsel = el('select'); formasV().filter(function (f) { return f.cartao !== 'crediario' && f.uso !== 'pagar'; }).forEach(function (f) { var o = el('option', '', f.nome); o.value = f.id || f.nome; fsel.appendChild(o); });
+    campo(c3, 'Forma do sinal', fsel, true);
+    var sv = campo(c3, 'Valor do sinal (R$)', inp('text', '')); sv.inputMode = 'decimal';
+    var mh = el('div', 'hint'); c3.appendChild(mh);
+    var mw = el('div'); c3.appendChild(mw); var ms = campo(mw, 'Motivo do sinal menor (precisa da liberação do gerente)', inp('text', 'Ex.: cliente antigo, paga o resto na entrega')); ms.maxLength = 200;
+    var ex = el('div'); c3.appendChild(ex);
+    var P = { parcelas: '', bandeira: '' };
+    function extras() {
+      ex.innerHTML = ''; var fo = formasV().filter(function (f) { return (f.id || f.nome) === fsel.value; })[0];
+      if (fo && fo.cartao === 'credito') { var ps = el('select'); for (var n = 1; n <= (fo.maxParc || 12); n++) { var o = el('option', '', n + 'x'); o.value = String(n); ps.appendChild(o); } ps.value = P.parcelas || '1'; P.parcelas = ps.value; ps.onchange = function () { P.parcelas = ps.value; }; campo(ex, 'Parcelas', ps); }
+      var bl = bandeirasDe(fo); if (bl.length) { var bs = el('select'); bl.forEach(function (b) { var o = el('option', '', b); o.value = b; bs.appendChild(o); }); if (bl.indexOf(P.bandeira) < 0) P.bandeira = bl[0]; bs.value = P.bandeira; bs.onchange = function () { P.bandeira = bs.value; }; campo(ex, 'Bandeira', bs); } else P.bandeira = '';
+    }
+    fsel.onchange = extras; extras();
+    var auto = true;
+    function minimo() {
+      var p = num(pr.value) || 0, mn = Math.round(p * cfg.sinalMinEnc) / 100;
+      if (auto && p) sv.value = String(mn.toFixed(2)).replace('.', ',');
+      var v = num(sv.value) || 0;
+      mh.textContent = p ? 'Mínimo: ' + brl(mn) + ' (' + cfg.sinalMinEnc + '%) · falta na entrega: ' + brl(Math.max(0, p - v)) : '';
+      mw.style.display = p && v + 0.009 < mn ? '' : 'none';
+    }
+    pr.oninput = minimo; sv.oninput = function () { auto = false; minimo(); }; minimo();
+    var termos = (S.u.termos || []).filter(function (t) { return t.tipo === 'encomenda'; }), tsel = el('select');
+    termos.forEach(function (t) { var o = el('option', '', t.titulo); o.value = t.id; if (t.padrao) o.selected = true; tsel.appendChild(o); });
+    campo(c3, 'Termo que o cliente assina', tsel);
+    var ob = campo(c3, 'Observação (opcional)', inp('text', 'Ex.: cliente quer capa junto')); ob.maxLength = 300;
+    var m = el('div', 'msg err'); sh.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Criar encomenda'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); sh.appendChild(ac);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var erro = ITEM.origem === 'produto' ? (!ITEM.produtoId ? 'Escolha o produto do cadastro.' : '') : String(ITEM.modelo || '').trim().length < 2 ? 'Informe o modelo do produto.' : '';
+      erro = erro || (nm.value.trim().length < 3 ? 'Informe o nome do cliente.' : String(wh.value).replace(/\D/g, '').length < 10 ? 'Informe o WhatsApp com DDD.' : !(num(pr.value) > 0) ? 'Informe o preço combinado.' : '');
+      if (!erro && mw.style.display !== 'none' && ms.value.trim().length < 3) erro = 'O sinal está abaixo do mínimo: informe o motivo.';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      var fo = formasV().filter(function (f) { return (f.id || f.nome) === fsel.value; })[0];
+      var d = { item: ITEM, cliente: { nome: nm.value.trim(), whats: wh.value }, preco: pr.value, prevista: pv.value, obs: ob.value.trim(), termoId: tsel.value, motivoSinal: ms.value.trim(), loja: S.u.loja,
+                sinal: num(sv.value) > 0 ? { formaId: fo.id, forma: fo.nome, valor: sv.value, parcelas: P.parcelas, bandeira: P.bandeira } : null };
+      ok.disabled = true; ok.textContent = 'Criando…';
+      comLiberacao('encomendaCriar', [S.token, d], 1).then(function (e) { S.enc = null; abrirEncomenda(e, true); carregarEncomendas(true); })
+        .catch(function (er) { ok.disabled = false; ok.textContent = 'Criar encomenda'; m.textContent = er; m.classList.add('show'); });
+    };
+    abrirModal();
+  }
+  function abrirEncomenda(e, nova) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', (nova ? '✓ ' : '') + 'Encomenda ' + e.id));
+    var st = el('div', 'sub'); var bg = el('span', 'bdg ' + corEnc(e), e.atrasada ? 'Atrasada ' + e.diasAtraso + ' dia(s)' : e.situacao); bg.style.marginLeft = '0'; st.appendChild(bg); sh.appendChild(st);
+    var P = e.pedido;
+    var pares = [['Cliente', e.cliente + (e.whats ? ' · ' + fmtFone(e.whats) : '')], ['Produto', e.produto], ['Preço combinado', brl(e.preco)],
+                 ['Sinal', e.sinal ? brl(e.sinal) + ' · ' + e.sinalForma : 'Sem sinal'], ['Falta pagar', brl(Math.max(0, e.preco - e.sinal))],
+                 ['Sinal abaixo do mínimo', e.motivoSinal ? e.motivoSinal + (e.sinalLiberadoPor ? ' · liberado por ' + e.sinalLiberadoPor : '') : ''],
+                 ['Vendedor', e.vendedor + ' em ' + e.criada], ['Loja', e.loja], ['Termo', e.termo ? e.termo.titulo : ''], ['Assinatura', e.assinatura ? '✓ ' + e.assinatura.nome + ' em ' + e.assinatura.em : 'Aguardando o cliente assinar'],
+                 ['Fornecedor', P ? P.fornecedor : ''], ['Previsão de chegada', e.previstaTxt ? e.previstaTxt + (e.atrasada ? ' (atrasada ' + e.diasAtraso + ' dia(s))' : '') : ''],
+                 ['Custo previsto', P && P.custoPrevisto != null ? brl(P.custoPrevisto) + (e.margemPrevista != null ? ' · margem ' + pct(e.margemPrevista) : '') : ''],
+                 ['Chegou', e.chegada ? e.chegada.em + ' · compra ' + e.chegada.compra + (e.chegada.imei ? ' · IMEI ' + e.chegada.imei : e.chegada.serial ? ' · serial ' + e.chegada.serial : '') : ''],
+                 ['Custo real', e.custoReal ? brl(e.custoReal) + ' · margem ' + pct((e.preco - e.custoReal) / e.preco) : ''], ['Observação', e.obs]];
+    if (e.fim) pares.push(['Encerrada', e.fim.em + ' · ' + e.fim.por + (e.fim.venda ? ' · venda ' + e.fim.venda : '') + (e.fim.motivo ? ' · ' + e.fim.motivo : '') + ({ devolvido: ' · sinal devolvido', retido: ' · sinal retido', por_fora: ' · sinal devolvido por fora' }[e.fim.destino] || '')]);
+    var c = el('div', 'card'), kv = el('div', 'kv'); pares.forEach(function (p) { if (!p[1]) return; kv.appendChild(el('div', 'k', p[0])); kv.appendChild(el('div', '', p[1])); }); c.appendChild(kv); sh.appendChild(c);
+    var m = el('div', 'msg err'); sh.appendChild(m);
+    if (e.ativa && e.podeGerir) {
+      var ac = el('div', 'acoes');
+      if (e.situacao === 'Chegou' && e.textoChegou) { var bch = el('button', 'btn', 'Avisar o cliente que chegou'); bch.type = 'button'; bch.onclick = function () { window.open(waLink(e.whats, e.textoChegou), '_blank'); }; ac.appendChild(bch); }
+      var bw = el('button', 'btn' + (e.situacao === 'Chegou' ? ' ghost' : ''), 'Enviar comprovante no WhatsApp'); bw.type = 'button'; bw.onclick = function () { window.open(waLink(e.whats, e.texto), '_blank'); }; ac.appendChild(bw);
+      if (!e.assinatura) { var ba = el('button', 'btn ghost', 'Cliente assina neste aparelho'); ba.type = 'button'; ba.onclick = function () { window.open(e.link, '_blank'); }; ac.appendChild(ba); }
+      sh.appendChild(ac);
+      if (e.situacao === 'Chegou' && pode('vender')) {
+        var bv = el('button', 'btn', 'Vender (abate o sinal)'); bv.type = 'button'; bv.style.marginTop = '10px';
+        bv.onclick = function () {
+          bv.disabled = true; bv.textContent = 'Abrindo…';
+          if (e.chegada && e.chegada.imei) call('disponiveis', [S.token]).then(function (l) { S.disp = l; var x = l.filter(function (z) { return z.imei === e.chegada.imei; })[0]; if (!x) throw 'O aparelho não está mais no estoque.'; fecharModal(); S.vdPre = x; ir('vendas'); }).catch(function (er) { bv.disabled = false; bv.textContent = 'Vender (abate o sinal)'; m.textContent = er; m.classList.add('show'); });
+          else call('acessorios', [S.token]).then(function (d) { S.ac = d; var p = d.produtos.filter(function (z) { return z.id === (e.chegada && e.chegada.produtoId); })[0]; if (!p) throw 'Produto não encontrado.'; fecharModal(); S.vdPreAc = p; S.vdPreSer = e.chegada.serial || null; S.resv = null; ir('vendas'); }).catch(function (er) { bv.disabled = false; bv.textContent = 'Vender (abate o sinal)'; m.textContent = er; m.classList.add('show'); });
+        };
+        sh.appendChild(bv);
+      }
+    }
+    if (e.ativa && e.podePedir && ['Aguardando assinatura', 'A pedir', 'Pedido ao fornecedor'].indexOf(e.situacao) > -1) {
+      var bp = el('button', 'btn ghost', e.situacao === 'Pedido ao fornecedor' ? 'Atualizar o pedido (fornecedor / previsão)' : 'Pedido ao fornecedor'); bp.type = 'button'; bp.style.marginTop = '10px';
+      bp.onclick = function () {
+        bp.remove(); var bx = el('div', 'card'); bx.appendChild(el('h2', '', 'Pedido ao fornecedor'));
+        if (e.situacao === 'Aguardando assinatura') bx.appendChild(el('div', 'hint', 'Atenção: o cliente ainda não assinou o termo.'));
+        var fo = campo(bx, 'Fornecedor', inp('text', 'Ex.: Distribuidora X'), true); fo.maxLength = 80; fo.value = P ? P.fornecedor : '';
+        var dt = inpData(P ? P.prevista : ''); if (!P) dt.value = ''; campo(bx, 'Data prevista de chegada', dt);
+        var cu = null; if (pode('ver_custos')) { cu = campo(bx, 'Custo previsto (R$)', inp('text', 'Ex.: 4.200,00')); cu.inputMode = 'decimal'; if (P && P.custoPrevisto != null) cu.value = String(P.custoPrevisto).replace('.', ','); }
+        var mg = el('div', 'hint'); bx.appendChild(mg); if (cu) cu.oninput = function () { var v = num(cu.value); mg.textContent = v > 0 ? 'Margem prevista: ' + pct((e.preco - v) / e.preco) + ' (lucro bruto ' + brl(e.preco - v) + ')' : ''; };
+        var sv2 = el('button', 'btn', 'Salvar pedido'); sv2.type = 'button'; sv2.style.marginTop = '10px'; bx.appendChild(sv2);
+        sv2.onclick = function () {
+          m.classList.remove('show');
+          if (fo.value.trim().length < 2 || !dt.value) { m.textContent = 'Informe o fornecedor e a data prevista.'; m.classList.add('show'); return; }
+          sv2.disabled = true; sv2.textContent = 'Salvando…';
+          call('encomendaPedido', [S.token, e.id, { fornecedor: fo.value.trim(), prevista: dt.value, custoPrevisto: cu ? cu.value : '' }]).then(function (l) { aposEnc(l); var n = l.filter(function (z) { return z.id === e.id; })[0]; if (n) abrirEncomenda(n); else fecharModal(); })
+            .catch(function (er) { sv2.disabled = false; sv2.textContent = 'Salvar pedido'; m.textContent = er; m.classList.add('show'); });
+        };
+        sh.insertBefore(bx, m);
+      };
+      sh.appendChild(bp);
+      if (pode('compras')) {
+        var bc2 = el('button', 'btn ghost', 'Chegou → lançar na Entrada de Compras'); bc2.type = 'button'; bc2.style.marginTop = '10px';
+        bc2.onclick = function () { fecharModal(); S.cpEnc = [e]; ir('compras'); };
+        sh.appendChild(bc2);
+      }
+    }
+    if (e.ativa && e.podeGerir) {
+      var bcan = el('button', 'btn ghost', 'Cancelar a encomenda'); bcan.type = 'button'; bcan.style.cssText = 'margin-top:14px;color:var(--err);border-color:var(--err)';
+      bcan.onclick = function () { bcan.remove(); sh.appendChild(painelCancelarRes(e, m, 'encomendaCancelar', function (l) { aposEnc(l); })); };
+      sh.appendChild(bcan);
+    }
+    if ((e.hist || []).length) { var hb = el('div', 'card'); hb.appendChild(el('h2', '', 'Andamento')); e.hist.forEach(function (h) { hb.appendChild(el('div', 'hint', h.em + ' · ' + h.txt)); }); sh.appendChild(hb); }
+    var fx = el('button', 'btn ghost', 'Fechar'); fx.type = 'button'; fx.style.marginTop = '10px'; fx.onclick = fecharModal; sh.appendChild(fx);
+    abrirModal();
   }
   // ---------- página pública: o cliente lê e assina ----------
   function paginaAssinatura() {
@@ -2118,7 +2322,7 @@
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
   var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta' };
-  var ICO_VIEW = { reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
+  var ICO_VIEW = { encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas' };
   var SBM = { aberto: {} };
@@ -3229,7 +3433,7 @@
     if (id === 'acess') carregarAcess(false);
     if (id === 'estoque') carregarEstoque(false);
     if (id === 'saldo') carregarSaldo();
-    if (id === 'compras') abaCompras(CP ? 'form' : 'lista');
+    if (id === 'compras') { if (S.cpEnc) { var encs = S.cpEnc; S.cpEnc = null; call('compras', [S.token]).then(function (d) { aposCompras(d); novaCompra(null); encs.forEach(function (e) { addEncCp(e); }); }).catch(function (e) { msg('topMsg', e); }); } else abaCompras(CP ? 'form' : 'lista'); }
     if (id === 'osnova') { OSM = 'Lista'; $('osTit').textContent = 'Ordem de Serviço · Lista'; garantirOS(function () { if (S.view === 'osnova') formOS(null); }); }
     if (id === 'osaux') { var ob = $('osaCorpo'); ob.innerHTML = ''; ob.appendChild(el('div', 'empty', 'Carregando…')); garantirOS(function () { if (S.view === 'osaux') renderOsAux(ob); }); }
     if (id === 'dre') carregarDre();
@@ -3239,6 +3443,7 @@
     if (id === 'comissoes') carregarMetas(S.mt ? S.mt.mes : '', 'com');
     if (id === 'caixa') carregarCaixa(true);
     if (id === 'reservas') carregarReservas(true);
+    if (id === 'encomendas') carregarEncomendas(true);
     if (id === 'conferencia') carregarCaixa(true);
     if (id === 'manut') carregarManut(false);
     window.scrollTo(0, 0);
@@ -3284,7 +3489,7 @@
     if (!V) novaVenda();
     if (!S.resv) carregarResv(function () { if (V && V._resumo) V._resumo(); });
     if (S.vdPre) { var x = S.vdPre; S.vdPre = null; abaVendas('nova'); addItem(x); return; }
-    if (S.vdPreAc) { var y = S.vdPreAc; S.vdPreAc = null; abaVendas('nova'); addAcess(y); return; }
+    if (S.vdPreAc) { var y = S.vdPreAc, ys = S.vdPreSer; S.vdPreAc = null; S.vdPreSer = null; abaVendas('nova'); addAcess(y, ys); return; }
     abaVendas('hist');
   }
   // ---------- regras de pagamento (iguais às do servidor) ----------
@@ -8720,6 +8925,21 @@
     }
     abaCompras('form'); desenharCompra();
   }
+  /** Item da compra já ligado a uma encomenda: aparelho (modelo/cor preenchidos) ou o produto do catálogo. */
+  function addEncCp(e) {
+    if (!CP) return;
+    var it2 = e.item || {};
+    if (it2.origem === 'produto') {
+      var p = prodCp(it2.produtoId);
+      CP.itens.push({ prodId: p ? p.id : '', novo: p ? null : { nome: e.produto, sku: '', gtin: '', unidade: 'UN', markup: '', preco: '', condicao: 'Novo' }, descricao: e.produto, codForn: '', ean: p ? p.codigo : '', ncm: p ? p.ncm : '', cfop: '', unidade: p ? p.unidade : 'UN',
+                      qtd: '1', fator: '1', vUnit: '', desconto: '', ipi: '', st: '', aberto: true, encomenda: e.id, encCli: e.cliente });
+    } else {
+      CP.itens.push({ aparelho: { imei: '', imei2: '', serial: '', modelo: [it2.modelo, it2.armazenamento].filter(Boolean).join(' '), cor: it2.cor || '', bateria: it2.condicao === 'Novo' ? '100' : '', classificacao: '', tipo: 'Distribuidor', consulta: '', obs: 'Encomenda ' + e.id + ' · ' + e.cliente, sku: '', existe: false },
+                      prodId: '', novo: null, descricao: '', codForn: '', ean: '', ncm: '', cfop: '', unidade: 'UN', qtd: '1', fator: '1', vUnit: e.pedido && e.pedido.custoPrevisto ? vs(e.pedido.custoPrevisto) : '', desconto: '', ipi: '', st: '', aberto: true, encomenda: e.id, encCli: e.cliente });
+    }
+    if (e.pedido && e.pedido.fornId && CP.fornModo !== 'sel') { CP.fornId = e.pedido.fornId; CP.fornModo = 'sel'; }
+    desenharCompra();
+  }
   function prodCp(id) { return (S.cp.produtos || []).filter(function (p) { return p.id === id; })[0]; }
   function calcCp() {
     var itens = CP.itens.map(function (it) {
@@ -8787,6 +9007,15 @@
     var busca = inp('text', 'Adicionar item: nome, SKU ou código de barras do produto'); busca.setAttribute('aria-label', 'Buscar produto'); c3.appendChild(busca);
     var res = el('div'); c3.appendChild(res);
     var itBox = el('div'); c3.appendChild(itBox);
+    var encB = el('button', 'lnk', '+ Incluir encomendas desta compra'); encB.type = 'button'; encB.style.marginTop = '8px';
+    encB.onclick = function () {
+      var ja = CP.itens.map(function (it) { return it.encomenda; }).filter(Boolean), l = (D.encomendas || []).filter(function (e) { return ja.indexOf(e.id) < 0; });
+      var bx = el('div', 'vdres');
+      if (!l.length) bx.appendChild(el('div', 'hint', 'Nenhuma outra encomenda esperando chegar.'));
+      l.forEach(function (e) { var b = el('button'), a = el('span', '', e.id + ' · ' + e.produto); b.type = 'button'; a.appendChild(el('small', '', e.cliente + (e.pedido ? ' · ' + e.pedido.fornecedor + ' · previsão ' + (e.previstaTxt || '—') : ' · ' + e.situacao))); b.appendChild(a); b.onclick = function () { bx.remove(); addEncCp(e); }; bx.appendChild(b); });
+      encB.after(bx);
+    };
+    if ((D.encomendas || []).length) c3.appendChild(encB);
     function addItemCp(p, nomeNovo) {
       CP.itens.push({ prodId: p ? p.id : '', novo: p ? null : { nome: nomeNovo || '', sku: '', gtin: /^\d{8,14}$/.test(nomeNovo || '') ? nomeNovo : '', unidade: 'UN', markup: '', preco: '', condicao: 'Novo' },
                       descricao: p ? p.nome : (nomeNovo || ''), codForn: '', ean: p ? p.codigo : '', ncm: p ? p.ncm : '', cfop: '', unidade: p ? p.unidade : 'UN', qtd: '1', fator: '1',
@@ -8830,6 +9059,7 @@
       var hd = el('div', 'cphd'), nmw = el('div', 'nm');
       nmw.appendChild(document.createTextNode((i + 1) + '. ' + (A.modelo ? A.modelo + (A.cor ? ' ' + A.cor.toUpperCase() : '') : 'Aparelho usado')));
       nmw.appendChild(el('span', 'bdg ' + (A.existe ? 'ok' : 'warn'), A.existe ? 'Já passou pela loja' : 'Aparelho usado'));
+      if (it.encomenda) nmw.appendChild(el('span', 'bdg res', 'Encomenda ' + it.encomenda + (it.encCli ? ' · ' + it.encCli : '')));
       nmw.appendChild(el('small', '', A.imei ? 'IMEI ' + A.imei : 'Informe o IMEI'));
       hd.appendChild(nmw);
       var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar item'; x.onclick = function () { CP.itens.splice(i, 1); desenharItens(); totais(); }; hd.appendChild(x);
@@ -8885,6 +9115,7 @@
         var hd = el('div', 'cphd'), nmw = el('div', 'nm');
         nmw.appendChild(document.createTextNode((i + 1) + '. ' + (p ? p.nome : (it.novo ? it.novo.nome || 'Produto novo' : '?'))));
         nmw.appendChild(el('span', 'bdg ' + (p ? 'ok' : 'warn'), p ? 'Vinculado' : 'Produto novo'));
+        if (it.encomenda) nmw.appendChild(el('span', 'bdg res', 'Encomenda ' + it.encomenda + (it.encCli ? ' · ' + it.encCli : '') + (p && p.serial ? ' · fica com o 1º serial' : '')));
         nmw.appendChild(el('small', '', [it.descricao && p && it.descricao !== p.nome ? 'Na nota: ' + it.descricao : '', it.codForn ? 'Cód. fornecedor ' + it.codForn : '', it.ean ? 'EAN ' + it.ean : ''].filter(Boolean).join(' · ')));
         hd.appendChild(nmw);
         var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar item'; x.onclick = function () { CP.itens.splice(i, 1); desenharItens(); totais(); }; hd.appendChild(x);
@@ -9062,7 +9293,7 @@
         itens: CP.itens.map(function (it) { return { aparelho: it.aparelho ? { imei: it.aparelho.imei, imei2: it.aparelho.imei2, serial: it.aparelho.serial, modelo: it.aparelho.modelo, cor: it.aparelho.cor, bateria: it.aparelho.bateria, classificacao: it.aparelho.classificacao, tipo: it.aparelho.tipo, consulta: it.aparelho.consulta, obs: it.aparelho.obs, sku: it.aparelho.sku } : null,
           prodId: it.prodId, novo: it.prodId || !it.novo ? null : { nome: it.novo.nome, sku: it.novo.sku, gtin: it.novo.gtin, unidade: it.novo.unidade, markup: num(it.novo.markup) || 0, preco: num(it.novo.preco) || 0, condicao: it.novo.condicao },
           descricao: it.descricao || (it.novo ? it.novo.nome : ''), codForn: it.codForn, ean: it.ean, ncm: it.ncm, cfop: it.cfop, unidade: it.unidade, qtd: num(it.qtd), fator: num(it.fator) || 1, vUnit: num(it.vUnit) || 0,
-          desconto: num(it.desconto) || 0, ipi: num(it.ipi) || 0, st: num(it.st) || 0, seriais: it.prodId && prodCp(it.prodId) && prodCp(it.prodId).serial ? String(it.seriais || '') : [] }; }),
+          desconto: num(it.desconto) || 0, ipi: num(it.ipi) || 0, st: num(it.st) || 0, seriais: it.prodId && prodCp(it.prodId) && prodCp(it.prodId).serial ? String(it.seriais || '') : [], encomenda: it.encomenda || '' }; }),
         pagamento: { modo: P.modo, categoria: P.categoria, conta: P.conta, forma: P.forma, pagoEm: P.pagoEm, parcelas: P.parcelas.map(function (p) { return { venc: p.venc, valor: num(p.valor), doc: p.doc }; }) }
       };
       if (CP.totalNota !== null && Math.abs(r2(CP.totalNota - T.total)) > 0.05) {
