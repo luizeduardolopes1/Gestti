@@ -1760,6 +1760,20 @@
     return lsRaw('gestti_conta') || 'tec-cell';
   })();
   var API = SRV === 'sb' ? SUPA + '/functions/v1/api' : APPS;
+  var CONTA_OFICIAL = 'tec-cell';
+  if (CONTA !== CONTA_OFICIAL) {
+    // conta de testes (ou de outro cliente): faixa fixa no topo para ninguém lançar venda real no lugar errado
+    window.addEventListener('DOMContentLoaded', function () {
+      var teste = /^teste/.test(CONTA);
+      var f = document.createElement('div');
+      f.innerHTML = (teste ? '⚠ AMBIENTE DE TESTES — nada lançado aqui vale para a loja' : 'Conta: ' + CONTA) +
+        ' · <a href="?c=' + CONTA_OFICIAL + '" style="color:#fff;text-decoration:underline">sair dos testes</a>';
+      f.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99999;background:' + (teste ? '#ea580c' : '#334155') + ';color:#fff;font:700 12px system-ui,sans-serif;text-align:center;padding:5px 8px;pointer-events:auto';
+      document.body.appendChild(f);
+      document.body.style.paddingTop = '26px';
+      if (teste) document.title = '[TESTE] ' + document.title;
+    });
+  }
   if (SRV !== SRV_PADRAO) {
     // aviso discreto enquanto o servidor novo está em teste
     window.addEventListener('DOMContentLoaded', function () {
