@@ -1742,7 +1742,32 @@
 
 <script>
 (function () {
-  var API = 'https://script.google.com/macros/s/AKfycbyBa4IS1qtGLHhIfWiwyXysL-UuJT0Y0wIkZbX08cnWP8_8DkftMv7N7GTElVS-DtnzsQ/exec';
+  // Servidor: Google (Apps Script) ou Supabase. ?srv=sb liga o servidor novo neste aparelho; ?srv=gs volta ao antigo.
+  var APPS = 'https://script.google.com/macros/s/AKfycbyBa4IS1qtGLHhIfWiwyXysL-UuJT0Y0wIkZbX08cnWP8_8DkftMv7N7GTElVS-DtnzsQ/exec';
+  var SUPA = 'https://wcrfhxijeoxgklyqkhko.supabase.co';
+  var SRV_PADRAO = 'gs';
+  function lsRaw(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  var SRV = (function () {
+    var q = /[?&]srv=(sb|gs)\b/.exec(location.search);
+    if (q) lsRaw('gestti_srv', q[1]);
+    return lsRaw('gestti_srv') || SRV_PADRAO;
+  })();
+  // conta (cliente do Gestti): ?c=codigo; padrão tec-cell
+  var CONTA = (function () {
+    var q = /[?&]c=([a-z0-9-]{2,40})\b/.exec(location.search);
+    if (q) lsRaw('gestti_conta', q[1]);
+    return lsRaw('gestti_conta') || 'tec-cell';
+  })();
+  var API = SRV === 'sb' ? SUPA + '/functions/v1/api' : APPS;
+  if (SRV === 'sb' && SRV_PADRAO !== 'sb') {
+    // aviso discreto enquanto o servidor novo está em teste
+    window.addEventListener('DOMContentLoaded', function () {
+      var t = document.createElement('a');
+      t.href = '?srv=gs'; t.textContent = 'Servidor novo (teste) · voltar';
+      t.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99999;background:#7c3aed;color:#fff;font:600 11px system-ui,sans-serif;padding:5px 9px;border-radius:999px;text-decoration:none;opacity:.9';
+      document.body.appendChild(t);
+    });
+  }
   var $ = function (id) { return document.getElementById(id); };
   var LS = {
     get: function (k, d) { try { var v = localStorage.getItem('tc_' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -3180,7 +3205,12 @@
   // =========================================================
   //  FOTOS (Google Drive): capa na lista, grande na gaveta, na venda/PDV
   // =========================================================
-  function fotoUrl(id, w) { return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w' + (w || 400); }
+  function fotoUrl(id, w) {
+    id = String(id || '');
+    // fotos novas (servidor Supabase) ficam no Storage; as antigas continuam no Drive
+    if (/^sb[a-f0-9]{20}$/.test(id)) return SUPA + '/storage/v1/object/public/fotos/' + id + ((w || 400) <= 300 ? '_t' : '') + '.jpg';
+    return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w' + (w || 400);
+  }
   function fotosDeProduto(x) { var M = mapaP(), p = x && x.pai && M[x.pai] ? M[x.pai] : x; return (p && p.ficha && p.ficha.fotos) || []; }
   /** Miniatura no lugar do ícone (cai no ícone se a foto não carregar). */
   function pimgFoto(ic, fotos) {
@@ -3227,7 +3257,7 @@
       ocupado(true);
       var um = function () {
         var f = fs.shift(); if (!f) return fim();
-        comprimirImg(f, 1600, 0.82, function (url) { call('fotoEnviar', [S.token, ref, url]).then(function (r) { L = r.fotos; um(); }).catch(erro); });
+        comprimirImg(f, 1600, 0.82, function (url) { comprimirImg(f, 300, 0.8, function (mini) { call('fotoEnviar', [S.token, ref, url, mini]).then(function (r) { L = r.fotos; um(); }).catch(erro); }); });
       };
       um();
     }
@@ -3539,7 +3569,7 @@
       fetch(API, {
         method: 'POST', credentials: 'omit', redirect: 'follow',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ acao: fn, args: args }), signal: ctl ? ctl.signal : undefined
+        body: JSON.stringify(SRV === 'sb' ? { acao: fn, args: args, c: CONTA } : { acao: fn, args: args }), signal: ctl ? ctl.signal : undefined
       }).then(function (r) { return r.json(); })
         .then(function (j) {
           clearTimeout(timer);
