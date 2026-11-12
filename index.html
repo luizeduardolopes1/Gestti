@@ -1745,12 +1745,13 @@
   // Servidor: Google (Apps Script) ou Supabase. ?srv=sb liga o servidor novo neste aparelho; ?srv=gs volta ao antigo.
   var APPS = 'https://script.google.com/macros/s/AKfycbyBa4IS1qtGLHhIfWiwyXysL-UuJT0Y0wIkZbX08cnWP8_8DkftMv7N7GTElVS-DtnzsQ/exec';
   var SUPA = 'https://wcrfhxijeoxgklyqkhko.supabase.co';
-  var SRV_PADRAO = 'gs';
+  var SRV_PADRAO = 'sb'; // virada para o Supabase em 12/11/2026
   function lsRaw(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  // ?srv=gs só para consulta pontual (o servidor antigo não grava mais); não fica salvo no aparelho
   var SRV = (function () {
     var q = /[?&]srv=(sb|gs)\b/.exec(location.search);
-    if (q) lsRaw('gestti_srv', q[1]);
-    return lsRaw('gestti_srv') || SRV_PADRAO;
+    try { localStorage.removeItem('gestti_srv'); } catch (e) {}
+    return q ? q[1] : SRV_PADRAO;
   })();
   // conta (cliente do Gestti): ?c=codigo; padrão tec-cell
   var CONTA = (function () {
@@ -1759,11 +1760,11 @@
     return lsRaw('gestti_conta') || 'tec-cell';
   })();
   var API = SRV === 'sb' ? SUPA + '/functions/v1/api' : APPS;
-  if (SRV === 'sb' && SRV_PADRAO !== 'sb') {
+  if (SRV !== SRV_PADRAO) {
     // aviso discreto enquanto o servidor novo está em teste
     window.addEventListener('DOMContentLoaded', function () {
       var t = document.createElement('a');
-      t.href = '?srv=gs'; t.textContent = 'Servidor novo (teste) · voltar';
+      t.href = location.pathname; t.textContent = 'Servidor antigo (só consulta) · voltar';
       t.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99999;background:#7c3aed;color:#fff;font:600 11px system-ui,sans-serif;padding:5px 9px;border-radius:999px;text-decoration:none;opacity:.9';
       document.body.appendChild(t);
     });

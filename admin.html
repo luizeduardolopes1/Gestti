@@ -142,7 +142,7 @@
 
   function show(id, on) { $(id).classList.toggle('hide', !on); }
   function msg(id, t) { var m = $(id); m.textContent = t || ''; m.classList.toggle('show', !!t); }
-  var API = 'https://script.google.com/macros/s/AKfycbzkAQ35nZ1m3S89rHYZ-LQqwD7VH5hw443l3WzE_637ArBN9EdSyFTBcjwSpk8spNweBA/exec';
+  var API = 'https://wcrfhxijeoxgklyqkhko.supabase.co/functions/v1/api'; // servidor novo (Supabase) desde 12/11/2026
   function call(fn, args, ok, fail) {
     var ctl = ('AbortController' in window) ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 45000);
