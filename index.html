@@ -779,6 +779,20 @@
   .fmtab .prow{grid-template-columns:44px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) 20px;cursor:pointer}.fmtab .prow.off{opacity:.6}
   .fmtab .prow.h{cursor:default}.fmtab .prow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   .bdg.res{background:#F1E8FF;color:#6B2FC9}
+  .ctcab .pnome{font-size:17px}.ctids{display:flex;flex-wrap:wrap;gap:14px;margin-top:4px}.ctids span{display:inline-flex;align-items:center;gap:2px}
+  .ctfil .g4{align-items:end}.ctfil .btn{margin:0}
+  .ctgrid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px;align-items:start}
+  @media (max-width:900px){.ctgrid{grid-template-columns:1fr}.ctgrid .ctlado{order:-1}}
+  .ctwrap{overflow-x:auto}.cttab{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
+  .cttab th{font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);text-align:left;padding:8px;border-bottom:2px solid var(--line);white-space:nowrap}
+  .cttab td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}.cttab td small{display:block;color:var(--muted);font-size:11.5px}
+  .cttab .n{text-align:right;white-space:nowrap}.cttab td.e{color:var(--ok);font-weight:700}.cttab td.s{color:var(--err);font-weight:700}.cttab td.ob{min-width:220px;max-width:340px}.cttab td:first-child{white-space:nowrap}.cttab td.og{white-space:nowrap;color:var(--muted)}
+  .ctlado .ctn{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--line)}.ctlado .ctn b{font-size:20px}.ctlado .ctn.e b{color:var(--ok)}.ctlado .ctn.s b{color:var(--err)}
+  .ctlado .k{margin-top:12px}.ctlado .btn{margin-top:10px}
+  .tfit{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.tfit .nm{flex:1;min-width:0}.tfit .nm small{display:block;color:var(--muted)}
+  .tfit .tfq{width:80px}.tfit .x{background:none;border:0;font-size:20px;color:var(--muted);cursor:pointer;padding:0 6px}
+  .tfser{padding:4px 0 8px}.tfcard .tfh{display:flex;align-items:center;gap:4px;margin-bottom:4px}.tfcard .tfh .bdg{margin-left:6px}.tfmot{margin-top:8px}
+  .tfrec{padding:10px 0;border-bottom:1px solid var(--line)}.tfrec .nm small{display:block;color:var(--muted)}
   :root[data-tema=escuro] .bdg.res{background:#2E2147;color:#C9A8FF}
   .resl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:8px;cursor:pointer}
   .resl b{font-size:14.5px}.resl .hint{margin:0}.resl .v{text-align:right;font-weight:800}
@@ -1164,6 +1178,21 @@
     <div id="enCorpo"></div>
   </section>
 
+  <!-- TRANSFERÊNCIAS -->
+  <section id="vTransf" class="hide">
+    <div class="crumb">Suprimento</div>
+    <div class="ptopo"><h1>Transferências</h1><button type="button" class="btn ghost" id="tfAtual" style="width:auto;padding:9px 16px;margin:0">↻ Atualizar</button></div>
+    <div class="hint">Envios entre depósitos e entre empresas. Para enviar, abra o produto (ou o aparelho) › Controle de estoque › Transferência, ou use "Enviar para outra loja" no PDV. Quem está no destino confirma o recebimento aqui.</div>
+    <div id="tfCorpo"></div>
+  </section>
+
+  <!-- CONTROLE DE ESTOQUE DO PRODUTO (abre de dentro do produto) -->
+  <section id="vCtrl" class="hide">
+    <div class="crumb">Suprimento › Controle de estoque</div>
+    <div class="ptopo"><h1 id="ctTit">Controle de estoque</h1><button type="button" class="btn ghost" id="ctVoltar">← Voltar</button></div>
+    <div id="ctCorpo"></div>
+  </section>
+
   <!-- RESERVAS -->
   <section id="vReservas" class="hide">
     <div class="crumb">Faturamento</div>
@@ -1364,7 +1393,7 @@
   <!-- CADASTRO -->
   <section id="vCadastro" class="hide">
     <div class="crumb">Suprimento › Produtos Usados</div>
-    <div class="ptopo"><h1>Novo produto usado</h1><button type="button" class="btn ghost" id="cVoltar">← Voltar para Produtos Usados</button></div>
+    <div class="ptopo"><h1 id="cTit">Novo produto usado</h1><button type="button" class="btn ghost" id="cVoltar">← Voltar para Produtos Usados</button></div>
     <form id="form" novalidate>
       <div class="msg err" id="formMsg"></div>
       <div class="card pecard">
@@ -1692,6 +1721,7 @@
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Produtos', desc: 'Aparelhos seminovos e outros produtos usados' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Manutenção', desc: 'Quadro de conserto dos aparelhos usados' },
     { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Suprimento', desc: 'Saldo de cada produto por loja e lançamentos' },
+    { id: 'transf', sec: 'vTransf', nome: 'Transferências', perm: 'transferir', menu: 'Suprimento', desc: 'Enviar e receber entre depósitos e empresas' },
     { id: 'compras', sec: 'vCompras', nome: 'Entrada de Compras', perm: 'compras', menu: 'Suprimento', desc: 'Lançar nota de compra (XML da NF-e ou manual)' },
     { id: 'saldo', sec: 'vSaldo', nome: 'Saldo de Estoque', perm: 'estoque', menu: 'Suprimento', sub: 'Relatórios', subNome: 'Saldo de Estoque', desc: 'Como estava o estoque em um dia, por depósito' },
     { id: 'vendas', sec: 'vVendas', nome: 'Vendas', perm: 'vender', menu: 'Faturamento', desc: 'Venda completa com troca, entrega e crediário' },
@@ -1957,6 +1987,465 @@
   function filtroRes(r, f) { return f === 'ativas' ? r.ativa : f === 'minhas' ? r.ativa && r.vendedorId === S.u.id : f === 'vencidas' ? r.ativa && r.vencida : !r.ativa; }
   /** Abre a reserva a partir do resumo que vem no aparelho (busca os detalhes). */
   function abrirReservaId(id) { var r = (S.resv || []).filter(function (z) { return z.id === id; })[0]; if (r) { abrirReserva(r); return; } carregarResv(function (l, e) { if (e) { alert(String(e)); return; } var r2 = l.filter(function (z) { return z.id === id; })[0]; if (r2) abrirReserva(r2); }); }
+  // =========================================================
+  //  CONTROLE DE ESTOQUE (de um produto ou aparelho) e TRANSFERÊNCIAS
+  // =========================================================
+  var CT = null; // { ref, nome, voltar, filtro, d }
+  function abrirControle(ref, nome, voltar) { CT = { ref: ref, nome: nome, voltar: voltar || S.view, filtro: { de: '', ate: '', deposito: '' }, d: null }; fecharDrawer(); ir('ctrlest'); }
+  function voltarControle() { var v = CT ? CT.voltar : 'acess'; ir(v === 'ctrlest' ? 'acess' : v); }
+  function carregarControle() {
+    var box = $('ctCorpo'); if (!CT) return;
+    $('ctTit').textContent = 'Controle de estoque';
+    box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
+    call('estoqueExtrato', [S.token, CT.ref, CT.filtro]).then(function (d) { if (!CT || S.view !== 'ctrlest') return; CT.d = d; desenharControle(); })
+      .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
+  }
+  function curtoLoja(l) { return String(l || '').replace(/^.*\| /, ''); }
+  function desenharControle() {
+    var d = CT.d, box = $('ctCorpo'); box.innerHTML = '';
+    var cab = el('div', 'card ctcab');
+    var nm = el('div', 'pnome', d.item.nome); nm.appendChild(botaoCopiar(d.item.nome, 'Copiar nome'));
+    if (d.item.status === 'Em trânsito') nm.appendChild(el('span', 'bdg warn', 'Em trânsito'));
+    cab.appendChild(nm);
+    var sub = el('div', 'psub ctids');
+    if (d.item.sku) { var s1 = el('span', '', 'SKU ' + d.item.sku); s1.appendChild(botaoCopiar(d.item.sku, 'Copiar SKU')); sub.appendChild(s1); }
+    if (d.item.imei) { var s2 = el('span', '', 'IMEI ' + d.item.imei); s2.appendChild(botaoCopiar(d.item.imei, 'Copiar IMEI')); sub.appendChild(s2); }
+    if (d.item.codigo) sub.appendChild(el('span', '', 'EAN ' + d.item.codigo));
+    if (sub.children.length) cab.appendChild(sub);
+    box.appendChild(cab);
+    // filtros
+    var fl = el('div', 'card ctfil'), g = el('div', 'g4'), a = el('div'), b = el('div'), c = el('div'), e = el('div'); [a, b, c, e].forEach(function (z) { g.appendChild(z); }); fl.appendChild(g); box.appendChild(fl);
+    var de = el('input'); de.type = 'date'; de.value = CT.filtro.de; campo(a, 'De', de, true);
+    var at = el('input'); at.type = 'date'; at.value = CT.filtro.ate; campo(b, 'Até', at, true);
+    var dp = el('select'); opts(dp, d.lojas, CT.filtro.deposito, 'Todos os depósitos'); campo(c, 'Depósito', dp, true);
+    var fb = el('button', 'btn ghost', 'Filtrar'); fb.type = 'button'; e.appendChild(el('label', 'first', ' ')); e.appendChild(fb);
+    fb.onclick = function () { CT.filtro = { de: de.value, ate: at.value, deposito: dp.value }; carregarControle(); };
+    var gr = el('div', 'ctgrid'); box.appendChild(gr);
+    // tabela de lançamentos
+    var tc = el('div', 'card ctwrap'); gr.appendChild(tc);
+    if (!d.linhas.length) tc.appendChild(el('div', 'empty', 'Nenhum lançamento neste filtro.'));
+    else {
+      var t = el('table', 'cttab'), th = el('tr');
+      var cols = ['Data', 'Entrada', 'Saída', 'Preço de venda'].concat(d.ver ? ['Preço de compra', 'Preço de custo'] : []).concat(['Observação', 'Origem']);
+      cols.forEach(function (k, i) { th.appendChild(el('th', i > 0 && i < cols.length - 2 ? 'n' : '', k)); }); t.appendChild(th);
+      d.linhas.forEach(function (l) {
+        var tr = el('tr'), d0 = el('td'); d0.appendChild(document.createTextNode(String(l.data || '').slice(0, 16))); d0.appendChild(el('small', '', [curtoLoja(l.deposito), l.por].filter(Boolean).join(' · '))); tr.appendChild(d0);
+        tr.appendChild(el('td', 'n e', l.entrada ? '+' + l.entrada : ''));
+        tr.appendChild(el('td', 'n s', l.saida ? '−' + l.saida : ''));
+        tr.appendChild(el('td', 'n', l.precoVenda ? brl(l.precoVenda) : ''));
+        if (d.ver) { tr.appendChild(el('td', 'n', l.precoCompra != null ? brl(l.precoCompra) : '')); tr.appendChild(el('td', 'n', l.precoCusto != null ? brl(l.precoCusto) : '')); }
+        tr.appendChild(el('td', 'ob', l.obs || ''));
+        tr.appendChild(el('td', 'og', l.origem || ''));
+        t.appendChild(tr);
+      });
+      tc.appendChild(t);
+      if (d.linhas.length >= 400) tc.appendChild(el('div', 'hint', 'Mostrando os 400 lançamentos mais recentes. Use o filtro de datas para ver os anteriores.'));
+    }
+    // painel lateral
+    var sd = el('div', 'card ctlado'); gr.appendChild(sd);
+    [['Entradas', d.entradas, 'e'], ['Saídas', d.saidas, 's'], ['Saldo atual', d.saldo, '']].forEach(function (p) { var r = el('div', 'ctn ' + p[2]); r.appendChild(el('span', '', p[0])); r.appendChild(el('b', '', inteiro(p[1]))); sd.appendChild(r); });
+    sd.appendChild(el('div', 'k', 'Saldos por depósito'));
+    var ts = el('table', 'ext');
+    d.saldos.forEach(function (s) { var tr = el('tr'); tr.appendChild(el('td', '', s.deposito)); tr.appendChild(el('td', 'v' + (s.saldo > 0 ? '' : ' s'), inteiro(s.saldo))); ts.appendChild(tr); });
+    if (d.transito && d.transito.qtd) { var tr2 = el('tr'); tr2.appendChild(el('td', '', 'Em trânsito (' + d.transito.ids.join(', ') + ')')); tr2.appendChild(el('td', 'v', inteiro(d.transito.qtd))); ts.appendChild(tr2); }
+    sd.appendChild(ts);
+    if (d.podeTransferir) {
+      var bt = el('button', 'btn', 'Transferência'); bt.type = 'button'; sd.appendChild(bt);
+      bt.onclick = function () { transferirDoControle(); };
+    }
+    var podeLanc = d.item.tipo === 'produto' ? d.podeLancar : (pode('editar_aparelho') || pode('editar_acessorios'));
+    if (podeLanc && !(d.item.tipo === 'aparelho' && ['Disponível', 'Manutenção'].indexOf(d.item.status) < 0)) {
+      var bl = el('button', 'btn ghost', '+ Incluir lançamento'); bl.type = 'button'; sd.appendChild(bl);
+      bl.onclick = function () { if (d.item.tipo === 'produto') lancarProduto(d); else lancarAparelho(d); };
+    }
+    if (d.item.tipo === 'aparelho' && d.item.status && d.item.status !== 'Disponível') sd.appendChild(el('div', 'hint', 'Situação: ' + d.item.status + '.'));
+    if (d.item.tipo === 'aparelho') {
+      var hz = el('details', 'card ctwrap'), sm = el('summary', '', 'Histórico completo (manutenção, preço, alterações…)'); hz.appendChild(sm); box.appendChild(hz);
+      hz.ontoggle = function () {
+        if (!hz.open || hz.dataset.ok) return; hz.dataset.ok = 1; var w = el('div', 'hint', 'Carregando…'); hz.appendChild(w);
+        call('aparelhoHistorico', [S.token, d.item.imei]).then(function (l) {
+          w.remove(); if (!l.length) { hz.appendChild(el('div', 'hint', 'Sem registros.')); return; }
+          var t = el('div', 'movs');
+          l.forEach(function (m2) { var r = el('div', 'mov'), a = el('div'); a.appendChild(el('b', '', m2.acao)); a.appendChild(el('small', '', [m2.data, m2.quem, m2.loja].filter(Boolean).join(' · '))); r.appendChild(a); if (m2.det) r.appendChild(el('div', 'hint', m2.det)); t.appendChild(r); });
+          hz.appendChild(t);
+        }).catch(function (e) { w.textContent = String(e); });
+      };
+    }
+  }
+  function garantirAc(fn) { if (S.ac) return fn(); call('acessorios', [S.token]).then(function (d) { S.ac = d; fn(); }).catch(function (e) { msg('topMsg', e); }); }
+  function transferirDoControle() {
+    var d = CT.d;
+    if (d.item.tipo === 'aparelho') {
+      var x = (S.disp || []).filter(function (y) { return y.imei === d.item.imei; })[0] || { linha: d.item.linha, imei: d.item.imei, loja: d.item.loja, status: d.item.status };
+      if (x.status !== 'Disponível' || x.manut) { msg('topMsg', 'Só dá para transferir aparelho disponível (este está ' + (x.manut ? 'em manutenção' : String(x.status || '').toLowerCase()) + ').'); return; }
+      abrirTransferencia({ origem: x.loja, itens: [{ tipo: 'aparelho', linha: x.linha, imei: x.imei, nome: d.item.nome }] });
+      return;
+    }
+    garantirAc(function () {
+      var p = mapaP()[d.item.id]; if (!p) { msg('topMsg', 'Produto não encontrado. Atualize a página.'); return; }
+      var org = CT.filtro.deposito || (p.estoque[lojaUser()] ? lojaUser() : Object.keys(p.estoque).filter(function (l) { return p.estoque[l] > 0; })[0]) || lojaUser();
+      abrirTransferencia({ origem: org, itens: [itemTransfP(p, 1)] });
+    });
+  }
+  function itemTransfP(p, qtd, seriais) { return { tipo: 'produto', id: p.id, nome: p.nome, sku: p.sku, qtd: qtd || 1, serial: !!p.serial, serialTipo: p.serialTipo, seriais: seriais || [], estoque: p.estoque || {} }; }
+  // ---------- lançamento manual no controle de estoque ----------
+  function lancarProduto(d) {
+    garantirAc(function () {
+      var p = mapaP()[d.item.id]; if (!p) { msg('topMsg', 'Produto não encontrado.'); return; }
+      var sh = $('fSheet'); sh.innerHTML = '';
+      sh.appendChild(el('h2', 'tt', 'Incluir lançamento')); sh.appendChild(el('div', 'sub', p.nome));
+      var c = el('div', 'card'); sh.appendChild(c);
+      var tipo = 'entrada', sg = el('div', 'seg'); c.appendChild(el('label', 'first', 'Tipo')); c.appendChild(sg);
+      var area = el('div'); c.appendChild(area);
+      var m = el('div', 'msg err'); c.appendChild(m);
+      var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Lançar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
+      cc.onclick = fecharModal;
+      var f = {};
+      function des() {
+        area.innerHTML = '';
+        f.lj = el('select'); opts(f.lj, S.ac.lojas, CT.filtro.deposito || lojaUser()); campo(area, 'Depósito', f.lj);
+        f.qt = inp('number', tipo === 'ajuste' ? 'Quantidade contada' : 'Quantidade'); f.qt.min = tipo === 'ajuste' ? 0 : 1; campo(area, tipo === 'ajuste' ? 'Quantidade contada no depósito' : 'Quantidade', f.qt);
+        f.cu = null; if (tipo === 'entrada' && S.ac.ver) { f.cu = inpValor(p.custo || ''); campo(area, 'Custo unitário', f.cu); }
+        f.ob = inp('text', tipo === 'saida' ? 'Ex.: capa com defeito' : 'Ex.: nota 123, contagem do mês'); f.ob.maxLength = 150; campo(area, tipo === 'saida' ? 'Observação (motivo) *' : 'Observação', f.ob);
+        area.appendChild(el('div', 'hint', 'A observação aparece no Controle de Estoque.'));
+        f.cs = null;
+        if (p.serial) {
+          if (tipo === 'ajuste') area.appendChild(el('div', 'hint', 'Produto com controle de serial: use Entrada ou Saída informando os seriais.'));
+          else { f.qt.readOnly = true; f.cs = caixaSeriais(area, p, tipo, function () { return f.lj.value; }, function () { return S.ac.seriais; }, function (sel) { f.qt.value = sel.length ? String(sel.length) : ''; }); f.lj.onchange = function () { f.cs.redesenhar(); }; }
+        }
+        var h = el('div', 'hint'); area.appendChild(h);
+        var hz = function () { h.textContent = 'Hoje em ' + f.lj.value + ': ' + (p.estoque[f.lj.value] || 0) + '.'; }; f.lj.addEventListener('change', hz); hz();
+      }
+      seg(sg, ['Entrada', 'Saída', 'Ajuste (contagem)'], 'Entrada', function (v) { tipo = v === 'Saída' ? 'saida' : v === 'Entrada' ? 'entrada' : 'ajuste'; des(); });
+      des();
+      ok.onclick = function () {
+        m.classList.remove('show'); ok.disabled = true; ok.textContent = 'Salvando…';
+        call('acEstoque', [S.token, p.id, { tipo: tipo, loja: f.lj.value, qtd: f.qt.value, custo: f.cu ? num(f.cu.input.value) : null, obs: f.ob.value, seriais: f.cs ? f.cs.get() : [] }])
+          .then(function (r) { S.ac = r; fecharModal(); carregarControle(); })
+          .catch(function (e) { ok.disabled = false; ok.textContent = 'Lançar'; m.textContent = e; m.classList.add('show'); });
+      };
+      abrirModal();
+    });
+  }
+  function lancarAparelho(d) {
+    var it = d.item, sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Incluir lançamento')); sh.appendChild(el('div', 'sub', it.nome + ' · IMEI ' + it.imei));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var modo = 'baixa', sg = el('div', 'seg'), area = el('div');
+    if (pode('ver_custos')) { c.appendChild(el('label', 'first', 'Tipo')); c.appendChild(sg); seg(sg, ['Baixa do estoque', 'Corrigir custo'], 'Baixa do estoque', function (v) { modo = v === 'Corrigir custo' ? 'custo' : 'baixa'; des(); }); }
+    c.appendChild(area);
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Lançar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
+    cc.onclick = fecharModal;
+    var f = {}, x = (S.disp || []).filter(function (y) { return y.imei === it.imei; })[0] || {};
+    function des() {
+      area.innerHTML = '';
+      if (modo === 'baixa') {
+        f.mt = el('select'); opts(f.mt, ['Perda ou roubo', 'Defeito sem conserto', 'Devolução ao fornecedor', 'Uso interno', 'Outro'], '', 'Escolha o motivo…'); campo(area, 'Motivo', f.mt);
+        f.ob = inp('text', 'Detalhe (obrigatório em "Outro")'); f.ob.maxLength = 200; campo(area, 'Observação', f.ob);
+        area.appendChild(el('div', 'hint', 'O aparelho sai do estoque. A observação aparece no Controle de Estoque.'));
+      } else {
+        var g = grade(area, 2);
+        f.cu = inpValor(x.custo == null ? '' : x.custo); campo(g[0], 'Custo de compra', f.cu, true);
+        f.pc = inpValor(x.peca == null ? '' : x.peca); campo(g[1], 'Peças', f.pc, true);
+        f.ob = inp('text', 'Ex.: valor pago estava errado'); f.ob.maxLength = 200; campo(area, 'Motivo do ajuste *', f.ob);
+      }
+    }
+    des();
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var p = modo === 'baixa' ? { tipo: 'baixa', motivo: f.mt.value, obs: f.ob.value.trim() } : { tipo: 'custo', custo: f.cu.input.value.trim(), peca: f.pc.input.value.trim(), obs: f.ob.value.trim() };
+      if (modo === 'baixa' && !f.mt.value) { m.textContent = 'Escolha o motivo da baixa.'; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('aparelhoAjuste', [S.token, it.linha, it.imei, p]).then(function (l) { S.disp = l; if (S.ac) S.ac.aparelhos = l; S.venda = null; fecharModal(); carregarControle(); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Lançar'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal();
+  }
+  // ---------- enviar transferência (do controle de estoque ou do PDV) ----------
+  var TFO = null; // opções (depósitos de todas as empresas e naturezas)
+  function abrirTransferencia(pre, depois) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Transferência de estoque'));
+    sh.appendChild(el('div', 'sub', 'Os itens saem agora e ficam "Em trânsito" (não vendem) até alguém do destino confirmar o recebimento.'));
+    var c = el('div', 'card'); sh.appendChild(c); c.appendChild(el('div', 'empty', 'Carregando…'));
+    abrirModal();
+    var vai = function (op) { TFO = op; c.innerHTML = ''; formTransferencia(c, op, pre, depois); };
+    garantirAc(function () { if (TFO && TFO.empresa === (S.u.empresa || {}).id) return vai(TFO); call('transferenciaOpcoes', [S.token]).then(vai).catch(function (e) { c.innerHTML = ''; c.appendChild(el('div', 'msg err show', String(e))); }); });
+  }
+  function formTransferencia(c, op, pre, depois) {
+    var itens = pre.itens.slice();
+    var g = el('div', 'g2'), a = el('div'), b = el('div'); g.appendChild(a); g.appendChild(b); c.appendChild(g);
+    var org = el('select'); opts(org, op.lojas, pre.origem || op.minhaLoja); campo(a, 'Sai do depósito', org, true);
+    var emp = el('select'); op.empresas.forEach(function (e) { var o = el('option', '', e.nome + (e.id === op.empresa ? ' (esta empresa)' : '')); o.value = e.id; emp.appendChild(o); }); emp.value = op.empresa; campo(b, 'Empresa de destino', emp, true);
+    var g2 = el('div', 'g2'), a2 = el('div'), b2 = el('div'); g2.appendChild(a2); g2.appendChild(b2); c.appendChild(g2);
+    var dst = el('select'); campo(a2, 'Vai para o depósito', dst);
+    var nat = el('select'); op.naturezas.forEach(function (n) { var o = el('option', '', n.nome + (n.cfopDentro ? ' · CFOP ' + n.cfopDentro + '/' + n.cfopFora : '') + (n.gera === 'venda_compra' && !op.vendaPronta ? ' (em breve)' : '')); o.value = n.id; o.disabled = n.gera === 'venda_compra' && !op.vendaPronta; nat.appendChild(o); }); campo(b2, 'Natureza de operação', nat);
+    var av = el('div', 'hint'); c.appendChild(av);
+    function porEmp() {
+      var e = op.empresas.filter(function (z) { return z.id === emp.value; })[0] || { lojas: [], sugestao: {} };
+      var ls = e.lojas.filter(function (l) { return !(e.id === op.empresa && l === org.value); });
+      opts(dst, ls, dst.value, 'Escolha…');
+      if (e.sugestao && e.sugestao.id) nat.value = e.sugestao.id;
+      av.textContent = (e.sugestao && e.sugestao.aviso) || (e.id !== op.empresa ? 'Sugestão pela empresa de destino; você pode escolher outra natureza. Confirme os CFOPs com seu contador.' : '');
+    }
+    emp.onchange = porEmp; org.onchange = function () { porEmp(); desItens(); }; porEmp();
+    c.appendChild(el('label', '', 'Itens'));
+    var li = el('div', 'tfitens'); c.appendChild(li);
+    function desItens() {
+      li.innerHTML = '';
+      if (!itens.length) li.appendChild(el('div', 'hint', 'Nenhum item.'));
+      itens.forEach(function (it, i) {
+        var r = el('div', 'tfit'), n = el('div', 'nm', it.nome);
+        if (it.tipo === 'aparelho') n.appendChild(el('small', '', 'IMEI ' + it.imei));
+        else n.appendChild(el('small', '', (it.estoque[org.value] || 0) + ' em ' + curtoLoja(org.value) + (it.sku ? ' · SKU ' + it.sku : '')));
+        r.appendChild(n);
+        if (it.tipo === 'produto' && !it.serial) {
+          var q = inp('number', 'Qtd'); q.min = 1; q.value = it.qtd; q.className = 'tfq'; q.oninput = function () { it.qtd = parseInt(q.value, 10) || 0; }; r.appendChild(q);
+        } else if (it.tipo === 'produto') r.appendChild(el('b', '', (it.seriais || []).length + ' un.'));
+        var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar'; x.onclick = function () { itens.splice(i, 1); desItens(); }; r.appendChild(x);
+        li.appendChild(r);
+        if (it.tipo === 'produto' && it.serial) {
+          var sb = el('div', 'tfser'); li.appendChild(sb);
+          var pre0 = (it.seriais || []).slice();
+          var cs = caixaSeriais(sb, { id: it.id, serialTipo: it.serialTipo }, 'saida', function () { return org.value; }, function () { return S.ac ? S.ac.seriais : []; }, function (sel) { it.seriais = sel; it.qtd = sel.length; var bb = r.querySelector('b'); if (bb) bb.textContent = sel.length + ' un.'; });
+          if (pre0.length) { pre0.forEach(function (s) { var bt = Array.prototype.filter.call(sb.querySelectorAll('.chip'), function (z) { return z.textContent === s; })[0]; if (bt && !bt.classList.contains('on')) bt.click(); }); }
+          void cs;
+        }
+      });
+    }
+    desItens();
+    var ob = inp('text', 'Ex.: pedido da loja de Cordeiro'); ob.maxLength = 200; campo(c, 'Observação', ob);
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn ok', 'Enviar transferência'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show');
+      var erro = !dst.value ? 'Escolha o depósito de destino.' : !itens.length ? 'Adicione os itens.' : itens.some(function (it) { return it.tipo === 'produto' && !(it.qtd > 0); }) ? 'Informe a quantidade (ou os seriais) de cada produto.' : '';
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Enviando…';
+      var d = { origem: org.value, destEmpresa: emp.value, destino: dst.value, naturezaId: nat.value, obs: ob.value.trim(),
+                itens: itens.map(function (it) { return it.tipo === 'aparelho' ? { tipo: 'aparelho', linha: it.linha, imei: it.imei } : { tipo: 'produto', id: it.id, qtd: it.qtd, seriais: it.serial ? it.seriais : null }; }) };
+      call('transferenciaEnviar', [S.token, d]).then(function (t) {
+        S.ac = null; S.disp = null; S.venda = null;
+        mostrarComprovanteTransf(t, true);
+        if (depois) depois(t);
+        if (S.view === 'ctrlest') carregarControle();
+      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Enviar transferência'; m.textContent = e; m.classList.add('show'); });
+    };
+  }
+  function textoTransf(t) {
+    var l = ['*Transferência ' + t.id + '*', 'De: ' + (t.origEmp !== t.destEmp ? t.origEmpNome + ' · ' : '') + t.origem, 'Para: ' + (t.origEmp !== t.destEmp ? t.destEmpNome + ' · ' : '') + t.destino, 'Natureza: ' + (t.natureza.nome || '') + (t.natureza.cfop ? ' (CFOP ' + t.natureza.cfop + ')' : ''), 'Enviada em ' + t.em + ' por ' + t.por, ''];
+    t.itens.forEach(function (it) { l.push('• ' + it.qtd + 'x ' + it.nome + (it.imei ? ' · IMEI ' + it.imei : '') + (it.seriais && it.seriais.length ? ' · serial ' + it.seriais.join(', ') : '')); });
+    if (t.obs) l.push('', 'Obs.: ' + t.obs);
+    l.push('', 'Situação: ' + t.situacao);
+    return l.join('\n');
+  }
+  function noComprovanteTransf(t) {
+    var w = el('div', 'tfcomp');
+    w.appendChild(el('h3', '', 'Transferência ' + t.id));
+    [['Situação', t.situacao], ['De', (t.origEmp !== t.destEmp ? t.origEmpNome + ' · ' : '') + t.origem], ['Para', (t.origEmp !== t.destEmp ? t.destEmpNome + ' · ' : '') + t.destino],
+     ['Natureza', (t.natureza.nome || '') + (t.natureza.cfop ? ' · CFOP ' + t.natureza.cfop : '')], ['Enviada', t.em + ' · ' + t.por], ['Observação', t.obs]]
+      .forEach(function (p) { if (!p[1]) return; var r = el('div', 'l'); r.appendChild(el('span', '', p[0])); r.appendChild(el('b', '', p[1])); w.appendChild(r); });
+    var tb = el('table'), h = el('tr'); ['Qtd', 'Item', 'Recebido'].forEach(function (k) { h.appendChild(el('th', '', k)); }); tb.appendChild(h);
+    t.itens.forEach(function (it) {
+      var r = el('tr'); r.appendChild(el('td', '', String(it.qtd)));
+      var n = el('td', '', it.nome); if (it.imei) n.appendChild(el('div', 'pq', 'IMEI ' + it.imei)); if (it.seriais && it.seriais.length) n.appendChild(el('div', 'pq', 'Serial ' + it.seriais.join(', '))); r.appendChild(n);
+      r.appendChild(el('td', '', [it.recebido ? it.recebido + ' ok' : '', it.avaria ? it.avaria + ' avaria' : '', it.falta ? it.falta + ' falta' : '', it.pendente ? it.pendente + ' pendente' : ''].filter(Boolean).join(' · ')));
+      tb.appendChild(r);
+    });
+    w.appendChild(tb);
+    var as = el('div', 'ass'); as.appendChild(el('div', '', 'Enviado por')); as.appendChild(el('div', '', 'Recebido por')); w.appendChild(as);
+    return w;
+  }
+  var CSS_TRANSF = '.tfcomp{max-width:640px;font-size:13px}.tfcomp h3{margin:0 0 8px}.tfcomp .l{display:flex;gap:10px;padding:2px 0}.tfcomp .l span{min-width:90px;color:#555}.tfcomp table{width:100%;border-collapse:collapse;margin-top:10px}.tfcomp th,.tfcomp td{border-bottom:1px solid #ccc;padding:5px;text-align:left;vertical-align:top}.tfcomp .pq{font-size:11px;color:#555}.tfcomp .ass{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:50px}.tfcomp .ass div{border-top:1px solid #333;padding-top:4px;text-align:center}';
+  function mostrarComprovanteTransf(t, novo) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', novo ? '✓ Transferência ' + t.id + ' enviada' : 'Transferência ' + t.id));
+    if (novo) sh.appendChild(el('div', 'sub', 'Os itens estão "Em trânsito". Quem estiver em ' + t.destino + ' confirma o recebimento em Suprimento › Transferências.'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var no = noComprovanteTransf(t); c.appendChild(no);
+    var ac = el('div', 'acoes'), pr = el('button', 'btn', 'Imprimir'), wa = el('a', 'btn ghost', 'Enviar no WhatsApp'), fc = el('button', 'btn ghost', 'Fechar'); pr.type = fc.type = 'button';
+    wa.href = waLink('', textoTransf(t)); wa.target = '_blank'; wa.rel = 'noopener';
+    ac.appendChild(pr); ac.appendChild(wa); ac.appendChild(fc); c.appendChild(ac);
+    pr.onclick = function () { imprimirHTML('Transferência ' + t.id, no, CSS_TRANSF); };
+    fc.onclick = function () { fecharModal(); if (S.view === 'transf') carregarTransf(); };
+    abrirModal();
+  }
+  // ---------- página Transferências (receber, cancelar, encerrar) ----------
+  var TF = { filtro: 'abertas', lista: null };
+  function carregarTransf() {
+    var box = $('tfCorpo'); box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
+    call('transferenciasListar', [S.token, { situacao: TF.filtro === 'todas' ? '' : 'abertas' }]).then(function (l) {
+      TF.lista = l; S.u.transfPendentes = l.filter(function (t) { return t.podeReceber; }).length; montarMenu(); desenharTransf();
+    }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
+  }
+  function desenharTransf() {
+    var box = $('tfCorpo'); box.innerHTML = '';
+    var sg = el('div', 'seg'); box.appendChild(sg);
+    seg(sg, ['Em aberto', 'Todas'], TF.filtro === 'todas' ? 'Todas' : 'Em aberto', function (v) { TF.filtro = v === 'Todas' ? 'todas' : 'abertas'; carregarTransf(); });
+    if (!TF.lista.length) { box.appendChild(el('div', 'empty', TF.filtro === 'todas' ? 'Nenhuma transferência ainda.' : 'Nada em trânsito.')); return; }
+    TF.lista.forEach(function (t) {
+      var c = el('div', 'card tfcard'), h = el('div', 'tfh');
+      var tt = el('b', '', t.id); h.appendChild(tt);
+      var cls = t.situacao === 'Em trânsito' || t.situacao === 'Recebida parcialmente' ? 'warn' : t.situacao === 'Cancelada' ? 'off' : 'ok';
+      h.appendChild(el('span', 'bdg ' + cls, t.situacao));
+      h.appendChild(el('span', 'bdg inf', t.sentido === 'entrada' ? 'Chegando' : t.sentido === 'saida' ? 'Saindo' : 'Entre depósitos'));
+      c.appendChild(h);
+      c.appendChild(el('div', '', (t.origEmp !== t.destEmp ? t.origEmpNome + ' · ' : '') + t.origem + ' → ' + (t.origEmp !== t.destEmp ? t.destEmpNome + ' · ' : '') + t.destino));
+      c.appendChild(el('div', 'psub', [t.resumo, t.natureza.nome, t.em + ' · ' + t.por, t.valor != null ? 'custo ' + brl(t.valor) : ''].filter(Boolean).join(' · ')));
+      if (t.obs) c.appendChild(el('div', 'hint', 'Obs.: ' + t.obs));
+      var pend = t.itens.filter(function (it) { return it.pendente > 0; });
+      if (pend.length && t.situacao === 'Recebida parcialmente') c.appendChild(el('div', 'hint', 'Falta receber: ' + pend.map(function (it) { return it.pendente + 'x ' + it.nome; }).join(', ')));
+      t.itens.forEach(function (it) { (it.motivos || []).forEach(function (mo) { c.appendChild(el('div', 'hint', it.nome + ' · ' + mo)); }); });
+      var ac = el('div', 'acoes');
+      if (t.podeReceber) { var rb = el('button', 'btn ok', 'Receber'); rb.type = 'button'; rb.onclick = function () { receberTransf(t); }; ac.appendChild(rb); }
+      var vb = el('button', 'btn ghost', 'Comprovante'); vb.type = 'button'; vb.onclick = function () { mostrarComprovanteTransf(t, false); }; ac.appendChild(vb);
+      var m = el('div', 'msg err');
+      if (t.podeCancelar) { var cb = el('button', 'btn ghost', 'Cancelar envio'); cb.type = 'button'; cb.onclick = function () { motivoTransf(c, m, 'Motivo do cancelamento', 'Cancelar transferência', function (mot) { return call('transferenciaCancelar', [S.token, t.id, mot]); }); }; ac.appendChild(cb); }
+      if (t.podeEncerrar) { var eb = el('button', 'btn ghost', 'Encerrar com falta'); eb.type = 'button'; eb.onclick = function () { motivoTransf(c, m, 'O que falta fica registrado como falta. Motivo', 'Encerrar com falta', function (mot) { return call('transferenciaEncerrar', [S.token, t.id, mot]); }); }; ac.appendChild(eb); }
+      c.appendChild(ac); c.appendChild(m);
+      box.appendChild(c);
+    });
+  }
+  function motivoTransf(c, m, rot, txtBtn, fn) {
+    if (c.querySelector('.tfmot')) return;
+    var w = el('div', 'tfmot'), i = inp('text', 'Ex.: enviei errado'); i.maxLength = 200; campo(w, rot, i, true);
+    var b = el('button', 'btn danger', txtBtn); b.type = 'button'; w.appendChild(b); c.appendChild(w); i.focus();
+    b.onclick = function () {
+      if (i.value.trim().length < 3) { m.textContent = 'Diga o motivo.'; m.classList.add('show'); return; }
+      b.disabled = true; m.classList.remove('show');
+      fn(i.value.trim()).then(function () { S.ac = null; S.disp = null; S.venda = null; carregarTransf(); }).catch(function (e) { b.disabled = false; m.textContent = e; m.classList.add('show'); });
+    };
+  }
+  function receberTransf(t) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Receber ' + t.id));
+    sh.appendChild(el('div', 'sub', 'De ' + (t.origEmp !== t.destEmp ? t.origEmpNome + ' · ' : '') + t.origem + '. Confira item por item: o que chegou bem entra no estoque de ' + t.destino + '. O que você não informar continua pendente.'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var R = [];
+    t.itens.filter(function (it) { return it.pendente > 0; }).forEach(function (it) {
+      var w = el('div', 'tfrec'), o = { k: it.k, ok: 0, avaria: 0, falta: 0, motivo: '', seriais: [] }; R.push(o);
+      var n = el('div', 'nm', it.nome); n.appendChild(el('small', '', (it.imei ? 'IMEI ' + it.imei + ' · ' : '') + 'pendente: ' + it.pendente)); w.appendChild(n);
+      var mo = inp('text', 'Motivo da avaria / falta'); mo.maxLength = 150; mo.oninput = function () { o.motivo = mo.value.trim(); };
+      if (it.tipo === 'aparelho') {
+        var sg = el('div', 'seg'); w.appendChild(sg);
+        seg(sg, ['Chegou OK', 'Chegou com avaria', 'Não chegou', 'Depois'], 'Chegou OK', function (v) { o.ok = v === 'Chegou OK' ? 1 : 0; o.avaria = v === 'Chegou com avaria' ? 1 : 0; o.falta = v === 'Não chegou' ? 1 : 0; mo.parentNode.classList.toggle('hide', !(o.avaria || o.falta)); });
+        o.ok = 1;
+        w.appendChild(el('div', 'hint', 'Com avaria: o aparelho entra em Manutenção no destino.'));
+      } else if (it.seriaisPendentes) {
+        w.appendChild(el('label', '', 'Toque nos seriais que chegaram OK'));
+        var ch = el('div', 'chips'); w.appendChild(ch);
+        var g = grade(w, 2), av = inp('number', '0'), fa = inp('number', '0'); av.min = fa.min = 0; campo(g[0], 'Com avaria', av, true); campo(g[1], 'Não chegou', fa, true);
+        it.seriaisPendentes.forEach(function (s) { var b = el('button', 'chip on', s); b.type = 'button'; o.seriais.push(s); b.onclick = function () { var k = o.seriais.indexOf(s); if (k > -1) o.seriais.splice(k, 1); else o.seriais.push(s); b.classList.toggle('on', k < 0); o.ok = o.seriais.length; }; ch.appendChild(b); });
+        o.ok = o.seriais.length;
+        av.oninput = function () { o.avaria = parseInt(av.value, 10) || 0; mo.parentNode.classList.toggle('hide', !(o.avaria || o.falta)); };
+        fa.oninput = function () { o.falta = parseInt(fa.value, 10) || 0; mo.parentNode.classList.toggle('hide', !(o.avaria || o.falta)); };
+        w.appendChild(el('div', 'hint', 'Os seriais com avaria ou que não chegaram são os que você não marcou.'));
+      } else {
+        var g3 = grade(w, 3), okq = inp('number', '0'), avq = inp('number', '0'), faq = inp('number', '0'); okq.min = avq.min = faq.min = 0; okq.value = it.pendente; o.ok = it.pendente;
+        campo(g3[0], 'Chegou OK', okq, true); campo(g3[1], 'Com avaria', avq, true); campo(g3[2], 'Não chegou', faq, true);
+        var up = function () { o.ok = parseInt(okq.value, 10) || 0; o.avaria = parseInt(avq.value, 10) || 0; o.falta = parseInt(faq.value, 10) || 0; mo.parentNode.classList.toggle('hide', !(o.avaria || o.falta)); };
+        okq.oninput = avq.oninput = faq.oninput = up;
+        w.appendChild(el('div', 'hint', 'Com avaria não entra no estoque (fica registrado na transferência).'));
+      }
+      var mw = el('div', 'hide'); campo(mw, 'Motivo', mo); w.appendChild(mw);
+      c.appendChild(w);
+    });
+    var ob = inp('text', 'Opcional'); ob.maxLength = 200; campo(c, 'Observação do recebimento', ob);
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn ok', 'Confirmar recebimento'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show'); ok.disabled = true; ok.textContent = 'Salvando…';
+      call('transferenciaReceber', [S.token, t.id, { itens: R, obs: ob.value.trim() }]).then(function (r) { S.ac = null; S.disp = null; S.venda = null; mostrarComprovanteTransf(r, false); carregarTransf(); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar recebimento'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal();
+  }
+  // ---------- Configurações › Naturezas de operação ----------
+  function cfgNaturezas(box, d) {
+    var L = d.naturezas.map(function (n) { return Object.assign({}, n); });
+    box.appendChild(el('div', 'hint', 'A natureza diz o que a transferência é para o fiscal (CFOP) e para o financeiro. Na transferência o sistema sugere uma pela empresa de destino e o CNPJ, e você pode escolher outra. Confirme os CFOPs com seu contador.'));
+    var lst = el('div'); box.appendChild(lst);
+    function des() {
+      lst.innerHTML = '';
+      L.forEach(function (n, i) {
+        var c = el('div', 'card'), g = el('div', 'g2'), a = el('div'), b = el('div'); g.appendChild(a); g.appendChild(b); c.appendChild(g);
+        var nm = campo(a, 'Nome', inp('text', 'Ex.: Remessa para conserto'), true); nm.value = n.nome; nm.oninput = function () { n.nome = nm.value; }; nm.disabled = !d.editar;
+        var tp = el('select'); [['saida', 'Saída'], ['entrada', 'Entrada']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; tp.appendChild(op); }); tp.value = n.tipo; tp.onchange = function () { n.tipo = tp.value; }; tp.disabled = !d.editar; campo(b, 'Tipo', tp, true);
+        var g2 = el('div', 'g4'), cs = [el('div'), el('div'), el('div'), el('div')]; cs.forEach(function (z) { g2.appendChild(z); }); c.appendChild(g2);
+        var cd = campo(cs[0], 'CFOP dentro do estado', inp('text', '5.152')); cd.value = n.cfopDentro; cd.oninput = function () { n.cfopDentro = cd.value; }; cd.disabled = !d.editar;
+        var cf = campo(cs[1], 'CFOP fora do estado', inp('text', '6.152')); cf.value = n.cfopFora; cf.oninput = function () { n.cfopFora = cf.value; }; cf.disabled = !d.editar;
+        var vl = el('select'); [['custo', 'Pelo custo'], ['custo_pct', 'Custo + %'], ['preco', 'Preço de venda']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; vl.appendChild(op); }); vl.value = n.valor; vl.disabled = !d.editar; campo(cs[2], 'Valor do documento', vl);
+        var pc = campo(cs[3], '% sobre o custo', inp('number', '0')); pc.value = n.pct; pc.oninput = function () { n.pct = pc.value; }; pc.disabled = !d.editar || n.valor !== 'custo_pct';
+        vl.onchange = function () { n.valor = vl.value; pc.disabled = !d.editar || n.valor !== 'custo_pct'; };
+        var gr = el('select'); [['nada', 'Só movimenta o estoque'], ['venda_compra', 'Gera venda na origem e compra no destino (com financeiro)']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; gr.appendChild(op); }); gr.value = n.gera; gr.disabled = !d.editar; gr.onchange = function () { n.gera = gr.value; }; campo(c, 'O que gera', gr);
+        if (n.gera === 'venda_compra' && !d.vendaPronta) c.appendChild(el('div', 'hint', 'A venda entre empresas (conta do mês entre as empresas) chega numa próxima entrega. Até lá essa natureza não pode ser usada.'));
+        var us = el('select'); [['', 'Não sugerir'], ['depositos', 'Sugerir entre depósitos da mesma empresa'], ['filiais', 'Sugerir entre empresas do mesmo CNPJ'], ['empresas', 'Sugerir entre empresas de CNPJ diferente']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; us.appendChild(op); }); us.value = n.uso || ''; us.disabled = !d.editar; us.onchange = function () { n.uso = us.value; }; campo(c, 'Sugestão automática', us);
+        [['movimenta', 'Movimenta o estoque'], ['ativa', 'Ativa']].forEach(function (o) { var lb = el('label', 'perm'), cb = el('input'); cb.type = 'checkbox'; cb.checked = n[o[0]] !== false; cb.disabled = !d.editar; cb.onchange = function () { n[o[0]] = cb.checked; }; lb.appendChild(cb); lb.appendChild(el('div', 't', o[1])); lb.style.marginTop = '6px'; c.appendChild(lb); });
+        if (d.editar && !/^N[123]$/.test(n.id)) { var del = el('button', 'lnk', 'Excluir natureza'); del.type = 'button'; del.style.color = 'var(--err)'; del.onclick = function () { L.splice(i, 1); des(); }; c.appendChild(del); }
+        lst.appendChild(c);
+      });
+    }
+    des();
+    if (!d.editar) return;
+    var add = el('button', 'btn ghost', '+ Nova natureza'); add.type = 'button'; add.style.width = 'auto'; add.onclick = function () { L.push({ id: '', nome: '', tipo: 'saida', cfopDentro: '', cfopFora: '', movimenta: true, gera: 'nada', valor: 'custo', pct: 0, uso: '', ativa: true }); des(); }; box.appendChild(add);
+    var m = el('div', 'msg err'); box.appendChild(m);
+    var sv = el('button', 'btn', 'Salvar'); sv.type = 'button'; sv.style.marginTop = '10px'; box.appendChild(sv);
+    sv.onclick = function () {
+      m.classList.remove('show'); sv.disabled = true; sv.textContent = 'Salvando…';
+      call('naturezasSalvar', [S.token, L]).then(function (r) { TFO = null; box.innerHTML = ''; cfgNaturezas(box, r); box.insertBefore(el('div', 'msg ok show', '✓ Naturezas salvas.'), box.firstChild); })
+        .catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
+    };
+  }
+  // ---------- Produto usado: editar na página de cadastro ----------
+  function abrirEdicaoCad(x) {
+    limparCadastro(); S.cadEdit = x; fecharDrawer(); ir('cadastro');
+    var podeEd = pode('editar_aparelho') && x.status !== 'Em trânsito';
+    $('cTit').textContent = podeEd ? 'Editar produto usado' : 'Produto usado';
+    $('modelo').value = x.modelo || ''; $('cor').value = x.cor || ''; $('sku').value = x.sku || ''; $('imei').value = x.imei || ''; $('imei2').value = x.imei2 || ''; $('serial').value = x.serial || '';
+    $('bateria').value = typeof x.bateria === 'number' ? x.bateria : String(x.bateria || '').replace(/\D/g, ''); $('obs').value = x.obs || ''; $('cLocal').value = x.local || '';
+    var lj = $('loja'); if (x.loja && !Array.prototype.some.call(lj.options, function (o) { return o.value === x.loja; })) { var o = el('option', '', x.loja); o.value = x.loja; lj.appendChild(o); } lj.value = x.loja;
+    $('custo').value = x.custo == null ? '' : String(x.custo).replace('.', ',');
+    S.classificacao = x.classif; S.tipo = x.tipo;
+    seg($('classif'), S.u.classificacoes || [], x.classif, function (v) { S.classificacao = v; });
+    seg($('tipo'), S.u.tipos || [], x.tipo, function (v) { S.tipo = v; });
+    S.cGrupo = seletorGrupo($('cGrupo'), x.grupo || ''); S.cTags = seletorTags($('cTags'), x.tags || []);
+    imeiStatus('', '');
+    modoEdicaoCad(true, podeEd, x);
+  }
+  function modoEdicaoCad(on, podeEd, x) {
+    var form = $('form');
+    show('cBox', false); document.querySelector('#vCadastro .ckbox').classList.toggle('hide', !!on); if (on) $('cPrecoBox').classList.add('hide');
+    $('cPu').disabled = $('cObsSI').disabled = !!on; $('cPu').placeholder = on ? '—' : '0,00'; $('cObsSI').placeholder = on ? 'Fica no Controle de Estoque do aparelho' : 'Ex.: comprado de cliente na loja';
+    $('cCond').disabled = !!on;
+    $('custo').closest('div').parentNode.classList.toggle('hide', !!on && !pode('ver_custos'));
+    $('enviar').textContent = on ? 'Salvar alterações' : 'Salvar produto usado'; show('enviar', !on || podeEd);
+    $('cCancelar').textContent = on && !podeEd ? 'Voltar' : 'Cancelar';
+    Array.prototype.forEach.call(form.querySelectorAll('input,textarea,select,#classif button,#tipo button,#cGrupo button,#cTags button'), function (i) { if (i.id === 'cPu' || i.id === 'cObsSI' || i.id === 'cQtd' || i.id === 'cCond') return; i.disabled = !!on && !podeEd; });
+    var ev = $('cEdAviso'); if (ev) ev.remove();
+    $('eu').classList.toggle('hide', !!on);
+    if (on) {
+      var av = el('div', 'hint', podeEd ? 'Alterando o cadastro de ' + x.modelo + ' (IMEI ' + x.imei + '). A alteração fica registrada no Histórico. Preço unitário e observação do saldo inicial ficam no Controle de Estoque.' : (x.status === 'Em trânsito' ? 'Aparelho em trânsito: dá para alterar depois que for recebido.' : 'Você pode ver o cadastro, mas não tem permissão para alterar.'));
+      av.id = 'cEdAviso'; $('eu').after(av);
+    } else if ($('cTit')) $('cTit').textContent = 'Novo produto usado';
+  }
+  function salvarEdicaoCad() {
+    var x = S.cadEdit;
+    var d = { loja: $('loja').value, modelo: $('modelo').value.trim().toUpperCase().replace(/\s+/g, ' '), cor: $('cor').value.trim(), imei: $('imei').value.replace(/\D/g, ''), bateria: $('bateria').value.trim(),
+              classificacao: S.classificacao, tipo: S.tipo, obs: $('obs').value.trim(), sku: $('sku').value.trim(), imei2: $('imei2').value.replace(/\D/g, ''), serial: $('serial').value.trim().toUpperCase(),
+              grupo: S.cGrupo ? S.cGrupo.get() : '', tags: S.cTags ? S.cTags.get() : [], localizacao: $('cLocal').value.trim() };
+    if (pode('ver_custos')) { d.custo = $('custo').value.trim(); d.peca = x.peca == null ? '' : String(x.peca); }
+    var erro = !d.modelo ? 'Informe o modelo.' : !d.cor ? 'Informe a cor.' : !luhn(d.imei) ? 'IMEI1 inválido. Confira os 15 números.' : d.imei2 && (!luhn(d.imei2) || d.imei2 === d.imei) ? 'IMEI2 inválido ou igual ao IMEI1.' : d.bateria === '' || +d.bateria < 0 || +d.bateria > 100 ? 'Bateria deve ser de 0 a 100.' : '';
+    if (erro) { msg('formMsg', erro); window.scrollTo(0, 0); return; }
+    var btn = $('enviar'); btn.disabled = true; btn.textContent = 'Salvando…';
+    call('editarAparelho', [S.token, x.linha, x.imei, d]).then(function (l) {
+      btn.disabled = false; S.disp = l; if (S.ac) S.ac.aparelhos = l; S.venda = null; S.manut = null;
+      limparCadastro(); ir('disp');
+      var nv = l.filter(function (y) { return y.linha === x.linha; })[0]; if (nv) abrirDrawer(nv);
+    }).catch(function (e) { btn.disabled = false; btn.textContent = 'Salvar alterações'; msg('formMsg', e); window.scrollTo(0, 0); });
+  }
   // ---------- Configurações › Estoque e Reservas ----------
   function cfgReservas(box, d) {
     var c = el('div', 'card'); c.appendChild(el('h2', '', 'Prazos e valores')); box.appendChild(c);
@@ -2330,12 +2819,13 @@
   var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta' };
   var ICO_VIEW = { encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
-                   cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas' };
+                   cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao' };
   var SBM = { aberto: {} };
   function semAc(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function itemMenu(v) {
     var b = el('button', 'sbi'); b.type = 'button'; b.dataset.v = v.id; b.innerHTML = '<span class="ic">' + svgIco(ICO_VIEW[v.id]) + '</span>';
     var nm = v.sub ? (v.subNome || v.nome) : v.nome; b.appendChild(el('span', 'sbl', nm)); b.title = nm;
+    if (v.id === 'transf' && S.u && S.u.transfPendentes) { b.querySelector('.sbl').appendChild(el('span', 'bdg warn', String(S.u.transfPendentes))); b.title = S.u.transfPendentes + ' transferência(s) para receber'; }
     b.onclick = function () { ir(v.id); fecharSb(); };
     return b;
   }
@@ -2367,7 +2857,7 @@
     marcarMenu(S.view);
   }
   function marcarMenu(id) {
-    var alvo = { cadastro: 'disp', prod: 'acess', pessoa: 'crm' }[id] || id;
+    var alvo = { cadastro: 'disp', prod: 'acess', pessoa: 'crm', ctrlest: CT && CT.ref.tipo === 'aparelho' ? 'disp' : 'acess' }[id] || id;
     var v = VIEWS.filter(function (z) { return z.id === alvo; })[0];
     Array.prototype.forEach.call(document.querySelectorAll('#tabs .sbi'), function (b) { b.classList.toggle('on', b.dataset.v === alvo); if (b.dataset.v === alvo) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     Array.prototype.forEach.call(document.querySelectorAll('#tabs .sbg'), function (b) {
@@ -3415,9 +3905,14 @@
     if (S.view && S.view !== id) limparRascunhos(S.view, id);
     if (id === 'pessoa' && !PE) id = 'crm';
     if (id === 'prod' && !PR) id = 'acess';
-    S.view = id; if (id !== 'pessoa' && id !== 'prod') LS.set('view', id); msg('topMsg', ''); document.body.classList.add('wide'); fecharDrawer();
+    if (id === 'ctrlest' && !CT) id = 'acess';
+    if (id !== 'cadastro' && S.cadEdit) limparCadastro();
+    S.view = id; if (id !== 'pessoa' && id !== 'prod' && id !== 'ctrlest') LS.set('view', id); msg('topMsg', ''); document.body.classList.add('wide'); fecharDrawer();
     var secs = {}; VIEWS.forEach(function (v) { secs[v.sec] = secs[v.sec] || v.id === id; }); Object.keys(secs).forEach(function (k) { show(k, secs[k]); });
-    show('vConfig', id === 'config'); show('vPessoa', id === 'pessoa'); show('vProd', id === 'prod'); fecharTags();
+    show('vConfig', id === 'config'); show('vPessoa', id === 'pessoa'); show('vProd', id === 'prod'); show('vCtrl', id === 'ctrlest'); fecharTags();
+    if (id !== 'ctrlest') CT = null;
+    if (id === 'ctrlest') carregarControle();
+    if (id === 'transf') carregarTransf();
     if (id !== 'pessoa') PE = null;
     if (id !== 'prod') PR = null;
     if (id === 'config') desenharCfg();
@@ -4116,7 +4611,7 @@
     if (window.innerWidth < 820) document.body.style.overflow = 'hidden';
     return bd;
   }
-  function kvCard(bd, pares) { var c = el('div', 'card'), kv = el('div', 'kv'); pares.forEach(function (p) { if (p[1] === '' || p[1] === null || p[1] === undefined) return; kv.appendChild(el('div', 'k', p[0])); var d = el('div', '', String(p[1])); d.style.whiteSpace = 'pre-line'; kv.appendChild(d); }); c.appendChild(kv); bd.appendChild(c); return c; }
+  function kvCard(bd, pares) { var c = el('div', 'card'), kv = el('div', 'kv'); pares.forEach(function (p) { if (p[1] === '' || p[1] === null || p[1] === undefined) return; kv.appendChild(el('div', 'k', p[0])); var d = el('div', '', String(p[1])); d.style.whiteSpace = 'pre-line'; if (p[2] === 'copiar') d.appendChild(botaoCopiar(String(p[1]), 'Copiar ' + p[0])); kv.appendChild(d); }); c.appendChild(kv); bd.appendChild(c); return c; }
 
   // =========================================================
   //  CRM: CLIENTES / FORNECEDORES
@@ -5322,9 +5817,10 @@
     Array.prototype.forEach.call(document.querySelectorAll('#acLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.id || r.dataset.k === x.pai); });
     var D = S.ac, M = mapaP(), fi = x.ficha || {}, ca = fi.carac || {}, tr = fi.trib || {};
     var bd = abrirDw(x.nome, FMT_NOME[x.formato] + ' · ' + (x.preco ? brl(x.preco) : 'sem preço') + ' · ' + (x.formato === 'composicao' ? x.total + ' kit(s) montável(is)' : x.total + ' em estoque'));
+    $('dw').querySelector('.dwh .t').appendChild(botaoCopiar(x.nome, 'Copiar nome'));
     var pares = [['Preço de venda', x.preco ? brl(x.preco) : '—']];
     if (D.ver && x.custo !== undefined && x.custo !== null) pares.push(['Custo líquido', brl(x.custo)], ['Custo médio', x.custoMedio != null ? brl(x.custoMedio) : ''], [x.ultimaDeCompra ? 'Última compra' : 'Última entrada', x.ultimaCompra != null ? brl(x.ultimaCompra) + (x.ultimaData ? ' em ' + x.ultimaData : '') : ''], ['Mark-up', x.markup !== null ? nfmt(x.markup) + '%' : ''], ['Lucro bruto', x.preco ? brl(x.preco - x.custo) + (x.preco ? ' (' + pct((x.preco - x.custo) / x.preco) + ' do preço)' : '') : '']);
-    pares.push(['SKU', x.sku], ['GTIN/EAN', x.codigo], ['Unidade', x.unidade], ['Condição', x.condicao !== 'Não especificado' ? x.condicao : ''], ['Categoria', x.grupo], ['Tags', (x.tags || []).join(', ')],
+    pares.push(['SKU', x.sku, 'copiar'], ['GTIN/EAN', x.codigo, 'copiar'], ['Unidade', x.unidade], ['Condição', x.condicao !== 'Não especificado' ? x.condicao : ''], ['Categoria', x.grupo], ['Tags', (x.tags || []).join(', ')],
                ['Marca', ca.marca], ['Localização', x.localizacao], ['Estoque mín./máx.', x.minimo || x.maximo ? (x.minimo || 0) + ' / ' + (x.maximo || '—') : ''], ['NCM', tr.ncm],
                ['Fornecedores', (fi.fornecedores || []).map(function (id) { var f2 = (D.fornecedores || []).filter(function (q) { return q.id === id; })[0]; return f2 ? f2.nome : ''; }).filter(Boolean).join(', ')],
                ['Descrição', fi.descCurta], ['Na venda sai', fi.descComp]);
@@ -5367,24 +5863,8 @@
     if (D.editar) {
       var alvo = x.pai && M[x.pai] ? M[x.pai] : x;
       opcaoDw(bd, 'Editar produto', x.pai ? 'Abre o cadastro de ' + alvo.nome : 'Dados, preço, características, estoque, fornecedores e tributação', '', function () { fecharDrawer(); formProduto(alvo); });
-      if (x.formato === 'simples' || x.formato === 'variacao') {
-        [['entrada', 'Entrada de estoque', 'Compra / reposição (atualiza o custo médio)'], ['transferencia', 'Transferir entre lojas', 'Tira de uma loja e coloca em outra'],
-         ['ajuste', 'Ajuste (contagem)', 'Corrige a quantidade depois de contar'], ['saida', 'Saída (perda, defeito, brinde)', 'Tira do estoque com motivo']].forEach(function (o) {
-          var b = opcaoDw(bd, o[1], o[2], '', function () { painelEstoque(b, x, o[0], am); });
-        });
-      }
     }
-    if (x.formato === 'simples' || x.formato === 'variacao') {
-      var bh = opcaoDw(bd, 'Histórico de movimentações', 'Entradas, vendas, transferências e ajustes', '', function () {
-        if (bh.nextSibling && bh.nextSibling.classList && bh.nextSibling.classList.contains('opc-box')) { bh.nextSibling.remove(); return; }
-        var bx = el('div', 'opc-box', 'Carregando…'); bh.after(bx);
-        call('acMov', [S.token, x.id]).then(function (l) {
-          bx.textContent = ''; if (!l.length) { bx.appendChild(el('div', 'hint', 'Nenhuma movimentação.')); return; }
-          var t = el('table', 'ext'); l.forEach(function (m) { var trr = el('tr'), a = el('td'); a.appendChild(document.createTextNode(m.tipo + ' · ' + m.loja.replace(/^.*\| /, '') + (m.destino ? ' → ' + m.destino.replace(/^.*\| /, '') : ''))); a.appendChild(el('small', '', [m.data, m.por, m.obs].filter(Boolean).join(' · '))); trr.appendChild(a); trr.appendChild(el('td', 'v' + (m.qtd > 0 ? ' e' : ' s'), (m.qtd > 0 ? '+' : '') + m.qtd)); t.appendChild(trr); });
-          bx.appendChild(t);
-        }).catch(function (e) { bx.textContent = e; });
-      });
-    }
+    if (x.formato === 'simples' || x.formato === 'variacao') opcaoDw(bd, 'Controle de estoque', 'Entradas e saídas, saldo por depósito, transferência e lançamentos', '', function () { abrirControle({ tipo: 'produto', id: x.id }, x.nome, S.view); });
     var bc = opcaoDw(bd, 'Cálculo de cartão', x.preco ? 'Total e parcelas de 1x a 18x' : 'Sem preço', '', function () {
       if (bc.nextSibling && bc.nextSibling.classList && bc.nextSibling.classList.contains('opc-box')) { bc.nextSibling.remove(); return; }
       var bx = el('div', 'opc-box'); if (x.preco) bx.appendChild(linhasCartao(x.preco)); else bx.appendChild(el('div', 'hint', 'Sem preço.')); bc.after(bx);
@@ -5869,7 +6349,19 @@
     var tot = el('div', 'pdvtot'); tot.appendChild(el('div', 'k', T.qtd + ' ite' + (T.qtd === 1 ? 'm' : 'ns') + (T.desc ? ' · desconto ' + brl(T.desc) : ''))); tot.appendChild(el('div', 'v', brl(T.venda))); c2.appendChild(tot);
     var m = el('div', 'msg err'); c2.appendChild(m);
     var rod = el('div', 'pdvrod'), nv = el('button', 'btn ghost', 'Nova venda (F4)'), pg = el('button', 'btn ok', 'Efetuar pagamento (F2)'); nv.type = pg.type = 'button'; pg.id = 'pdvPagar';
-    rod.appendChild(nv); rod.appendChild(pg); box.appendChild(rod);
+    rod.appendChild(nv);
+    if (pode('transferir')) {
+      var en = el('button', 'btn ghost', 'Enviar para outra loja'); en.type = 'button'; rod.appendChild(en);
+      en.onclick = function () {
+        m.classList.remove('show');
+        var er = !PDV.loja ? 'Seu usuário não tem loja definida.' : !PDV.itens.length && !PDV.acess.length ? 'Coloque no carrinho o que vai ser enviado.' : PDV.acess.some(function (a) { return a.serial && a.seriais.length !== a.qtd; }) ? 'Leia o serial de cada unidade dos produtos com controle de serial.' : PDV.itens.some(function (i) { return i.loja !== PDV.loja; }) ? 'Tem aparelho no carrinho que não está nesta loja.' : '';
+        if (er) { m.textContent = er; m.classList.add('show'); return; }
+        var its = PDV.itens.map(function (i) { return { tipo: 'aparelho', linha: i.linha, imei: i.imei, nome: i.nome }; })
+          .concat(PDV.acess.map(function (a) { return { tipo: 'produto', id: a.id, nome: a.nome, sku: a.sku, qtd: a.qtd, serial: !!a.serial, serialTipo: a.serialTipo, seriais: (a.seriais || []).slice(), estoque: a.estoque || {} }; }));
+        abrirTransferencia({ origem: PDV.loja, itens: its }, function () { pdvNovo(); desenharPdv(); });
+      };
+    }
+    rod.appendChild(pg); box.appendChild(rod);
     nv.onclick = function () { pdvNovo(); abrirPdv(); };
     pg.onclick = function () {
       m.classList.remove('show'); var erro = '';
@@ -6862,6 +7354,7 @@
   $('imei').addEventListener('input', function () {
     var d = this.value.replace(/\D/g, '').slice(0, 15);
     if (this.value !== d) this.value = d;
+    if (S.cadEdit) { imeiStatus(d.length === 15 && !luhn(d) ? 'err' : '', d.length === 15 && !luhn(d) ? 'IMEI inválido.' : ''); return; }
     show('cBox', d.length === 15 && luhn(d));
     if (d !== S.imeiConsultado) { resetConsulta(); S.imeiConsultado = d; $('cAbrir').textContent = 'Copiar IMEI e abrir a consulta oficial'; }
     if (!d) return imeiStatus('', '');
@@ -6886,6 +7379,7 @@
   });
   $('form').addEventListener('submit', function (e) {
     e.preventDefault(); msg('formMsg', '');
+    if (S.cadEdit) { salvarEdicaoCad(); return; }
     var d = { loja: $('loja').value, modelo: $('modelo').value, cor: $('cor').value.trim(), imei: $('imei').value.replace(/\D/g, ''),
               bateria: $('bateria').value.trim(), custo: $('custo').value.trim(), classificacao: S.classificacao, tipo: S.tipo, obs: $('obs').value.trim(), sku: $('sku').value.trim(),
               imei2: $('imei2').value.replace(/\D/g, ''), serial: $('serial').value.trim().toUpperCase(),
@@ -6893,7 +7387,7 @@
     if ($('cPrecoV') && $('cPrecoV').value.trim()) d.precoVenda = $('cPrecoV').value.trim();
     var puV = $('cPu').value.trim(), siO = $('cObsSI').value.trim();
     if (!d.custo && puV) d.custo = puV;
-    d.obs = [d.obs, puV ? 'Preço unitário R$ ' + puV : '', siO ? 'Saldo inicial: ' + siO : ''].filter(Boolean).join(' · ');
+    d.precoUnit = puV; d.obsSaldo = siO;
     d.modelo = d.modelo.trim().toUpperCase().replace(/\s+/g, ' ');
     var falta = [];
     if (!d.loja) falta.push('depósito'); if (!d.modelo) falta.push('modelo'); if (!d.cor) falta.push('cor');
@@ -6951,6 +7445,7 @@
     S.classificacao = ''; S.tipo = ''; S.ck = {}; resetConsulta(); S.imeiConsultado = ''; show('cBox', false); montarCkCadastro(); montarCatCadastro();
     Array.prototype.forEach.call(document.querySelectorAll('#classif button,#tipo button,.chip'), function (c) { c.classList.remove('on'); });
     imeiStatus('', ''); show('sucesso', false); show('form', true); window.scrollTo(0, 0);
+    if (S.cadEdit) { S.cadEdit = null; modoEdicaoCad(false); seg($('classif'), S.u.classificacoes || [], '', function (v) { S.classificacao = v; }); seg($('tipo'), S.u.tipos || [], '', function (v) { S.tipo = v; }); }
   }
   $('outro').onclick = limparCadastro;
 
@@ -7059,6 +7554,7 @@
     var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
     var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(nomeProduto(x)));
     if (x.manut) nm.appendChild(el('span', 'badge-m', 'Em manutenção'));
+    if (x.transito) { var tb0 = el('span', 'bdg warn', 'Em trânsito'); tb0.title = x.transito.id ? x.transito.id + ' para ' + x.transito.destino : ''; nm.appendChild(tb0); }
     if (x.precoAparelho) nm.appendChild(el('span', 'bdg warn', 'Preço especial'));
     if (!x.preco) nm.appendChild(el('span', 'bdg warn', 'Aguardando preço'));
     var dpz = diasEstoque(x); if (dpz >= diasCfgParado()) nm.appendChild(el('span', 'bdg off', 'Parado há ' + dpz + ' dias'));
@@ -7121,7 +7617,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.linha + '|' + x.imei); });
     var dw = $('dw'); dw.innerHTML = '';
     var hd = el('div', 'dwh'), ht = el('div');
-    ht.appendChild(el('div', 't', x.modelo + ' ' + String(x.cor || '').toUpperCase()));
+    var tN = el('div', 't', x.modelo + ' ' + String(x.cor || '').toUpperCase()); tN.appendChild(botaoCopiar(nomeProduto(x), 'Copiar nome')); ht.appendChild(tN);
     ht.appendChild(el('div', 's', (x.preco ? brl(x.preco) : 'Sem preço') + ' · ' + x.loja));
     var fx = el('button', '', '×'); fx.type = 'button'; fx.setAttribute('aria-label', 'Fechar'); fx.onclick = fecharDrawer;
     hd.appendChild(ht); hd.appendChild(fx); dw.appendChild(hd);
@@ -7129,11 +7625,12 @@
 
     var info = el('div', 'card'), kv = el('div', 'kv');
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
-    [['SKU', x.sku || '—'], ['IMEI1', x.imei], ['IMEI2', x.imei2 || ''], ['Serial', x.serial || ''], ['Classificação', x.classif], ['Bateria', bat], ['Loja', x.loja], ['Localização', x.local || ''], ['Situação', x.manut ? 'Em manutenção' : 'Disponível'],
-     ['Tipo', x.tipo], ['Custo', pode('ver_custos') && x.custo !== null && x.custo !== undefined ? brl((x.custo || 0) + (x.peca || 0)) : ''], ['Observação', x.obs],
+    [['SKU', x.sku || '', 1], ['IMEI1', x.imei, 1], ['IMEI2', x.imei2 || '', 1], ['Serial', x.serial || '', 1], ['Classificação', x.classif], ['Bateria', bat], ['Loja', x.loja], ['Localização', x.local || ''],
+     ['Situação', x.transito ? 'Em trânsito' + (x.transito.id ? ' · ' + x.transito.id + ' para ' + x.transito.destino : '') : x.manut ? 'Em manutenção' : 'Disponível'],
+     ['Tipo', x.tipo], ['Custo', pode('ver_custos') && x.custo !== null && x.custo !== undefined ? brl((x.custo || 0) + (x.peca || 0)) : ''], ['Observação', x.obs], ['Consulta do IMEI', x.consulta || ''],
      ['Reserva', x.reserva ? x.reserva.id + ' · ' + txtRes(x.reserva) + (x.reserva.sinal ? ' · sinal ' + brl(x.reserva.sinal) : '') : ''],
      ['Preço da tabela', x.precoAparelho ? (x.precoTabela ? brl(x.precoTabela) : 'sem preço') : ''], ['Preço deste aparelho', x.precoAparelho ? brl(x.precoAparelho) + ' · ' + x.precoMotivo : '']]
-      .forEach(function (p) { if (p[1] === '' || p[1] === undefined || p[1] === null) return; kv.appendChild(el('div', 'k', p[0])); kv.appendChild(el('div', '', String(p[1]))); });
+      .forEach(function (p) { if (p[1] === '' || p[1] === undefined || p[1] === null) return; kv.appendChild(el('div', 'k', p[0])); var vv = el('div', '', String(p[1])); if (p[2]) vv.appendChild(botaoCopiar(String(p[1]), 'Copiar ' + p[0])); kv.appendChild(vv); });
     info.appendChild(kv); bd.appendChild(info);
     var am = el('div', 'msg err'); bd.appendChild(am);
     function erro(e) { am.textContent = e; am.classList.add('show'); }
@@ -7153,7 +7650,7 @@
 
     // Reserva
     if (x.reserva) opcao('Ver a reserva ' + x.reserva.id, 'Reservado para ' + x.reserva.cliente + ' por ' + x.reserva.vendedor + (x.reserva.vencida ? ' · SINAL VENCIDO' : ''), '', function () { abrirReservaId(x.reserva.id); });
-    else if (pode('vender') && x.linha) opcao('Reservar', 'Separa o aparelho para um cliente (com ou sem sinal)', '', function () { abrirReservar({ tipo: 'aparelho', linha: x.linha, imei: x.imei, nome: x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classif, preco: x.preco, loja: x.loja }); });
+    else if (pode('vender') && x.linha && !x.transito) opcao('Reservar', 'Separa o aparelho para um cliente (com ou sem sinal)', '', function () { abrirReservar({ tipo: 'aparelho', linha: x.linha, imei: x.imei, nome: x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classif, preco: x.preco, loja: x.loja }); });
 
     // Preço só deste aparelho (diferente da tabela)
     if (pode('editar_precos') && x.linha && x.status !== 'Vendido' && x.status !== 'Baixado') {
@@ -7187,76 +7684,8 @@
     }
 
     // 4. Editar produto
-    if (pode('editar_aparelho') && x.linha) opcao('Editar produto', 'Corrigir modelo, cor, IMEI, bateria, classificação…', '', function () { fecharDrawer(); abrirEdicao(x); });
-
-    // 3. Transferir estoque (troca a loja / depósito)
-    if (pode('mudar_loja')) {
-      var bl = opcao('Transferir estoque', 'Agora em: ' + x.loja);
-      bl.onclick = painel(bl, function (box) {
-        var tr = el('div', 'trl'), sl = el('select'), bt = el('button', 'btn', 'Salvar'); bt.type = 'button';
-        opts(sl, S.u.lojas || [], x.loja); tr.appendChild(sl); tr.appendChild(bt); box.appendChild(tr);
-        if (x.manut) box.appendChild(el('div', 'hint', 'Em conserto: continua no quadro de Manutenção até ser finalizado com o checklist.'));
-        bt.onclick = function () {
-          if (sl.value === x.loja) return;
-          bt.disabled = true; bt.textContent = '…';
-          call('alterarLoja', [S.token, x.imei, sl.value]).then(function (l) {
-            aposAparelhos(l); S.manut = null;
-            var novo = l.filter(function (y) { return y.linha === x.linha && y.imei === x.imei; })[0];
-            if (novo) abrirDrawer(novo); else fecharDrawer();
-          }).catch(function (e) { bt.disabled = false; bt.textContent = 'Salvar'; erro(e); });
-        };
-      });
-    }
-
-    // Ajuste de estoque: baixa com motivo ou correção de custo
-    if ((pode('editar_aparelho') || pode('editar_acessorios')) && x.linha) {
-      var ba = opcao('Ajuste de estoque', 'Baixa (perda, defeito, devolução…)' + (pode('ver_custos') ? ' ou correção de custo' : ''));
-      ba.onclick = painel(ba, function (box) {
-        var modo = 'baixa', area = el('div'), sg = el('div', 'seg');
-        if (pode('ver_custos')) { box.appendChild(sg); seg(sg, ['Baixa do estoque', 'Corrigir custo'], 'Baixa do estoque', function (v) { modo = v === 'Corrigir custo' ? 'custo' : 'baixa'; des(); }); }
-        box.appendChild(area);
-        function des() {
-          area.innerHTML = '';
-          if (modo === 'baixa') {
-            var mt = el('select'); opts(mt, ['Perda ou roubo', 'Defeito sem conserto', 'Devolução ao fornecedor', 'Uso interno', 'Outro'], '', 'Escolha o motivo…'); campo(area, 'Motivo', mt, true);
-            var ob = inp('text', 'Detalhe (obrigatório em "Outro")'); ob.maxLength = 200; campo(area, 'Observação', ob);
-            area.appendChild(el('div', 'hint', 'O aparelho sai do estoque e fica registrado no histórico. Dá para desfazer logo depois.'));
-            var bt = el('button', 'btn', 'Dar baixa'); bt.type = 'button'; bt.style.marginTop = '8px'; area.appendChild(bt);
-            bt.onclick = function () {
-              if (!mt.value) return erro('Escolha o motivo da baixa.');
-              bt.disabled = true; bt.textContent = 'Salvando…';
-              call('aparelhoAjuste', [S.token, x.linha, x.imei, { tipo: 'baixa', motivo: mt.value, obs: ob.value.trim() }]).then(function (l) { fecharDrawer(); aposAparelhos(l); avisoBaixa(x); })
-                .catch(function (e) { bt.disabled = false; bt.textContent = 'Dar baixa'; erro(e); });
-            };
-          } else {
-            var g = grade(area, 2);
-            var cu = inpValor(x.custo === null || x.custo === undefined ? '' : vs(x.custo)); campo(g[0], 'Custo de compra', cu, true);
-            var pc = inpValor(x.peca === null || x.peca === undefined ? '' : vs(x.peca)); campo(g[1], 'Peças', pc, true);
-            var ob2 = inp('text', 'Ex.: valor pago estava errado'); ob2.maxLength = 200; campo(area, 'Motivo do ajuste *', ob2);
-            var bt2 = el('button', 'btn', 'Salvar custo'); bt2.type = 'button'; bt2.style.marginTop = '8px'; area.appendChild(bt2);
-            bt2.onclick = function () {
-              bt2.disabled = true; bt2.textContent = 'Salvando…';
-              call('aparelhoAjuste', [S.token, x.linha, x.imei, { tipo: 'custo', custo: cu.input.value.trim(), peca: pc.input.value.trim(), obs: ob2.value.trim() }]).then(function (l) {
-                aposAparelhos(l); var nv = l.filter(function (y) { return y.linha === x.linha && y.imei === x.imei; })[0]; if (nv) abrirDrawer(nv); else fecharDrawer();
-              }).catch(function (e) { bt2.disabled = false; bt2.textContent = 'Salvar custo'; erro(e); });
-            };
-          }
-        }
-        des();
-      });
-    }
-    // Histórico de movimentações
-    var bh = opcao('Histórico de movimentações', 'Cadastro, transferências, manutenção, vendas e ajustes');
-    bh.onclick = painel(bh, function (box) {
-      box.appendChild(el('div', 'hint', 'Carregando…'));
-      call('aparelhoHistorico', [S.token, x.imei]).then(function (l) {
-        box.innerHTML = '';
-        if (!l.length) { box.appendChild(el('div', 'hint', 'Sem movimentações registradas.')); return; }
-        var t = el('div', 'movs');
-        l.forEach(function (m2) { var r = el('div', 'mov'); var a = el('div'); a.appendChild(el('b', '', m2.acao)); a.appendChild(el('small', '', [m2.data, m2.quem, m2.loja].filter(Boolean).join(' · '))); r.appendChild(a); if (m2.det) r.appendChild(el('div', 'hint', m2.det)); t.appendChild(r); });
-        box.appendChild(t);
-      }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'hint', String(e))); });
-    });
+    if (x.linha) opcao(pode('editar_aparelho') ? 'Editar produto' : 'Ver cadastro', pode('editar_aparelho') ? 'Abre o cadastro completo para corrigir modelo, cor, IMEI, bateria, classificação…' : 'Abre o cadastro completo (só para ver)', '', function () { abrirEdicaoCad(x); });
+    if (x.linha) opcao('Controle de estoque', 'Entradas e saídas, saldo por depósito, transferência, lançamentos e histórico', '', function () { abrirControle({ tipo: 'aparelho', imei: x.imei }, nomeProduto(x), S.view); });
 
     // 2. Cálculo de cartão
     var bc = opcao('Cálculo de cartão', x.preco ? 'Total e parcelas de 1x a 18x' : 'Sem preço de venda cadastrado');
@@ -7286,7 +7715,7 @@
     if (x.manut && pode('tirar_manut') && x.linha) opcao('Tirar da manutenção', 'Colocado em manutenção por engano (sem checklist)', '', function () { fecharDrawer(); abrirTirarManut(x, function () { S.disp = null; carregarDisp(true); }); });
 
     // 5. Vender / Vendido / Excluir
-    if (pode('vender') && x.linha && !x.manut) opcao('Vender (registrar venda)', 'Abre a página Vendas com este aparelho, cliente, troca e recibo', 'okc', function () { fecharDrawer(); S.vdPre = x; ir('vendas'); });
+    if (pode('vender') && x.linha && !x.manut && !x.transito) opcao('Vender (registrar venda)', 'Abre a página Vendas com este aparelho, cliente, troca e recibo', 'okc', function () { fecharDrawer(); S.vdPre = x; ir('vendas'); });
     if (pode('excluir_aparelho') && x.linha) opcao('Excluir produto', 'Só para cadastro feito por engano', 'danger', function () { fecharDrawer(); abrirExclusao(x); });
 
     $('dwBg').classList.remove('hide'); dw.classList.add('on'); dw.setAttribute('aria-hidden', 'false'); dw.scrollTop = 0;
@@ -10380,6 +10809,7 @@
     if (pode('grupos_tags')) l.push(['grupos', 'Grupo de Produtos', 'Grupos e subgrupos dos produtos'], ['tags', 'Tags', 'Tags e subtags dos produtos']);
     if (pode('financeiro')) l.push(['formas', 'Formas de pagamento/recebimento', 'Formas, uso (receber/pagar) e caixa/banco de cada uma'], ['categorias', 'Categorias financeiras', 'Contas a receber e a pagar e o grupo de cada uma no DRE']);
     if (pode('equipe') || pode('liberar')) l.push(['reservas', 'Estoque e Reservas', 'Prazo da reserva, sinal da encomenda, dias de parado e termos']);
+    if (pode('equipe') || pode('liberar') || pode('transferir')) l.push(['naturezas', 'Naturezas de operação', 'Transferências: CFOP, se movimenta estoque e o que gera']);
     if (pode('conferir_caixa')) l.push(['caixa', 'Caixa', 'Abertura e fechamento: por loja (tudo junto) ou por funcionário']);
     if (pode('equipe')) l.push(['depositos', 'Depósitos (lojas)', 'Criar, renomear e excluir lojas e locais de estoque']);
     if (pode('cancelar_os')) l.push(['osaux', 'Ordem de Serviço', 'Termos e prazos de garantia']);
@@ -10415,6 +10845,11 @@
     else if (ab === 'reservas') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
       call('estoqueReservasDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgReservas(box, d); })
+        .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
+    }
+    else if (ab === 'naturezas') {
+      box.appendChild(el('div', 'empty', 'Carregando…'));
+      call('naturezasDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgNaturezas(box, d); })
         .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
     }
     else if (ab === 'osaux') { box.appendChild(el('div', 'empty', 'Carregando…')); garantirOS(function () { if (CFG.aba === 'osaux' && box.isConnected) renderOsAux(box); }); }
@@ -10752,6 +11187,8 @@
   if (window.matchMedia) try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { if (LS.get('tema', 'claro') === 'auto') aplicarTema('auto'); }); } catch (e) {}
   $('dNovo').onclick = function () { ir('cadastro'); };
   $('cVoltar').onclick = function () { ir('disp'); };
+  $('ctVoltar').onclick = voltarControle;
+  $('tfAtual').onclick = carregarTransf;
   $('verProd').onclick = function () { $('outro').click(); ir('disp'); carregarDisp(true); };
   if (/[?&]ass=[a-f0-9]{40}/.test(location.search)) paginaAssinatura(); else iniciar();
 })();
