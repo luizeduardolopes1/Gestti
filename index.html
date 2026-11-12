@@ -793,6 +793,13 @@
   .tfit .tfq{width:80px}.tfit .x{background:none;border:0;font-size:20px;color:var(--muted);cursor:pointer;padding:0 6px}
   .tfser{padding:4px 0 8px}.tfcard .tfh{display:flex;align-items:center;gap:4px;margin-bottom:4px}.tfcard .tfh .bdg{margin-left:6px}.tfmot{margin-top:8px}
   .tfit.ok .nm{opacity:.7}.tfit.ok .ckq{color:var(--ok)}.ckq{white-space:nowrap}.btn.ckb{width:auto;margin:0;padding:6px 12px}
+  .pimg.foto{padding:0;overflow:hidden;border-color:transparent}.pimg.foto img{width:100%;height:100%;object-fit:cover}
+  .fotos .fcapa{display:block;background:var(--soft);border-radius:10px;overflow:hidden;text-align:center}.fotos .fcapa img{max-width:100%;max-height:340px;object-fit:contain;display:block;margin:0 auto}
+  .fminis{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.fmini{position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:2px solid transparent;cursor:pointer}.fmini.on{border-color:var(--accent)}.fmini img{width:100%;height:100%;object-fit:cover}
+  .fmini .fx{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:14px;line-height:1;cursor:pointer}
+  .fmini .fc{position:absolute;bottom:2px;left:2px;right:2px;border:0;border-radius:6px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:2px;cursor:pointer}
+  .fotos label.btn{width:auto;margin:0;cursor:pointer}.fotos.carregando{opacity:.55;pointer-events:none}
+  .vdthumb{width:36px;height:36px;object-fit:cover;border-radius:6px;flex:none;margin-right:8px}
   .etqprev{background:#fff;padding:10px;border-radius:8px;overflow:auto;margin-top:8px}.etqprev .etq{box-shadow:0 0 0 1px #999;background:#fff;color:#000}
   .etqcard{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.etqcard .etqprev{margin:0}
   .etqbar{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.etqbar .btn{width:auto;margin:0;padding:7px 10px;font-size:13px}
@@ -1537,6 +1544,7 @@
       <div class="ico">✓</div>
       <h3>Aparelho cadastrado</h3>
       <p id="sucessoTxt"></p>
+      <button class="btn ghost" id="cFotos" type="button" style="margin-bottom:8px">📷 Adicionar fotos e etiqueta</button>
       <button class="btn" id="outro" type="button">Cadastrar outro</button>
       <button class="btn ghost" id="verProd" type="button" style="margin-top:8px">Ver produtos</button>
     </section>
@@ -3168,6 +3176,62 @@
     var et = el('button', 'btn ghost', 'Imprimir etiquetas dos itens ajustados'); et.type = 'button'; et.style.width = 'auto';
     et.onclick = function () { garantirAc(function () { var M = mapaP(); etqAdicionar(r.itens.filter(function (o) { return M[o.id] && o.contado > 0; }).map(function (o) { return etqItemProduto(M[o.id], o.contado); }), true); }); };
     if (r.itens.length) c.appendChild(et);
+  }
+  // =========================================================
+  //  FOTOS (Google Drive): capa na lista, grande na gaveta, na venda/PDV
+  // =========================================================
+  function fotoUrl(id, w) { return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w' + (w || 400); }
+  function fotosDeProduto(x) { var M = mapaP(), p = x && x.pai && M[x.pai] ? M[x.pai] : x; return (p && p.ficha && p.ficha.fotos) || []; }
+  /** Miniatura no lugar do ícone (cai no ícone se a foto não carregar). */
+  function pimgFoto(ic, fotos) {
+    if (!fotos || !fotos.length) return;
+    var im = el('img'); im.loading = 'lazy'; im.alt = ''; im.src = fotoUrl(fotos[0], 120);
+    var ant = ic.innerHTML; im.onerror = function () { ic.innerHTML = ant; ic.classList.remove('foto'); };
+    ic.innerHTML = ''; ic.classList.add('foto'); ic.appendChild(im);
+  }
+  /** Galeria na gaveta: capa grande, miniaturas, tirar foto / anexar, tirar, virar capa. */
+  function galeriaFotos(bd, ref, fotos, podeEditar, mudou) {
+    var w = el('div', 'card fotos'), L = (fotos || []).slice(); bd.appendChild(w);
+    var m = el('div', 'msg err');
+    function des() {
+      w.innerHTML = '';
+      if (!L.length && !podeEditar) { w.remove(); return; }
+      if (L.length) {
+        var cap = el('a', 'fcapa'); cap.href = fotoUrl(L[0], 2000); cap.target = '_blank'; cap.rel = 'noopener'; var ci = el('img'); ci.alt = 'Foto'; ci.src = fotoUrl(L[0], 900); cap.appendChild(ci); w.appendChild(cap);
+        var mini = el('div', 'fminis'); w.appendChild(mini);
+        L.forEach(function (id, i) {
+          var b = el('div', 'fmini' + (i === 0 ? ' on' : '')), im = el('img'); im.alt = ''; im.src = fotoUrl(id, 160); b.appendChild(im);
+          im.onclick = function () { ci.src = fotoUrl(id, 900); cap.href = fotoUrl(id, 2000); };
+          if (podeEditar) {
+            var x = el('button', 'fx', '×'); x.type = 'button'; x.title = 'Tirar esta foto'; x.onclick = function () { if (!x.dataset.c) { x.dataset.c = 1; x.textContent = '?'; x.title = 'Toque de novo para tirar'; return; } ocupado(true); call('fotoRemover', [S.token, ref, id]).then(function (r) { L = r.fotos; fim(); }).catch(erro); }; b.appendChild(x);
+            if (i > 0) { var c = el('button', 'fc', 'Capa'); c.type = 'button'; c.onclick = function () { var n = [id].concat(L.filter(function (z) { return z !== id; })); ocupado(true); call('fotoOrdem', [S.token, ref, n]).then(function (r) { L = r.fotos; fim(); }).catch(erro); }; b.appendChild(c); }
+          }
+          mini.appendChild(b);
+        });
+      } else w.appendChild(el('div', 'hint', 'Sem fotos.'));
+      if (podeEditar && L.length < 6) {
+        var ac = el('div', 'acoes');
+        var cam = el('label', 'btn ghost', '📷 Tirar foto'), ci2 = el('input'); ci2.type = 'file'; ci2.accept = 'image/*'; ci2.setAttribute('capture', 'environment'); ci2.className = 'hide'; cam.appendChild(ci2);
+        var an = el('label', 'btn ghost', 'Anexar do computador'), ai = el('input'); ai.type = 'file'; ai.accept = 'image/*'; ai.multiple = true; ai.className = 'hide'; an.appendChild(ai);
+        ci2.onchange = function () { enviar(ci2.files); }; ai.onchange = function () { enviar(ai.files); };
+        ac.appendChild(cam); ac.appendChild(an); w.appendChild(ac);
+        w.appendChild(el('div', 'hint', L.length + ' de 6 fotos. A primeira é a capa.'));
+      }
+      w.appendChild(m);
+    }
+    function ocupado(on) { w.classList.toggle('carregando', on); m.classList.remove('show'); }
+    function erro(e) { ocupado(false); m.textContent = e; m.classList.add('show'); }
+    function fim() { ocupado(false); des(); if (mudou) mudou(L.slice()); }
+    function enviar(files) {
+      var fs = Array.prototype.slice.call(files || []).slice(0, 6 - L.length); if (!fs.length) return;
+      ocupado(true);
+      var um = function () {
+        var f = fs.shift(); if (!f) return fim();
+        comprimirImg(f, 1600, 0.82, function (url) { call('fotoEnviar', [S.token, ref, url]).then(function (r) { L = r.fotos; um(); }).catch(erro); });
+      };
+      um();
+    }
+    des();
   }
   // ---------- Configurações › Estoque e Reservas ----------
   function cfgReservas(box, d) {
@@ -6518,7 +6582,7 @@
       if (it.t === 'a') { tab.appendChild(linhaAcAparelho(it.x)); return; }
       var x = it.x;
       var r = el('div', 'prow'), qt = qtdLoja(x, lj); r.dataset.k = x.id;
-      var ic = el('div', 'pimg'); ic.innerHTML = ICO_AC; r.appendChild(ic);
+      var ic = el('div', 'pimg'); ic.innerHTML = ICO_AC; r.appendChild(ic); pimgFoto(ic, fotosDeProduto(x));
       var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome));
       if (x.formato === 'composicao') nm.appendChild(el('span', 'bdg inf', 'Kit'));
       if (x.formato === 'variacoes') nm.appendChild(el('span', 'bdg inf', (x.filhos || []).length + ' variações'));
@@ -6552,6 +6616,7 @@
                ['Marca', ca.marca], ['Localização', x.localizacao], ['Estoque mín./máx.', x.minimo || x.maximo ? (x.minimo || 0) + ' / ' + (x.maximo || '—') : ''], ['NCM', tr.ncm],
                ['Fornecedores', (fi.fornecedores || []).map(function (id) { var f2 = (D.fornecedores || []).filter(function (q) { return q.id === id; })[0]; return f2 ? f2.nome : ''; }).filter(Boolean).join(', ')],
                ['Descrição', fi.descCurta], ['Na venda sai', fi.descComp]);
+    galeriaFotos(bd, { tipo: 'produto', id: x.pai || x.id }, fotosDeProduto(x), !!D.editar, function (l) { var M2 = mapaP(), alvo = M2[x.pai] || x; alvo.ficha = alvo.ficha || {}; alvo.ficha.fotos = l; if (S.view === 'acess') renderAcess(); });
     kvCard(bd, pares);
     if (x.formato === 'variacoes') {
       var cv = el('div', 'card'); cv.appendChild(el('h2', '', 'Variações (toque para ver e mexer no estoque)')); var tv = el('table', 'ext');
@@ -7008,6 +7073,7 @@
         var lst = el('div', 'vdres');
         l.forEach(function (o) {
           var x = o.x, b = el('button'), a = el('span', '', o.tipo === 'a' ? x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classif : x.nome); b.type = 'button';
+          var fl = o.tipo === 'a' ? x.fotos : fotosDeProduto(x); if (fl && fl.length) { var tf = el('img', 'vdthumb'); tf.alt = ''; tf.loading = 'lazy'; tf.src = fotoUrl(fl[0], 96); b.appendChild(tf); }
           a.appendChild(el('small', '', o.tipo === 'a' ? 'Seminovo · IMEI ' + x.imei : 'Produto · ' + (PDV.loja ? (x.estoque[PDV.loja] || 0) + ' na loja' : x.total + ' no total') + (x.sku ? ' · ' + x.sku : '')));
           b.appendChild(a); b.appendChild(el('b', '', x.preco ? brl(x.preco) : 'sem preço')); b.onclick = function () { bs.value = ''; pdvAdd(o); }; lst.appendChild(b);
         });
@@ -8134,7 +8200,7 @@
     var btn = $('enviar'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Salvando…';
     call('registrarAparelho', [S.token, d]).then(function (r) {
       btn.disabled = false; btn.textContent = 'Salvar produto usado';
-      if (d.loja !== 'Manutenção') LS.set('loja', d.loja); S.disp = null; S.mt = null; S.ac = null;
+      if (d.loja !== 'Manutenção') LS.set('loja', d.loja); S.disp = null; S.mt = null; S.ac = null; S.ultCad = { linha: r.linha, imei: r.imei };
       $('sucessoTxt').textContent = r.modelo + ' · IMEI ' + r.imei + (d.loja === 'Manutenção' ? ' entrou no quadro de Manutenção.' : ' entrou no estoque como Disponível em ' + d.loja + '.') + (r.avisos && r.avisos.length ? ' (' + r.avisos.join('; ') + ')' : '') +
         (r.precoDefinido ? ' Preço de venda definido na tabela: ' + brl(r.precoDefinido) + '.' : r.aguardandoPreco ? ' Este modelo ainda não tem preço nesta classificação: o aparelho ficou em "Aguardando preço" e o gerente define na Tabela de Preços.' : '');
       S.venda = null;
@@ -8180,6 +8246,10 @@
     if (S.cadEdit) { S.cadEdit = null; modoEdicaoCad(false); seg($('classif'), S.u.classificacoes || [], '', function (v) { S.classificacao = v; }); seg($('tipo'), S.u.tipos || [], '', function (v) { S.tipo = v; }); }
   }
   $('outro').onclick = limparCadastro;
+  $('cFotos').onclick = function () {
+    var u = S.ultCad; if (!u) return;
+    call('disponiveis', [S.token]).then(function (l) { S.disp = l; var x = l.filter(function (y) { return y.linha === u.linha && y.imei === u.imei; })[0]; limparCadastro(); ir('disp'); if (x) abrirDrawer(x); }).catch(function (e) { msg('formMsg', e); });
+  };
 
   // =========================================================
   //  DISPONÍVEIS
@@ -8283,7 +8353,7 @@
   function tagsMini(box, tags) { if (!tags || !tags.length) return; var d = el('div'); tags.forEach(function (t) { d.appendChild(el('span', 'tagmini', t)); }); box.appendChild(d); }
   function linhaProduto(x) {
     var r = el('div', 'prow'); r.dataset.k = x.linha + '|' + x.imei;
-    var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
+    var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic); pimgFoto(ic, x.fotos);
     var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(nomeProduto(x)));
     if (x.manut) nm.appendChild(el('span', 'badge-m', 'Em manutenção'));
     if (x.transito) { var tb0 = el('span', 'bdg warn', 'Em trânsito'); tb0.title = x.transito.id ? x.transito.id + ' para ' + x.transito.destino : ''; nm.appendChild(tb0); }
@@ -8363,6 +8433,7 @@
      ['Reserva', x.reserva ? x.reserva.id + ' · ' + txtRes(x.reserva) + (x.reserva.sinal ? ' · sinal ' + brl(x.reserva.sinal) : '') : ''],
      ['Preço da tabela', x.precoAparelho ? (x.precoTabela ? brl(x.precoTabela) : 'sem preço') : ''], ['Preço deste aparelho', x.precoAparelho ? brl(x.precoAparelho) + ' · ' + x.precoMotivo : '']]
       .forEach(function (p) { if (p[1] === '' || p[1] === undefined || p[1] === null) return; kv.appendChild(el('div', 'k', p[0])); var vv = el('div', '', String(p[1])); if (p[2]) vv.appendChild(botaoCopiar(String(p[1]), 'Copiar ' + p[0])); kv.appendChild(vv); });
+    if (x.linha) galeriaFotos(bd, { tipo: 'aparelho', linha: x.linha, imei: x.imei }, x.fotos, pode('editar_aparelho') || pode('cadastro'), function (l) { x.fotos = l; if (S.view === 'disp') renderDisp(); else if (S.view === 'acess') renderAcess(); });
     info.appendChild(kv); bd.appendChild(info);
     var am = el('div', 'msg err'); bd.appendChild(am);
     function erro(e) { am.textContent = e; am.classList.add('show'); }
@@ -9877,7 +9948,7 @@
   }
   function linhaAcAparelho(a) {
     var r = el('div', 'prow'); r.dataset.k = a.linha + '|' + a.imei;
-    var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
+    var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic); pimgFoto(ic, a.fotos);
     var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(nomeProduto(a))); nm.appendChild(el('span', 'bdg inf', 'Usado'));
     if (a.manut) nm.appendChild(el('span', 'badge-m', 'Em manutenção'));
     if (a.precoAparelho) nm.appendChild(el('span', 'bdg warn', 'Preço especial'));
