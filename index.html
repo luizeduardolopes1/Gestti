@@ -792,6 +792,15 @@
   .tfit{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.tfit .nm{flex:1;min-width:0}.tfit .nm small{display:block;color:var(--muted)}
   .tfit .tfq{width:80px}.tfit .x{background:none;border:0;font-size:20px;color:var(--muted);cursor:pointer;padding:0 6px}
   .tfser{padding:4px 0 8px}.tfcard .tfh{display:flex;align-items:center;gap:4px;margin-bottom:4px}.tfcard .tfh .bdg{margin-left:6px}.tfmot{margin-top:8px}
+  .tfit.ok .nm{opacity:.7}.tfit.ok .ckq{color:var(--ok)}.ckq{white-space:nowrap}.btn.ckb{width:auto;margin:0;padding:6px 12px}
+  .etqprev{background:#fff;padding:10px;border-radius:8px;overflow:auto;margin-top:8px}.etqprev .etq{box-shadow:0 0 0 1px #999;background:#fff;color:#000}
+  .etqcard{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.etqcard .etqprev{margin:0}
+  .etqbar{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.etqbar .btn{width:auto;margin:0;padding:7px 10px;font-size:13px}
+  .etqed{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:start}@media (max-width:860px){.etqed{grid-template-columns:1fr}}
+  .etqcanvas{position:relative;background:#fff;box-shadow:0 0 0 1px #888;overflow:hidden;touch-action:none}.etqzoom{position:absolute;left:0;top:0;transform-origin:0 0;color:#000;pointer-events:none}
+  .etqh{position:absolute;outline:1px dashed rgba(36,69,214,.5);cursor:move;touch-action:none}.etqh.on{outline:2px solid var(--accent);background:rgba(36,69,214,.08)}
+  .etqprops{border:1px solid var(--line);border-radius:10px;padding:10px}
+  #fSheet.etqsheet{max-width:1000px;width:96vw}
   .tfrec{padding:10px 0;border-bottom:1px solid var(--line)}.tfrec .nm small{display:block;color:var(--muted)}
   :root[data-tema=escuro] .bdg.res{background:#2E2147;color:#C9A8FF}
   .resl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:8px;cursor:pointer}
@@ -1184,6 +1193,29 @@
     <div class="ptopo"><h1>Transferências</h1><button type="button" class="btn ghost" id="tfAtual" style="width:auto;padding:9px 16px;margin:0">↻ Atualizar</button></div>
     <div class="hint">Envios entre depósitos e entre empresas. Para enviar, abra o produto (ou o aparelho) › Controle de estoque › Transferência, ou use "Enviar para outra loja" no PDV. Quem está no destino confirma o recebimento aqui.</div>
     <div id="tfCorpo"></div>
+  </section>
+
+  <!-- CHECK-IN DO RECEBIMENTO -->
+  <section id="vCheckin" class="hide">
+    <div class="crumb">Suprimento</div>
+    <div class="ptopo"><h1>Recebimento (check-in)</h1><button type="button" class="btn ghost" id="ckAtual" style="width:auto;padding:9px 16px;margin:0">↻ Atualizar</button></div>
+    <div class="hint">A compra lançada fica "Aguardando recebimento". Aqui você confere item por item (leitor de código de barras, câmera ou digitando) e só o que foi conferido entra no estoque.</div>
+    <div id="ckCorpo"></div>
+  </section>
+
+  <!-- BALANÇO -->
+  <section id="vBalanco" class="hide">
+    <div class="crumb">Suprimento</div>
+    <div class="ptopo"><h1>Balanço de estoque</h1></div>
+    <div class="hint">Contagem do estoque de um depósito: todo, por categoria ou só alguns produtos (e os aparelhos pelo IMEI). Quem conta não vê o saldo; quem finaliza revisa as diferenças antes de ajustar.</div>
+    <div id="blCorpo"></div>
+  </section>
+
+  <!-- ETIQUETAS -->
+  <section id="vEtiquetas" class="hide">
+    <div class="crumb">Suprimento</div>
+    <div class="ptopo"><h1>Etiquetas</h1></div>
+    <div id="etCorpo"></div>
   </section>
 
   <!-- CONTROLE DE ESTOQUE DO PRODUTO (abre de dentro do produto) -->
@@ -1722,6 +1754,9 @@
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Manutenção', desc: 'Quadro de conserto dos aparelhos usados' },
     { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Suprimento', desc: 'Saldo de cada produto por loja e lançamentos' },
     { id: 'transf', sec: 'vTransf', nome: 'Transferências', perm: 'transferir', menu: 'Suprimento', desc: 'Enviar e receber entre depósitos e empresas' },
+    { id: 'checkin', sec: 'vCheckin', nome: 'Recebimento (check-in)', perm: 'receber', permOu: 'compras', menu: 'Suprimento', desc: 'Conferir a mercadoria da compra e dar entrada no estoque' },
+    { id: 'balanco', sec: 'vBalanco', nome: 'Balanço', perm: 'balanco', permOu: 'finalizar_balanco', menu: 'Suprimento', desc: 'Inventário: contagem às cegas, revisão e ajuste' },
+    { id: 'etiquetas', sec: 'vEtiquetas', nome: 'Etiquetas', perm: 'acessorios', permOu: 'produtos', menu: 'Suprimento', desc: 'Imprimir etiquetas, modelos e impressoras' },
     { id: 'compras', sec: 'vCompras', nome: 'Entrada de Compras', perm: 'compras', menu: 'Suprimento', desc: 'Lançar nota de compra (XML da NF-e ou manual)' },
     { id: 'saldo', sec: 'vSaldo', nome: 'Saldo de Estoque', perm: 'estoque', menu: 'Suprimento', sub: 'Relatórios', subNome: 'Saldo de Estoque', desc: 'Como estava o estoque em um dia, por depósito' },
     { id: 'vendas', sec: 'vVendas', nome: 'Vendas', perm: 'vender', menu: 'Faturamento', desc: 'Venda completa com troca, entrega e crediário' },
@@ -2182,13 +2217,30 @@
     var dst = el('select'); campo(a2, 'Vai para o depósito', dst);
     var nat = el('select'); op.naturezas.forEach(function (n) { var o = el('option', '', n.nome + (n.cfopDentro ? ' · CFOP ' + n.cfopDentro + '/' + n.cfopFora : '') + (n.gera === 'venda_compra' && !op.vendaPronta ? ' (em breve)' : '')); o.value = n.id; o.disabled = n.gera === 'venda_compra' && !op.vendaPronta; nat.appendChild(o); }); campo(b2, 'Natureza de operação', nat);
     var av = el('div', 'hint'); c.appendChild(av);
+    var vw = el('div', 'hide'); c.appendChild(vw);
+    var vg = el('div', 'g2'), va = el('div'), vb = el('div'); vg.appendChild(va); vg.appendChild(vb); vw.appendChild(vg);
+    var vm = el('select'); [['custo', 'Pelo custo'], ['custo_pct', 'Custo + %'], ['preco', 'Preço de venda']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; vm.appendChild(op); }); campo(va, 'Valor da venda', vm, true);
+    var vp = inp('text', '0'); vp.inputMode = 'decimal'; campo(vb, '% sobre o custo', vp, true);
+    var vt = el('div', 'hint'); vw.appendChild(vt);
+    var natSel = function () { return op.naturezas.filter(function (n) { return n.id === nat.value; })[0] || {}; };
+    function desVenda() {
+      var n = natSel(), on = n.gera === 'venda_compra'; vw.classList.toggle('hide', !on); if (!on) return;
+      if (!vw.dataset.nat || vw.dataset.nat !== n.id) { vw.dataset.nat = n.id; vm.value = n.valor || 'custo_pct'; vp.value = String(n.pct || 0).replace('.', ','); }
+      var podeV = pode('ver_custos'); vm.disabled = vp.disabled = !podeV; vp.closest('div').classList.toggle('hide', vm.value !== 'custo_pct');
+      var M = mapaP(), tot = 0, falta = false;
+      itens.forEach(function (it) { var p = it.tipo === 'produto' ? M[it.id] : (S.disp || []).filter(function (y) { return y.imei === it.imei; })[0]; var cu = p ? (it.tipo === 'produto' ? p.custo : (p.custo || 0) + (p.peca || 0)) : null, pr = p ? p.preco : null; var u = vm.value === 'preco' ? pr : vm.value === 'custo_pct' ? (cu || 0) * (1 + (num(vp.value) || 0) / 100) : cu; if (!(u > 0)) falta = true; tot += (u || 0) * (it.qtd || 1); });
+      vt.textContent = 'Gera a conta do mês: a receber nesta empresa e a pagar na empresa de destino, quando a mercadoria for recebida. Não entra em meta nem comissão.' + (podeV ? ' Valor estimado: ' + brl(tot) + (falta ? ' (tem item sem custo/preço)' : '') + '.' : ' O valor segue a configuração da natureza.');
+    }
+    vm.onchange = vp.oninput = desVenda;
     function porEmp() {
       var e = op.empresas.filter(function (z) { return z.id === emp.value; })[0] || { lojas: [], sugestao: {} };
       var ls = e.lojas.filter(function (l) { return !(e.id === op.empresa && l === org.value); });
       opts(dst, ls, dst.value, 'Escolha…');
       if (e.sugestao && e.sugestao.id) nat.value = e.sugestao.id;
       av.textContent = (e.sugestao && e.sugestao.aviso) || (e.id !== op.empresa ? 'Sugestão pela empresa de destino; você pode escolher outra natureza. Confirme os CFOPs com seu contador.' : '');
+      desVenda();
     }
+    nat.onchange = desVenda;
     emp.onchange = porEmp; org.onchange = function () { porEmp(); desItens(); }; porEmp();
     c.appendChild(el('label', '', 'Itens'));
     var li = el('div', 'tfitens'); c.appendChild(li);
@@ -2201,7 +2253,7 @@
         else n.appendChild(el('small', '', (it.estoque[org.value] || 0) + ' em ' + curtoLoja(org.value) + (it.sku ? ' · SKU ' + it.sku : '')));
         r.appendChild(n);
         if (it.tipo === 'produto' && !it.serial) {
-          var q = inp('number', 'Qtd'); q.min = 1; q.value = it.qtd; q.className = 'tfq'; q.oninput = function () { it.qtd = parseInt(q.value, 10) || 0; }; r.appendChild(q);
+          var q = inp('number', 'Qtd'); q.min = 1; q.value = it.qtd; q.className = 'tfq'; q.oninput = function () { it.qtd = parseInt(q.value, 10) || 0; desVenda(); }; r.appendChild(q);
         } else if (it.tipo === 'produto') r.appendChild(el('b', '', (it.seriais || []).length + ' un.'));
         var x = el('button', 'x', '×'); x.type = 'button'; x.title = 'Tirar'; x.onclick = function () { itens.splice(i, 1); desItens(); }; r.appendChild(x);
         li.appendChild(r);
@@ -2224,7 +2276,7 @@
       var erro = !dst.value ? 'Escolha o depósito de destino.' : !itens.length ? 'Adicione os itens.' : itens.some(function (it) { return it.tipo === 'produto' && !(it.qtd > 0); }) ? 'Informe a quantidade (ou os seriais) de cada produto.' : '';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Enviando…';
-      var d = { origem: org.value, destEmpresa: emp.value, destino: dst.value, naturezaId: nat.value, obs: ob.value.trim(),
+      var d = { origem: org.value, destEmpresa: emp.value, destino: dst.value, naturezaId: nat.value, obs: ob.value.trim(), valorModo: vm.value, pct: vp.value,
                 itens: itens.map(function (it) { return it.tipo === 'aparelho' ? { tipo: 'aparelho', linha: it.linha, imei: it.imei } : { tipo: 'produto', id: it.id, qtd: it.qtd, seriais: it.serial ? it.seriais : null }; }) };
       call('transferenciaEnviar', [S.token, d]).then(function (t) {
         S.ac = null; S.disp = null; S.venda = null;
@@ -2445,6 +2497,677 @@
       limparCadastro(); ir('disp');
       var nv = l.filter(function (y) { return y.linha === x.linha; })[0]; if (nv) abrirDrawer(nv);
     }).catch(function (e) { btn.disabled = false; btn.textContent = 'Salvar alterações'; msg('formMsg', e); window.scrollTo(0, 0); });
+  }
+  // =========================================================
+  //  ETIQUETAS: códigos de barras, QR, modelos, perfis e fila de impressão
+  // =========================================================
+  var C128 = ['212222','222122','222221','121223','121322','131222','122213','122312','132212','221213','221312','231212','112232','122132','122231','113222','123122','123221','223211','221132','221231','213212','223112','312131','311222','321122','321221','312212','322112','322211','212123','212321','232121','111323','131123','131321','112313','132113','132311','211313','231113','231311','112133','112331','132131','113123','113321','133121','313121','211331','231131','213113','213311','213131','311123','311321','331121','312113','312311','332111','314111','221411','431111','111224','111422','121124','121421','141122','141221','112214','112412','122114','122411','142112','142211','241211','221114','413111','241112','134111','111242','121142','121241','114212','124112','124211','411212','421112','421211','212141','214121','412121','111143','111341','131141','114113','114311','411113','411311','113141','114131','311141','411131','211412','211214','211232','2331112'];
+  /** Code128 (B, com trechos numéricos em C) → lista de larguras de barras/espaços. */
+  function code128(txt) {
+    txt = String(txt || '').replace(/[^\x20-\x7E]/g, '');
+    var cod = [], i = 0, set = null;
+    var digs = function (k) { var n = 0; while (k + n < txt.length && /\d/.test(txt[k + n])) n++; return n; };
+    while (i < txt.length) {
+      var d = digs(i);
+      if (d >= 4 || (d >= 2 && d === txt.length - i && d % 2 === 0)) {
+        if (d % 2) { if (set !== 'B') { cod.push(set ? 100 : 104); set = 'B'; } cod.push(txt.charCodeAt(i) - 32); i++; d--; }
+        if (set !== 'C') { cod.push(set ? 99 : 105); set = 'C'; }
+        while (d >= 2) { cod.push(+txt.substr(i, 2)); i += 2; d -= 2; }
+      } else { if (set !== 'B') { cod.push(set ? 100 : 104); set = 'B'; } cod.push(txt.charCodeAt(i) - 32); i++; }
+    }
+    if (!cod.length) cod.push(104);
+    var soma = cod[0]; for (var k = 1; k < cod.length; k++) soma += cod[k] * k;
+    cod.push(soma % 103); cod.push(106);
+    return cod.map(function (c) { return C128[c]; }).join('');
+  }
+  var EAN_L = ['0001101','0011001','0010011','0111101','0100011','0110001','0101111','0111011','0110111','0001011'], EAN_G = ['0100111','0110011','0011011','0100001','0011101','0111001','0000101','0010001','0001001','0010111'],
+      EAN_R = ['1110010','1100110','1101100','1000010','1011100','1001110','1010000','1000100','1001000','1110100'], EAN_P = ['LLLLLL','LLGLGG','LLGGLG','LLGGGL','LGLLGG','LGGLLG','LGGGLL','LGLGLG','LGLGGL','LGGLGL'];
+  function eanValido(c) { c = String(c || ''); if (!/^\d{13}$/.test(c)) return false; var s = 0; for (var i = 0; i < 12; i++) s += +c[i] * (i % 2 ? 3 : 1); return (10 - s % 10) % 10 === +c[12]; }
+  function ean13Bits(c) {
+    var p = EAN_P[+c[0]], b = '101';
+    for (var i = 1; i <= 6; i++) b += (p[i - 1] === 'L' ? EAN_L : EAN_G)[+c[i]];
+    b += '01010'; for (var j = 7; j <= 12; j++) b += EAN_R[+c[j]]; return b + '101';
+  }
+  /** SVG do código de barras (w x h em mm). */
+  function svgBarras(valor, formato, w, h, legenda) {
+    valor = String(valor || ''); var bits = '';
+    if ((formato === 'ean13' || formato === 'auto') && eanValido(valor)) bits = ean13Bits(valor);
+    else { if (formato === 'ean13') formato = 'code128'; var pad = code128(valor); for (var i = 0; i < pad.length; i++) bits += (i % 2 ? '0' : '1').repeat(+pad[i]); }
+    var tx = legenda ? Math.min(h * 0.28, 3.2) : 0, bh = Math.max(1, h - tx), u = w / (bits.length + 4), r = '';
+    for (var k = 0; k < bits.length; k++) if (bits[k] === '1') { var n = 1; while (bits[k + n] === '1') n++; r += '<rect x="' + ((k + 2) * u).toFixed(3) + '" y="0" width="' + (n * u).toFixed(3) + '" height="' + bh.toFixed(2) + '"/>'; k += n - 1; }
+    if (legenda) r += '<text x="' + (w / 2) + '" y="' + (h - 0.3).toFixed(2) + '" font-size="' + (tx * 0.9).toFixed(2) + '" text-anchor="middle" font-family="Arial,sans-serif">' + valor.replace(/[<&]/g, '') + '</text>';
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="' + w + 'mm" height="' + h + 'mm" preserveAspectRatio="none">' + r + '</svg>';
+  }
+  var QRLIB = null;
+  function garantirQR(fn) {
+    if (window.qrcode) return fn();
+    if (!QRLIB) { QRLIB = []; var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'; s.onload = function () { var l = QRLIB; QRLIB = 'ok'; l.forEach(function (f) { f(); }); }; s.onerror = function () { var l = QRLIB; QRLIB = null; l.forEach(function (f) { f(); }); }; document.head.appendChild(s); }
+    if (Array.isArray(QRLIB)) QRLIB.push(fn); else fn();
+  }
+  function svgQR(valor, lado) {
+    if (!window.qrcode) return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" width="' + lado + 'mm" height="' + lado + 'mm"><rect x="0" y="0" width="10" height="10" fill="none" stroke="#000" stroke-width=".3"/><text x="5" y="6" font-size="3" text-anchor="middle">QR</text></svg>';
+    var q = window.qrcode(0, 'M'); q.addData(String(valor || ' ')); q.make();
+    var n = q.getModuleCount(), r = '';
+    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) if (q.isDark(y, x)) r += '<rect x="' + x + '" y="' + y + '" width="1.02" height="1.02"/>';
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + n + ' ' + n + '" width="' + lado + 'mm" height="' + lado + 'mm" shape-rendering="crispEdges">' + r + '</svg>';
+  }
+  var ETQ_CAMPOS = [['nome', 'Nome do produto'], ['preco', 'Preço de venda'], ['parcela', 'Parcela 12x'], ['sku', 'SKU'], ['codigo', 'Código de barras (GTIN/EAN)'], ['imei', 'IMEI1'], ['imei2', 'IMEI2'], ['serial', 'Serial'],
+    ['modelo', 'Modelo'], ['cor', 'Cor'], ['classif', 'Classificação'], ['bateria', 'Bateria'], ['grupo', 'Grupo'], ['loja', 'Loja'], ['local', 'Localização'], ['data', 'Data de hoje'], ['empresa', 'Nome da empresa']];
+  function etqValor(campo, d) {
+    var v = d[campo];
+    if (campo === 'preco') return d.preco ? brl(d.preco) : '';
+    if (campo === 'parcela') { var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0]; return d.preco && t12 ? '12x ' + brl(d.preco / (1 - t12.taxa) / 12) : ''; }
+    if (campo === 'data') return new Date().toLocaleDateString('pt-BR');
+    if (campo === 'empresa') return ETQ.d ? ETQ.d.empresa || '' : '';
+    if (campo === 'bateria' && v !== '' && v != null) return String(v).replace(/%?$/, '%');
+    return v == null ? '' : String(v);
+  }
+  function etqDadosProduto(p) { return { nome: p.nome, preco: p.preco, sku: p.sku, codigo: p.codigo, grupo: p.grupo, local: p.localizacao, serial: '' }; }
+  function etqDadosAparelho(x) { return { nome: nomeProduto(x), preco: x.preco, sku: x.sku, imei: x.imei, imei2: x.imei2, serial: x.serial, modelo: x.modelo, cor: x.cor, classif: x.classif, bateria: x.bateria, grupo: x.grupo, loja: x.loja, local: x.local, codigo: '' }; }
+  /** Monta uma etiqueta (HTML em mm) para os dados. */
+  function etqHTML(m, d) {
+    var h = '<div class="etq" style="position:relative;width:' + m.largura + 'mm;height:' + m.altura + 'mm;overflow:hidden">';
+    (m.elementos || []).forEach(function (e) {
+      var pos = 'position:absolute;left:' + e.x + 'mm;top:' + e.y + 'mm;width:' + e.w + 'mm;height:' + e.h + 'mm;';
+      if (e.tipo === 'texto' || e.tipo === 'campo') {
+        var t = e.tipo === 'texto' ? e.texto : (e.prefixo || '') + etqValor(e.campo, d);
+        h += '<div style="' + pos + 'font:' + (e.negrito ? '700 ' : '') + e.tam + 'pt Arial,sans-serif;line-height:1.1;text-align:' + ({ esq: 'left', centro: 'center', dir: 'right' })[e.alinha || 'esq'] + ';overflow:hidden;white-space:pre-wrap;word-break:break-word">' + String(t || '').replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }) + '</div>';
+      } else if (e.tipo === 'barras') { var bv = etqValor(e.campo, d); if (e.formato === 'auto' && eanValido(d.codigo) && (e.campo === 'sku' || e.campo === 'codigo')) bv = d.codigo; h += '<div style="' + pos + '">' + (bv ? svgBarras(bv, e.formato, e.w, e.h, e.legenda) : '') + '</div>'; }
+      else if (e.tipo === 'qr') { var qv = etqValor(e.campo, d); h += '<div style="' + pos + '">' + (qv ? svgQR(qv, Math.min(e.w, e.h)) : '') + '</div>'; }
+      else if (e.tipo === 'linha') h += '<div style="' + pos + 'height:0;border-top:' + e.espessura + 'mm solid #000"></div>';
+      else if (e.tipo === 'retangulo') h += '<div style="' + pos + 'box-sizing:border-box;border:' + e.espessura + 'mm solid #000"></div>';
+      else if (e.tipo === 'logo' && e.img) h += '<img src="' + e.img + '" style="' + pos + 'object-fit:contain">';
+    });
+    return h + '</div>';
+  }
+  function etqPagina(p) { var w = p.tipo === 'folha' ? 210 : r2(p.margemE * 2 + p.colunas * p.largura + (p.colunas - 1) * p.gapH), hh = p.tipo === 'folha' ? 297 : p.altura; return { w: w, h: hh, porPag: p.tipo === 'folha' ? p.colunas * p.linhas : p.colunas }; }
+  function imprimirEtiquetas(p, lista, titulo) {
+    var pg = etqPagina(p), pags = [], i = 0;
+    while (i < lista.length) { pags.push(lista.slice(i, i + pg.porPag)); i += pg.porPag; }
+    var html = pags.map(function (l) {
+      return '<div class="pg">' + l.map(function (x, k) {
+        var c = k % p.colunas, r = Math.floor(k / p.colunas);
+        var left = p.margemE + c * (p.largura + p.gapH) + p.offX, top = (p.tipo === 'folha' ? p.margemT + r * (p.altura + p.gapV) : 0) + p.offY;
+        return '<div style="position:absolute;left:' + left + 'mm;top:' + top + 'mm">' + x + '</div>';
+      }).join('') + '</div>';
+    }).join('');
+    var f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
+    var d = f.contentWindow.document;
+    d.open(); d.write('<!doctype html><html><head><meta charset="utf-8"><title>' + String(titulo || 'Etiquetas').replace(/</g, '') + '</title><style>@page{size:' + pg.w + 'mm ' + pg.h + 'mm;margin:0}html,body{margin:0;padding:0;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}.pg{position:relative;width:' + pg.w + 'mm;height:' + pg.h + 'mm;overflow:hidden;page-break-after:always;break-after:page}.pg:last-child{page-break-after:auto;break-after:auto}svg{display:block}</style></head><body>' + html + '</body></html>'); d.close();
+    setTimeout(function () { f.contentWindow.focus(); f.contentWindow.print(); setTimeout(function () { f.remove(); }, 2000); }, 350);
+  }
+  function etqTesteHTML(p) {
+    var w = p.largura, h = p.altura, r = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" width="' + w + 'mm" height="' + h + 'mm"><rect x=".15" y=".15" width="' + (w - .3) + '" height="' + (h - .3) + '" fill="none" stroke="#000" stroke-width=".3"/>';
+    r += '<line x1="' + w / 2 + '" y1="1" x2="' + w / 2 + '" y2="' + (h - 1) + '" stroke="#000" stroke-width=".15"/><line x1="1" y1="' + h / 2 + '" x2="' + (w - 1) + '" y2="' + h / 2 + '" stroke="#000" stroke-width=".15"/>';
+    for (var x = 0; x <= w; x += 5) r += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="' + (x % 10 ? 1.5 : 3) + '" stroke="#000" stroke-width=".15"/>';
+    for (var y = 0; y <= h; y += 5) r += '<line x1="0" y1="' + y + '" x2="' + (y % 10 ? 1.5 : 3) + '" y2="' + y + '" stroke="#000" stroke-width=".15"/>';
+    r += '<text x="' + w / 2 + '" y="' + (h / 2 - 1.2) + '" font-size="' + Math.min(3, h / 6) + '" text-anchor="middle" font-family="Arial">' + String(p.nome).replace(/[<&]/g, '') + '</text><text x="' + w / 2 + '" y="' + (h / 2 + Math.min(3.5, h / 5)) + '" font-size="' + Math.min(2.6, h / 7) + '" text-anchor="middle" font-family="Arial">' + w + ' x ' + h + ' mm · X ' + p.offX + ' · Y ' + p.offY + '</text></svg>';
+    return '<div style="width:' + w + 'mm;height:' + h + 'mm">' + r + '</div>';
+  }
+  // ---------- fila (fica neste navegador) ----------
+  var ETQ = { d: null, aba: 'fila' };
+  function etqFila() { var l = LS.get('etqFila', []); return Array.isArray(l) ? l : []; }
+  function etqFilaGravar(l) { LS.set('etqFila', l.slice(0, 300)); }
+  function etqAdicionar(itens, abrir) {
+    var l = etqFila();
+    itens.forEach(function (it) { var j = l.filter(function (x) { return x.k === it.k; })[0]; if (j) { j.qtd += it.qtd; j.dados = it.dados; } else l.push(it); });
+    etqFilaGravar(l);
+    if (abrir) { ETQ.aba = 'fila'; fecharDrawer(); fecharModal(); ir('etiquetas'); } else msg('topMsg', '✓ ' + itens.reduce(function (a, x) { return a + x.qtd; }, 0) + ' etiqueta(s) na fila de impressão (Suprimento › Etiquetas).');
+  }
+  function etqItemProduto(p, qtd) { return { k: 'p:' + p.id, tipo: 'produto', nome: p.nome, qtd: qtd || 1, dados: etqDadosProduto(p) }; }
+  function etqItemAparelho(x) { return { k: 'a:' + x.imei, tipo: 'aparelho', nome: nomeProduto(x), qtd: 1, dados: etqDadosAparelho(x) }; }
+  function pedirEtiqueta(item, maxQ) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Imprimir etiqueta')); sh.appendChild(el('div', 'sub', item.nome));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var q = inp('number', '1'); q.min = 1; q.value = item.qtd || 1; campo(c, 'Quantidade de etiquetas', q, true);
+    if (maxQ) c.appendChild(el('div', 'hint', 'Em estoque: ' + maxQ + '.'));
+    var ac = el('div', 'acoes'), ag = el('button', 'btn', 'Imprimir agora'), fl = el('button', 'btn ghost', 'Só pôr na fila'); ag.type = fl.type = 'button'; ac.appendChild(ag); ac.appendChild(fl); c.appendChild(ac);
+    var pega = function () { item.qtd = Math.max(1, Math.min(500, parseInt(q.value, 10) || 1)); return item; };
+    ag.onclick = function () { etqAdicionar([pega()], true); };
+    fl.onclick = function () { etqAdicionar([pega()], false); fecharModal(); };
+    abrirModal(); q.select();
+  }
+  function carregarEtiquetas() {
+    var box = $('etCorpo'); box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
+    call('etiquetasDados', [S.token]).then(function (d) { ETQ.d = d; garantirQR(function () { if (S.view === 'etiquetas') desenharEtiquetas(); }); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
+  }
+  function desenharEtiquetas() {
+    var box = $('etCorpo'), D = ETQ.d; box.innerHTML = '';
+    var sg = el('div', 'seg'); box.appendChild(sg);
+    var abas = [['fila', 'Fila de impressão'], ['modelos', 'Modelos'], ['perfis', 'Impressoras e papel']];
+    seg(sg, abas.map(function (a) { return a[1]; }), abas.filter(function (a) { return a[0] === ETQ.aba; })[0][1], function (v) { ETQ.aba = abas.filter(function (a) { return a[1] === v; })[0][0]; desenharEtiquetas(); });
+    var cp = el('div'); box.appendChild(cp);
+    if (ETQ.aba === 'fila') etqTelaFila(cp, D); else if (ETQ.aba === 'modelos') etqTelaModelos(cp, D); else etqTelaPerfis(cp, D);
+  }
+  function etqTelaFila(box, D) {
+    var l = etqFila();
+    if (!D.perfis.length || !D.modelos.length) {
+      box.appendChild(el('div', 'aviso', D.editar ? 'Primeiro cadastre a impressora/papel (aba "Impressoras e papel") e crie um modelo (aba "Modelos").' : 'Peça ao gerente para cadastrar a impressora e o modelo de etiqueta.'));
+    }
+    var c = el('div', 'card'); box.appendChild(c);
+    var g = el('div', 'g2'), a = el('div'), b = el('div'); g.appendChild(a); g.appendChild(b); c.appendChild(g);
+    var sp = el('select'); D.perfis.forEach(function (p) { var o = el('option', '', p.nome + ' · ' + p.largura + 'x' + p.altura + 'mm' + (p.colunas > 1 ? ' · ' + p.colunas + ' colunas' : '')); o.value = p.id; sp.appendChild(o); });
+    var pp = D.perfis.filter(function (p) { return p.padrao; })[0]; sp.value = LS.get('etqPerfil', '') || (pp ? pp.id : ''); if (!sp.value && D.perfis[0]) sp.value = D.perfis[0].id; campo(a, 'Impressora / papel', sp, true);
+    var sm = el('select'); campo(b, 'Modelo de etiqueta', sm, true);
+    var desM = function () { var mods = D.modelos.filter(function (m) { return !m.perfilId || m.perfilId === sp.value; }); sm.innerHTML = ''; mods.forEach(function (m) { var o = el('option', '', m.nome + ' · ' + m.largura + 'x' + m.altura + 'mm'); o.value = m.id; sm.appendChild(o); }); var mp = mods.filter(function (m) { return m.padrao; })[0]; var ls = LS.get('etqModelo', ''); sm.value = mods.some(function (m) { return m.id === ls; }) ? ls : mp ? mp.id : mods[0] ? mods[0].id : ''; };
+    sp.onchange = function () { LS.set('etqPerfil', sp.value); desM(); prev(); }; desM();
+    sm.onchange = function () { LS.set('etqModelo', sm.value); prev(); };
+    var pv = el('div', 'etqprev'); c.appendChild(pv);
+    function prev() { pv.innerHTML = ''; var m = D.modelos.filter(function (x) { return x.id === sm.value; })[0]; if (!m) return; var it = l[0] || { dados: { nome: 'Capinha iPhone 13 Pro Max', preco: 49.9, sku: 'CAP13PM', codigo: '7891234567895', imei: '356938035643809' } }; pv.innerHTML = etqHTML(m, it.dados); pv.appendChild(el('div', 'hint', l[0] ? 'Prévia com o primeiro item da fila.' : 'Prévia com dados de exemplo.')); }
+    prev();
+    var lc = el('div', 'card'); box.appendChild(lc);
+    lc.appendChild(el('h2', '', 'Itens na fila (' + l.reduce(function (s, x) { return s + x.qtd; }, 0) + ' etiquetas)'));
+    if (!l.length) lc.appendChild(el('div', 'hint', 'Fila vazia. Em um produto ou aparelho, toque em "Imprimir etiqueta". O check-in e o balanço também mandam para cá.'));
+    l.forEach(function (it, i) {
+      var r = el('div', 'tfit'), n = el('div', 'nm', it.nome); n.appendChild(el('small', '', [it.dados.sku ? 'SKU ' + it.dados.sku : '', it.dados.imei ? 'IMEI ' + it.dados.imei : '', it.dados.preco ? brl(it.dados.preco) : 'sem preço'].filter(Boolean).join(' · '))); r.appendChild(n);
+      var q = inp('number', '1'); q.min = 1; q.value = it.qtd; q.className = 'tfq'; q.onchange = function () { it.qtd = Math.max(1, parseInt(q.value, 10) || 1); etqFilaGravar(l); }; r.appendChild(q);
+      var x = el('button', 'x', '×'); x.type = 'button'; x.onclick = function () { l.splice(i, 1); etqFilaGravar(l); desenharEtiquetas(); }; r.appendChild(x);
+      lc.appendChild(r);
+    });
+    var ac = el('div', 'acoes'), im = el('button', 'btn ok', 'Imprimir'), lp = el('button', 'btn ghost', 'Limpar fila'); im.type = lp.type = 'button'; ac.appendChild(im); ac.appendChild(lp); lc.appendChild(ac);
+    var m0 = el('div', 'msg err'); lc.appendChild(m0);
+    lp.onclick = function () { etqFilaGravar([]); desenharEtiquetas(); };
+    im.onclick = function () {
+      m0.classList.remove('show');
+      var p = D.perfis.filter(function (x) { return x.id === sp.value; })[0], m = D.modelos.filter(function (x) { return x.id === sm.value; })[0];
+      if (!p || !m) { m0.textContent = 'Escolha a impressora e o modelo.'; m0.classList.add('show'); return; }
+      if (!l.length) { m0.textContent = 'A fila está vazia.'; m0.classList.add('show'); return; }
+      var vai = function () {
+        var lista = []; l.forEach(function (it) { var h = etqHTML(m, it.dados); for (var k = 0; k < it.qtd; k++) lista.push(h); });
+        imprimirEtiquetas(p, lista, 'Etiquetas');
+        var ok = el('div', 'msg ok show', 'Enviado para a impressora. Saiu tudo certo?'), lim = el('button', 'lnk', 'Sim, limpar a fila'); lim.type = 'button'; lim.onclick = function () { etqFilaGravar([]); desenharEtiquetas(); }; ok.appendChild(lim); lc.appendChild(ok);
+      };
+      if (!p.testado) etqPrimeiraVez(p, vai); else vai();
+    };
+  }
+  /** Primeira impressão do perfil: página de teste para calibrar (só desta vez). */
+  function etqPrimeiraVez(p, depois) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Primeira impressão em "' + p.nome + '"'));
+    sh.appendChild(el('div', 'sub', 'Imprima a página de teste: a moldura tem que cair na borda da etiqueta e as cruzes no centro. Se sair deslocada, ajuste abaixo (em mm) e teste de novo. Depois disso não aparece mais.'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var g = grade(c, 2), ox = inp('text', '0'), oy = inp('text', '0'); ox.inputMode = oy.inputMode = 'decimal'; ox.value = String(p.offX).replace('.', ','); oy.value = String(p.offY).replace('.', ',');
+    campo(g[0], 'Ajuste X (mm, + vai para a direita)', ox, true); campo(g[1], 'Ajuste Y (mm, + vai para baixo)', oy, true);
+    if (!ETQ.d.editar) { ox.disabled = oy.disabled = true; c.appendChild(el('div', 'hint', 'Só quem configura etiquetas muda o ajuste.')); }
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), te = el('button', 'btn ghost', 'Imprimir página de teste'), ok = el('button', 'btn ok', 'Está calibrada: imprimir as etiquetas'); te.type = ok.type = 'button'; ac.appendChild(te); ac.appendChild(ok); c.appendChild(ac);
+    var aj = function () { return Object.assign({}, p, { offX: num(ox.value) || 0, offY: num(oy.value) || 0 }); };
+    te.onclick = function () { var q = aj(), l = []; for (var i = 0; i < (q.tipo === 'folha' ? q.colunas * q.linhas : q.colunas); i++) l.push(etqTesteHTML(q)); imprimirEtiquetas(q, l, 'Página de teste'); };
+    ok.onclick = function () {
+      ok.disabled = true; var q = aj();
+      call('etiquetaCalibrada', [S.token, p.id, ETQ.d.editar ? { offX: q.offX, offY: q.offY } : null]).then(function (d) { ETQ.d = d; fecharModal(); var np = d.perfis.filter(function (x) { return x.id === p.id; })[0] || q; Object.assign(p, np); depois(); })
+        .catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal();
+  }
+  function etqTelaPerfis(box, D) {
+    var L = D.perfis.map(function (p) { return Object.assign({}, p); });
+    box.appendChild(el('div', 'hint', 'Cadastre cada impressora/papel que você usa (ex.: térmica de rolo 40x25 e folha A4 com 3 colunas). Na primeira impressão de cada uma o sistema pede a página de teste para calibrar.'));
+    var lst = el('div'); box.appendChild(lst);
+    function des() {
+      lst.innerHTML = '';
+      L.forEach(function (p, i) {
+        var c = el('div', 'card'), g = el('div', 'g2'), a = el('div'), b = el('div'); g.appendChild(a); g.appendChild(b); c.appendChild(g);
+        var nm = campo(a, 'Nome', inp('text', 'Ex.: Térmica do balcão'), true); nm.value = p.nome; nm.oninput = function () { p.nome = nm.value; };
+        var tp = el('select'); [['rolo', 'Rolo (impressora térmica)'], ['folha', 'Folha A4 (várias por folha)']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; tp.appendChild(op); }); tp.value = p.tipo; campo(b, 'Tipo de papel', tp, true);
+        var g2 = el('div', 'g4'), cs = []; for (var k = 0; k < 8; k++) { var z = el('div'); g2.appendChild(z); cs.push(z); } c.appendChild(g2);
+        var nf = function (cel, rot, key) { var x = campo(cel, rot, inp('text', '0')); x.inputMode = 'decimal'; x.value = p[key] == null ? '' : String(p[key]).replace('.', ','); x.oninput = function () { p[key] = num(x.value); }; x.disabled = !D.editar; return x; };
+        nf(cs[0], 'Largura da etiqueta (mm)', 'largura'); nf(cs[1], 'Altura (mm)', 'altura'); nf(cs[2], 'Colunas', 'colunas'); var ln = nf(cs[3], 'Linhas por folha', 'linhas');
+        nf(cs[4], 'Espaço entre colunas (mm)', 'gapH'); var gv = nf(cs[5], 'Espaço entre linhas (mm)', 'gapV'); nf(cs[6], 'Margem esquerda (mm)', 'margemE'); var mt = nf(cs[7], 'Margem de cima (mm)', 'margemT');
+        var g3 = grade(c, 2); nf(g3[0], 'Ajuste fino X (mm)', 'offX'); nf(g3[1], 'Ajuste fino Y (mm)', 'offY');
+        var folha = function () { [ln, gv, mt].forEach(function (x) { x.closest('div').classList.toggle('hide', p.tipo !== 'folha'); }); };
+        tp.onchange = function () { p.tipo = tp.value; folha(); }; folha();
+        nm.disabled = tp.disabled = !D.editar;
+        var lb = el('label', 'perm'), cb = el('input'); cb.type = 'checkbox'; cb.checked = !!p.padrao; cb.disabled = !D.editar; cb.onchange = function () { L.forEach(function (z) { z.padrao = false; }); p.padrao = cb.checked; des(); }; lb.appendChild(cb); lb.appendChild(el('div', 't', 'Padrão')); c.appendChild(lb);
+        c.appendChild(el('div', 'hint', p.testado ? '✓ Calibrada (página de teste já feita).' : 'Ainda sem página de teste: aparece na primeira impressão.'));
+        var ac = el('div', 'acoes'); c.appendChild(ac);
+        if (p.id) { var te = el('button', 'btn ghost', 'Imprimir página de teste'); te.type = 'button'; te.onclick = function () { var l = []; for (var q = 0; q < (p.tipo === 'folha' ? p.colunas * p.linhas : p.colunas); q++) l.push(etqTesteHTML(p)); imprimirEtiquetas(p, l, 'Página de teste'); }; ac.appendChild(te); }
+        if (D.editar) { var del = el('button', 'lnk', 'Excluir'); del.type = 'button'; del.style.color = 'var(--err)'; del.onclick = function () { L.splice(i, 1); des(); }; ac.appendChild(del); }
+        lst.appendChild(c);
+      });
+    }
+    des();
+    if (!D.editar) return;
+    var add = el('button', 'btn ghost', '+ Nova impressora / papel'); add.type = 'button'; add.style.width = 'auto'; add.onclick = function () { L.push({ id: '', nome: '', tipo: 'rolo', largura: 40, altura: 25, colunas: 1, linhas: 1, gapH: 2, gapV: 0, margemE: 0, margemT: 0, offX: 0, offY: 0, testado: false, padrao: !L.length }); des(); }; box.appendChild(add);
+    etqBotaoSalvar(box, function () { return { perfis: L, modelos: D.modelos }; });
+  }
+  function etqBotaoSalvar(box, dados) {
+    var m = el('div', 'msg err'); box.appendChild(m);
+    var sv = el('button', 'btn', 'Salvar'); sv.type = 'button'; sv.style.marginTop = '10px'; box.appendChild(sv);
+    sv.onclick = function () {
+      m.classList.remove('show'); sv.disabled = true; sv.textContent = 'Salvando…';
+      call('etiquetasSalvar', [S.token, dados()]).then(function (d) { ETQ.d = d; desenharEtiquetas(); $('etCorpo').insertBefore(el('div', 'msg ok show', '✓ Salvo.'), $('etCorpo').firstChild); })
+        .catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
+    };
+  }
+  function etqTelaModelos(box, D) {
+    if (!D.modelos.length) box.appendChild(el('div', 'hint', 'Nenhum modelo ainda.'));
+    D.modelos.forEach(function (m) {
+      var c = el('div', 'card etqcard'), pv = el('div', 'etqprev'); pv.innerHTML = etqHTML(m, { nome: 'Capinha iPhone 13 Pro Max', preco: 49.9, sku: 'CAP13PM', codigo: '7891234567895', imei: '356938035643809', modelo: 'IPHONE 13', cor: 'AZUL', classif: 'Ótimo', bateria: 88 }); c.appendChild(pv);
+      var t = el('div'); t.appendChild(el('b', '', m.nome + (m.padrao ? ' (padrão)' : ''))); t.appendChild(el('div', 'psub', m.largura + ' x ' + m.altura + ' mm · ' + ({ todos: 'produtos e aparelhos', produto: 'produtos', aparelho: 'aparelhos' })[m.para])); c.appendChild(t);
+      if (D.editar) { var ed = el('button', 'btn ghost', 'Editar'); ed.type = 'button'; ed.style.width = 'auto'; ed.onclick = function () { editorEtiqueta(m); }; c.appendChild(ed); }
+      box.appendChild(c);
+    });
+    if (D.editar) { var nv = el('button', 'btn', '+ Novo modelo'); nv.type = 'button'; nv.style.width = 'auto'; nv.onclick = function () { var p = D.perfis.filter(function (x) { return x.padrao; })[0] || D.perfis[0] || { largura: 40, altura: 25 }; editorEtiqueta({ id: '', nome: '', largura: p.largura, altura: p.altura, para: 'todos', perfilId: '', padrao: !D.modelos.length,
+      elementos: [{ tipo: 'campo', campo: 'nome', x: 1, y: 1, w: p.largura - 2, h: 6, tam: 7, negrito: true, alinha: 'esq' }, { tipo: 'campo', campo: 'preco', x: 1, y: 7.5, w: p.largura - 2, h: 5, tam: 10, negrito: true, alinha: 'esq' }, { tipo: 'barras', campo: 'sku', formato: 'auto', legenda: true, x: 1, y: 13, w: p.largura - 2, h: Math.max(6, p.altura - 14) }] }); }; box.appendChild(nv); }
+  }
+  /** Editor visual: arrasta os elementos (em mm) e ajusta as propriedades. */
+  function editorEtiqueta(m0) {
+    var D = ETQ.d, M = JSON.parse(JSON.stringify(m0)), sel = -1, ESC = 6;
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.classList.add('etqsheet');
+    sh.appendChild(el('h2', 'tt', M.id ? 'Editar modelo' : 'Novo modelo de etiqueta'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var g = el('div', 'g4'), cs = [el('div'), el('div'), el('div'), el('div')]; cs.forEach(function (z) { g.appendChild(z); }); c.appendChild(g);
+    var nm = campo(cs[0], 'Nome do modelo', inp('text', 'Ex.: Preço com código'), true); nm.value = M.nome; nm.oninput = function () { M.nome = nm.value; };
+    var lw = campo(cs[1], 'Largura (mm)', inp('text', '40'), true); lw.value = M.largura; lw.oninput = function () { M.largura = num(lw.value) || M.largura; des(); };
+    var lh = campo(cs[2], 'Altura (mm)', inp('text', '25'), true); lh.value = M.altura; lh.oninput = function () { M.altura = num(lh.value) || M.altura; des(); };
+    var pa = el('select'); [['todos', 'Produtos e aparelhos'], ['produto', 'Produtos'], ['aparelho', 'Aparelhos usados']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; pa.appendChild(op); }); pa.value = M.para; pa.onchange = function () { M.para = pa.value; }; campo(cs[3], 'Usar em', pa, true);
+    var lb = el('label', 'perm'), cb = el('input'); cb.type = 'checkbox'; cb.checked = !!M.padrao; cb.onchange = function () { M.padrao = cb.checked; }; lb.appendChild(cb); lb.appendChild(el('div', 't', 'Modelo padrão')); c.appendChild(lb);
+    var bar = el('div', 'etqbar'); c.appendChild(bar);
+    [['texto', 'Texto fixo'], ['campo', 'Campo'], ['barras', 'Código de barras'], ['qr', 'QR code'], ['linha', 'Linha'], ['retangulo', 'Moldura'], ['logo', 'Logo']].forEach(function (o) {
+      var b = el('button', 'btn ghost', '+ ' + o[1]); b.type = 'button'; b.onclick = function () {
+        var e = { tipo: o[0], x: 1, y: 1, w: Math.min(20, M.largura - 2), h: o[0] === 'barras' ? 8 : o[0] === 'qr' ? 10 : o[0] === 'linha' ? 0 : 5 };
+        if (o[0] === 'texto') { e.texto = 'Texto'; e.tam = 7; e.alinha = 'esq'; } if (o[0] === 'campo') { e.campo = 'nome'; e.tam = 7; e.alinha = 'esq'; } if (o[0] === 'barras') { e.campo = 'sku'; e.formato = 'auto'; e.legenda = true; } if (o[0] === 'qr') { e.campo = 'sku'; e.w = 10; }
+        if (o[0] === 'linha' || o[0] === 'retangulo') e.espessura = 0.3;
+        if (o[0] === 'logo') { var fi = el('input'); fi.type = 'file'; fi.accept = 'image/*'; fi.onchange = function () { var f = fi.files[0]; if (!f) return; comprimirImg(f, 300, 0.85, function (url) { e.img = url; M.elementos.push(e); sel = M.elementos.length - 1; des(); }); }; fi.click(); return; }
+        M.elementos.push(e); sel = M.elementos.length - 1; des();
+      }; bar.appendChild(b);
+    });
+    var wrap = el('div', 'etqed'); c.appendChild(wrap);
+    var cv = el('div', 'etqcanvas'); wrap.appendChild(cv);
+    var pr = el('div', 'etqprops'); wrap.appendChild(pr);
+    c.appendChild(el('div', 'hint', 'Arraste os elementos na etiqueta. Toque em um para mudar campo, tamanho e posição (em mm). A prévia usa dados de exemplo.'));
+    var EX = { nome: 'Capinha iPhone 13 Pro Max', preco: 49.9, sku: 'CAP13PM', codigo: '7891234567895', imei: '356938035643809', imei2: '', serial: 'F2LX1234', modelo: 'IPHONE 13', cor: 'AZUL', classif: 'Ótimo', bateria: 88, grupo: 'Acessórios', loja: lojaUser(), local: 'Vitrine 1' };
+    function des() {
+      ESC = Math.max(3, Math.min(9, (Math.min(window.innerWidth - 60, 640)) / M.largura));
+      cv.style.width = M.largura * ESC + 'px'; cv.style.height = M.altura * ESC + 'px';
+      cv.innerHTML = '';
+      var pv = el('div', 'etqzoom'); pv.style.transform = 'scale(' + (ESC / (96 / 25.4)) + ')'; pv.innerHTML = etqHTML(M, EX); cv.appendChild(pv);
+      M.elementos.forEach(function (e, i) {
+        var h = el('div', 'etqh' + (i === sel ? ' on' : '')); h.style.left = e.x * ESC + 'px'; h.style.top = e.y * ESC + 'px'; h.style.width = Math.max(6, e.w * ESC) + 'px'; h.style.height = Math.max(6, e.h * ESC) + 'px';
+        h.onpointerdown = function (ev) {
+          ev.preventDefault(); sel = i; var x0 = ev.clientX, y0 = ev.clientY, ex = e.x, ey = e.y, mov = false;
+          h.setPointerCapture(ev.pointerId);
+          h.onpointermove = function (mv) { var dx = (mv.clientX - x0) / ESC, dy = (mv.clientY - y0) / ESC; if (Math.abs(dx) + Math.abs(dy) > 0.2) mov = true; e.x = Math.round((ex + dx) * 2) / 2; e.y = Math.round((ey + dy) * 2) / 2; h.style.left = e.x * ESC + 'px'; h.style.top = e.y * ESC + 'px'; };
+          h.onpointerup = function () { h.onpointermove = null; des(); };
+          if (!mov) props();
+        };
+        cv.appendChild(h);
+      });
+      props();
+    }
+    function props() {
+      pr.innerHTML = '';
+      var e = M.elementos[sel];
+      if (!e) { pr.appendChild(el('div', 'hint', 'Toque em um elemento para editar.')); return; }
+      pr.appendChild(el('b', '', ({ texto: 'Texto fixo', campo: 'Campo', barras: 'Código de barras', qr: 'QR code', linha: 'Linha', retangulo: 'Moldura', logo: 'Logo' })[e.tipo]));
+      if (e.tipo === 'texto') { var tx = campo(pr, 'Texto', inp('text')); tx.maxLength = 120; tx.value = e.texto; tx.oninput = function () { e.texto = tx.value; desSem(); }; }
+      if (e.tipo === 'campo' || e.tipo === 'barras' || e.tipo === 'qr') { var cp = el('select'); ETQ_CAMPOS.forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; cp.appendChild(op); }); cp.value = e.campo; cp.onchange = function () { e.campo = cp.value; desSem(); }; campo(pr, 'Mostra', cp); }
+      if (e.tipo === 'campo') { var pf = campo(pr, 'Texto antes (opcional)', inp('text', 'Ex.: R$ ')); pf.maxLength = 20; pf.value = e.prefixo || ''; pf.oninput = function () { e.prefixo = pf.value; desSem(); }; }
+      if (e.tipo === 'barras') { var fm = el('select'); [['auto', 'Automático (EAN-13 se tiver GTIN; senão Code128)'], ['code128', 'Code128'], ['ean13', 'EAN-13']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; fm.appendChild(op); }); fm.value = e.formato; fm.onchange = function () { e.formato = fm.value; desSem(); }; campo(pr, 'Formato', fm);
+        var lg = el('label', 'perm'), lc = el('input'); lc.type = 'checkbox'; lc.checked = e.legenda !== false; lc.onchange = function () { e.legenda = lc.checked; desSem(); }; lg.appendChild(lc); lg.appendChild(el('div', 't', 'Mostrar o número embaixo')); pr.appendChild(lg); }
+      if (e.tipo === 'texto' || e.tipo === 'campo') {
+        var g2 = grade(pr, 2), tm = campo(g2[0], 'Letra (pt)', inp('number'), true); tm.value = e.tam; tm.oninput = function () { e.tam = num(tm.value) || 7; desSem(); };
+        var al = el('select'); [['esq', 'Esquerda'], ['centro', 'Centro'], ['dir', 'Direita']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; al.appendChild(op); }); al.value = e.alinha || 'esq'; al.onchange = function () { e.alinha = al.value; desSem(); }; campo(g2[1], 'Alinhar', al, true);
+        var ng = el('label', 'perm'), nc = el('input'); nc.type = 'checkbox'; nc.checked = !!e.negrito; nc.onchange = function () { e.negrito = nc.checked; desSem(); }; ng.appendChild(nc); ng.appendChild(el('div', 't', 'Negrito')); pr.appendChild(ng);
+      }
+      if (e.tipo === 'linha' || e.tipo === 'retangulo') { var es = campo(pr, 'Espessura (mm)', inp('text')); es.value = e.espessura; es.oninput = function () { e.espessura = num(es.value) || 0.3; desSem(); }; }
+      var g4 = el('div', 'g4'), qs = [el('div'), el('div'), el('div'), el('div')]; qs.forEach(function (z) { g4.appendChild(z); }); pr.appendChild(g4);
+      [['x', 'X'], ['y', 'Y'], ['w', 'Larg.'], ['h', 'Alt.']].forEach(function (o, k) { var x = campo(qs[k], o[1] + ' mm', inp('text'), true); x.inputMode = 'decimal'; x.value = String(e[o[0]]).replace('.', ','); x.oninput = function () { var v = num(x.value); if (v !== null) { e[o[0]] = v; desSem(); } }; });
+      var ac = el('div', 'acoes'), du = el('button', 'btn ghost', 'Duplicar'), rm = el('button', 'btn danger', 'Remover'); du.type = rm.type = 'button'; ac.appendChild(du); ac.appendChild(rm); pr.appendChild(ac);
+      du.onclick = function () { var n = JSON.parse(JSON.stringify(e)); n.y += 2; M.elementos.push(n); sel = M.elementos.length - 1; des(); };
+      rm.onclick = function () { M.elementos.splice(sel, 1); sel = -1; des(); };
+    }
+    var tmr = null;
+    function desSem() { clearTimeout(tmr); tmr = setTimeout(function () { var s = sel; var foc = document.activeElement; var id = foc && foc.closest && foc.closest('.etqprops') ? Array.prototype.indexOf.call(pr.querySelectorAll('input,select'), foc) : -1; desCanvas(); sel = s; if (id > -1) { var nf = pr.querySelectorAll('input,select')[id]; if (nf) nf.focus(); } }, 150); }
+    function desCanvas() { var pv = cv.querySelector('.etqzoom'); if (pv) pv.innerHTML = etqHTML(M, EX); Array.prototype.forEach.call(cv.querySelectorAll('.etqh'), function (h, i) { var e = M.elementos[i]; if (!e) return; h.style.left = e.x * ESC + 'px'; h.style.top = e.y * ESC + 'px'; h.style.width = Math.max(6, e.w * ESC) + 'px'; h.style.height = Math.max(6, e.h * ESC) + 'px'; }); }
+    des();
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), sv = el('button', 'btn', 'Salvar modelo'), cc = el('button', 'btn ghost', 'Cancelar'), ex = el('button', 'lnk', 'Excluir modelo'); sv.type = cc.type = ex.type = 'button'; ac.appendChild(sv); ac.appendChild(cc); if (M.id) ac.appendChild(ex); c.appendChild(ac);
+    var fim = function () { sh.classList.remove('etqsheet'); fecharModal(); };
+    cc.onclick = fim;
+    var salvar = function (lista) {
+      m.classList.remove('show'); sv.disabled = true;
+      call('etiquetasSalvar', [S.token, { perfis: D.perfis, modelos: lista }]).then(function (d) { ETQ.d = d; fim(); ETQ.aba = 'modelos'; desenharEtiquetas(); })
+        .catch(function (e) { sv.disabled = false; m.textContent = e; m.classList.add('show'); });
+    };
+    sv.onclick = function () { var l = D.modelos.filter(function (x) { return x.id !== M.id || !M.id; }); if (M.padrao) l.forEach(function (x) { x.padrao = false; }); salvar(M.id ? D.modelos.map(function (x) { return x.id === M.id ? M : (M.padrao ? Object.assign({}, x, { padrao: false }) : x); }) : l.concat([M])); };
+    ex.onclick = function () { if (!ex.dataset.c) { ex.dataset.c = 1; ex.textContent = 'Toque de novo para excluir'; return; } salvar(D.modelos.filter(function (x) { return x.id !== M.id; })); };
+    abrirModal(); garantirQR(desCanvas);
+  }
+  /** Reduz a imagem (lado maior até max px) e devolve data URL JPEG. */
+  function comprimirImg(file, max, q, cb) {
+    var rd = new FileReader();
+    rd.onload = function () { var im = new Image(); im.onload = function () { var k = Math.min(1, max / Math.max(im.width, im.height)), cv = document.createElement('canvas'); cv.width = Math.round(im.width * k); cv.height = Math.round(im.height * k); var cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); cx.drawImage(im, 0, 0, cv.width, cv.height); cb(cv.toDataURL('image/jpeg', q)); }; im.src = rd.result; };
+    rd.readAsDataURL(file);
+  }
+  // =========================================================
+  //  CHECK-IN DO RECEBIMENTO (compra → conferência → estoque)
+  // =========================================================
+  var CK = { lista: null, atual: null, conf: null };
+  function carregarCheckin() {
+    var box = $('ckCorpo'); box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
+    call('checkinListar', [S.token]).then(function (l) { CK.lista = l; S.u.checkinPendentes = l.length; montarMenu(); if (CK.atual) { var a = l.filter(function (c) { return c.id === CK.atual; })[0]; if (a) return desenharConferencia(a); CK.atual = null; } desenharCheckin(); })
+      .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
+  }
+  function desenharCheckin() {
+    var box = $('ckCorpo'); box.innerHTML = '';
+    if (!CK.lista.length) { box.appendChild(el('div', 'empty', 'Nenhuma compra esperando conferência.')); return; }
+    CK.lista.forEach(function (c) {
+      var k = el('div', 'card tfcard'), h = el('div', 'tfh'); h.appendChild(el('b', '', c.id + (c.numero ? ' · NF ' + c.numero : ''))); h.appendChild(el('span', 'bdg warn', c.situacao)); k.appendChild(h);
+      k.appendChild(el('div', '', c.fornecedor + ' → ' + c.loja));
+      var pend = c.itens.reduce(function (a, it) { return a + it.pendente; }, 0), tot = c.itens.reduce(function (a, it) { return a + it.qtd; }, 0);
+      k.appendChild(el('div', 'psub', 'Lançada em ' + c.em + ' por ' + c.por + ' · ' + (tot - pend) + ' de ' + tot + ' unidade(s) conferidas'));
+      var ac = el('div', 'acoes'), b = el('button', 'btn ok', 'Conferir'); b.type = 'button'; b.onclick = function () { CK.atual = c.id; CK.conf = null; desenharConferencia(c); }; ac.appendChild(b); k.appendChild(ac);
+      box.appendChild(k);
+    });
+  }
+  function soChave(t) { return String(t || '').trim().toLowerCase(); }
+  function desenharConferencia(c) {
+    var box = $('ckCorpo'); box.innerHTML = '';
+    if (!CK.conf || CK.conf.id !== c.id) CK.conf = { id: c.id, q: {}, ser: {} };
+    var C = CK.conf;
+    var vt = el('button', 'lnk', '← Todas as compras'); vt.type = 'button'; vt.onclick = function () { CK.atual = null; desenharCheckin(); }; box.appendChild(vt);
+    var cab = el('div', 'card'); cab.appendChild(el('b', '', c.id + (c.numero ? ' · NF ' + c.numero : '') + ' · ' + c.fornecedor)); cab.appendChild(el('div', 'psub', 'Entra em ' + c.loja + ' · ' + c.situacao)); box.appendChild(cab);
+    var lc = el('div', 'card'); box.appendChild(lc);
+    var bs = inp('text', 'Leia o código de barras, o IMEI ou o serial'); bs.className = 'pdvbusca'; bs.maxLength = 80; lc.appendChild(bs);
+    var cam = null;
+    if ('BarcodeDetector' in window && navigator.mediaDevices) { cam = el('button', 'btn ghost', '📷 Ler com a câmera'); cam.type = 'button'; cam.style.width = 'auto'; lc.appendChild(cam); }
+    var av = el('div', 'hint'); lc.appendChild(av);
+    var lst = el('div'); lc.appendChild(lst);
+    function pend(it) { return it.pendente - (C.q[it.k] || 0); }
+    function desItens() {
+      lst.innerHTML = '';
+      c.itens.forEach(function (it) {
+        if (!it.pendente) { var d0 = el('div', 'tfit ok'), n0 = el('div', 'nm', it.nome || it.descricao); n0.appendChild(el('small', '', it.falta ? it.recebido + ' recebido · ' + it.falta + ' em falta' : '✓ ' + it.recebido + ' recebido')); d0.appendChild(n0); lst.appendChild(d0); return; }
+        var r = el('div', 'tfit' + ((C.q[it.k] || 0) === it.pendente ? ' ok' : '')), n = el('div', 'nm', it.nome || it.descricao);
+        n.appendChild(el('small', '', [it.aparelho ? 'IMEI ' + it.aparelho.imei : '', it.codigo ? 'EAN ' + it.codigo : '', it.sku ? 'SKU ' + it.sku : '', it.recebido ? it.recebido + ' já recebido' : ''].filter(Boolean).join(' · ')));
+        r.appendChild(n);
+        r.appendChild(el('b', 'ckq', (C.q[it.k] || 0) + ' / ' + it.pendente));
+        if (!it.aparelho && !it.serial) {
+          var mn = el('button', 'btn ghost', '−'), pl = el('button', 'btn ghost', '+'), tudo = el('button', 'lnk', 'Tudo'); mn.type = pl.type = tudo.type = 'button'; mn.className = pl.className = 'btn ghost ckb';
+          mn.onclick = function () { C.q[it.k] = Math.max(0, (C.q[it.k] || 0) - 1); desItens(); }; pl.onclick = function () { C.q[it.k] = Math.min(it.pendente, (C.q[it.k] || 0) + 1); desItens(); }; tudo.onclick = function () { C.q[it.k] = it.pendente; desItens(); };
+          r.appendChild(mn); r.appendChild(pl); r.appendChild(tudo);
+        } else if (it.serial) {
+          var ls = el('button', 'btn ghost ckb', ultSerial === it.k ? 'Lendo seriais…' : 'Ler seriais'); ls.type = 'button'; ls.onclick = function () { ultSerial = it.k; av.textContent = it.nome + ': leia o serial de cada unidade.'; desItens(); bs.focus(); }; r.appendChild(ls);
+        } else if (it.aparelho) {
+          var ok = el('button', 'btn ghost ckb', C.q[it.k] ? 'Desmarcar' : 'Marcar'); ok.type = 'button'; ok.onclick = function () { C.q[it.k] = C.q[it.k] ? 0 : 1; desItens(); }; r.appendChild(ok);
+        }
+        lst.appendChild(r);
+        if (it.serial) {
+          var sl = C.ser[it.k] = C.ser[it.k] || [], w = el('div', 'tfser'), ch = el('div', 'chips');
+          sl.forEach(function (s, i) { var b = el('button', 'chip on', s + ' ×'); b.type = 'button'; b.onclick = function () { sl.splice(i, 1); C.q[it.k] = sl.length; desItens(); }; ch.appendChild(b); });
+          w.appendChild(el('div', 'hint', 'Leia o serial de cada unidade (' + sl.length + ' de ' + it.pendente + ').' + (it.seriaisPrevistos && it.seriaisPrevistos.length ? ' Previstos na nota: ' + it.seriaisPrevistos.join(', ') : '')));
+          w.appendChild(ch); lst.appendChild(w);
+        }
+      });
+    }
+    var ultSerial = null;
+    function ler(v) {
+      var t = soChave(v), dig = t.replace(/\D/g, ''); av.textContent = ''; av.style.color = '';
+      if (!t) return;
+      var it = c.itens.filter(function (x) { return x.aparelho && pend(x) > 0 && (x.aparelho.imei === dig || x.aparelho.imei2 === dig); })[0];
+      if (it) { C.q[it.k] = 1; av.textContent = '✓ ' + it.nome; return desItens(); }
+      it = c.itens.filter(function (x) { return !x.aparelho && pend(x) > 0 && [x.codigo, x.sku, x.codForn].some(function (z) { return z && soChave(z) === t; }); })[0];
+      if (it) {
+        if (it.serial) { ultSerial = it.k; av.textContent = it.nome + ': agora leia o serial de cada unidade.'; return desItens(); }
+        C.q[it.k] = (C.q[it.k] || 0) + 1; av.textContent = '✓ ' + it.nome + ' (' + C.q[it.k] + ' / ' + it.pendente + ')'; return desItens();
+      }
+      var sers = c.itens.filter(function (x) { return x.serial && pend(x) > 0; });
+      var alvo = sers.filter(function (x) { return (x.seriaisPrevistos || []).some(function (s) { return soChave(s) === t; }); })[0] || sers.filter(function (x) { return x.k === ultSerial; })[0];
+      if (alvo) {
+        var sl = C.ser[alvo.k] = C.ser[alvo.k] || [];
+        if (Object.keys(C.ser).some(function (k) { return C.ser[k].some(function (s) { return soChave(s) === t; }); })) { av.textContent = 'O serial ' + v + ' já foi lido.'; av.style.color = 'var(--err)'; return; }
+        sl.push(String(v).trim()); C.q[alvo.k] = sl.length; av.textContent = '✓ ' + alvo.nome + ' · serial ' + v; return desItens();
+      }
+      av.textContent = 'Não achei "' + v + '" nesta compra.'; av.style.color = 'var(--err)';
+      try { navigator.vibrate && navigator.vibrate(200); } catch (e) {}
+    }
+    bs.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); ler(bs.value); bs.value = ''; } };
+    if (cam) cam.onclick = function () { lerCamera(function (v) { ler(v); }); };
+    desItens();
+    var ob = inp('text', 'Opcional'); ob.maxLength = 200; campo(lc, 'Observação', ob);
+    var m = el('div', 'msg err'); lc.appendChild(m);
+    var ac = el('div', 'acoes'), cf = el('button', 'btn ok', 'Confirmar o que foi conferido'), fl = el('button', 'btn ghost', 'Encerrar com falta do fornecedor'); cf.type = fl.type = 'button'; ac.appendChild(cf); ac.appendChild(fl); lc.appendChild(ac);
+    cf.onclick = function () {
+      m.classList.remove('show');
+      var itens = c.itens.filter(function (it) { return (C.q[it.k] || 0) > 0; }).map(function (it) { return { k: it.k, qtd: C.q[it.k], seriais: it.serial ? C.ser[it.k] : null }; });
+      if (!itens.length) { m.textContent = 'Leia ou marque o que chegou.'; m.classList.add('show'); return; }
+      cf.disabled = true; cf.textContent = 'Salvando…';
+      call('compraReceber', [S.token, c.id, { itens: itens, obs: ob.value.trim() }]).then(function (r) {
+        S.ac = null; S.disp = null; S.est = null; S.cp = null;
+        var rec = c.itens.filter(function (it) { return (C.q[it.k] || 0) > 0; }).map(function (it) { return { it: it, q: C.q[it.k] }; });
+        CK.conf = null; posCheckin(r, rec);
+      }).catch(function (e) { cf.disabled = false; cf.textContent = 'Confirmar o que foi conferido'; m.textContent = e; m.classList.add('show'); });
+    };
+    fl.onclick = function () {
+      if (lc.querySelector('.tfmot')) return;
+      var w = el('div', 'tfmot'), i = inp('text', 'Ex.: veio 8 de 10 capinhas'); i.maxLength = 200; campo(w, 'O que não foi conferido fica como falta do fornecedor (o financeiro não muda sozinho). Motivo', i, true);
+      var b = el('button', 'btn danger', 'Encerrar com falta'); b.type = 'button'; w.appendChild(b); lc.appendChild(w); i.focus();
+      b.onclick = function () { if (i.value.trim().length < 3) { m.textContent = 'Diga o motivo.'; m.classList.add('show'); return; } b.disabled = true; call('compraEncerrarFalta', [S.token, c.id, i.value.trim()]).then(function (l) { CK.lista = l; CK.atual = null; CK.conf = null; S.cp = null; desenharCheckin(); msg('topMsg', '✓ Compra ' + c.id + ' encerrada com falta. Confira as contas a pagar com o fornecedor.'); }).catch(function (e) { b.disabled = false; m.textContent = e; m.classList.add('show'); }); };
+    };
+    setTimeout(function () { bs.focus(); }, 50);
+  }
+  function posCheckin(c, rec) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', '✓ Entrou no estoque'));
+    sh.appendChild(el('div', 'sub', c.id + ' · ' + c.situacao + '. ' + rec.map(function (o) { return o.q + 'x ' + (o.it.nome || o.it.descricao); }).join(', ')));
+    var k = el('div', 'card'); sh.appendChild(k);
+    var ac = el('div', 'acoes'), et = el('button', 'btn', 'Imprimir etiquetas destes itens'), fc = el('button', 'btn ghost', 'Fechar'); et.type = fc.type = 'button'; ac.appendChild(et); ac.appendChild(fc); k.appendChild(ac);
+    et.onclick = function () {
+      etqAdicionar(rec.map(function (o) {
+        var it = o.it;
+        if (it.aparelho) return { k: 'a:' + it.aparelho.imei, tipo: 'aparelho', nome: it.nome, qtd: 1, dados: { nome: it.aparelho.modelo + ' ' + it.aparelho.cor + ' ' + it.aparelho.classif, imei: it.aparelho.imei, imei2: it.aparelho.imei2, modelo: it.aparelho.modelo, cor: it.aparelho.cor, classif: it.aparelho.classif, codigo: '' } };
+        return { k: 'p:' + it.prodId, tipo: 'produto', nome: it.nome, qtd: o.q, dados: { nome: it.nome, preco: it.preco, sku: it.sku, codigo: it.codigo } };
+      }), true);
+    };
+    fc.onclick = function () { fecharModal(); carregarCheckin(); };
+    abrirModal();
+  }
+  /** Leitura pela câmera (navegadores com BarcodeDetector, como o Chrome do Android). */
+  function lerCamera(cb) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Aponte para o código'));
+    var v = el('video'); v.setAttribute('playsinline', ''); v.muted = true; v.style.cssText = 'width:100%;max-height:60vh;background:#000;border-radius:10px'; sh.appendChild(v);
+    var st = el('div', 'hint', 'Procurando…'); sh.appendChild(st);
+    var fc = el('button', 'btn ghost', 'Fechar'); fc.type = 'button'; sh.appendChild(fc);
+    var stream = null, vivo = true, det = new window.BarcodeDetector();
+    var parar = function () { vivo = false; if (stream) stream.getTracks().forEach(function (t) { t.stop(); }); fecharModal(); };
+    fc.onclick = parar;
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(function (s) {
+      stream = s; v.srcObject = s; v.play();
+      var loop = function () { if (!vivo) return; det.detect(v).then(function (r) { if (r && r.length) { var t = r[0].rawValue; parar(); cb(t); } else setTimeout(loop, 250); }).catch(function () { setTimeout(loop, 400); }); };
+      loop();
+    }).catch(function (e) { st.textContent = 'Não consegui abrir a câmera: ' + e.message; });
+    abrirModal();
+  }
+  // ---------- vender sem estoque ----------
+  function semEstoqueOk(p) {
+    var c = (S.u && S.u.vendaSemEstoque) || {}; if (!p || p.serial || (p.formato && p.formato !== 'simples' && p.formato !== 'variacao')) return false;
+    var exc = (c.excecoes || []).indexOf(p.grupo || '') > -1; return c.geral ? !exc : exc;
+  }
+  function cfgSemEstoque(box) {
+    var c = Object.assign({ geral: false, excecoes: [] }, S.u.vendaSemEstoque || {}), card = el('div', 'card'); box.appendChild(card);
+    card.appendChild(el('h2', '', 'Vender produto sem estoque'));
+    var sg = el('div', 'seg'); card.appendChild(sg);
+    var grupos = ((S.u.catalogo || {}).grupos || []).slice();
+    var hint = el('div', 'hint'), lst = el('div', 'chips');
+    var des = function () { hint.textContent = (c.geral ? 'Pode vender sem estoque, menos os grupos marcados abaixo.' : 'Só vende com estoque, menos os grupos marcados abaixo (esses podem vender sem estoque).') + ' Nunca vale para produto com serial nem para aparelho usado. O estoque fica negativo e aparece o aviso "Saldo negativo".';
+      lst.innerHTML = ''; grupos.forEach(function (g) { var on = c.excecoes.indexOf(g) > -1, b = el('button', 'chip' + (on ? ' on' : ''), g); b.type = 'button'; b.onclick = function () { if (on) c.excecoes.splice(c.excecoes.indexOf(g), 1); else c.excecoes.push(g); des(); }; lst.appendChild(b); }); };
+    seg(sg, ['Vender só com estoque', 'Pode vender sem estoque'], c.geral ? 'Pode vender sem estoque' : 'Vender só com estoque', function (v) { c.geral = v === 'Pode vender sem estoque'; des(); });
+    card.appendChild(hint); card.appendChild(el('label', '', 'Exceções por grupo de produtos')); card.appendChild(lst); des();
+    var m = el('div', 'msg err'); card.appendChild(m);
+    var sv = el('button', 'btn', 'Salvar'); sv.type = 'button'; sv.style.marginTop = '10px'; card.appendChild(sv);
+    sv.onclick = function () { sv.disabled = true; call('vendaSemEstoqueSalvar', [S.token, c]).then(function (r) { S.u.vendaSemEstoque = r; sv.disabled = false; m.className = 'msg ok show'; m.textContent = '✓ Salvo.'; }).catch(function (e) { sv.disabled = false; m.className = 'msg err show'; m.textContent = e; }); };
+  }
+  // =========================================================
+  //  BALANÇO (inventário)
+  // =========================================================
+  var BL = { lista: null, d: null, minha: null, sujo: false };
+  function carregarBalancos() {
+    var box = $('blCorpo'); box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
+    call('balancosListar', [S.token]).then(function (l) { BL.lista = l; BL.d = null; desenharBalancos(); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
+  }
+  function desenharBalancos() {
+    var box = $('blCorpo'); box.innerHTML = '';
+    var nv = el('button', 'btn', '+ Novo balanço'); nv.type = 'button'; nv.style.width = 'auto'; nv.onclick = novoBalanco; box.appendChild(nv);
+    if (!BL.lista.length) { box.appendChild(el('div', 'empty', 'Nenhum balanço ainda.')); return; }
+    BL.lista.forEach(function (b) {
+      var c = el('div', 'card tfcard'), h = el('div', 'tfh'); h.appendChild(el('b', '', b.id)); h.appendChild(el('span', 'bdg ' + (b.situacao === 'Em contagem' ? 'warn' : b.situacao === 'Cancelado' ? 'off' : 'ok'), b.situacao)); c.appendChild(h);
+      c.appendChild(el('div', '', b.deposito + ' · ' + b.resumo));
+      c.appendChild(el('div', 'psub', 'Criado em ' + b.em + ' por ' + b.por + (b.pessoas.length ? ' · contando: ' + b.pessoas.join(', ') : '') + (b.fimEm ? ' · finalizado em ' + b.fimEm + ' por ' + b.fimPor : '') + (b.resultado ? ' · ' + b.resultado.itens + ' ajuste(s)' + (b.resultado.valor != null ? ' · ' + brl(b.resultado.valor) : '') : '')));
+      var ac = el('div', 'acoes'), ab = el('button', 'btn ' + (b.situacao === 'Em contagem' ? 'ok' : 'ghost'), b.situacao === 'Em contagem' ? 'Contar' : 'Ver'); ab.type = 'button'; ab.onclick = function () { abrirBalanco(b.id); }; ac.appendChild(ab); c.appendChild(ac);
+      box.appendChild(c);
+    });
+  }
+  function novoBalanco() {
+    garantirAc(function () {
+      var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Novo balanço'));
+      sh.appendChild(el('div', 'sub', 'Quem conta não vê o saldo do sistema. Várias pessoas podem contar ao mesmo tempo; as contagens somam. Quem finaliza revisa e aceita as diferenças.'));
+      var c = el('div', 'card'); sh.appendChild(c);
+      var tipo = 'geral', sg = el('div', 'seg'); c.appendChild(el('label', 'first', 'O que contar')); c.appendChild(sg);
+      var dp = el('select'); opts(dp, S.ac.lojas, lojaUser()); campo(c, 'Depósito', dp);
+      var area = el('div'); c.appendChild(area);
+      var apL = el('label', 'perm'), apC = el('input'); apC.type = 'checkbox'; apC.checked = true; apL.appendChild(apC); apL.appendChild(el('div', 't', 'Incluir os aparelhos usados (pelo IMEI)')); c.appendChild(apL);
+      var grupos = [], prods = [];
+      function des() {
+        area.innerHTML = '';
+        if (tipo === 'categoria') { var gs = {}; S.ac.produtos.forEach(function (p) { if (p.grupo) gs[p.grupo] = 1; }); var ch = el('div', 'chips'); Object.keys(gs).sort().forEach(function (g) { var b = el('button', 'chip' + (grupos.indexOf(g) > -1 ? ' on' : ''), g); b.type = 'button'; b.onclick = function () { var k = grupos.indexOf(g); if (k > -1) grupos.splice(k, 1); else grupos.push(g); b.classList.toggle('on', k < 0); }; ch.appendChild(b); }); area.appendChild(el('label', '', 'Categorias')); area.appendChild(ch); }
+        if (tipo === 'escolhidos') {
+          var q = inp('text', 'Buscar produto pelo nome, SKU ou código'); campo(area, 'Produtos', q); var rs = el('div', 'vdres'), sel = el('div', 'chips'); area.appendChild(rs); area.appendChild(sel);
+          var dsel = function () { sel.innerHTML = ''; prods.forEach(function (id, i) { var p = mapaP()[id]; var b = el('button', 'chip on', (p ? p.nome : id) + ' ×'); b.type = 'button'; b.onclick = function () { prods.splice(i, 1); dsel(); }; sel.appendChild(b); }); };
+          q.oninput = function () { rs.innerHTML = ''; var t = q.value.trim().toLowerCase(); if (t.length < 2) return; S.ac.produtos.filter(function (p) { return (p.formato === 'simples' || p.formato === 'variacao') && (p.nome + ' ' + p.sku + ' ' + p.codigo).toLowerCase().indexOf(t) > -1; }).slice(0, 8).forEach(function (p) { var b = el('button', '', p.nome); b.type = 'button'; b.onclick = function () { if (prods.indexOf(p.id) < 0) prods.push(p.id); q.value = ''; rs.innerHTML = ''; dsel(); }; rs.appendChild(b); }); };
+          dsel();
+        }
+      }
+      seg(sg, ['Estoque todo', 'Por categoria', 'Produtos escolhidos'], 'Estoque todo', function (v) { tipo = v === 'Estoque todo' ? 'geral' : v === 'Por categoria' ? 'categoria' : 'escolhidos'; des(); });
+      des();
+      var m = el('div', 'msg err'); c.appendChild(m);
+      var ac = el('div', 'acoes'), ok = el('button', 'btn ok', 'Começar a contagem'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
+      cc.onclick = fecharModal;
+      ok.onclick = function () { ok.disabled = true; m.classList.remove('show'); call('balancoCriar', [S.token, { tipo: tipo, deposito: dp.value, grupos: grupos, produtos: prods, aparelhos: apC.checked }]).then(function (d) { fecharModal(); BL.d = d; BL.minha = JSON.parse(JSON.stringify(d.minha)); desenharContagem(); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); }); };
+      abrirModal();
+    });
+  }
+  function abrirBalanco(id) {
+    var box = $('blCorpo'); box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
+    call('balancoDados', [S.token, id]).then(function (d) { BL.d = d; BL.minha = JSON.parse(JSON.stringify(d.minha)); BL.sujo = false; desenharContagem(); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
+  }
+  function desenharContagem() {
+    var D = BL.d, M = BL.minha, box = $('blCorpo'); box.innerHTML = '';
+    M.q = M.q || {}; M.ser = M.ser || {}; M.imeis = M.imeis || [];
+    var vt = el('button', 'lnk', '← Balanços'); vt.type = 'button'; vt.onclick = function () { if (BL.sujo) call('balancoContar', [S.token, D.id, M]).then(carregarBalancos).catch(function (e) { msg('topMsg', e); }); else carregarBalancos(); }; box.appendChild(vt);
+    var cab = el('div', 'card'); cab.appendChild(el('b', '', D.id + ' · ' + D.deposito + ' · ' + D.situacao)); cab.appendChild(el('div', 'psub', D.resumo + ' · criado em ' + D.em + ' por ' + D.por)); box.appendChild(cab);
+    if (D.situacao !== 'Em contagem') { resultadoBalanco(box, D); return; }
+    if (D.pessoas.length) cab.appendChild(el('div', 'hint', 'Contando: ' + D.pessoas.map(function (p) { return p.nome + ' (' + p.itens + ' itens, ' + p.em + ')'; }).join(' · ')));
+    var mp = {}; D.produtos.forEach(function (p) { mp[p.id] = p; });
+    var lc = el('div', 'card'); box.appendChild(lc);
+    var bs = inp('text', 'Leia o código de barras, o IMEI ou o serial'); bs.className = 'pdvbusca'; bs.maxLength = 80; lc.appendChild(bs);
+    var cam = null; if ('BarcodeDetector' in window && navigator.mediaDevices) { cam = el('button', 'btn ghost', '📷 Ler com a câmera'); cam.type = 'button'; cam.style.width = 'auto'; lc.appendChild(cam); }
+    var av = el('div', 'hint'); lc.appendChild(av);
+    var fl = inp('text', 'Filtrar a lista'); fl.style.marginTop = '8px'; lc.appendChild(fl);
+    var lst = el('div'); lc.appendChild(lst);
+    var serAlvo = null;
+    function desLista() {
+      lst.innerHTML = '';
+      var t = fl.value.trim().toLowerCase();
+      var l = D.produtos.filter(function (p) { return !t || (p.nome + ' ' + p.sku + ' ' + p.codigo).toLowerCase().indexOf(t) > -1; });
+      if (D.tipo === 'geral' && !t) l = l.filter(function (p) { return M.q[p.id] !== undefined; });
+      if (D.tipo === 'geral') lst.appendChild(el('div', 'hint', t ? '' : 'Balanço geral: aparecem aqui só os itens que você já contou. Leia os códigos ou filtre para achar um produto.'));
+      l.slice(0, 300).forEach(function (p) {
+        var r = el('div', 'tfit' + (M.q[p.id] !== undefined ? ' ok' : '')), n = el('div', 'nm', p.nome); n.appendChild(el('small', '', [p.sku ? 'SKU ' + p.sku : '', p.codigo ? 'EAN ' + p.codigo : '', p.serial ? 'com serial' : ''].filter(Boolean).join(' · '))); r.appendChild(n);
+        if (p.serial) { r.appendChild(el('b', 'ckq', String((M.ser[p.id] || []).length))); var ls = el('button', 'btn ghost ckb', serAlvo === p.id ? 'Lendo seriais…' : 'Ler seriais'); ls.type = 'button'; ls.onclick = function () { serAlvo = p.id; M.q[p.id] = (M.ser[p.id] = M.ser[p.id] || []).length; BL.sujo = true; desLista(); bs.focus(); }; r.appendChild(ls); }
+        else { var q = inp('number', '—'); q.min = 0; q.className = 'tfq'; q.value = M.q[p.id] === undefined ? '' : M.q[p.id]; q.oninput = function () { if (q.value === '') delete M.q[p.id]; else M.q[p.id] = Math.max(0, parseInt(q.value, 10) || 0); BL.sujo = true; }; r.appendChild(q); }
+        lst.appendChild(r);
+        if (p.serial && (M.ser[p.id] || []).length) { var ch = el('div', 'chips tfser'); M.ser[p.id].forEach(function (s, i) { var b = el('button', 'chip on', s + ' ×'); b.type = 'button'; b.onclick = function () { M.ser[p.id].splice(i, 1); M.q[p.id] = M.ser[p.id].length; BL.sujo = true; desLista(); }; ch.appendChild(b); }); lst.appendChild(ch); }
+      });
+      if (D.aparelhos) {
+        lst.appendChild(el('h3', 'ch', 'Aparelhos lidos (' + M.imeis.length + ')'));
+        var ch2 = el('div', 'chips'); M.imeis.forEach(function (im, i) { var a = (S.disp || []).filter(function (x) { return x.imei === im; })[0]; var b = el('button', 'chip on', (a ? a.modelo + ' · ' : '') + im + ' ×'); b.type = 'button'; b.onclick = function () { M.imeis.splice(i, 1); BL.sujo = true; desLista(); }; ch2.appendChild(b); }); lst.appendChild(ch2);
+      }
+    }
+    function ler(v) {
+      var t = String(v || '').trim(), k = t.toLowerCase(), dig = t.replace(/\D/g, ''); av.style.color = ''; if (!t) return;
+      var p = D.produtos.filter(function (x) { return [x.codigo, x.sku].some(function (z) { return z && String(z).toLowerCase() === k; }); })[0];
+      if (p) { if (p.serial) { serAlvo = p.id; av.textContent = p.nome + ': agora leia o serial de cada unidade.'; } else { M.q[p.id] = (M.q[p.id] || 0) + 1; av.textContent = '✓ ' + p.nome + ': ' + M.q[p.id]; } BL.sujo = true; return desLista(); }
+      if (D.aparelhos && dig.length === 15 && dig === t) { if (M.imeis.indexOf(dig) < 0) M.imeis.push(dig); var a = (S.disp || []).filter(function (x) { return x.imei === dig || x.imei2 === dig; })[0]; av.textContent = '✓ Aparelho ' + (a ? a.modelo + ' ' + a.cor : dig); BL.sujo = true; return desLista(); }
+      if (serAlvo && mp[serAlvo]) { var sl = M.ser[serAlvo] = M.ser[serAlvo] || []; if (sl.some(function (s) { return s.toLowerCase() === k; })) { av.textContent = 'Serial ' + t + ' já lido.'; av.style.color = 'var(--err)'; return; } sl.push(t); M.q[serAlvo] = sl.length; av.textContent = '✓ ' + mp[serAlvo].nome + ' · serial ' + t; BL.sujo = true; return desLista(); }
+      av.textContent = 'Não achei "' + t + '" neste balanço.'; av.style.color = 'var(--err)';
+    }
+    bs.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); ler(bs.value); bs.value = ''; } };
+    if (cam) cam.onclick = function () { lerCamera(ler); };
+    fl.oninput = desLista;
+    if (D.aparelhos && !S.disp && pode('produtos')) call('disponiveis', [S.token]).then(function (l) { S.disp = l; desLista(); }).catch(function () {});
+    desLista();
+    var m = el('div', 'msg err'); lc.appendChild(m);
+    var ac = el('div', 'acoes'), sv = el('button', 'btn', 'Salvar minha contagem'); sv.type = 'button'; ac.appendChild(sv); lc.appendChild(ac);
+    var salvar = function (depois) { m.classList.remove('show'); sv.disabled = true; sv.textContent = 'Salvando…'; return call('balancoContar', [S.token, D.id, M]).then(function (d) { BL.d = d; BL.minha = JSON.parse(JSON.stringify(d.minha)); BL.sujo = false; sv.disabled = false; sv.textContent = 'Salvar minha contagem'; if (depois) depois(); else { desenharContagem(); $('blCorpo').insertBefore(el('div', 'msg ok show', '✓ Contagem salva (rascunho). Pode continuar depois.'), $('blCorpo').firstChild); } }).catch(function (e) { sv.disabled = false; sv.textContent = 'Salvar minha contagem'; m.textContent = e; m.classList.add('show'); }); };
+    sv.onclick = function () { salvar(); };
+    if (D.podeFinalizar) {
+      var rv = el('button', 'btn ok', 'Revisar e finalizar'), cn = el('button', 'btn ghost', 'Cancelar balanço'); rv.type = cn.type = 'button'; ac.appendChild(rv); ac.appendChild(cn);
+      rv.onclick = function () { salvar(function () { revisarBalanco(D.id); }); };
+      cn.onclick = function () { motivoTransf(lc, m, 'Motivo do cancelamento', 'Cancelar balanço', function (mot) { return call('balancoCancelar', [S.token, D.id, mot]); }); };
+    }
+    setTimeout(function () { bs.focus(); }, 50);
+  }
+  function revisarBalanco(id) {
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.classList.add('etqsheet'); sh.appendChild(el('h2', 'tt', 'Revisar balanço ' + id));
+    var c = el('div', 'card'); sh.appendChild(c); c.appendChild(el('div', 'empty', 'Calculando…')); abrirModal();
+    var fim = function () { sh.classList.remove('etqsheet'); fecharModal(); };
+    call('balancoRevisao', [S.token, id]).then(function (r) {
+      c.innerHTML = '';
+      c.appendChild(el('div', 'hint', 'Contagem de: ' + (r.pessoas.join(', ') || 'ninguém') + '. Saldo comparado com o de agora em ' + r.deposito + '. Nada muda no estoque até você aceitar.'));
+      var difs = r.itens.filter(function (o) { return o.dif || (o.faltamSeriais && o.faltamSeriais.length) || (o.sobramSeriais && o.sobramSeriais.length); });
+      c.appendChild(el('h3', 'ch', 'Diferenças (' + difs.length + ')'));
+      if (!difs.length) c.appendChild(el('div', 'hint', 'Tudo bateu.'));
+      else {
+        var w = el('div', 'ctwrap'), t = el('table', 'cttab'), h = el('tr'); ['Produto', 'Sistema', 'Contado', 'Diferença'].concat(r.ver ? ['Valor (custo)'] : []).forEach(function (k, i) { h.appendChild(el('th', i ? 'n' : '', k)); }); t.appendChild(h);
+        difs.forEach(function (o) { var tr = el('tr'), a = el('td', '', o.nome); if (o.faltamSeriais && o.faltamSeriais.length) a.appendChild(el('small', '', 'Faltam: ' + o.faltamSeriais.join(', '))); if (o.sobramSeriais && o.sobramSeriais.length) a.appendChild(el('small', '', 'Sobram: ' + o.sobramSeriais.join(', '))); if (o.naoContado) a.appendChild(el('small', '', 'não contado')); tr.appendChild(a); tr.appendChild(el('td', 'n', String(o.esperado))); tr.appendChild(el('td', 'n', String(o.contado))); tr.appendChild(el('td', 'n ' + (o.dif < 0 ? 's' : 'e'), (o.dif > 0 ? '+' : '') + o.dif)); if (r.ver) tr.appendChild(el('td', 'n', brl(o.valor))); t.appendChild(tr); });
+        w.appendChild(t); c.appendChild(w);
+        if (r.ver) c.appendChild(el('div', 'k', 'Total das diferenças: ' + brl(difs.reduce(function (a, o) { return a + (o.valor || 0); }, 0))));
+      }
+      var nc = 'manter';
+      if (r.naoContados.length) {
+        c.appendChild(el('h3', 'ch', 'Não contados (' + r.naoContados.length + ')'));
+        c.appendChild(el('div', 'hint', r.naoContados.slice(0, 30).map(function (o) { return o.nome + ' (' + o.esperado + ')'; }).join(' · ') + (r.naoContados.length > 30 ? ' …' : '')));
+        var sg = el('div', 'seg'); c.appendChild(sg); seg(sg, ['Manter o saldo', 'Zerar'], 'Manter o saldo', function (v) { nc = v === 'Zerar' ? 'zerar' : 'manter'; });
+      }
+      var decAp = {};
+      if (r.aparelhos) {
+        c.appendChild(el('h3', 'ch', 'Aparelhos: ' + r.aparelhos.contados + ' lidos de ' + r.aparelhos.esperados));
+        r.aparelhos.faltando.forEach(function (a) {
+          var w2 = el('div', 'tfrec'), n = el('div', 'nm', a.nome); n.appendChild(el('small', '', 'IMEI ' + a.imei + ' · não foi lido' + (r.ver && a.custo != null ? ' · custo ' + brl(a.custo) : ''))); w2.appendChild(n);
+          var o = decAp[a.imei] = { imei: a.imei, acao: 'manter', motivo: '' }, s2 = el('div', 'seg'); w2.appendChild(s2);
+          var mo = inp('text', 'Motivo da baixa'); mo.maxLength = 120; mo.oninput = function () { o.motivo = mo.value; }; var mw = el('div', 'hide'); mw.appendChild(mo); w2.appendChild(mw);
+          seg(s2, ['Manter no estoque', 'Dar baixa'], 'Manter no estoque', function (v) { o.acao = v === 'Dar baixa' ? 'baixar' : 'manter'; mw.classList.toggle('hide', o.acao !== 'baixar'); });
+          c.appendChild(w2);
+        });
+        if (r.aparelhos.sobrando.length) c.appendChild(el('div', 'aviso', 'Lidos e que não estavam neste depósito: ' + r.aparelhos.sobrando.map(function (a) { return a.nome + ' (' + a.imei + (a.onde ? ' · ' + a.onde : '') + ')'; }).join(' · ') + '. Confira e transfira se for o caso.'));
+      }
+      var ob = inp('text', 'Ex.: inventário de novembro'); ob.maxLength = 150; campo(c, 'Observação (aparece no Controle de Estoque)', ob);
+      var lb = el('label', 'perm'), cb = el('input'); cb.type = 'checkbox'; lb.appendChild(cb); lb.appendChild(el('div', 't', 'Revisei e aceito as diferenças (quantidade e custo)')); lb.style.marginTop = '10px'; c.appendChild(lb);
+      var m = el('div', 'msg err'); c.appendChild(m);
+      var ac = el('div', 'acoes'), ok = el('button', 'btn ok', 'Finalizar e ajustar o estoque'), cc = el('button', 'btn ghost', 'Voltar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
+      cc.onclick = fim;
+      ok.onclick = function () {
+        if (!cb.checked) { m.textContent = 'Marque que revisou e aceita as diferenças.'; m.classList.add('show'); return; }
+        ok.disabled = true; m.classList.remove('show');
+        call('balancoFinalizar', [S.token, id, { aceite: true, naoContados: nc, obs: ob.value.trim(), aparelhos: Object.keys(decAp).map(function (k) { return decAp[k]; }) }]).then(function (d) { fim(); S.ac = null; S.disp = null; BL.d = d; desenharContagem(); })
+          .catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); });
+      };
+    }).catch(function (e) { c.innerHTML = ''; c.appendChild(el('div', 'msg err show', String(e))); var b = el('button', 'btn ghost', 'Fechar'); b.type = 'button'; b.onclick = fim; c.appendChild(b); });
+  }
+  function resultadoBalanco(box, D) {
+    var r = D.resultado, c = el('div', 'card'); box.appendChild(c);
+    if (!r) { c.appendChild(el('div', 'hint', 'Balanço ' + D.situacao.toLowerCase() + '.')); return; }
+    c.appendChild(el('h3', 'ch', r.itens.length + ' ajuste(s) no estoque' + (r.valor != null && pode('ver_custos') ? ' · diferença ' + brl(r.valor) : '')));
+    r.itens.forEach(function (o) { c.appendChild(el('div', 'psub', o.nome + ': ' + o.esperado + ' → ' + o.contado + ' (' + (o.dif > 0 ? '+' : '') + o.dif + ')')); });
+    if (r.baixas.length) c.appendChild(el('div', 'psub', 'Aparelhos baixados: ' + r.baixas.map(function (b) { return b.nome + ' (' + b.motivo + ')'; }).join(' · ')));
+    c.appendChild(el('div', 'hint', 'Não contados: ' + r.naoContados + '. Os ajustes aparecem no Controle de Estoque com a origem "Balanço ' + D.id + '".'));
+    var et = el('button', 'btn ghost', 'Imprimir etiquetas dos itens ajustados'); et.type = 'button'; et.style.width = 'auto';
+    et.onclick = function () { garantirAc(function () { var M = mapaP(); etqAdicionar(r.itens.filter(function (o) { return M[o.id] && o.contado > 0; }).map(function (o) { return etqItemProduto(M[o.id], o.contado); }), true); }); };
+    if (r.itens.length) c.appendChild(et);
   }
   // ---------- Configurações › Estoque e Reservas ----------
   function cfgReservas(box, d) {
@@ -2819,12 +3542,13 @@
   var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta' };
   var ICO_VIEW = { encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
-                   cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao' };
+                   cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista' };
   var SBM = { aberto: {} };
   function semAc(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function itemMenu(v) {
     var b = el('button', 'sbi'); b.type = 'button'; b.dataset.v = v.id; b.innerHTML = '<span class="ic">' + svgIco(ICO_VIEW[v.id]) + '</span>';
     var nm = v.sub ? (v.subNome || v.nome) : v.nome; b.appendChild(el('span', 'sbl', nm)); b.title = nm;
+    if (v.id === 'checkin' && S.u && S.u.checkinPendentes) b.querySelector('.sbl').appendChild(el('span', 'bdg warn', String(S.u.checkinPendentes)));
     if (v.id === 'transf' && S.u && S.u.transfPendentes) { b.querySelector('.sbl').appendChild(el('span', 'bdg warn', String(S.u.transfPendentes))); b.title = S.u.transfPendentes + ' transferência(s) para receber'; }
     b.onclick = function () { ir(v.id); fecharSb(); };
     return b;
@@ -2840,7 +3564,7 @@
     nav.classList.toggle('busca', !!q);
     var grupos = {};
     VIEWS.forEach(function (v) {
-      if (!pode(v.perm) || (v.perm2 && !pode(v.perm2)) || v.oculta || (v.id === 'cadastro' && pode('produtos'))) return;
+      if ((!pode(v.perm) && !(v.permOu && pode(v.permOu))) || (v.perm2 && !pode(v.perm2)) || v.oculta || (v.id === 'cadastro' && pode('produtos'))) return;
       if (q && semAc([v.nome, v.subNome, v.menu, v.sub, v.desc].join(' ')).indexOf(q) < 0) return;
       var it = itemMenu(v);
       if (!v.menu) { nav.appendChild(it); return; }
@@ -3913,6 +4637,9 @@
     if (id !== 'ctrlest') CT = null;
     if (id === 'ctrlest') carregarControle();
     if (id === 'transf') carregarTransf();
+    if (id === 'etiquetas') carregarEtiquetas();
+    if (id === 'checkin') { CK.atual = null; carregarCheckin(); }
+    if (id === 'balanco') carregarBalancos();
     if (id !== 'pessoa') PE = null;
     if (id !== 'prod') PR = null;
     if (id === 'config') desenharCfg();
@@ -4342,7 +5069,7 @@
       else if (!V.itens.length && !V.acess.length) erro = 'Adicione pelo menos um produto.';
       else if (V.acess.some(function (i) { return i.serial && !(i.seriais || []).length; })) erro = 'Leia o serial dos produtos com controle de serial.';
       else if (V.itens.some(function (i) { return !(num(i.preco) > 0); }) || V.acess.some(function (i) { return !(num(i.preco) > 0) || !(parseInt(i.qtd, 10) > 0); })) erro = 'Informe quantidade e preço de todos os produtos.';
-      else if (V.acess.some(function (i) { return (parseInt(i.qtd, 10) || 0) > (i.estoque[V.loja] || 0); })) erro = 'Tem produto com quantidade maior que o estoque desta loja.';
+      else if (V.acess.some(function (i) { return (parseInt(i.qtd, 10) || 0) > (i.estoque[V.loja] || 0) && !semEstoqueOk(mapaP()[i.id]); })) erro = 'Tem produto com quantidade maior que o estoque desta loja.';
       else if (V.troca.some(function (t) { return !t.modelo || !t.cor || !luhn(soDig(t.imei)) || t.bateria === '' || !t.classificacao || !(num(t.valor) > 0); })) erro = 'Complete os dados do aparelho da troca (modelo, cor, IMEI, bateria, classificação e valor).';
       else if (V.troca.some(function (t) { return t.consulta !== 'Nada consta'; })) erro = 'Faça a consulta oficial do IMEI do aparelho da troca e marque "Nada consta".';
       else if (T.pagar < 0) erro = 'A troca vale mais que a venda.';
@@ -5796,6 +6523,7 @@
       if (x.formato === 'composicao') nm.appendChild(el('span', 'bdg inf', 'Kit'));
       if (x.formato === 'variacoes') nm.appendChild(el('span', 'bdg inf', (x.filhos || []).length + ' variações'));
       if (x.condicao === 'Usado' || x.condicao === 'Recondicionado') nm.appendChild(el('span', 'bdg inf', x.condicao));
+      if (Object.keys(x.estoque || {}).some(function (l) { return x.estoque[l] < 0; })) nm.appendChild(el('span', 'bdg warn', 'Saldo negativo'));
       if (!(qt > 0)) nm.appendChild(el('span', 'badge-m', x.formato === 'composicao' ? 'Sem kit montável' : 'Sem estoque'));
       else if (baixoMin(x, lj) || (x.filhos || []).some(function (id) { return M[id] && baixoMin(M[id], lj); })) nm.appendChild(el('span', 'bdg warn', 'Repor'));
       n.appendChild(nm); var sub = [x.sku ? 'SKU ' + x.sku : '', x.grupo, x.codigo ? 'EAN ' + x.codigo : ''].filter(Boolean).join(' · '); if (sub) n.appendChild(el('div', 'psub', sub)); tagsMini(n, x.tags); r.appendChild(n);
@@ -5864,6 +6592,7 @@
       var alvo = x.pai && M[x.pai] ? M[x.pai] : x;
       opcaoDw(bd, 'Editar produto', x.pai ? 'Abre o cadastro de ' + alvo.nome : 'Dados, preço, características, estoque, fornecedores e tributação', '', function () { fecharDrawer(); formProduto(alvo); });
     }
+    if (x.formato !== 'variacoes') opcaoDw(bd, 'Imprimir etiqueta', 'Escolhe a quantidade e manda para a fila de impressão', '', function () { pedirEtiqueta(etqItemProduto(x, Math.max(1, x.total || 1)), x.total); });
     if (x.formato === 'simples' || x.formato === 'variacao') opcaoDw(bd, 'Controle de estoque', 'Entradas e saídas, saldo por depósito, transferência e lançamentos', '', function () { abrirControle({ tipo: 'produto', id: x.id }, x.nome, S.view); });
     var bc = opcaoDw(bd, 'Cálculo de cartão', x.preco ? 'Total e parcelas de 1x a 18x' : 'Sem preço', '', function () {
       if (bc.nextSibling && bc.nextSibling.classList && bc.nextSibling.classList.contains('opc-box')) { bc.nextSibling.remove(); return; }
@@ -6369,7 +7098,7 @@
       else if (!PDV.itens.length && !PDV.acess.length) erro = 'Carrinho vazio.';
       else if (PDV.itens.length && !PDV.cli) erro = 'Venda de aparelho: identifique o cliente (a garantia sai no nome dele).';
       else if (PDV.acess.some(function (a) { return a.serial && !a.seriais.length; })) erro = 'Leia o serial dos produtos com controle de serial.';
-      else if (PDV.acess.some(function (a) { return a.qtd > (a.estoque[PDV.loja] || 0); })) erro = 'Tem produto sem estoque suficiente nesta loja.';
+      else if (PDV.acess.some(function (a) { return a.qtd > (a.estoque[PDV.loja] || 0) && !semEstoqueOk(mapaP()[a.id]); })) erro = 'Tem produto sem estoque suficiente nesta loja.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       PDV.tela = 'pag'; PDV.forma = PDV.forma || ''; desenharPdv(); window.scrollTo(0, 0);
     };
@@ -6890,7 +7619,7 @@
       D: D, C: C, F: F, ini: ini, fim: fim, rotulo: P[2], loja: loja,
       vendas: D.vendas.filter(noPer), vendasAnt: D.vendas.filter(noAnt),
       docs: (D.docs || []).filter(noPer), docsAnt: (D.docs || []).filter(noAnt),
-      os: (D.os || []).filter(naLoja), compras: (D.compras || []).filter(noPer),
+      os: (D.os || []).filter(naLoja), compras: (D.compras || []).filter(noPer), entre: (D.entreEmpresas || []).filter(noPer),
       produtos: (D.produtos || []).map(function (x) { var o = Object.assign({}, x); o.qt = loja ? ((x.e || {})[loja] || 0) : (x.t || 0); return o; }),
       estoque: D.itens.filter(function (x) { return (x.s === 'Disponível' || x.s === 'Manutenção') && (!loja || x.l === loja); }),
       cadastros: D.itens.filter(function (x) { return x.d && x.d >= ini && x.d <= fim && naLoja(x); })
@@ -6980,6 +7709,9 @@
     kpi(k, 'Próximos 7 dias', brl(R2.rec7 - R2.pag7), 'entra ' + brl(R2.rec7) + ' · sai ' + brl(R2.pag7), R2.rec7 - R2.pag7 < 0 ? 'down' : 'up');
     kpi(k, 'Despesas pagas', brl(soma(F.pagos, function (x) { return x.v; })), ctx.rotulo);
     if (ctx.compras.length && ctx.C) kpi(k, 'Compras lançadas', brl(soma(ctx.compras, function (x) { return x.v; })), inteiro(ctx.compras.length) + ' nota(s) · ' + ctx.rotulo);
+    var veV = ctx.entre.filter(function (x) { return x.tipo === 'venda'; }), veC = ctx.entre.filter(function (x) { return x.tipo === 'compra'; });
+    if (veV.length) kpi(k, 'Vendas entre empresas', brl(soma(veV, function (x) { return x.v; })), (ctx.C ? 'custo ' + brl(soma(veV, function (x) { return x.cu || 0; })) + ' · ' : '') + 'fora da meta e da comissão');
+    if (veC.length) kpi(k, 'Compras de outras empresas', brl(soma(veC, function (x) { return x.v; })), veC.map(function (x) { return x.com; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(', '));
     var g = el('div', 'dbgrid'); box.appendChild(g);
     barras(g, 'Saldo por caixa/banco', F.contas.map(function (c) { return { rot: c.nome + (ctx.D.todas ? ' (' + c.emp + ')' : ''), val: Math.abs(c.saldo), txt: brl(c.saldo), sub: c.futuro ? '+ ' + brl(c.futuro) + ' a cair' : '' }; }));
     var h = F.hoje, ini = isoMs(h), fim = ini + 30 * DIA;
@@ -7685,6 +8417,7 @@
 
     // 4. Editar produto
     if (x.linha) opcao(pode('editar_aparelho') ? 'Editar produto' : 'Ver cadastro', pode('editar_aparelho') ? 'Abre o cadastro completo para corrigir modelo, cor, IMEI, bateria, classificação…' : 'Abre o cadastro completo (só para ver)', '', function () { abrirEdicaoCad(x); });
+    if (x.linha) opcao('Imprimir etiqueta', 'Manda para a fila de impressão', '', function () { pedirEtiqueta(etqItemAparelho(x)); });
     if (x.linha) opcao('Controle de estoque', 'Entradas e saídas, saldo por depósito, transferência, lançamentos e histórico', '', function () { abrirControle({ tipo: 'aparelho', imei: x.imei }, nomeProduto(x), S.view); });
 
     // 2. Cálculo de cartão
@@ -9786,6 +10519,10 @@
       CP._pag = conf; lista();
     }
     // ---- 6. observações
+    var c5r = el('div', 'card pecard'); c5r.appendChild(el('h2', '', 'Recebimento da mercadoria')); W.appendChild(c5r);
+    var sgr = el('div', 'seg'); c5r.appendChild(sgr); var hr = el('div', 'hint'); c5r.appendChild(hr);
+    var desR = function () { hr.textContent = CP.recebimento === 'agora' ? 'A mercadoria já está na loja: entra no estoque assim que lançar.' : 'Fica "Aguardando recebimento": entra no estoque só quando for conferida em Suprimento › Recebimento (check-in). Dá para receber em partes.'; };
+    seg(sgr, ['Conferir no check-in', 'Já recebido (entra agora)'], CP.recebimento === 'agora' ? 'Já recebido (entra agora)' : 'Conferir no check-in', function (v) { CP.recebimento = v === 'Conferir no check-in' ? 'depois' : 'agora'; desR(); }); desR();
     var c6 = el('div', 'card pecard'); c6.appendChild(el('h2', '', 'Observações')); W.appendChild(c6);
     var ob = el('textarea'); ob.maxLength = 600; ob.placeholder = 'Opcional'; ob.value = CP.obs; ob.oninput = function () { CP.obs = ob.value; }; campo(c6, 'Observações da entrada', ob, true);
     // ---- rodapé
@@ -9812,7 +10549,7 @@
       var d = {
         fornId: CP.fornModo === 'sel' ? CP.fornId : '', fornNovo: CP.fornModo === 'novo' ? CP.fornNovo : null, modelo: CP.modelo, numero: CP.numero, serie: CP.serie, chave: CP.chave,
         emissao: CP.emissao, entrada: CP.entrada, natureza: CP.natureza, loja: CP.loja, frete: num(CP.frete) || 0, seguro: num(CP.seguro) || 0, outras: num(CP.outras) || 0, descontoNota: num(CP.descontoNota) || 0,
-        totalNota: CP.totalNota, atualizarCusto: CP.atualizarCusto, obs: CP.obs, xml: CP.xml,
+        totalNota: CP.totalNota, atualizarCusto: CP.atualizarCusto, obs: CP.obs, xml: CP.xml, recebimento: CP.recebimento === 'agora' ? 'agora' : 'depois',
         itens: CP.itens.map(function (it) { return { aparelho: it.aparelho ? { imei: it.aparelho.imei, imei2: it.aparelho.imei2, serial: it.aparelho.serial, modelo: it.aparelho.modelo, cor: it.aparelho.cor, bateria: it.aparelho.bateria, classificacao: it.aparelho.classificacao, tipo: it.aparelho.tipo, consulta: it.aparelho.consulta, obs: it.aparelho.obs, sku: it.aparelho.sku } : null,
           prodId: it.prodId, novo: it.prodId || !it.novo ? null : { nome: it.novo.nome, sku: it.novo.sku, gtin: it.novo.gtin, unidade: it.novo.unidade, markup: num(it.novo.markup) || 0, preco: num(it.novo.preco) || 0, condicao: it.novo.condicao },
           descricao: it.descricao || (it.novo ? it.novo.nome : ''), codForn: it.codForn, ean: it.ean, ncm: it.ncm, cfop: it.cfop, unidade: it.unidade, qtd: num(it.qtd), fator: num(it.fator) || 1, vUnit: num(it.vUnit) || 0,
@@ -9825,7 +10562,8 @@
       }
       fin.disabled = true; fin.innerHTML = '<span class="spin"></span>Lançando…';
       call('compraLancar', [S.token, d]).then(function (r) {
-        S.ac = null; S.est = null; S.pagar = null; S.fin = null; S.crm = null; S.dispProd = null;
+        S.ac = null; S.est = null; S.pagar = null; S.fin = null; S.crm = null; S.dispProd = null; S.disp = null;
+        if (d.recebimento !== 'agora') { S.u.checkinPendentes = (S.u.checkinPendentes || 0) + 1; montarMenu(); }
         aposCompras(r); abaCompras('lista');
         var c = r.compras.filter(function (x) { return x.id === r.salvoId; })[0]; if (c) abrirCompra(c, true);
       }).catch(function (e) { fin.disabled = false; fin.textContent = 'Lançar entrada'; m.textContent = e; m.classList.add('show'); });
@@ -9836,7 +10574,7 @@
     var q = $('cpBusca').value.trim().toLowerCase(), qd = soDig(q), lj = $('cpLoja').value, sit = $('cpSit').value, per = periodo($('cpPer').value || '90');
     var hoje = isoHoje(), mesIni = hoje.slice(0, 8) + '01';
     var rs = $('cpResumo'); rs.innerHTML = ''; var k = el('div', 'kpis'); rs.appendChild(k);
-    var mes = D.compras.filter(function (c) { return c.situacao === 'Lançada' && c.entrada >= mesIni && (!lj || c.loja === lj); });
+    var mes = D.compras.filter(function (c) { return c.situacao !== 'Estornada' && c.entrada >= mesIni && (!lj || c.loja === lj); });
     kpi(k, 'Compras no mês', brl(soma(mes, function (c) { return c.total; })), mes.length + ' nota' + (mes.length === 1 ? '' : 's'));
     kpi(k, 'Unidades que entraram', inteiro(soma(mes, function (c) { return soma(c.itens, function (it) { return it.qtdEstoque; }); })), 'neste mês');
     var forn = {}; mes.forEach(function (c) { forn[c.fornecedor] = (forn[c.fornecedor] || 0) + c.total; });
@@ -9844,7 +10582,7 @@
     kpi(k, 'Maior fornecedor do mês', top ? brl(forn[top]) : '—', top || 'sem compras');
     var l = D.compras.filter(function (c) {
       if (lj && c.loja !== lj) return false;
-      if (sit === '' && c.situacao !== 'Lançada') return false;
+      if (sit === '' && c.situacao === 'Estornada') return false;
       if (sit === 'Estornada' && c.situacao !== 'Estornada') return false;
       var ms = c.entrada ? msIso(c.entrada) : 0; if (ms && (ms < per[0] - 864e5 || ms > per[1])) return false;
       if (!q) return true;
@@ -9897,7 +10635,7 @@
     var am = el('div', 'msg err'); bd.appendChild(am);
     if (c.chave) opcaoDw(bd, 'Copiar chave de acesso', c.chave, '', function () { copiar(c.chave); });
     if (pode('financeiro') && (dd.contas || []).length) opcaoDw(bd, 'Ver em Contas a Pagar', 'Abre o financeiro', '', function () { fecharDrawer(); ir('pagar'); });
-    if (c.situacao === 'Lançada' && D.cancelar) {
+    if (c.situacao !== 'Estornada' && D.cancelar) {
       var be = opcaoDw(bd, 'Estornar entrada', 'Tira do estoque o que entrou e cancela as contas a pagar em aberto', 'danger', function () {
         if (be.nextSibling && be.nextSibling.classList && be.nextSibling.classList.contains('opc-box')) { be.nextSibling.remove(); return; }
         var bx = el('div', 'opc-box'), mo = inp('text', 'Ex.: nota lançada em duplicidade'); mo.maxLength = 200; campo(bx, 'Motivo do estorno *', mo, true);
@@ -10844,7 +11582,7 @@
     else if (ab === 'categorias') cfgCatFin(box);
     else if (ab === 'reservas') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
-      call('estoqueReservasDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgReservas(box, d); })
+      call('estoqueReservasDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgReservas(box, d); cfgSemEstoque(box); })
         .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
     }
     else if (ab === 'naturezas') {
@@ -11189,6 +11927,7 @@
   $('cVoltar').onclick = function () { ir('disp'); };
   $('ctVoltar').onclick = voltarControle;
   $('tfAtual').onclick = carregarTransf;
+  $('ckAtual').onclick = carregarCheckin;
   $('verProd').onclick = function () { $('outro').click(); ir('disp'); carregarDisp(true); };
   if (/[?&]ass=[a-f0-9]{40}/.test(location.search)) paginaAssinatura(); else iniciar();
 })();
