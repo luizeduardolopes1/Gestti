@@ -795,6 +795,8 @@
   .fmtab .prow{grid-template-columns:44px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) 20px;cursor:pointer}.fmtab .prow.off{opacity:.6}
   .fmtab .prow.h{cursor:default}.fmtab .prow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   .bdg.res{background:#F1E8FF;color:#6B2FC9}
+  .prow.rede{cursor:default;background:var(--card)} .prow.rede .btn.mini{width:auto;padding:6px 10px;font-size:12.5px} .psub.rdisp{margin-top:3px}
+  #sdAgr.on{background:var(--brand);color:#fff;border-color:var(--brand)}
   .ctcab .pnome{font-size:17px}.ctids{display:flex;flex-wrap:wrap;gap:14px;margin-top:4px}.ctids span{display:inline-flex;align-items:center;gap:2px}
   .ctfil .g4{align-items:end}.ctfil .btn{margin:0}
   .ctgrid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px;align-items:start}
@@ -1324,6 +1326,7 @@
         <button type="button" class="btn ghost" id="sdLimpar" style="margin-top:14px">Limpar filtros</button>
       </aside>
       <div>
+        <div class="ptopo"><h1>Saldo de Estoque</h1><div class="tbtns"><button type="button" class="btn ghost" id="sdAgr" aria-pressed="false" style="width:auto">Agrupar por depósito</button></div></div>
         <div class="hint" id="sdInfo" style="margin:0 0 10px"></div>
         <div class="kpis" id="sdKpis"></div>
         <div id="sdCorpo"><div class="empty">Carregando…</div></div>
@@ -1582,6 +1585,7 @@
         <input id="cLocal" autocomplete="off" maxlength="40" placeholder="Ex.: Vitrine 1, gaveta B">
         <div class="hint">Aparelho com IMEI entra sempre 1 por cadastro. O custo do aparelho é o custo de compra (ou o preço unitário, se o custo ficar em branco).</div>
       </div>
+      <div id="cFotosW"></div>
       <div class="card pecard hide" id="cPrecoBox">
         <h2>Preço de venda</h2>
         <div id="cPrecoCorpo"></div>
@@ -1592,7 +1596,7 @@
       <div class="ico">✓</div>
       <h3>Aparelho cadastrado</h3>
       <p id="sucessoTxt"></p>
-      <button class="btn ghost" id="cFotos" type="button" style="margin-bottom:8px">📷 Adicionar fotos e etiqueta</button>
+      <button class="btn ghost" id="cFotos" type="button" style="margin-bottom:8px">🏷 Ver o produto e imprimir etiqueta</button>
       <button class="btn" id="outro" type="button">Cadastrar outro</button>
       <button class="btn ghost" id="verProd" type="button" style="margin-top:8px">Ver produtos</button>
     </section>
@@ -1603,6 +1607,7 @@
     <div class="pgrid">
       <aside class="pfil" id="dFil">
         <h3>Filtros</h3>
+        <div id="dEmpW" class="hide"><label for="dEmp">Empresa</label><select id="dEmp"><option value="">Desta empresa</option><option value="todas">Todas as empresas</option></select></div>
         <label for="dBusca">Modelo</label>
         <input id="dBusca" placeholder="Ex.: 13 128" autocomplete="off">
         <label for="dImei">IMEI / SKU / Serial</label>
@@ -1644,7 +1649,7 @@
         <label for="nSit">Situação</label>
         <select id="nSit"><option value="">Disponíveis</option><option value="indisp">Não disponíveis</option><option value="todos">Todos</option></select>
         <label for="nOrdem">Ordenar por</label>
-        <select id="nOrdem"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select>
+        <select id="nOrdem" data-keep="1"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select>
         <button type="button" class="btn ghost" id="nLimpar">Limpar filtros</button>
       </aside>
       <div>
@@ -1761,6 +1766,7 @@
     <div class="pgrid">
       <aside class="pfil" id="vFil">
         <h3>Filtros</h3>
+        <div id="vEmpW" class="hide"><label for="vEmp">Empresa</label><select id="vEmp"><option value="">Desta empresa</option><option value="todas">Todas as empresas</option></select></div>
         <label for="vBusca">Modelo</label>
         <input id="vBusca" placeholder="Ex.: 13 128" autocomplete="off">
         <label for="vSit">Situação</label>
@@ -1770,7 +1776,7 @@
           <select id="vMg"><option value="">Todas</option><option value="ok">Na meta</option><option value="abaixo">Abaixo da meta</option><option value="prej">Com prejuízo</option></select>
         </div>
         <label for="vOrdem">Ordenar por</label>
-        <select id="vOrdem"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="estoque">Mais estoque</option><option value="maior">Maior preço</option><option value="menor">Menor preço</option></select>
+        <select id="vOrdem" data-keep="1"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="estoque">Mais estoque</option><option value="maior">Maior preço</option><option value="menor">Menor preço</option></select>
         <button type="button" class="btn ghost" id="vLimpar">Limpar filtros</button>
       </aside>
       <div>
@@ -1873,14 +1879,14 @@
     { id: 'cred', sec: 'vCred', nome: 'Crediário', perm: 'crediario', menu: 'Financeiro', desc: 'Faturas, atrasos, recebimentos e limite dos clientes' },
     { id: 'conferencia', sec: 'vConfCx', nome: 'Auditoria de Caixa', perm: 'conferir_caixa', menu: 'Financeiro', desc: 'Caixas abertos, fechados e diferenças' },
     { id: 'dre', sec: 'vDre', nome: 'DRE', perm: 'financeiro', perm2: 'ver_custos', menu: 'Financeiro', desc: 'Resultado do período: lucro ou prejuízo da loja' },
-    { id: 'metas', sec: 'vMetas', nome: 'Metas das lojas', perm: 'metas', menu: 'Metas', desc: 'Meta da rede, das lojas e dos vendedores' },
+    { id: 'metas', sec: 'vMetas', nome: 'Metas das empresas', perm: 'metas', menu: 'Metas', desc: 'Meta da rede, das lojas e dos vendedores' },
     { id: 'comissoes', sec: 'vComissoes', nome: 'Comissões', perm: 'comissoes', menu: 'Metas', desc: 'Comissão a pagar e lançamento em Contas a Pagar' },
     { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos', menu: 'Tabela de Preços', desc: 'Preço e precificação dos produtos novos' },
     { id: 'venda', sec: 'vVenda', nome: 'Produtos Usados', perm: 'precos', menu: 'Tabela de Preços', desc: 'Preço de venda dos aparelhos usados' },
-    { id: 'proposta', sec: 'vProposta', nome: 'Proposta', perm: 'vender', menu: 'Ferramentas de Venda', desc: 'Oferta para o cliente, com ou sem troca, por WhatsApp ou PDF' },
-    { id: 'cartao', sec: 'vCartao', nome: 'Calculadora de Cartão', perm: 'cartao', menu: 'Ferramentas de Venda', desc: 'Parcelas e taxas do cartão' },
-    { id: 'compra', sec: 'vCompra', nome: 'Calculadora de Compra', perm: 'compra', menu: 'Ferramentas de Venda', desc: 'Quanto pagar num aparelho usado' },
-    { id: 'aval', sec: 'vAval', nome: 'Avaliação iPhone', perm: 'avaliacao', menu: 'Ferramentas de Venda', desc: 'Valor do iPhone do cliente na troca' }
+    { id: 'proposta', sec: 'vProposta', nome: 'Proposta', perm: 'vender', menu: 'Ferramentas', desc: 'Oferta para o cliente, com ou sem troca, por WhatsApp ou PDF' },
+    { id: 'cartao', sec: 'vCartao', nome: 'Calculadora de Cartão', perm: 'cartao', menu: 'Ferramentas', desc: 'Parcelas e taxas do cartão' },
+    { id: 'compra', sec: 'vCompra', nome: 'Calculadora de Compra', perm: 'compra', menu: 'Ferramentas', desc: 'Quanto pagar num aparelho usado' },
+    { id: 'aval', sec: 'vAval', nome: 'Avaliação de usados', perm: 'avaliacao', menu: 'Ferramentas', desc: 'Valor do iPhone do cliente na troca' }
   ];
 
   // ---------- utilidades ----------
@@ -2625,6 +2631,7 @@
     $('cCancelar').textContent = on && !podeEd ? 'Voltar' : 'Cancelar';
     Array.prototype.forEach.call(form.querySelectorAll('input,textarea,select,#classif button,#tipo button,#cGrupo button,#cTags button'), function (i) { if (i.id === 'cPu' || i.id === 'cObsSI' || i.id === 'cQtd' || i.id === 'cCond') return; i.disabled = !!on && !podeEd; });
     var ev = $('cEdAviso'); if (ev) ev.remove();
+    var fw = $('cFotosW'); fw.innerHTML = ''; S.cadFotos = fotosForm(fw, on && x && x.linha ? { tipo: 'aparelho', linha: x.linha, imei: x.imei } : null, on && x ? x.fotos : [], on && x ? function (l) { x.fotos = l; S.disp = null; } : null);
     $('eu').classList.toggle('hide', !!on);
     if (on) {
       var av = el('div', 'hint', podeEd ? 'Alterando o cadastro de ' + x.modelo + ' (IMEI ' + x.imei + '). A alteração fica registrada no Histórico. Preço unitário e observação do saldo inicial ficam no Controle de Estoque.' : (x.status === 'Em trânsito' ? 'Aparelho em trânsito: dá para alterar depois que for recebido.' : 'Você pode ver o cadastro, mas não tem permissão para alterar.'));
@@ -3378,6 +3385,38 @@
     }
     des();
   }
+  /** Fotos dentro do formulário de cadastro. Edição (ref): envia na hora. Novo: guarda e envia depois de salvar (enviarPara). */
+  function fotosForm(box, ref, fotos, mudou) {
+    var c = el('div', 'card pecard'); c.appendChild(el('h2', '', 'Fotos')); box.appendChild(c);
+    if (ref) { galeriaFotos(c, ref, fotos, true, mudou); return { enviarPara: function () { return Promise.resolve(); }, qtd: function () { return 0; } }; }
+    var P = [], w = el('div'); c.appendChild(w);
+    function des() {
+      w.innerHTML = '';
+      if (P.length) { var mini = el('div', 'fminis'); P.forEach(function (f, i) { var b = el('div', 'fmini' + (i === 0 ? ' on' : '')), im = el('img'); im.alt = ''; im.src = f.mini; b.appendChild(im); var x = el('button', 'fx', '×'); x.type = 'button'; x.title = 'Tirar esta foto'; x.onclick = function () { P.splice(i, 1); des(); }; b.appendChild(x); if (i > 0) { var cp = el('button', 'fc', 'Capa'); cp.type = 'button'; cp.onclick = function () { P.unshift(P.splice(i, 1)[0]); des(); }; b.appendChild(cp); } mini.appendChild(b); }); w.appendChild(mini); }
+      if (P.length < 6) {
+        var ac = el('div', 'acoes');
+        var cam = el('label', 'btn ghost', '📷 Tirar foto'), ci = el('input'); ci.type = 'file'; ci.accept = 'image/*'; ci.setAttribute('capture', 'environment'); ci.className = 'hide'; cam.appendChild(ci);
+        var an = el('label', 'btn ghost', 'Anexar do computador'), ai = el('input'); ai.type = 'file'; ai.accept = 'image/*'; ai.multiple = true; ai.className = 'hide'; an.appendChild(ai);
+        ci.onchange = function () { add(ci.files); }; ai.onchange = function () { add(ai.files); };
+        ac.appendChild(cam); ac.appendChild(an); w.appendChild(ac);
+      }
+      w.appendChild(el('div', 'hint', P.length + ' de 6 fotos. A primeira é a capa. Elas sobem junto quando você salvar.'));
+    }
+    function add(files) {
+      var fs = Array.prototype.slice.call(files || []).slice(0, 6 - P.length);
+      var um = function () { var f = fs.shift(); if (!f) return des(); comprimirImg(f, 1600, 0.82, function (url) { comprimirImg(f, 300, 0.8, function (mini) { P.push({ url: url, mini: mini }); um(); }); }); };
+      um();
+    }
+    des();
+    return {
+      qtd: function () { return P.length; },
+      enviarPara: function (ref2) {
+        var fila = P.slice(), out = [];
+        var um = function () { var f = fila.shift(); if (!f) return Promise.resolve(out); return call('fotoEnviar', [S.token, ref2, f.url, f.mini]).then(function (r) { out = r.fotos; return um(); }); };
+        return um().then(function (l) { P = []; des(); return l; });
+      }
+    };
+  }
   // ---------- Configurações › Estoque e Reservas ----------
   function cfgReservas(box, d) {
     var c = el('div', 'card'); c.appendChild(el('h2', '', 'Prazos e valores')); box.appendChild(c);
@@ -3673,9 +3712,15 @@
       box.appendChild(b);
     });
   }
+  /** Nome do depósito para mostrar: "Defeito · Tec-Cell | Cordeiro" vira "Defeito" dentro da própria empresa e "Tec-Cell | Cordeiro · Defeito" visto de outra. */
+  function depVer(l) {
+    var m = String(l == null ? '' : l).match(/^(.+?) · (.+)$/); if (!m) return String(l == null ? '' : l);
+    var aqui = S.u && S.u.empresa ? S.u.empresa.nome : '';
+    return m[2] === aqui ? m[1] : m[2] + ' · ' + m[1];
+  }
   function opts(sel, list, keep, vazio) {
     sel.innerHTML = vazio ? '<option value="">' + vazio + '</option>' : '';
-    list.forEach(function (v) { var o = el('option', '', v); o.value = v; sel.appendChild(o); });
+    list.forEach(function (v) { var o = el('option', '', depVer(v)); o.value = v; sel.appendChild(o); });
     if (keep && list.indexOf(keep) > -1) sel.value = keep;
   }
   function call(fn, args) {
@@ -3749,7 +3794,7 @@
     var b = escuro ? '#FFFFFF' : '#0F1B2D', a = escuro ? '#7D97FF' : '#2F5BFF', s = escuro ? '#0F1B2D' : '#FFFFFF';
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
-  var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas de Venda': 'calc' };
+  var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc' };
   var ICO_VIEW = { encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista', proposta: 'recibo', finest: 'moedas' };
@@ -4189,6 +4234,7 @@
     c.appendChild(el('h3', 'ch', 'Impressão'));
     t(c, 'Mensagem no rodapé da impressão', 'rodape', 'Ex.: Obrigado pela preferência!', 200);
     c.appendChild(el('label', '', 'Logo'));
+    c.appendChild(el('div', 'hint', 'Melhor resultado: PNG com fundo transparente, horizontal (ex.: 600 × 240 px) ou quadrado (ex.: 500 × 500 px), até 300 KB. Na impressão ela fica à esquerda, com os dados da empresa ao lado; o sistema reduz para até 360 × 140 px.'));
     var lw = el('div', 'logow'); c.appendChild(lw);
     var pv = el('div'); lw.appendChild(pv);
     var fi = el('input'); fi.type = 'file'; fi.accept = 'image/png,image/jpeg,image/webp'; fi.className = 'hide';
@@ -4519,7 +4565,47 @@
     return t.toUpperCase();
   }
   function bandeirasDe(fo) { return fo && (fo.cartao === 'credito' || fo.cartao === 'debito') ? Object.keys(fo.bandeiras || {}) : []; }
+  /** Controles fixos (com id) de cada página, para voltarem ao padrão quando a pessoa sai dela. */
+  var CTRL_FIXOS = {};
+  function secDe(id) { var v = VIEWS.filter(function (x) { return x.id === id; })[0]; return v ? v.sec : ({ config: 'vConfig', pessoa: 'vPessoa', prod: 'vProd', ctrlest: 'vCtrl' })[id] || ''; }
+  function guardarCtrlFixos() {
+    VIEWS.forEach(function (v) { if (CTRL_FIXOS[v.sec] || !$(v.sec)) return; CTRL_FIXOS[v.sec] = Array.prototype.slice.call($(v.sec).querySelectorAll('input[id],select[id],textarea[id]')).filter(function (c) { return !c.dataset.keep; }).map(function (c) { return c.id; }); });
+  }
+  function resetSecao(sec) {
+    (CTRL_FIXOS[sec] || []).forEach(function (id) {
+      var c = $(id); if (!c) return;
+      if (c.type === 'checkbox' || c.type === 'radio') c.checked = c.defaultChecked;
+      else if (c.tagName === 'SELECT') { var k = -1; Array.prototype.forEach.call(c.options, function (o, i) { if (o.defaultSelected && k < 0) k = i; }); c.selectedIndex = k > -1 ? k : (c.options.length ? 0 : -1); }
+      else if (c.type !== 'file') c.value = c.defaultValue || '';
+    });
+  }
+  /** Ao sair de uma página, tudo (rascunhos e filtros) volta ao padrão. */
+  function limparFiltros(ant) {
+    var sec = secDe(ant); if (sec) resetSecao(sec);
+    if (ant === 'saldo') { SD.lojas = []; SD.tags = []; SD.agr = false; S.saldo = null; }
+    if (ant === 'finest') { FE.modo = 'medio'; LS.set('feModo', 'medio'); S.finEst = null; }
+    if (ant === 'transf') TF.filtro = 'abertas';
+    if (ant === 'reservas') RSF = 'ativas';
+    if (ant === 'encomendas') ENF = 'abertas';
+    if (ant === 'cred') { CDV = 'Faturas'; LS.set('credAba', 'Faturas'); }
+    if (ant === 'bancos') { ESV = 'Saldos'; LS.set('esAba', 'Saldos'); }
+    if (['os', 'oslista', 'osnova'].indexOf(ant) > -1) OSV = 'andamento';
+    if (ant === 'dre') { DREF.per = 'mes'; DREF.de = ''; DREF.ate = ''; DREF.loja = ''; DREF.modo = 'Sintético'; DREF.emp = ''; }
+    if (ant === 'dash') { ['dbEmp', 'dbPer', 'dbRel'].forEach(function (k) { try { localStorage.removeItem('tc_' + k); } catch (e) {} }); if ($('dbPer')) $('dbPer').value = '30'; }
+    if (ant === 'crm' && $('hPer')) { try { localStorage.removeItem('tc_hPer'); } catch (e) {} $('hPer').value = '30'; }
+    if (ant === 'disp' || ant === 'venda') REDE.em = REDE.em; // a lista da rede continua em cache (1 min)
+  }
+  /** Tem algo preenchido que se perde ao sair? (só nas telas de lançamento) */
+  function rascunhoSujo(id) {
+    if (id === 'vendas' && V) return !!(V.itens.length || V.acess.length || V.troca.length || (V.cli && V.cli.nome && V.cliModo !== 'busca'));
+    if (id === 'pdv' && PDV) return !!((PDV.itens || []).length || (PDV.acess || []).length || PDV.cli);
+    if (id === 'proposta' && PP && PP.aba !== 'hist') return !!(PP.itens.length || (PP.cli && PP.cli.nome) || PP.troca.modo !== 'Sem troca');
+    if (id === 'osnova' && OSF && !OSF.id) return !!((OSF.cli && OSF.cli.nome) || (OSF.aparelho && (OSF.aparelho.modelo || OSF.aparelho.imei)) || (OSF.defeito || '').trim());
+    return false;
+  }
   function limparRascunhos(ant, novo) {
+    if (secDe(ant) !== secDe(novo)) limparFiltros(ant);
+    if (ant === 'proposta') PP = null;
     var osv = ['os', 'oslista', 'osnova'];
     if (ant === 'vendas') { V = null; if ($('vdNova')) $('vdNova').innerHTML = ''; }
     if (ant === 'pdv') PDV = null;
@@ -4799,8 +4885,8 @@
       return;
     }
     show('vNovaSenha', false); show('gear', true); montarEmpresa();
-    REDE.d = null; $('rbBusca').value = ''; show('rbW', !!(d.empresa && d.empresa.lista && d.empresa.lista.length > 1) && ['vender', 'produtos', 'acessorios', 'os', 'estoque'].some(pode));
-    $('sbBusca').value = ''; montarMenu();
+    REDE.d = null; $('rbBusca').value = ''; S.rbPode = !!(d.empresa && d.empresa.lista && d.empresa.lista.length > 1) && ['vender', 'produtos', 'acessorios', 'os', 'estoque'].some(pode); show('rbW', false);
+    $('sbBusca').value = ''; montarMenu(); guardarCtrlFixos();
     show('nav', true); document.body.classList.add('logado'); avisoPedidos();
     montarCadastro(d); montarAval(); montarCartao(); if (pode('compra')) montarCompra();
     var ult = pode('dashboard') ? 'dash' : LS.get('view', 'cadastro'); // o sistema sempre abre no Dashboard
@@ -4848,6 +4934,7 @@
   window.addEventListener('resize', fecharMenuNav);
 
   function ir(id) {
+    if (S.view && S.view !== id && rascunhoSujo(S.view) && !confirm('Você vai perder o que preencheu nesta tela. Sair mesmo assim?')) { marcarMenu(S.view); return; }
     if (S.view && S.view !== id) limparRascunhos(S.view, id);
     if (id === 'pessoa' && !PE) id = 'crm';
     if (id === 'prod' && !PR) id = 'acess';
@@ -4867,6 +4954,7 @@
     if (id === 'config') desenharCfg();
     fecharMenuNav();
     marcarMenu(id);
+    show('rbW', !!S.rbPode && (id === 'acess' || id === 'disp')); if (id !== 'acess' && id !== 'disp') { $('rbBusca').value = ''; $('rbRes').classList.add('hide'); }
     if (id === 'disp') carregarDisp(false);
     if (id === 'cadastro' && S.cadPre) aplicarPreCadastro();
     show('dNovo', pode('cadastro')); show('dNovoP', pode('editar_acessorios')); show('cVoltar', pode('produtos'));
@@ -6874,6 +6962,8 @@
     var formato = x ? x.formato : 'simples', temEstoque = x && x.formato !== 'composicao' && x.total > 0;
     // ---- dados principais
     var c1 = el('div', 'card pecard'); c1.appendChild(el('h2', '', 'Produto')); corpo.appendChild(c1);
+    var fotosW = el('div'); corpo.appendChild(fotosW);
+    var FF = fotosForm(fotosW, x ? { tipo: 'produto', id: x.pai || x.id } : null, x ? fotosDeProduto(x) : [], function (l) { var alvo = mapaP()[x.pai] || x; alvo.ficha = alvo.ficha || {}; alvo.ficha.fotos = l; });
     var nome = campo(c1, 'Nome *', inp('text', 'Ex.: Capa anti-impacto iPhone 13'), true); nome.maxLength = 120; nome.value = x ? x.nome : '';
     var g1 = grade(c1, 2);
     var sku = campo(g1[0], 'SKU (código interno)', inp('text', 'Ex.: CAPA-IP13')); sku.maxLength = 40; sku.value = x ? x.sku : '';
@@ -7166,6 +7256,9 @@
         componentes: comps, saldoInicial: formato === 'simples' && !temEstoque ? SI.filter(function (s2) { return +s2.qtd > 0; }).map(function (s2) { return { loja: s2.loja, qtd: +s2.qtd, precoUnit: num(s2.precoUnit), custo: num(s2.custo), obs: s2.obs, seriais: serOn ? String(s2.seriais || '') : [] }; }) : [], serial: serOn, serialTipo: serTipo };
       ok.disabled = cc.disabled = true; ok.textContent = 'Salvando…';
       call('acSalvar', [S.token, x ? x.id : '', d]).then(function (r) {
+        if (!x && FF.qtd() && r.salvoId) return FF.enviarPara({ tipo: 'produto', id: r.salvoId }).then(function (l) { var nx0 = r.produtos.filter(function (y) { return y.id === r.salvoId; })[0]; if (nx0) { nx0.ficha = nx0.ficha || {}; nx0.ficha.fotos = l; } return r; }).catch(function (e) { msg('topMsg', 'Produto salvo, mas as fotos não subiram: ' + e); return r; });
+        return r;
+      }).then(function (r) {
         aposAcess(r); ir('acess');
         var b = $('acAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + nome.value.trim() + (x ? ' atualizado.' : ' cadastrado.')));
         var nx = r.produtos.filter(function (y) { return y.id === r.salvoId; })[0]; if (nx) abrirAcess(nx);
@@ -7570,15 +7663,24 @@
     // 2. pagamento
     var c2 = el('div', 'card pecard'); box.appendChild(c2); c2.appendChild(el('h2', '', 'Como paga a comissão'));
     cfgPag(c2, 'Supervisor (venda total da rede)', C.pagamento.supervisor); cfgPag(c2, 'Gerente (venda total da loja)', C.pagamento.gerente); cfgPag(c2, 'Vendedor (venda individual)', C.pagamento.vendedor);
+    // manutenção centralizada (Celulares): não tem meta; o faturamento pode contar na empresa que entrega
+    if (D.central) box.appendChild(el('div', 'aviso', 'Esta empresa é a central de manutenção: não tem meta de faturamento. As OS entregues contam na empresa que entregou (se ligado na meta dela).'));
+    else if (D.temCentral) {
+      var cc = el('div', 'card pecard'); box.appendChild(cc); cc.appendChild(el('h2', '', 'Faturamento da ' + D.centralNome));
+      var lb = el('label', 'ckl'), ck = el('input'); ck.type = 'checkbox'; ck.checked = !!D.celularesFat; ck.disabled = !D.editar; lb.appendChild(ck); lb.appendChild(document.createTextNode(' Contar na meta desta empresa as OS da ' + D.centralNome + ' entregues aqui')); cc.appendChild(lb);
+      cc.appendChild(el('div', 'hint', 'Vale para todas as empresas que entregam OS da manutenção central. A bonificação por aparelho da ' + D.centralNome + ' é configurada à parte.'));
+      ck.onchange = function () { ck.disabled = true; call('metaCelularesSalvar', [S.token, ck.checked]).then(function () { ck.disabled = false; avisoTopo('A configuração foi salva com sucesso'); carregarMetas(D.mes); }).catch(function (e) { ck.disabled = false; ck.checked = !ck.checked; msg('topMsg', e); }); };
+    }
     // 3. lojas
     var H = D.historico || { meses: [], lojas: {} };
+    Object.keys(C.lojas).forEach(function (l) { if (D.lojas.indexOf(l) < 0) delete C.lojas[l]; });
     var somaLojas = function () { return r2(Object.keys(C.lojas).reduce(function (a, l) { return a + (C.lojas[l].valor || 0); }, 0)); };
     D.lojas.forEach(function (l) {
       var L = C.lojas[l] = C.lojas[l] || { valor: 0, gerenteId: '', modoVend: 'valor', vendedores: [] };
       var c = el('div', 'card pecard'); box.appendChild(c); c.appendChild(el('h2', '', l));
       var hl = H.lojas[l] || {}, vals = H.meses.map(function (m) { return hl[m] || 0; }), med = vals.length ? r2(vals.reduce(function (a, b) { return a + b; }, 0) / vals.length) : 0;
       c.appendChild(el('div', 'hint', 'Vendas: ' + H.meses.map(function (m, i) { return MESES[+m.slice(5) - 1].slice(0, 3) + ' ' + brl(vals[i]); }).join(' · ') + ' · média ' + brl(med) + (hl[H.anoPassado] ? ' · ' + mesBR(H.anoPassado) + ': ' + brl(hl[H.anoPassado]) : '')));
-      var g = grade(c, 3), mv = inpValor(L.valor ? vs(L.valor) : ''); campo(g[0], 'Meta da loja (gerente)', mv, true);
+      var g = grade(c, 3), mv = inpValor(L.valor ? vs(L.valor) : ''); campo(g[0], 'Meta da empresa (gerente)', mv, true);
       var sb = el('button', 'lnk', 'Sugerir: média + 10%'); sb.type = 'button'; g[0].appendChild(sb); sb.onclick = function () { L.valor = r2(med * 1.1); mv.input.value = vs(L.valor); atu(); };
       var gs = el('select'); gs.appendChild(el('option', '', 'Sem gerente')).value = ''; D.funcionarios.forEach(function (f) { var o = el('option', '', f.nome + (f.loja ? ' · ' + f.loja.replace(/^.*\| /, '') : '')); o.value = f.id; gs.appendChild(o); }); gs.value = L.gerenteId; campo(g[1], 'Gerente da loja', gs, true); gs.onchange = function () { L.gerenteId = gs.value; };
       var ms = el('select'); [['valor', 'Valor por vendedor'], ['pct', '% da meta da loja']].forEach(function (x) { var o = el('option', '', x[1]); o.value = x[0]; ms.appendChild(o); }); ms.value = L.modoVend; campo(g[2], 'Meta dos vendedores', ms, true);
@@ -8247,6 +8349,7 @@
   // =========================================================
   function montarCadastro(d) {
     $('eu').textContent = 'Cadastrando como ' + d.nome + ' (' + d.id + ')';
+    if (!S.cadEdit && $('cFotosW') && !$('cFotosW').children.length) S.cadFotos = fotosForm($('cFotosW'), null, []);
     var lojaPad = LS.get('loja', ''); if ((d.lojas || []).indexOf(lojaPad) < 0) lojaPad = d.loja;
     opts($('loja'), d.lojas, $('loja').value || lojaPad, 'Selecione…'); lojaHint();
     var dlm = $('modeloList'); dlm.innerHTML = ''; (d.modelos || []).forEach(function (m2) { if (/^\(/.test(m2)) return; var o = el('option'); o.value = m2; dlm.appendChild(o); });
@@ -8405,6 +8508,9 @@
     var b = +d.bateria; if (isNaN(b) || b < 0 || b > 100) { msg('formMsg', 'Bateria deve ser de 0 a 100.'); window.scrollTo(0, 0); return; }
     var btn = $('enviar'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Salvando…';
     call('registrarAparelho', [S.token, d]).then(function (r) {
+      if (S.cadFotos && S.cadFotos.qtd()) { btn.innerHTML = '<span class="spin"></span>Enviando fotos…'; return S.cadFotos.enviarPara({ tipo: 'aparelho', linha: r.linha, imei: r.imei }).then(function () { return r; }).catch(function (e) { r.avisos = (r.avisos || []).concat(['As fotos não subiram (' + e + '). Adicione pelo produto.']); return r; }); }
+      return r;
+    }).then(function (r) {
       btn.disabled = false; btn.textContent = 'Salvar produto usado';
       if (d.loja !== 'Manutenção') LS.set('loja', d.loja); S.disp = null; S.mt = null; S.ac = null; S.ultCad = { linha: r.linha, imei: r.imei };
       $('sucessoTxt').textContent = r.modelo + ' · IMEI ' + r.imei + (d.loja === 'Manutenção' ? ' entrou no quadro de Manutenção.' : ' entrou no estoque como Disponível em ' + d.loja + '.') + (r.avisos && r.avisos.length ? ' (' + r.avisos.join('; ') + ')' : '') +
@@ -8447,6 +8553,7 @@
     var lp = LS.get('loja', ''); if ((S.u.lojas || []).indexOf(lp) > -1) $('loja').value = lp; else $('loja').value = S.u.loja || ''; lojaHint();
     show('ckArea', false); $('ckAbrir').textContent = 'Fazer checklist';
     S.classificacao = ''; S.tipo = ''; S.ck = {}; resetConsulta(); S.imeiConsultado = ''; show('cBox', false); montarCkCadastro(); montarCatCadastro();
+    if (!S.cadEdit) { $('cFotosW').innerHTML = ''; S.cadFotos = fotosForm($('cFotosW'), null, []); }
     Array.prototype.forEach.call(document.querySelectorAll('#classif button,#tipo button,.chip'), function (c) { c.classList.remove('on'); });
     imeiStatus('', ''); show('sucesso', false); show('form', true); window.scrollTo(0, 0);
     if (S.cadEdit) { S.cadEdit = null; modoEdicaoCad(false); seg($('classif'), S.u.classificacoes || [], '', function (v) { S.classificacao = v; }); seg($('tipo'), S.u.tipos || [], '', function (v) { S.tipo = v; }); }
@@ -8477,7 +8584,29 @@
   }
   ['dBusca', 'dImei'].forEach(function (k) { $(k).addEventListener('input', renderDisp); });
   ['dLoja', 'dCor', 'dClassif', 'dSit', 'dGrupo', 'dTag'].forEach(function (k) { $(k).addEventListener('change', renderDisp); });
-  $('dLimpar').onclick = function () { ['dBusca', 'dImei', 'dLoja', 'dCor', 'dClassif', 'dSit', 'dGrupo', 'dTag'].forEach(function (k) { $(k).value = ''; }); renderDisp(); };
+  $('dEmp').addEventListener('change', function () { if ($('dEmp').value === 'todas') garantirRede().then(renderDisp).catch(function (e) { msg('topMsg', e); }); else renderDisp(); });
+  $('dLimpar').onclick = function () { ['dBusca', 'dImei', 'dLoja', 'dCor', 'dClassif', 'dSit', 'dGrupo', 'dTag', 'dEmp'].forEach(function (k) { $(k).value = ''; }); renderDisp(); };
+  function multiEmp() { var E = S.u && S.u.empresa; return !!(E && E.lista && E.lista.length > 1); }
+  /** Usado de outra empresa na lista de Produtos Usados (só pedir transferência ou proposta). */
+  function linhaUsadoRede(a) {
+    var r = el('div', 'prow rede');
+    var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
+    var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode([a.modelo, String(a.cor || '').toUpperCase(), String(a.classif || '').toUpperCase()].filter(Boolean).join(' ')));
+    nm.appendChild(el('span', 'bdg res', 'Disponível em ' + a.empresa)); n.appendChild(nm);
+    var bat = a.bateria !== '' && a.bateria != null ? (typeof a.bateria === 'number' ? a.bateria + '%' : a.bateria) : '';
+    n.appendChild(el('div', 'psub', [a.empresa + ' · ' + depVer(a.deposito), bat ? 'bateria ' + bat : '', 'IMEI final ' + String(a.imei).slice(-4)].filter(Boolean).join(' · ')));
+    var ac = el('div', 'acoes'); ac.style.margin = '6px 0 0';
+    var bt = el('button', 'btn ghost mini', 'Pedir transferência'); bt.type = 'button'; bt.onclick = function (e) { e.stopPropagation(); pedirTransferencia(a, 'a', { motivo: 'Venda', depois: function () { REDE.em = 0; garantirRede(true).then(renderDisp); } }); };
+    var bpc = el('button', 'btn mini', 'Proposta completa'); bpc.type = 'button'; bpc.onclick = function (e) { e.stopPropagation(); propostaCom(a, 'a'); };
+    ac.appendChild(bt); if (pode('vender')) ac.appendChild(bpc); n.appendChild(ac);
+    r.appendChild(n);
+    r.appendChild(el('div', 'psku', '—'));
+    var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
+    var pr = el('div', 'ppre' + (a.preco ? '' : ' sem'), a.preco ? brl(a.preco) : 'Consultar');
+    if (a.preco && t12) pr.appendChild(el('small', '', '12x ' + brl(a.preco / (1 - t12.taxa) / 12)));
+    r.appendChild(pr); r.appendChild(el('div', 'chev', ''));
+    return r;
+  }
   function linhasCartao(valor) {
     var t = el('table', 't');
     var h = el('tr'); ['Opção', 'Total', 'Parcela'].forEach(function (x) { h.appendChild(el('th', '', x)); }); t.appendChild(h);
@@ -8528,7 +8657,19 @@
     if (S.ac) { S.ac.aparelhos = S.disp; if (S.view === 'acess') renderAcess(); }
     var box = $('dLista'); box.innerHTML = '';
     var qRede = termos.join(' ') || imeiTxt;
-    if (!l.length && !lp.length) { box.appendChild(el('div', 'empty', 'Nenhum aparelho encontrado nesta empresa.')); if (qRede.length >= 2) redeBloco(box, qRede, { motivo: 'Venda' }); return; }
+    show('dEmpW', multiEmp());
+    var todas = multiEmp() && $('dEmp').value === 'todas', lr = [];
+    if (todas && REDE.d) lr = REDE.d.aparelhos.filter(function (a) {
+      if (a.e === REDE.d.atual) return false;
+      if (loja || sit === 'manut' || sit === 'res' || sit === 'parados' || sit === 'p60' || sit === 'p90' || gru || tag) return false;
+      if (cor && String(a.cor).trim() !== cor) return false;
+      if (cls && a.classif !== cls) return false;
+      if (sit === 'sempreco' && a.preco) return false;
+      if (imeiTxt && String(a.imei).toLowerCase().indexOf(imeiTxt) < 0) return false;
+      var m = String(a.modelo).toLowerCase(); return termos.every(function (t) { return m.indexOf(t) > -1; });
+    });
+    if (lr.length) $('dCont').textContent += ' · ' + lr.length + ' em outras empresas';
+    if (!l.length && !lp.length && !lr.length) { box.appendChild(el('div', 'empty', 'Nenhum aparelho encontrado' + (todas ? '.' : ' nesta empresa.'))); if (!todas && qRede.length >= 2) redeBloco(box, qRede, { motivo: 'Venda' }); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
     ['', 'Nome', 'SKU', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
     tab.appendChild(h);
@@ -8537,8 +8678,12 @@
       var sp = el('div', 'prow h sep'); sp.appendChild(el('div', '', '')); sp.appendChild(el('div', '', 'Outros produtos usados (cadastrados em Produtos com condição "Usado")')); tab.appendChild(sp);
       lp.forEach(function (x) { tab.appendChild(linhaUsadoProd(x, loja)); });
     }
+    if (lr.length) {
+      var sr = el('div', 'prow h sep'); sr.appendChild(el('div', '', '')); sr.appendChild(el('div', '', 'Disponíveis em outras empresas (' + lr.length + ')')); tab.appendChild(sr);
+      lr.sort(function (a, b) { return a.modelo.localeCompare(b.modelo); }).forEach(function (a) { tab.appendChild(linhaUsadoRede(a)); });
+    }
     box.appendChild(tab);
-    if (qRede.length >= 2) redeBloco(box, qRede, { motivo: 'Venda' });
+    if (!todas && qRede.length >= 2) redeBloco(box, qRede, { motivo: 'Venda' });
   }
 
   var ICO_CEL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>';
@@ -8696,7 +8841,7 @@
     if (x.reserva) { var rb = el('span', 'bdg ' + (x.reserva.vencida ? 'warn' : 'res'), (x.reserva.vencida ? 'Reserva vencida · ' : 'Reservado · ') + x.reserva.vendedor.split(' ')[0]); rb.title = txtRes(x.reserva); nm.appendChild(rb); }
     nm.appendChild(botaoCopiar(nomeProduto(x), 'Copiar nome', 'aparelho'));
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
-    n.appendChild(nm); n.appendChild(el('div', 'psub', [x.loja, bat ? 'bateria ' + bat : '', x.grupo].filter(Boolean).join(' · ')));
+    n.appendChild(nm); n.appendChild(el('div', 'psub', [depVer(x.loja), bat ? 'bateria ' + bat : '', x.grupo].filter(Boolean).join(' · ')));
     tagsMini(n, x.tags);
     r.appendChild(n);
     var cod = x.sku || x.imei;
@@ -8741,6 +8886,52 @@
     if (x.preco) { linhas.push(''); linhas.push('💰 ' + linhaPrecoOferta(x.preco, parcelas)); }
     return linhas.join('\n');
   }
+  // ---------- proposta simples (modelos de mensagem) e completa ----------
+  var MSGM = null;
+  function garantirModelosMsg() { if (MSGM) return Promise.resolve(MSGM); return call('modelosMsgDados', [S.token]).then(function (d) { MSGM = d; return d; }); }
+  function textoModelo(tipo, texto, x, parcelas) {
+    var cfg = (MSGM && MSGM[tipo]) || {}, nome = tipo === 'usado' ? x.modelo : x.nome;
+    var bat = x.bateria === '' || x.bateria == null ? '' : (typeof x.bateria === 'number' ? x.bateria + '%' : String(x.bateria));
+    var arm = (String(nome || '').match(/\b\d+\s?(GB|TB)\b/i) || [''])[0];
+    var tx = (S.u.taxas || []).filter(function (z) { return z.nome === parcelas; })[0], parcTxt = '';
+    if (tx && parcelas !== 'Só à vista' && x.preco) { var tot = x.preco / (1 - tx.taxa); parcTxt = 'ou ' + tx.parcelas + 'x de ' + brl(tot / tx.parcelas) + ' no cartão'; }
+    var V = { produto: String(nome || '').trim().toUpperCase(), cor: String(x.cor || '').trim().toUpperCase(), classificacao: x.classif || '', bateria: bat, armazenamento: arm,
+              preco: x.preco ? brl(x.preco) : '', parcelas: parcTxt, garantia: cfg.garantia || '', empresa: ppEmpresa(), vendedor: String((S.u && S.u.nome) || '').split(' ')[0] };
+    return String(texto || '').split('\n').map(function (ln) {
+      var vs = ln.match(/\{([a-z]+)\}/g) || []; if (vs.length && vs.every(function (v) { return !V[v.slice(1, -1)]; })) return null;
+      var t = ln.replace(/\{([a-z]+)\}/g, function (m0, k) { return V.hasOwnProperty(k) ? V[k] : m0; });
+      return t.replace(/\s*·\s*[^·:]+:\s*$/, '').replace(/\s+$/, '');
+    }).filter(function (l) { return l !== null; }).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+  /** Painel "Enviar proposta": Simples copia a mensagem do modelo; Completa abre a página Proposta com o item. */
+  function painelProposta(box, tipo, x, item, itTipo) {
+    var sg = el('div', 'seg'); box.appendChild(sg); var area = el('div'); box.appendChild(area);
+    function simples() {
+      area.innerHTML = ''; area.appendChild(el('div', 'hint', 'Carregando modelos…'));
+      garantirModelosMsg().then(function (M) {
+        area.innerHTML = '';
+        var lst = (M[tipo] || {}).modelos || [], pad = lst.filter(function (m) { return m.padrao; })[0] || lst[0];
+        var sm = el('select'); lst.forEach(function (m) { var o = el('option', '', m.nome + (m.padrao ? ' (padrão)' : '')); o.value = m.id; sm.appendChild(o); }); if (pad) sm.value = pad.id;
+        if (lst.length > 1) campo(area, 'Modelo de mensagem', sm, true);
+        var parc = (S.u.taxas || []).filter(function (t) { return t.nome !== 'Débito'; }).map(function (t) { return t.nome; });
+        var sl = el('select'); opts(sl, ['Só à vista'].concat(parc), LS.get('parcOferta', '12x')); campo(area, 'Parcelar em', sl, lst.length < 2);
+        var prev = el('div', 'oferta'); area.appendChild(prev);
+        var cp = el('button', 'btn ok', 'Copiar mensagem'); cp.type = 'button'; cp.style.marginTop = '10px'; area.appendChild(cp);
+        function atual() { var m = lst.filter(function (z) { return z.id === sm.value; })[0] || pad; prev.textContent = textoModelo(tipo, m ? m.texto : '', x, sl.value); cp.textContent = 'Copiar mensagem'; }
+        sl.onchange = function () { LS.set('parcOferta', sl.value); atual(); }; sm.onchange = atual; atual();
+        cp.onclick = function () { copiar(prev.textContent).then(function (ok) { cp.textContent = ok ? '✓ Copiada! Agora é só colar na conversa' : 'Não deu para copiar: selecione o texto acima'; if (ok) avisoTopo('A proposta simples foi copiada com sucesso'); }); };
+      }).catch(function (e) { area.innerHTML = ''; area.appendChild(el('div', 'hint', String(e))); });
+    }
+    seg(sg, ['Proposta simples', 'Proposta completa'], 'Proposta simples', function (v) { if (v === 'Proposta completa') { fecharDrawer(); propostaCom(item, itTipo); } else simples(); });
+    simples();
+  }
+  /** Abre a página Proposta já com o item (aparelho 'a', produto 'p' ou 'avulso'). */
+  function propostaCom(it, tipo) {
+    novaProposta();
+    if (tipo === 'avulso') PP.itens.push({ tipo: 'avulso', nome: it.nome, preco: it.preco ? String(it.preco).replace('.', ',') : '', qtd: 1 });
+    else ppAddRede(it, tipo, true);
+    PP.aba = 'nova'; ir('proposta');
+  }
   // "R$ 3.060,00 à vista PIX ou 18x de R$ 203,28 no cartão"
   function linhaPrecoOferta(preco, parcelas) {
     var t = brl(preco) + ' à vista PIX';
@@ -8753,7 +8944,7 @@
     var dw = $('dw'); dw.innerHTML = '';
     var hd = el('div', 'dwh'), ht = el('div');
     var tN = el('div', 't', x.modelo + ' ' + String(x.cor || '').toUpperCase()); tN.appendChild(botaoCopiar(nomeProduto(x), 'Copiar nome', 'aparelho')); ht.appendChild(tN);
-    ht.appendChild(el('div', 's', (x.preco ? brl(x.preco) : 'Sem preço') + ' · ' + x.loja));
+    ht.appendChild(el('div', 's', (x.preco ? brl(x.preco) : 'Sem preço') + ' · ' + depVer(x.loja)));
     var fx = el('button', '', '×'); fx.type = 'button'; fx.setAttribute('aria-label', 'Fechar'); fx.onclick = fecharDrawer;
     hd.appendChild(ht); hd.appendChild(fx); dw.appendChild(hd);
     var bd = el('div', 'dwb'); dw.appendChild(bd);
@@ -8831,21 +9022,11 @@
       box.appendChild(linhasCartao(x.preco));
     });
 
-    // 4. Enviar oferta: escolhe as parcelas e copia (sem o nome da loja)
-    var bo = opcao('Enviar oferta', x.preco ? 'Escolha as parcelas e copie a mensagem' : 'Sem preço de venda cadastrado', 'okc');
+    // 4. Enviar proposta: simples (copia o texto do modelo) ou completa (abre a página Proposta)
+    var bo = opcao('Enviar proposta', x.preco ? 'Proposta simples (copiar mensagem) ou completa' : 'Sem preço de venda cadastrado', 'okc');
     bo.onclick = painel(bo, function (box) {
       if (!x.preco) { box.appendChild(el('div', 'hint', 'Cadastre o preço desta classificação em Tabela de Preços › Produtos Usados.')); return; }
-      var parc = (S.u.taxas || []).filter(function (t) { return t.nome !== 'Débito'; }).map(function (t) { return t.nome; });
-      var sl = el('select'); opts(sl, ['Só à vista'].concat(parc), LS.get('parcOferta', '12x'));
-      campo(box, 'Parcelar em', sl, true);
-      var prev = el('div', 'oferta'); box.appendChild(prev);
-      var cp = el('button', 'btn ok', 'Copiar mensagem'); cp.type = 'button'; cp.style.marginTop = '10px'; box.appendChild(cp);
-      function atual() { prev.textContent = textoOferta(x, sl.value); }
-      sl.onchange = function () { LS.set('parcOferta', sl.value); atual(); cp.textContent = 'Copiar mensagem'; };
-      atual();
-      cp.onclick = function () {
-        copiar(prev.textContent).then(function (ok) { cp.textContent = ok ? '✓ Copiada! Agora é só colar na conversa' : 'Não deu para copiar: selecione o texto acima'; });
-      };
+      painelProposta(box, 'usado', x, { e: S.u.empresa ? S.u.empresa.atual : '', empresa: S.u.empresa ? S.u.empresa.nome : '', imei: x.imei, modelo: x.modelo, cor: x.cor, classif: x.classif, bateria: x.bateria, preco: x.preco, linha: x.linha }, 'a');
     });
 
     // Tirar da manutenção (colocado por engano)
@@ -8860,7 +9041,7 @@
   }
 
   // ---- relatório: saldo de estoque em um dia
-  var SD = { lojas: [], tags: [] };
+  var SD = { lojas: [], tags: [], agr: false };
   function carregarSaldo() {
     if (!$('sdData').value) $('sdData').value = hojeISOcli();
     $('sdData').max = hojeISOcli();
@@ -8873,7 +9054,7 @@
   function chipsMulti(box, lista, sel, fn) {
     box.innerHTML = '';
     lista.forEach(function (v) {
-      var on = sel.indexOf(v) > -1, b = el('button', 'chip' + (on ? ' on' : ''), (on ? '✓ ' : '') + v); b.type = 'button'; b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      var on = sel.indexOf(v) > -1, b = el('button', 'chip' + (on ? ' on' : ''), (on ? '✓ ' : '') + depVer(v)); b.type = 'button'; b.setAttribute('aria-pressed', on ? 'true' : 'false');
       b.onclick = function () { var i = sel.indexOf(v); if (i > -1) sel.splice(i, 1); else sel.push(v); chipsMulti(box, lista, sel, fn); fn(); };
       box.appendChild(b);
     });
@@ -8893,8 +9074,9 @@
     d.produtos.forEach(function (p) {
       if (!p.usado || !p.modelo) { out.push(p); return; }
       var g = por[p.modelo];
-      if (!g) { g = por[p.modelo] = Object.assign({}, p, { nome: p.modelo, saldo: {}, _cu: 0, _q: 0, _pv: 0, _pq: 0, classifs: [] }); out.push(g); }
+      if (!g) { g = por[p.modelo] = Object.assign({}, p, { nome: p.modelo, saldo: {}, saldoDep: p.saldoDep ? {} : null, _cu: 0, _q: 0, _pv: 0, _pq: 0, classifs: [] }); out.push(g); }
       var q = 0; Object.keys(p.saldo).forEach(function (l) { g.saldo[l] = (g.saldo[l] || 0) + p.saldo[l]; q += p.saldo[l]; });
+      if (p.saldoDep && g.saldoDep) Object.keys(p.saldoDep).forEach(function (k) { g.saldoDep[k] = (g.saldoDep[k] || 0) + p.saldoDep[k]; });
       if (p.custo > 0) { g._cu += p.custo * q; g._q += q; }
       if (p.preco > 0) { g._pv += p.preco * q; g._pq += q; }
       if (p.classif) g.classifs.push(p.classif + ' ' + q);
@@ -8905,7 +9087,8 @@
   }
   function renderSaldo() {
     var d = S.saldo; if (!d) return;
-    var lojas = SD.lojas.length ? SD.lojas : d.lojas, sit = 'pos', C = d.custos;
+    var lojas = SD.lojas.length ? SD.lojas : d.lojas, sit = 'pos';
+    $('sdAgr').classList.toggle('on', SD.agr); $('sdAgr').setAttribute('aria-pressed', SD.agr ? 'true' : 'false'); $('sdAgr').textContent = SD.agr ? '✓ Agrupado por depósito' : 'Agrupar por depósito';
     var ws = semAc($('sdBusca').value.trim()).split(/\s+/).filter(Boolean);
     $('sdLojasRot').firstChild.textContent = d.consolidado ? 'Empresas ' : 'Depósitos ';
     var L = saldoProdutos(d).map(function (p) { var t = lojas.reduce(function (a, l) { return a + (p.saldo[l] || 0); }, 0); return { p: p, t: t }; }).filter(function (x) {
@@ -8921,14 +9104,19 @@
     var k = $('sdKpis'); k.innerHTML = '';
     kpi(k, 'Produtos', inteiro(L.length), 'no filtro');
     kpi(k, 'Unidades', inteiro(L.reduce(function (a, x) { return a + x.t; }, 0)), dataTxt);
-    if (C) kpi(k, 'Valor de custo', brl(L.reduce(function (a, x) { return a + x.t * (x.p.custo || 0); }, 0)), 'custo atual do cadastro');
-    kpi(k, 'Valor de venda', brl(L.reduce(function (a, x) { return a + x.t * (x.p.preco || 0); }, 0)), 'preço atual do cadastro');
-    var cab = ['Produto', 'SKU', 'Grupo'].concat(lojas.length > 1 ? lojas : []).concat(['Saldo', 'Un.']).concat(C ? ['Custo unit.', 'Custo total'] : []).concat(['Preço', 'Valor de venda']);
-    var linhas = L.map(function (x) {
-      return [x.p.nome + (x.p.classifs && x.p.classifs.length > 1 ? ' · ' + x.p.classifs.join(', ') : ''), x.p.usado ? 'Usado' : (x.p.sku || '—'), x.p.grupo ? x.p.grupo.split(SEP).join(' › ') : '—'].concat(lojas.length > 1 ? lojas.map(function (l) { return x.p.saldo[l] || 0; }) : [])
-        .concat([x.t, x.p.unidade]).concat(C ? [brl(x.p.custo || 0), brl(x.t * (x.p.custo || 0))] : []).concat([x.p.preco ? brl(x.p.preco) : '—', brl(x.t * (x.p.preco || 0))]);
-    });
+    var nomeP = function (x) { return x.p.nome + (x.p.classifs && x.p.classifs.length > 1 ? ' · ' + x.p.classifs.join(', ') : ''); };
+    var skuP = function (x) { return x.p.usado ? 'Usado' : (x.p.sku || '—'); }, grP = function (x) { return x.p.grupo ? x.p.grupo.split(SEP).join(' › ') : '—'; };
     var box = $('sdCorpo'); box.innerHTML = '';
+    if (SD.agr) {
+      // um bloco por depósito (no consolidado: "Empresa · Depósito")
+      var deps = [], porDep = function (x) { var o = {}; if (d.consolidado) { Object.keys(x.p.saldoDep || {}).forEach(function (k2) { var emp = k2.split(' · ')[0]; if (lojas.indexOf(emp) > -1) o[k2] = (o[k2] || 0) + x.p.saldoDep[k2]; }); if (!x.p.saldoDep) lojas.forEach(function (l) { if (x.p.saldo[l]) o[l] = x.p.saldo[l]; }); } else lojas.forEach(function (l) { if (x.p.saldo[l]) o[depVer(l)] = x.p.saldo[l]; }); return o; };
+      var G = {}; L.forEach(function (x) { var o = porDep(x); Object.keys(o).forEach(function (dp) { if (!(o[dp] > 0)) return; if (!G[dp]) { G[dp] = []; deps.push(dp); } G[dp].push([nomeP(x), skuP(x), grP(x), o[dp], x.p.unidade]); }); });
+      if (!deps.length) { box.appendChild(el('div', 'empty', 'Nada disponível no filtro.')); return; }
+      deps.sort().forEach(function (dp) { var q = G[dp].reduce(function (a, r) { return a + r[3]; }, 0); tabela(box, dp + ' · ' + G[dp].length + ' produto(s) · ' + inteiro(q) + ' un.', ['Produto', 'SKU', 'Grupo', 'Saldo', 'Un.'], G[dp], 'saldo-' + dp + '-' + d.data); });
+      return;
+    }
+    var cab = ['Produto', 'SKU', 'Grupo'].concat(lojas.length > 1 ? lojas.map(depVer) : []).concat(['Saldo', 'Un.']);
+    var linhas = L.map(function (x) { return [nomeP(x), skuP(x), grP(x)].concat(lojas.length > 1 ? lojas.map(function (l) { return x.p.saldo[l] || 0; }) : []).concat([x.t, x.p.unidade]); });
     tabela(box, 'Saldo de estoque · ' + dataTxt + ' (' + L.length + ')', cab, linhas, 'saldo-de-estoque-' + d.data);
   }
   $('sdData').addEventListener('change', function () { if ($('sdData').value) carregarSaldo(); });
@@ -8936,7 +9124,8 @@
   $('sdClass').addEventListener('change', renderSaldo);
   $('sdEmp').addEventListener('change', function () { SD.lojas = []; carregarSaldo(); });
   $('sdBusca').addEventListener('input', renderSaldo);
-  $('sdLimpar').onclick = function () { SD.lojas = []; SD.tags = []; $('sdClass').checked = false; $('sdBusca').value = ''; if ($('sdData').value !== hojeISOcli()) { $('sdData').value = hojeISOcli(); carregarSaldo(); } else { montarFiltrosSaldo(); renderSaldo(); } };
+  $('sdAgr').onclick = function () { SD.agr = !SD.agr; renderSaldo(); };
+  $('sdLimpar').onclick = function () { SD.lojas = []; SD.tags = []; SD.agr = false; $('sdClass').checked = false; $('sdBusca').value = ''; if ($('sdData').value !== hojeISOcli()) { $('sdData').value = hojeISOcli(); carregarSaldo(); } else { montarFiltrosSaldo(); renderSaldo(); } };
 
   // =========================================================
   //  PROPOSTA (oferta para o cliente, com ou sem troca)
@@ -8945,7 +9134,52 @@
   function isoMais(dias) { var d = new Date(Date.now() + dias * 864e5); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
   function novaProposta() {
     var tx = (S.u.taxas || []).map(function (t) { return t.nome; }), pad = ['À vista'].concat(['6x', '12x'].filter(function (n) { return tx.indexOf(n) > -1; }));
-    PP = { itens: [], troca: { modo: 'Sem troca', modelo: '', av: { bat: '85% ou mais', marcas: 'Não', tela: 'Não', vidro: 'Não', gar: 'Não tem' }, desc: '', valor: '' }, cli: { nome: '', whats: '' }, validade: isoMais(3), parc: pad, obs: '', aba: 'nova' };
+    PP = { itens: [], troca: { modo: 'Sem troca', modelo: '', av: { bat: '85% ou mais', marcas: 'Não', tela: 'Não', vidro: 'Não', gar: 'Não tem' }, desc: '', valor: '' }, cli: cliVazio(), cliModo: 'busca', validade: isoMais(3), parc: pad, obs: '', aba: 'nova' };
+  }
+  function cliVazio() { return { id: '', cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' }; }
+  /** Bloco de cliente igual ao de Vendas/OS: buscar cadastrado, cadastrar novo ou (o.avulso) só nome e WhatsApp. st = { cli, cliModo } */
+  function blocoCliente(c1, st, redes, o) {
+    o = o || {}; var C = st.cli;
+    if (st.cliModo === 'sel') {
+      var sl = el('div', 'clisel'); sl.appendChild(el('div', 'pnome', C.nome)); sl.appendChild(el('div', 'psub', [C.whats ? fmtFone(C.whats) : 'sem celular', C.cpf ? fmtDoc(C.cpf) : ''].filter(Boolean).join(' · ')));
+      var bt = el('div', 'clibt'), tr = el('button', 'lnk', 'Trocar cliente'), ed = el('button', 'lnk', 'Editar dados'); tr.type = ed.type = 'button'; bt.appendChild(ed); bt.appendChild(tr); sl.appendChild(bt);
+      tr.onclick = function () { st.cli = cliVazio(); st.cliModo = 'busca'; redes(); };
+      ed.onclick = function () { st.cliModo = 'novo'; redes(); };
+      c1.appendChild(sl);
+    } else if (st.cliModo === 'busca') {
+      var bq = inp('text', 'Buscar cliente cadastrado: nome, CPF ou celular'); bq.setAttribute('aria-label', 'Buscar cliente'); c1.appendChild(bq);
+      var rq = el('div'); c1.appendChild(rq);
+      var bb = el('div', 'acoes'); bb.style.cssText = 'margin-top:10px;flex-wrap:wrap'; c1.appendChild(bb);
+      var nv = el('button', 'btn ghost', '+ Cadastrar novo'); nv.type = 'button'; nv.style.width = 'auto'; bb.appendChild(nv);
+      nv.onclick = function () { st.cliModo = 'novo'; st.cli = cliVazio(); if (/^\D{3,}/.test(bq.value)) st.cli.nome = bq.value.trim(); redes(); };
+      if (o.avulso) { var sc = el('button', 'btn ghost', 'Sem cadastro'); sc.type = 'button'; sc.style.width = 'auto'; bb.appendChild(sc); sc.onclick = function () { st.cliModo = 'avulso'; st.cli = cliVazio(); if (/^\D{3,}/.test(bq.value)) st.cli.nome = bq.value.trim(); redes(); }; }
+      var tmr = null;
+      bq.oninput = function () {
+        clearTimeout(tmr); rq.innerHTML = ''; var q = bq.value.trim(); if (q.length < 2) return;
+        tmr = setTimeout(function () {
+          rq.innerHTML = ''; rq.appendChild(el('div', 'hint', 'Procurando…'));
+          call('clientesBusca', [S.token, q]).then(function (l) {
+            rq.innerHTML = ''; if (bq.value.trim() !== q) return;
+            if (!l.length) { rq.appendChild(el('div', 'hint', 'Nenhum cliente encontrado.')); return; }
+            var lst = el('div', 'vdres');
+            l.forEach(function (x) {
+              var b = el('button'); b.type = 'button'; var a = el('span', '', x.nome); a.appendChild(el('small', '', [x.cpf ? fmtDoc(x.cpf) : '', x.whats ? fmtFone(x.whats) : '', x.cidade].filter(Boolean).join(' · ')));
+              b.appendChild(a); b.onclick = function () { st.cli = x; st.cliModo = 'sel'; redes(); };
+              lst.appendChild(b);
+            });
+            rq.appendChild(lst);
+          }).catch(function (e) { rq.innerHTML = ''; rq.appendChild(el('div', 'hint', e)); });
+        }, 300);
+      };
+    } else if (st.cliModo === 'avulso') {
+      var vl0 = el('button', 'lnk', '← Buscar cliente cadastrado'); vl0.type = 'button'; c1.appendChild(vl0); vl0.onclick = function () { st.cliModo = 'busca'; redes(); };
+      var cn = inp('text', 'Nome do cliente'); cn.maxLength = 80; cn.value = C.nome || ''; cn.oninput = function () { C.nome = cn.value; if (o.mudou) o.mudou(); }; campo(c1, 'Nome', cn);
+      var cw = inp('tel', 'DDD + número'); cw.value = C.whats || ''; cw.oninput = function () { C.whats = cw.value.replace(/\D/g, '').slice(0, 11); }; campo(c1, 'WhatsApp', cw);
+    } else {
+      var vl = el('button', 'lnk', '← Buscar cliente cadastrado'); vl.type = 'button'; c1.appendChild(vl);
+      vl.onclick = function () { st.cliModo = C.id ? 'sel' : 'busca'; redes(); };
+      formCliente(c1, C, { exigeWhats: true }, function (cli) { st.cli = cli; st.cliModo = 'sel'; redes(); }, C.id ? function () { st.cliModo = 'sel'; redes(); } : null);
+    }
   }
   function abrirProposta() { if (!PP) novaProposta(); if (PP.aba === 'hist') desenharHistProposta(); else desenharProposta(); }
   $('ppNovaBtn').onclick = function () { novaProposta(); desenharProposta(); };
@@ -8987,10 +9221,10 @@
     L.push('', 'Proposta válida até ' + PP.validade.split('-').reverse().join('/') + '.');
     return L.join('\n');
   }
-  function ppAddRede(it, tipo) {
+  function ppAddRede(it, tipo, semDesenhar) {
     if (tipo === 'a') { if (PP.itens.some(function (x) { return x.imei === it.imei; })) return; PP.itens.push({ tipo: 'aparelho', nome: it.modelo + ' ' + String(it.cor || '').toUpperCase() + ' · ' + it.classif, preco: it.preco ? String(it.preco).replace('.', ',') : '', qtd: 1, e: it.e, empresa: it.empresa, imei: it.imei, linha: it.linha }); }
     else PP.itens.push({ tipo: 'produto', nome: it.nome, preco: it.preco ? String(it.preco).replace('.', ',') : '', qtd: 1, e: it.e, empresa: it.empresa, id: it.id, sku: it.sku, max: it.qtd });
-    desenharProposta();
+    if (!semDesenhar) desenharProposta();
   }
   function desenharProposta() {
     PP.aba = 'nova';
@@ -9042,10 +9276,10 @@
       var vl = inp('text', '0,00'); vl.inputMode = 'decimal'; vl.value = PP.troca.valor; vl.oninput = function () { PP.troca.valor = vl.value; atualizar(); }; campo(tb, 'Valor que pagamos (R$)', vl);
     }
     // 3. cliente, validade e pagamento (lado)
+    var c0 = el('div', 'card'); c0.appendChild(el('h2', '', 'Cliente')); dir.appendChild(c0);
+    blocoCliente(c0, PP, desenharProposta, { avulso: true });
     var c3 = el('div', 'card'); dir.appendChild(c3);
-    var cn = inp('text', 'Nome do cliente'); cn.maxLength = 80; cn.value = PP.cli.nome; cn.oninput = function () { PP.cli.nome = cn.value; atualizar(); }; campo(c3, 'Cliente', cn, true);
-    var cw = inp('tel', 'DDD + número'); cw.value = PP.cli.whats; cw.oninput = function () { PP.cli.whats = cw.value.replace(/\D/g, '').slice(0, 11); }; campo(c3, 'WhatsApp', cw);
-    var va = inp('date'); va.value = PP.validade; va.min = isoMais(0); va.onchange = function () { PP.validade = va.value || isoMais(3); atualizar(); }; campo(c3, 'Válida até', va);
+    var va = inp('date'); va.value = PP.validade; va.min = isoMais(0); va.onchange = function () { PP.validade = va.value || isoMais(3); atualizar(); }; campo(c3, 'Válida até', va, true);
     c3.appendChild(el('label', '', 'Parcelas que aparecem para o cliente'));
     var ch = el('div', 'chips'); c3.appendChild(ch);
     chipsMulti(ch, ['À vista'].concat((S.u.taxas || []).map(function (t) { return t.nome; })), PP.parc, atualizar);
@@ -9067,7 +9301,8 @@
       if (!PP.itens.length) { m.textContent = 'Coloque pelo menos um produto.'; m.classList.add('show'); return null; }
       if (PP.itens.some(function (x) { return !String(x.nome).trim() || !(num(x.preco) > 0); })) { m.textContent = 'Todo item precisa de descrição e preço.'; m.classList.add('show'); return null; }
       var tr = ppTroca();
-      return call('propostaSalvar', [S.token, { cliente: PP.cli, itens: PP.itens.map(function (x) { return { tipo: x.tipo, nome: x.nome, preco: x.preco, qtd: x.qtd, e: x.e, empresa: x.empresa, imei: x.imei, id: x.id, sku: x.sku }; }), troca: tr, validade: PP.validade, parcelas: PP.parc, obs: PP.obs }])
+      if (PP.cliModo === 'novo') { m.textContent = 'Termine o cadastro do cliente ("Salvar cliente") ou use "Sem cadastro".'; m.classList.add('show'); return null; }
+      return call('propostaSalvar', [S.token, { cliente: { id: PP.cli.id || '', nome: PP.cli.nome, whats: PP.cli.whats }, itens: PP.itens.map(function (x) { return { tipo: x.tipo, nome: x.nome, preco: x.preco, qtd: x.qtd, e: x.e, empresa: x.empresa, imei: x.imei, id: x.id, sku: x.sku }; }), troca: tr, validade: PP.validade, parcelas: PP.parc, obs: PP.obs }])
         .then(function (r) { PP.salva = r.lista[0] && r.lista[0].id; avisoTopo('A proposta ' + PP.salva + ' foi salva com sucesso'); return r; })
         .catch(function (e) { m.textContent = e; m.classList.add('show'); throw e; });
     }
@@ -9108,7 +9343,8 @@
       var ok = rp.filter(function (r) { return r && r.id; }), err = rp.filter(function (r) { return r && r.erro; });
       return Promise.all([call('disponiveis', [S.token]).then(function (l) { S.disp = l; }).catch(function () {}), call('acessorios', [S.token]).then(function (d) { S.ac = d; }).catch(function () {})]).then(function () {
         novaVenda();
-        if (PP.cli.nome) { V.cli.nome = PP.cli.nome; V.cli.whats = PP.cli.whats; V.cliModo = 'novo'; }
+        if (PP.cli.id) { V.cli = PP.cli; V.credito = PP.cli.credito; V.credCpf = PP.cli.cpf; V.cliModo = 'sel'; }
+        else if (PP.cli.nome) { V.cli.nome = PP.cli.nome; V.cli.whats = PP.cli.whats; V.cliModo = 'novo'; }
         PP.itens.forEach(function (x) {
           if (x.e && x.e !== aqui) return;
           if (x.tipo === 'aparelho') { var a = (S.disp || []).filter(function (z) { return z.imei === x.imei; })[0]; if (a) { addItem(a); var it = V.itens.filter(function (i) { return i.imei === x.imei; })[0]; if (it) it.preco = x.preco; } }
@@ -9153,32 +9389,35 @@
     var L = d.linhas.filter(function (l) { if (!ws.length) return true; var t = semAc([l.nome, l.sku, l.modelo, l.grupo].join(' ')); return ws.every(function (w) { return t.indexOf(w) > -1; }); });
     var chave = function (l) {
       if (agr === 'grupo') return l.grupo ? l.grupo.split(SEP).join(' › ') : (l.tipo === 'usado' ? 'Usados' : 'Sem grupo');
-      if (agr === 'deposito') return (d.consolidado ? l.empresa + ' · ' : '') + l.deposito;
+      if (agr === 'deposito') return (d.consolidado ? l.empresa + ' · ' : '') + depVer(l.deposito);
       if (agr === 'empresa') return l.empresa;
       if (agr === 'tipo') return l.tipo === 'usado' ? 'Usados' : 'Produtos novos e acessórios';
-      return l.tipo === 'usado' ? (sep ? l.modelo + ' (' + l.classif + ')' : l.modelo) : l.nome;
+      return (l.tipo === 'usado' ? (sep ? l.modelo + ' (' + l.classif + ')' : l.modelo) : l.nome) + (l.parado ? ' · em ' + l.parado.toLowerCase() : '');
     };
     var G = {}, ordem = [];
     L.forEach(function (l) {
       var k = chave(l), g = G[k];
-      if (!g) { g = G[k] = { nome: k, qtd: 0, ult: 0, med: 0, venda: 0, sku: agr === 'produto' && l.tipo !== 'usado' ? l.sku : '' }; ordem.push(g); }
+      if (!g) { g = G[k] = { nome: k, qtd: 0, ult: 0, med: 0, venda: 0, pUlt: 0, pMed: 0, pQtd: 0, sku: agr === 'produto' && l.tipo !== 'usado' ? l.sku : '' }; ordem.push(g); }
       g.qtd += l.qtd; g.ult += l.totalUlt; g.med += l.totalMedio; g.venda += (l.preco || 0) * l.qtd;
+      if (l.parado) { g.pQtd += l.qtd; g.pUlt += l.totalUlt; g.pMed += l.totalMedio; }
     });
-    var tot = ordem.reduce(function (a, g) { a.qtd += g.qtd; a.ult += g.ult; a.med += g.med; a.venda += g.venda; return a; }, { qtd: 0, ult: 0, med: 0, venda: 0 });
-    var custo = function (g) { return ult ? g.ult : g.med; };
+    var tot = ordem.reduce(function (a, g) { a.qtd += g.qtd; a.ult += g.ult; a.med += g.med; a.venda += g.venda; a.pQtd += g.pQtd; a.pUlt += g.pUlt; a.pMed += g.pMed; return a; }, { qtd: 0, ult: 0, med: 0, venda: 0, pQtd: 0, pUlt: 0, pMed: 0 });
+    var custo = function (g) { return ult ? g.ult : g.med; }, parado = function (g) { return ult ? g.pUlt : g.pMed; };
     ordem.sort(function (a, b) { return custo(b) - custo(a); });
     var dataTxt = d.data.split('-').reverse().join('/');
-    $('feInfo').textContent = 'Estoque disponível em ' + dataTxt + ' · ' + (d.consolidado ? 'todas as empresas' : d.empresa) + ' · valor pelo ' + (ult ? 'custo da última compra' : 'custo médio') + '. Usados valem aparelho + peças.';
+    $('feInfo').textContent = 'Estoque em ' + dataTxt + ' · ' + (d.consolidado ? 'todas as empresas' : d.empresa) + ' · valor pelo ' + (ult ? 'custo da última compra' : 'custo médio') + '. Usados valem aparelho + peças. Inclui o que está em manutenção e defeito (coluna "Parado").';
     var k = $('feKpis'); k.innerHTML = '';
     kpi(k, 'Unidades', inteiro(tot.qtd), dataTxt);
     kpi(k, ult ? 'Custo (última compra)' : 'Custo médio', brl(custo(tot)), 'valor do estoque');
     kpi(k, ult ? 'Custo médio' : 'Custo (última compra)', brl(ult ? tot.med : tot.ult), 'para comparar');
     kpi(k, 'Valor de venda', brl(tot.venda), tot.venda > 0 ? 'margem bruta ' + pct((tot.venda - custo(tot)) / tot.venda) : 'preço atual');
+    kpi(k, 'Parado (manutenção e defeito)', brl(parado(tot)), inteiro(tot.pQtd) + ' un. · ' + (custo(tot) ? pct(parado(tot) / custo(tot)) : '0%') + ' do estoque', tot.pQtd ? 'down' : '');
     var rot = { produto: 'Produto', grupo: 'Grupo', deposito: 'Depósito', empresa: 'Empresa', tipo: 'Tipo' }[agr];
-    var cab = [rot].concat(agr === 'produto' ? ['SKU'] : []).concat(['Unidades', ult ? 'Custo (última compra)' : 'Custo médio', 'Custo unit.', 'Valor de venda', '% do estoque']);
+    var cab = [rot].concat(agr === 'produto' ? ['SKU'] : []).concat(['Unidades', ult ? 'Custo (última compra)' : 'Custo médio', 'Custo unit.', 'Parado', 'Valor de venda', '% do estoque']);
     var linhas = ordem.map(function (g) {
-      return [g.nome].concat(agr === 'produto' ? [g.sku || (g.nome ? '—' : '')] : []).concat([g.qtd, brl(custo(g)), brl(g.qtd ? custo(g) / g.qtd : 0), g.venda ? brl(g.venda) : '—', custo(tot) ? pct(custo(g) / custo(tot)) : '—']);
+      return [g.nome].concat(agr === 'produto' ? [g.sku || (g.nome ? '—' : '')] : []).concat([g.qtd, brl(custo(g)), brl(g.qtd ? custo(g) / g.qtd : 0), g.pQtd ? brl(parado(g)) + ' (' + g.pQtd + ' un.)' : '—', g.venda ? brl(g.venda) : '—', custo(tot) ? pct(custo(g) / custo(tot)) : '—']);
     });
+    if (ordem.length) linhas.push(['Total'].concat(agr === 'produto' ? [''] : []).concat([tot.qtd, brl(custo(tot)), '', tot.pQtd ? brl(parado(tot)) + ' (' + tot.pQtd + ' un.)' : '—', tot.venda ? brl(tot.venda) : '—', '100%']));
     var box = $('feCorpo'); box.innerHTML = '';
     tabela(box, 'Visão financeira de estoque · ' + dataTxt + ' (' + ordem.length + ')', cab, linhas, 'visao-financeira-estoque-' + d.data);
   }
@@ -9433,16 +9672,11 @@
     if (pode('editar_precos')) opcao('Editar produto e precificação', 'Nome, custo, % e valores deste produto, preço final', '', function () { fecharDrawer(); abrirProdutoNovo(x); });
     var bc = opcao('Cálculo de cartão', x.preco ? 'Total e parcelas de 1x a 18x' : 'Sem preço');
     bc.onclick = painel(bc, function (box) { if (!x.preco) { box.appendChild(el('div', 'hint', 'Produto sem preço.')); return; } box.appendChild(linhasCartao(x.preco)); });
-    var bo = opcao('Enviar oferta', x.preco ? 'Escolha as parcelas e copie a mensagem' : 'Sem preço', 'okc');
+    var bo = opcao('Enviar proposta', x.preco ? 'Proposta simples (copiar mensagem) ou completa' : 'Sem preço', 'okc');
     bo.onclick = painel(bo, function (box) {
       if (!x.preco) { box.appendChild(el('div', 'hint', 'Produto sem preço.')); return; }
-      var parc = (S.u.taxas || []).filter(function (t) { return t.nome !== 'Débito'; }).map(function (t) { return t.nome; });
-      var sl = el('select'); opts(sl, ['Só à vista'].concat(parc), LS.get('parcOferta', '12x')); campo(box, 'Parcelar em', sl, true);
-      var prev = el('div', 'oferta'); box.appendChild(prev);
-      var cp = el('button', 'btn ok', 'Copiar mensagem'); cp.type = 'button'; cp.style.marginTop = '10px'; box.appendChild(cp);
-      function atual() { prev.textContent = textoOfertaNovo(x, sl.value); }
-      sl.onchange = function () { LS.set('parcOferta', sl.value); atual(); cp.textContent = 'Copiar mensagem'; }; atual();
-      cp.onclick = function () { copiar(prev.textContent).then(function (ok) { cp.textContent = ok ? '✓ Copiada! Agora é só colar na conversa' : 'Não deu para copiar: selecione o texto acima'; }); };
+      var v = (x.vinc || []).filter(function (z) { return z.id && z.total > 0; })[0];
+      painelProposta(box, 'novo', x, v ? { e: S.u.empresa ? S.u.empresa.atual : '', empresa: S.u.empresa ? S.u.empresa.nome : '', id: v.id, nome: v.nome || x.nome, sku: v.sku, preco: x.preco, qtd: v.total } : { avulso: true, nome: x.nome, preco: x.preco }, v ? 'p' : 'avulso');
     });
     if (pode('editar_precos')) {
       var bdp = opcao(x.indisp ? 'Marcar como disponível' : 'Marcar como não disponível', x.indisp ? 'Volta para a lista principal' : 'Sai da lista e fica no filtro "Não disponíveis"', x.indisp ? 'okc' : '');
@@ -9760,7 +9994,14 @@
   ['vSit', 'vMg'].forEach(function (k) { $(k).addEventListener('change', renderVenda); });
   $('vOrdem').addEventListener('change', function () { LS.set('ordemUsados', this.value); renderVenda(); });
   $('vOrdem').value = LS.get('ordemUsados', 'az');
-  $('vLimpar').onclick = function () { $('vBusca').value = ''; $('vSit').value = 'todos'; $('vMg').value = ''; renderVenda(); };
+  $('vLimpar').onclick = function () { $('vBusca').value = ''; $('vSit').value = 'todos'; $('vMg').value = ''; $('vEmp').value = ''; renderVenda(); };
+  $('vEmp').addEventListener('change', function () { if ($('vEmp').value === 'todas') garantirRede().then(renderVenda).catch(function (e) { msg('topMsg', e); }); else renderVenda(); });
+  /** {MODELO: {empresa: {classif: qtd}}} dos usados disponíveis nas outras empresas */
+  function redePorModelo() {
+    var o = {}; if (!REDE.d || $('vEmp').value !== 'todas') return o;
+    REDE.d.aparelhos.forEach(function (a) { if (a.e === REDE.d.atual) return; var k = String(a.modelo).toUpperCase(), m = o[k] = o[k] || {}, e = m[a.empresa] = m[a.empresa] || {}; e[a.classif] = (e[a.classif] || 0) + 1; });
+    return o;
+  }
   $('vFilBtn').onclick = function () { var on = !$('vFil').classList.contains('on'); $('vFil').classList.toggle('on', on); this.textContent = on ? 'Fechar filtros ▴' : 'Filtros ▾'; };
   botaoEsconderFiltros($('vFilEsc'), 'vFil', 'semFilPrecos');
   function stCls(s) {
@@ -9819,8 +10060,10 @@
     var g = pode('ver_custos');
     var termos = $('vBusca').value.trim().toLowerCase().split(/\s+/).filter(Boolean), sit = $('vSit').value, mg = g ? $('vMg').value : '', ordem = $('vOrdem').value;
     var re = { ok: /DENTRO/, abaixo: /ABAIXO/, prej: /PREJU/ }[mg];
+    show('vEmpW', multiEmp()); var RM = S.redeMod = redePorModelo();
+    var qRedeM = function (x) { var m = RM[String(x.modelo).toUpperCase()]; if (!m) return 0; var t = 0; Object.keys(m).forEach(function (e) { Object.keys(m[e]).forEach(function (c) { t += m[e][c]; }); }); return t; };
     var l = S.venda.filter(function (x) {
-      var m = x.modelo.toLowerCase(), q = qtdModelo(x);
+      var m = x.modelo.toLowerCase(), q = qtdModelo(x) + qRedeM(x);
       if (!termos.every(function (t) { return m.indexOf(t) > -1; })) return false;
       if (sit === '' && !q) return false;
       if (sit === 'sem' && q) return false;
@@ -9858,6 +10101,8 @@
     if (x.foraTabela) { var ft = el('div', 'psub', 'Novo na tabela · defina os preços'); ft.style.color = 'var(--warn, #b26a00)'; n.appendChild(ft); }
     var porCl = CL.filter(function (k) { return vz(x[k[0]]).qtd; }).map(function (k) { return k[1] + ' ' + vz(x[k[0]]).qtd; });
     if (porCl.length) n.appendChild(el('div', 'psub', porCl.join(' · ')));
+    var rm = (S.redeMod || {})[String(x.modelo).toUpperCase()];
+    if (rm) Object.keys(rm).sort().forEach(function (e) { var b = el('div', 'psub rdisp'); b.appendChild(el('span', 'bdg res', 'Disponível em ' + e)); b.appendChild(document.createTextNode(' ' + Object.keys(rm[e]).map(function (c) { return c + ' ' + rm[e][c]; }).join(' · '))); n.appendChild(b); });
     if (x.reservados) { var rsv = el('span', 'bdg res', x.reservados + (x.reservados === 1 ? ' reservado' : ' reservados')); rsv.style.marginLeft = '0'; n.appendChild(rsv); }
     if (x.difs && x.difs.length) {
       var bd = el('button', 'pdif', x.difs.length + ' com preço diferente'); bd.type = 'button';
@@ -11936,14 +12181,16 @@
     return l.filter(function (e) { return (e.lojas || []).indexOf(loja) > -1; })[0] || l.filter(function (e) { return !(e.lojas || []).length; })[0] || null;
   }
   function cabecalhoEmpresa(loja, sub) {
-    var e = empresaDe(loja), w = el('div', 'empcab');
-    if (!e) { w.appendChild(el('h1', '', lojaNome(loja))); w.appendChild(el('div', 'lj', loja + (sub ? ' · ' + sub : ''))); return w; }
-    if (e.logo) { var im = el('img'); im.src = e.logo; im.alt = ''; im.style.cssText = 'max-height:56px;max-width:180px;display:block;margin-bottom:4px'; w.appendChild(im); }
-    w.appendChild(el('h1', '', e.fantasia || e.razao));
+    var e = empresaDe(loja), w = el('div', 'empcab'), tx = el('div');
+    w.style.cssText = 'display:flex;align-items:center;gap:14px'; tx.style.cssText = 'flex:1;min-width:0';
+    if (!e) { tx.appendChild(el('h1', '', lojaNome(loja))); tx.appendChild(el('div', 'lj', depVer(loja) + (sub ? ' · ' + sub : ''))); w.appendChild(tx); return w; }
+    if (e.logo) { var im = el('img'); im.src = e.logo; im.alt = ''; im.style.cssText = 'max-height:64px;max-width:160px;flex:0 0 auto;object-fit:contain'; w.appendChild(im); }
+    w.appendChild(tx);
+    tx.appendChild(el('h1', '', e.fantasia || e.razao));
     var l1 = [e.razao && e.fantasia ? e.razao : '', e.cnpj ? (e.cnpj.length === 14 ? 'CNPJ ' : 'CPF ') + fmtDoc(e.cnpj) : '', e.ie ? 'IE ' + e.ie : ''].filter(Boolean).join(' · ');
     var l2 = [e.endereco, e.cidade, e.cep ? 'CEP ' + e.cep.slice(0, 5) + '-' + e.cep.slice(5) : ''].filter(Boolean).join(' · ');
     var l3 = [e.fone ? 'Tel. ' + fmtFone(e.fone) : '', e.whats ? 'Cel. ' + fmtFone(e.whats) : '', e.email, e.site].filter(Boolean).join(' · ');
-    [l1, l2, l3, loja + (sub ? ' · ' + sub : '')].forEach(function (t) { if (t) w.appendChild(el('div', 'lj', t)); });
+    [l1, l2, l3, depVer(loja) + (sub ? ' · ' + sub : '')].forEach(function (t) { if (t) tx.appendChild(el('div', 'lj', t)); });
     return w;
   }
   function rodapeEmpresa(loja) { var e = empresaDe(loja); return e && e.rodape ? e.rodape : ''; }
@@ -12359,6 +12606,40 @@
     };
   }
   // ---------- Configurações › Manutenção centralizada
+  function cfgModelosMsg(box, d) {
+    var aba = 'usado';
+    box.appendChild(el('div', 'hint', 'Usados na "Proposta simples" de Produtos Usados (celular usado) e da Tabela de Preços › Produtos Novos (celular novo). Variáveis: ' + d.variaveis.map(function (v) { return '{' + v + '}'; }).join(' ') + '. Linha em que nenhuma variável tem valor some da mensagem.'));
+    var sg = el('div', 'seg'); box.appendChild(sg); var area = el('div'); box.appendChild(area);
+    var exU = { modelo: 'IPHONE 13 128GB', cor: 'Azul', classif: 'Ótimo', bateria: 88, preco: 2999 }, exN = { nome: 'IPHONE 16 128GB', preco: 5999 };
+    function des() {
+      area.innerHTML = ''; var T = d[aba];
+      var c0 = el('div', 'card'); area.appendChild(c0);
+      var ga = inp('text', aba === 'usado' ? '3 meses' : '1 ano'); ga.maxLength = 40; ga.value = T.garantia || ''; ga.oninput = function () { T.garantia = ga.value; }; campo(c0, 'Garantia ({garantia})', ga, true);
+      T.modelos.forEach(function (m, i) {
+        var c = el('div', 'card'); area.appendChild(c);
+        var g = grade(c, 2), nm = inp('text', 'Ex.: Curto'); nm.maxLength = 40; nm.value = m.nome; nm.oninput = function () { m.nome = nm.value; }; campo(g[0], 'Nome do modelo', nm, true);
+        var pl = el('label', 'ckl'), pc = el('input'); pc.type = 'radio'; pc.name = 'mmPad' + aba; pc.checked = !!m.padrao; pc.onchange = function () { T.modelos.forEach(function (z) { z.padrao = z === m; }); }; pl.appendChild(pc); pl.appendChild(document.createTextNode(' Padrão')); g[1].appendChild(el('label', 'first', ' ')); g[1].appendChild(pl);
+        var ta = el('textarea'); ta.rows = 9; ta.maxLength = 1500; ta.value = m.texto; campo(c, 'Texto', ta);
+        var pv = el('div', 'oferta'); c.appendChild(el('label', '', 'Prévia')); c.appendChild(pv);
+        var at = function () { MSGM = MSGM || d; var bk = MSGM[aba]; MSGM[aba] = T; pv.textContent = textoModelo(aba, m.texto, aba === 'usado' ? exU : exN, '12x'); MSGM[aba] = bk; };
+        ta.oninput = function () { m.texto = ta.value; at(); }; at();
+        if (T.modelos.length > 1) { var rm = el('button', 'lnk', 'Excluir este modelo'); rm.type = 'button'; rm.style.color = 'var(--err)'; rm.onclick = function () { T.modelos.splice(i, 1); if (!T.modelos.some(function (z) { return z.padrao; })) T.modelos[0].padrao = true; des(); }; c.appendChild(rm); }
+      });
+      var ad = el('button', 'btn ghost', '+ Novo modelo'); ad.type = 'button'; ad.style.width = 'auto'; area.appendChild(ad);
+      ad.onclick = function () { T.modelos.push({ id: '', nome: 'Modelo ' + (T.modelos.length + 1), texto: T.modelos[0].texto, padrao: false }); des(); };
+    }
+    seg(sg, ['Celular usado', 'Celular novo'], 'Celular usado', function (v) { aba = v === 'Celular novo' ? 'novo' : 'usado'; des(); });
+    des();
+    var m = el('div', 'msg'); box.appendChild(m);
+    if (d.editar) {
+      var b = el('button', 'btn', 'Salvar modelos'); b.type = 'button'; box.appendChild(b);
+      b.onclick = function () {
+        m.className = 'msg'; b.disabled = true;
+        call('modelosMsgSalvar', [S.token, { usado: d.usado, novo: d.novo }]).then(function (r) { b.disabled = false; MSGM = r; avisoTopo('Os modelos de mensagem foram salvos com sucesso'); })
+          .catch(function (e) { b.disabled = false; m.className = 'msg err show'; m.textContent = e; });
+      };
+    }
+  }
   function cfgManutCentral(box) {
     var E = (S.u.empresa && S.u.empresa.lista) || [], mc = S.u.manutCentral || {};
     var c = el('div', 'card'); box.appendChild(c);
@@ -12385,6 +12666,7 @@
     if (pode('equipe') || pode('liberar') || pode('transferir')) l.push(['naturezas', 'Naturezas de operação', 'Transferências: CFOP, se movimenta estoque e o que gera']);
     if (pode('equipe')) l.push(['transfrede', 'Transferências entre empresas', 'Quem gera contas a pagar/receber e quanto tempo o pedido segura o item']);
     if (pode('editar_quadro') || pode('equipe')) l.push(['checklists', 'Checklists', 'Itens, onde aparecem (entrada de usados, OS, manutenção) e classificação sugerida']);
+    if (pode('equipe') || pode('precos')) l.push(['modelosmsg', 'Modelos de mensagem', 'Texto da proposta simples de celular usado e de celular novo']);
     if (pode('equipe')) l.push(['manutcentral', 'Manutenção centralizada', 'Empresa que guarda os aparelhos em conserto e quem trabalha neles']);
     if (pode('conferir_caixa')) l.push(['caixa', 'Caixa', 'Abertura e fechamento: por loja (tudo junto) ou por funcionário']);
     if (pode('equipe')) l.push(['depositos', 'Depósitos', 'Criar, renomear e excluir os locais de estoque desta empresa']);
@@ -12434,6 +12716,11 @@
         .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
     }
     else if (ab === 'manutcentral') cfgManutCentral(box);
+    else if (ab === 'modelosmsg') {
+      box.appendChild(el('div', 'empty', 'Carregando…'));
+      call('modelosMsgDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; MSGM = d; cfgModelosMsg(box, JSON.parse(JSON.stringify(d))); })
+        .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
+    }
     else if (ab === 'naturezas') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
       call('naturezasDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgNaturezas(box, d); })
