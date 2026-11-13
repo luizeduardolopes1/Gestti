@@ -795,6 +795,20 @@
   .fmtab .prow{grid-template-columns:44px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) 20px;cursor:pointer}.fmtab .prow.off{opacity:.6}
   .fmtab .prow.h{cursor:default}.fmtab .prow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   .bdg.res{background:#F1E8FF;color:#6B2FC9}
+  /* barra lateral direita: resumo + ações da página */
+  #rp{display:none;position:fixed;top:var(--hh);right:0;bottom:0;width:300px;background:var(--card);border-left:1px solid var(--line);z-index:25;overflow:auto;padding:14px 14px 30px}
+  #rp .rph{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}#rp .rph b{font-size:15px}
+  #rp .rph button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;width:32px;height:32px;font-size:18px;cursor:pointer}
+  #rp .kpis{grid-template-columns:1fr!important;gap:8px}#rp .kpi{padding:10px 12px}#rp .kpi .v{font-size:19px}#rp .hint{margin:0 0 10px!important}
+  #rpAcoes h4{margin:16px 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  #rpAcoes button{display:flex;width:100%;align-items:center;gap:8px;text-align:left;border:0;border-top:1px solid var(--line);background:none;color:var(--ink);padding:10px 4px;font-size:14px;cursor:pointer}
+  #rpAcoes button:hover:not(:disabled){color:var(--brand)}#rpAcoes button:disabled{color:var(--muted);cursor:default}
+  #rpTab{display:none;position:fixed;right:0;top:calc(var(--hh) + 120px);z-index:24;border:1px solid var(--line);border-right:0;background:var(--card);color:var(--ink);border-radius:10px 0 0 10px;padding:10px 8px;writing-mode:vertical-rl;font-weight:700;font-size:13px;cursor:pointer;box-shadow:-4px 0 14px rgba(9,15,28,.08)}
+  @media (min-width:1100px){body.rpon:not(.rpmin) #rp{display:block}body.rpon:not(.rpmin){padding-right:300px}body.rpon.rpmin #rpTab{display:block}}
+  @media (max-width:1099px){body.rpon #rpTab{display:block;writing-mode:horizontal-tb;top:auto;bottom:16px;border-radius:22px;border-right:1px solid var(--line);right:12px}body.rpon.rpmob #rp{display:block;width:min(340px,92vw);box-shadow:-12px 0 40px rgba(9,15,28,.3)}body.rpon.rpmob #rpTab{display:none}}
+  .prow .pimg{position:relative}.prow .rsel{position:absolute;left:-4px;top:-4px;width:18px;height:18px;margin:0;accent-color:var(--brand);cursor:pointer;z-index:2}
+  .prow.h .rsel{position:static}
+  .rptrsel{width:18px;height:18px;margin:0;accent-color:var(--brand)}
   .prow.rede{cursor:default;background:var(--card)} .prow.rede .btn.mini{width:auto;padding:6px 10px;font-size:12.5px} .psub.rdisp{margin-top:3px}
   #sdAgr.on{background:var(--brand);color:#fff;border-color:var(--brand)}
   .ctcab .pnome{font-size:17px}.ctids{display:flex;flex-wrap:wrap;gap:14px;margin-top:4px}.ctids span{display:inline-flex;align-items:center;gap:2px}
@@ -939,6 +953,8 @@
   </div>
 </header>
 
+<aside id="rp" aria-label="Resumo da página"><div class="rph"><b>Resumo</b><button type="button" id="rpFechar" title="Esconder o resumo" aria-label="Esconder o resumo">›</button></div><div id="rpCorpo"></div><div id="rpAcoes"></div></aside>
+<button type="button" id="rpTab" title="Mostrar o resumo" aria-label="Mostrar o resumo">‹ Resumo</button>
 <main>
   <div class="msg err" id="topMsg"></div>
 
@@ -1088,6 +1104,7 @@
     <div class="crumb">Financeiro</div>
     <div class="ptopo"><h1>Caixas e Bancos</h1><div class="tbtns"><button type="button" class="btn ghost" id="fbConta">+ Nova conta</button><button type="button" class="btn" id="fbLanc">+ Lançamento</button></div></div>
     <div id="fbAviso"></div>
+    <div id="fbResumo"></div>
     <div id="fbCorpo"><div class="empty">Carregando…</div></div>
   </section>
 
@@ -1667,18 +1684,10 @@
   <section id="vAval" class="hide">
     <div class="card">
       <h2>Aparelho do cliente <span><button type="button" class="lnk hide" id="aNovo" style="margin-right:10px">+ Cadastrar modelo</button><button type="button" class="lnk hide" id="aEditar" style="margin-right:10px">Editar valores</button><button type="button" class="atualizar">Atualizar tabela</button></span></h2>
-      <label class="first" for="aModelo">Modelo</label>
+      <div id="aMarcaW"><label class="first" for="aMarca">Marca</label><select id="aMarca"></select></div>
+      <label for="aModelo">Modelo</label>
       <select id="aModelo"></select>
-      <label>Saúde da bateria</label>
-      <div class="seg" id="aBat"></div>
-      <label>Tem marcas de uso?</label>
-      <div class="seg" id="aMarcas"></div>
-      <label>Precisa trocar a tela?</label>
-      <div class="seg" id="aTela"></div>
-      <label>Vidro traseiro quebrado?</label>
-      <div class="seg" id="aVidro"></div>
-      <label>Garantia Apple restante</label>
-      <div class="seg" id="aGar"></div>
+      <div id="aItens"></div>
     </div>
     <div class="card">
       <h2>Oferta ao cliente</h2>
@@ -3846,6 +3855,151 @@
     if (!nav.children.length) nav.appendChild(el('div', 'sbvazio', q ? 'Nenhuma página com esse nome.' : 'Nenhuma página liberada.'));
     marcarMenu(S.view);
   }
+  // =========================================================
+  //  BARRA LATERAL DIREITA (resumo + ações), no lugar dos quadros do topo
+  // =========================================================
+  var RPV = { estoque: { n: ['esResumo'], l: 'esLista', t: 'Controle de Estoque', semSel: true }, compras: { n: ['cpResumo'], l: 'cpLista', t: 'Entradas de compras' },
+    saldo: { n: ['sdInfo', 'sdKpis'], l: 'sdCorpo', t: 'Saldo de Estoque', rel: true }, finest: { n: ['feInfo', 'feKpis'], l: 'feCorpo', t: 'Visão Financeira de Estoque', rel: true },
+    vendas: { n: ['hResumo'], l: 'hLista', t: 'Vendas' }, oslista: { n: ['osResumo'], l: 'osLista', t: 'Ordens de serviço' }, os: { n: ['osResumo'], l: 'osLista', t: 'Ordens de serviço', semSel: true },
+    bancos: { n: ['fbResumo'], l: 'fbCorpo', t: 'Caixas e Bancos', rel: true }, receber: { n: ['rcResumo'], l: 'rcLista', t: 'Contas a receber' }, pagar: { n: ['pgResumo'], l: 'pgLista', t: 'Contas a pagar' },
+    cred: { n: ['cdResumo'], l: 'cdLista', t: 'Crediário' }, conferencia: { n: ['cfResumo'], l: 'cfLista', t: 'Auditoria de caixa' } };
+  var RPSEL = {}, RPOBS = {};
+  function rpAtualizar(id) {
+    var cfg = RPV[id]; document.body.classList.toggle('rpon', !!cfg); document.body.classList.remove('rpmob');
+    var corpo = $('rpCorpo');
+    Object.keys(RPV).forEach(function (v) { RPV[v].n.forEach(function (nid) { var no = $(nid); if (!no) return; if (no.parentNode !== corpo) corpo.appendChild(no); no.style.display = cfg && cfg.n.indexOf(nid) > -1 ? '' : 'none'; }); });
+    if (!cfg) return;
+    var lst = $(cfg.l);
+    if (lst && !RPOBS[cfg.l]) { RPOBS[cfg.l] = new MutationObserver(function () { if (RPV[S.view] && RPV[S.view].l === cfg.l) rpLinhas(); }); RPOBS[cfg.l].observe(lst, { childList: true, subtree: false }); }
+    rpLinhas();
+  }
+  /** Linhas da lista atual (para imprimir/exportar): lê o que está na tela. */
+  function rpDados() {
+    var cfg = RPV[S.view], box = cfg && $(cfg.l); if (!box) return { cab: [], linhas: [], ks: [] };
+    var limpa = function (t) { return String(t || '').replace(/\s*\n+\s*/g, ' · ').replace(/[›✓]/g, '').trim(); };
+    var rows = box.querySelectorAll('.prow');
+    if (rows.length) {
+      var cab = [], linhas = [], ks = [];
+      Array.prototype.forEach.call(rows, function (r) {
+        var cel = Array.prototype.filter.call(r.children, function (c) { return !c.classList.contains('pimg') && !c.classList.contains('chev'); }).map(function (c) { return limpa(c.innerText); });
+        if (r.classList.contains('h')) { if (!cab.length) cab = cel; return; }
+        if (r.classList.contains('sep')) return;
+        linhas.push(cel); ks.push(r.dataset.k || '');
+      });
+      return { cab: cab.length ? cab : linhas[0] ? linhas[0].map(function () { return ''; }) : [], linhas: linhas, ks: ks };
+    }
+    var tb = box.querySelector('table'); if (!tb) return { cab: [], linhas: [], ks: [] };
+    var trs = tb.querySelectorAll('tr'), cab2 = [], l2 = [], k2 = [];
+    Array.prototype.forEach.call(trs, function (tr, i) {
+      var cs = Array.prototype.map.call(tr.querySelectorAll('th,td'), function (c) { return limpa(c.innerText); }).filter(function (t, j, a) { return j < a.length; });
+      if (tr.querySelector('th')) { if (!cab2.length) cab2 = cs; } else { l2.push(cs); k2.push(tr.dataset.k || String(i)); }
+    });
+    return { cab: cab2, linhas: l2, ks: k2 };
+  }
+  /** Caixinhas de seleção nas linhas + atualiza as ações. */
+  function rpLinhas() {
+    var cfg = RPV[S.view]; if (!cfg) return;
+    var sel = RPSEL[S.view] = RPSEL[S.view] || {}, box = $(cfg.l);
+    if (box && !cfg.semSel && !cfg.rel) {
+      var rows = box.querySelectorAll('.prow');
+      var vis = {};
+      Array.prototype.forEach.call(rows, function (r) {
+        if (r.classList.contains('sep')) return;
+        var pi = r.querySelector('.pimg') || r.firstElementChild; if (!pi || pi.querySelector('.rsel')) return;
+        var c = el('input'); c.type = 'checkbox'; c.className = 'rsel'; c.setAttribute('aria-label', r.classList.contains('h') ? 'Marcar todos' : 'Marcar');
+        c.onclick = function (e) { e.stopPropagation(); };
+        if (r.classList.contains('h')) {
+          c.onchange = function () { Array.prototype.forEach.call(box.querySelectorAll('.prow:not(.h) .rsel'), function (x) { x.checked = c.checked; var k = x.closest('.prow').dataset.k; if (k) { if (c.checked) sel[k] = 1; else delete sel[k]; } }); rpAcoes(); };
+        } else {
+          var k = r.dataset.k; if (!k) return; vis[k] = 1; c.checked = !!sel[k];
+          c.onchange = function () { if (c.checked) sel[k] = 1; else delete sel[k]; rpAcoes(); };
+        }
+        pi.appendChild(c);
+      });
+      if (rows.length) Object.keys(sel).forEach(function (k) { if (!vis[k] && !box.querySelector('.prow[data-k="' + k.replace(/"/g, '') + '"]')) delete sel[k]; });
+    }
+    rpAcoes();
+  }
+  function rpImprimir(titulo, cab, linhas) {
+    var w = el('div', 'rpimp'); w.appendChild(cabecalhoEmpresa(lojaUser(), titulo + ' · ' + dataBR(Date.now())));
+    var t = el('table'), h = el('tr'); cab.forEach(function (c) { h.appendChild(el('th', '', c)); }); t.appendChild(h);
+    linhas.forEach(function (l) { var r = el('tr'); l.forEach(function (v) { r.appendChild(el('td', '', v)); }); t.appendChild(r); });
+    w.appendChild(t); w.appendChild(el('p', 'rod', linhas.length + ' linha(s)'));
+    imprimirHTML(titulo, w, '.empcab h1{margin:0;font-size:18px}.empcab .lj{font-size:12px;color:#444}.rpimp table{width:100%;border-collapse:collapse;margin-top:12px;font-size:11.5px}.rpimp th,.rpimp td{border-bottom:1px solid #ddd;padding:5px 4px;text-align:left;vertical-align:top}.rpimp th{background:#f2f4f7}.rpimp .rod{font-size:11px;color:#555}');
+  }
+  function rpAcoes() {
+    var cfg = RPV[S.view], box = $('rpAcoes'); box.innerHTML = ''; if (!cfg) return;
+    var sel = RPSEL[S.view] || {}, ns = Object.keys(sel).length;
+    var bt = function (txt, fn, off) { var b = el('button', '', txt); b.type = 'button'; b.disabled = !!off; b.onclick = fn; box.appendChild(b); return b; };
+    box.appendChild(el('h4', '', 'Ações'));
+    bt('🖨  Imprimir ' + (cfg.rel ? '' : 'lista'), function () { var D = rpDados(); if (!D.linhas.length) return msg('topMsg', 'Nada para imprimir com esses filtros.'); rpImprimir(cfg.t, D.cab, D.linhas); });
+    bt('⬇  Exportar planilha (CSV)', function () { var D = rpDados(); if (!D.linhas.length) return msg('topMsg', 'Nada para exportar com esses filtros.'); baixarCSV(cfg.t, D.cab, D.linhas); });
+    if (cfg.rel || cfg.semSel) return;
+    box.appendChild(el('h4', '', ns ? ns + ' selecionado(s)' : 'Selecionados'));
+    var selD = function () { var D = rpDados(), cab = D.cab, l = []; D.ks.forEach(function (k, i) { if (sel[k]) l.push(D.linhas[i]); }); return { cab: cab, linhas: l }; };
+    bt('🖨  Imprimir selecionados', function () { var D = selD(); rpImprimir(cfg.t + ' (selecionados)', D.cab, D.linhas); }, !ns);
+    bt('⬇  Exportar selecionados', function () { var D = selD(); baixarCSV(cfg.t + '-selecionados', D.cab, D.linhas); }, !ns);
+    var ids = Object.keys(sel);
+    if (S.view === 'vendas') bt('🧾  Reimprimir recibos', function () { imprimirRecibos((S.vendas || []).filter(function (v) { return sel[v.id]; })); }, !ns);
+    if (S.view === 'receber' && pode('financeiro')) bt('✓  Receber selecionadas', function () { baixaLote('receber', ids); }, !ns);
+    if (S.view === 'pagar' && pode('financeiro')) bt('✓  Pagar selecionadas', function () { baixaLote('pagar', ids); }, !ns);
+    if (S.view === 'oslista') bt('↻  Mudar situação', function () { osLoteStatus(ids); }, !ns);
+    if (ns) bt('Desmarcar todos', function () { RPSEL[S.view] = {}; Array.prototype.forEach.call(document.querySelectorAll('#' + cfg.l + ' .rsel'), function (c) { c.checked = false; }); rpAcoes(); });
+  }
+  $('rpFechar').onclick = function () { if (window.innerWidth < 1100) document.body.classList.remove('rpmob'); else { document.body.classList.add('rpmin'); LS.set('rpMin', '1'); } };
+  $('rpTab').onclick = function () { if (window.innerWidth < 1100) document.body.classList.add('rpmob'); else { document.body.classList.remove('rpmin'); LS.set('rpMin', ''); } };
+  if (LS.get('rpMin', '') === '1') document.body.classList.add('rpmin');
+  /** Recibos de várias vendas numa impressão só. */
+  function imprimirRecibos(lista) {
+    if (!lista.length) return;
+    var w = el('div'); lista.forEach(function (v, i) { var r = reciboEl(v); if (i) r.style.pageBreakBefore = 'always'; w.appendChild(r); });
+    var css = Array.prototype.map.call(document.querySelectorAll('style'), function (st) { return st.textContent; }).join('\n').match(/\.recibo[^{]*\{[^}]*\}/g) || [];
+    imprimirHTML('Recibos', w, css.join('\n'));
+  }
+  /** Baixa em lote (receber/pagar): mesma conta, data e forma para todas. */
+  function baixaLote(tipo, ids) {
+    var rec = tipo === 'receber', D = rec ? S.receber : S.pagar; if (!D) return;
+    var l = D.contas.filter(function (x) { return ids.indexOf(x.id) > -1 && x.situacao === 'Em aberto' && !x.crediario; });
+    var fora = ids.length - l.length;
+    var bd = abrirDw(rec ? 'Receber selecionadas' : 'Pagar selecionadas', l.length + ' conta(s) · ' + brl(soma(l, function (x) { return x.valor; })));
+    if (!l.length) { bd.appendChild(el('div', 'empty', 'Nenhuma das selecionadas está em aberto' + (rec ? ' (parcelas do crediário são recebidas na página Crediário).' : '.'))); return; }
+    if (fora) bd.appendChild(el('div', 'hint', fora + ' selecionada(s) ficam de fora: já baixadas, canceladas' + (rec ? ' ou do crediário' : '') + '.'));
+    var bx = el('div', 'card'); bd.appendChild(bx);
+    var co = el('select'); D.financeiras.forEach(function (c) { var o = el('option', '', c.nome); o.value = c.id; co.appendChild(o); }); campo(bx, rec ? 'Entrou na conta' : 'Saiu da conta', co, true);
+    var dt = inpData(isoHoje()); campo(bx, rec ? 'Data do recebimento' : 'Data do pagamento', dt);
+    var fo = el('select'); (rec ? formasRcNomes() : formasPgNomes()).forEach(function (f) { var o = el('option', '', f); o.value = f; fo.appendChild(o); }); campo(bx, rec ? 'Como foi recebido' : 'Como foi pago', fo);
+    bx.appendChild(el('div', 'hint', 'Cada conta é baixada pelo valor dela. Para valor diferente, baixe a conta sozinha.'));
+    var m = el('div', 'msg err'); bd.appendChild(m);
+    var ok = el('button', 'btn ok', 'Confirmar ' + l.length + ' conta(s)'); ok.type = 'button'; bd.appendChild(ok);
+    ok.onclick = function () {
+      ok.disabled = true; var feitas = 0, ult = null;
+      var um = function () {
+        var x = l[feitas]; if (!x) return Promise.resolve();
+        ok.textContent = 'Baixando ' + (feitas + 1) + ' de ' + l.length + '…';
+        var arg = rec ? { receber: true, conta: co.value, recebidoEm: dt.value, valor: x.valor, forma: fo.value } : { pagar: true, conta: co.value, pagoEm: dt.value, valor: x.valor, forma: fo.value };
+        return call(rec ? 'receberBaixar' : 'pagarBaixar', [S.token, x.id, arg]).then(function (d) { ult = d; feitas++; return um(); });
+      };
+      um().then(function () { RPSEL[S.view] = {}; if (ult) (rec ? aposReceber : aposPagar)(ult); fecharDrawer(); avisoTopo(feitas + ' conta(s) ' + (rec ? 'recebida(s)' : 'paga(s)') + ' com sucesso'); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Tentar de novo'; m.textContent = (feitas ? feitas + ' baixada(s); parou em ' + l[feitas].descricao + ': ' : '') + e; m.classList.add('show'); if (ult) (rec ? aposReceber : aposPagar)(ult); l = l.slice(feitas); feitas = 0; });
+    };
+  }
+  /** Muda a situação de várias OS de uma vez. */
+  function osLoteStatus(ids) {
+    var D = S.os; if (!D) return;
+    var l = D.ordens.filter(function (o) { return ids.indexOf(o.id) > -1 && !osFinal(o); });
+    var bd = abrirDw('Mudar situação', l.length + ' OS selecionada(s) em andamento');
+    if (!l.length) { bd.appendChild(el('div', 'empty', 'Nenhuma das selecionadas está em andamento (entregues e canceladas não mudam por aqui).')); return; }
+    var sl = el('select'); D.status.filter(function (s2) { return s2 !== 'Entregue' && s2 !== 'Cancelada'; }).forEach(function (s2) { var o = el('option', '', s2); o.value = s2; sl.appendChild(o); }); campo(bd, 'Nova situação', sl, true);
+    bd.appendChild(el('div', 'hint', 'Entregar e cancelar continuam na OS, uma a uma (têm pagamento e motivo).'));
+    var m = el('div', 'msg err'); bd.appendChild(m);
+    var ok = el('button', 'btn ok', 'Mudar ' + l.length + ' OS'); ok.type = 'button'; bd.appendChild(ok);
+    ok.onclick = function () {
+      ok.disabled = true; var i = 0, ult = null;
+      var um = function () { var o = l[i]; if (!o) return Promise.resolve(); if (o.status === sl.value) { i++; return um(); } ok.textContent = 'Mudando ' + (i + 1) + ' de ' + l.length + '…'; return callM('osStatus', [S.token, o.id, sl.value, '']).then(function (d) { ult = d; i++; return um(); }); };
+      um().then(function () { RPSEL[S.view] = {}; if (ult) aposOS(ult); else renderOS(); fecharDrawer(); avisoTopo(l.length + ' OS mudada(s) para ' + sl.value); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Tentar de novo'; m.textContent = e; m.classList.add('show'); if (ult) aposOS(ult); l = l.slice(i); i = 0; });
+    };
+  }
   function marcarMenu(id) {
     var alvo = { cadastro: 'disp', prod: 'acess', pessoa: 'crm', ctrlest: CT && CT.ref.tipo === 'aparelho' ? 'disp' : 'acess' }[id] || id;
     var v = VIEWS.filter(function (z) { return z.id === alvo; })[0];
@@ -4954,6 +5108,7 @@
     if (id === 'config') desenharCfg();
     fecharMenuNav();
     marcarMenu(id);
+    rpAtualizar(id);
     show('rbW', !!S.rbPode && (id === 'acess' || id === 'disp')); if (id !== 'acess' && id !== 'disp') { $('rbBusca').value = ''; $('rbRes').classList.add('hide'); }
     if (id === 'disp') carregarDisp(false);
     if (id === 'cadastro' && S.cadPre) aplicarPreCadastro();
@@ -5985,7 +6140,7 @@
     var D = S.fin; if (!D) return;
     var box = $('fbCorpo'); box.innerHTML = '';
     var ativas = D.contas.filter(function (c) { return c.ativa; }), tot = soma(ativas, function (c) { return c.saldo; });
-    var k = el('div', 'kpis'); box.appendChild(k);
+    var rsF = $('fbResumo'); rsF.innerHTML = ''; var k = el('div', 'kpis'); rsF.appendChild(k);
     kpi(k, 'Saldo total', brl(tot), ativas.length + ' conta' + (ativas.length === 1 ? '' : 's') + ' ativa' + (ativas.length === 1 ? '' : 's'), tot < 0 ? 'down' : '');
     kpi(k, 'Contas a pagar em aberto', brl(D.aPagar.total), D.aPagar.qtd + ' lançamento' + (D.aPagar.qtd === 1 ? '' : 's'));
     kpi(k, 'Vencidas', brl(D.aPagar.vencido), D.aPagar.vencido ? 'pague ou renegocie' : 'nada vencido', D.aPagar.vencido ? 'down' : 'up');
@@ -7663,6 +7818,31 @@
     // 2. pagamento
     var c2 = el('div', 'card pecard'); box.appendChild(c2); c2.appendChild(el('h2', '', 'Como paga a comissão'));
     cfgPag(c2, 'Supervisor (venda total da rede)', C.pagamento.supervisor); cfgPag(c2, 'Gerente (venda total da loja)', C.pagamento.gerente); cfgPag(c2, 'Vendedor (venda individual)', C.pagamento.vendedor);
+    // 2b. bonificação de celulares vendidos e manutenções entregues
+    C.bonus = C.bonus || { modelo: 'quantidade', cel: { modo: 'faixas', fixo: 0, faixas: [0, 0, 0, 0] }, manut: { modo: 'faixas', fixo: 0, faixas: [0, 0, 0, 0] } };
+    var cb = el('div', 'card pecard'); box.appendChild(cb); cb.appendChild(el('h2', '', 'Bonificação: celulares vendidos e manutenções entregues'));
+    var bsg = el('div', 'seg'); cb.appendChild(bsg); var bw = el('div'); cb.appendChild(bw);
+    var MOD_B = { 'Por quantidade (meta de aparelhos)': 'quantidade', 'Por aparelho (faixa do faturamento)': 'faixa_faturamento', 'Sem bonificação': 'nenhum' };
+    var desB = function () {
+      bw.innerHTML = ''; var B = C.bonus;
+      if (B.modelo === 'nenhum') { bw.appendChild(el('div', 'hint', 'Ninguém recebe bonificação por quantidade neste mês.')); return; }
+      bw.appendChild(el('div', 'hint', B.modelo === 'quantidade' ? 'Cada empresa define quantos celulares e manutenções quer no mês (no quadro da empresa, abaixo). A quantidade de cada vendedor segue o peso da meta dele (a mesma divisão do faturamento). Quem bate a sua quantidade recebe o valor fixo, ou o valor da faixa atingida (Mínima 80% · Meta 100% · Super 110% · Hiper 125%). Manutenção conta para quem registrou a entrega da OS.' : 'Valor por aparelho vendido e por OS entregue, conforme a faixa que o vendedor atingiu na meta de faturamento. Abaixo da Mínima não recebe.'));
+      [['cel', 'Celulares vendidos'], ['manut', 'Manutenções entregues']].forEach(function (t) {
+        var T = B[t[0]], bx = el('div', 'mtfx'); bw.appendChild(bx); bx.appendChild(el('h3', 'ch', t[1] + (B.modelo === 'faixa_faturamento' ? ' (R$ por unidade)' : '')));
+        var sg2 = el('div', 'seg'); bx.appendChild(sg2); var vw = el('div'); bx.appendChild(vw);
+        var desT2 = function () {
+          vw.innerHTML = '';
+          if (T.modo === 'fixo') { var fv = inpValor(T.fixo ? vs(T.fixo) : ''); campo(vw, B.modelo === 'quantidade' ? 'Valor para quem bate 100%' : 'Valor por unidade (a partir da Meta)', fv, true); fv.input.oninput = function () { T.fixo = num(fv.input.value) || 0; }; return; }
+          var g5 = grade(vw, 4); ['Mínima (80%)', 'Meta (100%)', 'Super (110%)', 'Hiper (125%)'].forEach(function (rot, i) { var fv2 = inpValor(T.faixas[i] ? vs(T.faixas[i]) : ''); campo(g5[i], rot, fv2, true); fv2.input.oninput = function () { T.faixas[i] = num(fv2.input.value) || 0; }; });
+        };
+        seg(sg2, ['Valor fixo', 'Por faixas'], T.modo === 'fixo' ? 'Valor fixo' : 'Por faixas', function (v) { T.modo = v === 'Valor fixo' ? 'fixo' : 'faixas'; desT2(); });
+        desT2();
+      });
+    };
+    seg(bsg, Object.keys(MOD_B), Object.keys(MOD_B).filter(function (k) { return MOD_B[k] === C.bonus.modelo; })[0], function (v) { C.bonus.modelo = MOD_B[v]; desB(); renderQtdLojas(); });
+    desB();
+    var qtdBoxes = [];
+    function renderQtdLojas() { qtdBoxes.forEach(function (f) { f(); }); }
     // manutenção centralizada (Celulares): não tem meta; o faturamento pode contar na empresa que entrega
     if (D.central) box.appendChild(el('div', 'aviso', 'Esta empresa é a central de manutenção: não tem meta de faturamento. As OS entregues contam na empresa que entregou (se ligado na meta dela).'));
     else if (D.temCentral) {
@@ -7684,6 +7864,13 @@
       var sb = el('button', 'lnk', 'Sugerir: média + 10%'); sb.type = 'button'; g[0].appendChild(sb); sb.onclick = function () { L.valor = r2(med * 1.1); mv.input.value = vs(L.valor); atu(); };
       var gs = el('select'); gs.appendChild(el('option', '', 'Sem gerente')).value = ''; D.funcionarios.forEach(function (f) { var o = el('option', '', f.nome + (f.loja ? ' · ' + f.loja.replace(/^.*\| /, '') : '')); o.value = f.id; gs.appendChild(o); }); gs.value = L.gerenteId; campo(g[1], 'Gerente da loja', gs, true); gs.onchange = function () { L.gerenteId = gs.value; };
       var ms = el('select'); [['valor', 'Valor por vendedor'], ['pct', '% da meta da loja']].forEach(function (x) { var o = el('option', '', x[1]); o.value = x[0]; ms.appendChild(o); }); ms.value = L.modoVend; campo(g[2], 'Meta dos vendedores', ms, true);
+      var qw = el('div'); c.appendChild(qw); L.qtd = L.qtd || { cel: 0, manut: 0 };
+      var desQ = function () {
+        qw.innerHTML = ''; if (C.bonus.modelo !== 'quantidade') return;
+        var gq = grade(qw, 2);
+        [['cel', 'Meta de celulares vendidos (qtd.)'], ['manut', 'Meta de manutenções entregues (qtd.)']].forEach(function (t, i) { var x = inp('number', '0'); x.min = 0; x.value = L.qtd[t[0]] || ''; campo(gq[i], t[1], x, true); x.oninput = function () { L.qtd[t[0]] = parseInt(x.value, 10) || 0; }; });
+      };
+      qtdBoxes.push(desQ); desQ();
       var vb = el('div'); c.appendChild(vb); var sm = el('div', 'hint'); c.appendChild(sm); var sw = el('div'); c.appendChild(sw);
       ms.onchange = function () { L.modoVend = ms.value; desV(); };
       mv.input.oninput = function () { L.valor = num(mv.input.value) || 0; atu(); };
@@ -7750,7 +7937,9 @@
       r.appendChild(a); r.appendChild(el('td', 'n', brl(x.meta))); r.appendChild(el('td', 'n', brl(x.vendido)));
       var at = el('td', 'n'), bar = el('div', 'mtbar'), fill = el('i'); fill.style.width = Math.min(100, x.ating) + '%'; fill.className = x.ating >= 100 ? 'ok' : x.ating >= 80 ? 'warn' : 'err'; bar.appendChild(fill); at.appendChild(document.createTextNode(nfmt(x.ating) + '%')); at.appendChild(bar); r.appendChild(at);
       r.appendChild(el('td', 'n', x.faixa + (x.pct ? ' (' + nfmt(x.pct) + '%)' : '')));
-      var cm = el('td', 'n b', brl(x.comissao)); if (x.extra) cm.appendChild(el('small', '', 'inclui ' + x.extra.qtd + ' OS × ' + brl(x.extra.valor / x.extra.qtd))); r.appendChild(cm);
+      var cm = el('td', 'n b', brl(x.comissao)); if (x.extra) cm.appendChild(el('small', '', 'inclui ' + x.extra.qtd + ' OS × ' + brl(x.extra.valor / x.extra.qtd)));
+      (x.bonus || []).forEach(function (b) { cm.appendChild(el('small', '', (b.meta ? b.tipo + ': ' + b.qtd + ' de ' + b.meta + ' (' + nfmt(b.ating) + '%)' : b.tipo + ': ' + b.qtd + ' × ' + brl(b.unit || 0)) + ' → ' + (b.valor ? '+ ' + brl(b.valor) : 'sem bônus'))); });
+      r.appendChild(cm);
       t.appendChild(r);
     });
     var tr = el('tr', 'tot'); tr.appendChild(el('td', '', 'Total')); tr.appendChild(el('td')); tr.appendChild(el('td')); tr.appendChild(el('td')); tr.appendChild(el('td')); tr.appendChild(el('td', 'n b', brl(R.total))); t.appendChild(tr);
@@ -9134,7 +9323,7 @@
   function isoMais(dias) { var d = new Date(Date.now() + dias * 864e5); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
   function novaProposta() {
     var tx = (S.u.taxas || []).map(function (t) { return t.nome; }), pad = ['À vista'].concat(['6x', '12x'].filter(function (n) { return tx.indexOf(n) > -1; }));
-    PP = { itens: [], troca: { modo: 'Sem troca', modelo: '', av: { bat: '85% ou mais', marcas: 'Não', tela: 'Não', vidro: 'Não', gar: 'Não tem' }, desc: '', valor: '' }, cli: cliVazio(), cliModo: 'busca', validade: isoMais(3), parc: pad, obs: '', aba: 'nova' };
+    PP = { itens: [], troca: { modo: 'Sem troca', marca: 'Apple', modelo: '', av: {}, desc: '', valor: '' }, cli: cliVazio(), cliModo: 'busca', validade: isoMais(3), parc: pad, obs: '', aba: 'nova' };
   }
   function cliVazio() { return { id: '', cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' }; }
   /** Bloco de cliente igual ao de Vendas/OS: buscar cadastrado, cadastrar novo ou (o.avulso) só nome e WhatsApp. st = { cli, cliModo } */
@@ -9185,16 +9374,9 @@
   $('ppNovaBtn').onclick = function () { novaProposta(); desenharProposta(); };
   $('ppHistBtn').onclick = function () { if (!PP) novaProposta(); PP.aba = 'hist'; desenharHistProposta(); };
   /** Avaliação iPhone (mesma conta da página Avaliação). */
-  function avalCalc(modelo, av) {
-    var m = (S.u.iphones || []).filter(function (x) { return x.modelo === modelo; })[0]; if (!m) return null;
-    var ab = function (v) { return v === null || v === undefined ? 0 : v; };
-    var bat = av.bat === '84% a 80%' ? ab(m.bat8480) : av.bat === 'Abaixo de 80%' ? ab(m.bat80) : 0;
-    var v = (m.compra || 0) + bat + (av.marcas === 'Sim' ? ab(m.marcas) : 0) + (av.tela === 'Sim' ? ab(m.tela) : 0) + (av.vidro === 'Sim' ? ab(m.vidro) : 0) + (av.gar === '+6 meses' ? ab(m.g6) : av.gar === '+3 meses' ? ab(m.g3) : 0);
-    return Math.max(0, v);
-  }
   function ppTroca() {
     var t = PP.troca;
-    if (t.modo === 'iPhone (avaliação)') { var v = avalCalc(t.modelo, t.av); return v ? { tipo: 'iphone', descricao: t.modelo, valor: v, detalhes: 'bateria ' + t.av.bat + ' · marcas ' + t.av.marcas.toLowerCase() + ' · trocar tela ' + t.av.tela.toLowerCase() + ' · vidro quebrado ' + t.av.vidro.toLowerCase() + ' · garantia Apple ' + t.av.gar.toLowerCase() } : null; }
+    if (t.modo === 'Usado (avaliação)') { var R = avCalcular(t.marca, t.modelo, t.av); return R && R.oferta ? { tipo: 'avaliacao', descricao: t.modelo, valor: R.oferta, detalhes: (t.marca !== 'Apple' ? t.marca + ' · ' : '') + R.detalhes } : null; }
     if (t.modo === 'Outro aparelho') { var v2 = num(t.valor); return v2 > 0 ? { tipo: 'outro', descricao: t.desc || 'Aparelho do cliente', valor: v2, detalhes: '' } : null; }
     return null;
   }
@@ -9263,14 +9445,12 @@
     // 2. troca
     var c2 = el('div', 'card'); c2.appendChild(el('h2', '', 'Aparelho do cliente na troca')); esq.appendChild(c2);
     var sg = el('div', 'seg'); c2.appendChild(sg); var tb = el('div'); c2.appendChild(tb);
-    seg(sg, ['Sem troca', 'iPhone (avaliação)', 'Outro aparelho'], PP.troca.modo, function (v) { PP.troca.modo = v; desenharProposta(); });
-    if (PP.troca.modo === 'iPhone (avaliação)') {
-      var ms = el('select'); opts(ms, (S.u.iphones || []).map(function (x) { return x.modelo; }), PP.troca.modelo, 'Selecione o modelo…'); campo(tb, 'Modelo', ms, true);
-      ms.onchange = function () { PP.troca.modelo = ms.value; PP.troca.av = { bat: '85% ou mais', marcas: 'Não', tela: 'Não', vidro: 'Não', gar: 'Não tem' }; desenharProposta(); };
-      var A = PP.troca.av;
-      [['Saúde da bateria', 'bat', ['85% ou mais', '84% a 80%', 'Abaixo de 80%']], ['Tem marcas de uso?', 'marcas', ['Não', 'Sim']], ['Precisa trocar a tela?', 'tela', ['Não', 'Sim']], ['Vidro traseiro quebrado?', 'vidro', ['Não', 'Sim']], ['Garantia Apple restante', 'gar', ['Não tem', '+6 meses', '+3 meses']]].forEach(function (k) {
-        tb.appendChild(el('label', '', k[0])); var sx = el('div', 'seg'); tb.appendChild(sx); seg(sx, k[2], A[k[1]], function (v) { A[k[1]] = v; atualizar(); });
-      });
+    seg(sg, ['Sem troca', 'Usado (avaliação)', 'Outro aparelho'], PP.troca.modo, function (v) { PP.troca.modo = v; desenharProposta(); });
+    if (PP.troca.modo === 'Usado (avaliação)') {
+      if (avMarcas().length > 1) { var mk = el('select'); opts(mk, avMarcas().map(function (m) { return m.nome; }), PP.troca.marca); campo(tb, 'Marca', mk, true); mk.onchange = function () { PP.troca.marca = mk.value; PP.troca.modelo = ''; PP.troca.av = {}; desenharProposta(); }; }
+      var ms = el('select'); opts(ms, avModelos(PP.troca.marca).map(function (x) { return x.modelo; }), PP.troca.modelo, 'Selecione o modelo…'); campo(tb, 'Modelo', ms, avMarcas().length < 2);
+      ms.onchange = function () { PP.troca.modelo = ms.value; PP.troca.av = {}; desenharProposta(); };
+      var qb = el('div'); tb.appendChild(qb); avPerguntas(qb, PP.troca.marca, PP.troca.av, function () { atualizar(); });
     } else if (PP.troca.modo === 'Outro aparelho') {
       var ds = inp('text', 'Ex.: Samsung A54 128GB'); ds.maxLength = 120; ds.value = PP.troca.desc; ds.oninput = function () { PP.troca.desc = ds.value; atualizar(); }; campo(tb, 'Aparelho', ds, true);
       var vl = inp('text', '0,00'); vl.inputMode = 'decimal'; vl.value = PP.troca.valor; vl.oninput = function () { PP.troca.valor = vl.value; atualizar(); }; campo(tb, 'Valor que pagamos (R$)', vl);
@@ -9803,7 +9983,38 @@
   // =========================================================
   //  AVALIAÇÃO iPHONE
   // =========================================================
-  $('aEditar').onclick = function () { abrirEditarAval($('aModelo').value); };
+  $('aEditar').onclick = function () { if ((S.avMarca || 'Apple') !== 'Apple') abrirEditarAvalMarca(S.avMarca, $('aModelo').value); else abrirEditarAval($('aModelo').value); };
+  /** Valores de um modelo de outra marca (fica na configuração do sistema). */
+  function abrirEditarAvalMarca(marca, modelo) {
+    var M = avMarca(marca), sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Valores da Avaliação · ' + marca));
+    sh.appendChild(el('div', 'sub', 'Abatimentos são negativos (ex.: -100) e bônus positivos. Vazio = sem valor (o vendedor vê "consultar gerente").'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var sm = el('select'); opts(sm, avModelos(marca).map(function (x) { return x.modelo; }), modelo || '', 'Escolha o modelo…'); campo(c, 'Modelo', sm, true);
+    var gd = el('div'); gd.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px'; c.appendChild(gd);
+    var ins = {};
+    var add = function (k, rot) { var w = el('div'), i = inp('text'); i.inputMode = 'decimal'; i.placeholder = 'vazio'; campo(w, rot, i); ins[k] = i; gd.appendChild(w); };
+    add('compra', 'Preço de compra (aparelho perfeito)'); add('venda', 'Preço de venda');
+    M.itens.forEach(function (it) { it.opcoes.forEach(function (o, k) { if (k) add(it.id + ':' + k, it.nome.replace(/\?$/, '') + ': ' + o); }); });
+    function preencher() {
+      var x = avModelos(marca).filter(function (y) { return y.modelo === sm.value; })[0];
+      Object.keys(ins).forEach(function (k) { var v = !x ? '' : k === 'compra' || k === 'venda' ? x[k] : (x.desc[k.split(':')[0]] || [])[+k.split(':')[1]]; ins[k].value = v === null || v === undefined ? '' : String(v).replace('.', ','); ins[k].disabled = !x; });
+    }
+    sm.onchange = preencher; preencher();
+    var m = el('div', 'msg err'); c.appendChild(m);
+    var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Fechar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
+    cc.onclick = fecharModal;
+    ok.onclick = function () {
+      m.classList.remove('show'); if (!sm.value) { m.textContent = 'Escolha o modelo.'; m.classList.add('show'); return; }
+      var val = {}, erro = ''; Object.keys(ins).forEach(function (k) { var t = ins[k].value.trim(); if (!t) { val[k] = ''; return; } var n = num(t.replace(/^\+/, '')); if (n === null) erro = 'Valor inválido.'; else val[k] = n; });
+      if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      var d = { compra: val.compra, venda: val.venda, desc: {} }; M.itens.forEach(function (it) { d.desc[it.id] = it.opcoes.map(function (o, k) { return k ? val[it.id + ':' + k] : 0; }); });
+      ok.disabled = true; ok.textContent = 'Salvando…';
+      call('avaliacaoModeloSalvar', [S.token, marca, sm.value, d]).then(function (r) { S.u.aval = r.aval; ok.disabled = false; ok.textContent = 'Salvar'; avisoTopo('Os valores de ' + sm.value + ' foram salvos com sucesso'); calcAval(); })
+        .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
+    };
+    abrirModal();
+  }
   function abrirEditarAval(modelo) {
     var lista = S.u.iphones || [];
     var sh = $('fSheet'); sh.innerHTML = '';
@@ -9840,78 +10051,102 @@
     };
     abrirModal();
   }
+  // ---------- avaliação de usados por marca ----------
+  var APPLE_ITENS = [{ id: 'bat', nome: 'Saúde da bateria', opcoes: ['85% ou mais', '84% a 80%', 'Abaixo de 80%'] }, { id: 'marcas', nome: 'Tem marcas de uso?', opcoes: ['Não', 'Sim'] },
+    { id: 'tela', nome: 'Precisa trocar a tela?', opcoes: ['Não', 'Sim'] }, { id: 'vidro', nome: 'Vidro traseiro quebrado?', opcoes: ['Não', 'Sim'] }, { id: 'gar', nome: 'Garantia Apple restante', opcoes: ['Não tem', '+6 meses', '+3 meses'] }];
+  function avMarcas() { return [{ nome: 'Apple', itens: APPLE_ITENS }].concat(((S.u.aval || {}).marcas) || []); }
+  function avMarca(nome) { return avMarcas().filter(function (m) { return m.nome === nome; })[0] || avMarcas()[0]; }
+  /** Modelos de uma marca no formato único: { modelo, compra, venda, desc: { item: [valor por opção] } } */
+  function avModelos(marca) {
+    if (marca === 'Apple') return (S.u.iphones || []).map(function (x) { return { marca: 'Apple', modelo: x.modelo, compra: x.compra, venda: x.venda, bruto: x, desc: { bat: [0, x.bat8480, x.bat80], marcas: [0, x.marcas], tela: [0, x.tela], vidro: [0, x.vidro], gar: [0, x.g6, x.g3] } }; });
+    return (((S.u.aval || {}).modelos) || []).filter(function (x) { return x.marca === marca; });
+  }
+  function avMarcaDoModelo(modelo) { var ms = avMarcas(); for (var i = 0; i < ms.length; i++) if (avModelos(ms[i].nome).some(function (x) { return x.modelo === modelo; })) return ms[i].nome; return 'Apple'; }
+  /** Calcula a oferta: escolhas = { item: índice da opção } */
+  function avCalcular(marca, modelo, escolhas) {
+    var M = avMarca(marca), m = avModelos(marca).filter(function (x) { return x.modelo === modelo; })[0];
+    if (!m) return null;
+    var linhas = [['Preço base (perfeito)', m.compra || 0]], tot = m.compra || 0, falta = [];
+    var semTabela = M.itens.every(function (it) { return (m.desc[it.id] || []).slice(1).every(function (v) { return v === null || v === undefined; }); });
+    M.itens.forEach(function (it) {
+      var k = escolhas[it.id] || 0, v = (m.desc[it.id] || [])[k];
+      if (k > 0 && (v === null || v === undefined)) falta.push(it.nome.replace(/\?$/, ''));
+      v = typeof v === 'number' ? v : 0; tot += v; linhas.push([it.nome.replace(/\?$/, '') + (k ? ': ' + it.opcoes[k] : ''), v]);
+    });
+    var alerta = semTabela ? 'Modelo sem tabela de abatimentos — CONSULTAR GERENTE.' : falta.length ? 'Sem valor na tabela para: ' + falta.join(', ') + ' — CONSULTAR GERENTE.' : '';
+    return { base: m.compra || 0, linhas: linhas, oferta: Math.max(0, tot), alerta: alerta, detalhes: M.itens.map(function (it) { return it.nome.replace(/\?$/, '').toLowerCase() + ' ' + String(it.opcoes[escolhas[it.id] || 0]).toLowerCase(); }).join(' · ') };
+  }
+  /** Perguntas da marca (cada item vira um seletor), usadas na Avaliação e na troca da Proposta. */
+  function avPerguntas(box, marca, escolhas, mudou) {
+    box.innerHTML = '';
+    avMarca(marca).itens.forEach(function (it) { box.appendChild(el('label', '', it.nome)); var sx = el('div', 'seg'); box.appendChild(sx); seg(sx, it.opcoes, it.opcoes[escolhas[it.id] || 0], function (v) { escolhas[it.id] = it.opcoes.indexOf(v); mudou(); }); });
+  }
   function montarAval() {
     show('aEditar', pode('editar_avaliacao')); show('aNovo', pode('editar_avaliacao'));
-    var ms = (S.u.iphones || []).map(function (x) { return x.modelo; });
-    opts($('aModelo'), ms, $('aModelo').value, 'Selecione o modelo…');
-    seg($('aBat'), ['85% ou mais', '84% a 80%', 'Abaixo de 80%'], S.av.bat, function (v) { S.av.bat = v; calcAval(); });
-    seg($('aMarcas'), ['Não', 'Sim'], S.av.marcas, function (v) { S.av.marcas = v; calcAval(); });
-    seg($('aTela'), ['Não', 'Sim'], S.av.tela, function (v) { S.av.tela = v; calcAval(); });
-    seg($('aVidro'), ['Não', 'Sim'], S.av.vidro, function (v) { S.av.vidro = v; calcAval(); });
-    seg($('aGar'), ['Não tem', '+6 meses', '+3 meses'], S.av.gar, function (v) { S.av.gar = v; calcAval(); });
+    var ms = avMarcas().map(function (m) { return m.nome; });
+    show('aMarcaW', ms.length > 1);
+    if (!S.avMarca || ms.indexOf(S.avMarca) < 0) S.avMarca = 'Apple';
+    opts($('aMarca'), ms, S.avMarca);
+    opts($('aModelo'), avModelos(S.avMarca).map(function (x) { return x.modelo; }), $('aModelo').value, 'Selecione o modelo…');
+    S.av = S.av && S.av.__m === S.avMarca ? S.av : { __m: S.avMarca };
+    avPerguntas($('aItens'), S.avMarca, S.av, calcAval);
     calcAval();
   }
-  // trocar de modelo volta tudo ao padrão (bateria, marcas, tela, vidro e garantia)
-  var AV_PADRAO = { bat: '85% ou mais', marcas: 'Não', tela: 'Não', vidro: 'Não', gar: 'Não tem' };
-  $('aModelo').addEventListener('change', function () { S.av = Object.assign({}, AV_PADRAO); montarAval(); });
+  // trocar de marca ou de modelo volta tudo ao padrão
+  $('aMarca').addEventListener('change', function () { S.avMarca = $('aMarca').value; $('aModelo').value = ''; S.av = null; montarAval(); });
+  $('aModelo').addEventListener('change', function () { S.av = null; montarAval(); });
   $('aNovo').onclick = function () { abrirNovoModeloAval(); };
-  function abrirNovoModeloAval(depois) {
-    var lista = S.u.iphones || [];
-    var media = function (k) { var v = lista.map(function (x) { return x[k]; }).filter(function (x) { return typeof x === 'number'; }); return v.length ? Math.round(v.reduce(function (a, b) { return a + b; }, 0) / v.length) : ''; };
+  function abrirNovoModeloAval(depois, marcaIni) {
+    var marca = marcaIni || S.avMarca || 'Apple';
     var sh = $('fSheet'); sh.innerHTML = '';
-    sh.appendChild(el('h2', 'tt', 'Cadastrar modelo na Avaliação iPhone'));
-    sh.appendChild(el('div', 'sub', 'Os descontos já vêm com a média dos outros modelos: só ajuste. O modelo entra também na Tabela de Preços › Produtos Usados.'));
-    var c = el('div', 'card');
-    var nm = inp('text', 'Ex.: IPHONE 16 PRO 256GB'); nm.maxLength = 60; nm.style.textTransform = 'uppercase'; campo(c, 'Modelo (com a capacidade)', nm, true);
-    var campos = [['compra', 'Preço de compra (aparelho perfeito)', ''], ['venda', 'Preço de venda', ''], ['bat8480', 'Bateria 84% a 80%', media('bat8480')], ['bat80', 'Bateria abaixo de 80%', media('bat80')],
-                  ['marcas', 'Com marcas de uso', media('marcas')], ['tela', 'Troca de tela', media('tela')], ['vidro', 'Vidro traseiro quebrado', media('vidro')], ['g6', 'Garantia Apple +6 meses', media('g6')], ['g3', 'Garantia Apple +3 meses', media('g3')]];
-    var ins = {}, grade = el('div'); grade.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px';
-    campos.forEach(function (k) { var w = el('div'); var i = inp('text'); i.inputMode = 'decimal'; i.placeholder = 'vazio'; i.value = k[2] === '' ? '' : String(k[2]); campo(w, k[1], i); ins[k[0]] = i; grade.appendChild(w); });
-    c.appendChild(grade);
+    sh.appendChild(el('h2', 'tt', 'Cadastrar modelo na Avaliação de usados'));
+    sh.appendChild(el('div', 'sub', 'Os descontos já vêm com a média dos outros modelos da marca: só ajuste (negativo = desconto). O modelo entra também na Tabela de Preços › Produtos Usados.'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var sm = el('select'); opts(sm, avMarcas().map(function (m) { return m.nome; }), marca); if (avMarcas().length > 1) campo(c, 'Marca', sm, true);
+    var nm = inp('text', 'Ex.: IPHONE 16 PRO 256GB'); nm.maxLength = 60; nm.style.textTransform = 'uppercase'; campo(c, 'Modelo (com a capacidade)', nm, avMarcas().length < 2);
+    var corpo = el('div'); c.appendChild(corpo);
+    var ins = {};
+    var media = function (lst, f) { var v = lst.map(f).filter(function (x) { return typeof x === 'number'; }); return v.length ? Math.round(v.reduce(function (a, b) { return a + b; }, 0) / v.length) : ''; };
+    function des() {
+      corpo.innerHTML = ''; ins = {}; var M = avMarca(sm.value), lst = avModelos(sm.value);
+      nm.placeholder = sm.value === 'Apple' ? 'Ex.: IPHONE 16 PRO 256GB' : 'Ex.: GALAXY S23 256GB';
+      var gd = el('div'); gd.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px'; corpo.appendChild(gd);
+      var add = function (k, rot, v) { var w = el('div'), i = inp('text'); i.inputMode = 'decimal'; i.placeholder = 'vazio'; i.value = v === '' || v === null || v === undefined ? '' : String(v); campo(w, rot, i); ins[k] = i; gd.appendChild(w); };
+      add('compra', 'Preço de compra (aparelho perfeito)', ''); add('venda', 'Preço de venda', '');
+      M.itens.forEach(function (it) { it.opcoes.forEach(function (o, k) { if (k) add(it.id + ':' + k, it.nome.replace(/\?$/, '') + ': ' + o, media(lst, function (x) { return (x.desc[it.id] || [])[k]; })); }); });
+    }
+    sm.onchange = des; des();
     var m = el('div', 'msg err'); c.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Cadastrar modelo'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
-    ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
+    ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
     cc.onclick = fecharModal;
     ok.onclick = function () {
       m.classList.remove('show');
-      var d = { modelo: nm.value.trim() }, erro = '';
-      if (d.modelo.length < 5) erro = 'Informe o modelo com a capacidade.';
-      campos.forEach(function (k) { var t = ins[k[0]].value.trim(); if (!t) { d[k[0]] = ''; return; } var n = num(t.replace(/^\+/, '')); if (n === null) erro = 'Valor inválido em "' + k[1] + '".'; else d[k[0]] = n; });
-      if (!erro && !(d.compra > 0)) erro = 'Informe o preço de compra.';
+      var M = avMarca(sm.value), erro = '', val = {};
+      Object.keys(ins).forEach(function (k) { var t = ins[k].value.trim(); if (!t) { val[k] = ''; return; } var n = num(t.replace(/^\+/, '')); if (n === null) erro = 'Valor inválido.'; else val[k] = n; });
+      if (nm.value.trim().length < 5) erro = 'Informe o modelo com a capacidade.';
+      if (!erro && !(val.compra > 0)) erro = 'Informe o preço de compra.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      var d = { marca: sm.value, modelo: nm.value.trim(), compra: val.compra, venda: val.venda };
+      if (sm.value === 'Apple') { var map = { 'bat:1': 'bat8480', 'bat:2': 'bat80', 'marcas:1': 'marcas', 'tela:1': 'tela', 'vidro:1': 'vidro', 'gar:1': 'g6', 'gar:2': 'g3' }; Object.keys(map).forEach(function (k) { d[map[k]] = val[k]; }); }
+      else { d.desc = {}; M.itens.forEach(function (it) { d.desc[it.id] = it.opcoes.map(function (o, k) { return k ? val[it.id + ':' + k] : 0; }); }); }
       ok.disabled = true; ok.textContent = 'Cadastrando…';
       call('avaliacaoModeloNovo', [S.token, d]).then(function (r) {
-        ['params', 'taxas', 'iphones'].forEach(function (k) { if (r[k]) S.u[k] = r[k]; }); if (r.modelos) S.u.modelos = r.modelos;
+        ['params', 'taxas', 'iphones', 'aval'].forEach(function (k) { if (r[k]) S.u[k] = r[k]; }); if (r.modelos) S.u.modelos = r.modelos;
         fecharModal(); avisoTopo('O modelo ' + r.novoModelo + ' foi cadastrado com sucesso');
-        $('aModelo').value = r.novoModelo; S.av = Object.assign({}, AV_PADRAO); montarAval();
-        if (depois) depois(r.novoModelo);
+        S.avMarca = d.marca; S.av = null; montarAval(); $('aModelo').value = r.novoModelo; S.av = null; montarAval();
+        if (depois) depois(r.novoModelo, d.marca);
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Cadastrar modelo'; m.textContent = e; m.classList.add('show'); });
     };
     abrirModal(); setTimeout(function () { nm.focus(); }, 50);
   }
   function setDecisao(box, txt, cls) { box.textContent = txt; box.className = 'decisao ' + (cls || 'info'); }
   function calcAval() {
-    var P = S.u.params, m = (S.u.iphones || []).filter(function (x) { return x.modelo === $('aModelo').value; })[0];
-    if (!m) { lines($('aLinhas'), []); $('aOferta').textContent = '—'; $('aAlerta').className = 'status'; return; }
-    var alerta = '';
-    var ab = function (v) { return v === null ? 0 : v; };
-    var semTabela = m.bat8480 === null && m.bat80 === null && m.marcas === null && m.tela === null;
-    if (semTabela) alerta = 'Modelo sem tabela de abatimentos — CONSULTAR GERENTE.';
-    var bat = S.av.bat === '84% a 80%' ? ab(m.bat8480) : S.av.bat === 'Abaixo de 80%' ? ab(m.bat80) : 0;
-    var marcas = S.av.marcas === 'Sim' ? ab(m.marcas) : 0;
-    var tela = S.av.tela === 'Sim' ? ab(m.tela) : 0;
-    var vidro = S.av.vidro === 'Sim' ? ab(m.vidro) : 0;
-    if (!alerta && S.av.vidro === 'Sim' && m.vidro === null) alerta = 'Vidro traseiro sem valor na tabela — CONSULTAR GERENTE.';
-    var gar = S.av.gar === '+6 meses' ? ab(m.g6) : S.av.gar === '+3 meses' ? ab(m.g3) : 0;
-    var base = m.compra || 0;
-    var oferta = Math.max(0, base + bat + marcas + tela + vidro + gar);
-    lines($('aLinhas'), [
-      ['Preço base (perfeito)', brl(base)], ['Bateria', brl(bat)], ['Marcas de uso', brl(marcas)],
-      ['Troca de tela', brl(tela)], ['Vidro traseiro', brl(vidro)], ['Garantia Apple', brl(gar)]
-    ]);
-    $('aOferta').textContent = brl(oferta);
-    var al = $('aAlerta'); al.className = 'status' + (alerta ? ' show err' : ''); al.textContent = alerta;
-
+    var R = avCalcular(S.avMarca || 'Apple', $('aModelo').value, S.av || {});
+    if (!R) { lines($('aLinhas'), []); $('aOferta').textContent = '—'; $('aAlerta').className = 'status'; return; }
+    lines($('aLinhas'), R.linhas.map(function (l) { return [l[0], brl(l[1])]; }));
+    $('aOferta').textContent = brl(R.oferta);
+    var al = $('aAlerta'); al.className = 'status' + (R.alerta ? ' show err' : ''); al.textContent = R.alerta;
   }
 
   // =========================================================
@@ -12485,7 +12720,7 @@
     if (!l.length) { box.appendChild(el('div', 'empty', sit === '' ? 'Nenhum caixa esperando conferência.' : 'Nenhum caixa com esses filtros.')); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h'); ['', 'Caixa', 'Período', 'Diferença', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); }); tab.appendChild(h);
     l.forEach(function (x) {
-      var r = el('div', 'prow'), ic = el('div', 'pimg'); ic.innerHTML = ICO_DOC; r.appendChild(ic);
+      var r = el('div', 'prow'), ic = el('div', 'pimg'); r.dataset.k = x.id; ic.innerHTML = ICO_DOC; r.appendChild(ic);
       var n = el('div'), nm = el('div', 'pnome', x.loja.replace(/^.*\| /, '') + ' · ' + (x.funcId ? x.func : 'caixa da loja'));
       nm.appendChild(el('span', 'bdg ' + (x.situacao === 'Aberto' ? 'inf' : x.situacao === 'Fechado' ? 'warn' : x.situacao === 'Conferido' ? 'ok' : 'err'), x.situacao)); n.appendChild(nm);
       n.appendChild(el('div', 'psub', x.id + ' · aberto por ' + x.abertoPor.replace(/ \(.*\)$/, '') + (x.fechadoPor ? ' · fechado por ' + x.fechadoPor.replace(/ \(.*\)$/, '') : ''))); r.appendChild(n);
@@ -12606,6 +12841,37 @@
     };
   }
   // ---------- Configurações › Manutenção centralizada
+  function cfgAvalMarcas(box, L) {
+    box.appendChild(el('div', 'hint', 'A Apple usa a Tabela iPhones (bateria, marcas, tela, vidro e garantia Apple). Aqui você cria outras marcas, cada uma com seus próprios itens. Em cada item, a primeira opção é "sem desconto"; os valores de cada opção são cadastrados por modelo, na Avaliação de usados.'));
+    var area = el('div'); box.appendChild(area);
+    function des() {
+      area.innerHTML = '';
+      L.forEach(function (M, i) {
+        var c = el('div', 'card'); area.appendChild(c);
+        var nm = inp('text', 'Ex.: Samsung'); nm.maxLength = 30; nm.value = M.nome; nm.oninput = function () { M.nome = nm.value; }; campo(c, 'Marca', nm, true);
+        M.itens.forEach(function (it, k) {
+          var r = el('div', 'ed-et'); r.style.flexWrap = 'wrap';
+          var a = inp('text', 'Pergunta (ex.: Tela)'); a.maxLength = 60; a.value = it.nome; a.style.flex = '1 1 200px'; a.oninput = function () { it.nome = a.value; };
+          var b = inp('text', 'Opções separadas por vírgula (a 1ª é sem desconto)'); b.value = it.opcoes.join(', '); b.style.flex = '2 1 260px'; b.oninput = function () { it.opcoes = b.value.split(',').map(function (x) { return x.trim(); }).filter(Boolean); };
+          var x = el('button', '', '✕'); x.type = 'button'; x.onclick = function () { M.itens.splice(k, 1); des(); };
+          [a, b, x].forEach(function (z) { r.appendChild(z); }); c.appendChild(r);
+        });
+        var ad = el('button', 'lnk', '+ Item de desconto'); ad.type = 'button'; ad.onclick = function () { M.itens.push({ id: '', nome: '', opcoes: ['Não', 'Sim'] }); des(); }; c.appendChild(ad);
+        var rm = el('button', 'lnk', 'Excluir marca'); rm.type = 'button'; rm.style.cssText = 'margin-left:14px;color:var(--err)'; rm.onclick = function () { L.splice(i, 1); des(); }; c.appendChild(rm);
+      });
+      var nb = el('button', 'btn ghost', '+ Nova marca'); nb.type = 'button'; nb.style.width = 'auto'; area.appendChild(nb);
+      nb.onclick = function () { L.push({ nome: '', itens: [{ id: '', nome: 'Liga normalmente?', opcoes: ['Sim', 'Não'] }, { id: '', nome: 'Tela', opcoes: ['Perfeita', 'Riscada', 'Quebrada'] }, { id: '', nome: 'Tampa traseira', opcoes: ['Perfeita', 'Com marcas', 'Quebrada'] }] }); des(); };
+    }
+    des();
+    var m = el('div', 'msg'); box.appendChild(m);
+    var b = el('button', 'btn', 'Salvar marcas'); b.type = 'button'; box.appendChild(b);
+    box.appendChild(el('div', 'hint', 'Excluir uma marca apaga também os modelos dela na avaliação.'));
+    b.onclick = function () {
+      m.className = 'msg'; b.disabled = true;
+      call('avaliacaoMarcasSalvar', [S.token, { marcas: L }]).then(function (r) { b.disabled = false; S.u.aval = r.aval; L = JSON.parse(JSON.stringify(r.aval.marcas)); des(); avisoTopo('As marcas da avaliação foram salvas com sucesso'); })
+        .catch(function (e) { b.disabled = false; m.className = 'msg err show'; m.textContent = e; });
+    };
+  }
   function cfgModelosMsg(box, d) {
     var aba = 'usado';
     box.appendChild(el('div', 'hint', 'Usados na "Proposta simples" de Produtos Usados (celular usado) e da Tabela de Preços › Produtos Novos (celular novo). Variáveis: ' + d.variaveis.map(function (v) { return '{' + v + '}'; }).join(' ') + '. Linha em que nenhuma variável tem valor some da mensagem.'));
@@ -12666,6 +12932,7 @@
     if (pode('equipe') || pode('liberar') || pode('transferir')) l.push(['naturezas', 'Naturezas de operação', 'Transferências: CFOP, se movimenta estoque e o que gera']);
     if (pode('equipe')) l.push(['transfrede', 'Transferências entre empresas', 'Quem gera contas a pagar/receber e quanto tempo o pedido segura o item']);
     if (pode('editar_quadro') || pode('equipe')) l.push(['checklists', 'Checklists', 'Itens, onde aparecem (entrada de usados, OS, manutenção) e classificação sugerida']);
+    if (pode('editar_avaliacao')) l.push(['avalmarcas', 'Avaliação de usados: marcas', 'Marcas além da Apple e os itens de desconto de cada uma']);
     if (pode('equipe') || pode('precos')) l.push(['modelosmsg', 'Modelos de mensagem', 'Texto da proposta simples de celular usado e de celular novo']);
     if (pode('equipe')) l.push(['manutcentral', 'Manutenção centralizada', 'Empresa que guarda os aparelhos em conserto e quem trabalha neles']);
     if (pode('conferir_caixa')) l.push(['caixa', 'Caixa', 'Abertura e fechamento: por loja (tudo junto) ou por funcionário']);
@@ -12716,6 +12983,7 @@
         .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
     }
     else if (ab === 'manutcentral') cfgManutCentral(box);
+    else if (ab === 'avalmarcas') cfgAvalMarcas(box, JSON.parse(JSON.stringify(((S.u.aval || {}).marcas) || [])));
     else if (ab === 'modelosmsg') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
       call('modelosMsgDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; MSGM = d; cfgModelosMsg(box, JSON.parse(JSON.stringify(d))); })
