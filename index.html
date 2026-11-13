@@ -9109,7 +9109,7 @@
     var box = $('sdCorpo'); box.innerHTML = '';
     if (SD.agr) {
       // um bloco por depósito (no consolidado: "Empresa · Depósito")
-      var deps = [], porDep = function (x) { var o = {}; if (d.consolidado) { Object.keys(x.p.saldoDep || {}).forEach(function (k2) { var emp = k2.split(' · ')[0]; if (lojas.indexOf(emp) > -1) o[k2] = (o[k2] || 0) + x.p.saldoDep[k2]; }); if (!x.p.saldoDep) lojas.forEach(function (l) { if (x.p.saldo[l]) o[l] = x.p.saldo[l]; }); } else lojas.forEach(function (l) { if (x.p.saldo[l]) o[depVer(l)] = x.p.saldo[l]; }); return o; };
+      var deps = [], porDep = function (x) { var o = {}; if (d.consolidado) { Object.keys(x.p.saldoDep || {}).forEach(function (k2) { var emp = k2.split(' · ')[0], dp2 = k2.slice(emp.length + 3), rot = dp2 === emp ? emp : k2; if (lojas.indexOf(emp) > -1) o[rot] = (o[rot] || 0) + x.p.saldoDep[k2]; }); if (!x.p.saldoDep) lojas.forEach(function (l) { if (x.p.saldo[l]) o[l] = x.p.saldo[l]; }); } else lojas.forEach(function (l) { if (x.p.saldo[l]) o[depVer(l)] = x.p.saldo[l]; }); return o; };
       var G = {}; L.forEach(function (x) { var o = porDep(x); Object.keys(o).forEach(function (dp) { if (!(o[dp] > 0)) return; if (!G[dp]) { G[dp] = []; deps.push(dp); } G[dp].push([nomeP(x), skuP(x), grP(x), o[dp], x.p.unidade]); }); });
       if (!deps.length) { box.appendChild(el('div', 'empty', 'Nada disponível no filtro.')); return; }
       deps.sort().forEach(function (dp) { var q = G[dp].reduce(function (a, r) { return a + r[3]; }, 0); tabela(box, dp + ' · ' + G[dp].length + ' produto(s) · ' + inteiro(q) + ' un.', ['Produto', 'SKU', 'Grupo', 'Saldo', 'Un.'], G[dp], 'saldo-' + dp + '-' + d.data); });
@@ -12618,7 +12618,7 @@
       T.modelos.forEach(function (m, i) {
         var c = el('div', 'card'); area.appendChild(c);
         var g = grade(c, 2), nm = inp('text', 'Ex.: Curto'); nm.maxLength = 40; nm.value = m.nome; nm.oninput = function () { m.nome = nm.value; }; campo(g[0], 'Nome do modelo', nm, true);
-        var pl = el('label', 'ckl'), pc = el('input'); pc.type = 'radio'; pc.name = 'mmPad' + aba; pc.checked = !!m.padrao; pc.onchange = function () { T.modelos.forEach(function (z) { z.padrao = z === m; }); }; pl.appendChild(pc); pl.appendChild(document.createTextNode(' Padrão')); g[1].appendChild(el('label', 'first', ' ')); g[1].appendChild(pl);
+        var pl = el('label', 'ckl'), pc = el('input'); pc.type = 'checkbox'; pc.checked = !!m.padrao; pc.onchange = function () { T.modelos.forEach(function (z) { z.padrao = z === m; }); des(); }; pl.appendChild(pc); pl.appendChild(document.createTextNode(' Padrão')); g[1].appendChild(el('label', 'first', ' ')); g[1].appendChild(pl);
         var ta = el('textarea'); ta.rows = 9; ta.maxLength = 1500; ta.value = m.texto; campo(c, 'Texto', ta);
         var pv = el('div', 'oferta'); c.appendChild(el('label', '', 'Prévia')); c.appendChild(pv);
         var at = function () { MSGM = MSGM || d; var bk = MSGM[aba]; MSGM[aba] = T; pv.textContent = textoModelo(aba, m.texto, aba === 'usado' ? exU : exN, '12x'); MSGM[aba] = bk; };
