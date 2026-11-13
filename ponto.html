@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F1B2D">
+<title>Gestti Ponto</title>
+<link rel="manifest" href="ponto.webmanifest">
+<link rel="icon" href="ponto-icone-192.png">
+<link rel="apple-touch-icon" href="ponto-icone-192.png">
+<style>
+  :root{--bg:#F3F5F9;--card:#fff;--tx:#0F1B2D;--mut:#5B6577;--line:#E3E7EE;--brand:#2F5BFF;--ok:#1B9E4B;--err:#D93025;--warn:#B26A00;--soft:#EEF2FF}
+  @media (prefers-color-scheme:dark){:root{--bg:#0B1220;--card:#131C2E;--tx:#EEF2F8;--mut:#9AA6B8;--line:#24304A;--soft:#1A2540}}
+  *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+  header{background:#0F1B2D;color:#fff;padding:calc(14px + env(safe-area-inset-top)) 16px 14px;display:flex;align-items:center;gap:10px}
+  header b{font-size:18px;flex:1}header button{background:none;border:0;color:#cfd8ea;font:inherit;font-size:14px;padding:6px}
+  main{max-width:520px;margin:0 auto;padding:16px 16px calc(96px + env(safe-area-inset-bottom))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+  h2{font-size:17px;margin:0 0 10px}h3{font-size:15px;margin:16px 0 8px}
+  label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+  input,select,textarea{width:100%;padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit}
+  .btn{display:block;width:100%;padding:15px;border-radius:12px;border:0;background:var(--brand);color:#fff;font:inherit;font-weight:700;margin-top:14px;cursor:pointer}
+  .btn.ok{background:var(--ok)}.btn.ghost{background:var(--soft);color:var(--tx);font-weight:600}.btn:disabled{opacity:.55}
+  .big{font-size:20px;padding:22px}
+  .hint{color:var(--mut);font-size:14px}.aviso{background:#FFF4E0;color:#6B4200;border-radius:12px;padding:12px;font-size:14px;margin:8px 0}
+  @media (prefers-color-scheme:dark){.aviso{background:#3A2A0C;color:#FFD891}}
+  .erro{color:var(--err);font-size:14px;min-height:20px;margin-top:8px}
+  .relogio{font-size:44px;font-weight:800;text-align:center;letter-spacing:1px}.data{text-align:center;color:var(--mut);margin-bottom:6px}
+  .linha{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}.linha:last-child{border-bottom:0}
+  .linha span:last-child{text-align:right;color:var(--mut)}
+  .pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;background:var(--soft);margin-left:6px}
+  .pill.ok{background:#E3F4E8;color:#11612F}.pill.err{background:#FDE7E7;color:#9A1C14}.pill.warn{background:#FFF1D6;color:#7A4A00}
+  nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+  nav button{flex:1;background:none;border:0;padding:12px 4px 10px;font:inherit;font-size:13px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px}
+  nav button.on{color:var(--brand);font-weight:700}nav svg{width:24px;height:24px}
+  .opc{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;background:var(--card);width:100%;font:inherit;color:inherit;text-align:left;cursor:pointer}
+  .opc b{display:block}.opc small{color:var(--mut)}.opc .ic{font-size:26px}
+  #cam{position:fixed;inset:0;background:#000;z-index:9;display:none;flex-direction:column}
+  #cam video{flex:1;width:100%;object-fit:cover;transform:scaleX(-1)}
+  #cam .bar{padding:16px 16px calc(16px + env(safe-area-inset-bottom));background:#0F1B2D;color:#fff;text-align:center}
+  #cam .moldura{position:absolute;left:50%;top:38%;width:62vw;max-width:300px;aspect-ratio:3/4;transform:translate(-50%,-50%);border:3px solid rgba(255,255,255,.75);border-radius:50%}
+  .hide{display:none!important}
+</style>
+</head>
+<body>
+<header><b id="hTit">Gestti Ponto</b><button id="hSair" class="hide" type="button">Sair</button></header>
+<main id="tela"></main>
+<nav id="abas" class="hide">
+  <button type="button" data-a="ponto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>Ponto</button>
+  <button type="button" data-a="justificar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 14h6M9 17h4"/></svg>Justificar</button>
+  <button type="button" data-a="mes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Meu mês</button>
+</nav>
+<div id="cam"><video id="camV" playsinline muted autoplay></video><div class="moldura"></div><div class="bar"><div id="camSt">Abrindo a câmera…</div><button class="btn ok" id="camOk" type="button" disabled>Capturar</button><button class="btn ghost" id="camNao" type="button">Cancelar</button></div></div>
+<script>
+(function () {
+  'use strict';
+  var API = 'https://wcrfhxijeoxgklyqkhko.supabase.co/functions/v1/api';
+  var CONTA = (location.search.match(/[?&]c=([a-z0-9-]+)/) || [])[1] || 'tec-cell';
+  var NO_APP = !!window.Capacitor || /[?&]app=1\b/.test(location.search);
+  var LS = { get: function (k) { try { return localStorage.getItem('pt_' + CONTA + '_' + k) || ''; } catch (e) { return ''; } }, set: function (k, v) { try { if (v) localStorage.setItem('pt_' + CONTA + '_' + k, v); else localStorage.removeItem('pt_' + CONTA + '_' + k); } catch (e) {} } };
+  var S = { token: LS.get('token'), aba: 'ponto', P: null };
+  var $ = function (id) { return document.getElementById(id); };
+  function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined && x !== null) e.textContent = x; return e; }
+  function btn(box, t, cls, fn) { var b = el('button', 'btn ' + (cls || ''), t); b.type = 'button'; if (fn) b.onclick = fn; box.appendChild(b); return b; }
+  function campo(box, rot, node) { box.appendChild(el('label', '', rot)); box.appendChild(node); return node; }
+  function inp(tipo, ph) { var i = el('input'); i.type = tipo || 'text'; if (ph) i.placeholder = ph; return i; }
+  function hoje() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function br(iso) { return iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) : ''; }
+  function hm(m) { if (m === null || m === undefined) return '—'; var s = m < 0 ? '-' : '', a = Math.abs(m); return s + Math.floor(a / 60) + 'h' + ('0' + a % 60).slice(-2); }
+  var MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+  var DS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+  function call(fn, args) {
+    return fetch(API, { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ acao: fn, args: args, c: CONTA }) })
+      .then(function (r) { return r.json(); }, function () { throw 'Sem internet. Confira a conexão e tente de novo.'; })
+      .then(function (j) {
+        if (j && j.ok) return j.dados;
+        var e = String((j && j.erro) || 'Erro no servidor.').replace(/^(Exception|Error):\s*/, '');
+        if (/Sessão expirada|acesso está desativado|Entre de novo/i.test(e)) { sair(e); }
+        throw e;
+      });
+  }
+  function sair(m) { if (S.token) call('sair', [S.token]).catch(function () {}); S.token = ''; LS.set('token', ''); telaEntrar(m); }
+
+  // ---------- entrar ----------
+  function telaEntrar(m) {
+    $('abas').classList.add('hide'); $('hSair').classList.add('hide'); $('hTit').textContent = 'Gestti Ponto';
+    var t = $('tela'); t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c);
+    c.appendChild(el('h2', '', 'Entrar no ponto'));
+    c.appendChild(el('div', 'hint', 'Use o código que o RH te passou e o seu PIN.'));
+    var cod = campo(c, 'Código', inp('text', 'Ex.: 1001')); cod.inputMode = 'numeric'; cod.autocomplete = 'username'; cod.value = LS.get('codigo');
+    var pin = campo(c, 'PIN', inp('password', 'PIN')); pin.inputMode = 'numeric'; pin.maxLength = 6; pin.autocomplete = 'current-password';
+    var er = el('div', 'erro', m || ''); c.appendChild(er);
+    var b = btn(c, 'Entrar', '', function () {
+      if (!cod.value.trim() || !pin.value) { er.textContent = 'Informe o código e o PIN.'; return; }
+      b.disabled = true; er.textContent = '';
+      call('pontoEntrar', [cod.value.trim(), pin.value]).then(function (d) { S.token = d.token; LS.set('token', d.token); LS.set('codigo', cod.value.trim()); abrir('ponto'); })
+        .catch(function (e) { b.disabled = false; er.textContent = e; });
+    });
+    pin.onkeydown = function (e) { if (e.key === 'Enter') b.click(); };
+    (cod.value ? pin : cod).focus();
+    t.appendChild(el('div', 'hint', 'Esqueceu o PIN? Peça ao RH um PIN provisório.'));
+  }
+
+  function abrir(aba) {
+    S.aba = aba; $('abas').classList.remove('hide'); $('hSair').classList.remove('hide');
+    [].forEach.call(document.querySelectorAll('#abas button'), function (b) { b.classList.toggle('on', b.dataset.a === aba); });
+    var t = $('tela'); t.innerHTML = ''; t.appendChild(el('div', 'hint', 'Carregando…'));
+    ({ ponto: telaPonto, justificar: telaJustificar, mes: telaMes })[aba](t);
+  }
+
+  // ---------- câmera e rosto ----------
+  var FACE = null;
+  function carregarFace() {
+    if (FACE) return FACE;
+    FACE = new Promise(function (ok, fail) {
+      var s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/dist/face-api.js';
+      s.onload = function () { var M = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/model/'; Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(M), faceapi.nets.faceLandmark68Net.loadFromUri(M), faceapi.nets.faceRecognitionNet.loadFromUri(M)]).then(function () { ok(window.faceapi); }, function () { FACE = null; fail('Não deu para carregar o leitor de rosto.'); }); };
+      s.onerror = function () { FACE = null; fail('Não deu para carregar o leitor de rosto (confira a internet).'); };
+      document.head.appendChild(s);
+    });
+    return FACE;
+  }
+  function capturarRosto(titulo) {
+    return new Promise(function (ok, fail) {
+      var cam = $('cam'), v = $('camV'), st = $('camSt'), b = $('camOk'), stream = null;
+      cam.style.display = 'flex'; st.textContent = titulo + ' · abrindo a câmera…'; b.disabled = true;
+      var fim = function () { if (stream) stream.getTracks().forEach(function (x) { x.stop(); }); v.srcObject = null; cam.style.display = 'none'; };
+      $('camNao').onclick = function () { fim(); fail(''); };
+      Promise.all([carregarFace(), navigator.mediaDevices && navigator.mediaDevices.getUserMedia ? navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } }, audio: false }) : Promise.reject('Este aparelho não libera a câmera.')])
+        .then(function (r) { stream = r[1]; v.srcObject = stream; st.textContent = titulo + ': encaixe o rosto no círculo e toque em Capturar.'; b.disabled = false; })
+        .catch(function (e) { st.textContent = String(e && e.message || e || 'Sem acesso à câmera.') + ' Permita o uso da câmera.'; });
+      b.onclick = function () {
+        b.disabled = true; st.textContent = 'Lendo o rosto…'; var fa = window.faceapi;
+        fa.detectAllFaces(v, new fa.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 })).withFaceLandmarks().withFaceDescriptors().then(function (l) {
+          if (l.length !== 1) { st.textContent = l.length ? 'Apareceu mais de um rosto. Fique sozinho na câmera.' : 'Não achei o rosto. Chegue mais perto e melhore a luz.'; b.disabled = false; return; }
+          var cv = document.createElement('canvas'), w = 320, h = Math.round(v.videoHeight / v.videoWidth * 320) || 240; cv.width = w; cv.height = h; cv.getContext('2d').drawImage(v, 0, 0, w, h);
+          var out = { desc: Array.prototype.slice.call(l[0].descriptor), foto: cv.toDataURL('image/jpeg', 0.6) }; fim(); ok(out);
+        }).catch(function (e) { st.textContent = 'Erro ao ler o rosto: ' + e; b.disabled = false; });
+      };
+    });
+  }
+  function localizacao() {
+    return new Promise(function (ok, fail) {
+      if (!navigator.geolocation) return fail('Este aparelho não informa a localização.');
+      navigator.geolocation.getCurrentPosition(function (p) { ok({ lat: p.coords.latitude, lng: p.coords.longitude }); }, function () { fail('Ligue a localização (GPS) e permita para o app.'); }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    });
+  }
+  // digital / Face ID (só no navegador; o app ainda não tem)
+  function txtBytes(t) { return new TextEncoder().encode(t); }
+  function deB64u(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function aparelhoConfirmar() {
+    return call('pontoDesafio', [S.token]).then(function (D) {
+      if (!D.credenciais.length) return null;
+      if (!window.PublicKeyCredential) throw 'Você ligou a digital/Face ID no navegador: neste app ela ainda não funciona. Peça ao RH para desligar ou bata pelo navegador.';
+      return navigator.credentials.get({ publicKey: { challenge: txtBytes(D.desafio), allowCredentials: D.credenciais.map(function (id) { return { type: 'public-key', id: deB64u(id) }; }), userVerification: 'required', timeout: 60000 } }).then(function (a) { return { desafio: D.desafio, id: a.id }; });
+    });
+  }
+
+  // ---------- PONTO ----------
+  function telaPonto(t) {
+    call('pontoMeu', [S.token]).then(function (P) {
+      S.P = P; t.innerHTML = ''; $('hTit').textContent = P.nome.split(' ')[0] + (P.codigo ? ' · ' + P.codigo : '');
+      var c = el('div', 'card'); t.appendChild(c);
+      if (P.pinTemp) return pinNovo(c, true);
+      if (!P.consentimento) {
+        c.appendChild(el('h2', '', 'Antes de começar'));
+        var tx = el('div', 'hint'); tx.style.whiteSpace = 'pre-line';
+        tx.textContent = 'Para registrar o ponto, o Gestti usa:\n\n• uma leitura do seu rosto, guardada como números (não como foto), só para conferir que é você;\n• uma foto pequena de cada batida, em área privada, apagada depois de 12 meses;\n• a localização do celular na hora da batida, para conferir que você está na loja.\n\nOs dados servem só para o controle de jornada, ficam visíveis apenas para o RH e a gerência, e a leitura do rosto é apagada quando você sair da empresa. Este é um controle interno de gestão. Você pode pedir a revisão ou exclusão dos seus dados ao RH.';
+        c.appendChild(tx);
+        var b0 = btn(c, 'Li e aceito', 'ok', function () { b0.disabled = true; call('pontoConsentir', [S.token]).then(function () { abrir('ponto'); }).catch(function (e) { b0.disabled = false; alerta(c, e); }); });
+        return;
+      }
+      if (P.exigirRosto && !P.rosto) {
+        c.appendChild(el('h2', '', 'Cadastre o seu rosto'));
+        c.appendChild(el('div', 'hint', 'Só uma vez. De frente, sem boné nem óculos escuros, num lugar claro.'));
+        btn(c, '📷 Cadastrar meu rosto', '', function () { capturarRosto('Cadastro do rosto').then(function (r) { return call('pontoRosto', [S.token, '', r.desc]); }).then(function () { abrir('ponto'); }).catch(function (e) { if (e) alerta(c, e); }); });
+        return;
+      }
+      var rel = el('div', 'relogio'), dt = el('div', 'data'); c.appendChild(rel); c.appendChild(dt);
+      var tick = function () { var d = new Date(); rel.textContent = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); dt.textContent = DS[d.getDay()] + ', ' + d.getDate() + ' de ' + MESES[d.getMonth()]; };
+      tick(); clearInterval(S.tm); S.tm = setInterval(function () { if (document.body.contains(rel)) tick(); else clearInterval(S.tm); }, 5000);
+      if (P.plano) c.appendChild(el('div', P.plano.trabalha ? 'hint' : 'aviso', P.plano.trabalha ? 'Hoje: ' + (P.plano.cod === 'C' ? 'convocado · ' : '') + 'jornada ' + P.plano.jornada : 'Hoje: ' + P.plano.motivo + '. O ponto fica travado' + (P.plano.cod === 'F' || P.plano.cod === 'FER' ? ' (se precisar trabalhar, o gerente te convoca).' : '.')));
+      var st = el('div', 'hint'); st.style.textAlign = 'center';
+      var bb = btn(c, '⏱ Bater ponto: ' + P.proximo, 'ok big'); c.appendChild(st);
+      var er = el('div', 'erro'); c.appendChild(er);
+      bb.onclick = function () {
+        bb.disabled = true; er.textContent = ''; var d = {};
+        st.textContent = 'Pegando a localização…';
+        localizacao().then(function (g) { d.lat = g.lat; d.lng = g.lng; st.textContent = ''; return P.exigirRosto ? capturarRosto(P.proximo) : null; })
+          .then(function (r) { if (r) { d.desc = r.desc; d.foto = r.foto; } st.textContent = 'Registrando…'; return aparelhoConfirmar(); })
+          .then(function (w) { if (w) d.webauthn = w; return call('pontoBater', [S.token, d]); })
+          .then(function (r) { st.textContent = ''; vibrar(); mostrarOk(r.batida.tipo + ' registrada às ' + r.batida.hora); })
+          .catch(function (e) { bb.disabled = false; st.textContent = ''; if (e) er.textContent = e; });
+      };
+      var c2 = el('div', 'card'); t.appendChild(c2); c2.appendChild(el('h2', '', 'Batidas de hoje'));
+      if (!P.hoje.length) c2.appendChild(el('div', 'hint', 'Nenhuma batida ainda.'));
+      P.hoje.forEach(function (b) { var l = el('div', 'linha'); l.appendChild(el('span', '', b.tipo)); l.appendChild(el('span', '', b.hora + ' · ' + b.origem)); c2.appendChild(l); });
+      var c3 = el('div', 'card'); t.appendChild(c3);
+      btn(c3, 'Trocar meu PIN', 'ghost', function () { t.innerHTML = ''; var c4 = el('div', 'card'); t.appendChild(c4); pinNovo(c4, false); });
+      btn(c3, 'Recadastrar meu rosto', 'ghost', function () { capturarRosto('Novo cadastro do rosto').then(function (r) { return call('pontoRosto', [S.token, '', r.desc]); }).then(function () { mostrarOk('Rosto atualizado'); }).catch(function (e) { if (e) alerta(c3, e); }); });
+    }).catch(function (e) { t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c); alerta(c, e); btn(c, 'Tentar de novo', 'ghost', function () { abrir('ponto'); }); });
+  }
+  function pinNovo(c, obrigatorio) {
+    c.appendChild(el('h2', '', obrigatorio ? 'Crie o seu PIN' : 'Trocar o PIN'));
+    c.appendChild(el('div', 'hint', 'O PIN é a senha do ponto: só você deve saber. 4 a 6 números, nada de 1234 ou 1111.'));
+    var p1 = campo(c, 'Novo PIN', inp('password')), p2 = campo(c, 'Repita o PIN', inp('password')); p1.inputMode = p2.inputMode = 'numeric'; p1.maxLength = p2.maxLength = 6;
+    var er = el('div', 'erro'); c.appendChild(er);
+    var b = btn(c, 'Salvar PIN', 'ok', function () {
+      if (p1.value !== p2.value) { er.textContent = 'Os dois PINs não são iguais.'; return; }
+      b.disabled = true; call('pontoPin', [S.token, p1.value]).then(function () { mostrarOk('PIN salvo'); }).catch(function (e) { b.disabled = false; er.textContent = e; });
+    });
+    if (!obrigatorio) btn(c, 'Voltar', 'ghost', function () { abrir('ponto'); });
+  }
+  function vibrar() { try { navigator.vibrate && navigator.vibrate(120); } catch (e) {} }
+  function alerta(box, e) { box.appendChild(el('div', 'erro', String(e))); }
+  function mostrarOk(txt, depois) {
+    var t = $('tela'); t.innerHTML = ''; var c = el('div', 'card'); c.style.textAlign = 'center'; t.appendChild(c);
+    var ic = el('div', '', '✓'); ic.style.cssText = 'font-size:64px;color:var(--ok);font-weight:800'; c.appendChild(ic);
+    c.appendChild(el('h2', '', txt)); btn(c, 'OK', '', function () { abrir(depois || S.aba); });
+  }
+
+  // ---------- JUSTIFICAR ----------
+  function telaJustificar(t) {
+    t.innerHTML = '';
+    var c = el('div', 'card'); t.appendChild(c); c.appendChild(el('h2', '', 'O que você quer enviar?'));
+    [['🩺', 'Atestado médico', 'Os dias do atestado viram folga remunerada', 'atestado'], ['📄', 'Declaração de horas', 'Consulta, exame, cartório… abona as horas', 'declaracao'], ['⏰', 'Esqueci de bater o ponto', 'Peça para incluir a batida que faltou', 'incluir']].forEach(function (o) {
+      var b = el('button', 'opc'); b.type = 'button'; b.appendChild(el('span', 'ic', o[0])); var tx = el('span'); tx.appendChild(el('b', '', o[1])); tx.appendChild(el('small', '', o[2])); b.appendChild(tx); b.onclick = function () { formJust(o[3], o[1]); }; c.appendChild(b);
+    });
+    c.appendChild(el('div', 'hint', 'Tudo vai para o gerente aprovar. Atestado: entregue em até 48 horas.'));
+    var c2 = el('div', 'card'); t.appendChild(c2); c2.appendChild(el('h2', '', 'Meus pedidos'));
+    var lst = el('div', 'hint', 'Carregando…'); c2.appendChild(lst);
+    var m = hoje().slice(0, 7), d0 = new Date(); d0.setDate(1); d0.setMonth(d0.getMonth() - 1); var ant = d0.getFullYear() + '-' + ('0' + (d0.getMonth() + 1)).slice(-2);
+    Promise.all([call('rhFolhaFunc', [S.token, '', m]), call('rhFolhaFunc', [S.token, '', ant])]).then(function (R) {
+      var aj = []; R.forEach(function (F) { F.linhas.forEach(function (L) { L.ajustes.forEach(function (a) { if (['atestado', 'declaracao', 'incluir', 'alterar'].indexOf(a.tipo) > -1) aj.push(Object.assign({ dia: L.dia }, a)); }); }); });
+      lst.innerHTML = ''; if (!aj.length) { lst.textContent = 'Nenhum pedido nos últimos 2 meses.'; return; }
+      aj.sort(function (a, b) { return a.em < b.em ? 1 : -1; });
+      aj.forEach(function (a) {
+        var l = el('div', 'linha'), x = el('span', '', ({ atestado: 'Atestado', declaracao: 'Declaração', incluir: 'Batida incluída', alterar: 'Batida alterada' })[a.tipo] + ' · ' + (a.dados.de && a.tipo === 'atestado' ? br(a.dados.de) + ' a ' + br(a.dados.ate) : br(a.dia) + (a.dados.hora ? ' ' + a.dados.hora : a.dados.de ? ' ' + a.dados.de + '–' + a.dados.ate : '')));
+        var s = el('span'); s.appendChild(el('span', 'pill ' + (a.situacao === 'Aprovado' ? 'ok' : a.situacao === 'Recusado' ? 'err' : 'warn'), a.situacao === 'Pendente' ? 'Aguardando' : a.situacao)); l.appendChild(x); l.appendChild(s); lst.appendChild(l);
+      });
+    }).catch(function (e) { lst.textContent = String(e); });
+  }
+  function formJust(tipo, tit) {
+    var t = $('tela'); t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c); c.appendChild(el('h2', '', tit));
+    var d = { tipo: tipo }, de, ate, dia, hora, arq;
+    if (tipo === 'atestado') { de = campo(c, 'Primeiro dia', inp('date')); ate = campo(c, 'Último dia', inp('date')); de.value = ate.value = hoje(); de.onchange = function () { if (ate.value < de.value) ate.value = de.value; }; }
+    else { dia = campo(c, 'Dia', inp('date')); dia.value = hoje(); dia.max = hoje(); }
+    if (tipo === 'declaracao') { de = campo(c, 'Das', inp('time')); ate = campo(c, 'Até', inp('time')); }
+    if (tipo === 'incluir') { hora = campo(c, 'Hora em que você bateu (ou deveria)', inp('time')); }
+    if (tipo !== 'incluir') { arq = campo(c, 'Foto ou PDF do documento', inp('file')); arq.accept = 'image/*,application/pdf'; c.appendChild(el('div', 'hint', 'Tire a foto com o documento inteiro aparecendo e legível.')); }
+    var mo = campo(c, tipo === 'incluir' ? 'O que aconteceu (obrigatório)' : 'Observação', el('textarea')); mo.rows = 3; mo.maxLength = 300;
+    var er = el('div', 'erro'); c.appendChild(er);
+    var b = btn(c, 'Enviar para o gerente', 'ok', function () {
+      d.motivo = mo.value;
+      if (tipo === 'atestado') { d.de = de.value; d.ate = ate.value; } else d.dia = dia.value;
+      if (tipo === 'declaracao') { d.de = de.value; d.ate = ate.value; if (!d.de || !d.ate) { er.textContent = 'Informe das e até que horas.'; return; } }
+      if (tipo === 'incluir') { d.hora = hora.value; if (!d.hora) { er.textContent = 'Informe a hora.'; return; } }
+      if (arq && !arq.files[0]) { er.textContent = 'Anexe a foto ou o PDF do documento.'; return; }
+      b.disabled = true; er.textContent = ''; b.textContent = 'Enviando…';
+      enviarAnexo(arq && arq.files[0]).then(function (id) { if (id) d.anexo = id; return call('rhAjuste', [S.token, d]); })
+        .then(function () { mostrarOk('Enviado! O gerente vai analisar.', 'justificar'); })
+        .catch(function (e) { b.disabled = false; b.textContent = 'Enviar para o gerente'; er.textContent = e; });
+    });
+    btn(c, 'Voltar', 'ghost', function () { abrir('justificar'); });
+  }
+  function enviarAnexo(file) {
+    return new Promise(function (ok, fail) {
+      if (!file) return ok('');
+      if (file.type === 'application/pdf' && file.size > 3 * 1024 * 1024) return fail('PDF grande demais (máximo 3 MB). Tire uma foto do documento.');
+      var rd = new FileReader();
+      rd.onload = function () {
+        if (file.type === 'application/pdf') return call('rhAnexoEnviar', [S.token, rd.result]).then(function (r) { ok(r.id); }, fail);
+        if (!/^image\//.test(file.type)) return fail('Envie uma foto ou um PDF.');
+        var im = new Image(); im.onload = function () { var k = Math.min(1, 1600 / Math.max(im.width, im.height)), cv = document.createElement('canvas'); cv.width = Math.round(im.width * k); cv.height = Math.round(im.height * k); cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height); call('rhAnexoEnviar', [S.token, cv.toDataURL('image/jpeg', 0.75)]).then(function (r) { ok(r.id); }, fail); };
+        im.onerror = function () { fail('Não deu para ler a foto.'); }; im.src = rd.result;
+      };
+      rd.onerror = function () { fail('Não deu para ler o arquivo.'); }; rd.readAsDataURL(file);
+    });
+  }
+
+  // ---------- MEU MÊS ----------
+  function telaMes(t) {
+    var m = S.mes || hoje().slice(0, 7);
+    call('rhFolhaFunc', [S.token, '', m]).then(function (F) {
+      t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c);
+      var sel = el('select'); for (var i = 0; i < 6; i++) { var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - i); var v = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2); var o = el('option', '', MESES[d.getMonth()] + ' de ' + d.getFullYear()); o.value = v; sel.appendChild(o); }
+      sel.value = m; sel.onchange = function () { S.mes = sel.value; abrir('mes'); }; c.appendChild(sel);
+      [['Trabalhado', hm(F.total.trabalhado) + ' de ' + hm(F.total.previsto)], ['Saldo do mês', hm(F.total.saldo)], ['Banco de horas', hm(F.banco.saldoMin)], ['Faltas', String(F.total.faltas)], ['Atrasos', hm(F.total.atraso)]].forEach(function (x) { var l = el('div', 'linha'); l.appendChild(el('span', '', x[0])); l.appendChild(el('b', '', x[1])); c.appendChild(l); });
+      if (F.fechado) {
+        var a = el('div', F.assinatura ? 'hint' : 'aviso', F.assinatura ? (F.assinatura.concorda ? '✓ Você assinou este espelho em ' + F.assinatura.em : '✗ Você contestou este espelho em ' + F.assinatura.em) : 'O RH fechou este mês. Confira os dias abaixo e assine.'); c.appendChild(a);
+        if (!F.assinatura) {
+          var cm = el('textarea'); cm.rows = 2; cm.placeholder = 'Se algo não estiver certo, conte aqui'; c.appendChild(cm);
+          btn(c, '✓ Concordo e assino', 'ok', function () { call('rhEspelhoAssinar', [S.token, F.mes, true, cm.value]).then(function () { mostrarOk('Espelho assinado', 'mes'); }).catch(function (e) { alerta(c, e); }); });
+          btn(c, 'Discordo', 'ghost', function () { call('rhEspelhoAssinar', [S.token, F.mes, false, cm.value]).then(function () { mostrarOk('Contestação enviada ao RH', 'mes'); }).catch(function (e) { alerta(c, e); }); });
+        }
+      }
+      var c2 = el('div', 'card'); t.appendChild(c2); c2.appendChild(el('h2', '', 'Dia a dia'));
+      F.linhas.slice().reverse().forEach(function (L) {
+        if (!L.trabalha && !L.batidas.length && L.cod === 'F') return;
+        var l = el('div', 'linha'), e = el('span', '', DS[new Date(L.dia + 'T12:00').getDay()] + ' ' + br(L.dia));
+        if (L.pend.some(function (p) { return p.trava; })) e.appendChild(el('span', 'pill err', L.pend.filter(function (p) { return p.trava; })[0].t));
+        var r = el('span', '', L.batidas.length ? L.batidas.map(function (b) { return b.hora; }).join(' · ') + ' (' + (L.saldo === null ? 'em andamento' : hm(L.saldo)) + ')' : (L.trabalha ? 'sem batida' : ({ AT: 'atestado', FE: 'férias', AF: 'afastado', FER: 'feriado', BH: 'folga do banco', FC: 'folga compensatória', SU: 'suspensão' })[L.cod] || L.motivo));
+        l.appendChild(e); l.appendChild(r); c2.appendChild(l);
+      });
+    }).catch(function (e) { t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c); alerta(c, e); });
+  }
+
+  [].forEach.call(document.querySelectorAll('#abas button'), function (b) { b.onclick = function () { abrir(b.dataset.a); }; });
+  $('hSair').onclick = function () { sair(''); };
+  if (!NO_APP && 'serviceWorker' in navigator) navigator.serviceWorker.register('ponto-sw.js').catch(function () {});
+  if (S.token) abrir('ponto'); else telaEntrar('');
+})();
+</script>
+</body>
+</html>
