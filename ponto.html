@@ -54,10 +54,27 @@
 <script>
 (function () {
   'use strict';
-  var API = 'https://wcrfhxijeoxgklyqkhko.supabase.co/functions/v1/api';
-  var CONTA = (location.search.match(/[?&]c=([a-z0-9-]+)/) || [])[1] || 'tec-cell';
+  // Ambiente: 'producao' (/Gestti/ponto.html) ou 'homolog' (/Gestti/homolog/ponto.html, demonstração; gerado por scripts/gerar-homolog.js).
+  var AMB = 'producao';
+  var AMBS = { producao: { fn: 'api', conta: 'tec-cell', ls: 'pt_' }, homolog: { fn: 'api-homolog', conta: 'demo', ls: 'pth_' } };
+  var AMBC = AMBS[AMB];
+  function apiDe(amb) { return 'https://wcrfhxijeoxgklyqkhko.supabase.co/functions/v1/' + AMBS[amb].fn; }
+  var RAIZ = location.pathname.replace(/[^\/]*$/, '').replace(/homolog\/$/, '');
+  function pontoDe(amb) { return location.origin + RAIZ + (amb === 'homolog' ? 'homolog/' : '') + 'ponto.html'; }
+  var API = apiDe(AMB);
+  function lsRaw(k, v) { try { if (v === undefined) return localStorage.getItem(k) || ''; if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch (e) { return ''; } }
+  // conta: ?c= no endereço, senão a última em que entrou ("código.sistema"), senão a padrão do ambiente
+  var CONTA = (location.search.match(/[?&]c=([a-z0-9-]+)/) || [])[1] || lsRaw(AMBC.ls + 'conta') || AMBC.conta;
   var NO_APP = !!window.Capacitor || /[?&]app=1\b/.test(location.search);
-  var LS = { get: function (k) { try { return localStorage.getItem('pt_' + CONTA + '_' + k) || ''; } catch (e) { return ''; } }, set: function (k, v) { try { if (v) localStorage.setItem('pt_' + CONTA + '_' + k, v); else localStorage.removeItem('pt_' + CONTA + '_' + k); } catch (e) {} } };
+  var LS = { get: function (k) { return lsRaw(AMBC.ls + CONTA + '_' + k); }, set: function (k, v) { lsRaw(AMBC.ls + CONTA + '_' + k, v || ''); } };
+  // sessão vinda do outro ambiente (entrou lá com "código.sistema"): #sessao=<token>&c=<conta>&u=<código>
+  (function () {
+    var h = /^#sessao=([^&]+)&c=([a-z0-9-]{2,40})(?:&u=([^&]*))?$/.exec(location.hash);
+    if (!h) return;
+    CONTA = h[2]; lsRaw(AMBC.ls + 'conta', CONTA);
+    LS.set('token', decodeURIComponent(h[1])); if (h[3]) LS.set('codigo', decodeURIComponent(h[3]));
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { location.hash = ''; }
+  })();
   var S = { token: LS.get('token'), aba: 'ponto', P: null };
   var $ = function (id) { return document.getElementById(id); };
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined && x !== null) e.textContent = x; return e; }
@@ -82,20 +99,43 @@
   }
   function sair(m) { if (S.token) call('sair', [S.token]).catch(function () {}); S.token = ''; LS.set('token', ''); telaEntrar(m); }
 
+  // ---------- entrar: "código.sistema" (ex.: 1001.grupo); o sistema diz a conta e o ambiente. Sem sufixo: conta atual ----------
+  function postEm(amb, corpo) {
+    return fetch(apiDe(amb), { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(corpo) })
+      .then(function (r) { return r.json(); }, function () { throw 'Sem internet. Confira a conexão e tente de novo.'; })
+      .then(function (j) { if (j && j.ok) return j.dados; throw String((j && j.erro) || 'Erro no servidor.').replace(/^(Exception|Error):\s*/, ''); });
+  }
+  function entrarSistema(txt, pin) {
+    var m = /^(.+)\.([a-z0-9][a-z0-9-]{1,39})$/i.exec(txt);
+    var R0 = m ? postEm(AMB, { acao: 'resolverLogin', args: [m[2].toLowerCase()] }).then(function (d) { return { cod: m[1], conta: d.conta, amb: AMBS[d.ambiente] ? d.ambiente : 'producao' }; },
+      function (e) { throw /Sistema não encontrado/.test(e) ? 'Sistema "' + m[2] + '" não encontrado. Confira o que vem depois do ponto (ex.: 1001.grupo).' : e; })
+      : Promise.resolve({ cod: txt, conta: CONTA, amb: AMB });
+    return R0.then(function (R) {
+      return postEm(R.amb, { acao: 'pontoEntrar', args: [R.cod, pin], c: R.conta }).then(function (d) {
+        if (R.amb !== AMB) { location.href = pontoDe(R.amb) + '#sessao=' + encodeURIComponent(d.token) + '&c=' + R.conta + '&u=' + encodeURIComponent(txt); return { fora: true }; }
+        if (R.conta !== CONTA) { CONTA = R.conta; lsRaw(AMBC.ls + 'conta', CONTA); }
+        return { d: d };
+      });
+    });
+  }
+
   // ---------- entrar ----------
   function telaEntrar(m) {
     $('abas').classList.add('hide'); $('hSair').classList.add('hide'); $('hTit').textContent = 'Gestti Ponto';
     var t = $('tela'); t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c);
     c.appendChild(el('h2', '', 'Entrar no ponto'));
     c.appendChild(el('div', 'hint', 'Use o código que o RH te passou e o seu PIN.'));
-    var cod = campo(c, 'Código', inp('text', 'Ex.: 1001')); cod.inputMode = 'numeric'; cod.autocomplete = 'username'; cod.value = LS.get('codigo');
+    var cod = campo(c, 'Código', inp('text', 'Ex.: 1001.grupo')); cod.autocapitalize = 'none'; cod.spellcheck = false; cod.autocomplete = 'username'; cod.value = LS.get('codigo');
     var pin = campo(c, 'PIN', inp('password', 'PIN')); pin.inputMode = 'numeric'; pin.maxLength = 6; pin.autocomplete = 'current-password';
     var er = el('div', 'erro', m || ''); c.appendChild(er);
     var b = btn(c, 'Entrar', '', function () {
       if (!cod.value.trim() || !pin.value) { er.textContent = 'Informe o código e o PIN.'; return; }
       b.disabled = true; er.textContent = '';
-      call('pontoEntrar', [cod.value.trim(), pin.value]).then(function (d) { S.token = d.token; LS.set('token', d.token); LS.set('codigo', cod.value.trim()); abrir('ponto'); })
-        .catch(function (e) { b.disabled = false; er.textContent = e; });
+      var txt = cod.value.trim();
+      entrarSistema(txt, pin.value).then(function (x) {
+        if (x.fora) return;
+        S.token = x.d.token; LS.set('token', x.d.token); LS.set('codigo', txt); abrir('ponto');
+      }).catch(function (e) { b.disabled = false; er.textContent = e; });
     });
     pin.onkeydown = function (e) { if (e.key === 'Enter') b.click(); };
     (cod.value ? pin : cod).focus();
