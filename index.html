@@ -958,6 +958,12 @@
   .cmbox small{display:block;color:var(--muted);font-size:12px}.cmbox b{display:block;font-size:17px;margin-top:2px}.cmbox span{display:block;color:var(--muted);font-size:11.5px}
   .sertipo{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:8px}.dstg{grid-template-columns:repeat(2,minmax(0,1fr))}
   @media (max-width:700px){.sertipo,.dstg,.cmbox{grid-template-columns:1fr}}
+  /* Leva 6: coluna SKU logo depois do nome nas listas de produto (no celular, embaixo do nome) */
+  .pskuc{font-size:13.5px;font-variant-numeric:tabular-nums;color:var(--muted);word-break:break-all;min-width:0}
+  .skumob{display:none}
+  #acLista .prow,#nLista .prow{grid-template-columns:52px minmax(0,1fr) 130px 190px 130px 24px}
+  .estmat td.sk{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+  @media (max-width:899px){.pskuc{display:none}.skumob{display:block}#acLista .prow,#nLista .prow{grid-template-columns:44px minmax(0,1fr) auto}}
 </style>
 </head>
 <body class="tela-login">
@@ -1725,7 +1731,7 @@
         <label for="nTag">Tag</label>
         <select id="nTag"></select>
         <label for="nSit">Situação</label>
-        <select id="nSit"><option value="">Disponíveis</option><option value="indisp">Não disponíveis</option><option value="todos">Todos</option></select>
+        <select id="nSit"><option value="">Disponíveis</option><option value="indisp">Não disponíveis</option><option value="ajustar">Precisa ajustar o preço</option><option value="todos">Todos</option></select>
         <label for="nOrdem">Ordenar por</label>
         <select id="nOrdem" data-keep="1"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select>
         <button type="button" class="btn ghost" id="nLimpar">Limpar filtros</button>
@@ -2659,7 +2665,7 @@
     var R = [];
     t.itens.filter(function (it) { return it.pendente > 0; }).forEach(function (it) {
       var w = el('div', 'tfrec'), o = { k: it.k, ok: 0, avaria: 0, falta: 0, motivo: '', seriais: [] }; R.push(o);
-      var n = el('div', 'nm', it.nome); n.appendChild(el('small', '', (it.imei ? 'IMEI ' + it.imei + ' · ' : '') + 'pendente: ' + it.pendente)); w.appendChild(n);
+      var n = el('div', 'nm', it.nome); n.appendChild(el('small', '', (it.sku ? 'SKU ' + it.sku + ' · ' : '') + (it.imei ? 'IMEI ' + it.imei + ' · ' : '') + 'pendente: ' + it.pendente)); w.appendChild(n);
       var mo = inp('text', 'Motivo da avaria / falta'); mo.maxLength = 150; mo.oninput = function () { o.motivo = mo.value.trim(); };
       if (it.tipo === 'aparelho') {
         var sg = el('div', 'seg'); w.appendChild(sg);
@@ -3404,8 +3410,8 @@
       c.appendChild(el('h3', 'ch', 'Diferenças (' + difs.length + ')'));
       if (!difs.length) c.appendChild(el('div', 'hint', 'Tudo bateu.'));
       else {
-        var w = el('div', 'ctwrap'), t = el('table', 'cttab'), h = el('tr'); ['Produto', 'Sistema', 'Contado', 'Diferença'].concat(r.ver ? ['Valor (custo)'] : []).forEach(function (k, i) { h.appendChild(el('th', i ? 'n' : '', k)); }); t.appendChild(h);
-        difs.forEach(function (o) { var tr = el('tr'), a = el('td', '', o.nome); if (o.faltamSeriais && o.faltamSeriais.length) a.appendChild(el('small', '', 'Faltam: ' + o.faltamSeriais.join(', '))); if (o.sobramSeriais && o.sobramSeriais.length) a.appendChild(el('small', '', 'Sobram: ' + o.sobramSeriais.join(', '))); if (o.naoContado) a.appendChild(el('small', '', 'não contado')); tr.appendChild(a); tr.appendChild(el('td', 'n', String(o.esperado))); tr.appendChild(el('td', 'n', String(o.contado))); tr.appendChild(el('td', 'n ' + (o.dif < 0 ? 's' : 'e'), (o.dif > 0 ? '+' : '') + o.dif)); if (r.ver) tr.appendChild(el('td', 'n', brl(o.valor))); t.appendChild(tr); });
+        var w = el('div', 'ctwrap'), t = el('table', 'cttab'), h = el('tr'); ['Produto', 'SKU', 'Sistema', 'Contado', 'Diferença'].concat(r.ver ? ['Valor (custo)'] : []).forEach(function (k, i) { h.appendChild(el('th', i > 1 ? 'n' : '', k)); }); t.appendChild(h);
+        difs.forEach(function (o) { var tr = el('tr'), a = el('td', '', o.nome); if (o.faltamSeriais && o.faltamSeriais.length) a.appendChild(el('small', '', 'Faltam: ' + o.faltamSeriais.join(', '))); if (o.sobramSeriais && o.sobramSeriais.length) a.appendChild(el('small', '', 'Sobram: ' + o.sobramSeriais.join(', '))); if (o.naoContado) a.appendChild(el('small', '', 'não contado')); tr.appendChild(a); tr.appendChild(el('td', '', o.sku || '—')); tr.appendChild(el('td', 'n', String(o.esperado))); tr.appendChild(el('td', 'n', String(o.contado))); tr.appendChild(el('td', 'n ' + (o.dif < 0 ? 's' : 'e'), (o.dif > 0 ? '+' : '') + o.dif)); if (r.ver) tr.appendChild(el('td', 'n', brl(o.valor))); t.appendChild(tr); });
         w.appendChild(t); c.appendChild(w);
         if (r.ver) c.appendChild(el('div', 'k', 'Total das diferenças: ' + brl(difs.reduce(function (a, o) { return a + (o.valor || 0); }, 0))));
       }
@@ -8463,7 +8469,7 @@
     var box = $('acLista'); box.innerHTML = '';
     if (!l.length && !la.length) { box.appendChild(el('div', 'empty', D.produtos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto cadastrado ainda.' + (D.editar ? ' Use "+ Novo produto".' : ''))); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
-    ['', 'Produto', 'Estoque' + (lj ? ' (' + lj.replace(/^.*\| /, '') + ')' : ''), 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    ['', 'Produto', 'SKU', 'Estoque' + (lj ? ' (' + lj.replace(/^.*\| /, '') + ')' : ''), 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 4) d.style.textAlign = 'right'; h.appendChild(d); });
     tab.appendChild(h);
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     mix.forEach(function (it) {
@@ -8479,7 +8485,8 @@
       if (!(qt > 0)) nm.appendChild(el('span', 'badge-m', x.formato === 'composicao' ? 'Sem kit montável' : 'Sem estoque'));
       if (REDE.d && x.formato !== 'variacoes' && x.formato !== 'composicao') { var nr = redeAchar(REDE.d, '', { produto: x }).produtos.reduce(function (a, p) { return a + p.qtd; }, 0); if (nr) { var bR = el('span', 'bdg inf', '+' + nr + ' em outras empresas'); bR.title = 'Toque no produto para ver onde está e pedir transferência'; nm.appendChild(bR); } }
       else if (baixoMin(x, lj) || (x.filhos || []).some(function (id) { return M[id] && baixoMin(M[id], lj); })) nm.appendChild(el('span', 'bdg warn', 'Repor'));
-      n.appendChild(nm); var sub = [x.sku ? 'SKU ' + x.sku : '', x.grupo, x.codigo ? 'EAN ' + x.codigo : ''].filter(Boolean).join(' · '); if (sub) n.appendChild(el('div', 'psub', sub)); tagsMini(n, x.tags); r.appendChild(n);
+      n.appendChild(nm); if (x.sku) n.appendChild(el('div', 'psub skumob', 'SKU ' + x.sku)); var sub = [x.grupo, x.codigo ? 'EAN ' + x.codigo : ''].filter(Boolean).join(' · '); if (sub) n.appendChild(el('div', 'psub', sub)); r.appendChild(n);
+      r.appendChild(el('div', 'pskuc', x.sku || '—'));
       var es = el('div', 'psku'), es1 = el('div', 'esrow'); es1.appendChild(el('span', '', x.formato === 'composicao' ? inteiro(qt) + ' kit' + (qt === 1 ? '' : 's') : unTxt(x, qt))); if (x.formato === 'simples' || x.formato === 'variacao') { var eb = botaoEstoque(x); if (eb) es1.appendChild(eb); } es.appendChild(es1);
       if (!lj) { var lo = Object.keys(x.estoque).map(function (k) { return k.replace(/^.*\| /, '') + ' ' + x.estoque[k]; }).join(' · '); if (lo) es.appendChild(el('div', 'psub', lo)); }
       r.appendChild(es);
@@ -8762,7 +8769,7 @@
       tnW.innerHTML = '';
       if (cond.value === 'Usado' || formato !== 'simples') { tnOn = false; nome.readOnly = false; return; }
       var lb = el('label', 'perm'), ck = el('input'); ck.type = 'checkbox'; ck.checked = tnOn;
-      var tt = el('div', 't', 'Mostrar na Tabela de Preços (Produtos Novos)'); tt.appendChild(el('small', '', 'O preço de venda passa a vir da Tabela de Preços › Produtos Novos. Uma linha por modelo vale para todas as cores.'));
+      var tt = el('div', 't', 'Mostrar na Tabela de Preços (Produtos Novos)'); tt.appendChild(el('small', '', 'O preço de venda digitado vai para a Tabela de Preços › Produtos Novos. Uma linha por modelo vale para todas as cores.'));
       lb.appendChild(ck); lb.appendChild(tt); lb.style.marginTop = '12px'; tnW.appendChild(lb);
       ck.onchange = function () { tnOn = ck.checked; if (tnOn && !tn) tn = { modelo: nome.value.trim().toUpperCase(), cor: '' }; desTN(); };
       if (!tnOn) { nome.readOnly = false; return; }
@@ -8775,7 +8782,7 @@
         tn.modelo = mo.value.trim().toUpperCase().replace(/\s+/g, ' '); tn.cor = co.value.trim().toUpperCase().replace(/\s+/g, ' ');
         nome.value = (tn.modelo + (tn.cor ? ' ' + tn.cor : '')).trim();
         var rr = S.tnNov && (S.tnNov.produtos || []).filter(function (n) { return n.nome.toUpperCase() === tn.modelo; })[0];
-        hn.textContent = rr ? 'Na tabela: ' + (rr.preco ? brl(rr.preco) : 'sem preço') + '. Este produto (e as outras cores do modelo) usa esse preço.' : (tn.modelo ? 'Modelo novo: ao salvar, ele entra na Tabela de Preços com o preço calculado pela precificação.' : 'Digite o modelo igual ao da tabela (as sugestões aparecem ao digitar).');
+        hn.textContent = rr ? 'Na tabela: ' + (rr.preco ? brl(rr.preco) : 'sem preço') + '. Se você digitar outro preço de venda, ele passa a valer na tabela para o modelo (e as outras cores).' : (tn.modelo ? 'Modelo novo: ao salvar, ele entra na Tabela de Preços com o preço de venda digitado. Sem preço, entra em "Precisa ajustar o preço".' : 'Digite o modelo igual ao da tabela (as sugestões aparecem ao digitar).');
       };
       var carregar = function (l) { dl2.innerHTML = ''; l.forEach(function (n) { var o = el('option'); o.value = n.nome; dl2.appendChild(o); }); up(); };
       if (!S.tnNov && Array.isArray(S.novos)) S.tnNov = { produtos: S.novos };
@@ -10036,9 +10043,15 @@
     var lista = el('div'); bd.appendChild(lista);
     var ft = el('div', 'twf'), ok = el('button', 'btn', ''); ok.type = 'button'; ok.onclick = fecharTags; ft.appendChild(ok); tw.appendChild(ft);
     function conta() { ok.textContent = 'Concluir' + (esc.length ? ' (' + esc.length + ' selecionada' + (esc.length === 1 ? '' : 's') + ')' : ''); }
-    function linha(item, sub) {
+    // Leva 6: marcar um subgrupo marca o grupo; desmarcar o grupo desmarca os subgrupos; desmarcar o último subgrupo mantém o grupo.
+    function linha(item, sub, pai) {
       var r = el('label', 'trow' + (sub ? ' sub' : '')), c = el('input'); c.type = 'checkbox'; c.checked = esc.indexOf(item.path) > -1;
-      c.onchange = function () { var i = esc.indexOf(item.path); if (c.checked && i < 0) esc.push(item.path); if (!c.checked && i > -1) esc.splice(i, 1); conta(); aoMudar(); };
+      c.onchange = function () {
+        var i = esc.indexOf(item.path); if (c.checked && i < 0) esc.push(item.path); if (!c.checked && i > -1) esc.splice(i, 1);
+        if (c.checked && pai && esc.indexOf(pai.path) < 0) esc.push(pai.path);
+        if (!c.checked && !sub) for (var k = esc.length - 1; k >= 0; k--) if (esc[k].indexOf(item.path + SEP) === 0) esc.splice(k, 1);
+        conta(); aoMudar(); desenhar();
+      };
       r.appendChild(c); r.appendChild(document.createTextNode(item.nome)); return r;
     }
     function desenhar() {
@@ -10048,7 +10061,7 @@
         var fs = p.filhos.filter(function (f) { return !q || f.path.toLowerCase().indexOf(q) > -1; });
         if (q && p.nome.toLowerCase().indexOf(q) < 0 && !fs.length) return;
         lista.appendChild(linha(p, false)); n++;
-        (q && p.nome.toLowerCase().indexOf(q) > -1 ? p.filhos : fs).forEach(function (f) { lista.appendChild(linha(f, true)); n++; });
+        (q && p.nome.toLowerCase().indexOf(q) > -1 ? p.filhos : fs).forEach(function (f) { lista.appendChild(linha(f, true, p)); n++; });
       });
       if (!n) lista.appendChild(el('div', 'empty', cat().tags.length ? 'Nenhuma tag encontrada.' : (pode('grupos_tags') ? 'Nenhuma tag cadastrada ainda. Use "+ Nova tag".' : 'Nenhuma tag cadastrada. O gerente cria as tags em Configurações › Tags.')));
     }
@@ -10561,7 +10574,7 @@
     nm.appendChild(botaoCopiar(nomeProduto(x), 'Copiar nome', 'aparelho'));
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
     n.appendChild(nm); n.appendChild(el('div', 'psub', [depVer(x.loja), bat ? 'bateria ' + bat : '', x.grupo].filter(Boolean).join(' · ')));
-    tagsMini(n, x.tags);
+   
     r.appendChild(n);
     var cod = x.sku || x.imei;
     var sku = el('div', 'psku', cod); sku.appendChild(botaoCopiar(cod, 'Copiar SKU')); r.appendChild(sku);
@@ -11651,7 +11664,8 @@
       if (tag && !(x.tags || []).some(function (t) { return casaCat(t, tag); })) return false;
       if (sit === '' && x.indisp) return false;
       if (sit === 'indisp' && !x.indisp) return false;
-      var t = x.nome.toLowerCase(); return termos.every(function (q) { return t.indexOf(q) > -1; });
+      if (sit === 'ajustar' && !x.ajustar) return false;
+      var t = x.nome.toLowerCase() + ' ' + (x.vinc || []).map(function (v) { return (v.sku || '').toLowerCase(); }).join(' '); return termos.every(function (q) { return t.indexOf(q) > -1; });
     }).sort(function (a2, b2) {
       if (ordem === 'za') return b2.nome.localeCompare(a2.nome);
       if (ordem === 'menor') return (a2.preco || Infinity) - (b2.preco || Infinity) || a2.nome.localeCompare(b2.nome);
@@ -11659,21 +11673,25 @@
       return a2.nome.localeCompare(b2.nome);
     });
     var ni = S.novos.filter(function (x) { return x.indisp; }).length;
-    $('nCont').textContent = l.length + ' produto' + (l.length === 1 ? '' : 's') + (sit === '' && ni ? ' · ' + ni + ' não disponíve' + (ni === 1 ? 'l' : 'is') + ' (veja no filtro Situação)' : '');
+    var naj = S.novos.filter(function (x) { return x.ajustar; }).length;
+    $('nCont').textContent = l.length + ' produto' + (l.length === 1 ? '' : 's') + (sit === '' && ni ? ' · ' + ni + ' não disponíve' + (ni === 1 ? 'l' : 'is') + ' (veja no filtro Situação)' : '') + (sit !== 'ajustar' && naj ? ' · ' + naj + ' precisa' + (naj === 1 ? '' : 'm') + ' ajustar o preço' : '');
     var box = $('nLista'); box.innerHTML = '';
     if (!l.length) { box.appendChild(el('div', 'empty', sit === 'indisp' ? 'Nenhum produto marcado como não disponível.' : S.novos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto cadastrado ainda.' + (pode('editar_precos') ? ' Use "+ Novo Produto".' : ''))); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
-    ['', 'Produto', ver ? 'Custo · Margem' : '', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    ['', 'Produto', 'SKU', ver ? 'Custo · Margem' : '', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 4) d.style.textAlign = 'right'; h.appendChild(d); });
     tab.appendChild(h);
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     l.forEach(function (x) {
       var r = el('div', 'prow'); r.dataset.k = x.linha + '|' + x.nome;
       var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
-      var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome)); if (x.indisp) nm.appendChild(el('span', 'badge-m', 'Não disponível')); nm.appendChild(botaoCopiar(x.nome, 'Copiar nome')); n.appendChild(nm);
+      var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome)); if (x.indisp) nm.appendChild(el('span', 'badge-m', 'Não disponível')); if (x.ajustar) nm.appendChild(el('span', 'bdg warn', 'Precisa ajustar o preço')); nm.appendChild(botaoCopiar(x.nome, 'Copiar nome')); n.appendChild(nm);
+      var skus = (x.vinc || []).map(function (v) { return v.sku; }).filter(function (k, i, a) { return k && a.indexOf(k) === i; }), skuT = skus.join(', ');
+      if (skuT) n.appendChild(el('div', 'psub skumob', 'SKU ' + skuT));
       var sub = [x.grupo, ver && x.manual ? 'Preço definido manualmente' : '', (x.vinc || []).length ? x.vinc.length + ' cor(es) no cadastro · ' + soma(x.vinc, function (v) { return v.total; }) + ' em estoque' : ''].filter(Boolean).join(' · ');
       if (sub) n.appendChild(el('div', 'psub', sub));
       tagsMini(n, x.tags);
       r.appendChild(n);
+      r.appendChild(el('div', 'pskuc', skuT || '—'));
       var cm = el('div', 'psku');
       if (ver && x.custo) { var res = resultado(x.preco, x.custo, calcNovo(x.custo, x.aj, S.prec)); cm.textContent = brl(x.custo) + (res ? ' · ' + pct(res.margem) : ''); if (res) cm.style.color = res.margem >= (S.prec.margem / 100) - 0.0001 ? 'var(--ok)' : res.margem > 0 ? 'var(--warn)' : 'var(--err)'; }
       r.appendChild(cm);
@@ -13000,7 +13018,7 @@
     if (!(qt > 0)) nm.appendChild(el('span', 'badge-m', 'Sem estoque'));
     n.appendChild(nm);
     var lo = Object.keys(x.estoque || {}).map(function (k) { return k.replace(/^.*\| /, '') + ' ' + x.estoque[k]; }).join(' · ');
-    var ps = el('div', 'psub esrow', [lo || 'sem estoque', x.grupo].filter(Boolean).join(' · ')); var eb = botaoEstoque(x); if (eb) ps.appendChild(eb); n.appendChild(ps); tagsMini(n, x.tags); r.appendChild(n);
+    var ps = el('div', 'psub esrow', [lo || 'sem estoque', x.grupo].filter(Boolean).join(' · ')); var eb = botaoEstoque(x); if (eb) ps.appendChild(eb); n.appendChild(ps); r.appendChild(n);
     var cod = x.sku || x.codigo || '—', sku = el('div', 'psku', cod); if (x.sku || x.codigo) sku.appendChild(botaoCopiar(cod, 'Copiar SKU')); r.appendChild(sku);
     var pr = el('div', 'ppre' + (x.preco ? '' : ' sem'), x.preco ? brl(x.preco) : 'Consultar');
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
@@ -13017,7 +13035,8 @@
     if (a.precoAparelho) nm.appendChild(el('span', 'bdg warn', 'Preço especial'));
     if (a.reserva) { var rb2 = el('span', 'bdg res', 'Reservado · ' + a.reserva.vendedor.split(' ')[0]); rb2.title = txtRes(a.reserva); nm.appendChild(rb2); }
     var bat = typeof a.bateria === 'number' ? a.bateria + '%' : a.bateria;
-    n.appendChild(nm); n.appendChild(el('div', 'psub', ['Aparelho seminovo (Produtos Usados)', bat ? 'bateria ' + bat : '', a.grupo].filter(Boolean).join(' · '))); tagsMini(n, a.tags); r.appendChild(n);
+    n.appendChild(nm); if (a.sku) n.appendChild(el('div', 'psub skumob', 'SKU ' + a.sku)); n.appendChild(el('div', 'psub', ['Aparelho seminovo (Produtos Usados)', bat ? 'bateria ' + bat : '', a.grupo].filter(Boolean).join(' · '))); r.appendChild(n);
+    r.appendChild(el('div', 'pskuc', a.sku || '—'));
     var es = el('div', 'psku'); es.appendChild(el('div', '', '1 un.')); es.appendChild(el('div', 'psub', String(a.loja || '').replace(/^.*\| /, ''))); r.appendChild(es);
     var pr = el('div', 'ppre' + (a.preco ? '' : ' sem'), a.preco ? brl(a.preco) : 'Consultar');
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
@@ -13103,12 +13122,12 @@
     var c = el('div', 'card estcard'), top = el('div', 'tbacoes'); top.appendChild(el('h3', 'ch', 'Saldo por loja'));
     var dl = el('button', 'lnk', '⬇ Baixar planilha (CSV)'); dl.type = 'button'; top.appendChild(dl); c.appendChild(top);
     var w = el('div', 'tbwrap'), t = el('table', 't estmat'), h = el('tr');
-    ['Produto'].concat(lojas.map(function (x) { return x.replace(/^.*\| /, '').replace('Tec-Cell', 'TC'); })).concat(['Total', 'Mín./Máx.', D.ver ? 'Custo total' : 'Preço', '']).forEach(function (x, i) { var th = el('th', i > 0 ? 'n' : '', x); h.appendChild(th); });
+    ['Produto', 'SKU'].concat(lojas.map(function (x) { return x.replace(/^.*\| /, '').replace('Tec-Cell', 'TC'); })).concat(['Total', 'Mín./Máx.', D.ver ? 'Custo total' : 'Preço', '']).forEach(function (x, i) { var th = el('th', i > 1 ? 'n' : '', x); h.appendChild(th); });
     t.appendChild(h);
     l.forEach(function (x) {
       var r = el('tr'), s2 = sitEst(x, lj), a = el('td', 'pn'); a.appendChild(document.createTextNode(x.nome)); if (s2[0] !== 'OK') a.appendChild(el('span', 'bdg ' + s2[1], s2[0]));
-      a.appendChild(el('small', '', [x.sku ? 'SKU ' + x.sku : '', x.codigo ? 'EAN ' + x.codigo : '', x.localizacao ? 'Local: ' + x.localizacao : ''].filter(Boolean).join(' · ')));
-      r.appendChild(a);
+      a.appendChild(el('small', '', [x.codigo ? 'EAN ' + x.codigo : '', x.localizacao ? 'Local: ' + x.localizacao : ''].filter(Boolean).join(' · ')));
+      r.appendChild(a); r.appendChild(el('td', 'sk', x.sku || '—'));
       lojas.forEach(function (lo) { var v = x.estoque[lo] || 0; r.appendChild(el('td', 'n' + (x.minimo && v < x.minimo ? ' s' : v ? '' : ' z'), v ? inteiro(v) : '0')); });
       r.appendChild(el('td', 'n b', inteiro(qt(x))));
       r.appendChild(el('td', 'n z', x.minimo || x.maximo ? (x.minimo || 0) + ' / ' + (x.maximo || '—') : '—'));
