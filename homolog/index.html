@@ -304,6 +304,12 @@
   @media(min-width:700px){.overlay{align-items:center}.sheet{border-radius:18px}}
   .sheet h2.tt{font-size:17px;color:var(--accent);margin:2px 2px 2px;text-transform:none;letter-spacing:0}
   .sheet .sub{font-size:13px;color:var(--muted);margin:0 2px 12px}
+  /* Leva 6: cadastro aberto como página (no lugar da lista) */
+  body.pgon main > section:not(#vPg){display:none!important}
+  #vPg{max-width:900px}
+  #fSheet.pgsheet{max-width:none;width:auto;max-height:none;overflow:visible;border-radius:0;padding:0;background:transparent}
+  #fSheet.pgsheet > h2.tt:first-child{display:none}
+  #fSheet.pgsheet > .sub:nth-child(2){margin-top:-6px}
   .ck{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
   .ck:first-of-type{border-top:0}
   .ck .n{flex:1;font-size:14px}
@@ -952,6 +958,32 @@
   .cmbox small{display:block;color:var(--muted);font-size:12px}.cmbox b{display:block;font-size:17px;margin-top:2px}.cmbox span{display:block;color:var(--muted);font-size:11.5px}
   .sertipo{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:8px}.dstg{grid-template-columns:repeat(2,minmax(0,1fr))}
   @media (max-width:700px){.sertipo,.dstg,.cmbox{grid-template-columns:1fr}}
+  /* Leva 6: coluna SKU logo depois do nome nas listas de produto (no celular, embaixo do nome) */
+  .pskuc{font-size:13.5px;font-variant-numeric:tabular-nums;color:var(--muted);word-break:break-all;min-width:0}
+  .skumob{display:none}
+  #acLista .prow,#nLista .prow{grid-template-columns:52px minmax(0,1fr) 130px 190px 130px 24px}
+  .estmat td.sk{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+  @media (max-width:899px){.pskuc{display:none}.skumob{display:block}#acLista .prow,#nLista .prow{grid-template-columns:44px minmax(0,1fr) auto}}
+  .ccbusca{position:relative;margin-bottom:6px}.ccbusca .sug{position:absolute;left:0;right:0;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(16,24,40,.12);max-height:300px;overflow:auto}
+  .ccbusca .sug button{display:block;width:100%;text-align:left;padding:9px 12px;background:none;border:0;border-top:1px solid var(--line);cursor:pointer;color:var(--ink)}.ccbusca .sug button:first-child{border-top:0}.ccbusca .sug button:hover{background:var(--soft2)}
+  .ccbusca .sug small{color:var(--muted)}
+  .alerta.avisorg{background:var(--warn-bg);color:var(--warn);margin:0 0 10px}
+  .ccfotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:10px 0}
+  .ccfoto{position:relative;display:block;border:2px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer}.ccfoto.on{border-color:var(--accent)}
+  .ccfoto img{display:block;width:100%;aspect-ratio:1;object-fit:cover}.ccfoto input{position:absolute;top:8px;left:8px;width:20px;height:20px;margin:0;accent-color:var(--accent)}
+  .ccparc{display:flex;flex-direction:column;gap:6px;margin:8px 0}.ccimei .btn{width:auto}
+  #vPortal .ptopo{flex-wrap:wrap}#ptAc{margin:0;gap:8px}#ptAc .btn{width:auto;padding:10px 14px}
+  .ptcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px}
+  .ptcard{background:var(--card);border-radius:14px;padding:14px 16px;box-shadow:0 1px 2px rgba(16,24,40,.06)}
+  .ptcard .k{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .ptcard .v{font-size:24px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}.ptcard .s{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .ptmes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}.ptmes div{text-align:center}.ptmes b{display:block;font-size:20px}.ptmes span{font-size:11.5px;color:var(--muted)}
+  .ptlist .prow{grid-template-columns:minmax(0,1fr) auto 24px}.ptlist.pteq .prow{grid-template-columns:minmax(0,1fr) auto auto}.ptav{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.ptav:first-child{border-top:0}
+  .ptav .q{font-size:12px;color:var(--muted);white-space:nowrap}.ptav.novo b{color:var(--accent)}
+  .pttab{width:100%;border-collapse:collapse}.pttab th,.pttab td{padding:9px 10px;border-top:1px solid var(--line);text-align:left}.pttab th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-top:0}
+  .pttab td.n,.pttab th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ptcontrato{white-space:pre-wrap;max-height:340px;overflow:auto;background:var(--soft2);border-radius:10px;padding:12px;font-size:13px;line-height:1.5}
+  @media (max-width:600px){.ptmes b{font-size:17px}.pttab th,.pttab td{padding:8px 6px;font-size:13px}}
 </style>
 </head>
 <body class="tela-login">
@@ -1517,9 +1549,15 @@
     <div class="ptopo"><h1>Comissões</h1></div>
     <div id="cmCorpo"></div>
   </section>
+  <section id="vPortal" class="hide">
+    <div class="crumb">Portal da parceira</div>
+    <div class="ptopo"><h1 id="ptTit">Início</h1><div id="ptAc" class="acoes"></div></div>
+    <div id="ptCorpo"></div>
+  </section>
+
   <section id="vCompraCel" class="hide">
-    <div class="crumb">Suprimento</div>
-    <div class="ptopo"><h1>Compra de Celulares</h1></div>
+    <div class="crumb" id="ccCrumb">Suprimento › Compra de Celulares</div>
+    <div class="ptopo"><h1 id="ccTit">Kanban</h1></div>
     <div id="ccCorpo"></div>
   </section>
   <section id="vMetRel" class="hide">
@@ -1719,7 +1757,7 @@
         <label for="nTag">Tag</label>
         <select id="nTag"></select>
         <label for="nSit">Situação</label>
-        <select id="nSit"><option value="">Disponíveis</option><option value="indisp">Não disponíveis</option><option value="todos">Todos</option></select>
+        <select id="nSit"><option value="">Disponíveis</option><option value="indisp">Não disponíveis</option><option value="ajustar">Precisa ajustar o preço</option><option value="todos">Todos</option></select>
         <label for="nOrdem">Ordenar por</label>
         <select id="nOrdem" data-keep="1"><option value="az">Ordem alfabética (A → Z)</option><option value="za">Ordem alfabética (Z → A)</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select>
         <button type="button" class="btn ghost" id="nLimpar">Limpar filtros</button>
@@ -1853,6 +1891,11 @@
       </div>
     </div>
   </section>
+  <section id="vPg" class="hide">
+    <div class="crumb" id="pgCrumb"></div>
+    <div class="ptopo"><h1 id="pgTit"></h1><button type="button" class="btn ghost" id="pgVoltar">← Voltar</button></div>
+    <div id="pgCorpo"></div>
+  </section>
 </main>
 <div class="dw-bg hide" id="dwBg"></div><aside class="drawer" id="dw" aria-hidden="true"></aside>
 <div class="dw-bg tw-bg hide" id="twBg"></div>
@@ -1945,11 +1988,23 @@
   var CORES = ['Preto','Branco','Azul','Azul-claro','Azul-profundo','Verde','Verde-acinzentado','Rosa','Roxo','Lavanda','Vermelho','Amarelo','Laranja','Laranja-cósmico','Dourado','Prata','Grafite','Meia-noite','Estelar','Sálvia','Titânio Natural','Titânio Preto','Titânio Branco','Titânio Azul','Titânio Deserto','Ultramarino','Cinza','Bege','Outra'];
   var CONSULTA_URL = 'https://www.consultaserialaparelho.com.br/public-web/homeSiga?token=20260618';
   var VIEWS = [
+    // Leva 6: Portal da Parceira (só o login de parceira vê; Financeiro só o responsável)
+    { id: 'pinicio', sec: 'vPortal', nome: 'Início', perm: 'parceira', desc: 'A receber, aparelhos do mês e pendências' },
+    { id: 'pnova', sec: 'vCompraCel', nome: 'Nova compra', perm: 'parceira', desc: 'Comprar um aparelho: cliente, fotos, consulta de IMEI e contrato' },
+    { id: 'paparelhos', sec: 'vCompraCel', nome: 'Meus aparelhos', perm: 'parceira', desc: 'Lista e Kanban dos aparelhos enviados' },
+    { id: 'pfin', sec: 'vPortal', nome: 'Financeiro', perm: 'parceira_dono', desc: 'A receber, recebidos e extrato' },
+    { id: 'ptab', sec: 'vPortal', nome: 'Tabela de referência', perm: 'parceira', desc: 'Quanto a loja paga por modelo' },
+    { id: 'pcli', sec: 'vPortal', nome: 'Meus clientes', perm: 'parceira', desc: 'Vendedores que você cadastrou' },
+    { id: 'pav', sec: 'vPortal', nome: 'Avisos', perm: 'parceira', desc: 'Aparelhos conferidos, recusados e pagamentos' },
+    { id: 'ploja', sec: 'vPortal', nome: 'Minha loja', perm: 'parceira', desc: 'Dados, chave PIX e equipe' },
     { id: 'dash', sec: 'vDash', nome: 'Dashboard', perm: 'dashboard' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
     { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios', menu: 'Suprimento', desc: 'Cadastro, preço e estoque dos produtos' },
-    { id: 'compracel', sec: 'vCompraCel', nome: 'Compra de Celulares', perm: 'cadastro', permOu: 'parceira', menu: 'Suprimento', desc: 'Compra de usado com contrato e assinatura, parceiras e Upgrade (Kanban)' },
+    { id: 'ccnova', sec: 'vCompraCel', nome: 'Nova compra', perm: 'cadastro', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Nova compra', desc: 'Comprar um usado do cliente: dados, fotos, contrato e assinatura' },
+    { id: 'compracel', sec: 'vCompraCel', nome: 'Kanban', perm: 'cadastro', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Kanban', desc: 'Compras de usados por etapa (loja, parceiras e Upgrade)' },
+    { id: 'cclista', sec: 'vCompraCel', nome: 'Lista', perm: 'cadastro', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Lista', desc: 'Todas as compras de usados, com busca' },
+    { id: 'ccparc', sec: 'vCompraCel', nome: 'Lojas Parceiras', perm: 'compras', permOu: 'equipe', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Lojas Parceiras', desc: 'Cadastro das lojas parceiras, login e pagamento' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Produtos', desc: 'Aparelhos seminovos e outros produtos usados' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Manutenção', desc: 'Quadro de conserto dos aparelhos usados' },
     { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Suprimento', desc: 'Saldo de cada produto por loja e lançamentos' },
@@ -2163,7 +2218,7 @@
       comLiberacao('reservaCriar', [S.token, d], 1).then(function (r) { aposReserva(); abrirReserva(r, true); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Reservar'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); (serSel || nm).focus();
+    abrirPagina(); (serSel || nm).focus();
   }
   function abrirReserva(r, nova) {
     var sh = $('fSheet'); sh.innerHTML = '';
@@ -2648,7 +2703,7 @@
     var R = [];
     t.itens.filter(function (it) { return it.pendente > 0; }).forEach(function (it) {
       var w = el('div', 'tfrec'), o = { k: it.k, ok: 0, avaria: 0, falta: 0, motivo: '', seriais: [] }; R.push(o);
-      var n = el('div', 'nm', it.nome); n.appendChild(el('small', '', (it.imei ? 'IMEI ' + it.imei + ' · ' : '') + 'pendente: ' + it.pendente)); w.appendChild(n);
+      var n = el('div', 'nm', it.nome); n.appendChild(el('small', '', (it.sku ? 'SKU ' + it.sku + ' · ' : '') + (it.imei ? 'IMEI ' + it.imei + ' · ' : '') + 'pendente: ' + it.pendente)); w.appendChild(n);
       var mo = inp('text', 'Motivo da avaria / falta'); mo.maxLength = 150; mo.oninput = function () { o.motivo = mo.value.trim(); };
       if (it.tipo === 'aparelho') {
         var sg = el('div', 'seg'); w.appendChild(sg);
@@ -3105,7 +3160,7 @@
     };
     sv.onclick = function () { var l = D.modelos.filter(function (x) { return x.id !== M.id || !M.id; }); if (M.padrao) l.forEach(function (x) { x.padrao = false; }); salvar(M.id ? D.modelos.map(function (x) { return x.id === M.id ? M : (M.padrao ? Object.assign({}, x, { padrao: false }) : x); }) : l.concat([M])); };
     ex.onclick = function () { if (!ex.dataset.c) { ex.dataset.c = 1; ex.textContent = 'Toque de novo para excluir'; return; } salvar(D.modelos.filter(function (x) { return x.id !== M.id; })); };
-    abrirModal(); garantirQR(desCanvas);
+    abrirPagina(); garantirQR(desCanvas);
   }
   /** Reduz a imagem (lado maior até max px) e devolve data URL JPEG. */
   function comprimirImg(file, max, q, cb) {
@@ -3393,8 +3448,8 @@
       c.appendChild(el('h3', 'ch', 'Diferenças (' + difs.length + ')'));
       if (!difs.length) c.appendChild(el('div', 'hint', 'Tudo bateu.'));
       else {
-        var w = el('div', 'ctwrap'), t = el('table', 'cttab'), h = el('tr'); ['Produto', 'Sistema', 'Contado', 'Diferença'].concat(r.ver ? ['Valor (custo)'] : []).forEach(function (k, i) { h.appendChild(el('th', i ? 'n' : '', k)); }); t.appendChild(h);
-        difs.forEach(function (o) { var tr = el('tr'), a = el('td', '', o.nome); if (o.faltamSeriais && o.faltamSeriais.length) a.appendChild(el('small', '', 'Faltam: ' + o.faltamSeriais.join(', '))); if (o.sobramSeriais && o.sobramSeriais.length) a.appendChild(el('small', '', 'Sobram: ' + o.sobramSeriais.join(', '))); if (o.naoContado) a.appendChild(el('small', '', 'não contado')); tr.appendChild(a); tr.appendChild(el('td', 'n', String(o.esperado))); tr.appendChild(el('td', 'n', String(o.contado))); tr.appendChild(el('td', 'n ' + (o.dif < 0 ? 's' : 'e'), (o.dif > 0 ? '+' : '') + o.dif)); if (r.ver) tr.appendChild(el('td', 'n', brl(o.valor))); t.appendChild(tr); });
+        var w = el('div', 'ctwrap'), t = el('table', 'cttab'), h = el('tr'); ['Produto', 'SKU', 'Sistema', 'Contado', 'Diferença'].concat(r.ver ? ['Valor (custo)'] : []).forEach(function (k, i) { h.appendChild(el('th', i > 1 ? 'n' : '', k)); }); t.appendChild(h);
+        difs.forEach(function (o) { var tr = el('tr'), a = el('td', '', o.nome); if (o.faltamSeriais && o.faltamSeriais.length) a.appendChild(el('small', '', 'Faltam: ' + o.faltamSeriais.join(', '))); if (o.sobramSeriais && o.sobramSeriais.length) a.appendChild(el('small', '', 'Sobram: ' + o.sobramSeriais.join(', '))); if (o.naoContado) a.appendChild(el('small', '', 'não contado')); tr.appendChild(a); tr.appendChild(el('td', '', o.sku || '—')); tr.appendChild(el('td', 'n', String(o.esperado))); tr.appendChild(el('td', 'n', String(o.contado))); tr.appendChild(el('td', 'n ' + (o.dif < 0 ? 's' : 'e'), (o.dif > 0 ? '+' : '') + o.dif)); if (r.ver) tr.appendChild(el('td', 'n', brl(o.valor))); t.appendChild(tr); });
         w.appendChild(t); c.appendChild(w);
         if (r.ver) c.appendChild(el('div', 'k', 'Total das diferenças: ' + brl(difs.reduce(function (a, o) { return a + (o.valor || 0); }, 0))));
       }
@@ -3701,7 +3756,7 @@
       comLiberacao('encomendaCriar', [S.token, d], 1).then(function (e) { S.enc = null; abrirEncomenda(e, true); carregarEncomendas(true); })
         .catch(function (er) { ok.disabled = false; ok.textContent = 'Criar encomenda'; m.textContent = er; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
   function abrirEncomenda(e, nova) {
     var sh = $('fSheet'); sh.innerHTML = '';
@@ -3960,24 +4015,47 @@
     instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
     suporte: '<path d="M3 14v-2a9 9 0 0 1 18 0v2"/><rect x="2" y="14" width="5" height="7" rx="2"/><rect x="17" y="14" width="5" height="7" rx="2"/>',
     telefone: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>',
-    whatsapp: '<path d="M3 21l1.7-4.9A8.6 8.6 0 1 1 8 19.5z"/><path d="M9 8.5c0 2.7 3.3 6.5 6.5 6.5l1-1.6-2-1-1 1c-1-.5-2.2-1.7-2.7-2.7l1-1-1-2z"/>'
+    whatsapp: '<path d="M3 21l1.7-4.9A8.6 8.6 0 1 1 8 19.5z"/><path d="M9 8.5c0 2.7 3.3 6.5 6.5 6.5l1-1.6-2-1-1 1c-1-.5-2.2-1.7-2.7-2.7l1-1-1-2z"/>',
+    pasta: '<path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    relogio: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    digital: '<path d="M7 10a5 5 0 0 1 10 0v3"/><path d="M12 10v5a6 6 0 0 1-1.5 4"/><path d="M4 12a8 8 0 0 1 16-2"/><path d="M17 16a12 12 0 0 1-1 4"/><path d="M8.5 14v1a8 8 0 0 1-1.5 4.5"/>',
+    engrenagem: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+    escala: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="M8.5 15l2 2 4-4"/>',
+    ampulheta: '<path d="M6 2h12M6 22h12"/><path d="M7 2c0 5 10 6 10 10S7 17 7 22"/><path d="M17 2c0 5-10 6-10 10s10 5 10 10"/>',
+    escada: '<path d="M3 20h4v-4h4v-4h4V8h4V4"/><path d="M15 4h4v4"/>',
+    organograma: '<rect x="9" y="2" width="6" height="5" rx="1"/><rect x="2" y="17" width="6" height="5" rx="1"/><rect x="16" y="17" width="6" height="5" rx="1"/><path d="M12 7v5M5 17v-5h14v5"/>',
+    sol: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    estrela: '<path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/>',
+    chapeu: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/>',
+    alerta: '<path d="M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+    aperto: '<path d="M2 11l4-4 4 2 3-2 3 1 4-1 2 4"/><path d="M6 7v6l5 5c.8.8 2 .8 2.8 0l4.2-4.2"/><path d="M11 9l-2.5 2.5a1.5 1.5 0 0 0 2.1 2.1L13 11.5l3 3"/>',
+    celcompra: '<rect x="3" y="2" width="11" height="20" rx="3"/><path d="M8 18h1"/><path d="M19 8v8M16 13l3 3 3-3"/>',
+    casa: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+    sino: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+    loja: '<path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M5 12v8h14v-8"/><path d="M10 20v-5h4v5"/>',
+    contato: '<rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="11" r="2.5"/><path d="M4.5 17c.6-2 2.1-3 4-3s3.4 1 4 3M15 9h4M15 13h4"/>'
   };
   function svgIco(k) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICO[k] || ICO.ponto) + '</svg>'; }
   function logoSvg(escuro) {
     var b = escuro ? '#FFFFFF' : '#0F1B2D', a = escuro ? '#7D97FF' : '#2F5BFF', s = escuro ? '#0F1B2D' : '#FFFFFF';
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
-  var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'pessoas', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas' };
+  var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'contato', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas', 'Cadastro': 'pasta', 'Folha': 'relogio', 'Gestão': 'camadas', 'Compra de Celulares': 'celcompra' };
   var ICO_VIEW = { encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
-                   cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista', proposta: 'recibo', finest: 'moedas' };
+                   cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista', proposta: 'recibo', finest: 'moedas',
+                   compracel: 'quadro', ccnova: 'mais', cclista: 'lista', ccparc: 'aperto', pinicio: 'casa', pnova: 'mais', paparelhos: 'celular', pfin: 'carteira', ptab: 'etiqueta', pcli: 'pessoas', pav: 'sino', ploja: 'loja', metrel: 'grafico', rhdash: 'grafico', ponto: 'engrenagem', rhfunc: 'usuario', rhferiados: 'calendario', rhjornada: 'relogio', rhescalas: 'escala',
+                   rhpontos: 'digital', rhverificar: 'busca', rhbanco: 'ampulheta', rhcentral: 'dre', rhcarreira: 'escada', rhorg: 'organograma', rhferias: 'sol', rhaval: 'estrela',
+                   rhtrein: 'chapeu', rhocorr: 'alerta', rhdocs: 'conta', rhfolha: 'moedas' };
   var SBM = { aberto: {} };
+  var SUB_ABRE = { 'Compra de Celulares': 'compracel' }; // Leva 6: clicar no subgrupo abre o Kanban
   function semAc(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function itemMenu(v) {
     var b = el('button', 'sbi'); b.type = 'button'; b.dataset.v = v.id; b.innerHTML = '<span class="ic">' + svgIco(ICO_VIEW[v.id]) + '</span>';
     var nm = v.sub ? (v.subNome || v.nome) : v.nome; b.appendChild(el('span', 'sbl', nm)); b.title = nm;
     if (v.id === 'checkin' && S.u && S.u.checkinPendentes) b.querySelector('.sbl').appendChild(el('span', 'bdg warn', String(S.u.checkinPendentes)));
     if (v.id === 'transf' && S.u && (S.u.transfPendentes || S.u.pedidosTransf)) { var nT = (S.u.transfPendentes || 0) + (S.u.pedidosTransf || 0); b.querySelector('.sbl').appendChild(el('span', 'bdg warn', String(nT))); b.title = [S.u.pedidosTransf ? S.u.pedidosTransf + ' pedido(s) de transferência para responder' : '', S.u.transfPendentes ? S.u.transfPendentes + ' transferência(s) para receber' : ''].filter(Boolean).join(' · '); }
+    if (v.id === 'pav' && PT.novos) b.querySelector('.sbl').appendChild(el('span', 'bdg warn', String(PT.novos)));
     b.onclick = function () { ir(v.id); fecharSb(); };
     return b;
   }
@@ -3986,6 +4064,7 @@
     b.appendChild(el('span', 'sbl', nome)); b.appendChild(el('span', 'ar', '›')); b.title = nome; b.setAttribute('aria-expanded', 'false');
     b.onclick = function () {
       var on = !b.classList.contains('aberto'); SBM.aberto[chave] = on; b.classList.toggle('aberto', on); b.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (on && SUB_ABRE[nome] && S.view !== SUB_ABRE[nome]) { ir(SUB_ABRE[nome]); fecharSb(); }
       if (!on) return;
       // abrir um grupo fecha os outros do mesmo nível (grupo com grupo, subgrupo com subgrupo do mesmo grupo)
       var pai = chave.indexOf('|') > -1 ? chave.split('|')[0] : null;
@@ -6019,7 +6098,7 @@
     mo.onchange = desF; desF();
     var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
     btn(ac, 'Salvar', '', function () { call('rhEscalaAtribuir', [S.token, x.id, { modelo: mo.value, inicio: ini.value, folgas: fl }]).then(function (d) { RH.d = d; RH.em = Date.now(); fecharModal(); avisoTopo('A escala de ' + x.nome + ' foi salva'); abrirRH(S.view); }).catch(function (e2) { erroEm(m, e2); }); });
-    btn(ac, 'Fechar', 'ghost', fecharModal); abrirModal();
+    btn(ac, 'Fechar', 'ghost', fecharModal); abrirPagina();
   }
   function escalaModelos(box, D) {
     var L = JSON.parse(JSON.stringify(D.escalas)), c = el('div', 'card pecard'); box.appendChild(c); c.appendChild(el('h2', '', 'Modelos de escala'));
@@ -6208,7 +6287,7 @@
           perguntar('Funcionário cadastrado', nm.value + '\n\nCódigo do ponto: ' + r.codigo + sis + (r.pin ? '\nPIN provisório: ' + r.pin : '') + '\n\nAnote agora: a senha e o PIN provisórios só aparecem uma vez.', [{ t: 'Abrir a ficha', v: 'ficha' }, { t: 'OK', v: true, cls: 'ghost' }]).then(function (v) { abrirRH(S.view); if (v === 'ficha') formFunc(r.id, RH.d); });
         }).catch(function (e) { erroEm(m, e); });
     });
-    btn(ac, 'Fechar', 'ghost', fecharModal); abrirModal();
+    btn(ac, 'Fechar', 'ghost', fecharModal); abrirPagina();
   }
 
   // ---------- REGISTROS (férias, avaliação, treinamentos, ocorrências, documentos) ----------
@@ -6260,7 +6339,7 @@
         call('rhRegistroSalvar', [S.token, { id: r.id, tipo: r.tipo, func: sf.value, data: da.value, ate: at.value, sub: su.value, titulo: ti.value, obs: ob.value, situacao: sit ? sit.value : '', notas: r.tipo === 'avaliacao' ? notas : undefined, nota: media, horas: nota ? nota.value : '', arquivo: ar ? ar.value : '', assinado: sit && sit.value === 'Assinado' }])
           .then(function () { fecharModal(); avisoTopo('O registro foi salvo com sucesso'); des(); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); });
       };
-      abrirModal();
+      abrirPagina();
     }
     nv.onclick = function () { formReg(null); };
     des();
@@ -6415,7 +6494,7 @@
   $('sair').onclick = function () { var t = S.token; sairLocal(''); call('sair', [t]).catch(function () {}); };
 
   // loja parceira (só a permissão "parceira"): não é funcionária, não recebe as telas de todos (ponto, escala, carreira…)
-  function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira'; }); }
+  function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono'; }); }
   function pode(p) { return !!(S.u && ((p === '**' && !soParceira()) || (p === '*' && !S.u.soPonto && !soParceira()) || (S.u.perms || []).indexOf(p) > -1)); }
   // ---------- várias empresas ----------
   var ICO_EMP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h1M14 9h1M9 13h1M14 13h1M9 17h1M14 17h1"/></svg>';
@@ -6478,7 +6557,8 @@
     show('nav', true); document.body.classList.add('logado'); avisoPedidos();
     montarCadastro(d); montarAval(); montarCartao(); if (pode('compra')) montarCompra();
     var soParc = (d.perms || []).indexOf('parceira') > -1 && (d.perms || []).every(function (x) { return x === 'parceira'; });
-    var ult = soParc ? 'compracel' : d.soPonto || d.pinTemp ? 'ponto' : pode('dashboard') ? 'dash' : LS.get('view', 'cadastro'); // o sistema sempre abre no Dashboard
+    if (soParc) portalIniciar();
+    var ult = soParc ? 'pinicio' : d.soPonto || d.pinTemp ? 'ponto' : pode('dashboard') ? 'dash' : LS.get('view', 'cadastro'); // o sistema sempre abre no Dashboard
     var permitidas = VIEWS.filter(function (v) { return pode(v.perm) || (v.permOu && pode(v.permOu)); });
     if (ult !== 'config' && !permitidas.some(function (v) { return v.id === ult; })) ult = permitidas.length ? permitidas[0].id : '';
     if (!ult) { show('nav', false); document.body.classList.remove('logado'); msg('topMsg', 'Seu usuário ainda não tem nenhuma página liberada. Fale com o gerente.'); return; }
@@ -6523,6 +6603,7 @@
   window.addEventListener('resize', fecharMenuNav);
 
   function ir(id) {
+    if (PG) { if (!podeSairPagina()) { marcarMenu(S.view); return; } fecharPagina(); }
     if (S.view && S.view !== id && rascunhoSujo(S.view) && !confirm('Você vai perder o que preencheu nesta tela. Sair mesmo assim?')) { marcarMenu(S.view); return; }
     if (S.view && S.view !== id) limparRascunhos(S.view, id);
     if (id === 'pessoa' && !PE) id = 'crm';
@@ -6573,7 +6654,9 @@
     if (id === 'metas') carregarMetas(S.mt ? S.mt.mes : '');
     if (id === 'comissoes') carregarMetas(S.mt ? S.mt.mes : '', 'com');
     if (id === 'metrel') carregarMetRel();
-    if (id === 'compracel') carregarCC();
+    var abaCC = { ccnova: 'Kanban', compracel: 'Kanban', cclista: 'Lista', ccparc: 'Parceiras', pnova: CC.abaP || 'Kanban', paparelhos: CC.abaP || 'Kanban' }[id];
+    if (abaCC) { CC.aba = abaCC; if (id === 'ccnova' || id === 'pnova') carregarCC(function () { formCC(null); }); else carregarCC(); }
+    if (['pinicio', 'pfin', 'ptab', 'pcli', 'pav', 'ploja'].indexOf(id) > -1) portalTela(id);
     if (id === 'caixa') carregarCaixa(true);
     if (id === 'reservas') carregarReservas(true);
     if (id === 'encomendas') carregarEncomendas(true);
@@ -7658,7 +7741,7 @@
       call('contaFinSalvar', [S.token, { id: c ? c.id : '', nome: nome.value, tipo: tp.value, loja: lj.value, inicial: vi.input.value.trim() === '' ? 0 : num(vi.input.value), desde: dt.value, ativa: at ? at.checked : true }])
         .then(function (d) { aposFin(d); fecharModal(); renderFin(); }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); nome.focus();
+    abrirPagina(); nome.focus();
   }
   function formLanc(c, tipo) {
     if (!S.fin) return carregarFin(true);
@@ -7762,6 +7845,13 @@
     kvCard(bd, [['Situação', st === 'Pago' ? 'Paga' : st], ['Valor', brl(x.valor)], ['Vencimento', isoBR(x.venc)], ['Fornecedor', x.fornecedor], ['Categoria', x.categoria], ['Loja', x.loja],
                 ['Pago em', x.pagoEm ? isoBR(x.pagoEm) : ''], ['Saiu de', x.conta ? nomeContaPg(x.conta) : ''], ['Forma', x.forma], ['Observação', x.obs], ['Lançada por', x.lancado], ['Paga por', x.pagoPor], ['Nº', x.id]]);
     var am = el('div', 'msg err'); bd.appendChild(am);
+    if (/^Parceira PC\d+ /.test(x.obs || '') && x.situacao !== 'Cancelada') {
+      // Leva 6: o comprovante do PIX aparece para a parceira em Financeiro › Recebidos
+      var cl = el('label', 'opc'), ci = el('input'); ci.type = 'file'; ci.accept = 'image/*,application/pdf'; ci.className = 'hide';
+      var cd = el('div', '', '📎 Anexar comprovante para a parceira'); cd.appendChild(el('small', '', 'Foto ou PDF do PIX; ela vê no app')); cl.appendChild(cd); cl.appendChild(el('span', 'ar', '›')); cl.appendChild(ci); bd.appendChild(cl);
+      ci.onchange = function () { var f = ci.files[0]; if (!f) return; var env = function (u) { call('parcComprovante', [S.token, x.id, u]).then(function () { avisoTopo('Comprovante anexado'); }).catch(function (e) { am.textContent = e; am.classList.add('show'); }); };
+        if (/pdf/.test(f.type)) lerArquivo(f, false, env); else comprimirImg(f, 1600, 0.82, env); };
+    }
     if (x.situacao === 'Em aberto') {
       var bp = opcaoDw(bd, 'Marcar como paga', 'Escolha de qual caixa/banco saiu o dinheiro', 'okc', function () {
         if (bp.nextSibling && bp.nextSibling.classList && bp.nextSibling.classList.contains('opc-box')) return;
@@ -7833,7 +7923,7 @@
       call('pagarSalvar', [S.token, d]).then(function (r) { aposPagar(r); S.crm = null; fecharModal(); var b = $('pgAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + (x ? 'Conta atualizada.' : d.repetir > 1 ? d.repetir + ' contas lançadas (uma por mês).' : 'Conta lançada.' + (d.pago ? ' O valor já saiu do saldo.' : '')))); })
         .catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Lançar conta'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); ds.focus();
+    abrirPagina(); ds.focus();
   }
 
   // =========================================================
@@ -7989,7 +8079,7 @@
       call('receberSalvar', [S.token, d]).then(function (r) { aposReceber(r); S.crm = null; fecharModal(); var b = $('rcAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + (x ? 'Conta atualizada.' : d.repetir > 1 ? d.repetir + ' contas lançadas (uma por mês).' : 'Conta lançada.' + (d.recebido ? ' O valor já entrou no saldo.' : '')))); })
         .catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Lançar conta'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); ds.focus();
+    abrirPagina(); ds.focus();
   }
 
   // =========================================================
@@ -8345,7 +8435,7 @@
           .then(function (d) { aposCred(d); fecharModal(); var b = $('cdAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ Crediário lançado.')); })
           .catch(function (e) { ok.disabled = false; ok.textContent = 'Lançar crediário'; m.textContent = e; m.classList.add('show'); });
       };
-      abrirModal();
+      abrirPagina();
     };
     if (S.crm) go(); else call('crmListar', [S.token]).then(function (r) { aposCrm(r); go(); }).catch(function (e) { var b = $('cdAviso'); b.innerHTML = ''; b.appendChild(el('div', 'msg err show', e)); });
   }
@@ -8433,7 +8523,7 @@
     var box = $('acLista'); box.innerHTML = '';
     if (!l.length && !la.length) { box.appendChild(el('div', 'empty', D.produtos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto cadastrado ainda.' + (D.editar ? ' Use "+ Novo produto".' : ''))); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
-    ['', 'Produto', 'Estoque' + (lj ? ' (' + lj.replace(/^.*\| /, '') + ')' : ''), 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    ['', 'Produto', 'SKU', 'Estoque' + (lj ? ' (' + lj.replace(/^.*\| /, '') + ')' : ''), 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 4) d.style.textAlign = 'right'; h.appendChild(d); });
     tab.appendChild(h);
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     mix.forEach(function (it) {
@@ -8449,7 +8539,8 @@
       if (!(qt > 0)) nm.appendChild(el('span', 'badge-m', x.formato === 'composicao' ? 'Sem kit montável' : 'Sem estoque'));
       if (REDE.d && x.formato !== 'variacoes' && x.formato !== 'composicao') { var nr = redeAchar(REDE.d, '', { produto: x }).produtos.reduce(function (a, p) { return a + p.qtd; }, 0); if (nr) { var bR = el('span', 'bdg inf', '+' + nr + ' em outras empresas'); bR.title = 'Toque no produto para ver onde está e pedir transferência'; nm.appendChild(bR); } }
       else if (baixoMin(x, lj) || (x.filhos || []).some(function (id) { return M[id] && baixoMin(M[id], lj); })) nm.appendChild(el('span', 'bdg warn', 'Repor'));
-      n.appendChild(nm); var sub = [x.sku ? 'SKU ' + x.sku : '', x.grupo, x.codigo ? 'EAN ' + x.codigo : ''].filter(Boolean).join(' · '); if (sub) n.appendChild(el('div', 'psub', sub)); tagsMini(n, x.tags); r.appendChild(n);
+      n.appendChild(nm); if (x.sku) n.appendChild(el('div', 'psub skumob', 'SKU ' + x.sku)); var sub = [x.grupo, x.codigo ? 'EAN ' + x.codigo : ''].filter(Boolean).join(' · '); if (sub) n.appendChild(el('div', 'psub', sub)); r.appendChild(n);
+      r.appendChild(el('div', 'pskuc', x.sku || '—'));
       var es = el('div', 'psku'), es1 = el('div', 'esrow'); es1.appendChild(el('span', '', x.formato === 'composicao' ? inteiro(qt) + ' kit' + (qt === 1 ? '' : 's') : unTxt(x, qt))); if (x.formato === 'simples' || x.formato === 'variacao') { var eb = botaoEstoque(x); if (eb) es1.appendChild(eb); } es.appendChild(es1);
       if (!lj) { var lo = Object.keys(x.estoque).map(function (k) { return k.replace(/^.*\| /, '') + ' ' + x.estoque[k]; }).join(' · '); if (lo) es.appendChild(el('div', 'psub', lo)); }
       r.appendChild(es);
@@ -8732,7 +8823,7 @@
       tnW.innerHTML = '';
       if (cond.value === 'Usado' || formato !== 'simples') { tnOn = false; nome.readOnly = false; return; }
       var lb = el('label', 'perm'), ck = el('input'); ck.type = 'checkbox'; ck.checked = tnOn;
-      var tt = el('div', 't', 'Mostrar na Tabela de Preços (Produtos Novos)'); tt.appendChild(el('small', '', 'O preço de venda passa a vir da Tabela de Preços › Produtos Novos. Uma linha por modelo vale para todas as cores.'));
+      var tt = el('div', 't', 'Mostrar na Tabela de Preços (Produtos Novos)'); tt.appendChild(el('small', '', 'O preço de venda digitado vai para a Tabela de Preços › Produtos Novos. Uma linha por modelo vale para todas as cores.'));
       lb.appendChild(ck); lb.appendChild(tt); lb.style.marginTop = '12px'; tnW.appendChild(lb);
       ck.onchange = function () { tnOn = ck.checked; if (tnOn && !tn) tn = { modelo: nome.value.trim().toUpperCase(), cor: '' }; desTN(); };
       if (!tnOn) { nome.readOnly = false; return; }
@@ -8745,7 +8836,7 @@
         tn.modelo = mo.value.trim().toUpperCase().replace(/\s+/g, ' '); tn.cor = co.value.trim().toUpperCase().replace(/\s+/g, ' ');
         nome.value = (tn.modelo + (tn.cor ? ' ' + tn.cor : '')).trim();
         var rr = S.tnNov && (S.tnNov.produtos || []).filter(function (n) { return n.nome.toUpperCase() === tn.modelo; })[0];
-        hn.textContent = rr ? 'Na tabela: ' + (rr.preco ? brl(rr.preco) : 'sem preço') + '. Este produto (e as outras cores do modelo) usa esse preço.' : (tn.modelo ? 'Modelo novo: ao salvar, ele entra na Tabela de Preços com o preço calculado pela precificação.' : 'Digite o modelo igual ao da tabela (as sugestões aparecem ao digitar).');
+        hn.textContent = rr ? 'Na tabela: ' + (rr.preco ? brl(rr.preco) : 'sem preço') + '. Se você digitar outro preço de venda, ele passa a valer na tabela para o modelo (e as outras cores).' : (tn.modelo ? 'Modelo novo: ao salvar, ele entra na Tabela de Preços com o preço de venda digitado. Sem preço, entra em "Precisa ajustar o preço".' : 'Digite o modelo igual ao da tabela (as sugestões aparecem ao digitar).');
       };
       var carregar = function (l) { dl2.innerHTML = ''; l.forEach(function (n) { var o = el('option'); o.value = n.nome; dl2.appendChild(o); }); up(); };
       if (!S.tnNov && Array.isArray(S.novos)) S.tnNov = { produtos: S.novos };
@@ -10006,9 +10097,15 @@
     var lista = el('div'); bd.appendChild(lista);
     var ft = el('div', 'twf'), ok = el('button', 'btn', ''); ok.type = 'button'; ok.onclick = fecharTags; ft.appendChild(ok); tw.appendChild(ft);
     function conta() { ok.textContent = 'Concluir' + (esc.length ? ' (' + esc.length + ' selecionada' + (esc.length === 1 ? '' : 's') + ')' : ''); }
-    function linha(item, sub) {
+    // Leva 6: marcar um subgrupo marca o grupo; desmarcar o grupo desmarca os subgrupos; desmarcar o último subgrupo mantém o grupo.
+    function linha(item, sub, pai) {
       var r = el('label', 'trow' + (sub ? ' sub' : '')), c = el('input'); c.type = 'checkbox'; c.checked = esc.indexOf(item.path) > -1;
-      c.onchange = function () { var i = esc.indexOf(item.path); if (c.checked && i < 0) esc.push(item.path); if (!c.checked && i > -1) esc.splice(i, 1); conta(); aoMudar(); };
+      c.onchange = function () {
+        var i = esc.indexOf(item.path); if (c.checked && i < 0) esc.push(item.path); if (!c.checked && i > -1) esc.splice(i, 1);
+        if (c.checked && pai && esc.indexOf(pai.path) < 0) esc.push(pai.path);
+        if (!c.checked && !sub) for (var k = esc.length - 1; k >= 0; k--) if (esc[k].indexOf(item.path + SEP) === 0) esc.splice(k, 1);
+        conta(); aoMudar(); desenhar();
+      };
       r.appendChild(c); r.appendChild(document.createTextNode(item.nome)); return r;
     }
     function desenhar() {
@@ -10018,7 +10115,7 @@
         var fs = p.filhos.filter(function (f) { return !q || f.path.toLowerCase().indexOf(q) > -1; });
         if (q && p.nome.toLowerCase().indexOf(q) < 0 && !fs.length) return;
         lista.appendChild(linha(p, false)); n++;
-        (q && p.nome.toLowerCase().indexOf(q) > -1 ? p.filhos : fs).forEach(function (f) { lista.appendChild(linha(f, true)); n++; });
+        (q && p.nome.toLowerCase().indexOf(q) > -1 ? p.filhos : fs).forEach(function (f) { lista.appendChild(linha(f, true, p)); n++; });
       });
       if (!n) lista.appendChild(el('div', 'empty', cat().tags.length ? 'Nenhuma tag encontrada.' : (pode('grupos_tags') ? 'Nenhuma tag cadastrada ainda. Use "+ Nova tag".' : 'Nenhuma tag cadastrada. O gerente cria as tags em Configurações › Tags.')));
     }
@@ -10531,7 +10628,7 @@
     nm.appendChild(botaoCopiar(nomeProduto(x), 'Copiar nome', 'aparelho'));
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
     n.appendChild(nm); n.appendChild(el('div', 'psub', [depVer(x.loja), bat ? 'bateria ' + bat : '', x.grupo].filter(Boolean).join(' · ')));
-    tagsMini(n, x.tags);
+   
     r.appendChild(n);
     var cod = x.sku || x.imei;
     var sku = el('div', 'psku', cod); sku.appendChild(botaoCopiar(cod, 'Copiar SKU')); r.appendChild(sku);
@@ -10733,7 +10830,10 @@
   //  COMPRA DE CELULARES (Leva 5): Kanban, lista, nova compra, contrato, assinatura, conferência e parceiras
   // =========================================================
   var CC = { d: null, aba: 'Kanban', filtro: '' };
-  var CC_COR = { 'Em negociação': '', 'Aguardando assinatura': 'warn', 'Assinado e pago': 'ok', 'Aguardando chegada': 'warn', 'Upgrade aguardando conferência': 'warn', 'Em conferência': 'warn', 'No estoque': 'ok', 'Cancelada': 'off', 'Recusada': 'err' };
+  var CC_COR = { 'Em negociação': '', 'Aguardando assinatura': 'warn', 'Assinado e pago': 'ok', 'Aguardando chegada': 'warn', 'Upgrade aguardando conferência': 'warn', 'Em conferência': 'warn', 'Aguardando resposta da parceira': 'warn', 'Nota de entrada pendente': 'warn', 'Aguardando nota da parceira': 'warn', 'No estoque': 'ok', 'Cancelada': 'off', 'Recusada': 'err' };
+  var CC_RESPOSTA = 'Aguardando resposta da parceira', CC_NOTA_ENTRADA = 'Nota de entrada pendente', CC_NOTA_PARC = 'Aguardando nota da parceira';
+  function lerArquivo(f, comoTexto, cb) { var r = new FileReader(); r.onload = function () { cb(r.result); }; r.onerror = function () { cb(null); }; if (comoTexto) r.readAsText(f); else r.readAsDataURL(f); }
+  function abrirUrl(acao, args, m) { call(acao, [S.token].concat(args)).then(function (u) { if (u && u.url) window.open(u.url, '_blank', 'noopener'); }).catch(function (e) { if (m) erroEm(m, e); else msg('topMsg', e); }); }
   var CC_ORIG = { loja: 'Compra na loja', parceira: 'Parceira', upgrade: 'Upgrade' };
   function carregarCC(depois) {
     var b = $('ccCorpo'); if (!CC.d) { b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…')); }
@@ -10743,15 +10843,18 @@
   function desenharCC() {
     var D = CC.d, b = $('ccCorpo'); b.innerHTML = '';
     var tp = el('div', 'ptopo'); b.appendChild(tp);
-    var abas = ['Kanban', 'Lista'].concat(D.editarParceiras ? ['Parceiras'] : []).concat(D.parceira ? ['Pagamentos'] : []);
-    var sg = el('div', 'seg'); tp.appendChild(sg); seg(sg, abas, CC.aba, function (v) { CC.aba = v; desenharCC(); });
+    if (CC.aba === 'Parceiras' && !D.editarParceiras) CC.aba = 'Kanban';
+    if (CC.aba === 'Pagamentos' && !D.parceira) CC.aba = 'Kanban';
+    $('ccTit').textContent = soParceira() ? 'Meus aparelhos' : ({ Kanban: 'Kanban', Lista: 'Lista', Parceiras: 'Lojas Parceiras', Pagamentos: 'Pagamentos' }[CC.aba] || 'Compra de Celulares');
+    $('ccCrumb').textContent = soParceira() ? 'Portal da parceira' : 'Suprimento › Compra de Celulares';
+    if (soParceira()) { var sgP = el('div', 'seg'); tp.appendChild(sgP); seg(sgP, ['Kanban', 'Lista'], CC.aba === 'Lista' ? 'Lista' : 'Kanban', function (v) { CC.aba = CC.abaP = v; desenharCC(); }); }
     if (CC.aba === 'Kanban' || CC.aba === 'Lista') {
       var nv = el('button', 'btn', '+ Nova compra'); nv.type = 'button'; nv.style.width = 'auto'; tp.appendChild(nv); nv.onclick = function () { formCC(null); };
       if (D.conferir) { var cq = el('button', 'btn ghost', '📷 Conferir pelo código'); cq.type = 'button'; cq.style.width = 'auto'; tp.appendChild(cq); cq.onclick = conferirPorCodigo; }
       var bq = inp('search', 'Buscar: código, cliente, modelo ou IMEI'); bq.value = CC.filtro; bq.style.maxWidth = '320px'; tp.appendChild(bq);
       bq.oninput = function () { CC.filtro = bq.value; desLista(); };
     }
-    if (D.parceira) b.appendChild(el('div', 'hint', 'Parceira: ' + D.parceira.nome + ' · os aparelhos vão para ' + D.parceira.loja + '. Lance o aparelho, gere o contrato com o seu cliente e envie: a loja confere na chegada.'));
+    if (D.parceira) b.appendChild(el('div', 'hint', D.parceira.nome + ' · os aparelhos vão para ' + depVer(D.parceira.loja) + '. Lance o aparelho, registre a consulta de IMEI, gere o contrato com o cliente e envie: a loja confere na chegada.'));
     var area = el('div'); b.appendChild(area);
     if (CC.aba === 'Parceiras') return parceirasCC(area);
     if (CC.aba === 'Pagamentos') return pagamentosParc(area);
@@ -10791,36 +10894,84 @@
     }
     desLista();
   }
-  /** Formulário da compra: cliente (busca no CRM pelo CPF), aparelho, valor, loja e pagamento (pode dividir). */
+  /** Nova compra (página): vendedor com os campos do cadastro de Clientes (sem RG) e busca de cliente, aparelho, fotos, valor, loja e pagamento. */
   function formCC(x) {
-    var D = CC.d, sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', x ? 'Compra ' + x.id : 'Nova compra de celular'));
+    var D = CC.d, sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', x ? 'Compra ' + x.id : 'Nova compra'));
     var c = el('div', 'card'); sh.appendChild(c);
-    var C = x ? JSON.parse(JSON.stringify(x.cliente)) : {}, A = x ? JSON.parse(JSON.stringify(x.aparelho)) : { marca: 'Apple', classif: 'Bom' };
+    var C = x ? JSON.parse(JSON.stringify(x.cliente)) : {}, A = x ? JSON.parse(JSON.stringify(x.aparelho)) : { marca: 'Apple', classif: 'Bom' }, PS = (x && x.dados.pessoais) || {};
+    if (D.avisoRG) c.appendChild(el('div', 'alerta avisorg', 'O texto do contrato de compra desta loja ainda cita o RG, que não é mais pedido. Ajuste em Configurações › Modelos de documento.'));
+    // busca de cliente já cadastrado (a parceira só encontra os clientes que ela cadastrou)
+    var bw = el('div', 'ccbusca'); c.appendChild(bw);
+    var bq = campo(bw, 'Usar cliente já cadastrado', inp('search', 'Buscar por nome, celular ou CPF')); bq.setAttribute('autocomplete', 'off');
+    var bs = el('div', 'sug hide'); bw.appendChild(bs);
     c.appendChild(el('h3', 'ch', 'Cliente (vendedor do aparelho)'));
-    var g1 = grade(c, 2), cpf = inp('text', '000.000.000-00'); cpf.inputMode = 'numeric'; cpf.value = C.cpf || ''; campo(g1[0], 'CPF *', cpf, true);
-    var nm = inp('text', 'Nome e sobrenome'); nm.value = C.nome || ''; campo(g1[1], 'Nome completo *', nm, true);
-    var g2 = grade(c, 2), rg = inp('text', 'RG'); rg.value = C.rg || ''; campo(g2[0], 'RG *', rg, true); var wp = inp('tel', '(22) 99999-9999'); wp.value = C.whats || ''; campo(g2[1], 'Celular *', wp, true);
-    var g3 = grade(c, 3), cep = inp('text', '00000-000'); cep.value = C.cep || ''; campo(g3[0], 'CEP', cep);
-    var en = inp('text', 'Rua, número'); en.value = C.endereco || ''; campo(g3[1], 'Endereço *', en, true); var ba = inp('text', 'Bairro'); ba.value = C.bairro || ''; campo(g3[2], 'Bairro', ba);
-    var ci = inp('text', 'Cidade/UF'); ci.value = C.cidade || ''; campo(c, 'Cidade *', ci, true);
+    var g1 = grade(c, 2), nm = inp('text', 'Nome e sobrenome'); nm.maxLength = 80; nm.value = C.nome || ''; campo(g1[0], 'Nome completo *', nm);
+    var cpf = inp('text', '000.000.000-00'); cpf.inputMode = 'numeric'; cpf.maxLength = 14; cpf.value = C.cpf ? fmtDoc(C.cpf) : ''; campo(g1[1], 'CPF *', cpf);
+    // dados pessoais: os do cadastro de Clientes, sem RG e órgão emissor (opcionais)
+    var dp = el('details', 'fdet'); dp.appendChild(el('summary', '', 'Dados pessoais (opcional)')); c.appendChild(dp); if (Object.keys(PS).length) dp.open = true;
+    var gp = grade(dp, 3), nasc = campo(gp[0], 'Data de nascimento', inp('date')); nasc.value = PS.nasc || ''; nasc.max = new Date().toISOString().slice(0, 10);
+    var sexo = selecao(gp[1], 'Sexo', ['Não informado', 'Masculino', 'Feminino'], PS.sexo), civil = selecao(gp[2], 'Estado civil', ['Não informado', 'Solteiro', 'Casado', 'Divorciado', 'Viúvo'], PS.civil);
+    var cjW = el('div'); dp.appendChild(cjW); var conj = campo(cjW, 'Nome do cônjuge', inp('text', 'Nome completo do cônjuge')); conj.maxLength = 80; conj.value = PS.conjuge || '';
+    civil.addEventListener('change', function () { cjW.classList.toggle('hide', civil.value !== 'Casado'); }); cjW.classList.toggle('hide', civil.value !== 'Casado');
+    var nat = campo(dp, 'Naturalidade', inp('text', 'Cidade/UF')); nat.maxLength = 60; nat.value = PS.naturalidade || '';
+    var gp2 = grade(dp, 2), mae = campo(gp2[0], 'Nome da mãe', inp('text', '')); mae.maxLength = 80; mae.value = PS.mae || ''; var pai = campo(gp2[1], 'Nome do pai', inp('text', '')); pai.maxLength = 80; pai.value = PS.pai || '';
+    var gp3 = grade(dp, 2), trab = campo(gp3[0], 'Local de trabalho', inp('text', '')); trab.maxLength = 80; trab.value = PS.trabalho || ''; var ativ = campo(gp3[1], 'Atividade exercida', inp('text', 'Profissão / cargo')); ativ.maxLength = 80; ativ.value = PS.atividade || '';
+    var gp4 = grade(dp, 2), renda = dinheiro(gp4[0], 'Renda mensal', PS.renda);
+    var esc = selecao(gp4[1], 'Escolaridade', ['Não informado', 'Fundamental incompleto', 'Fundamental completo', 'Médio incompleto', 'Médio completo', 'Superior incompleto', 'Superior completo', 'Pós-graduação'], PS.escolaridade);
+    // contato e endereço (mesma ordem do cadastro de Clientes)
+    c.appendChild(el('h3', 'ch', 'Contato e endereço'));
+    var g2 = grade(c, 2), wp = inp('tel', '(22) 99999-9999'); wp.value = C.whats ? fmtFone(C.whats) : ''; campo(g2[0], 'Celular *', wp);
+    var em = inp('email', 'opcional'); em.maxLength = 80; em.value = C.email || ''; campo(g2[1], 'E-mail', em);
+    var g3 = grade(c, 2), cep = inp('text', '00000-000'); cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = C.cep || ''; campo(g3[0], 'CEP', cep);
+    var ci = inp('text', 'Cidade/UF'); ci.value = C.cidade || ''; campo(g3[1], 'Cidade *', ci);
+    var en = inp('text', 'Rua, avenida…'); en.maxLength = 120; en.value = C.endereco || ''; campo(c, 'Endereço (rua, avenida…) *', en);
+    var g4b = grade(c, 2), nu = inp('text', 'Ex.: 120 ou S/N'); nu.maxLength = 10; nu.value = C.numero || ''; campo(g4b[0], 'Número', nu);
+    var co = inp('text', 'Ex.: casa 2, apto 301'); co.maxLength = 40; co.value = C.complemento || ''; campo(g4b[1], 'Complemento', co);
+    var ba = inp('text', 'Bairro'); ba.value = C.bairro || ''; campo(c, 'Bairro', ba);
+    function preencher(p) {
+      nm.value = p.nome || ''; cpf.value = p.cpf ? fmtDoc(p.cpf) : ''; wp.value = p.whats ? fmtFone(p.whats) : ''; em.value = p.email || ''; cep.value = p.cep || '';
+      ci.value = p.cidade || ''; en.value = p.endereco || ''; nu.value = p.numero || ''; co.value = p.complemento || ''; ba.value = p.bairro || '';
+      var q = p.pessoais || {}; nasc.value = q.nasc || ''; sexo.value = q.sexo || 'Não informado'; civil.value = q.civil || 'Não informado'; conj.value = q.conjuge || ''; nat.value = q.naturalidade || '';
+      mae.value = q.mae || ''; pai.value = q.pai || ''; trab.value = q.trabalho || ''; ativ.value = q.atividade || ''; renda.value = q.renda ? vs(q.renda) : ''; esc.value = q.escolaridade || 'Não informado';
+      cjW.classList.toggle('hide', civil.value !== 'Casado'); if (Object.keys(q).length) dp.open = true;
+      avisoTopo('Dados de ' + p.nome + ' preenchidos. Se corrigir algo, o cadastro do cliente é atualizado ao salvar.');
+    }
+    var CLI = CC.cli || null;
+    function buscar() {
+      var q = semAc(bq.value.trim()), dg = soDig(bq.value); bs.innerHTML = '';
+      if (q.length < 2 || !CLI) { bs.classList.add('hide'); return; }
+      var l = CLI.filter(function (p) { return semAc(p.nome).indexOf(q) > -1 || (dg.length >= 3 && (String(p.cpf).indexOf(dg) > -1 || String(p.whats).indexOf(dg) > -1)); }).slice(0, 8);
+      if (!l.length) bs.appendChild(el('div', 'hint', 'Nenhum cliente encontrado. Preencha abaixo: ele vira cliente ao salvar.')).style.padding = '9px 12px';
+      l.forEach(function (p) {
+        var o = el('button', ''); o.type = 'button'; o.appendChild(el('b', '', p.nome)); o.appendChild(el('small', '', ' · ' + [fmtDoc(p.cpf), p.whats ? fmtFone(p.whats) : '', p.origem || ''].filter(Boolean).join(' · ')));
+        o.onmousedown = function (e) { e.preventDefault(); }; o.onclick = function () { preencher(p); bq.value = ''; bs.classList.add('hide'); };
+        bs.appendChild(o);
+      });
+      bs.classList.remove('hide');
+    }
+    bq.addEventListener('input', buscar); bq.addEventListener('focus', buscar); bq.addEventListener('blur', function () { setTimeout(function () { bs.classList.add('hide'); }, 150); });
+    if (!CLI) call('ccClientes', [S.token]).then(function (l) { CC.cli = CLI = l; if (document.activeElement === bq) buscar(); }).catch(function () {});
     cpf.onblur = function () {
       var k = soDig(cpf.value); if (k.length !== 11) return; cpf.value = fmtDoc(k);
-      var p = (S.crm || []).filter(function (z) { return soDig(z.doc || z.cpf || '') === k; })[0];
-      if (p) { if (!nm.value) nm.value = p.nome || ''; if (!wp.value) wp.value = p.whats || ''; if (!en.value) en.value = p.endereco || ''; if (!ba.value) ba.value = p.bairro || ''; if (!ci.value) ci.value = p.cidade || ''; if (!cep.value) cep.value = p.cep || ''; avisoTopo('Cliente encontrado no CRM'); }
+      var p = (CLI || []).filter(function (z) { return z.cpf === k; })[0];
+      if (p && !nm.value.trim()) preencher(p);
     };
-    cep.oninput = function () { var k = soDig(cep.value).slice(0, 8); if (k.length !== 8) return; fetch('https://viacep.com.br/ws/' + k + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) { if (!j || j.erro) return; if (!en.value && j.logradouro) en.value = j.logradouro + ', '; if (!ba.value) ba.value = j.bairro || ''; if (!ci.value && j.localidade) ci.value = j.localidade + (j.uf ? '/' + j.uf : ''); }).catch(function () {}); };
+    cep.oninput = function () { var k = soDig(cep.value).slice(0, 8); if (k.length !== 8) return; fetch('https://viacep.com.br/ws/' + k + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) { if (!j || j.erro) return; if (!en.value && j.logradouro) en.value = j.logradouro; if (!ba.value) ba.value = j.bairro || ''; if (!ci.value && j.localidade) ci.value = j.localidade + (j.uf ? '/' + j.uf : ''); }).catch(function () {}); };
     c.appendChild(el('h3', 'ch', 'Aparelho'));
     var g4 = grade(c, 3), mc = el('select'); avMarcas().map(function (m) { return m.nome; }).concat(['Outra']).forEach(function (m) { mc.appendChild(el('option', '', m)).value = m; }); mc.value = A.marca || 'Apple'; campo(g4[0], 'Marca', mc);
-    var md = inp('text', 'Ex.: IPHONE 13 128GB'); md.value = A.modelo || ''; md.setAttribute('list', 'ccModelos'); campo(g4[1], 'Modelo *', md, true);
+    var md = inp('text', 'Ex.: IPHONE 13 128GB'); md.value = A.modelo || ''; md.setAttribute('list', 'ccModelos'); campo(g4[1], 'Modelo *', md);
     var dl = el('datalist'); dl.id = 'ccModelos'; ((S.u.modelos || []).map(function (m) { return m.modelo || m; })).forEach(function (m) { dl.appendChild(el('option')).value = m; }); c.appendChild(dl);
     var gb = inp('text', '128'); gb.value = A.gb || ''; campo(g4[2], 'GB', gb);
-    var g5 = grade(c, 3), cor = inp('text', 'Cor'); cor.value = A.cor || ''; campo(g5[0], 'Cor', cor); var im = inp('text', '15 números'); im.inputMode = 'numeric'; im.maxLength = 15; im.value = A.imei || ''; campo(g5[1], 'IMEI 1 *', im, true);
+    var g5 = grade(c, 3), cor = inp('text', 'Cor'); cor.value = A.cor || ''; campo(g5[0], 'Cor', cor); var im = inp('text', '15 números'); im.inputMode = 'numeric'; im.maxLength = 15; im.value = A.imei || ''; campo(g5[1], 'IMEI 1 *', im);
     var im2 = inp('text', 'opcional'); im2.inputMode = 'numeric'; im2.maxLength = 15; im2.value = A.imei2 || ''; campo(g5[2], 'IMEI 2', im2);
     var g6 = grade(c, 3), se = inp('text', 'opcional'); se.value = A.serial || ''; campo(g6[0], 'Número de série', se); var bt = inp('text', '%'); bt.value = A.bateria || ''; campo(g6[1], 'Bateria (%)', bt);
     var cl = el('select'); ['Bom', 'Ótimo', 'Excelente', 'Recondicionado'].forEach(function (k) { cl.appendChild(el('option', '', k)).value = k; }); cl.value = A.classif || 'Bom'; campo(g6[2], 'Classificação', cl);
     var ob = inp('text', 'Ex.: risco na lateral, sem caixa'); ob.value = A.obs || ''; campo(c, 'Observação (vai no contrato)', ob);
+    var fW = el('div'); c.appendChild(fW);
+    var FT = fotosForm(fW, x ? { tipo: 'cc', id: x.id } : null, x ? x.dados.fotos || [] : []);
+    fW.appendChild(el('div', 'hint', 'Fotos do aparelho (opcional, até 6). Recomendado: frente, verso e tela ligada.'));
     c.appendChild(el('h3', 'ch', 'Valor' + (D.parceira ? '' : ' e pagamento')));
-    var g7 = grade(c, 2), vl = inpValor(x ? vs(x.valor) : ''); campo(g7[0], 'Valor da compra *', vl, true);
+    var g7 = grade(c, 2), vl = inpValor(x ? vs(x.valor) : ''); campo(g7[0], 'Valor da compra *', vl);
     var lj = el('select'); D.lojas.forEach(function (l) { lj.appendChild(el('option', '', depVer(l))).value = l; }); lj.value = x ? x.loja : (S.u.loja && D.lojas.indexOf(S.u.loja) > -1 ? S.u.loja : D.lojas[0]); if (!D.parceira) campo(g7[1], 'Loja', lj);
     var pags = x && x.dados.pagamentos && x.dados.pagamentos.length ? JSON.parse(JSON.stringify(x.dados.pagamentos)) : [{ formaId: (D.formas[0] || {}).id, valor: '' }];
     var pw = el('div'); if (!D.parceira) c.appendChild(pw);
@@ -10840,11 +10991,244 @@
     btn(ac, x ? 'Salvar' : 'Salvar e continuar', '', function () {
       var valor = num(vl.input.value) || 0, P = pags.map(function (p) { return { formaId: p.formaId, valor: pags.length === 1 && !p.valor ? valor : p.valor }; });
       call('ccSalvar', [S.token, { id: x ? x.id : '', loja: lj.value, valor: valor, pagamentos: D.parceira ? [] : P,
-        cliente: { nome: nm.value, cpf: cpf.value, rg: rg.value, whats: wp.value, cep: cep.value, endereco: en.value, bairro: ba.value, cidade: ci.value },
+        cliente: { nome: nm.value, cpf: cpf.value, whats: wp.value, email: em.value, cep: cep.value, endereco: en.value, numero: nu.value, complemento: co.value, bairro: ba.value, cidade: ci.value },
+        pessoais: { nasc: nasc.value, sexo: sexo.value, civil: civil.value, conjuge: conj.value, naturalidade: nat.value, mae: mae.value, pai: pai.value, trabalho: trab.value, atividade: ativ.value, renda: num(renda.value) || 0, escolaridade: esc.value },
         aparelho: { marca: mc.value, modelo: md.value, gb: gb.value, cor: cor.value, imei: im.value, imei2: im2.value, serial: se.value, bateria: bt.value, classif: cl.value, obs: ob.value } }])
-        .then(function (r) { aposCC(r.dados); fecharModal(); avisoTopo('A compra ' + r.id + ' foi salva'); detalheCC(r.id); }).catch(function (e) { erroEm(m, e); });
+        .then(function (r) {
+          CC.cli = null; // o vendedor pode ter virado cliente: a busca recarrega na próxima compra
+          var fim = function () { fecharModal(); avisoTopo('A compra ' + r.id + ' foi salva'); detalheCC(r.id); };
+          aposCC(r.dados);
+          if (x || !FT.qtd()) return fim();
+          FT.enviarPara({ tipo: 'cc', id: r.id }).then(function () { carregarCC(fim); }).catch(function (e) { fim(); msg('topMsg', 'A compra foi salva, mas uma foto não subiu: ' + e); });
+        }).catch(function (e) { erroEm(m, e); });
     });
-    btn(ac, 'Fechar', 'ghost', fecharModal); abrirModal();
+    btn(ac, 'Fechar', 'ghost', fecharModal); abrirPagina(soParceira() ? 'Portal da parceira' : 'Suprimento › Compra de Celulares');
+  }
+  /** Leva 6: antes de o aparelho ir para o estoque, quem cadastra escolhe quais fotos da compra vão para o produto.
+   *  Todas começam desmarcadas (fotos de compra podem mostrar o documento ou o rosto do vendedor). */
+  function escolherFotosCC(x, seguir) {
+    var F = x.dados.fotos || []; if (!F.length) return seguir([]);
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Fotos do produto')); sh.appendChild(el('div', 'sub', x.id + ' · ' + x.aparelho.modelo));
+    var c = el('div', 'card'); sh.appendChild(c);
+    c.appendChild(el('div', 'hint', 'Marque as fotos que vão para o cadastro do produto. As que ficarem desmarcadas continuam só na compra.'));
+    var marc = {}, gr = el('div', 'ccfotos'); c.appendChild(gr);
+    F.forEach(function (id) {
+      var l = el('label', 'ccfoto'), ck = el('input'), im = el('img'); ck.type = 'checkbox'; im.alt = ''; im.src = fotoUrl(id, 300);
+      ck.onchange = function () { marc[id] = ck.checked; l.classList.toggle('on', ck.checked); }; l.appendChild(im); l.appendChild(ck); gr.appendChild(l);
+    });
+    var ac = el('div', 'acoes'); c.appendChild(ac);
+    btn(ac, 'Usar as fotos marcadas', 'ok', function () { var l = F.filter(function (id) { return marc[id]; }); if (!l.length) { avisoTopo('Nenhuma foto marcada. Use "Cadastrar sem foto" ou marque alguma.'); return; } seguir(l); });
+    btn(ac, 'Cadastrar sem foto', 'ghost', function () { seguir([]); });
+    btn(ac, 'Voltar', 'ghost', function () { detalheCC(x.id); });
+    abrirModal();
+  }
+  // =========================================================
+  //  PORTAL DA PARCEIRA (Leva 6): app instalável, início, financeiro, tabela, clientes, avisos e minha loja
+  // =========================================================
+  var PT = { d: null, novos: 0, timer: null, instalar: null };
+  function portalIniciar() {
+    // app instalável (PWA): manifesto e service worker só para o login de parceira
+    if (!document.querySelector('link[rel="manifest"]')) {
+      var lm = document.createElement('link'); lm.rel = 'manifest'; lm.href = 'parceira.webmanifest'; document.head.appendChild(lm);
+      var la = document.createElement('link'); la.rel = 'apple-touch-icon'; la.href = 'parceira-icone-192.png'; document.head.appendChild(la);
+      var mt = document.createElement('meta'); mt.name = 'theme-color'; mt.content = '#0F1B2D'; document.head.appendChild(mt);
+    }
+    try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('parceira-sw.js').catch(function () {}); } catch (e) {}
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); PT.instalar = e; if (S.view === 'pinicio') portalTela('pinicio'); });
+    PT.d = null; PT.novos = 0; carregarPortal();
+    if (PT.timer) clearInterval(PT.timer);
+    PT.timer = setInterval(function () { if (soParceira() && document.visibilityState !== 'hidden') carregarPortal(); }, 120000);
+  }
+  function carregarPortal(depois) {
+    call('parcPortal', [S.token]).then(function (d) { aplicarPortal(d); if (depois) depois(); }).catch(function (e) { if (depois) { var b = $('ptCorpo'); b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); } });
+  }
+  function aplicarPortal(d) {
+    if (!d || !d.parceira) return;
+    var antes = PT.d ? PT.novos : null; PT.d = d; PT.novos = d.avisosNovos || 0;
+    var pm = S.u.perms, tem = pm.indexOf('parceira_dono') > -1, mudou = false;
+    if (d.papel === 'dono' && !tem) { pm.push('parceira_dono'); mudou = true; }
+    if (d.papel !== 'dono' && tem) { pm.splice(pm.indexOf('parceira_dono'), 1); mudou = true; }
+    if (mudou || antes !== PT.novos) montarMenu();
+    // aviso no celular quando chega novidade (com o app aberto ou em segundo plano)
+    if (antes !== null && PT.novos > antes && d.avisos.length && 'Notification' in window && Notification.permission === 'granted') {
+      var t = d.avisos[0].txt;
+      try { navigator.serviceWorker.getRegistration().then(function (r) { if (r) r.showNotification('Gestti Parceiras', { body: t, icon: 'parceira-icone-192.png', tag: 'parc' }); else new Notification('Gestti Parceiras', { body: t }); }); } catch (e) {}
+    }
+  }
+  function portalTela(id) {
+    var b = $('ptCorpo'), tit = { pinicio: 'Início', pfin: 'Financeiro', ptab: 'Tabela de referência', pcli: 'Meus clientes', pav: 'Avisos', ploja: 'Minha loja' }[id];
+    $('ptTit').textContent = tit; $('ptAc').innerHTML = '';
+    var desenhar = function () { if (S.view !== id || !PT.d) return; b.innerHTML = ''; $('ptAc').innerHTML = ''; ({ pinicio: ptInicio, pfin: ptFin, ptab: ptTab, pcli: ptCli, pav: ptAv, ploja: ptLoja })[id](b, PT.d); };
+    if (PT.d) desenhar(); else { b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…')); }
+    carregarPortal(desenhar);
+  }
+  function ptCard(box, k, v, sub) { var c = el('div', 'ptcard'); c.appendChild(el('div', 'k', k)); c.appendChild(el('div', 'v', v)); if (sub) c.appendChild(el('div', 's', sub)); box.appendChild(c); return c; }
+  function ptAbrirCompra(id) { CC.aba = 'Kanban'; ir('paparelhos'); carregarCC(function () { detalheCC(id); }); }
+  function ptInicio(b, d) {
+    var P = d.parceira;
+    if (!P.parceriaAssinada) {
+      var cc = el('div', 'card'); b.appendChild(cc); cc.appendChild(el('h2', '', 'Contrato de parceria'));
+      if (d.papel !== 'dono') cc.appendChild(el('div', 'hint', 'O responsável pela loja precisa assinar o contrato de parceria antes da primeira compra.'));
+      else {
+        cc.appendChild(el('div', 'hint', 'Antes da primeira compra, leia e assine o contrato de parceria com a loja.'));
+        var tx = el('div', 'ptcontrato', 'Carregando…'); cc.appendChild(tx); var ac0 = el('div', 'acoes'); cc.appendChild(ac0); var m0 = el('div', 'msg err'); cc.appendChild(m0);
+        call('parcParceria', [S.token]).then(function (k) {
+          if (k.assinado) return carregarPortal(function () { portalTela('pinicio'); });
+          tx.textContent = k.contrato.texto;
+          var lk = location.origin + location.pathname + '?ass=' + k.tok;
+          btn(ac0, '✍️ Assinar o contrato', 'ok', function () { window.open(lk, '_blank', 'noopener'); });
+          btn(ac0, 'Já assinei: atualizar', 'ghost', function () { carregarPortal(function () { portalTela('pinicio'); }); });
+        }).catch(function (e) { tx.textContent = ''; erroEm(m0, e); });
+      }
+    }
+    // instalar o app
+    var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+    if (!standalone) {
+      var ic = el('div', 'card'); ic.appendChild(el('h2', '', 'App Gestti Parceiras'));
+      if (PT.instalar) { ic.appendChild(el('div', 'hint', 'Instale o app no celular: ele ganha um ícone na tela inicial e avisa quando um aparelho é conferido ou pago.')); btn(ic, '📲 Instalar o app', 'ok', function () { PT.instalar.prompt(); PT.instalar.userChoice.then(function () { PT.instalar = null; portalTela('pinicio'); }); }); b.appendChild(ic); }
+      else if (/iPhone|iPad/.test(navigator.userAgent)) { ic.appendChild(el('div', 'hint', 'No iPhone: abra este endereço no Safari, toque em Compartilhar (□↑) e depois em "Adicionar à Tela de Início".')); b.appendChild(ic); }
+    }
+    var cards = el('div', 'ptcards'); b.appendChild(cards);
+    if (d.papel === 'dono') {
+      ptCard(cards, 'A receber', brl(d.resumo.aReceber || 0), d.resumo.proximoVenc ? 'Próximo vencimento: ' + isoBR(d.resumo.proximoVenc) : 'Nada em aberto').onclick = function () { ir('pfin'); };
+      ptCard(cards, 'Recebido no mês', brl(d.resumo.recebidoMes || 0), 'No ano: ' + brl(d.resumo.recebidoAno || 0));
+    }
+    var cm = el('div', 'ptcard'); cm.appendChild(el('div', 'k', 'Aparelhos no mês')); cards.appendChild(cm);
+    var mg = el('div', 'ptmes'); cm.appendChild(mg);
+    [['enviados', 'Enviados'], ['conferencia', 'Em conferência'], ['aprovados', 'Aprovados'], ['recusados', 'Recusados']].forEach(function (k) { var z = el('div'); z.appendChild(el('b', '', String(d.resumo.mes[k[0]] || 0))); z.appendChild(el('span', '', k[1])); mg.appendChild(z); });
+    var ac = $('ptAc'); btn(ac, '+ Nova compra', '', function () { ir('pnova'); });
+    if (PT.novos) btn(ac, '🔔 ' + PT.novos + ' aviso' + (PT.novos === 1 ? '' : 's') + ' novo' + (PT.novos === 1 ? '' : 's'), 'ghost', function () { ir('pav'); });
+    var pc = el('div', 'card'); b.appendChild(pc); pc.appendChild(el('h2', '', 'Pendências (' + d.pendencias.length + ')'));
+    if (!d.pendencias.length) pc.appendChild(el('div', 'hint', 'Nenhuma pendência. 👍'));
+    var tab = el('div', 'ptab ptlist'); pc.appendChild(tab);
+    d.pendencias.forEach(function (x) {
+      var r = el('div', 'prow'); r.tabIndex = 0; r.setAttribute('role', 'button'); var n = el('div'); n.appendChild(el('div', 'pnome', x.id + ' · ' + x.modelo)); n.appendChild(el('div', 'psub', x.txt)); r.appendChild(n);
+      r.appendChild(el('span', 'bdg ' + (x.tipo === 'divergencia' || x.tipo === 'nota' ? 'warn' : ''), { divergencia: 'Divergência', assinatura: 'Assinatura', documento: 'Consulta de IMEI', nota: 'NF-e' }[x.tipo] || x.tipo)); r.appendChild(el('div', 'chev', '›'));
+      r.onclick = function () { ptAbrirCompra(x.id); }; r.onkeydown = function (ev) { if (ev.key === 'Enter') r.onclick(); }; tab.appendChild(r);
+    });
+  }
+  function ptFin(b, d) {
+    var F = d.financeiro; if (!F) { b.appendChild(el('div', 'empty', 'Só o responsável pela loja vê o financeiro.')); return; }
+    PT.finAba = PT.finAba || 'A receber';
+    var sg = el('div', 'seg'); b.appendChild(sg); var area = el('div'); area.style.marginTop = '12px'; b.appendChild(area);
+    seg(sg, ['A receber', 'Recebidos', 'Extrato'], PT.finAba, function (v) { PT.finAba = v; des(); });
+    function tabela(box, cab, linhas, total) {
+      var c = el('div', 'card'); box.appendChild(c); if (!linhas.length) { c.appendChild(el('div', 'empty', 'Nada aqui.')); return c; }
+      var w = el('div', 'tbwrap'), t = el('table', 'pttab'), h = el('tr'); cab.forEach(function (k, i) { h.appendChild(el('th', i >= cab.length - 1 || /Valor/.test(k) ? 'n' : '', k)); }); t.appendChild(h);
+      linhas.forEach(function (l) { var tr = el('tr'); l.forEach(function (v, i) { var td = el('td', i === l.length - 1 || /^R\$/.test(String(v)) ? 'n' : ''); if (v && v.nodeType) td.appendChild(v); else td.textContent = v; tr.appendChild(td); }); t.appendChild(tr); });
+      if (total !== undefined) { var tt = el('tr'), a = el('td', '', 'Total'); a.style.fontWeight = '800'; a.colSpan = cab.length - 1; tt.appendChild(a); var v = el('td', 'n', brl(total)); v.style.fontWeight = '800'; tt.appendChild(v); t.appendChild(tt); }
+      w.appendChild(t); c.appendChild(w); return c;
+    }
+    var soma = function (l) { return l.reduce(function (a, c) { return a + (Number(c.valor) || 0); }, 0); };
+    function des() {
+      area.innerHTML = '';
+      if (PT.finAba === 'A receber') { area.appendChild(el('div', 'hint', 'Aparelhos conferidos que a loja ainda vai pagar' + (d.parceira.pix ? ', na chave PIX ' + d.parceira.pix : '. Informe a sua chave PIX em Minha loja') + '.')); tabela(area, ['Descrição', 'Vencimento', 'Valor'], F.aReceber.map(function (c) { return [c.descricao, isoBR(c.venc), brl(c.valor)]; }), soma(F.aReceber)); return; }
+      if (PT.finAba === 'Recebidos') {
+        tabela(area, ['Descrição', 'Pago em', 'Comprovante', 'Valor'], F.recebidos.map(function (c) {
+          var cp = '—'; if (c.comprovante) { cp = el('button', 'lnk', 'Ver'); cp.type = 'button'; cp.onclick = function () { abrirUrl('parcComprovanteVer', [c.id]); }; }
+          return [c.descricao, isoBR(c.pagoEm), cp, brl(c.valor)];
+        }), soma(F.recebidos));
+        return;
+      }
+      var hoje = new Date(), mesI = inp('month'); mesI.value = PT.finMes || (hoje.getFullYear() + '-' + ('0' + (hoje.getMonth() + 1)).slice(-2)); mesI.style.maxWidth = '220px';
+      campo(area, 'Mês do extrato', mesI); mesI.onchange = function () { PT.finMes = mesI.value; des(); };
+      var mes = mesI.value, L = F.recebidos.filter(function (c) { return String(c.pagoEm).slice(0, 7) === mes; }).map(function (c) { return { data: c.pagoEm, descricao: c.descricao, sit: 'Recebido', valor: c.valor }; })
+        .concat(F.aReceber.filter(function (c) { return String(c.venc).slice(0, 7) === mes; }).map(function (c) { return { data: c.venc, descricao: c.descricao, sit: 'A receber', valor: c.valor }; }))
+        .sort(function (a, b2) { return a.data < b2.data ? -1 : 1; });
+      var linhas = L.map(function (x) { return [isoBR(x.data), x.descricao, x.sit, brl(x.valor)]; });
+      var ac = el('div', 'acoes'); area.appendChild(ac);
+      btn(ac, '⬇ Baixar planilha', 'ghost', function () { baixarCSV('extrato-' + mes, ['Data', 'Descrição', 'Situação', 'Valor'], L.map(function (x) { return [isoBR(x.data), x.descricao, x.sit, String(x.valor).replace('.', ',')]; })); });
+      btn(ac, '🖨 Imprimir / PDF', 'ghost', function () {
+        var w = window.open('', '_blank'); if (!w) return; var esc = function (t) { return String(t).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); };
+        w.document.write('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Extrato ' + esc(mes) + '</title><style>body{font-family:system-ui,sans-serif;margin:24px}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #ddd;padding:6px;text-align:left}td:last-child,th:last-child{text-align:right}</style></head><body>' +
+          '<h2>Extrato ' + esc(mes.split('-').reverse().join('/')) + ' · ' + esc(d.parceira.nome) + '</h2><table><tr><th>Data</th><th>Descrição</th><th>Situação</th><th>Valor</th></tr>' +
+          linhas.map(function (l) { return '<tr>' + l.map(function (v) { return '<td>' + esc(v) + '</td>'; }).join('') + '</tr>'; }).join('') + '<tr><th colspan="3">Total</th><th>' + esc(brl(soma(L))) + '</th></tr></table></body></html>');
+        w.document.close(); setTimeout(function () { w.print(); }, 300);
+      });
+      tabela(area, ['Data', 'Descrição', 'Situação', 'Valor'], linhas, soma(L));
+    }
+    des();
+  }
+  function ptTab(b, d) {
+    b.appendChild(el('div', 'alerta avisorg', 'Valores de referência: sujeitos à conferência do aparelho pela loja.'));
+    if (!d.tabela.length) { b.appendChild(el('div', 'empty', 'A loja ainda não liberou nenhum modelo na tabela.')); return; }
+    var q = inp('search', 'Buscar modelo'); q.style.maxWidth = '320px'; b.appendChild(q); var area = el('div'); area.style.marginTop = '10px'; b.appendChild(area);
+    function des() {
+      area.innerHTML = ''; var t = semAc(q.value.trim()), c = el('div', 'card'), w = el('div', 'tbwrap'), tb = el('table', 'pttab'), h = el('tr');
+      ['Modelo', 'Excelente', 'Ótimo', 'Bom'].forEach(function (k, i) { h.appendChild(el('th', i ? 'n' : '', k)); }); tb.appendChild(h);
+      d.tabela.filter(function (x) { return !t || semAc(x.marca + ' ' + x.modelo).indexOf(t) > -1; }).forEach(function (x) {
+        var tr = el('tr'); tr.appendChild(el('td', '', (x.marca !== 'Apple' ? x.marca + ' ' : '') + x.modelo)); [x.excelente, x.otimo, x.bom].forEach(function (v) { tr.appendChild(el('td', 'n', v ? brl(v) : '—')); }); tb.appendChild(tr);
+      });
+      w.appendChild(tb); c.appendChild(w); area.appendChild(c);
+    }
+    q.oninput = des; des();
+  }
+  function ptCli(b, d) {
+    var q = inp('search', 'Buscar por nome, celular ou CPF'); q.style.maxWidth = '360px'; b.appendChild(q); var area = el('div'); area.style.marginTop = '10px'; b.appendChild(area);
+    function des() {
+      area.innerHTML = ''; var t = semAc(q.value.trim()), dg = soDig(q.value);
+      var L = d.clientes.filter(function (c) { return !t || semAc(c.nome).indexOf(t) > -1 || (dg.length >= 3 && (c.cpf.indexOf(dg) > -1 || String(c.whats).indexOf(dg) > -1)); });
+      if (!L.length) { area.appendChild(el('div', 'empty', d.clientes.length ? 'Nenhum cliente encontrado.' : 'Os vendedores que você cadastrar na Nova compra aparecem aqui.')); return; }
+      var tab = el('div', 'ptab ptlist'); area.appendChild(tab);
+      L.forEach(function (c) {
+        var r = el('div', 'prow'); r.tabIndex = 0; var n = el('div'); n.appendChild(el('div', 'pnome', c.nome)); n.appendChild(el('div', 'psub', [fmtDoc(c.cpf), c.whats ? fmtFone(c.whats) : '', c.cidade].filter(Boolean).join(' · '))); r.appendChild(n);
+        r.appendChild(el('span', 'bdg', c.compras.length + ' compra' + (c.compras.length === 1 ? '' : 's'))); r.appendChild(el('div', 'chev', '›')); tab.appendChild(r);
+        var det = el('div', 'hide'); det.style.padding = '0 16px 12px'; tab.appendChild(det);
+        c.compras.forEach(function (x) { var l = el('button', 'lnk', x.id + ' · ' + x.modelo + ' · ' + brl(x.valor) + ' · ' + x.situacao + ' · ' + x.em); l.type = 'button'; l.style.display = 'block'; l.onclick = function () { ptAbrirCompra(x.id); }; det.appendChild(l); });
+        r.onclick = function () { det.classList.toggle('hide'); }; r.onkeydown = function (ev) { if (ev.key === 'Enter') r.onclick(); };
+      });
+    }
+    q.oninput = des; des();
+  }
+  function ptAv(b, d) {
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      var nc = el('div', 'card'); b.appendChild(nc); nc.appendChild(el('div', 'hint', Notification.permission === 'denied' ? 'Os avisos no celular estão bloqueados neste navegador. Libere nas configurações do site.' : 'Receba um aviso no celular quando um aparelho for conferido, recusado ou pago (com o app instalado).'));
+      if (Notification.permission !== 'denied') btn(nc, '🔔 Receber avisos no celular', 'ok', function () { Notification.requestPermission().then(function () { portalTela('pav'); }); });
+    }
+    var c = el('div', 'card'); b.appendChild(c);
+    if (!d.avisos.length) c.appendChild(el('div', 'empty', 'Nenhum aviso ainda.'));
+    var n = PT.novos;
+    d.avisos.forEach(function (a, i) {
+      var r = el('div', 'ptav' + (i < n ? ' novo' : '')), dt = new Date(a.ts);
+      r.appendChild(el('span', 'q', dataBR(a.ts) + ' ' + ('0' + dt.getHours()).slice(-2) + ':' + ('0' + dt.getMinutes()).slice(-2)));
+      var t = el('div'); t.appendChild(el('b', '', { conferido: 'Conferido', ajuste: 'Novo valor proposto', recusado: 'Recusado', pago: 'Pagamento', nota: 'NF-e pendente' }[a.tipo] || 'Aviso')); t.appendChild(el('div', '', a.txt)); r.appendChild(t);
+      if (a.ref && /^CC/.test(a.ref)) { r.style.cursor = 'pointer'; r.onclick = function () { ptAbrirCompra(a.ref); }; }
+      c.appendChild(r);
+    });
+    if (n) call('parcAvisosLidos', [S.token]).then(function () { PT.novos = 0; PT.d.avisosNovos = 0; montarMenu(); }).catch(function () {});
+  }
+  function ptLoja(b, d) {
+    var P = d.parceira, dono = d.papel === 'dono', c = el('div', 'card'); b.appendChild(c); c.appendChild(el('h2', '', P.nome));
+    var pg = P.pagamento || {}, cm = P.comissao || {};
+    lines(c, [['CNPJ/CPF', P.doc ? fmtDoc(P.doc) : '—'], ['Responsável', P.responsavel || '—'], ['Endereço', [P.endereco, P.cidade].filter(Boolean).join(' – ') || '—'], ['Loja de destino', depVer(P.loja)],
+      ['Modelo', P.modelo === 2 ? 'Modelo 2: você compra do cliente e revende à loja com NF-e' : 'Modelo 1: a loja compra do cliente; você paga em nome da loja e recebe o reembolso'],
+      ['Pagamento', pg.modo === 'periodico' ? 'Acerto ' + (pg.periodo === 'mensal' ? 'mensal' : 'semanal') : pg.dias + ' dia(s) depois da conferência'],
+      ['Comissão', P.modelo === 2 ? 'Não tem (o ganho é a diferença de preço)' : cm.tipo === 'fixa' ? brl(cm.valor) + ' por aparelho' : cm.tipo === 'pct' ? String(cm.valor).replace('.', ',') + '% do aparelho' : 'Sem comissão']]);
+    if (!dono) { c.appendChild(el('div', 'hint', 'Só o responsável muda os dados e a equipe.')); return; }
+    var e = el('div', 'card'); b.appendChild(e); e.appendChild(el('h2', '', 'Contato e PIX'));
+    var g = grade(e, 2), tl = inp('tel', '(22) 99999-9999'); tl.value = P.telefone ? fmtFone(P.telefone) : ''; campo(g[0], 'Telefone', tl);
+    var em = inp('email', 'e-mail'); em.value = P.email || ''; campo(g[1], 'E-mail', em);
+    var px = inp('text', 'CPF, CNPJ, e-mail, celular ou chave aleatória'); px.maxLength = 100; px.value = P.pix || ''; campo(e, 'Chave PIX para receber', px);
+    var m = el('div', 'msg err'); e.appendChild(m);
+    btn(e, 'Salvar', 'ok', function () { call('parcLojaSalvar', [S.token, { telefone: tl.value, email: em.value, pix: px.value }]).then(function (d2) { aplicarPortal(d2); avisoTopo('Dados salvos'); }).catch(function (er) { erroEm(m, er); }); });
+    var q = el('div', 'card'); b.appendChild(q); q.appendChild(el('h2', '', 'Equipe'));
+    q.appendChild(el('div', 'hint', 'Funcionários lançam compras e veem os aparelhos. Não veem o financeiro nem a equipe.'));
+    var lst = el('div'); q.appendChild(lst); var m2 = el('div', 'msg err');
+    function desEq(l) {
+      lst.innerHTML = ''; var tab = el('div', 'ptab ptlist pteq'); lst.appendChild(tab);
+      l.forEach(function (u) {
+        var r = el('div', 'prow'); r.style.cursor = 'default'; var n = el('div'); n.appendChild(el('div', 'pnome', u.nome + (u.eu ? ' (você)' : ''))); n.appendChild(el('div', 'psub', u.usuario + ' · ' + (u.papel === 'dono' ? 'Responsável' : 'Funcionário'))); r.appendChild(n);
+        r.appendChild(el('span', 'bdg ' + (u.ativo ? 'ok' : 'off'), u.ativo ? 'Ativo' : 'Bloqueado'));
+        var cl = el('div'); if (u.papel === 'func') { var bb = el('button', 'btn ghost mini', u.ativo ? 'Bloquear' : 'Liberar'); bb.type = 'button'; bb.onclick = function () { call('parcFuncAtivo', [S.token, u.id, !u.ativo]).then(desEq).catch(function (er) { erroEm(m2, er); }); }; cl.appendChild(bb); } r.appendChild(cl);
+        tab.appendChild(r);
+      });
+    }
+    lst.appendChild(el('div', 'empty', 'Carregando…')); call('parcEquipe', [S.token]).then(desEq).catch(function (er) { erroEm(m2, er); });
+    var gn = grade(q, 2), nm = inp('text', 'Nome e sobrenome'); campo(gn[0], 'Nome do funcionário', nm); var us = inp('text', 'ex.: joao_loja'); us.autocapitalize = 'off'; campo(gn[1], 'Usuário de acesso', us);
+    q.appendChild(m2);
+    btn(q, '+ Criar login', '', function () {
+      call('parcFuncCriar', [S.token, us.value, nm.value]).then(function (r) { nm.value = us.value = ''; perguntar('Login criado', 'Usuário: ' + r.usuario + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nAnote agora: a senha não aparece de novo.', [{ t: 'OK', v: true }]); call('parcEquipe', [S.token]).then(desEq); }).catch(function (er) { erroEm(m2, er); });
+    });
   }
   function ccAchar(id) { return CC.d.lista.filter(function (z) { return z.id === id; })[0]; }
   function linkAssCC(tok) { return location.origin + location.pathname + '?ass=' + tok; }
@@ -10855,7 +11239,7 @@
     var st = el('div', 'sub'); st.appendChild(el('span', 'bdg ' + (CC_COR[x.situacao] || ''), x.situacao)); st.appendChild(document.createTextNode(' ' + (CC_ORIG[x.origem] || '') + (x.dados.parceiraNome ? ' · ' + x.dados.parceiraNome : '') + (x.dados.vendaId ? ' · venda ' + x.dados.vendaId : '') + ' · ' + depVer(x.loja))); sh.appendChild(st);
     var c = el('div', 'card'); sh.appendChild(c);
     lines(c, [['Cliente', x.cliente.nome + (x.cliente.cpf ? ' · CPF ' + fmtDoc(x.cliente.cpf) : '')], ['Aparelho', [x.aparelho.marca, x.aparelho.modelo, x.aparelho.gb ? x.aparelho.gb + 'GB' : '', x.aparelho.cor].filter(Boolean).join(' ')], ['IMEI', x.aparelho.imei + (x.aparelho.imei2 ? ' / ' + x.aparelho.imei2 : '')],
-      ['Classificação', x.aparelho.classif + (x.aparelho.bateria ? ' · bateria ' + x.aparelho.bateria + '%' : '')], ['Valor', brl(x.valor) + (x.dados.ajuste ? ' (ajustado de ' + brl(x.dados.ajuste.de) + ': ' + x.dados.ajuste.motivo + ')' : '')]]
+      ['Classificação', x.aparelho.classif + (x.aparelho.bateria ? ' · bateria ' + x.aparelho.bateria + '%' : '')], ['Valor', brl(x.valor) + (x.dados.ajuste && x.situacao !== CC_RESPOSTA && x.dados.ajuste.resposta !== 'devolução' ? ' (ajustado de ' + brl(x.dados.ajuste.de) + ': ' + x.dados.ajuste.motivo + ')' : '')]]
       .concat((x.dados.pagamentos || []).length ? [['Pagamento', x.dados.pagamentos.map(function (p) { return p.forma + ' ' + brl(p.valor); }).join(' + ')]] : [])
       .concat(x.dados.divergencia ? [['Diferença na conferência', brl(x.dados.divergencia.diferenca) + ' · ' + x.dados.divergencia.motivo + ' · vendedor ' + x.dados.divergencia.vendedor]] : [])
       .concat(x.dados.recusa ? [['Recusado', x.dados.recusa.motivo]] : []));
@@ -10864,6 +11248,7 @@
     var reabrir = function (d) { aposCC(d); detalheCC(x.id); };
     // fotos do aparelho (anexo do contrato)
     if (aberta || (x.dados.fotos || []).length) { var fw = el('div'); sh.appendChild(fw); fw.appendChild(el('h3', 'ch', 'Fotos do aparelho (vão como anexo do contrato)')); if (aberta) galeriaFotos(fw, { tipo: 'cc', id: x.id }, x.dados.fotos || [], true, function (l) { x.dados.fotos = l; }); else galeriaFotos(fw, { tipo: 'cc', id: x.id }, x.dados.fotos, false); }
+    if (x.origem === 'parceira') detalheParcCC(D, x, c, acoes, m, reabrir);
     if (x.situacao === 'Em negociação') { btn(acoes, 'Editar dados', 'ghost', function () { formCC(x); }); btn(acoes, '📄 Gerar contrato', '', function () { call('ccContrato', [S.token, x.id]).then(function (r) { reabrir(r.dados); }).catch(function (e) { erroEm(m, e); }); }); }
     if (x.dados.contrato || x.origem === 'upgrade') {
       var ca = el('div', 'card'); sh.insertBefore(ca, sh.children[3] || null); ca.appendChild(el('h2', '', 'Contrato'));
@@ -10886,7 +11271,7 @@
     }
     if (x.situacao === 'Aguardando assinatura' && x.origem === 'loja' && D.concluir) {
       var pp = el('label', 'ckl'), ck = el('input'); ck.type = 'checkbox'; pp.appendChild(ck); pp.appendChild(document.createTextNode(' Assinado no papel (contrato impresso)')); if (!x.dados.assinatura) acoes.appendChild(pp);
-      btn(acoes, '✓ Concluir: pagar e pôr no estoque', 'ok', function () { call('ccConcluir', [S.token, x.id, { papel: ck.checked }]).then(function (d) { avisoTopo('Compra ' + x.id + ' concluída: aparelho no estoque'); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+      btn(acoes, '✓ Concluir: pagar e pôr no estoque', 'ok', function () { escolherFotosCC(x, function (fu) { call('ccConcluir', [S.token, x.id, { papel: ck.checked, fotosUsar: fu }]).then(function (d) { avisoTopo('Compra ' + x.id + ' concluída: aparelho no estoque'); reabrir(d); }).catch(function (e) { detalheCC(x.id); msg('topMsg', e); }); }); });
     }
     if (x.situacao === 'Aguardando assinatura' && D.parceira) {
       var pp2 = el('label', 'ckl'), ck2 = el('input'); ck2.type = 'checkbox'; pp2.appendChild(ck2); pp2.appendChild(document.createTextNode(' Assinado no papel')); if (!x.dados.assinatura) acoes.appendChild(pp2);
@@ -10894,13 +11279,79 @@
     }
     if (x.situacao === 'Aguardando chegada') btn(acoes, '🏷 Etiqueta com QR', 'ghost', function () { etiquetaCC(x); });
     if ((x.situacao === 'Aguardando chegada' || x.situacao === 'Upgrade aguardando conferência') && D.conferir) painelConferir(c, x, m, reabrir);
-    if (x.situacao === 'Em conferência' && D.conferir) btn(acoes, 'Lançar no estoque', 'ok', function () { call('ccConferir', [S.token, x.id, { acao: 'lancar' }]).then(function (d) { avisoTopo('Aparelho no estoque'); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+    if (x.situacao === 'Em conferência' && D.conferir) btn(acoes, 'Lançar no estoque', 'ok', function () { escolherFotosCC(x, function (fu) { call('ccConferir', [S.token, x.id, { acao: 'lancar', fotosUsar: fu }]).then(function (d) { avisoTopo('Aparelho no estoque'); reabrir(d); }).catch(function (e) { detalheCC(x.id); msg('topMsg', e); }); }); });
     if (aberta && x.origem !== 'upgrade' && !(x.origem === 'parceira' && x.situacao === 'Aguardando chegada' && !D.parceira)) btn(acoes, 'Cancelar compra', 'ghost', function () {
       var mo = prompt('Motivo do cancelamento:'); if (!mo) return; call('ccCancelar', [S.token, x.id, mo]).then(function (d) { reabrir(d); }).catch(function (e) { erroEm(m, e); });
     });
     var hc = el('div', 'card'); sh.appendChild(hc); hc.appendChild(el('h2', '', 'Histórico'));
     (x.dados.hist || []).slice().reverse().forEach(function (h) { hc.appendChild(el('div', 'hint', h.em + ' · ' + h.por + ' · ' + h.txt)); });
     var fx = el('button', 'btn ghost', 'Fechar'); fx.type = 'button'; fx.style.marginTop = '10px'; fx.onclick = fecharModal; sh.appendChild(fx);
+    abrirModal();
+  }
+  /** Leva 6: o que é próprio da compra de parceira (modelo, consulta de IMEI, resposta à divergência, notas). */
+  function detalheParcCC(D, x, c, acoes, m, reabrir) {
+    var md = x.dados.modelo || 1, box = el('div', 'ccparc'); c.insertBefore(box, acoes);
+    box.appendChild(el('div', 'hint', 'Modelo ' + md + (md === 1 ? ': a loja compra do cliente e a parceira paga em nome da loja (reembolso' + (D.parceira ? '' : ' + comissão') + ').' : ': a parceira compra do cliente e revende à loja com a NF-e dela.')));
+    if (!D.parceira && D.editarParceiras && x.situacao === 'Em negociação' && !x.dados.contrato) btn(acoes, 'Trocar para o Modelo ' + (md === 1 ? 2 : 1), 'ghost', function () { call('ccModeloTrocar', [S.token, x.id, md === 1 ? 2 : 1]).then(reabrir).catch(function (e) { erroEm(m, e); }); });
+    // consulta de IMEI (obrigatória antes do contrato)
+    var ic = x.dados.imeiConsulta;
+    if (ic) {
+      var l = el('div', 'hint', '✓ Consulta de IMEI: aparelho sem restrição · ' + ic.por + ' · ' + ic.em + ' '); box.appendChild(l);
+      if (ic.link) { var a = el('a', 'lnk', 'abrir o link'); a.href = ic.link; a.target = '_blank'; a.rel = 'noopener'; l.appendChild(a); }
+      if (ic.foto) { var vp = el('button', 'lnk', 'ver o print'); vp.type = 'button'; vp.onclick = function () { abrirUrl('ccImeiVer', [x.id], m); }; l.appendChild(document.createTextNode(' ')); l.appendChild(vp); }
+    } else if (x.situacao === 'Em negociação') {
+      var ib = el('div', 'card ccimei'); box.appendChild(ib); ib.appendChild(el('h3', 'ch', 'Consulta de IMEI (obrigatória)'));
+      ib.appendChild(el('div', 'hint', 'Consulte o IMEI ' + x.aparelho.imei + ' no site de aparelhos impedidos e anexe o print ou cole o link do resultado.'));
+      var ab = el('button', 'btn ghost', 'Abrir o site de consulta'); ab.type = 'button'; ab.style.width = 'auto'; ab.onclick = function () { copiar(soDig(x.aparelho.imei)); window.open(CONSULTA_URL, '_blank', 'noopener'); }; ib.appendChild(ab);
+      var lk = campo(ib, 'Link do resultado', inp('url', 'https://…'));
+      var ft = null, fl = el('label', 'btn ghost', '📷 Anexar print'), fi = el('input'); fi.type = 'file'; fi.accept = 'image/*'; fi.className = 'hide'; fl.appendChild(fi); fl.style.marginTop = '8px'; ib.appendChild(fl);
+      var fs = el('span', 'hint', ''); ib.appendChild(fs);
+      fi.onchange = function () { var f = fi.files[0]; if (!f) return; comprimirImg(f, 1600, 0.82, function (u) { ft = u; fs.textContent = ' ✓ print anexado'; }); };
+      var ok = el('label', 'ckl'), ck = el('input'); ck.type = 'checkbox'; ok.appendChild(ck); ok.appendChild(document.createTextNode(' Consulta de IMEI feita: aparelho sem restrição')); ib.appendChild(ok);
+      btn(ib, 'Registrar a consulta', 'ok', function () { call('ccImeiConsulta', [S.token, x.id, { ok: ck.checked, link: lk.value.trim(), foto: ft || '' }]).then(reabrir).catch(function (e) { erroEm(m, e); }); });
+    }
+    // divergência na conferência: a parceira responde
+    if (x.situacao === CC_RESPOSTA && x.dados.ajuste) {
+      var aj = x.dados.ajuste, rb = el('div', 'alerta avisorg', 'A loja propôs ' + brl(aj.para) + ' (era ' + brl(aj.de) + '). Motivo: ' + aj.motivo + '.'); box.appendChild(rb);
+      if (D.parceira) {
+        btn(acoes, '✓ Aceitar o novo valor', 'ok', function () { call('ccResponder', [S.token, x.id, { acao: 'aceitar' }]).then(function (d) { avisoTopo('Novo valor aceito'); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+        btn(acoes, 'Pedir devolução', 'ghost', function () { if (!confirm('Pedir a devolução do aparelho? A compra fica recusada e nada é pago.')) return; call('ccResponder', [S.token, x.id, { acao: 'devolver' }]).then(function (d) { avisoTopo('Devolução pedida'); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+      } else box.appendChild(el('div', 'hint', 'Esperando a resposta da parceira (aceitar o novo valor ou pedir a devolução).'));
+    }
+    // Modelo 1: o financeiro registra a nota de entrada; só então o aparelho entra no estoque
+    if (x.dados.notaEntrada) box.appendChild(el('div', 'hint', '✓ Nota de entrada ' + x.dados.notaEntrada.numero + ' · chave ' + x.dados.notaEntrada.chave));
+    if (x.situacao === CC_NOTA_ENTRADA && !D.parceira) {
+      var nb = el('div', 'card'); box.appendChild(nb); nb.appendChild(el('h3', 'ch', 'Nota de entrada'));
+      nb.appendChild(el('div', 'hint', 'Emita a nota de entrada no emissor da loja e importe o XML (ou digite a chave de acesso). O aparelho entra no estoque ao registrar.'));
+      var xml = '', xl = el('label', 'btn ghost', 'Importar XML'), xi = el('input'); xi.type = 'file'; xi.accept = '.xml,text/xml'; xi.className = 'hide'; xl.appendChild(xi); nb.appendChild(xl);
+      var xs = el('span', 'hint', ''); nb.appendChild(xs);
+      var ch = campo(nb, 'ou a chave de acesso (44 números)', inp('text', '0000 0000 0000 …')); ch.inputMode = 'numeric';
+      xi.onchange = function () { var f = xi.files[0]; if (f) lerArquivo(f, true, function (t) { xml = t || ''; xs.textContent = ' ✓ ' + f.name; }); };
+      btn(nb, 'Registrar a nota e pôr no estoque', 'ok', function () { call('ccNotaEntrada', [S.token, x.id, { xml: xml, chave: ch.value }]).then(function (d) { avisoTopo('Nota registrada: aparelho no estoque'); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+    }
+    // Modelo 2: NF-e da parceira (sem ela o pagamento não sai)
+    var np = x.dados.notaParceira;
+    if (np) { var nl = el('div', 'hint', '✓ NF-e da parceira ' + np.numero + ' · chave ' + np.chave + ' '); box.appendChild(nl); if (np.arq) { var vn = el('button', 'lnk', 'ver a nota'); vn.type = 'button'; vn.onclick = function () { abrirUrl('parcNotaVer', [x.id], m); }; nl.appendChild(vn); } }
+    else if (md === 2 && D.parceira && D.papel === 'dono' && ['Cancelada', 'Recusada', 'No estoque', 'Em negociação'].indexOf(x.situacao) < 0) btn(acoes, '🧾 Anexar NF-e', x.situacao === CC_NOTA_PARC ? 'ok' : 'ghost', function () { notaParcCC(x.id); });
+    if (x.situacao === CC_NOTA_PARC && !D.parceira) box.appendChild(el('div', 'hint', 'Aparelho no estoque. O pagamento sai quando a parceira anexar a NF-e de venda.'));
+  }
+  /** A parceira anexa a NF-e dela (XML ou PDF) a um ou mais aparelhos. */
+  function notaParcCC(id0) {
+    var D = CC.d, sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Anexar NF-e de venda'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    c.appendChild(el('div', 'hint', 'Uma nota pode valer para vários aparelhos: marque todos os que estão nela.'));
+    var sel = {}; sel[id0] = true;
+    D.lista.filter(function (x) { return (x.dados.modelo || 1) === 2 && !x.dados.notaParceira && ['Cancelada', 'Recusada', 'No estoque', 'Em negociação'].indexOf(x.situacao) < 0; }).forEach(function (x) {
+      var l = el('label', 'ckl'), k = el('input'); k.type = 'checkbox'; k.checked = !!sel[x.id]; k.onchange = function () { sel[x.id] = k.checked; };
+      l.appendChild(k); l.appendChild(document.createTextNode(' ' + x.id + ' · ' + x.aparelho.modelo + ' · ' + brl(x.valor) + ' · ' + x.situacao)); c.appendChild(l);
+    });
+    var xml = '', pdf = '', fl = el('label', 'btn ghost', 'Escolher o XML ou o PDF da nota'), fi = el('input'); fi.type = 'file'; fi.accept = '.xml,.pdf,text/xml,application/pdf'; fi.className = 'hide'; fl.appendChild(fi); fl.style.marginTop = '10px'; c.appendChild(fl);
+    var fs = el('span', 'hint', ''); c.appendChild(fs);
+    var ch = campo(c, 'Chave de acesso (44 números; vem sozinha no XML)', inp('text', '')); ch.inputMode = 'numeric';
+    fi.onchange = function () { var f = fi.files[0]; if (!f) return; var ehXml = /xml$/i.test(f.name) || /xml/.test(f.type); lerArquivo(f, ehXml, function (t) { if (ehXml) { xml = t || ''; pdf = ''; } else { pdf = t || ''; xml = ''; } fs.textContent = ' ✓ ' + f.name; }); };
+    var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
+    btn(ac, 'Anexar', 'ok', function () { var ids = Object.keys(sel).filter(function (k) { return sel[k]; }); call('ccNotaParceira', [S.token, { ids: ids, xml: xml, arquivo: pdf, chave: ch.value }]).then(function (d) { aposCC(d); avisoTopo('NF-e anexada'); detalheCC(id0); }).catch(function (e) { erroEm(m, e); }); });
+    btn(ac, 'Voltar', 'ghost', function () { detalheCC(id0); });
     abrirModal();
   }
   function painelConferir(c, x, m, reabrir) {
@@ -10910,7 +11361,12 @@
     var g = grade(bx, 2), v = inpValor(''); v.input.placeholder = up ? 'vazio = está como informado' : brl(x.valor); campo(g[0], up ? 'Quanto vale de verdade' : 'Valor ajustado (opcional)', v);
     var mo = inp('text', 'Ex.: bateria 79%, risco na tela'); campo(g[1], 'Motivo', mo);
     var ac = el('div', 'acoes'); bx.appendChild(ac);
-    btn(ac, up ? '✓ Conferido: pôr no estoque' : '✓ Aceitar', 'ok', function () { var d = { acao: 'aceitar', motivo: mo.value }; if (up) d.valorReal = v.input.value ? num(v.input.value) : ''; else d.valor = v.input.value ? num(v.input.value) : ''; call('ccConferir', [S.token, x.id, d]).then(function (r) { avisoTopo('Conferido'); reabrir(r); }).catch(function (e) { erroEm(m, e); }); });
+    btn(ac, up ? '✓ Conferido: pôr no estoque' : '✓ Aceitar', 'ok', function () {
+      var d = { acao: 'aceitar', motivo: mo.value }; if (up) d.valorReal = v.input.value ? num(v.input.value) : ''; else d.valor = v.input.value ? num(v.input.value) : '';
+      var pc = (CC.d.parceiras || []).filter(function (z) { return z.id === x.dados.parceiraId; })[0], vaiEstoque = up || !pc || pc.destino !== 'compras';
+      var enviar = function (fu) { if (fu) d.fotosUsar = fu; call('ccConferir', [S.token, x.id, d]).then(function (r) { avisoTopo('Conferido'); reabrir(r); }).catch(function (e) { if (fu) { detalheCC(x.id); msg('topMsg', e); } else erroEm(m, e); }); };
+      if (vaiEstoque && (x.dados.fotos || []).length) escolherFotosCC(x, enviar); else enviar(null);
+    });
     if (!up) btn(ac, 'Recusar e devolver', 'ghost', function () { call('ccConferir', [S.token, x.id, { acao: 'recusar', motivo: mo.value }]).then(function (r) { reabrir(r); }).catch(function (e) { erroEm(m, e); }); });
   }
   function verAnexoCC(id, qual) {
@@ -10983,13 +11439,33 @@
     var pm = el('select'); [['conferencia', 'Na conferência (vence em X dias)'], ['periodico', 'Acerto periódico']].forEach(function (o) { pm.appendChild(el('option', '', o[1])).value = o[0]; }); pm.value = p.pagamento.modo; campo(g4[2], 'Pagamento à parceira', pm);
     var g5 = grade(c, 2), di = inp('number', '0'); di.min = 0; di.value = p.pagamento.dias; campo(g5[0], 'Dias para vencer (na conferência)', di);
     var pe = el('select'); [['semanal', 'Semanal (vence no domingo)'], ['mensal', 'Mensal (vence no fim do mês)']].forEach(function (o) { pe.appendChild(el('option', '', o[1])).value = o[0]; }); pe.value = p.pagamento.periodo; campo(g5[1], 'Acerto', pe);
+    // Leva 6: modelo de compra, NF-e, comissão e PIX
+    c.appendChild(el('h3', 'ch', 'Modelo de compra e ganho da parceira'));
+    var nfL = el('label', 'ckl'), nfK = el('input'); nfK.type = 'checkbox'; nfK.checked = !!p.emiteNfe; nfL.appendChild(nfK); nfL.appendChild(document.createTextNode(' Emite NF-e (tem CNPJ e emissor de nota)')); c.appendChild(nfL);
+    var g6 = grade(c, 2), mo = el('select'); [['1', 'Modelo 1: a loja compra do cliente (pagamento pela parceira)'], ['2', 'Modelo 2: a parceira compra e revende com NF-e']].forEach(function (o) { mo.appendChild(el('option', '', o[1])).value = o[0]; }); mo.value = String(p.modelo || 1); campo(g6[0], 'Modelo padrão', mo);
+    var pix = inp('text', 'CPF, CNPJ, e-mail, celular ou chave aleatória'); pix.maxLength = 100; pix.value = p.pix || ''; campo(g6[1], 'Chave PIX para pagamento', pix);
+    var cmw = el('div'); c.appendChild(cmw); var cm0 = p.comissao || { tipo: 'nenhuma', valor: 0, quando: 'junto' };
+    var g7 = grade(cmw, 3), ct = el('select'); [['nenhuma', 'Sem comissão'], ['fixa', 'Valor fixo por aparelho'], ['pct', 'Percentual do aparelho']].forEach(function (o) { ct.appendChild(el('option', '', o[1])).value = o[0]; }); ct.value = cm0.tipo || 'nenhuma'; campo(g7[0], 'Comissão (Modelo 1)', ct);
+    var cv = inp('text', 'Ex.: 50 ou 5'); cv.inputMode = 'decimal'; cv.value = cm0.valor ? String(cm0.valor).replace('.', ',') : ''; campo(g7[1], 'Valor (R$ ou %)', cv);
+    var cq = el('select'); [['junto', 'Junto com o reembolso'], ['mensal', 'No fechamento do mês']].forEach(function (o) { cq.appendChild(el('option', '', o[1])).value = o[0]; }); cq.value = cm0.quando || 'junto'; campo(g7[2], 'Quando paga', cq);
+    var mh = el('div', 'hint'); c.appendChild(mh);
+    function desModelo() {
+      if (!nfK.checked) mo.value = '1'; mo.disabled = !nfK.checked; var m2 = mo.value === '2';
+      cmw.classList.toggle('hide', m2); cv.disabled = cq.disabled = ct.value === 'nenhuma';
+      mh.textContent = !nfK.checked ? 'Sem NF-e a parceira fica no Modelo 1: o contrato é do cliente com a loja, a loja emite a nota de entrada e reembolsa a parceira pelo valor pago ao cliente.'
+        : m2 ? 'Modelo 2: a parceira compra em nome dela e anexa a NF-e de venda; sem a nota, o pagamento não sai. O ganho dela é a diferença de preço (sem comissão).'
+        : 'Modelo 1: o contrato é do cliente com a loja, a loja emite a nota de entrada e reembolsa a parceira pelo valor pago ao cliente.';
+    }
+    nfK.onchange = mo.onchange = ct.onchange = desModelo; desModelo();
     var at = el('label', 'ckl'), ak = el('input'); ak.type = 'checkbox'; ak.checked = p.ativa !== false; at.appendChild(ak); at.appendChild(document.createTextNode(' Ativa')); c.appendChild(at);
+    if (p.parceria && p.parceria.assinatura) c.appendChild(el('div', 'hint', '✓ Contrato de parceria assinado por ' + p.parceria.assinatura.nome + ' em ' + p.parceria.assinatura.em + '.'));
+    else if (p.id) c.appendChild(el('div', 'hint', 'O contrato de parceria ainda não foi assinado: o responsável assina no primeiro acesso ao app.'));
     var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
-    btn(ac, 'Salvar', '', function () { call('parceiraSalvar', [S.token, { id: p.id || '', nome: nm.value, doc: dc.value, responsavel: rs.value, telefone: tl.value, email: em.value, endereco: en.value, cidade: ci.value, loja: lj.value, destino: ds.value, pagamento: { modo: pm.value, dias: di.value, periodo: pe.value }, ativa: ak.checked }])
+    btn(ac, 'Salvar', '', function () { call('parceiraSalvar', [S.token, { id: p.id || '', nome: nm.value, doc: dc.value, responsavel: rs.value, telefone: tl.value, email: em.value, endereco: en.value, cidade: ci.value, loja: lj.value, destino: ds.value, pagamento: { modo: pm.value, dias: di.value, periodo: pe.value }, emiteNfe: nfK.checked, modelo: Number(mo.value), comissao: { tipo: ct.value, valor: ct.value === 'nenhuma' ? 0 : num(cv.value), quando: cq.value }, pix: pix.value, ativa: ak.checked }])
       .then(function (d) { CC.d = d; avisoTopo('Parceira salva'); CC.aba = 'Parceiras'; desenharCC(); }).catch(function (e) { erroEm(m, e); }); });
     if (p.id && D.criarLogin) btn(ac, '🔑 Criar login da parceira', 'ghost', function () {
       var u = prompt('Usuário de acesso da parceira (ex.: parceirax):'); if (!u) return;
-      call('parceiraLoginCriar', [S.token, p.id, u, rs.value || nm.value]).then(function (r) { perguntar('Login da parceira', 'Usuário: ' + r.usuario + '.' + (S.u.sistema ? S.u.sistema : '') + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nEla entra pela mesma tela do Gestti e só vê a Compra de Celulares dela. Anote agora: a senha não aparece de novo.'); }).catch(function (e) { erroEm(m, e); });
+      call('parceiraLoginCriar', [S.token, p.id, u, rs.value || nm.value]).then(function (r) { perguntar('Login da parceira', 'Usuário: ' + r.usuario + '.' + (S.u.sistema ? S.u.sistema : '') + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nEla entra pela mesma tela do Gestti (ou instala o app Gestti Parceiras) e vê só o portal dela. Este é o login do responsável: ele assina o contrato de parceria e cria os logins dos funcionários. Anote agora: a senha não aparece de novo.'); }).catch(function (e) { erroEm(m, e); });
     });
   }
   function pagamentosParc(box) {
@@ -11523,7 +11999,7 @@
       call('editarAparelho', [S.token, x.linha, x.imei, d]).then(function (l) { S.disp = l; S.venda = null; S.manut = null; fecharModal(); renderDisp(); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar alterações'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
   function abrirTirarManut(x, depois) {
     var sh = $('fSheet'); sh.innerHTML = '';
@@ -11621,7 +12097,8 @@
       if (tag && !(x.tags || []).some(function (t) { return casaCat(t, tag); })) return false;
       if (sit === '' && x.indisp) return false;
       if (sit === 'indisp' && !x.indisp) return false;
-      var t = x.nome.toLowerCase(); return termos.every(function (q) { return t.indexOf(q) > -1; });
+      if (sit === 'ajustar' && !x.ajustar) return false;
+      var t = x.nome.toLowerCase() + ' ' + (x.vinc || []).map(function (v) { return (v.sku || '').toLowerCase(); }).join(' '); return termos.every(function (q) { return t.indexOf(q) > -1; });
     }).sort(function (a2, b2) {
       if (ordem === 'za') return b2.nome.localeCompare(a2.nome);
       if (ordem === 'menor') return (a2.preco || Infinity) - (b2.preco || Infinity) || a2.nome.localeCompare(b2.nome);
@@ -11629,21 +12106,25 @@
       return a2.nome.localeCompare(b2.nome);
     });
     var ni = S.novos.filter(function (x) { return x.indisp; }).length;
-    $('nCont').textContent = l.length + ' produto' + (l.length === 1 ? '' : 's') + (sit === '' && ni ? ' · ' + ni + ' não disponíve' + (ni === 1 ? 'l' : 'is') + ' (veja no filtro Situação)' : '');
+    var naj = S.novos.filter(function (x) { return x.ajustar; }).length;
+    $('nCont').textContent = l.length + ' produto' + (l.length === 1 ? '' : 's') + (sit === '' && ni ? ' · ' + ni + ' não disponíve' + (ni === 1 ? 'l' : 'is') + ' (veja no filtro Situação)' : '') + (sit !== 'ajustar' && naj ? ' · ' + naj + ' precisa' + (naj === 1 ? '' : 'm') + ' ajustar o preço' : '');
     var box = $('nLista'); box.innerHTML = '';
     if (!l.length) { box.appendChild(el('div', 'empty', sit === 'indisp' ? 'Nenhum produto marcado como não disponível.' : S.novos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto cadastrado ainda.' + (pode('editar_precos') ? ' Use "+ Novo Produto".' : ''))); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
-    ['', 'Produto', ver ? 'Custo · Margem' : '', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    ['', 'Produto', 'SKU', ver ? 'Custo · Margem' : '', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 4) d.style.textAlign = 'right'; h.appendChild(d); });
     tab.appendChild(h);
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     l.forEach(function (x) {
       var r = el('div', 'prow'); r.dataset.k = x.linha + '|' + x.nome;
       var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
-      var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome)); if (x.indisp) nm.appendChild(el('span', 'badge-m', 'Não disponível')); nm.appendChild(botaoCopiar(x.nome, 'Copiar nome')); n.appendChild(nm);
+      var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode(x.nome)); if (x.indisp) nm.appendChild(el('span', 'badge-m', 'Não disponível')); if (x.ajustar) nm.appendChild(el('span', 'bdg warn', 'Precisa ajustar o preço')); nm.appendChild(botaoCopiar(x.nome, 'Copiar nome')); n.appendChild(nm);
+      var skus = (x.vinc || []).map(function (v) { return v.sku; }).filter(function (k, i, a) { return k && a.indexOf(k) === i; }), skuT = skus.join(', ');
+      if (skuT) n.appendChild(el('div', 'psub skumob', 'SKU ' + skuT));
       var sub = [x.grupo, ver && x.manual ? 'Preço definido manualmente' : '', (x.vinc || []).length ? x.vinc.length + ' cor(es) no cadastro · ' + soma(x.vinc, function (v) { return v.total; }) + ' em estoque' : ''].filter(Boolean).join(' · ');
       if (sub) n.appendChild(el('div', 'psub', sub));
       tagsMini(n, x.tags);
       r.appendChild(n);
+      r.appendChild(el('div', 'pskuc', skuT || '—'));
       var cm = el('div', 'psku');
       if (ver && x.custo) { var res = resultado(x.preco, x.custo, calcNovo(x.custo, x.aj, S.prec)); cm.textContent = brl(x.custo) + (res ? ' · ' + pct(res.margem) : ''); if (res) cm.style.color = res.margem >= (S.prec.margem / 100) - 0.0001 ? 'var(--ok)' : res.margem > 0 ? 'var(--warn)' : 'var(--err)'; }
       r.appendChild(cm);
@@ -11771,7 +12252,7 @@
         var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ ' + nome.value.trim().toUpperCase() + (x ? ' atualizado.' : ' cadastrado.')));
       }).catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Cadastrar produto'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); if (!x) nome.focus();
+    abrirPagina(); if (!x) nome.focus();
   }
   function abrirPrecificacao(o) {
     o = o || { cfg: S.prec, tit: 'Precificação dos produtos novos', acao: 'precConfigSalvar', apos: function (d) { aposNovos(d); var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ Precificação salva e preços recalculados.')); } };
@@ -11835,8 +12316,12 @@
     var gd = el('div'); gd.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px'; w.appendChild(gd);
     var ins = {};
     ['Ótimo', 'Bom'].forEach(function (k) { var b = el('div'), i = inp('text'); i.inputMode = 'decimal'; campo(b, k + ' (vazio = regra)', i); ins[k] = i; gd.appendChild(b); });
+    // Leva 6: modelo visível na Tabela de referência do app das parceiras (salva na hora)
+    var vl = el('label', 'ckl'), vk = el('input'); vk.type = 'checkbox'; vl.appendChild(vk); vl.appendChild(document.createTextNode(' Visível para as parceiras (Tabela de referência do app)')); w.appendChild(vl);
+    vk.onchange = function () { var m = modeloDe(); if (!m) { vk.checked = false; return; } call('parcTabelaVisivel', [S.token, marca, m.modelo, vk.checked]).then(function (v) { S.u.parcTabVis = v; avisoTopo(vk.checked ? m.modelo + ' aparece para as parceiras' : m.modelo + ' saiu da tabela das parceiras'); }).catch(function (e) { vk.checked = !vk.checked; msg('topMsg', e); }); };
     function preencher() {
-      var m = modeloDe(); hint.textContent = 'Regra da marca: ' + avRegraTxt(marca) + '. Preencha só para travar um valor próprio neste modelo.';
+      var m = modeloDe(); vk.checked = !!(m && (S.u.parcTabVis || {})[marca + '|' + m.modelo]); vk.disabled = !m;
+      hint.textContent = 'Regra da marca: ' + avRegraTxt(marca) + '. Preencha só para travar um valor próprio neste modelo.';
       ['Ótimo', 'Bom'].forEach(function (k) { var t = m && m.travado && m.travado[k]; ins[k].value = typeof t === 'number' ? String(t).replace('.', ',') : ''; var r = m ? avPreco(marca, Object.assign({}, m, { travado: {} }), k) : null; ins[k].placeholder = r ? 'pela regra: ' + brl(r) : 'vazio'; ins[k].disabled = !m; });
     }
     return { preencher: preencher, valores: function () { var o = {}, erro = ''; ['Ótimo', 'Bom'].forEach(function (k) { var t = ins[k].value.trim(); if (!t) return; var n = num(t); if (!(n > 0)) erro = 'Valor travado inválido em ' + k + '.'; else o[k] = n; }); if (erro) throw erro; return o; } };
@@ -11873,7 +12358,7 @@
       call('avaliacaoModeloSalvar', [S.token, marca, sm.value, d]).then(function () { return call('avaliacaoTravarSalvar', [S.token, marca, sm.value, trav]); }).then(function (r) { S.u.aval = r.aval; TV.preencher(); ok.disabled = false; ok.textContent = 'Salvar'; avisoTopo('Os valores de ' + sm.value + ' foram salvos com sucesso'); calcAval(); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
   function abrirEditarAval(modelo) {
     var lista = S.u.iphones || [];
@@ -11911,7 +12396,7 @@
         $('aModelo').value = sm.value; montarAval();
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar na planilha'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
   // ---------- avaliação de usados por marca ----------
   var APPLE_ITENS = [{ id: 'bat', nome: 'Saúde da bateria', opcoes: ['85% ou mais', '84% a 80%', 'Abaixo de 80%'] },
@@ -12014,7 +12499,7 @@
         if (depois) depois(r.novoModelo, d.marca);
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Cadastrar modelo'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); setTimeout(function () { nm.focus(); }, 50);
+    abrirPagina(); setTimeout(function () { nm.focus(); }, 50);
   }
   function setDecisao(box, txt, cls) { box.textContent = txt; box.className = 'decisao ' + (cls || 'info'); }
   function calcAval() {
@@ -12156,7 +12641,7 @@
         var box = $('vAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ ' + nome + ' incluído.'));
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Incluir modelo'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); mod.focus();
+    abrirPagina(); mod.focus();
   };
 
   function renderVenda() {
@@ -12494,7 +12979,7 @@
         var box = $('vAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ Preços de ' + x.modelo + ' atualizados.'));
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); var pri = ins.bom; pri.focus(); pri.select();
+    abrirPagina(); var pri = ins.bom; pri.focus(); pri.select();
   }
   // caixa lateral do modelo (igual à dos produtos)
   function abrirDrawerPreco(modelo) {
@@ -12970,7 +13455,7 @@
     if (!(qt > 0)) nm.appendChild(el('span', 'badge-m', 'Sem estoque'));
     n.appendChild(nm);
     var lo = Object.keys(x.estoque || {}).map(function (k) { return k.replace(/^.*\| /, '') + ' ' + x.estoque[k]; }).join(' · ');
-    var ps = el('div', 'psub esrow', [lo || 'sem estoque', x.grupo].filter(Boolean).join(' · ')); var eb = botaoEstoque(x); if (eb) ps.appendChild(eb); n.appendChild(ps); tagsMini(n, x.tags); r.appendChild(n);
+    var ps = el('div', 'psub esrow', [lo || 'sem estoque', x.grupo].filter(Boolean).join(' · ')); var eb = botaoEstoque(x); if (eb) ps.appendChild(eb); n.appendChild(ps); r.appendChild(n);
     var cod = x.sku || x.codigo || '—', sku = el('div', 'psku', cod); if (x.sku || x.codigo) sku.appendChild(botaoCopiar(cod, 'Copiar SKU')); r.appendChild(sku);
     var pr = el('div', 'ppre' + (x.preco ? '' : ' sem'), x.preco ? brl(x.preco) : 'Consultar');
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
@@ -12987,7 +13472,8 @@
     if (a.precoAparelho) nm.appendChild(el('span', 'bdg warn', 'Preço especial'));
     if (a.reserva) { var rb2 = el('span', 'bdg res', 'Reservado · ' + a.reserva.vendedor.split(' ')[0]); rb2.title = txtRes(a.reserva); nm.appendChild(rb2); }
     var bat = typeof a.bateria === 'number' ? a.bateria + '%' : a.bateria;
-    n.appendChild(nm); n.appendChild(el('div', 'psub', ['Aparelho seminovo (Produtos Usados)', bat ? 'bateria ' + bat : '', a.grupo].filter(Boolean).join(' · '))); tagsMini(n, a.tags); r.appendChild(n);
+    n.appendChild(nm); if (a.sku) n.appendChild(el('div', 'psub skumob', 'SKU ' + a.sku)); n.appendChild(el('div', 'psub', ['Aparelho seminovo (Produtos Usados)', bat ? 'bateria ' + bat : '', a.grupo].filter(Boolean).join(' · '))); r.appendChild(n);
+    r.appendChild(el('div', 'pskuc', a.sku || '—'));
     var es = el('div', 'psku'); es.appendChild(el('div', '', '1 un.')); es.appendChild(el('div', 'psub', String(a.loja || '').replace(/^.*\| /, ''))); r.appendChild(es);
     var pr = el('div', 'ppre' + (a.preco ? '' : ' sem'), a.preco ? brl(a.preco) : 'Consultar');
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
@@ -13073,12 +13559,12 @@
     var c = el('div', 'card estcard'), top = el('div', 'tbacoes'); top.appendChild(el('h3', 'ch', 'Saldo por loja'));
     var dl = el('button', 'lnk', '⬇ Baixar planilha (CSV)'); dl.type = 'button'; top.appendChild(dl); c.appendChild(top);
     var w = el('div', 'tbwrap'), t = el('table', 't estmat'), h = el('tr');
-    ['Produto'].concat(lojas.map(function (x) { return x.replace(/^.*\| /, '').replace('Tec-Cell', 'TC'); })).concat(['Total', 'Mín./Máx.', D.ver ? 'Custo total' : 'Preço', '']).forEach(function (x, i) { var th = el('th', i > 0 ? 'n' : '', x); h.appendChild(th); });
+    ['Produto', 'SKU'].concat(lojas.map(function (x) { return x.replace(/^.*\| /, '').replace('Tec-Cell', 'TC'); })).concat(['Total', 'Mín./Máx.', D.ver ? 'Custo total' : 'Preço', '']).forEach(function (x, i) { var th = el('th', i > 1 ? 'n' : '', x); h.appendChild(th); });
     t.appendChild(h);
     l.forEach(function (x) {
       var r = el('tr'), s2 = sitEst(x, lj), a = el('td', 'pn'); a.appendChild(document.createTextNode(x.nome)); if (s2[0] !== 'OK') a.appendChild(el('span', 'bdg ' + s2[1], s2[0]));
-      a.appendChild(el('small', '', [x.sku ? 'SKU ' + x.sku : '', x.codigo ? 'EAN ' + x.codigo : '', x.localizacao ? 'Local: ' + x.localizacao : ''].filter(Boolean).join(' · ')));
-      r.appendChild(a);
+      a.appendChild(el('small', '', [x.codigo ? 'EAN ' + x.codigo : '', x.localizacao ? 'Local: ' + x.localizacao : ''].filter(Boolean).join(' · ')));
+      r.appendChild(a); r.appendChild(el('td', 'sk', x.sku || '—'));
       lojas.forEach(function (lo) { var v = x.estoque[lo] || 0; r.appendChild(el('td', 'n' + (x.minimo && v < x.minimo ? ' s' : v ? '' : ' z'), v ? inteiro(v) : '0')); });
       r.appendChild(el('td', 'n b', inteiro(qt(x))));
       r.appendChild(el('td', 'n z', x.minimo || x.maximo ? (x.minimo || 0) + ' / ' + (x.maximo || '—') : '—'));
@@ -14202,7 +14688,7 @@
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(cc); ac.appendChild(ok); c.appendChild(ac);
     cc.onclick = fecharModal;
     ok.onclick = function () { ok.disabled = true; call('osCfgSalvar', [S.token, { termos: tx.value, garantiaDias: gd.value }]).then(function (r) { aposOS(r); fecharModal(); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); }); };
-    abrirModal();
+    abrirPagina();
   }
 
   // =========================================================
@@ -14413,7 +14899,7 @@
       L.forEach(function (e) { if (e.orig && e.nome.trim() && e.orig !== e.nome.trim()) ren[e.orig] = e.nome.trim(); });
       ok.disabled = true; call('osEtapasSalvar', [S.token, lista, ren]).then(function (d) { aposOS(d); fecharModal(); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
 
   // =========================================================
@@ -14648,8 +15134,41 @@
     ok.onclick = function () { m.classList.remove('show'); ok.disabled = true; C.fundoPadrao = num(fw.input.value) || 0; call('caixaCfgSalvar', [S.token, C]).then(function (r) { aposCaixa(r); ok.disabled = false; ok.textContent = '✓ Salvo'; setTimeout(function () { ok.textContent = 'Salvar configuração do caixa'; }, 1500); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); }); };
   }
 
-  function fecharModal() { $('fModal').classList.add('hide'); document.body.style.overflow = ''; }
-  function abrirModal() { $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModal(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
+  function fecharModal() { if (PG) { fecharPagina(); return; } $('fModal').classList.add('hide'); document.body.style.overflow = ''; }
+  // ---------- Leva 6: cadastro em página
+  // O formulário continua sendo desenhado em #fSheet; abrirPagina() o mostra no lugar da lista,
+  // com "← Voltar", o caminho no topo e o aviso de descartar. O voltar do celular volta para a lista.
+  var PG = null, PG_IGN = false;
+  function nomeViewAtual() { var v = VIEWS.filter(function (z) { return z.id === S.view; })[0]; if (!v) return ({ config: 'Configurações', pessoa: 'CRM › Clientes/Fornecedores', prod: 'Produtos', ctrlest: 'Controle de Estoque' })[S.view] || ''; return [v.menu, v.sub, v.sub ? (v.subNome || v.nome) : v.nome].filter(Boolean).join(' › '); }
+  function abrirPagina(caminho) {
+    var sh = $('fSheet'), h = sh.querySelector('h2.tt'), tit = h ? h.textContent.replace(/^✓\s*/, '') : '';
+    if (!caminho) caminho = nomeViewAtual();
+    $('pgCrumb').textContent = caminho + (tit ? ' › ' + tit : ''); $('pgTit').textContent = tit;
+    if (!PG) { try { history.pushState({ gpg: 1 }, ''); } catch (e) {} }
+    PG = { sujo: false };
+    $('fModal').classList.add('hide'); document.body.style.overflow = '';
+    sh.classList.add('pgsheet'); $('pgCorpo').appendChild(sh);
+    // "Cancelar"/"Fechar" do formulário passam a perguntar antes de descartar, como o Voltar
+    Array.prototype.forEach.call(sh.querySelectorAll('button'), function (b) { if (b.onclick === fecharModal) b.onclick = voltarPagina; });
+    fecharDrawer(); document.body.classList.add('pgon'); show('vPg', true); window.scrollTo(0, 0);
+  }
+  function fecharPagina(semHistorico) {
+    if (!PG) return; PG = null;
+    var sh = $('fSheet'); sh.classList.remove('pgsheet'); $('fModal').appendChild(sh);
+    document.body.classList.remove('pgon'); show('vPg', false);
+    if (!semHistorico && history.state && history.state.gpg) { PG_IGN = true; try { history.back(); } catch (e) { PG_IGN = false; } }
+  }
+  function podeSairPagina() { return !PG || !PG.sujo || confirm('Descartar alterações?'); }
+  function voltarPagina() { if (podeSairPagina()) fecharPagina(); }
+  $('pgVoltar').onclick = voltarPagina;
+  ['input', 'change'].forEach(function (ev) { $('fSheet').addEventListener(ev, function () { if (PG) PG.sujo = true; }); });
+  window.addEventListener('popstate', function () {
+    if (PG_IGN) { PG_IGN = false; return; }
+    if (!PG) return;
+    if (PG.sujo && !confirm('Descartar alterações?')) { try { history.pushState({ gpg: 1 }, ''); } catch (e) {} return; }
+    fecharPagina(true);
+  });
+  function abrirModal() { if (PG) fecharPagina(); $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModal(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
   $('gear').onclick = function () { CFG.aba = window.innerWidth >= 820 ? 'conta' : null; CFG.eq = null; ir('config'); };
 
   // ---------- Configurações › Transferências entre empresas
@@ -14834,8 +15353,8 @@
     lista();
   }
   /** Configurações › Modelos de documento (layout das formas de pagamento): texto com campos automáticos e as exigências da assinatura. */
-  var DOC_TIPOS = { compra: 'Contrato de compra de celular', reserva: 'Termo de reserva', encomenda: 'Termo de encomenda' };
-  var DOC_CAMPOS = ['COMPRADOR_NOME', 'COMPRADOR_DOC', 'COMPRADOR_ENDERECO', 'CLIENTE_NOME', 'CLIENTE_CPF', 'CLIENTE_RG', 'CLIENTE_CELULAR', 'CLIENTE_ENDERECO', 'MARCA', 'MODELO', 'GB', 'COR', 'IMEI1', 'IMEI2', 'SERIE', 'OBS', 'VALOR', 'VALOR_EXTENSO', 'CLAUSULA_PAGAMENTO', 'FORO', 'CIDADE_DATA', 'RESPONSAVEL'];
+  var DOC_TIPOS = { compra: 'Contrato de compra de celular', compra_parceira: 'Compra pela parceira (Modelo 2)', parceria: 'Contrato de parceria', reserva: 'Termo de reserva', encomenda: 'Termo de encomenda' };
+  var DOC_CAMPOS = ['COMPRADOR_NOME', 'COMPRADOR_DOC', 'COMPRADOR_ENDERECO', 'CLIENTE_NOME', 'CLIENTE_CPF', 'CLIENTE_RG', 'CLIENTE_CELULAR', 'CLIENTE_ENDERECO', 'MARCA', 'MODELO', 'GB', 'COR', 'IMEI1', 'IMEI2', 'SERIE', 'OBS', 'VALOR', 'VALOR_EXTENSO', 'CLAUSULA_PAGAMENTO', 'FORO', 'CIDADE_DATA', 'RESPONSAVEL', 'LOJA_NOME', 'LOJA_DOC', 'LOJA_ENDERECO', 'PARCEIRA_NOME', 'PARCEIRA_DOC', 'PARCEIRA_ENDERECO', 'MODELO_TEXTO', 'PRAZO_TEXTO', 'GANHO_TEXTO'];
   var EXIGE_ROT = { doc: 'Foto do documento', selfie: 'Selfie na hora', gps: 'Localização' }, EXIGE_OP = [['nao', 'Não pedir'], ['opcional', 'Opcional'], ['obrigatorio', 'Obrigatório']];
   function cfgModelosDoc(box) {
     var raiz = el('div'); box.appendChild(raiz); var L = null;
