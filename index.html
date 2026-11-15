@@ -304,6 +304,12 @@
   @media(min-width:700px){.overlay{align-items:center}.sheet{border-radius:18px}}
   .sheet h2.tt{font-size:17px;color:var(--accent);margin:2px 2px 2px;text-transform:none;letter-spacing:0}
   .sheet .sub{font-size:13px;color:var(--muted);margin:0 2px 12px}
+  /* Leva 6: cadastro aberto como página (no lugar da lista) */
+  body.pgon main > section:not(#vPg){display:none!important}
+  #vPg{max-width:900px}
+  #fSheet.pgsheet{max-width:none;width:auto;max-height:none;overflow:visible;border-radius:0;padding:0;background:transparent}
+  #fSheet.pgsheet > h2.tt:first-child{display:none}
+  #fSheet.pgsheet > .sub:nth-child(2){margin-top:-6px}
   .ck{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
   .ck:first-of-type{border-top:0}
   .ck .n{flex:1;font-size:14px}
@@ -1853,6 +1859,11 @@
       </div>
     </div>
   </section>
+  <section id="vPg" class="hide">
+    <div class="crumb" id="pgCrumb"></div>
+    <div class="ptopo"><h1 id="pgTit"></h1><button type="button" class="btn ghost" id="pgVoltar">← Voltar</button></div>
+    <div id="pgCorpo"></div>
+  </section>
 </main>
 <div class="dw-bg hide" id="dwBg"></div><aside class="drawer" id="dw" aria-hidden="true"></aside>
 <div class="dw-bg tw-bg hide" id="twBg"></div>
@@ -2163,7 +2174,7 @@
       comLiberacao('reservaCriar', [S.token, d], 1).then(function (r) { aposReserva(); abrirReserva(r, true); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Reservar'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); (serSel || nm).focus();
+    abrirPagina(); (serSel || nm).focus();
   }
   function abrirReserva(r, nova) {
     var sh = $('fSheet'); sh.innerHTML = '';
@@ -3105,7 +3116,7 @@
     };
     sv.onclick = function () { var l = D.modelos.filter(function (x) { return x.id !== M.id || !M.id; }); if (M.padrao) l.forEach(function (x) { x.padrao = false; }); salvar(M.id ? D.modelos.map(function (x) { return x.id === M.id ? M : (M.padrao ? Object.assign({}, x, { padrao: false }) : x); }) : l.concat([M])); };
     ex.onclick = function () { if (!ex.dataset.c) { ex.dataset.c = 1; ex.textContent = 'Toque de novo para excluir'; return; } salvar(D.modelos.filter(function (x) { return x.id !== M.id; })); };
-    abrirModal(); garantirQR(desCanvas);
+    abrirPagina(); garantirQR(desCanvas);
   }
   /** Reduz a imagem (lado maior até max px) e devolve data URL JPEG. */
   function comprimirImg(file, max, q, cb) {
@@ -3701,7 +3712,7 @@
       comLiberacao('encomendaCriar', [S.token, d], 1).then(function (e) { S.enc = null; abrirEncomenda(e, true); carregarEncomendas(true); })
         .catch(function (er) { ok.disabled = false; ok.textContent = 'Criar encomenda'; m.textContent = er; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
   function abrirEncomenda(e, nova) {
     var sh = $('fSheet'); sh.innerHTML = '';
@@ -6019,7 +6030,7 @@
     mo.onchange = desF; desF();
     var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
     btn(ac, 'Salvar', '', function () { call('rhEscalaAtribuir', [S.token, x.id, { modelo: mo.value, inicio: ini.value, folgas: fl }]).then(function (d) { RH.d = d; RH.em = Date.now(); fecharModal(); avisoTopo('A escala de ' + x.nome + ' foi salva'); abrirRH(S.view); }).catch(function (e2) { erroEm(m, e2); }); });
-    btn(ac, 'Fechar', 'ghost', fecharModal); abrirModal();
+    btn(ac, 'Fechar', 'ghost', fecharModal); abrirPagina();
   }
   function escalaModelos(box, D) {
     var L = JSON.parse(JSON.stringify(D.escalas)), c = el('div', 'card pecard'); box.appendChild(c); c.appendChild(el('h2', '', 'Modelos de escala'));
@@ -6208,7 +6219,7 @@
           perguntar('Funcionário cadastrado', nm.value + '\n\nCódigo do ponto: ' + r.codigo + sis + (r.pin ? '\nPIN provisório: ' + r.pin : '') + '\n\nAnote agora: a senha e o PIN provisórios só aparecem uma vez.', [{ t: 'Abrir a ficha', v: 'ficha' }, { t: 'OK', v: true, cls: 'ghost' }]).then(function (v) { abrirRH(S.view); if (v === 'ficha') formFunc(r.id, RH.d); });
         }).catch(function (e) { erroEm(m, e); });
     });
-    btn(ac, 'Fechar', 'ghost', fecharModal); abrirModal();
+    btn(ac, 'Fechar', 'ghost', fecharModal); abrirPagina();
   }
 
   // ---------- REGISTROS (férias, avaliação, treinamentos, ocorrências, documentos) ----------
@@ -6260,7 +6271,7 @@
         call('rhRegistroSalvar', [S.token, { id: r.id, tipo: r.tipo, func: sf.value, data: da.value, ate: at.value, sub: su.value, titulo: ti.value, obs: ob.value, situacao: sit ? sit.value : '', notas: r.tipo === 'avaliacao' ? notas : undefined, nota: media, horas: nota ? nota.value : '', arquivo: ar ? ar.value : '', assinado: sit && sit.value === 'Assinado' }])
           .then(function () { fecharModal(); avisoTopo('O registro foi salvo com sucesso'); des(); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); });
       };
-      abrirModal();
+      abrirPagina();
     }
     nv.onclick = function () { formReg(null); };
     des();
@@ -6523,6 +6534,7 @@
   window.addEventListener('resize', fecharMenuNav);
 
   function ir(id) {
+    if (PG) { if (!podeSairPagina()) { marcarMenu(S.view); return; } fecharPagina(); }
     if (S.view && S.view !== id && rascunhoSujo(S.view) && !confirm('Você vai perder o que preencheu nesta tela. Sair mesmo assim?')) { marcarMenu(S.view); return; }
     if (S.view && S.view !== id) limparRascunhos(S.view, id);
     if (id === 'pessoa' && !PE) id = 'crm';
@@ -7658,7 +7670,7 @@
       call('contaFinSalvar', [S.token, { id: c ? c.id : '', nome: nome.value, tipo: tp.value, loja: lj.value, inicial: vi.input.value.trim() === '' ? 0 : num(vi.input.value), desde: dt.value, ativa: at ? at.checked : true }])
         .then(function (d) { aposFin(d); fecharModal(); renderFin(); }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); nome.focus();
+    abrirPagina(); nome.focus();
   }
   function formLanc(c, tipo) {
     if (!S.fin) return carregarFin(true);
@@ -7833,7 +7845,7 @@
       call('pagarSalvar', [S.token, d]).then(function (r) { aposPagar(r); S.crm = null; fecharModal(); var b = $('pgAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + (x ? 'Conta atualizada.' : d.repetir > 1 ? d.repetir + ' contas lançadas (uma por mês).' : 'Conta lançada.' + (d.pago ? ' O valor já saiu do saldo.' : '')))); })
         .catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Lançar conta'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); ds.focus();
+    abrirPagina(); ds.focus();
   }
 
   // =========================================================
@@ -7989,7 +8001,7 @@
       call('receberSalvar', [S.token, d]).then(function (r) { aposReceber(r); S.crm = null; fecharModal(); var b = $('rcAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ ' + (x ? 'Conta atualizada.' : d.repetir > 1 ? d.repetir + ' contas lançadas (uma por mês).' : 'Conta lançada.' + (d.recebido ? ' O valor já entrou no saldo.' : '')))); })
         .catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Lançar conta'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); ds.focus();
+    abrirPagina(); ds.focus();
   }
 
   // =========================================================
@@ -8345,7 +8357,7 @@
           .then(function (d) { aposCred(d); fecharModal(); var b = $('cdAviso'); b.innerHTML = ''; b.appendChild(el('div', 'aviso', '✓ Crediário lançado.')); })
           .catch(function (e) { ok.disabled = false; ok.textContent = 'Lançar crediário'; m.textContent = e; m.classList.add('show'); });
       };
-      abrirModal();
+      abrirPagina();
     };
     if (S.crm) go(); else call('crmListar', [S.token]).then(function (r) { aposCrm(r); go(); }).catch(function (e) { var b = $('cdAviso'); b.innerHTML = ''; b.appendChild(el('div', 'msg err show', e)); });
   }
@@ -10844,7 +10856,7 @@
         aparelho: { marca: mc.value, modelo: md.value, gb: gb.value, cor: cor.value, imei: im.value, imei2: im2.value, serial: se.value, bateria: bt.value, classif: cl.value, obs: ob.value } }])
         .then(function (r) { aposCC(r.dados); fecharModal(); avisoTopo('A compra ' + r.id + ' foi salva'); detalheCC(r.id); }).catch(function (e) { erroEm(m, e); });
     });
-    btn(ac, 'Fechar', 'ghost', fecharModal); abrirModal();
+    btn(ac, 'Fechar', 'ghost', fecharModal); abrirPagina();
   }
   function ccAchar(id) { return CC.d.lista.filter(function (z) { return z.id === id; })[0]; }
   function linkAssCC(tok) { return location.origin + location.pathname + '?ass=' + tok; }
@@ -11523,7 +11535,7 @@
       call('editarAparelho', [S.token, x.linha, x.imei, d]).then(function (l) { S.disp = l; S.venda = null; S.manut = null; fecharModal(); renderDisp(); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar alterações'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
   function abrirTirarManut(x, depois) {
     var sh = $('fSheet'); sh.innerHTML = '';
@@ -11771,7 +11783,7 @@
         var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ ' + nome.value.trim().toUpperCase() + (x ? ' atualizado.' : ' cadastrado.')));
       }).catch(function (e) { ok.disabled = false; ok.textContent = x ? 'Salvar' : 'Cadastrar produto'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); if (!x) nome.focus();
+    abrirPagina(); if (!x) nome.focus();
   }
   function abrirPrecificacao(o) {
     o = o || { cfg: S.prec, tit: 'Precificação dos produtos novos', acao: 'precConfigSalvar', apos: function (d) { aposNovos(d); var box = $('nAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ Precificação salva e preços recalculados.')); } };
@@ -11873,7 +11885,7 @@
       call('avaliacaoModeloSalvar', [S.token, marca, sm.value, d]).then(function () { return call('avaliacaoTravarSalvar', [S.token, marca, sm.value, trav]); }).then(function (r) { S.u.aval = r.aval; TV.preencher(); ok.disabled = false; ok.textContent = 'Salvar'; avisoTopo('Os valores de ' + sm.value + ' foram salvos com sucesso'); calcAval(); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
   function abrirEditarAval(modelo) {
     var lista = S.u.iphones || [];
@@ -11911,7 +11923,7 @@
         $('aModelo').value = sm.value; montarAval();
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar na planilha'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
   // ---------- avaliação de usados por marca ----------
   var APPLE_ITENS = [{ id: 'bat', nome: 'Saúde da bateria', opcoes: ['85% ou mais', '84% a 80%', 'Abaixo de 80%'] },
@@ -12014,7 +12026,7 @@
         if (depois) depois(r.novoModelo, d.marca);
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Cadastrar modelo'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); setTimeout(function () { nm.focus(); }, 50);
+    abrirPagina(); setTimeout(function () { nm.focus(); }, 50);
   }
   function setDecisao(box, txt, cls) { box.textContent = txt; box.className = 'decisao ' + (cls || 'info'); }
   function calcAval() {
@@ -12156,7 +12168,7 @@
         var box = $('vAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ ' + nome + ' incluído.'));
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Incluir modelo'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); mod.focus();
+    abrirPagina(); mod.focus();
   };
 
   function renderVenda() {
@@ -12494,7 +12506,7 @@
         var box = $('vAviso'); box.innerHTML = ''; box.appendChild(el('div', 'aviso', '✓ Preços de ' + x.modelo + ' atualizados.'));
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal(); var pri = ins.bom; pri.focus(); pri.select();
+    abrirPagina(); var pri = ins.bom; pri.focus(); pri.select();
   }
   // caixa lateral do modelo (igual à dos produtos)
   function abrirDrawerPreco(modelo) {
@@ -14202,7 +14214,7 @@
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(cc); ac.appendChild(ok); c.appendChild(ac);
     cc.onclick = fecharModal;
     ok.onclick = function () { ok.disabled = true; call('osCfgSalvar', [S.token, { termos: tx.value, garantiaDias: gd.value }]).then(function (r) { aposOS(r); fecharModal(); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); }); };
-    abrirModal();
+    abrirPagina();
   }
 
   // =========================================================
@@ -14413,7 +14425,7 @@
       L.forEach(function (e) { if (e.orig && e.nome.trim() && e.orig !== e.nome.trim()) ren[e.orig] = e.nome.trim(); });
       ok.disabled = true; call('osEtapasSalvar', [S.token, lista, ren]).then(function (d) { aposOS(d); fecharModal(); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); });
     };
-    abrirModal();
+    abrirPagina();
   }
 
   // =========================================================
@@ -14648,8 +14660,41 @@
     ok.onclick = function () { m.classList.remove('show'); ok.disabled = true; C.fundoPadrao = num(fw.input.value) || 0; call('caixaCfgSalvar', [S.token, C]).then(function (r) { aposCaixa(r); ok.disabled = false; ok.textContent = '✓ Salvo'; setTimeout(function () { ok.textContent = 'Salvar configuração do caixa'; }, 1500); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); }); };
   }
 
-  function fecharModal() { $('fModal').classList.add('hide'); document.body.style.overflow = ''; }
-  function abrirModal() { $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModal(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
+  function fecharModal() { if (PG) { fecharPagina(); return; } $('fModal').classList.add('hide'); document.body.style.overflow = ''; }
+  // ---------- Leva 6: cadastro em página
+  // O formulário continua sendo desenhado em #fSheet; abrirPagina() o mostra no lugar da lista,
+  // com "← Voltar", o caminho no topo e o aviso de descartar. O voltar do celular volta para a lista.
+  var PG = null, PG_IGN = false;
+  function nomeViewAtual() { var v = VIEWS.filter(function (z) { return z.id === S.view; })[0]; if (!v) return ({ config: 'Configurações', pessoa: 'CRM › Clientes/Fornecedores', prod: 'Produtos', ctrlest: 'Controle de Estoque' })[S.view] || ''; return (v.menu ? v.menu + ' › ' : '') + v.nome; }
+  function abrirPagina(caminho) {
+    var sh = $('fSheet'), h = sh.querySelector('h2.tt'), tit = h ? h.textContent.replace(/^✓\s*/, '') : '';
+    if (!caminho) caminho = nomeViewAtual();
+    $('pgCrumb').textContent = caminho + (tit ? ' › ' + tit : ''); $('pgTit').textContent = tit;
+    if (!PG) { try { history.pushState({ gpg: 1 }, ''); } catch (e) {} }
+    PG = { sujo: false };
+    $('fModal').classList.add('hide'); document.body.style.overflow = '';
+    sh.classList.add('pgsheet'); $('pgCorpo').appendChild(sh);
+    // "Cancelar"/"Fechar" do formulário passam a perguntar antes de descartar, como o Voltar
+    Array.prototype.forEach.call(sh.querySelectorAll('button'), function (b) { if (b.onclick === fecharModal) b.onclick = voltarPagina; });
+    fecharDrawer(); document.body.classList.add('pgon'); show('vPg', true); window.scrollTo(0, 0);
+  }
+  function fecharPagina(semHistorico) {
+    if (!PG) return; PG = null;
+    var sh = $('fSheet'); sh.classList.remove('pgsheet'); $('fModal').appendChild(sh);
+    document.body.classList.remove('pgon'); show('vPg', false);
+    if (!semHistorico && history.state && history.state.gpg) { PG_IGN = true; try { history.back(); } catch (e) { PG_IGN = false; } }
+  }
+  function podeSairPagina() { return !PG || !PG.sujo || confirm('Descartar alterações?'); }
+  function voltarPagina() { if (podeSairPagina()) fecharPagina(); }
+  $('pgVoltar').onclick = voltarPagina;
+  ['input', 'change'].forEach(function (ev) { $('fSheet').addEventListener(ev, function () { if (PG) PG.sujo = true; }); });
+  window.addEventListener('popstate', function () {
+    if (PG_IGN) { PG_IGN = false; return; }
+    if (!PG) return;
+    if (PG.sujo && !confirm('Descartar alterações?')) { try { history.pushState({ gpg: 1 }, ''); } catch (e) {} return; }
+    fecharPagina(true);
+  });
+  function abrirModal() { if (PG) fecharPagina(); $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModal(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
   $('gear').onclick = function () { CFG.aba = window.innerWidth >= 820 ? 'conta' : null; CFG.eq = null; ir('config'); };
 
   // ---------- Configurações › Transferências entre empresas
