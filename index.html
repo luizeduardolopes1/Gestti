@@ -92,6 +92,9 @@
   .prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
   .prefix input{padding-left:40px}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tagsel{position:relative}.tagsel input{margin:0}.tagsel .sug{position:absolute;left:0;right:0;top:100%;z-index:30;background:var(--card);border:1px solid var(--line);border-radius:10px;margin-top:4px;max-height:240px;overflow:auto;box-shadow:0 6px 18px rgba(15,27,45,.12)}
+  .tagsel .sug button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);padding:9px 12px;font-size:14px;cursor:pointer}.tagsel .sug button:hover,.tagsel .sug button:focus{background:var(--soft)}
+  .tagsel .chips .chip{display:inline-flex;align-items:center;gap:6px}.tagsel .chips .chip b{font-weight:700;font-size:15px;line-height:1}
   .tagbox{border:1.5px dashed var(--line);border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--card)}
   .tchip{display:inline-flex;align-items:center;gap:7px;border:1.5px dotted var(--muted);background:transparent;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer}
   .tchip::before{content:'';width:10px;height:10px;border-radius:50%;border:2px solid var(--muted);box-sizing:border-box;flex:0 0 auto}
@@ -842,6 +845,7 @@
   .fminis{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.fmini{position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:2px solid transparent;cursor:pointer}.fmini.on{border-color:var(--accent)}.fmini img{width:100%;height:100%;object-fit:cover}
   .fmini .fx{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:14px;line-height:1;cursor:pointer}
   .fmini .fc{position:absolute;bottom:2px;left:2px;right:2px;border:0;border-radius:6px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:2px;cursor:pointer}
+  .fmini .fcap{position:absolute;bottom:2px;left:2px;right:2px;border-radius:6px;background:var(--brand);color:#fff;font-size:10px;font-weight:700;padding:2px;text-align:center;pointer-events:none}
   .fotos label.btn{width:auto;margin:0;cursor:pointer}.fotos.carregando{opacity:.55;pointer-events:none}
   .vdthumb{width:36px;height:36px;object-fit:cover;border-radius:6px;flex:none;margin-right:8px}
   .etqprev{background:#fff;padding:10px;border-radius:8px;overflow:auto;margin-top:8px}.etqprev .etq{box-shadow:0 0 0 1px #999;background:#fff;color:#000}
@@ -1364,6 +1368,7 @@
         <label id="sdLojasRot">Depósitos <span style="font-weight:400;color:var(--muted)">(nenhum marcado = todos)</span></label>
         <div class="chips" id="sdLojas"></div>
         <label class="ckl"><input type="checkbox" id="sdClass"> Separar usados por classificação</label>
+        <label class="ckl"><input type="checkbox" id="sdVerClass"> Mostrar classificações</label>
         <select id="sdSit" class="hide"><option value=""></option></select>
         <label>Tags</label>
         <div class="chips" id="sdTags"></div>
@@ -1553,6 +1558,7 @@
           <div class="hint">Usado = aparelho com IMEI. Trocando a condição, o cadastro continua como produto comum.</div>
         </div></div>
       </div>
+      <div id="cFotosW"></div>
       <div class="card pecard">
         <h2>Identificação</h2>
         <div class="g2"><div>
@@ -1631,7 +1637,6 @@
         <input id="cLocal" autocomplete="off" maxlength="40" placeholder="Ex.: Vitrine 1, gaveta B">
         <div class="hint">Aparelho com IMEI entra sempre 1 por cadastro. O custo do aparelho é o custo de compra (ou o preço unitário, se o custo ficar em branco).</div>
       </div>
-      <div id="cFotosW"></div>
       <div class="card pecard hide" id="cPrecoBox">
         <h2>Preço de venda</h2>
         <div id="cPrecoCorpo"></div>
@@ -3443,7 +3448,8 @@
           im.onclick = function () { ci.src = fotoUrl(id, 900); cap.href = fotoUrl(id, 2000); };
           if (podeEditar) {
             var x = el('button', 'fx', '×'); x.type = 'button'; x.title = 'Tirar esta foto'; x.onclick = function () { if (!x.dataset.c) { x.dataset.c = 1; x.textContent = '?'; x.title = 'Toque de novo para tirar'; return; } ocupado(true); call('fotoRemover', [S.token, ref, id]).then(function (r) { L = r.fotos; fim(); }).catch(erro); }; b.appendChild(x);
-            if (i > 0) { var c = el('button', 'fc', 'Capa'); c.type = 'button'; c.onclick = function () { var n = [id].concat(L.filter(function (z) { return z !== id; })); ocupado(true); call('fotoOrdem', [S.token, ref, n]).then(function (r) { L = r.fotos; fim(); }).catch(erro); }; b.appendChild(c); }
+            if (i === 0) b.appendChild(el('span', 'fcap', '★ Capa'));
+            if (i > 0) { var c = el('button', 'fc', '☆ Capa'); c.type = 'button'; c.title = 'Usar como capa (aparece na lista)'; c.onclick = function () { var n = [id].concat(L.filter(function (z) { return z !== id; })); ocupado(true); call('fotoOrdem', [S.token, ref, n]).then(function (r) { L = r.fotos; fim(); }).catch(erro); }; b.appendChild(c); }
           }
           mini.appendChild(b);
         });
@@ -3454,7 +3460,7 @@
         var an = el('label', 'btn ghost', 'Anexar do computador'), ai = el('input'); ai.type = 'file'; ai.accept = 'image/*'; ai.multiple = true; ai.className = 'hide'; an.appendChild(ai);
         ci2.onchange = function () { enviar(ci2.files); }; ai.onchange = function () { enviar(ai.files); };
         ac.appendChild(cam); ac.appendChild(an); w.appendChild(ac);
-        w.appendChild(el('div', 'hint', L.length + ' de 6 fotos. A primeira é a capa.'));
+        w.appendChild(el('div', 'hint', L.length + ' de 6 fotos. A capa (★) aparece no quadradinho da lista.'));
       }
       w.appendChild(m);
     }
@@ -3479,7 +3485,7 @@
     var P = [], w = el('div'); c.appendChild(w);
     function des() {
       w.innerHTML = '';
-      if (P.length) { var mini = el('div', 'fminis'); P.forEach(function (f, i) { var b = el('div', 'fmini' + (i === 0 ? ' on' : '')), im = el('img'); im.alt = ''; im.src = f.mini; b.appendChild(im); var x = el('button', 'fx', '×'); x.type = 'button'; x.title = 'Tirar esta foto'; x.onclick = function () { P.splice(i, 1); des(); }; b.appendChild(x); if (i > 0) { var cp = el('button', 'fc', 'Capa'); cp.type = 'button'; cp.onclick = function () { P.unshift(P.splice(i, 1)[0]); des(); }; b.appendChild(cp); } mini.appendChild(b); }); w.appendChild(mini); }
+      if (P.length) { var mini = el('div', 'fminis'); P.forEach(function (f, i) { var b = el('div', 'fmini' + (i === 0 ? ' on' : '')), im = el('img'); im.alt = ''; im.src = f.mini; b.appendChild(im); var x = el('button', 'fx', '×'); x.type = 'button'; x.title = 'Tirar esta foto'; x.onclick = function () { P.splice(i, 1); des(); }; b.appendChild(x); if (i === 0) b.appendChild(el('span', 'fcap', '★ Capa')); if (i > 0) { var cp = el('button', 'fc', '☆ Capa'); cp.type = 'button'; cp.title = 'Usar como capa (aparece na lista)'; cp.onclick = function () { P.unshift(P.splice(i, 1)[0]); des(); }; b.appendChild(cp); } mini.appendChild(b); }); w.appendChild(mini); }
       if (P.length < 6) {
         var ac = el('div', 'acoes');
         var cam = el('label', 'btn ghost', '📷 Tirar foto'), ci = el('input'); ci.type = 'file'; ci.accept = 'image/*'; ci.setAttribute('capture', 'environment'); ci.className = 'hide'; cam.appendChild(ci);
@@ -3487,7 +3493,7 @@
         ci.onchange = function () { add(ci.files); }; ai.onchange = function () { add(ai.files); };
         ac.appendChild(cam); ac.appendChild(an); w.appendChild(ac);
       }
-      w.appendChild(el('div', 'hint', P.length + ' de 6 fotos. A primeira é a capa. Elas sobem junto quando você salvar.'));
+      w.appendChild(el('div', 'hint', P.length + ' de 6 fotos. A capa (★) aparece no quadradinho da lista. Elas sobem junto quando você salvar.'));
     }
     function add(files) {
       var fs = Array.prototype.slice.call(files || []).slice(0, 6 - P.length);
@@ -10522,7 +10528,29 @@
     chipsMulti($('sdLojas'), d.lojas, SD.lojas, renderSaldo);
     var tags = {}; d.produtos.forEach(function (p) { (p.tags || []).forEach(function (t) { tags[t] = 1; }); }); ((S.u.catalogo || {}).tags || []).forEach(function (t) { tags[t.nome || t] = 1; });
     var tl = Object.keys(tags).sort(); SD.tags = SD.tags.filter(function (t) { return tl.indexOf(t) > -1; });
-    chipsMulti($('sdTags'), tl, SD.tags, renderSaldo);
+    seletorTags($('sdTags'), tl, SD.tags, renderSaldo);
+  }
+  /** Tags: campo com busca; as escolhidas viram etiquetas com × (a lista inteira não aparece mais). */
+  function seletorTags(box, lista, sel, fn) {
+    box.innerHTML = ''; box.className = 'tagsel';
+    var ip = el('input'); ip.type = 'search'; ip.placeholder = lista.length ? 'Buscar tag…' : 'Nenhuma tag cadastrada'; ip.disabled = !lista.length; ip.setAttribute('aria-label', 'Buscar tag');
+    var sug = el('div', 'sug hide'), ch = el('div', 'chips');
+    box.appendChild(ip); box.appendChild(sug); box.appendChild(ch);
+    function chips() {
+      ch.innerHTML = '';
+      sel.forEach(function (t) { var b = el('button', 'chip on'); b.type = 'button'; b.appendChild(document.createTextNode(t)); b.appendChild(el('b', '', '×')); b.setAttribute('aria-label', 'Tirar a tag ' + t); b.onclick = function () { sel.splice(sel.indexOf(t), 1); chips(); fn(); }; ch.appendChild(b); });
+    }
+    function abrir() {
+      var w = semAc(ip.value.trim()), l = lista.filter(function (t) { return sel.indexOf(t) < 0 && (!w || semAc(t).indexOf(w) > -1); }).slice(0, 30);
+      sug.innerHTML = '';
+      if (!l.length) sug.appendChild(el('div', 'hint', w ? 'Nenhuma tag com "' + ip.value.trim() + '".' : 'Todas já escolhidas.')).style.padding = '9px 12px';
+      l.forEach(function (t) { var b = el('button', '', t); b.type = 'button'; b.onmousedown = function (e) { e.preventDefault(); }; b.onclick = function () { sel.push(t); ip.value = ''; chips(); abrir(); fn(); }; sug.appendChild(b); });
+      sug.classList.remove('hide');
+    }
+    ip.addEventListener('focus', abrir); ip.addEventListener('input', abrir);
+    ip.addEventListener('blur', function () { setTimeout(function () { sug.classList.add('hide'); }, 150); });
+    ip.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); var b = sug.querySelector('button'); if (b) b.click(); } else if (e.key === 'Escape') { ip.blur(); } });
+    chips();
   }
   /** Usados juntos por modelo (a classificação só separa quando o filtro pede). */
   function saldoProdutos(d) {
@@ -10561,7 +10589,7 @@
     var k = $('sdKpis'); k.innerHTML = '';
     kpi(k, 'Produtos', inteiro(L.length), 'no filtro');
     kpi(k, 'Unidades', inteiro(L.reduce(function (a, x) { return a + x.t; }, 0)), dataTxt);
-    var nomeP = function (x) { return x.p.nome + (x.p.classifs && x.p.classifs.length > 1 ? ' · ' + x.p.classifs.join(', ') : ''); };
+    var nomeP = function (x) { return x.p.nome + ($('sdVerClass').checked && x.p.classifs && x.p.classifs.length > 1 ? ' · ' + x.p.classifs.join(', ') : ''); };
     var skuP = function (x) { return x.p.usado ? 'Usado' : (x.p.sku || '—'); }, grP = function (x) { return x.p.grupo ? x.p.grupo.split(SEP).join(' › ') : '—'; };
     var box = $('sdCorpo'); box.innerHTML = '';
     if (SD.agr) {
@@ -10579,6 +10607,8 @@
   $('sdData').addEventListener('change', function () { if ($('sdData').value) carregarSaldo(); });
   $('sdSit').addEventListener('change', renderSaldo);
   $('sdClass').addEventListener('change', renderSaldo);
+  $('sdVerClass').checked = !!LS.get('sdVerClass', false);
+  $('sdVerClass').addEventListener('change', function () { LS.set('sdVerClass', $('sdVerClass').checked); renderSaldo(); });
   $('sdEmp').addEventListener('change', function () { SD.lojas = []; carregarSaldo(); });
   $('sdBusca').addEventListener('input', renderSaldo);
   $('sdAgr').onclick = function () { SD.agr = !SD.agr; renderSaldo(); };
@@ -10735,7 +10765,7 @@
     var res = el('div', 'card'); dir.appendChild(res);
     var m = el('div', 'msg err'); dir.appendChild(m);
     var ac = el('div', 'acoes'); ac.style.flexWrap = 'wrap'; dir.appendChild(ac);
-    var bw = el('button', 'btn ok', 'Enviar no WhatsApp'), bp = el('button', 'btn ghost', 'Gerar PDF'), bv = el('button', 'btn', 'Transformar em venda'); [bw, bp, bv].forEach(function (b) { b.type = 'button'; ac.appendChild(b); });
+    var bw = el('button', 'btn ok', 'Enviar no WhatsApp'), bc = el('button', 'btn ghost', 'Copiar mensagem'), bp = el('button', 'btn ghost', 'Gerar PDF'), bv = el('button', 'btn', 'Transformar em venda'); [bw, bc, bp, bv].forEach(function (b) { b.type = 'button'; ac.appendChild(b); });
     function atualizar() {
       var T = ppTotais(); res.innerHTML = '';
       res.appendChild(el('div', 'k', 'Resumo'));
@@ -10758,6 +10788,12 @@
       var sv = PP.salva ? Promise.resolve() : salvar(); if (!sv) return;
       var txt = textoProposta(), w = (PP.cli.whats || '').replace(/\D/g, '');
       sv.then(function () { window.open('https://wa.me/' + (w ? '55' + w : '') + '?text=' + encodeURIComponent(txt), '_blank', 'noopener'); }).catch(function () {});
+    };
+    // copia o mesmo texto do WhatsApp na hora do clique (o navegador só deixa copiar dentro do clique) e depois salva a proposta
+    bc.onclick = function () {
+      if (!PP.salva && PP.cliModo === 'novo') { salvar(); return; }
+      copiar(textoProposta(), bc).then(function (ok) { avisoTopo(ok ? 'Mensagem copiada' : 'Não deu para copiar neste navegador'); });
+      if (!PP.salva) { var sv = salvar(); if (sv) sv.catch(function () {}); }
     };
     bp.onclick = function () {
       var sv = PP.salva ? Promise.resolve() : salvar(); if (!sv) return;
