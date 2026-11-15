@@ -964,6 +964,13 @@
   #acLista .prow,#nLista .prow{grid-template-columns:52px minmax(0,1fr) 130px 190px 130px 24px}
   .estmat td.sk{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
   @media (max-width:899px){.pskuc{display:none}.skumob{display:block}#acLista .prow,#nLista .prow{grid-template-columns:44px minmax(0,1fr) auto}}
+  .ccbusca{position:relative;margin-bottom:6px}.ccbusca .sug{position:absolute;left:0;right:0;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(16,24,40,.12);max-height:300px;overflow:auto}
+  .ccbusca .sug button{display:block;width:100%;text-align:left;padding:9px 12px;background:none;border:0;border-top:1px solid var(--line);cursor:pointer;color:var(--ink)}.ccbusca .sug button:first-child{border-top:0}.ccbusca .sug button:hover{background:var(--soft2)}
+  .ccbusca .sug small{color:var(--muted)}
+  .alerta.avisorg{background:var(--warn-bg);color:var(--warn);margin:0 0 10px}
+  .ccfotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:10px 0}
+  .ccfoto{position:relative;display:block;border:2px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer}.ccfoto.on{border-color:var(--accent)}
+  .ccfoto img{display:block;width:100%;aspect-ratio:1;object-fit:cover}.ccfoto input{position:absolute;top:8px;left:8px;width:20px;height:20px;margin:0;accent-color:var(--accent)}
 </style>
 </head>
 <body class="tela-login">
@@ -1530,8 +1537,8 @@
     <div id="cmCorpo"></div>
   </section>
   <section id="vCompraCel" class="hide">
-    <div class="crumb">Suprimento</div>
-    <div class="ptopo"><h1>Compra de Celulares</h1></div>
+    <div class="crumb">Suprimento › Compra de Celulares</div>
+    <div class="ptopo"><h1 id="ccTit">Kanban</h1></div>
     <div id="ccCorpo"></div>
   </section>
   <section id="vMetRel" class="hide">
@@ -1966,7 +1973,11 @@
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
     { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios', menu: 'Suprimento', desc: 'Cadastro, preço e estoque dos produtos' },
-    { id: 'compracel', sec: 'vCompraCel', nome: 'Compra de Celulares', perm: 'cadastro', permOu: 'parceira', menu: 'Suprimento', desc: 'Compra de usado com contrato e assinatura, parceiras e Upgrade (Kanban)' },
+    { id: 'ccnova', sec: 'vCompraCel', nome: 'Nova compra', perm: 'cadastro', permOu: 'parceira', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Nova compra', desc: 'Comprar um usado do cliente: dados, fotos, contrato e assinatura' },
+    { id: 'compracel', sec: 'vCompraCel', nome: 'Kanban', perm: 'cadastro', permOu: 'parceira', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Kanban', desc: 'Compras de usados por etapa (loja, parceiras e Upgrade)' },
+    { id: 'cclista', sec: 'vCompraCel', nome: 'Lista', perm: 'cadastro', permOu: 'parceira', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Lista', desc: 'Todas as compras de usados, com busca' },
+    { id: 'ccparc', sec: 'vCompraCel', nome: 'Lojas Parceiras', perm: 'compras', permOu: 'equipe', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Lojas Parceiras', desc: 'Cadastro das lojas parceiras, login e pagamento' },
+    { id: 'ccpag', sec: 'vCompraCel', nome: 'Pagamentos', perm: 'parceira', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Pagamentos', desc: 'O que a loja já pagou e o que falta receber' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Produtos', desc: 'Aparelhos seminovos e outros produtos usados' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Manutenção', desc: 'Quadro de conserto dos aparelhos usados' },
     { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Suprimento', desc: 'Saldo de cada produto por loja e lançamentos' },
@@ -4003,10 +4014,11 @@
   var ICO_VIEW = { encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista', proposta: 'recibo', finest: 'moedas',
-                   compracel: 'celcompra', metrel: 'grafico', rhdash: 'grafico', ponto: 'engrenagem', rhfunc: 'usuario', rhferiados: 'calendario', rhjornada: 'relogio', rhescalas: 'escala',
+                   compracel: 'quadro', ccnova: 'mais', cclista: 'lista', ccparc: 'aperto', ccpag: 'carteira', metrel: 'grafico', rhdash: 'grafico', ponto: 'engrenagem', rhfunc: 'usuario', rhferiados: 'calendario', rhjornada: 'relogio', rhescalas: 'escala',
                    rhpontos: 'digital', rhverificar: 'busca', rhbanco: 'ampulheta', rhcentral: 'dre', rhcarreira: 'escada', rhorg: 'organograma', rhferias: 'sol', rhaval: 'estrela',
                    rhtrein: 'chapeu', rhocorr: 'alerta', rhdocs: 'conta', rhfolha: 'moedas' };
   var SBM = { aberto: {} };
+  var SUB_ABRE = { 'Compra de Celulares': 'compracel' }; // Leva 6: clicar no subgrupo abre o Kanban
   function semAc(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function itemMenu(v) {
     var b = el('button', 'sbi'); b.type = 'button'; b.dataset.v = v.id; b.innerHTML = '<span class="ic">' + svgIco(ICO_VIEW[v.id]) + '</span>';
@@ -4021,6 +4033,7 @@
     b.appendChild(el('span', 'sbl', nome)); b.appendChild(el('span', 'ar', '›')); b.title = nome; b.setAttribute('aria-expanded', 'false');
     b.onclick = function () {
       var on = !b.classList.contains('aberto'); SBM.aberto[chave] = on; b.classList.toggle('aberto', on); b.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (on && SUB_ABRE[nome] && S.view !== SUB_ABRE[nome]) { ir(SUB_ABRE[nome]); fecharSb(); }
       if (!on) return;
       // abrir um grupo fecha os outros do mesmo nível (grupo com grupo, subgrupo com subgrupo do mesmo grupo)
       var pai = chave.indexOf('|') > -1 ? chave.split('|')[0] : null;
@@ -6609,7 +6622,8 @@
     if (id === 'metas') carregarMetas(S.mt ? S.mt.mes : '');
     if (id === 'comissoes') carregarMetas(S.mt ? S.mt.mes : '', 'com');
     if (id === 'metrel') carregarMetRel();
-    if (id === 'compracel') carregarCC();
+    var abaCC = { ccnova: 'Kanban', compracel: 'Kanban', cclista: 'Lista', ccparc: 'Parceiras', ccpag: 'Pagamentos' }[id];
+    if (abaCC) { CC.aba = abaCC; if (id === 'ccnova') carregarCC(function () { formCC(null); }); else carregarCC(); }
     if (id === 'caixa') carregarCaixa(true);
     if (id === 'reservas') carregarReservas(true);
     if (id === 'encomendas') carregarEncomendas(true);
@@ -10786,8 +10800,9 @@
   function desenharCC() {
     var D = CC.d, b = $('ccCorpo'); b.innerHTML = '';
     var tp = el('div', 'ptopo'); b.appendChild(tp);
-    var abas = ['Kanban', 'Lista'].concat(D.editarParceiras ? ['Parceiras'] : []).concat(D.parceira ? ['Pagamentos'] : []);
-    var sg = el('div', 'seg'); tp.appendChild(sg); seg(sg, abas, CC.aba, function (v) { CC.aba = v; desenharCC(); });
+    if (CC.aba === 'Parceiras' && !D.editarParceiras) CC.aba = 'Kanban';
+    if (CC.aba === 'Pagamentos' && !D.parceira) CC.aba = 'Kanban';
+    $('ccTit').textContent = { Kanban: 'Kanban', Lista: 'Lista', Parceiras: 'Lojas Parceiras', Pagamentos: 'Pagamentos' }[CC.aba] || 'Compra de Celulares';
     if (CC.aba === 'Kanban' || CC.aba === 'Lista') {
       var nv = el('button', 'btn', '+ Nova compra'); nv.type = 'button'; nv.style.width = 'auto'; tp.appendChild(nv); nv.onclick = function () { formCC(null); };
       if (D.conferir) { var cq = el('button', 'btn ghost', '📷 Conferir pelo código'); cq.type = 'button'; cq.style.width = 'auto'; tp.appendChild(cq); cq.onclick = conferirPorCodigo; }
@@ -10834,36 +10849,84 @@
     }
     desLista();
   }
-  /** Formulário da compra: cliente (busca no CRM pelo CPF), aparelho, valor, loja e pagamento (pode dividir). */
+  /** Nova compra (página): vendedor com os campos do cadastro de Clientes (sem RG) e busca de cliente, aparelho, fotos, valor, loja e pagamento. */
   function formCC(x) {
-    var D = CC.d, sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', x ? 'Compra ' + x.id : 'Nova compra de celular'));
+    var D = CC.d, sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', x ? 'Compra ' + x.id : 'Nova compra'));
     var c = el('div', 'card'); sh.appendChild(c);
-    var C = x ? JSON.parse(JSON.stringify(x.cliente)) : {}, A = x ? JSON.parse(JSON.stringify(x.aparelho)) : { marca: 'Apple', classif: 'Bom' };
+    var C = x ? JSON.parse(JSON.stringify(x.cliente)) : {}, A = x ? JSON.parse(JSON.stringify(x.aparelho)) : { marca: 'Apple', classif: 'Bom' }, PS = (x && x.dados.pessoais) || {};
+    if (D.avisoRG) c.appendChild(el('div', 'alerta avisorg', 'O texto do contrato de compra desta loja ainda cita o RG, que não é mais pedido. Ajuste em Configurações › Modelos de documento.'));
+    // busca de cliente já cadastrado (a parceira só encontra os clientes que ela cadastrou)
+    var bw = el('div', 'ccbusca'); c.appendChild(bw);
+    var bq = campo(bw, 'Usar cliente já cadastrado', inp('search', 'Buscar por nome, celular ou CPF')); bq.setAttribute('autocomplete', 'off');
+    var bs = el('div', 'sug hide'); bw.appendChild(bs);
     c.appendChild(el('h3', 'ch', 'Cliente (vendedor do aparelho)'));
-    var g1 = grade(c, 2), cpf = inp('text', '000.000.000-00'); cpf.inputMode = 'numeric'; cpf.value = C.cpf || ''; campo(g1[0], 'CPF *', cpf, true);
-    var nm = inp('text', 'Nome e sobrenome'); nm.value = C.nome || ''; campo(g1[1], 'Nome completo *', nm, true);
-    var g2 = grade(c, 2), rg = inp('text', 'RG'); rg.value = C.rg || ''; campo(g2[0], 'RG *', rg, true); var wp = inp('tel', '(22) 99999-9999'); wp.value = C.whats || ''; campo(g2[1], 'Celular *', wp, true);
-    var g3 = grade(c, 3), cep = inp('text', '00000-000'); cep.value = C.cep || ''; campo(g3[0], 'CEP', cep);
-    var en = inp('text', 'Rua, número'); en.value = C.endereco || ''; campo(g3[1], 'Endereço *', en, true); var ba = inp('text', 'Bairro'); ba.value = C.bairro || ''; campo(g3[2], 'Bairro', ba);
-    var ci = inp('text', 'Cidade/UF'); ci.value = C.cidade || ''; campo(c, 'Cidade *', ci, true);
+    var g1 = grade(c, 2), nm = inp('text', 'Nome e sobrenome'); nm.maxLength = 80; nm.value = C.nome || ''; campo(g1[0], 'Nome completo *', nm);
+    var cpf = inp('text', '000.000.000-00'); cpf.inputMode = 'numeric'; cpf.maxLength = 14; cpf.value = C.cpf ? fmtDoc(C.cpf) : ''; campo(g1[1], 'CPF *', cpf);
+    // dados pessoais: os do cadastro de Clientes, sem RG e órgão emissor (opcionais)
+    var dp = el('details', 'fdet'); dp.appendChild(el('summary', '', 'Dados pessoais (opcional)')); c.appendChild(dp); if (Object.keys(PS).length) dp.open = true;
+    var gp = grade(dp, 3), nasc = campo(gp[0], 'Data de nascimento', inp('date')); nasc.value = PS.nasc || ''; nasc.max = new Date().toISOString().slice(0, 10);
+    var sexo = selecao(gp[1], 'Sexo', ['Não informado', 'Masculino', 'Feminino'], PS.sexo), civil = selecao(gp[2], 'Estado civil', ['Não informado', 'Solteiro', 'Casado', 'Divorciado', 'Viúvo'], PS.civil);
+    var cjW = el('div'); dp.appendChild(cjW); var conj = campo(cjW, 'Nome do cônjuge', inp('text', 'Nome completo do cônjuge')); conj.maxLength = 80; conj.value = PS.conjuge || '';
+    civil.addEventListener('change', function () { cjW.classList.toggle('hide', civil.value !== 'Casado'); }); cjW.classList.toggle('hide', civil.value !== 'Casado');
+    var nat = campo(dp, 'Naturalidade', inp('text', 'Cidade/UF')); nat.maxLength = 60; nat.value = PS.naturalidade || '';
+    var gp2 = grade(dp, 2), mae = campo(gp2[0], 'Nome da mãe', inp('text', '')); mae.maxLength = 80; mae.value = PS.mae || ''; var pai = campo(gp2[1], 'Nome do pai', inp('text', '')); pai.maxLength = 80; pai.value = PS.pai || '';
+    var gp3 = grade(dp, 2), trab = campo(gp3[0], 'Local de trabalho', inp('text', '')); trab.maxLength = 80; trab.value = PS.trabalho || ''; var ativ = campo(gp3[1], 'Atividade exercida', inp('text', 'Profissão / cargo')); ativ.maxLength = 80; ativ.value = PS.atividade || '';
+    var gp4 = grade(dp, 2), renda = dinheiro(gp4[0], 'Renda mensal', PS.renda);
+    var esc = selecao(gp4[1], 'Escolaridade', ['Não informado', 'Fundamental incompleto', 'Fundamental completo', 'Médio incompleto', 'Médio completo', 'Superior incompleto', 'Superior completo', 'Pós-graduação'], PS.escolaridade);
+    // contato e endereço (mesma ordem do cadastro de Clientes)
+    c.appendChild(el('h3', 'ch', 'Contato e endereço'));
+    var g2 = grade(c, 2), wp = inp('tel', '(22) 99999-9999'); wp.value = C.whats ? fmtFone(C.whats) : ''; campo(g2[0], 'Celular *', wp);
+    var em = inp('email', 'opcional'); em.maxLength = 80; em.value = C.email || ''; campo(g2[1], 'E-mail', em);
+    var g3 = grade(c, 2), cep = inp('text', '00000-000'); cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = C.cep || ''; campo(g3[0], 'CEP', cep);
+    var ci = inp('text', 'Cidade/UF'); ci.value = C.cidade || ''; campo(g3[1], 'Cidade *', ci);
+    var en = inp('text', 'Rua, avenida…'); en.maxLength = 120; en.value = C.endereco || ''; campo(c, 'Endereço (rua, avenida…) *', en);
+    var g4b = grade(c, 2), nu = inp('text', 'Ex.: 120 ou S/N'); nu.maxLength = 10; nu.value = C.numero || ''; campo(g4b[0], 'Número', nu);
+    var co = inp('text', 'Ex.: casa 2, apto 301'); co.maxLength = 40; co.value = C.complemento || ''; campo(g4b[1], 'Complemento', co);
+    var ba = inp('text', 'Bairro'); ba.value = C.bairro || ''; campo(c, 'Bairro', ba);
+    function preencher(p) {
+      nm.value = p.nome || ''; cpf.value = p.cpf ? fmtDoc(p.cpf) : ''; wp.value = p.whats ? fmtFone(p.whats) : ''; em.value = p.email || ''; cep.value = p.cep || '';
+      ci.value = p.cidade || ''; en.value = p.endereco || ''; nu.value = p.numero || ''; co.value = p.complemento || ''; ba.value = p.bairro || '';
+      var q = p.pessoais || {}; nasc.value = q.nasc || ''; sexo.value = q.sexo || 'Não informado'; civil.value = q.civil || 'Não informado'; conj.value = q.conjuge || ''; nat.value = q.naturalidade || '';
+      mae.value = q.mae || ''; pai.value = q.pai || ''; trab.value = q.trabalho || ''; ativ.value = q.atividade || ''; renda.value = q.renda ? vs(q.renda) : ''; esc.value = q.escolaridade || 'Não informado';
+      cjW.classList.toggle('hide', civil.value !== 'Casado'); if (Object.keys(q).length) dp.open = true;
+      avisoTopo('Dados de ' + p.nome + ' preenchidos. Se corrigir algo, o cadastro do cliente é atualizado ao salvar.');
+    }
+    var CLI = CC.cli || null;
+    function buscar() {
+      var q = semAc(bq.value.trim()), dg = soDig(bq.value); bs.innerHTML = '';
+      if (q.length < 2 || !CLI) { bs.classList.add('hide'); return; }
+      var l = CLI.filter(function (p) { return semAc(p.nome).indexOf(q) > -1 || (dg.length >= 3 && (String(p.cpf).indexOf(dg) > -1 || String(p.whats).indexOf(dg) > -1)); }).slice(0, 8);
+      if (!l.length) bs.appendChild(el('div', 'hint', 'Nenhum cliente encontrado. Preencha abaixo: ele vira cliente ao salvar.')).style.padding = '9px 12px';
+      l.forEach(function (p) {
+        var o = el('button', ''); o.type = 'button'; o.appendChild(el('b', '', p.nome)); o.appendChild(el('small', '', ' · ' + [fmtDoc(p.cpf), p.whats ? fmtFone(p.whats) : '', p.origem || ''].filter(Boolean).join(' · ')));
+        o.onmousedown = function (e) { e.preventDefault(); }; o.onclick = function () { preencher(p); bq.value = ''; bs.classList.add('hide'); };
+        bs.appendChild(o);
+      });
+      bs.classList.remove('hide');
+    }
+    bq.addEventListener('input', buscar); bq.addEventListener('focus', buscar); bq.addEventListener('blur', function () { setTimeout(function () { bs.classList.add('hide'); }, 150); });
+    if (!CLI) call('ccClientes', [S.token]).then(function (l) { CC.cli = CLI = l; if (document.activeElement === bq) buscar(); }).catch(function () {});
     cpf.onblur = function () {
       var k = soDig(cpf.value); if (k.length !== 11) return; cpf.value = fmtDoc(k);
-      var p = (S.crm || []).filter(function (z) { return soDig(z.doc || z.cpf || '') === k; })[0];
-      if (p) { if (!nm.value) nm.value = p.nome || ''; if (!wp.value) wp.value = p.whats || ''; if (!en.value) en.value = p.endereco || ''; if (!ba.value) ba.value = p.bairro || ''; if (!ci.value) ci.value = p.cidade || ''; if (!cep.value) cep.value = p.cep || ''; avisoTopo('Cliente encontrado no CRM'); }
+      var p = (CLI || []).filter(function (z) { return z.cpf === k; })[0];
+      if (p && !nm.value.trim()) preencher(p);
     };
-    cep.oninput = function () { var k = soDig(cep.value).slice(0, 8); if (k.length !== 8) return; fetch('https://viacep.com.br/ws/' + k + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) { if (!j || j.erro) return; if (!en.value && j.logradouro) en.value = j.logradouro + ', '; if (!ba.value) ba.value = j.bairro || ''; if (!ci.value && j.localidade) ci.value = j.localidade + (j.uf ? '/' + j.uf : ''); }).catch(function () {}); };
+    cep.oninput = function () { var k = soDig(cep.value).slice(0, 8); if (k.length !== 8) return; fetch('https://viacep.com.br/ws/' + k + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) { if (!j || j.erro) return; if (!en.value && j.logradouro) en.value = j.logradouro; if (!ba.value) ba.value = j.bairro || ''; if (!ci.value && j.localidade) ci.value = j.localidade + (j.uf ? '/' + j.uf : ''); }).catch(function () {}); };
     c.appendChild(el('h3', 'ch', 'Aparelho'));
     var g4 = grade(c, 3), mc = el('select'); avMarcas().map(function (m) { return m.nome; }).concat(['Outra']).forEach(function (m) { mc.appendChild(el('option', '', m)).value = m; }); mc.value = A.marca || 'Apple'; campo(g4[0], 'Marca', mc);
-    var md = inp('text', 'Ex.: IPHONE 13 128GB'); md.value = A.modelo || ''; md.setAttribute('list', 'ccModelos'); campo(g4[1], 'Modelo *', md, true);
+    var md = inp('text', 'Ex.: IPHONE 13 128GB'); md.value = A.modelo || ''; md.setAttribute('list', 'ccModelos'); campo(g4[1], 'Modelo *', md);
     var dl = el('datalist'); dl.id = 'ccModelos'; ((S.u.modelos || []).map(function (m) { return m.modelo || m; })).forEach(function (m) { dl.appendChild(el('option')).value = m; }); c.appendChild(dl);
     var gb = inp('text', '128'); gb.value = A.gb || ''; campo(g4[2], 'GB', gb);
-    var g5 = grade(c, 3), cor = inp('text', 'Cor'); cor.value = A.cor || ''; campo(g5[0], 'Cor', cor); var im = inp('text', '15 números'); im.inputMode = 'numeric'; im.maxLength = 15; im.value = A.imei || ''; campo(g5[1], 'IMEI 1 *', im, true);
+    var g5 = grade(c, 3), cor = inp('text', 'Cor'); cor.value = A.cor || ''; campo(g5[0], 'Cor', cor); var im = inp('text', '15 números'); im.inputMode = 'numeric'; im.maxLength = 15; im.value = A.imei || ''; campo(g5[1], 'IMEI 1 *', im);
     var im2 = inp('text', 'opcional'); im2.inputMode = 'numeric'; im2.maxLength = 15; im2.value = A.imei2 || ''; campo(g5[2], 'IMEI 2', im2);
     var g6 = grade(c, 3), se = inp('text', 'opcional'); se.value = A.serial || ''; campo(g6[0], 'Número de série', se); var bt = inp('text', '%'); bt.value = A.bateria || ''; campo(g6[1], 'Bateria (%)', bt);
     var cl = el('select'); ['Bom', 'Ótimo', 'Excelente', 'Recondicionado'].forEach(function (k) { cl.appendChild(el('option', '', k)).value = k; }); cl.value = A.classif || 'Bom'; campo(g6[2], 'Classificação', cl);
     var ob = inp('text', 'Ex.: risco na lateral, sem caixa'); ob.value = A.obs || ''; campo(c, 'Observação (vai no contrato)', ob);
+    var fW = el('div'); c.appendChild(fW);
+    var FT = fotosForm(fW, x ? { tipo: 'cc', id: x.id } : null, x ? x.dados.fotos || [] : []);
+    fW.appendChild(el('div', 'hint', 'Fotos do aparelho (opcional, até 6). Recomendado: frente, verso e tela ligada.'));
     c.appendChild(el('h3', 'ch', 'Valor' + (D.parceira ? '' : ' e pagamento')));
-    var g7 = grade(c, 2), vl = inpValor(x ? vs(x.valor) : ''); campo(g7[0], 'Valor da compra *', vl, true);
+    var g7 = grade(c, 2), vl = inpValor(x ? vs(x.valor) : ''); campo(g7[0], 'Valor da compra *', vl);
     var lj = el('select'); D.lojas.forEach(function (l) { lj.appendChild(el('option', '', depVer(l))).value = l; }); lj.value = x ? x.loja : (S.u.loja && D.lojas.indexOf(S.u.loja) > -1 ? S.u.loja : D.lojas[0]); if (!D.parceira) campo(g7[1], 'Loja', lj);
     var pags = x && x.dados.pagamentos && x.dados.pagamentos.length ? JSON.parse(JSON.stringify(x.dados.pagamentos)) : [{ formaId: (D.formas[0] || {}).id, valor: '' }];
     var pw = el('div'); if (!D.parceira) c.appendChild(pw);
@@ -10883,11 +10946,36 @@
     btn(ac, x ? 'Salvar' : 'Salvar e continuar', '', function () {
       var valor = num(vl.input.value) || 0, P = pags.map(function (p) { return { formaId: p.formaId, valor: pags.length === 1 && !p.valor ? valor : p.valor }; });
       call('ccSalvar', [S.token, { id: x ? x.id : '', loja: lj.value, valor: valor, pagamentos: D.parceira ? [] : P,
-        cliente: { nome: nm.value, cpf: cpf.value, rg: rg.value, whats: wp.value, cep: cep.value, endereco: en.value, bairro: ba.value, cidade: ci.value },
+        cliente: { nome: nm.value, cpf: cpf.value, whats: wp.value, email: em.value, cep: cep.value, endereco: en.value, numero: nu.value, complemento: co.value, bairro: ba.value, cidade: ci.value },
+        pessoais: { nasc: nasc.value, sexo: sexo.value, civil: civil.value, conjuge: conj.value, naturalidade: nat.value, mae: mae.value, pai: pai.value, trabalho: trab.value, atividade: ativ.value, renda: num(renda.value) || 0, escolaridade: esc.value },
         aparelho: { marca: mc.value, modelo: md.value, gb: gb.value, cor: cor.value, imei: im.value, imei2: im2.value, serial: se.value, bateria: bt.value, classif: cl.value, obs: ob.value } }])
-        .then(function (r) { aposCC(r.dados); fecharModal(); avisoTopo('A compra ' + r.id + ' foi salva'); detalheCC(r.id); }).catch(function (e) { erroEm(m, e); });
+        .then(function (r) {
+          CC.cli = null; // o vendedor pode ter virado cliente: a busca recarrega na próxima compra
+          var fim = function () { fecharModal(); avisoTopo('A compra ' + r.id + ' foi salva'); detalheCC(r.id); };
+          aposCC(r.dados);
+          if (x || !FT.qtd()) return fim();
+          FT.enviarPara({ tipo: 'cc', id: r.id }).then(function () { carregarCC(fim); }).catch(function (e) { fim(); msg('topMsg', 'A compra foi salva, mas uma foto não subiu: ' + e); });
+        }).catch(function (e) { erroEm(m, e); });
     });
-    btn(ac, 'Fechar', 'ghost', fecharModal); abrirPagina();
+    btn(ac, 'Fechar', 'ghost', fecharModal); abrirPagina('Suprimento › Compra de Celulares');
+  }
+  /** Leva 6: antes de o aparelho ir para o estoque, quem cadastra escolhe quais fotos da compra vão para o produto.
+   *  Todas começam desmarcadas (fotos de compra podem mostrar o documento ou o rosto do vendedor). */
+  function escolherFotosCC(x, seguir) {
+    var F = x.dados.fotos || []; if (!F.length) return seguir([]);
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Fotos do produto')); sh.appendChild(el('div', 'sub', x.id + ' · ' + x.aparelho.modelo));
+    var c = el('div', 'card'); sh.appendChild(c);
+    c.appendChild(el('div', 'hint', 'Marque as fotos que vão para o cadastro do produto. As que ficarem desmarcadas continuam só na compra.'));
+    var marc = {}, gr = el('div', 'ccfotos'); c.appendChild(gr);
+    F.forEach(function (id) {
+      var l = el('label', 'ccfoto'), ck = el('input'), im = el('img'); ck.type = 'checkbox'; im.alt = ''; im.src = fotoUrl(id, 300);
+      ck.onchange = function () { marc[id] = ck.checked; l.classList.toggle('on', ck.checked); }; l.appendChild(im); l.appendChild(ck); gr.appendChild(l);
+    });
+    var ac = el('div', 'acoes'); c.appendChild(ac);
+    btn(ac, 'Usar as fotos marcadas', 'ok', function () { var l = F.filter(function (id) { return marc[id]; }); if (!l.length) { avisoTopo('Nenhuma foto marcada. Use "Cadastrar sem foto" ou marque alguma.'); return; } seguir(l); });
+    btn(ac, 'Cadastrar sem foto', 'ghost', function () { seguir([]); });
+    btn(ac, 'Voltar', 'ghost', function () { detalheCC(x.id); });
+    abrirModal();
   }
   function ccAchar(id) { return CC.d.lista.filter(function (z) { return z.id === id; })[0]; }
   function linkAssCC(tok) { return location.origin + location.pathname + '?ass=' + tok; }
@@ -10929,7 +11017,7 @@
     }
     if (x.situacao === 'Aguardando assinatura' && x.origem === 'loja' && D.concluir) {
       var pp = el('label', 'ckl'), ck = el('input'); ck.type = 'checkbox'; pp.appendChild(ck); pp.appendChild(document.createTextNode(' Assinado no papel (contrato impresso)')); if (!x.dados.assinatura) acoes.appendChild(pp);
-      btn(acoes, '✓ Concluir: pagar e pôr no estoque', 'ok', function () { call('ccConcluir', [S.token, x.id, { papel: ck.checked }]).then(function (d) { avisoTopo('Compra ' + x.id + ' concluída: aparelho no estoque'); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+      btn(acoes, '✓ Concluir: pagar e pôr no estoque', 'ok', function () { escolherFotosCC(x, function (fu) { call('ccConcluir', [S.token, x.id, { papel: ck.checked, fotosUsar: fu }]).then(function (d) { avisoTopo('Compra ' + x.id + ' concluída: aparelho no estoque'); reabrir(d); }).catch(function (e) { detalheCC(x.id); msg('topMsg', e); }); }); });
     }
     if (x.situacao === 'Aguardando assinatura' && D.parceira) {
       var pp2 = el('label', 'ckl'), ck2 = el('input'); ck2.type = 'checkbox'; pp2.appendChild(ck2); pp2.appendChild(document.createTextNode(' Assinado no papel')); if (!x.dados.assinatura) acoes.appendChild(pp2);
@@ -10937,7 +11025,7 @@
     }
     if (x.situacao === 'Aguardando chegada') btn(acoes, '🏷 Etiqueta com QR', 'ghost', function () { etiquetaCC(x); });
     if ((x.situacao === 'Aguardando chegada' || x.situacao === 'Upgrade aguardando conferência') && D.conferir) painelConferir(c, x, m, reabrir);
-    if (x.situacao === 'Em conferência' && D.conferir) btn(acoes, 'Lançar no estoque', 'ok', function () { call('ccConferir', [S.token, x.id, { acao: 'lancar' }]).then(function (d) { avisoTopo('Aparelho no estoque'); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+    if (x.situacao === 'Em conferência' && D.conferir) btn(acoes, 'Lançar no estoque', 'ok', function () { escolherFotosCC(x, function (fu) { call('ccConferir', [S.token, x.id, { acao: 'lancar', fotosUsar: fu }]).then(function (d) { avisoTopo('Aparelho no estoque'); reabrir(d); }).catch(function (e) { detalheCC(x.id); msg('topMsg', e); }); }); });
     if (aberta && x.origem !== 'upgrade' && !(x.origem === 'parceira' && x.situacao === 'Aguardando chegada' && !D.parceira)) btn(acoes, 'Cancelar compra', 'ghost', function () {
       var mo = prompt('Motivo do cancelamento:'); if (!mo) return; call('ccCancelar', [S.token, x.id, mo]).then(function (d) { reabrir(d); }).catch(function (e) { erroEm(m, e); });
     });
@@ -10953,7 +11041,12 @@
     var g = grade(bx, 2), v = inpValor(''); v.input.placeholder = up ? 'vazio = está como informado' : brl(x.valor); campo(g[0], up ? 'Quanto vale de verdade' : 'Valor ajustado (opcional)', v);
     var mo = inp('text', 'Ex.: bateria 79%, risco na tela'); campo(g[1], 'Motivo', mo);
     var ac = el('div', 'acoes'); bx.appendChild(ac);
-    btn(ac, up ? '✓ Conferido: pôr no estoque' : '✓ Aceitar', 'ok', function () { var d = { acao: 'aceitar', motivo: mo.value }; if (up) d.valorReal = v.input.value ? num(v.input.value) : ''; else d.valor = v.input.value ? num(v.input.value) : ''; call('ccConferir', [S.token, x.id, d]).then(function (r) { avisoTopo('Conferido'); reabrir(r); }).catch(function (e) { erroEm(m, e); }); });
+    btn(ac, up ? '✓ Conferido: pôr no estoque' : '✓ Aceitar', 'ok', function () {
+      var d = { acao: 'aceitar', motivo: mo.value }; if (up) d.valorReal = v.input.value ? num(v.input.value) : ''; else d.valor = v.input.value ? num(v.input.value) : '';
+      var pc = (CC.d.parceiras || []).filter(function (z) { return z.id === x.dados.parceiraId; })[0], vaiEstoque = up || !pc || pc.destino !== 'compras';
+      var enviar = function (fu) { if (fu) d.fotosUsar = fu; call('ccConferir', [S.token, x.id, d]).then(function (r) { avisoTopo('Conferido'); reabrir(r); }).catch(function (e) { if (fu) { detalheCC(x.id); msg('topMsg', e); } else erroEm(m, e); }); };
+      if (vaiEstoque && (x.dados.fotos || []).length) escolherFotosCC(x, enviar); else enviar(null);
+    });
     if (!up) btn(ac, 'Recusar e devolver', 'ghost', function () { call('ccConferir', [S.token, x.id, { acao: 'recusar', motivo: mo.value }]).then(function (r) { reabrir(r); }).catch(function (e) { erroEm(m, e); }); });
   }
   function verAnexoCC(id, qual) {
@@ -14702,7 +14795,7 @@
   // O formulário continua sendo desenhado em #fSheet; abrirPagina() o mostra no lugar da lista,
   // com "← Voltar", o caminho no topo e o aviso de descartar. O voltar do celular volta para a lista.
   var PG = null, PG_IGN = false;
-  function nomeViewAtual() { var v = VIEWS.filter(function (z) { return z.id === S.view; })[0]; if (!v) return ({ config: 'Configurações', pessoa: 'CRM › Clientes/Fornecedores', prod: 'Produtos', ctrlest: 'Controle de Estoque' })[S.view] || ''; return (v.menu ? v.menu + ' › ' : '') + v.nome; }
+  function nomeViewAtual() { var v = VIEWS.filter(function (z) { return z.id === S.view; })[0]; if (!v) return ({ config: 'Configurações', pessoa: 'CRM › Clientes/Fornecedores', prod: 'Produtos', ctrlest: 'Controle de Estoque' })[S.view] || ''; return [v.menu, v.sub, v.sub ? (v.subNome || v.nome) : v.nome].filter(Boolean).join(' › '); }
   function abrirPagina(caminho) {
     var sh = $('fSheet'), h = sh.querySelector('h2.tt'), tit = h ? h.textContent.replace(/^✓\s*/, '') : '';
     if (!caminho) caminho = nomeViewAtual();
