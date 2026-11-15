@@ -26,7 +26,7 @@
   @media (prefers-color-scheme:dark){.aviso{background:#3A2A0C;color:#FFD891}}
   .erro{color:var(--err);font-size:14px;min-height:20px;margin-top:8px}
   .relogio{font-size:44px;font-weight:800;text-align:center;letter-spacing:1px}.data{text-align:center;color:var(--mut);margin-bottom:6px}
-  .linha{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}.linha:last-child{border-bottom:0}
+  .linha{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}.linha:last-child{border-bottom:0}.linha.hoje{background:var(--soft);border-radius:8px;padding-left:8px;padding-right:8px}
   .linha span:last-child{text-align:right;color:var(--mut)}
   .pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;background:var(--soft);margin-left:6px}
   .pill.ok{background:#E3F4E8;color:#11612F}.pill.err{background:#FDE7E7;color:#9A1C14}.pill.warn{background:#FFF1D6;color:#7A4A00}
@@ -49,6 +49,7 @@
   <button type="button" data-a="ponto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>Ponto</button>
   <button type="button" data-a="justificar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 14h6M9 17h4"/></svg>Justificar</button>
   <button type="button" data-a="mes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Meu mês</button>
+  <button type="button" data-a="escala"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M14 14h2M8 17h2"/></svg>Escala</button>
 </nav>
 <div id="cam"><video id="camV" playsinline muted autoplay></video><div class="moldura"></div><div class="bar"><div id="camSt">Abrindo a câmera…</div><button class="btn ok" id="camOk" type="button" disabled>Capturar</button><button class="btn ghost" id="camNao" type="button">Cancelar</button></div></div>
 <script>
@@ -124,9 +125,9 @@
     $('abas').classList.add('hide'); $('hSair').classList.add('hide'); $('hTit').textContent = 'Gestti Ponto';
     var t = $('tela'); t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c);
     c.appendChild(el('h2', '', 'Entrar no ponto'));
-    c.appendChild(el('div', 'hint', 'Use o código que o RH te passou e o seu PIN.'));
-    var cod = campo(c, 'Código', inp('text', 'Ex.: 1001.grupo')); cod.autocapitalize = 'none'; cod.spellcheck = false; cod.autocomplete = 'username'; cod.value = LS.get('codigo');
-    var pin = campo(c, 'PIN', inp('password', 'PIN')); pin.inputMode = 'numeric'; pin.maxLength = 6; pin.autocomplete = 'current-password';
+    c.appendChild(el('div', 'hint', 'Use o seu usuário ou o código que o RH te passou, e o seu PIN (quem também usa o sistema pode usar a senha).'));
+    var cod = campo(c, 'Usuário ou código', inp('text', 'Ex.: joao.grupo ou 1001.grupo')); cod.autocapitalize = 'none'; cod.spellcheck = false; cod.autocomplete = 'username'; cod.value = LS.get('codigo');
+    var pin = campo(c, 'PIN ou senha', inp('password', 'PIN ou senha')); pin.maxLength = 60; pin.autocomplete = 'current-password';
     var er = el('div', 'erro', m || ''); c.appendChild(er);
     var b = btn(c, 'Entrar', '', function () {
       if (!cod.value.trim() || !pin.value) { er.textContent = 'Informe o código e o PIN.'; return; }
@@ -146,7 +147,7 @@
     S.aba = aba; $('abas').classList.remove('hide'); $('hSair').classList.remove('hide');
     [].forEach.call(document.querySelectorAll('#abas button'), function (b) { b.classList.toggle('on', b.dataset.a === aba); });
     var t = $('tela'); t.innerHTML = ''; t.appendChild(el('div', 'hint', 'Carregando…'));
-    ({ ponto: telaPonto, justificar: telaJustificar, mes: telaMes })[aba](t);
+    ({ ponto: telaPonto, justificar: telaJustificar, mes: telaMes, escala: telaEscala })[aba](t);
   }
 
   // ---------- câmera e rosto ----------
@@ -320,6 +321,27 @@
   }
 
   // ---------- MEU MÊS ----------
+  /** Minha escala: mês atual e o próximo, só para ver (horários, folgas, feriados e férias). */
+  function telaEscala(t) {
+    call('pontoMinhaEscala', [S.token, S.escMes || '']).then(function (E) {
+      t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c);
+      c.appendChild(el('h2', '', 'Minha escala'));
+      var sel = el('select'); [E.atual, E.proximo].forEach(function (m) { var o = el('option', '', MESES[+m.slice(5) - 1] + ' de ' + m.slice(0, 4)); o.value = m; sel.appendChild(o); });
+      sel.value = E.mes; sel.setAttribute('aria-label', 'Mês'); sel.onchange = function () { S.escMes = sel.value; abrir('escala'); }; c.appendChild(sel);
+      if (E.modelo) c.appendChild(el('div', 'hint', 'Escala: ' + E.modelo));
+      var NOMES = { F: 'Folga', FE: 'Férias', AF: 'Afastado', AT: 'Atestado', FER: 'Feriado', C: 'Convocado', S: 'Suspensão', D: 'Dispensa' };
+      var c2 = el('div', 'card'); t.appendChild(c2);
+      var hj = hoje();
+      E.dias.forEach(function (d) {
+        var l = el('div', 'linha' + (d.iso === hj ? ' hoje' : '')), e = el('span', '', DS[d.ds] + ' ' + br(d.iso));
+        var txt = d.h ? d.h + (d.cod === 'C' ? ' · convocado' : '') : (NOMES[d.cod] || d.motivo || 'Folga');
+        if (d.feriado) txt += ' · ' + d.feriado;
+        var r = el('span', d.h ? '' : 'pill', txt);
+        if (d.iso === hj) e.appendChild(el('span', 'pill', 'hoje'));
+        l.appendChild(e); l.appendChild(r); c2.appendChild(l);
+      });
+    }).catch(function (e) { t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c); c.appendChild(el('div', 'erro', e)); });
+  }
   function telaMes(t) {
     var m = S.mes || hoje().slice(0, 7);
     call('rhFolhaFunc', [S.token, '', m]).then(function (F) {

@@ -6040,13 +6040,18 @@
   // ---------- NOVO FUNCIONÁRIO (pelo RH) ----------
   function novoFunc(D) {
     var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Novo funcionário')); var c = el('div', 'card'); sh.appendChild(c);
-    c.appendChild(el('div', 'hint', 'O sistema gera um código (é o "usuário" do ponto). A pessoa entra só no ponto, com o código e o PIN. Para dar acesso ao resto do sistema, use Configurações › Equipe.'));
+    c.appendChild(el('div', 'hint', 'O sistema gera um código numérico do ponto (serve também no tablet). Se quiser, dê um usuário com nome: com ele a pessoa entra no ponto e, se tiver acesso, no sistema (o mesmo login para os dois).'));
     var nm = inp('text', 'Como é chamado'); nm.maxLength = 60; campo(c, 'Nome', nm, true);
     var nc = inp('text', 'Nome completo'); campo(c, 'Nome completo', nc);
     var g = grade(c, 3), cpf = inp('text', 'CPF'), pis = inp('text', 'PIS/PASEP'), ad = inpData(isoHoje()); campo(g[0], 'CPF', cpf); campo(g[1], 'PIS (para o relógio)', pis); campo(g[2], 'Admissão', ad);
     var g2 = grade(c, 3), em = empSel(D), dg = el('select'); dg.appendChild(el('option', '', '—')).value = ''; D.degraus.forEach(function (x) { dg.appendChild(el('option', '', x)).value = x; }); var sa = inp('text', '0,00');
     campo(g2[0], 'Empresa', em); campo(g2[1], 'Cargo (degrau)', dg); campo(g2[2], 'Salário', sa);
     var g3 = grade(c, 2), tel = inp('tel', 'Telefone'), mail = inp('email', 'E-mail'); campo(g3[0], 'Telefone', tel); campo(g3[1], 'E-mail', mail);
+    // login único: usuário com nome + acesso ao sistema (só quem gerencia a equipe dá acesso)
+    c.appendChild(el('h3', 'ch', 'Login'));
+    var g4 = grade(c, 2), us = inp('text', 'Ex.: joao (opcional)'); us.autocapitalize = 'none'; us.spellcheck = false; us.maxLength = 30; campo(g4[0], 'Usuário (nome)', us);
+    var gs = el('select'); gs.appendChild(el('option', '', 'Somente ponto')).value = ''; (D.grupos || []).forEach(function (x) { gs.appendChild(el('option', '', x)).value = x; }); campo(g4[1], 'Acesso ao sistema', gs); gs.disabled = !(D.acesso && D.acesso.equipe);
+    c.appendChild(el('div', 'hint', 'Sem usuário, a pessoa entra no ponto com o código. Com acesso ao sistema, ela recebe uma senha provisória e pode bater o ponto com o PIN ou com a senha.'));
     c.appendChild(el('h3', 'ch', 'PIN do ponto'));
     var sg = el('div', 'seg'); c.appendChild(sg); var pw = el('div'); c.appendChild(pw); var pin = inp('password', '4 a 6 números'); pin.inputMode = 'numeric'; pin.maxLength = 6; campo(pw, 'PIN provisório (ele troca no 1º acesso)', pin);
     var modoPin = 'Gerar automático'; pw.classList.add('hide');
@@ -6054,10 +6059,11 @@
     seg(sg, ['Gerar automático', 'O RH informa'], modoPin, function (v) { modoPin = v; pw.classList.toggle('hide', v !== 'O RH informa'); });
     var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
     btn(ac, 'Cadastrar', '', function () {
-      call('rhFuncNovo', [S.token, { nome: nm.value, empresa: em.value, admissao: ad.value, pin: modoPin === 'O RH informa' ? pin.value : '', gerarPin: modoPin !== 'O RH informa', completo: true, degrau: dg.value, salario: sa.value, pessoais: { nomeCompleto: nc.value || nm.value, cpf: cpf.value, pis: pis.value, telefone: tel.value, email: mail.value } }])
+      call('rhFuncNovo', [S.token, { nome: nm.value, usuario: us.value.trim(), grupo: gs.value, empresa: em.value, admissao: ad.value, pin: modoPin === 'O RH informa' ? pin.value : '', gerarPin: modoPin !== 'O RH informa', completo: true, degrau: dg.value, salario: sa.value, pessoais: { nomeCompleto: nc.value || nm.value, cpf: cpf.value, pis: pis.value, telefone: tel.value, email: mail.value } }])
         .then(function (r) {
           RH.d = r.dados; RH.em = Date.now();
-          perguntar('Funcionário cadastrado', nm.value + '\n\nCódigo do ponto: ' + r.codigo + (r.pin ? '\nPIN provisório: ' + r.pin : '') + '\n\nPasse o código e o PIN provisório para ele. Na tela de entrada, ele toca em "Entrar no ponto (código e PIN)" e, no 1º acesso, cria o PIN dele (só ele vai saber). Anote agora: o PIN não aparece de novo.', [{ t: 'Entendi', v: true }]).then(function () { abrirRH(S.view); });
+          var sis = r.usuario !== r.codigo ? '\nUsuário: ' + r.usuario + ' (no ponto e' + (r.senha ? ' no sistema)\nSenha provisória do sistema: ' + r.senha + ' (troca no 1º acesso)' : ' no tablet também vale o código)') : '';
+          perguntar('Funcionário cadastrado', nm.value + '\n\nCódigo do ponto: ' + r.codigo + sis + (r.pin ? '\nPIN provisório: ' + r.pin : '') + '\n\nAnote agora: a senha e o PIN provisórios só aparecem uma vez.', [{ t: 'Abrir a ficha', v: 'ficha' }, { t: 'OK', v: true, cls: 'ghost' }]).then(function (v) { abrirRH(S.view); if (v === 'ficha') formFunc(r.id, RH.d); });
         }).catch(function (e) { erroEm(m, e); });
     });
     btn(ac, 'Fechar', 'ghost', fecharModal); abrirModal();
