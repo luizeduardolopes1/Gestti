@@ -3831,6 +3831,42 @@
     list.forEach(function (v) { var o = el('option', '', depVer(v)); o.value = v; sel.appendChild(o); });
     if (keep && list.indexOf(keep) > -1) sel.value = keep;
   }
+  // ---------- aviso de atualização (o servidor avisa antes e trava na hora; a página volta sozinha) ----------
+  var AV = { bloq: false, ini: 0, dif: 0, faixa: null, capa: null, tmr: null, tick: null };
+  function avisoTirar() { if (AV.faixa) { AV.faixa.remove(); AV.faixa = null; } if (AV.capa) { AV.capa.remove(); AV.capa = null; } clearInterval(AV.tick); AV.tick = null; }
+  function avisoMostrar(bloq) {
+    if (bloq) {
+      if (AV.faixa) { AV.faixa.remove(); AV.faixa = null; }
+      clearInterval(AV.tick); AV.tick = null; AV.bloq = true;
+      if (!AV.capa) {
+        var c = AV.capa = document.createElement('div'); c.setAttribute('role', 'alertdialog'); c.setAttribute('aria-live', 'assertive');
+        c.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(15,27,45,.96);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;font:600 16px system-ui,sans-serif';
+        c.innerHTML = '<div style="font-size:26px;font-weight:800;margin-bottom:10px">Sistema em atualização</div><div style="max-width:420px;opacity:.85;font-weight:500">Nada pode ser lançado agora para não perder informação. A página volta sozinha quando terminar.</div>';
+        document.body.appendChild(c);
+      }
+      return;
+    }
+    if (!AV.faixa) {
+      var f = AV.faixa = document.createElement('div'); f.setAttribute('role', 'status');
+      f.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99998;background:#c2410c;color:#fff;font:700 14px system-ui,sans-serif;text-align:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -4px 14px rgba(0,0,0,.18)';
+      document.body.appendChild(f);
+    }
+    var pinta = function () { if (!AV.faixa) return; var r = Math.max(0, AV.ini - (Date.now() + AV.dif)), m = Math.floor(r / 60000), sg = Math.floor(r / 1000) % 60; AV.faixa.textContent = '⚠ Atualização do sistema em ' + m + ':' + ('0' + sg).slice(-2) + ' — termine e salve o que está fazendo.'; if (r <= 0) verAviso(); };
+    pinta(); clearInterval(AV.tick); AV.tick = setInterval(pinta, 1000);
+  }
+  function verAviso() {
+    if (SRV !== 'sb') return;
+    fetch(API, { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ acao: 'statusSistema' }) })
+      .then(function (r) { return r.json(); }).then(function (j) {
+        var prox = 60000;
+        if (j && j.atualizando) { avisoMostrar(true); prox = 15000; }
+        else if (j && j.ok && j.dados && j.dados.aviso) { AV.ini = j.dados.aviso.inicio; AV.dif = j.dados.agora - Date.now(); avisoMostrar(AV.ini - j.dados.agora <= 0); prox = 20000; }
+        else if (j && j.ok) { if (AV.bloq) { location.reload(); return; } avisoTirar(); }
+        clearTimeout(AV.tmr); AV.tmr = setTimeout(verAviso, prox);
+      }).catch(function () { clearTimeout(AV.tmr); AV.tmr = setTimeout(verAviso, 60000); });
+  }
+  window.addEventListener('DOMContentLoaded', function () { setTimeout(verAviso, 1500); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) verAviso(); });
   function call(fn, args) {
     return new Promise(function (ok, fail) {
       var ctl = ('AbortController' in window) ? new AbortController() : null;
@@ -3843,6 +3879,7 @@
         .then(function (j) {
           clearTimeout(timer);
           if (j && j.ok) return ok(j.dados);
+          if (j && j.atualizando) { avisoMostrar(true); clearTimeout(AV.tmr); AV.tmr = setTimeout(verAviso, 15000); }
           var e = String((j && j.erro) || 'Erro no servidor.').replace(/^(Exception|Error):\s*/, '');
           if (/Sessão expirada|acesso está desativado/i.test(e)) { sairLocal(e); }
           else if (/Crie sua nova senha/i.test(e) && S.u) { S.u.trocarSenha = true; abrirApp(S.u); }
@@ -7441,6 +7478,19 @@
       dst.textContent = !k ? '' : !pj ? (k.length === 11 ? (cpfOk(k) ? '✓ CPF válido' : 'CPF inválido') : k.length > 11 ? 'CPF tem 11 números. Se for CNPJ, mude Pessoa para Jurídica.' : '')
         : (k.length === 14 ? (cnpjOk(k) ? '✓ CNPJ válido' : 'CNPJ inválido') : '');
       dst.style.color = /✓/.test(dst.textContent) ? 'var(--ok)' : 'var(--err)';
+      // CNPJ válido: busca os dados públicos da Receita (BrasilAPI) e preenche só o que estiver vazio
+      if (pj && k.length === 14 && cnpjOk(k) && doc.dataset.buscado !== k) {
+        doc.dataset.buscado = k; dst.textContent = 'Buscando os dados do CNPJ…'; dst.style.color = 'var(--muted)';
+        fetch('https://brasilapi.com.br/api/cnpj/v1/' + k, { credentials: 'omit' }).then(function (r) { if (!r.ok) throw r.status; return r.json(); }).then(function (j) {
+          var por = function (inp2, v) { if (inp2 && !inp2.value.trim() && v) inp2.value = v; };
+          por(nome, j.razao_social); por(cep, j.cep ? String(j.cep).replace(/\D/g, '').replace(/^(\d{5})(\d{3})$/, '$1-$2') : '');
+          por(end, [j.descricao_tipo_de_logradouro, j.logradouro].filter(Boolean).join(' ')); por(numE, j.numero); por(comp, j.complemento); por(bai, j.bairro);
+          por(cid, j.municipio ? j.municipio + (j.uf ? '/' + j.uf : '') : ''); por(em, (j.email || '').toLowerCase());
+          var tel = String(j.ddd_telefone_1 || '').replace(/\D/g, ''); if (tel.length >= 10) por(wpp, tel);
+          dst.textContent = '✓ CNPJ válido · ' + (j.descricao_situacao_cadastral || 'situação não informada') + (j.nome_fantasia ? ' · ' + j.nome_fantasia : '') + ' · dados da Receita preenchidos';
+          dst.style.color = /ATIVA/i.test(j.descricao_situacao_cadastral || '') ? 'var(--ok)' : 'var(--warn)';
+        }).catch(function () { dst.textContent = '✓ CNPJ válido · não consegui buscar os dados agora (preencha à mão)'; dst.style.color = 'var(--ok)'; });
+      }
     };
     doc.onblur = function () { doc.value = fmtDoc(doc.value); };
     cep.oninput = function () {
@@ -7469,6 +7519,8 @@
       else if (k && pj && !(k.length === 14 && cnpjOk(k))) erro = 'CNPJ inválido.';
       else if (w && (w.length < 10 || w.length > 11)) erro = 'Celular inválido (DDD + número).';
       else if (em.value.trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.value.trim())) erro = 'E-mail inválido.';
+      if (!erro) { var OB = (S.u.cadObrig || {})[pj ? 'Jurídica' : 'Física'] || [], VV = { doc: k, whats: w, email: em.value, cep: cep.value, endereco: end.value, bairro: bai.value, cidade: cid.value, nasc: pj ? '' : nasc.value, rg: pj ? '' : rg.value, ie: pj ? ie.value : '' };
+        var falta = OB.filter(function (q) { return !String(VV[q] || '').trim(); }); if (falta.length) erro = 'Preencha: ' + falta.map(function (q) { return ((S.u.cadObrig || {}).campos || {})[q] || q; }).join(', ') + '.'; }
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       var ficha = pj ? { regime: reg.value, contrib: ctb.value, ie: ie.value } :
         { nasc: nasc.value, rg: rg.value, orgao: org.value, mae: mae.value, pai: pai.value, trabalho: trab.value, atividade: ativ.value, renda: num(renda.value) || 0,
@@ -14479,6 +14531,53 @@
     }
     lista();
   }
+  /** Configurações › Histórico: tudo o que foi feito, com filtros, antes/depois nas alterações e planilha. */
+  function cfgHistorico(box) {
+    var H = { de: '', ate: '', usuario: '', tipo: '', busca: '', empresa: (S.u.empresa && S.u.empresa.atual) || '' };
+    var fil = el('div', 'card'); box.appendChild(fil); var info = el('div', 'hint'); box.appendChild(info); var corpo = el('div'); box.appendChild(corpo);
+    var g = grade(fil, 3), de = inpData(''), ate = inpData(''), bq = inp('search', 'IMEI, cliente, nº da venda, produto…');
+    campo(g[0], 'De', de); campo(g[1], 'Até', ate); campo(g[2], 'Buscar', bq);
+    var g2 = grade(fil, 3), su = el('select'), st = el('select'), se = el('select');
+    campo(g2[0], 'Usuário', su); campo(g2[1], 'Tipo de ação', st); campo(g2[2], 'Empresa', se);
+    var tmr = null;
+    function carregar() {
+      corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', 'Carregando…'));
+      call('historicoGeral', [S.token, { de: de.value, ate: ate.value, usuario: su.value, tipo: st.value, busca: bq.value.trim(), empresa: se.value }]).then(function (X) {
+        if (!de.value) de.value = X.de; if (!ate.value) ate.value = X.ate;
+        var sel = function (s2, lista, todos, val) { s2.innerHTML = ''; s2.appendChild(el('option', '', todos)).value = ''; lista.forEach(function (x) { var o = el('option', '', x.nome || x); o.value = x.id || x; s2.appendChild(o); }); s2.value = val; };
+        sel(su, X.usuarios, 'Todos os usuários', su.value); sel(st, X.tipos, 'Todos os tipos', st.value);
+        if (!se.options.length) { if (X.empresas.length > 1) { var o0 = el('option', '', 'Todas as empresas'); o0.value = 'todas'; se.appendChild(o0); } X.empresas.forEach(function (e) { var o = el('option', '', e.nome); o.value = e.id; se.appendChild(o); }); se.value = X.atual; }
+        se.disabled = X.empresas.length < 2;
+        info.textContent = X.total + ' registro(s)' + (X.total > X.linhas.length ? ' · mostrando os ' + X.linhas.length + ' mais novos (filtre para ver os outros)' : '') + '. Nas alterações aparece "antes → depois".';
+        corpo.innerHTML = '';
+        if (!X.linhas.length) { corpo.appendChild(el('div', 'empty', 'Nada no filtro.')); return; }
+        var multi = se.value === 'todas';
+        tabela(corpo, 'Histórico', ['Quando', 'Usuário'].concat(multi ? ['Empresa'] : []).concat(['Ação', 'Loja', 'Item', 'Detalhe']), X.linhas.map(function (x) { return [x.quando, x.quem].concat(multi ? [x.empresa] : []).concat([x.tipo, x.loja || '—', [x.modelo, x.imei].filter(Boolean).join(' · ') || '—', x.texto || '—']); }), 'historico-' + X.de + '-a-' + X.ate);
+      }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', String(e))); });
+    }
+    [de, ate, su, st, se].forEach(function (x) { x.onchange = carregar; });
+    bq.oninput = function () { clearTimeout(tmr); tmr = setTimeout(carregar, 400); };
+    carregar();
+  }
+  /** Configurações › Cadastro de pessoas: campos obrigatórios (PF e PJ). As regras que o sistema já exige continuam valendo. */
+  function cfgObrigatorios(box) {
+    var C = JSON.parse(JSON.stringify(S.u.cadObrig || { 'Física': [], 'Jurídica': [], campos: {}, so: {} }));
+    var c = el('div', 'card'); box.appendChild(c);
+    c.appendChild(el('div', 'hint', 'Marque o que precisa estar preenchido para salvar um cadastro no CRM. As regras que já existem continuam (ex.: venda de aparelho pede CPF e celular; compra de celular pede nome, CPF, RG, celular e endereço).'));
+    var g = grade(c, 2);
+    ['Física', 'Jurídica'].forEach(function (p, i) {
+      g[i].appendChild(el('h3', 'ch', 'Pessoa ' + p.toLowerCase()));
+      Object.keys(C.campos || {}).forEach(function (k) {
+        if (C.so && C.so[k] && C.so[k] !== p) return;
+        var lb = el('label', 'ckl'), ck = el('input'); ck.type = 'checkbox'; ck.checked = C[p].indexOf(k) > -1;
+        ck.onchange = function () { var j = C[p].indexOf(k); if (ck.checked && j < 0) C[p].push(k); if (!ck.checked && j > -1) C[p].splice(j, 1); };
+        lb.appendChild(ck); lb.appendChild(document.createTextNode(' ' + C.campos[k])); g[i].appendChild(lb);
+      });
+    });
+    var m = el('div', 'msg'); c.appendChild(m);
+    var b = el('button', 'btn', 'Salvar'); b.type = 'button'; b.style.width = 'auto'; c.appendChild(b);
+    b.onclick = function () { b.disabled = true; m.className = 'msg'; call('cadObrigSalvar', [S.token, { 'Física': C['Física'], 'Jurídica': C['Jurídica'] }]).then(function (r) { b.disabled = false; S.u.cadObrig = r; avisoTopo('Os campos obrigatórios foram salvos com sucesso'); }).catch(function (e) { b.disabled = false; m.className = 'msg err show'; m.textContent = e; }); };
+  }
   function cfgModelosMsg(box, d) {
     var aba = 'usado';
     box.appendChild(el('div', 'hint', 'Usados na "Proposta simples" de Produtos Usados (celular usado) e da Tabela de Preços › Produtos Novos (celular novo). Variáveis: ' + d.variaveis.map(function (v) { return '{' + v + '}'; }).join(' ') + '. Linha em que nenhuma variável tem valor some da mensagem.'));
@@ -14546,6 +14645,8 @@
     if (pode('equipe')) l.push(['depositos', 'Depósitos', 'Criar, renomear e excluir os locais de estoque desta empresa']);
     if (pode('cancelar_os')) l.push(['osaux', 'Ordem de Serviço', 'Termos e prazos de garantia']);
     if (pode('equipe')) l.push(['empresas', 'Empresas', 'Outras empresas com dados separados (mesmo sistema e atualizações)']);
+    if (pode('historico') || pode('equipe') || /^(Gerente|Supervisor)$/.test(S.u.perfil || '')) l.push(['historico', 'Histórico', 'Tudo o que foi feito no sistema: o quê, quem, quando e onde']);
+    if (pode('equipe') || pode('crm')) l.push(['obrigatorios', 'Cadastro de pessoas: obrigatórios', 'Campos obrigatórios para pessoa física e jurídica']);
     if (pode('equipe')) l.push(['empresa', 'Dados da empresa', 'Nome, CNPJ, endereço (busca pelo CEP) e logo da impressão'], ['login', 'Tela de entrada', 'Contatos do rodapé "fale com a gente!"']);
     return l;
   }
@@ -14591,6 +14692,8 @@
     }
     else if (ab === 'manutcentral') cfgManutCentral(box);
     else if (ab === 'avalmarcas') cfgAvalMarcas(box, JSON.parse(JSON.stringify(((S.u.aval || {}).marcas) || [])));
+    else if (ab === 'historico') cfgHistorico(box);
+    else if (ab === 'obrigatorios') cfgObrigatorios(box);
     else if (ab === 'modelosmsg') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
       call('modelosMsgDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; MSGM = d; cfgModelosMsg(box, JSON.parse(JSON.stringify(d))); })
