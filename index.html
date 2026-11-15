@@ -1509,6 +1509,14 @@
     <div class="ptopo"><h1>Comissões</h1></div>
     <div id="cmCorpo"></div>
   </section>
+  <section id="vMetRel" class="hide">
+    <div class="crumb">Metas</div>
+    <div class="ptopo"><h1>Relatórios</h1></div>
+    <div class="card" id="mrFil"></div>
+    <div class="hint" id="mrInfo" style="margin:0 0 10px"></div>
+    <div class="kpis" id="mrKpis"></div>
+    <div id="mrCorpo"></div>
+  </section>
 
   <!-- CADASTRO DE PRODUTO (página inteira) -->
   <section id="vProd" class="hide">
@@ -1973,6 +1981,7 @@
     { id: 'dre', sec: 'vDre', nome: 'DRE', perm: 'financeiro', perm2: 'ver_custos', menu: 'Financeiro', desc: 'Resultado do período: lucro ou prejuízo da loja' },
     { id: 'metas', sec: 'vMetas', nome: 'Metas das empresas', perm: 'metas', menu: 'Metas', desc: 'Meta da rede, das lojas e dos vendedores' },
     { id: 'comissoes', sec: 'vComissoes', nome: 'Comissões', perm: 'comissoes', menu: 'Metas', desc: 'Comissão a pagar e lançamento em Contas a Pagar' },
+    { id: 'metrel', sec: 'vMetRel', nome: 'Relatórios', perm: 'vender', permOu: 'metas', menu: 'Metas', desc: 'Vendas, OS entregues e celulares vendidos por vendedor' },
     { id: 'novos', sec: 'vNovos', nome: 'Produtos Novos', perm: 'novos', menu: 'Tabela de Preços', desc: 'Preço e precificação dos produtos novos' },
     { id: 'venda', sec: 'vVenda', nome: 'Produtos Usados', perm: 'precos', menu: 'Tabela de Preços', desc: 'Preço de venda dos aparelhos usados' },
     { id: 'proposta', sec: 'vProposta', nome: 'Proposta', perm: 'vender', menu: 'Ferramentas', desc: 'Oferta para o cliente, com ou sem troca, por WhatsApp ou PDF' },
@@ -6410,6 +6419,7 @@
     if (id === 'osimei') { var ib = $('oiCorpo'); ib.innerHTML = ''; renderImeiOS(ib); }
     if (id === 'metas') carregarMetas(S.mt ? S.mt.mes : '');
     if (id === 'comissoes') carregarMetas(S.mt ? S.mt.mes : '', 'com');
+    if (id === 'metrel') carregarMetRel();
     if (id === 'caixa') carregarCaixa(true);
     if (id === 'reservas') carregarReservas(true);
     if (id === 'encomendas') carregarEncomendas(true);
@@ -9096,10 +9106,50 @@
     C.bonus = C.bonus || { modelo: 'quantidade', cel: { modo: 'faixas', fixo: 0, faixas: [0, 0, 0, 0] }, manut: { modo: 'faixas', fixo: 0, faixas: [0, 0, 0, 0] } };
     var cb = el('div', 'card pecard'); box.appendChild(cb); cb.appendChild(el('h2', '', 'Bonificação: celulares vendidos e manutenções entregues'));
     var bsg = el('div', 'seg'); cb.appendChild(bsg); var bw = el('div'); cb.appendChild(bw);
-    var MOD_B = { 'Por quantidade (meta de aparelhos)': 'quantidade', 'Por aparelho (faixa do faturamento)': 'faixa_faturamento', 'Sem bonificação': 'nenhum' };
+    var MOD_B = { 'Por quantidade (tabela por grau)': 'graus', 'Por aparelho (faixa do faturamento)': 'faixa_faturamento', 'Sem bonificação': 'nenhum' };
+    if (C.bonus.modelo === 'quantidade') MOD_B['Quantidade da loja (modelo antigo)'] = 'quantidade';
+    var GRAUS_B = ['Mínima', 'Meta', 'Super', 'Hiper'];
+    var tabGraus = function () { return GRAUS_B.map(function () { return { qtd: 0, valor: 0 }; }); };
+    C.bonus.graus = C.bonus.graus || { cel: tabGraus(), manut: tabGraus() }; C.bonus.vendedores = C.bonus.vendedores || {};
+    /** Tabela por grau: quantidade e valor de cada grau, para celulares vendidos e para OS entregues. */
+    function tabelaGraus(box2, G) {
+      var t = el('table', 'tb mtgraus'), h = el('tr'); ['Grau', 'Celulares vendidos (qtd.)', 'Valor', 'OS entregues (qtd.)', 'Valor'].forEach(function (x) { h.appendChild(el('th', '', x)); }); t.appendChild(h);
+      GRAUS_B.forEach(function (gn, i) {
+        var tr = el('tr'); tr.appendChild(el('td', '', gn));
+        ['cel', 'manut'].forEach(function (k) {
+          G[k] = G[k] || tabGraus(); G[k][i] = G[k][i] || { qtd: 0, valor: 0 };
+          var q = inp('number', '0'); q.min = 0; q.value = G[k][i].qtd || ''; q.setAttribute('aria-label', gn + ' · ' + (k === 'cel' ? 'celulares' : 'OS') + ' · quantidade'); q.oninput = function () { G[k][i].qtd = parseInt(q.value, 10) || 0; };
+          var v = inpValor(G[k][i].valor ? vs(G[k][i].valor) : ''); v.input.setAttribute('aria-label', gn + ' · ' + (k === 'cel' ? 'celulares' : 'OS') + ' · valor'); v.input.oninput = function () { G[k][i].valor = num(v.input.value) || 0; };
+          var a = el('td'); a.appendChild(q); tr.appendChild(a); var b = el('td'); b.appendChild(v); tr.appendChild(b);
+        });
+        t.appendChild(tr);
+      });
+      var w = el('div'); w.style.overflowX = 'auto'; w.appendChild(t); box2.appendChild(w);
+    }
     var desB = function () {
       bw.innerHTML = ''; var B = C.bonus;
       if (B.modelo === 'nenhum') { bw.appendChild(el('div', 'hint', 'Ninguém recebe bonificação por quantidade neste mês.')); return; }
+      if (B.modelo === 'graus') {
+        bw.appendChild(el('div', 'hint', 'Quem chegar na quantidade de um grau recebe o valor dele (vale o maior grau alcançado). Grau com quantidade vazia não conta. A OS conta para quem registrou a entrega. A tabela vale para todos os vendedores; abaixo dá para dar uma tabela própria a um vendedor.'));
+        tabelaGraus(bw, B.graus);
+        var pv = el('div'); bw.appendChild(pv);
+        var desPV = function () {
+          pv.innerHTML = '';
+          Object.keys(B.vendedores).forEach(function (id) {
+            var f2 = D.funcionarios.filter(function (x) { return x.id === id; })[0], bx = el('div', 'mtfx'); pv.appendChild(bx);
+            var hd = el('div', 'ed-et'); hd.appendChild(el('h3', 'ch', 'Tabela própria: ' + (f2 ? f2.nome : id))); var rm = el('button', 'lnk', 'Tirar (volta para a tabela de todos)'); rm.type = 'button'; rm.onclick = function () { delete B.vendedores[id]; desPV(); }; hd.appendChild(rm); bx.appendChild(hd);
+            tabelaGraus(bx, B.vendedores[id]);
+          });
+          var livres = D.funcionarios.filter(function (x) { return !B.vendedores[x.id]; });
+          if (livres.length) {
+            var ad = el('div', 'ed-et'), sv = el('select'); sv.appendChild(el('option', '', 'Escolha o vendedor…')).value = ''; livres.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; sv.appendChild(o); });
+            var bt = el('button', 'lnk', '+ Tabela própria para um vendedor'); bt.type = 'button'; bt.onclick = function () { if (!sv.value) return; B.vendedores[sv.value] = JSON.parse(JSON.stringify(B.graus)); desPV(); };
+            ad.appendChild(sv); ad.appendChild(bt); pv.appendChild(ad);
+          }
+        };
+        desPV();
+        return;
+      }
       bw.appendChild(el('div', 'hint', B.modelo === 'quantidade' ? 'Cada empresa define quantos celulares e manutenções quer no mês (no quadro da empresa, abaixo). A quantidade de cada vendedor segue o peso da meta dele (a mesma divisão do faturamento). Quem bate a sua quantidade recebe o valor fixo, ou o valor da faixa atingida (Mínima 80% · Meta 100% · Super 110% · Hiper 125%). Manutenção conta para quem registrou a entrega da OS.' : 'Valor por aparelho vendido e por OS entregue, conforme a faixa que o vendedor atingiu na meta de faturamento. Abaixo da Mínima não recebe.'));
       [['cel', 'Celulares vendidos'], ['manut', 'Manutenções entregues']].forEach(function (t) {
         var T = B[t[0]], bx = el('div', 'mtfx'); bw.appendChild(bx); bx.appendChild(el('h3', 'ch', t[1] + (B.modelo === 'faixa_faturamento' ? ' (R$ por unidade)' : '')));
@@ -9134,7 +9184,7 @@
       var c = el('div', 'card pecard'); box.appendChild(c); c.appendChild(el('h2', '', l));
       var hl = H.lojas[l] || {}, vals = H.meses.map(function (m) { return hl[m] || 0; }), med = vals.length ? r2(vals.reduce(function (a, b) { return a + b; }, 0) / vals.length) : 0;
       c.appendChild(el('div', 'hint', 'Vendas: ' + H.meses.map(function (m, i) { return MESES[+m.slice(5) - 1].slice(0, 3) + ' ' + brl(vals[i]); }).join(' · ') + ' · média ' + brl(med) + (hl[H.anoPassado] ? ' · ' + mesBR(H.anoPassado) + ': ' + brl(hl[H.anoPassado]) : '')));
-      var g = grade(c, 3), mv = inpValor(L.valor ? vs(L.valor) : ''); campo(g[0], 'Meta da empresa (gerente)', mv, true);
+      var g = grade(c, 3), mv = inpValor(L.valor ? vs(L.valor) : ''); var mvRot = campo(g[0], 'Meta da empresa (gerente)', mv, true);
       var sb = el('button', 'lnk', 'Sugerir: média + 10%'); sb.type = 'button'; g[0].appendChild(sb); sb.onclick = function () { L.valor = r2(med * 1.1); mv.input.value = vs(L.valor); atu(); };
       var gs = el('select'); gs.appendChild(el('option', '', 'Sem gerente')).value = ''; D.funcionarios.forEach(function (f) { var o = el('option', '', f.nome + (f.loja ? ' · ' + f.loja.replace(/^.*\| /, '') : '')); o.value = f.id; gs.appendChild(o); }); gs.value = L.gerenteId; campo(g[1], 'Gerente da loja', gs, true); gs.onchange = function () { L.gerenteId = gs.value; };
       var ms = el('select'); [['valor', 'Valor por vendedor'], ['pct', '% da meta da loja']].forEach(function (x) { var o = el('option', '', x[1]); o.value = x[0]; ms.appendChild(o); }); ms.value = L.modoVend; campo(g[2], 'Meta dos vendedores', ms, true);
@@ -9149,8 +9199,14 @@
       ms.onchange = function () { L.modoVend = ms.value; desV(); };
       mv.input.oninput = function () { L.valor = num(mv.input.value) || 0; atu(); };
       function atu() {
-        var tot = L.vendedores.reduce(function (a, v) { return a + (L.modoVend === 'pct' ? L.valor * (v.pct || 0) / 100 : (v.valor || 0)); }, 0), pc = L.valor ? tot / L.valor * 100 : 0;
-        sm.textContent = L.vendedores.length ? 'Soma das metas dos vendedores: ' + brl(tot) + ' (' + nfmt(r2(pc)) + '% da meta da loja)' + (pc < 100 && L.valor ? ' · abaixo de 100%: a loja depende de alguém passar da meta' : '') : 'Nenhum vendedor nesta loja ainda.';
+        var tot = L.vendedores.reduce(function (a, v) { return a + (L.modoVend === 'pct' ? L.valor * (v.pct || 0) / 100 : (v.valor || 0)); }, 0);
+        // meta do gerente = soma das metas dos vendedores: no modo "valor por vendedor" o campo da loja fica travado nessa soma
+        var trava = L.modoVend !== 'pct' && L.vendedores.length > 0;
+        if (trava) { L.valor = r2(tot); mv.input.value = L.valor ? vs(L.valor) : ''; }
+        mv.input.disabled = trava || !ed; sb.classList.toggle('hide', trava);
+        mv.input.title = trava ? 'Soma das metas dos vendedores' : '';
+        var pc = L.valor ? tot / L.valor * 100 : 0;
+        sm.textContent = L.vendedores.length ? 'Meta do gerente = soma das metas dos vendedores: ' + brl(tot) + (L.modoVend === 'pct' ? ' (' + nfmt(r2(pc)) + '% da base da loja)' + (pc < 100 && L.valor ? ' · abaixo de 100%' : '') : ' · o campo da empresa fica travado nessa soma') : 'Nenhum vendedor nesta loja ainda: a meta do gerente é o valor da empresa.';
         Array.prototype.forEach.call(vb.querySelectorAll('.calc'), function (cc) { var v = L.vendedores[+cc.dataset.i]; if (v) cc.textContent = L.modoVend === 'pct' ? '= ' + brl(L.valor * (v.pct || 0) / 100) : (L.valor ? nfmt(r2((v.valor || 0) / L.valor * 100)) + '% da loja' : ''); });
         sw.innerHTML = ''; if (C.semanal && L.valor) sw.appendChild(el('div', 'hint', 'Por semana: ' + C.pesos.map(function (p, i) { return 'S' + (i + 1) + ' ' + brl(L.valor * p / 100); }).join(' · ')));
       }
@@ -9212,7 +9268,7 @@
       var at = el('td', 'n'), bar = el('div', 'mtbar'), fill = el('i'); fill.style.width = Math.min(100, x.ating) + '%'; fill.className = x.ating >= 100 ? 'ok' : x.ating >= 80 ? 'warn' : 'err'; bar.appendChild(fill); at.appendChild(document.createTextNode(nfmt(x.ating) + '%')); at.appendChild(bar); r.appendChild(at);
       r.appendChild(el('td', 'n', x.faixa + (x.pct ? ' (' + nfmt(x.pct) + '%)' : '')));
       var cm = el('td', 'n b', brl(x.comissao)); if (x.extra) cm.appendChild(el('small', '', 'inclui ' + x.extra.qtd + ' OS × ' + brl(x.extra.valor / x.extra.qtd)));
-      (x.bonus || []).forEach(function (b) { cm.appendChild(el('small', '', (b.meta ? b.tipo + ': ' + b.qtd + ' de ' + b.meta + ' (' + nfmt(b.ating) + '%)' : b.tipo + ': ' + b.qtd + ' × ' + brl(b.unit || 0)) + ' → ' + (b.valor ? '+ ' + brl(b.valor) : 'sem bônus'))); });
+      (x.bonus || []).forEach(function (b) { cm.appendChild(el('small', '', (b.grau !== undefined ? b.tipo + ': ' + b.qtd + (b.grau ? ' · grau ' + b.grau : ' · nenhum grau (Meta: ' + b.meta + ')') + (b.propria ? ' · tabela própria' : '') : b.meta ? b.tipo + ': ' + b.qtd + ' de ' + b.meta + ' (' + nfmt(b.ating) + '%)' : b.tipo + ': ' + b.qtd + ' × ' + brl(b.unit || 0)) + ' → ' + (b.valor ? '+ ' + brl(b.valor) : 'sem bônus'))); });
       r.appendChild(cm);
       t.appendChild(r);
     });
@@ -10501,6 +10557,51 @@
 
     $('dwBg').classList.remove('hide'); dw.classList.add('on'); dw.setAttribute('aria-hidden', 'false'); dw.scrollTop = 0;
     if (window.innerWidth < 820) document.body.style.overflow = 'hidden';
+  }
+
+  // ---- Metas › Relatórios: vendedor vê o dele; gerente filtra por vendedor; supervisor por loja, gerente ou vendedor
+  var MR = { per: 'mes', de: '', ate: '', loja: '', gerente: '', vendedor: '' };
+  function isoDe(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function periodoMR() {
+    var h = new Date();
+    if (MR.per === 'mes') return [isoDe(new Date(h.getFullYear(), h.getMonth(), 1)), isoDe(h)];
+    if (MR.per === 'mespass') return [isoDe(new Date(h.getFullYear(), h.getMonth() - 1, 1)), isoDe(new Date(h.getFullYear(), h.getMonth(), 0))];
+    return [MR.de || isoDe(new Date(h.getFullYear(), h.getMonth(), 1)), MR.ate || isoDe(h)];
+  }
+  function carregarMetRel() {
+    var p = periodoMR();
+    $('mrCorpo').innerHTML = ''; $('mrCorpo').appendChild(el('div', 'empty', 'Calculando…')); $('mrKpis').innerHTML = '';
+    call('metaRelatorio', [S.token, { de: p[0], ate: p[1], loja: MR.loja, gerente: MR.gerente, vendedor: MR.vendedor }]).then(function (d) { S.mr = d; filtrosMR(d); renderMR(d); })
+      .catch(function (e) { $('mrCorpo').innerHTML = ''; $('mrCorpo').appendChild(el('div', 'empty', String(e))); });
+  }
+  function filtrosMR(d) {
+    var f = $('mrFil'); f.innerHTML = '';
+    var g = grade(f, d.nivel === 'supervisor' ? 4 : d.nivel === 'gerente' ? 2 : 1);
+    var ps = el('select'); [['mes', 'Este mês'], ['mespass', 'Mês passado'], ['livre', 'Escolher datas']].forEach(function (x) { var o = el('option', '', x[1]); o.value = x[0]; ps.appendChild(o); }); ps.value = MR.per;
+    campo(g[0], 'Período', ps, true);
+    var dw = el('div', 'ed-et'); var di = inp('date'), ai = inp('date'); var p = periodoMR(); di.value = p[0]; ai.value = p[1]; di.setAttribute('aria-label', 'De'); ai.setAttribute('aria-label', 'Até');
+    dw.appendChild(di); dw.appendChild(ai); if (MR.per === 'livre') g[0].appendChild(dw);
+    ps.onchange = function () { MR.per = ps.value; if (MR.per === 'livre') { var q = periodoMR(); MR.de = q[0]; MR.ate = q[1]; } carregarMetRel(); };
+    di.onchange = ai.onchange = function () { MR.de = di.value; MR.ate = ai.value; if (MR.de && MR.ate) carregarMetRel(); };
+    var sel = function (box, rot, lista, k, todos) { var s2 = el('select'); s2.appendChild(el('option', '', todos)).value = ''; lista.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; s2.appendChild(o); }); s2.value = MR[k]; campo(box, rot, s2, true); s2.onchange = function () { MR[k] = s2.value; carregarMetRel(); }; };
+    if (d.nivel === 'supervisor') { sel(g[1], 'Loja', d.opcoes.lojas, 'loja', 'Todas as lojas'); sel(g[2], 'Gerente', d.opcoes.gerentes, 'gerente', 'Todos os gerentes'); sel(g[3], 'Vendedor', d.opcoes.vendedores, 'vendedor', 'Todos os vendedores'); }
+    else if (d.nivel === 'gerente') sel(g[1], 'Vendedor', d.opcoes.vendedores, 'vendedor', 'Visão geral (todos)');
+  }
+  function renderMR(d) {
+    var br2 = function (x) { return x.split('-').reverse().join('/'); };
+    $('mrInfo').textContent = br2(d.de) + ' a ' + br2(d.ate) + (d.nivel === 'vendedor' ? ' · seus resultados' : d.nivel === 'gerente' ? ' · ' + (MR.vendedor ? 'vendedor escolhido' : 'todos os vendedores da empresa') : ' · ' + (MR.loja || MR.gerente || MR.vendedor ? 'filtrado' : 'todas as lojas')) + (d.umMes ? '' : ' · comparação com a meta só dentro de um mês');
+    var T = d.total, k = $('mrKpis'); k.innerHTML = '';
+    kpi(k, 'Vendido', brl(T.vendas.valor), inteiro(T.vendas.qtd) + ' venda(s)');
+    kpi(k, 'OS entregues', inteiro(T.os.qtd), brl(T.os.valor) + ' faturado');
+    kpi(k, 'Celulares vendidos', inteiro(T.cel.qtd), brl(T.cel.valor) + ' faturado');
+    kpi(k, 'Ticket médio', brl(T.ticket), 'por venda');
+    if (T.meta) kpi(k, 'Meta', nfmt(T.ating) + '%', 'de ' + brl(T.meta));
+    var box = $('mrCorpo'); box.innerHTML = '';
+    if (!d.linhas.length) { box.appendChild(el('div', 'empty', 'Nada no período.')); return; }
+    var sup = d.nivel === 'supervisor';
+    var cab = (sup ? ['Loja'] : []).concat(['Vendedor'], sup ? ['Gerente'] : [], ['Vendido', 'Vendas', 'Ticket médio', 'OS entregues', 'OS faturado', 'Celulares', 'Celulares faturado', 'Meta', '% da meta']);
+    var linhas = d.linhas.map(function (x) { return (sup ? [x.empresa] : []).concat([x.nome], sup ? [x.gerente || '—'] : [], [brl(x.vendas.valor), x.vendas.qtd, brl(x.ticket), x.os.qtd, brl(x.os.valor), x.cel.qtd, brl(x.cel.valor), x.meta ? brl(x.meta) : '—', x.ating !== null ? nfmt(x.ating) + '%' : '—']); });
+    tabela(box, 'Resultados por vendedor (' + d.linhas.length + ')', cab, linhas, 'relatorio-metas-' + d.de + '-a-' + d.ate);
   }
 
   // ---- relatório: saldo de estoque em um dia
@@ -13583,6 +13684,8 @@
     var T = o.totais || {}, total = T.total || 0, bx = el('div', 'opc-box');
     var formas = formasV().filter(function (f) { return f.cartao !== 'crediario'; });
     var pags = total > 0 ? [{ formaId: formas[0].id, forma: formas[0].nome, cartao: formas[0].cartao, valor: vs(total.toFixed(2)), parcelas: '', categoria: 'Recebimento com serviços' }] : [];
+    // quem entrega é quem conta na meta e na bonificação de OS: fica fixo (o usuário logado), sem opção de trocar
+    var vq = el('div', 'hint'); vq.style.cssText = 'margin:0 0 8px;color:var(--ink)'; vq.appendChild(document.createTextNode('Vendedor desta entrega: ')); vq.appendChild(el('b', '', S.u.nome)); vq.appendChild(document.createTextNode(' — conta na meta e na bonificação de OS.')); bx.appendChild(vq);
     var lb = el('div'); bx.appendChild(lb); var inf = el('div', 'hint'); bx.appendChild(inf);
     function desenhar() {
       lb.innerHTML = '';
