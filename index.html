@@ -10528,10 +10528,10 @@
     chipsMulti($('sdLojas'), d.lojas, SD.lojas, renderSaldo);
     var tags = {}; d.produtos.forEach(function (p) { (p.tags || []).forEach(function (t) { tags[t] = 1; }); }); ((S.u.catalogo || {}).tags || []).forEach(function (t) { tags[t.nome || t] = 1; });
     var tl = Object.keys(tags).sort(); SD.tags = SD.tags.filter(function (t) { return tl.indexOf(t) > -1; });
-    seletorTags($('sdTags'), tl, SD.tags, renderSaldo);
+    buscaTags($('sdTags'), tl, SD.tags, renderSaldo);
   }
   /** Tags: campo com busca; as escolhidas viram etiquetas com × (a lista inteira não aparece mais). */
-  function seletorTags(box, lista, sel, fn) {
+  function buscaTags(box, lista, sel, fn) {
     box.innerHTML = ''; box.className = 'tagsel';
     var ip = el('input'); ip.type = 'search'; ip.placeholder = lista.length ? 'Buscar tag…' : 'Nenhuma tag cadastrada'; ip.disabled = !lista.length; ip.setAttribute('aria-label', 'Buscar tag');
     var sug = el('div', 'sug hide'), ch = el('div', 'chips');
@@ -11287,6 +11287,20 @@
   // =========================================================
   //  AVALIAÇÃO iPHONE
   // =========================================================
+  /** Ótimo e Bom travados do modelo (vazio = segue a regra da marca). */
+  function avCamposTravado(c, marca, modeloDe) {
+    var w = el('div'); c.appendChild(w);
+    w.appendChild(el('h3', 'ch', 'Ótimo e Bom'));
+    var hint = el('div', 'hint'); w.appendChild(hint);
+    var gd = el('div'); gd.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px'; w.appendChild(gd);
+    var ins = {};
+    ['Ótimo', 'Bom'].forEach(function (k) { var b = el('div'), i = inp('text'); i.inputMode = 'decimal'; campo(b, k + ' (vazio = regra)', i); ins[k] = i; gd.appendChild(b); });
+    function preencher() {
+      var m = modeloDe(); hint.textContent = 'Regra da marca: ' + avRegraTxt(marca) + '. Preencha só para travar um valor próprio neste modelo.';
+      ['Ótimo', 'Bom'].forEach(function (k) { var t = m && m.travado && m.travado[k]; ins[k].value = typeof t === 'number' ? String(t).replace('.', ',') : ''; var r = m ? avPreco(marca, Object.assign({}, m, { travado: {} }), k) : null; ins[k].placeholder = r ? 'pela regra: ' + brl(r) : 'vazio'; ins[k].disabled = !m; });
+    }
+    return { preencher: preencher, valores: function () { var o = {}, erro = ''; ['Ótimo', 'Bom'].forEach(function (k) { var t = ins[k].value.trim(); if (!t) return; var n = num(t); if (!(n > 0)) erro = 'Valor travado inválido em ' + k + '.'; else o[k] = n; }); if (erro) throw erro; return o; } };
+  }
   $('aEditar').onclick = function () { if ((S.avMarca || 'Apple') !== 'Apple') abrirEditarAvalMarca(S.avMarca, $('aModelo').value); else abrirEditarAval($('aModelo').value); };
   /** Valores de um modelo de outra marca (fica na configuração do sistema). */
   function abrirEditarAvalMarca(marca, modelo) {
@@ -11298,13 +11312,14 @@
     var gd = el('div'); gd.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px'; c.appendChild(gd);
     var ins = {};
     var add = function (k, rot) { var w = el('div'), i = inp('text'); i.inputMode = 'decimal'; i.placeholder = 'vazio'; campo(w, rot, i); ins[k] = i; gd.appendChild(w); };
-    add('compra', 'Preço de compra (aparelho perfeito)'); add('venda', 'Preço de venda');
+    add('compra', 'Preço Excelente (compra)'); add('venda', 'Preço de venda');
     M.itens.forEach(function (it) { it.opcoes.forEach(function (o, k) { if (k) add(it.id + ':' + k, it.nome.replace(/\?$/, '') + ': ' + o); }); });
     function preencher() {
       var x = avModelos(marca).filter(function (y) { return y.modelo === sm.value; })[0];
       Object.keys(ins).forEach(function (k) { var v = !x ? '' : k === 'compra' || k === 'venda' ? x[k] : (x.desc[k.split(':')[0]] || [])[+k.split(':')[1]]; ins[k].value = v === null || v === undefined ? '' : String(v).replace('.', ','); ins[k].disabled = !x; });
     }
-    sm.onchange = preencher; preencher();
+    var TV = avCamposTravado(c, marca, function () { return avModelos(marca).filter(function (y) { return y.modelo === sm.value; })[0]; });
+    sm.onchange = function () { preencher(); TV.preencher(); }; preencher(); TV.preencher();
     var m = el('div', 'msg err'); c.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Fechar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
     cc.onclick = fecharModal;
@@ -11313,8 +11328,9 @@
       var val = {}, erro = ''; Object.keys(ins).forEach(function (k) { var t = ins[k].value.trim(); if (!t) { val[k] = ''; return; } var n = num(t.replace(/^\+/, '')); if (n === null) erro = 'Valor inválido.'; else val[k] = n; });
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       var d = { compra: val.compra, venda: val.venda, desc: {} }; M.itens.forEach(function (it) { d.desc[it.id] = it.opcoes.map(function (o, k) { return k ? val[it.id + ':' + k] : 0; }); });
+      var trav; try { trav = TV.valores(); } catch (e2) { m.textContent = e2; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Salvando…';
-      call('avaliacaoModeloSalvar', [S.token, marca, sm.value, d]).then(function (r) { S.u.aval = r.aval; ok.disabled = false; ok.textContent = 'Salvar'; avisoTopo('Os valores de ' + sm.value + ' foram salvos com sucesso'); calcAval(); })
+      call('avaliacaoModeloSalvar', [S.token, marca, sm.value, d]).then(function () { return call('avaliacaoTravarSalvar', [S.token, marca, sm.value, trav]); }).then(function (r) { S.u.aval = r.aval; TV.preencher(); ok.disabled = false; ok.textContent = 'Salvar'; avisoTopo('Os valores de ' + sm.value + ' foram salvos com sucesso'); calcAval(); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar'; m.textContent = e; m.classList.add('show'); });
     };
     abrirModal();
@@ -11326,8 +11342,8 @@
     sh.appendChild(el('div', 'sub', 'Grava direto na aba Tabela iPhones da planilha. Abatimentos são negativos (ex.: -100) e bônus positivos.'));
     var c = el('div', 'card');
     var sm = el('select'); opts(sm, lista.map(function (x) { return x.modelo; }), modelo || '', 'Escolha o modelo…'); campo(c, 'Modelo', sm, true);
-    var campos = [['compra', 'Preço de compra (aparelho perfeito)'], ['venda', 'Preço de venda'], ['bat8480', 'Bateria 84% a 80%'], ['bat80', 'Bateria abaixo de 80%'],
-                  ['marcas', 'Com marcas de uso'], ['tela', 'Troca de tela'], ['vidro', 'Vidro traseiro quebrado'], ['g6', 'Garantia Apple +6 meses'], ['g3', 'Garantia Apple +3 meses']];
+    var campos = [['compra', 'Preço Excelente (compra)'], ['venda', 'Preço de venda'], ['bat8480', 'Bateria 84% a 80%'], ['bat80', 'Bateria abaixo de 80%'],
+                  ['tela', 'Troca de tela'], ['vidro', 'Vidro traseiro quebrado'], ['g6', 'Garantia Apple +6 meses'], ['g3', 'Garantia Apple +3 meses']];
     var ins = {}, grade = el('div'); grade.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px';
     campos.forEach(function (k) { var w = el('div'); var i = inp('text'); i.inputMode = 'decimal'; i.placeholder = 'vazio'; campo(w, k[1], i); ins[k[0]] = i; grade.appendChild(w); });
     c.appendChild(grade);
@@ -11335,7 +11351,8 @@
       var x = lista.filter(function (y) { return y.modelo === sm.value; })[0] || {};
       campos.forEach(function (k) { var v = x[k[0]]; ins[k[0]].value = v === null || v === undefined ? '' : String(v).replace('.', ','); ins[k[0]].disabled = !x.modelo; });
     }
-    sm.onchange = preencher; preencher();
+    var TV = avCamposTravado(c, 'Apple', function () { return avModelos('Apple').filter(function (y) { return y.modelo === sm.value; })[0]; });
+    sm.onchange = function () { preencher(); TV.preencher(); }; preencher(); TV.preencher();
     var m = el('div', 'msg'); c.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar na planilha'), cc = el('button', 'btn ghost', 'Fechar'); ok.type = cc.type = 'button';
     ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
@@ -11346,9 +11363,10 @@
       var v = {}, erro = '';
       campos.forEach(function (k) { var t = ins[k[0]].value.trim(); if (!t) { v[k[0]] = ''; return; } var n = num(t.replace(/^\+/, '')); if (n === null) erro = 'Valor inválido em "' + k[1] + '".'; else v[k[0]] = n; });
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
+      var trav; try { trav = TV.valores(); } catch (e2) { m.textContent = e2; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Salvando…';
-      call('avaliacaoSalvar', [S.token, sm.value, v]).then(function (d) {
-        ['params', 'taxas', 'iphones'].forEach(function (k) { S.u[k] = d[k]; }); lista = S.u.iphones;
+      call('avaliacaoSalvar', [S.token, sm.value, v]).then(function () { return call('avaliacaoTravarSalvar', [S.token, 'Apple', sm.value, trav]); }).then(function (d) {
+        ['params', 'taxas', 'iphones', 'aval'].forEach(function (k) { S.u[k] = d[k]; }); lista = S.u.iphones; TV.preencher();
         ok.disabled = false; ok.textContent = 'Salvar na planilha'; m.className = 'msg ok show'; m.textContent = '✓ Salvo na planilha.';
         $('aModelo').value = sm.value; montarAval();
       }).catch(function (e) { ok.disabled = false; ok.textContent = 'Salvar na planilha'; m.textContent = e; m.classList.add('show'); });
@@ -11356,21 +11374,33 @@
     abrirModal();
   }
   // ---------- avaliação de usados por marca ----------
-  var APPLE_ITENS = [{ id: 'bat', nome: 'Saúde da bateria', opcoes: ['85% ou mais', '84% a 80%', 'Abaixo de 80%'] }, { id: 'marcas', nome: 'Tem marcas de uso?', opcoes: ['Não', 'Sim'] },
+  var APPLE_ITENS = [{ id: 'bat', nome: 'Saúde da bateria', opcoes: ['85% ou mais', '84% a 80%', 'Abaixo de 80%'] },
     { id: 'tela', nome: 'Precisa trocar a tela?', opcoes: ['Não', 'Sim'] }, { id: 'vidro', nome: 'Vidro traseiro quebrado?', opcoes: ['Não', 'Sim'] }, { id: 'gar', nome: 'Garantia Apple restante', opcoes: ['Não tem', '+6 meses', '+3 meses'] }];
   function avMarcas() { return [{ nome: 'Apple', itens: APPLE_ITENS }].concat(((S.u.aval || {}).marcas) || []); }
   function avMarca(nome) { return avMarcas().filter(function (m) { return m.nome === nome; })[0] || avMarcas()[0]; }
   /** Modelos de uma marca no formato único: { modelo, compra, venda, desc: { item: [valor por opção] } } */
   function avModelos(marca) {
-    if (marca === 'Apple') return (S.u.iphones || []).map(function (x) { return { marca: 'Apple', modelo: x.modelo, compra: x.compra, venda: x.venda, bruto: x, desc: { bat: [0, x.bat8480, x.bat80], marcas: [0, x.marcas], tela: [0, x.tela], vidro: [0, x.vidro], gar: [0, x.g6, x.g3] } }; });
+    if (marca === 'Apple') return (S.u.iphones || []).map(function (x) { return { marca: 'Apple', modelo: x.modelo, compra: x.compra, venda: x.venda, bruto: x, travado: (((S.u.aval || {}).apple || {})[x.modelo] || {}).travado, desc: { bat: [0, x.bat8480, x.bat80], tela: [0, x.tela], vidro: [0, x.vidro], gar: [0, x.g6, x.g3] } }; });
     return (((S.u.aval || {}).modelos) || []).filter(function (x) { return x.marca === marca; });
   }
   function avMarcaDoModelo(modelo) { var ms = avMarcas(); for (var i = 0; i < ms.length; i++) if (avModelos(ms[i].nome).some(function (x) { return x.modelo === modelo; })) return ms[i].nome; return 'Apple'; }
-  /** Calcula a oferta: escolhas = { item: índice da opção } */
+  // classificação: o preço informado é o do Excelente; Ótimo e Bom saem da regra da marca (% ou R$) ou do valor travado do modelo
+  var CLASSES_AV = ['Excelente', 'Ótimo', 'Bom'];
+  function avRegra(marca) { var a = S.u.aval || {}; return (a.regras || {})[marca] || a.regraPadrao || { 'Ótimo': { t: '%', v: 10 }, 'Bom': { t: '%', v: 20 } }; }
+  function avRegraTxt(marca) { var r = avRegra(marca); return ['Ótimo', 'Bom'].map(function (k) { return k + ' −' + (r[k].t === '%' ? String(r[k].v).replace('.', ',') + '%' : brl(r[k].v)); }).join(' · '); }
+  function avPreco(marca, m, cls) {
+    if (!m || !(m.compra > 0)) return null;
+    if (!cls || cls === 'Excelente') return m.compra;
+    var t = (m.travado || {})[cls]; if (typeof t === 'number') return t;
+    var r = avRegra(marca)[cls] || { t: '%', v: 0 };
+    return Math.max(0, Math.round(r.t === '%' ? m.compra * (1 - r.v / 100) : m.compra - r.v));
+  }
+  /** Calcula a oferta: escolhas = { cls: classificação, item: índice da opção } */
   function avCalcular(marca, modelo, escolhas) {
     var M = avMarca(marca), m = avModelos(marca).filter(function (x) { return x.modelo === modelo; })[0];
     if (!m) return null;
-    var linhas = [['Preço base (perfeito)', m.compra || 0]], tot = m.compra || 0, falta = [];
+    var cls = escolhas.cls || 'Excelente', base = avPreco(marca, m, cls) || 0;
+    var linhas = [['Preço ' + cls + (cls !== 'Excelente' && typeof (m.travado || {})[cls] === 'number' ? ' (valor travado)' : ''), base]], tot = base, falta = [];
     var semTabela = M.itens.every(function (it) { return (m.desc[it.id] || []).slice(1).every(function (v) { return v === null || v === undefined; }); });
     M.itens.forEach(function (it) {
       var k = escolhas[it.id] || 0, v = (m.desc[it.id] || [])[k];
@@ -11378,11 +11408,13 @@
       v = typeof v === 'number' ? v : 0; tot += v; linhas.push([it.nome.replace(/\?$/, '') + (k ? ': ' + it.opcoes[k] : ''), v]);
     });
     var alerta = semTabela ? 'Modelo sem tabela de abatimentos — CONSULTAR GERENTE.' : falta.length ? 'Sem valor na tabela para: ' + falta.join(', ') + ' — CONSULTAR GERENTE.' : '';
-    return { base: m.compra || 0, linhas: linhas, oferta: Math.max(0, tot), alerta: alerta, detalhes: M.itens.map(function (it) { return it.nome.replace(/\?$/, '').toLowerCase() + ' ' + String(it.opcoes[escolhas[it.id] || 0]).toLowerCase(); }).join(' · ') };
+    return { base: base, cls: cls, linhas: linhas, oferta: Math.max(0, tot), alerta: alerta, detalhes: 'classificação ' + cls.toLowerCase() + ', ' + M.itens.map(function (it) { return it.nome.replace(/\?$/, '').toLowerCase() + ' ' + String(it.opcoes[escolhas[it.id] || 0]).toLowerCase(); }).join(' · ') };
   }
   /** Perguntas da marca (cada item vira um seletor), usadas na Avaliação e na troca da Proposta. */
   function avPerguntas(box, marca, escolhas, mudou) {
     box.innerHTML = '';
+    box.appendChild(el('label', '', 'Classificação')); var sc = el('div', 'seg'); box.appendChild(sc);
+    seg(sc, CLASSES_AV, escolhas.cls || 'Excelente', function (v) { escolhas.cls = v; mudou(); });
     avMarca(marca).itens.forEach(function (it) { box.appendChild(el('label', '', it.nome)); var sx = el('div', 'seg'); box.appendChild(sx); seg(sx, it.opcoes, it.opcoes[escolhas[it.id] || 0], function (v) { escolhas[it.id] = it.opcoes.indexOf(v); mudou(); }); });
   }
   function montarAval() {
@@ -11416,7 +11448,7 @@
       nm.placeholder = sm.value === 'Apple' ? 'Ex.: IPHONE 16 PRO 256GB' : 'Ex.: GALAXY S23 256GB';
       var gd = el('div'); gd.style.cssText = 'display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px'; corpo.appendChild(gd);
       var add = function (k, rot, v) { var w = el('div'), i = inp('text'); i.inputMode = 'decimal'; i.placeholder = 'vazio'; i.value = v === '' || v === null || v === undefined ? '' : String(v); campo(w, rot, i); ins[k] = i; gd.appendChild(w); };
-      add('compra', 'Preço de compra (aparelho perfeito)', ''); add('venda', 'Preço de venda', '');
+      add('compra', 'Preço Excelente (compra)', ''); add('venda', 'Preço de venda', '');
       M.itens.forEach(function (it) { it.opcoes.forEach(function (o, k) { if (k) add(it.id + ':' + k, it.nome.replace(/\?$/, '') + ': ' + o, media(lst, function (x) { return (x.desc[it.id] || [])[k]; })); }); });
     }
     sm.onchange = des; des();
@@ -11432,7 +11464,7 @@
       if (!erro && !(val.compra > 0)) erro = 'Informe o preço de compra.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       var d = { marca: sm.value, modelo: nm.value.trim(), compra: val.compra, venda: val.venda };
-      if (sm.value === 'Apple') { var map = { 'bat:1': 'bat8480', 'bat:2': 'bat80', 'marcas:1': 'marcas', 'tela:1': 'tela', 'vidro:1': 'vidro', 'gar:1': 'g6', 'gar:2': 'g3' }; Object.keys(map).forEach(function (k) { d[map[k]] = val[k]; }); }
+      if (sm.value === 'Apple') { var map = { 'bat:1': 'bat8480', 'bat:2': 'bat80', 'tela:1': 'tela', 'vidro:1': 'vidro', 'gar:1': 'g6', 'gar:2': 'g3' }; Object.keys(map).forEach(function (k) { d[map[k]] = val[k]; }); }
       else { d.desc = {}; M.itens.forEach(function (it) { d.desc[it.id] = it.opcoes.map(function (o, k) { return k ? val[it.id + ':' + k] : 0; }); }); }
       ok.disabled = true; ok.textContent = 'Cadastrando…';
       call('avaliacaoModeloNovo', [S.token, d]).then(function (r) {
@@ -14145,36 +14177,119 @@
     };
   }
   // ---------- Configurações › Manutenção centralizada
+  /** Configurações › Avaliação de usados: marcas (layout das formas de pagamento). Cada marca: Modelos (regra e preços por classificação) e Descontos. */
   function cfgAvalMarcas(box, L) {
-    box.appendChild(el('div', 'hint', 'A Apple usa a Tabela iPhones (bateria, marcas, tela, vidro e garantia Apple). Aqui você cria outras marcas, cada uma com seus próprios itens. Em cada item, a primeira opção é "sem desconto"; os valores de cada opção são cadastrados por modelo, na Avaliação de usados.'));
-    var area = el('div'); box.appendChild(area);
-    function des() {
-      area.innerHTML = '';
-      L.forEach(function (M, i) {
-        var c = el('div', 'card'); area.appendChild(c);
-        var nm = inp('text', 'Ex.: Samsung'); nm.maxLength = 30; nm.value = M.nome; nm.oninput = function () { M.nome = nm.value; }; campo(c, 'Marca', nm, true);
-        M.itens.forEach(function (it, k) {
-          var r = el('div', 'ed-et'); r.style.flexWrap = 'wrap';
-          var a = inp('text', 'Pergunta (ex.: Tela)'); a.maxLength = 60; a.value = it.nome; a.style.flex = '1 1 200px'; a.oninput = function () { it.nome = a.value; };
-          var b = inp('text', 'Opções separadas por vírgula (a 1ª é sem desconto)'); b.value = it.opcoes.join(', '); b.style.flex = '2 1 260px'; b.oninput = function () { it.opcoes = b.value.split(',').map(function (x) { return x.trim(); }).filter(Boolean); };
-          var x = el('button', '', '✕'); x.type = 'button'; x.onclick = function () { M.itens.splice(k, 1); des(); };
-          [a, b, x].forEach(function (z) { r.appendChild(z); }); c.appendChild(r);
-        });
-        var ad = el('button', 'lnk', '+ Item de desconto'); ad.type = 'button'; ad.onclick = function () { M.itens.push({ id: '', nome: '', opcoes: ['Não', 'Sim'] }); des(); }; c.appendChild(ad);
-        var rm = el('button', 'lnk', 'Excluir marca'); rm.type = 'button'; rm.style.cssText = 'margin-left:14px;color:var(--err)'; rm.onclick = function () { L.splice(i, 1); des(); }; c.appendChild(rm);
+    var raiz = el('div'); box.appendChild(raiz);
+    var nModelos = function (nome) { return avModelos(nome).length; };
+    function lista(ok) {
+      raiz.innerHTML = '';
+      if (ok) raiz.appendChild(el('div', 'msg ok show', ok));
+      var c = el('div', 'card'); raiz.appendChild(c);
+      c.appendChild(el('div', 'hint', 'Clique em uma marca para ver os modelos, os preços de cada classificação e os descontos da avaliação. Você informa o preço Excelente; Ótimo e Bom saem da regra da marca (ou de um valor travado no modelo).'));
+      var tab = el('div', 'ptab fmtab'), h = el('div', 'prow h');
+      ['', 'Marca', 'Modelos', 'Ótimo e Bom', ''].forEach(function (x) { h.appendChild(el('div', '', x)); }); tab.appendChild(h);
+      [{ nome: 'Apple', itens: APPLE_ITENS, apple: true }].concat(L.map(function (M, i) { return Object.assign({ idx: i }, M); })).forEach(function (M) {
+        var r = el('div', 'prow'); r.tabIndex = 0; r.setAttribute('role', 'button');
+        var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
+        var n = el('div'); n.appendChild(el('div', 'pnome', M.nome)); n.appendChild(el('div', 'psub', M.itens.length + ' pergunta(s) de desconto' + (M.apple ? ' · Tabela iPhones' : ''))); r.appendChild(n);
+        r.appendChild(el('div', 'psku', String(nModelos(M.nome))));
+        r.appendChild(el('div', 'psub', avRegraTxt(M.nome)));
+        r.appendChild(el('div', 'chev', '›'));
+        r.onclick = function () { pagina(M.apple ? -1 : M.idx, 'Modelos'); };
+        r.onkeydown = function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); r.onclick(); } };
+        tab.appendChild(r);
       });
-      var nb = el('button', 'btn ghost', '+ Nova marca'); nb.type = 'button'; nb.style.width = 'auto'; area.appendChild(nb);
-      nb.onclick = function () { L.push({ nome: '', itens: [{ id: '', nome: 'Liga normalmente?', opcoes: ['Sim', 'Não'] }, { id: '', nome: 'Tela', opcoes: ['Perfeita', 'Riscada', 'Quebrada'] }, { id: '', nome: 'Tampa traseira', opcoes: ['Perfeita', 'Com marcas', 'Quebrada'] }] }); des(); };
+      c.appendChild(tab);
+      var add = el('button', 'btn', '+ Nova marca'); add.type = 'button'; add.style.cssText = 'width:auto;padding:11px 20px;margin-top:14px'; add.onclick = function () { pagina(-2, 'Descontos da avaliação'); }; c.appendChild(add);
     }
-    des();
-    var m = el('div', 'msg'); box.appendChild(m);
-    var b = el('button', 'btn', 'Salvar marcas'); b.type = 'button'; box.appendChild(b);
-    box.appendChild(el('div', 'hint', 'Excluir uma marca apaga também os modelos dela na avaliação.'));
-    b.onclick = function () {
-      m.className = 'msg'; b.disabled = true;
-      call('avaliacaoMarcasSalvar', [S.token, { marcas: L }]).then(function (r) { b.disabled = false; S.u.aval = r.aval; L = JSON.parse(JSON.stringify(r.aval.marcas)); des(); avisoTopo('As marcas da avaliação foram salvas com sucesso'); })
-        .catch(function (e) { b.disabled = false; m.className = 'msg err show'; m.textContent = e; });
-    };
+    /** idx: -1 = Apple; -2 = marca nova; >= 0 = L[idx] */
+    function pagina(idx, aba) {
+      var apple = idx === -1, nova = idx === -2;
+      var M = apple ? { nome: 'Apple', itens: APPLE_ITENS } : nova ? { nome: '', itens: [{ id: '', nome: 'Liga normalmente?', opcoes: ['Sim', 'Não'] }, { id: '', nome: 'Tela', opcoes: ['Perfeita', 'Riscada', 'Quebrada'] }] } : JSON.parse(JSON.stringify(L[idx]));
+      raiz.innerHTML = '';
+      var vt = el('button', 'lnk', '← Todas as marcas'); vt.type = 'button'; vt.onclick = function () { lista(); window.scrollTo(0, 0); }; raiz.appendChild(vt);
+      var tit = el('h3', 'fmtit', nova ? 'Nova marca' : M.nome); raiz.appendChild(tit);
+      var sg = el('div', 'seg'); raiz.appendChild(sg); var corpo = el('div'); raiz.appendChild(corpo);
+      if (nova) aba = 'Descontos da avaliação';
+      else seg(sg, ['Modelos', 'Descontos da avaliação'], aba, function (v) { aba = v; des(); });
+      function des() { corpo.innerHTML = ''; if (aba === 'Modelos') modelos(); else descontos(); }
+      function modelos() {
+        // regra das classificações
+        var rc = el('div', 'card pecard'); corpo.appendChild(rc); rc.appendChild(el('h2', '', 'Regra das classificações'));
+        rc.appendChild(el('div', 'hint', 'Quanto o Ótimo e o Bom valem a menos que o Excelente. Vale para todos os modelos da marca que não têm valor travado.'));
+        var R = JSON.parse(JSON.stringify(avRegra(M.nome))), gd = grade(rc, 2);
+        ['Ótimo', 'Bom'].forEach(function (k, n) {
+          var w = el('div', 'ed-et'), tp = el('select'); ['%', 'R$'].forEach(function (o) { var op = el('option', '', o === '%' ? 'em %' : 'em R$'); op.value = o; tp.appendChild(op); }); tp.value = R[k].t;
+          var vi = inp('text'); vi.inputMode = 'decimal'; vi.value = String(R[k].v).replace('.', ','); vi.style.flex = '1';
+          tp.onchange = function () { R[k].t = tp.value; }; vi.oninput = function () { R[k].v = vi.value; };
+          gd[n].appendChild(el('label', '', k + ': Excelente menos')); w.appendChild(vi); w.appendChild(tp); gd[n].appendChild(w);
+        });
+        var mr = el('div', 'msg'); rc.appendChild(mr);
+        var br = el('button', 'btn', 'Salvar regra'); br.type = 'button'; br.style.width = 'auto'; rc.appendChild(br);
+        br.onclick = function () {
+          var env = {}; ['Ótimo', 'Bom'].forEach(function (k) { env[k] = { t: R[k].t, v: num(String(R[k].v)) }; });
+          br.disabled = true; mr.className = 'msg';
+          call('avaliacaoRegraSalvar', [S.token, M.nome, env]).then(function (r) { br.disabled = false; S.u.aval = r.aval; avisoTopo('A regra de ' + M.nome + ' foi salva com sucesso'); des(); })
+            .catch(function (e) { br.disabled = false; mr.className = 'msg err show'; mr.textContent = e; });
+        };
+        // modelos com o preço de cada classificação
+        var mc = el('div', 'card pecard'); corpo.appendChild(mc); mc.appendChild(el('h2', '', 'Modelos'));
+        var ms = avModelos(M.nome);
+        if (!ms.length) mc.appendChild(el('div', 'hint', 'Nenhum modelo cadastrado nesta marca.'));
+        else {
+          var tb = el('div', 'ptab'), hh = el('div', 'prow h'); ['Modelo', 'Excelente', 'Ótimo', 'Bom', ''].forEach(function (x) { hh.appendChild(el('div', '', x)); }); tb.appendChild(hh);
+          ms.forEach(function (x) {
+            var r = el('div', 'prow'); r.tabIndex = 0; r.setAttribute('role', 'button');
+            r.appendChild(el('div', 'pnome', x.modelo));
+            CLASSES_AV.forEach(function (k) { var v = avPreco(M.nome, x, k), tr = k !== 'Excelente' && typeof (x.travado || {})[k] === 'number'; r.appendChild(el('div', 'psub', (v ? brl(v) : '—') + (tr ? ' 🔒' : ''))); });
+            r.appendChild(el('div', 'chev', '›'));
+            r.onclick = function () { if (apple) abrirEditarAval(x.modelo); else abrirEditarAvalMarca(M.nome, x.modelo); };
+            r.onkeydown = function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); r.onclick(); } };
+            tb.appendChild(r);
+          });
+          mc.appendChild(tb);
+          mc.appendChild(el('div', 'hint', '🔒 = valor travado no modelo (não segue a regra). Clique no modelo para mudar os valores.'));
+        }
+        var nb = el('button', 'btn ghost', '+ Novo modelo'); nb.type = 'button'; nb.style.width = 'auto'; mc.appendChild(nb);
+        nb.onclick = function () { abrirNovoModeloAval(function () { des(); }, M.nome); };
+      }
+      function descontos() {
+        var c = el('div', 'card pecard'); corpo.appendChild(c);
+        if (apple) {
+          c.appendChild(el('h2', '', 'Perguntas da avaliação'));
+          c.appendChild(el('div', 'hint', 'A Apple usa perguntas fixas. A classificação (Excelente, Ótimo ou Bom) é perguntada primeiro, em todas as marcas. Os valores de cada desconto ficam em cada modelo (aba Modelos).'));
+          M.itens.forEach(function (it) { c.appendChild(el('div', 'row2', it.nome + ' — ' + it.opcoes.join(' / '))); });
+          return;
+        }
+        var nm = inp('text', 'Ex.: Samsung'); nm.maxLength = 30; nm.value = M.nome; nm.oninput = function () { M.nome = nm.value; tit.textContent = nm.value || 'Nova marca'; }; campo(c, 'Marca', nm, true);
+        c.appendChild(el('div', 'hint', 'A classificação é perguntada primeiro. Depois vêm estas perguntas; em cada uma, a primeira opção é "sem desconto". Os valores ficam em cada modelo.'));
+        var itw = el('div'); c.appendChild(itw);
+        function itens() {
+          itw.innerHTML = '';
+          M.itens.forEach(function (it, k) {
+            var r = el('div', 'ed-et'); r.style.flexWrap = 'wrap';
+            var a = inp('text', 'Pergunta (ex.: Tela)'); a.maxLength = 60; a.value = it.nome; a.style.flex = '1 1 200px'; a.oninput = function () { it.nome = a.value; };
+            var b = inp('text', 'Opções separadas por vírgula (a 1ª é sem desconto)'); b.value = it.opcoes.join(', '); b.style.flex = '2 1 260px'; b.oninput = function () { it.opcoes = b.value.split(',').map(function (x) { return x.trim(); }).filter(Boolean); };
+            var x = el('button', '', '✕'); x.type = 'button'; x.setAttribute('aria-label', 'Tirar a pergunta'); x.onclick = function () { M.itens.splice(k, 1); itens(); };
+            [a, b, x].forEach(function (z) { r.appendChild(z); }); itw.appendChild(r);
+          });
+          var ad = el('button', 'lnk', '+ Pergunta de desconto'); ad.type = 'button'; ad.onclick = function () { M.itens.push({ id: '', nome: '', opcoes: ['Não', 'Sim'] }); itens(); }; itw.appendChild(ad);
+        }
+        itens();
+        var m = el('div', 'msg'); c.appendChild(m);
+        var ac = el('div', 'acoes'), b = el('button', 'btn', nova ? 'Cadastrar marca' : 'Salvar'); b.type = 'button'; ac.appendChild(b);
+        if (!nova) { var rm = el('button', 'btn ghost', 'Excluir marca'); rm.type = 'button'; rm.style.color = 'var(--err)'; ac.appendChild(rm); rm.onclick = function () { if (!confirm('Excluir a marca ' + L[idx].nome + '? Os modelos dela na avaliação também são apagados.')) return; salvar(L.filter(function (z, n) { return n !== idx; }), 'A marca foi excluída', true); }; }
+        c.appendChild(ac);
+        function salvar(nova2, aviso, voltar) {
+          b.disabled = true; m.className = 'msg';
+          call('avaliacaoMarcasSalvar', [S.token, { marcas: nova2 }]).then(function (r) { S.u.aval = r.aval; L = JSON.parse(JSON.stringify(r.aval.marcas)); avisoTopo(aviso); if (voltar) lista(); else { var k = L.findIndex(function (z) { return z.nome === M.nome.trim(); }); pagina(k, 'Descontos da avaliação'); } })
+            .catch(function (e) { b.disabled = false; m.className = 'msg err show'; m.textContent = e; });
+        }
+        b.onclick = function () { var L2 = JSON.parse(JSON.stringify(L)); if (nova) L2.push(M); else L2[idx] = M; salvar(L2, 'A marca ' + M.nome + ' foi salva com sucesso'); };
+      }
+      des();
+    }
+    lista();
   }
   function cfgModelosMsg(box, d) {
     var aba = 'usado';
@@ -14236,7 +14351,7 @@
     if (pode('equipe') || pode('liberar') || pode('transferir')) l.push(['naturezas', 'Naturezas de operação', 'Transferências: CFOP, se movimenta estoque e o que gera']);
     if (pode('equipe')) l.push(['transfrede', 'Transferências entre empresas', 'Quem gera contas a pagar/receber e quanto tempo o pedido segura o item']);
     if (pode('editar_quadro') || pode('equipe')) l.push(['checklists', 'Checklists', 'Itens, onde aparecem (entrada de usados, OS, manutenção) e classificação sugerida']);
-    if (pode('editar_avaliacao')) l.push(['avalmarcas', 'Avaliação de usados: marcas', 'Marcas além da Apple e os itens de desconto de cada uma']);
+    if (pode('editar_avaliacao')) l.push(['avalmarcas', 'Avaliação de usados: marcas', 'Marcas, modelos, preços por classificação e descontos']);
     if (pode('equipe') || pode('precos')) l.push(['modelosmsg', 'Modelos de mensagem', 'Texto da proposta simples de celular usado e de celular novo']);
     if (pode('equipe')) l.push(['manutcentral', 'Manutenção centralizada', 'Empresa que guarda os aparelhos em conserto e quem trabalha neles']);
     if (pode('conferir_caixa')) l.push(['caixa', 'Caixa', 'Abertura e fechamento: por loja (tudo junto) ou por funcionário']);
