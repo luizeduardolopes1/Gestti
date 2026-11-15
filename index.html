@@ -92,6 +92,11 @@
   .prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
   .prefix input{padding-left:40px}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .rhdg{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}.rhdg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+  .rhdg>.card,.rhdg3>.card{margin:0;min-width:0}@media (max-width:900px){.rhdg,.rhdg3{grid-template-columns:1fr}}
+  .rhdl{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}.rhdl>div:first-child{flex:1;min-width:0}.rhdl small{color:var(--muted)}
+  .rhdl[role=button]{cursor:pointer}.rhdl[role=button]:hover{background:var(--soft2)}.rhdh{color:var(--muted);font-size:13px;white-space:nowrap}
+  .rhdbar{flex:1;height:8px;border-radius:99px;background:var(--soft);overflow:hidden}.rhdbar i{display:block;height:100%;background:var(--brand)}
   .tagsel{position:relative}.tagsel input{margin:0}.tagsel .sug{position:absolute;left:0;right:0;top:100%;z-index:30;background:var(--card);border:1px solid var(--line);border-radius:10px;margin-top:4px;max-height:240px;overflow:auto;box-shadow:0 6px 18px rgba(15,27,45,.12)}
   .tagsel .sug button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);padding:9px 12px;font-size:14px;cursor:pointer}.tagsel .sug button:hover,.tagsel .sug button:focus{background:var(--soft)}
   .tagsel .chips .chip{display:inline-flex;align-items:center;gap:6px}.tagsel .chips .chip b{font-weight:700;font-size:15px;line-height:1}
@@ -992,7 +997,7 @@
         <div class="pwbox"><input id="lPass" type="password" autocomplete="current-password" maxlength="40" placeholder="Senha"></div>
         <button type="button" class="lgesqueci" id="lgEsqBtn">Esqueci minha senha</button>
         <button class="btn" id="lBtn" type="button">Entrar</button>
-        <button type="button" class="lnk" id="lgPontoBtn" style="margin-top:12px">⏱ Entrar no ponto (código e PIN)</button>
+        <a class="lnk" id="lgPontoBtn" href="ponto.html" style="margin-top:12px;display:inline-block">⏱ Bater o ponto (app Gestti Ponto)</a>
       </div>
       <div id="lgPonto" class="hide">
         <h2>Entrar no ponto</h2>
@@ -1961,7 +1966,8 @@
     { id: 'pagar', sec: 'vPagar', nome: 'Contas a Pagar', perm: 'financeiro', menu: 'Financeiro', desc: 'Despesas, vencimentos e pagamentos' },
     { id: 'cred', sec: 'vCred', nome: 'Crediário', perm: 'crediario', menu: 'Financeiro', desc: 'Faturas, atrasos, recebimentos e limite dos clientes' },
     { id: 'conferencia', sec: 'vConfCx', nome: 'Auditoria de Caixa', perm: 'conferir_caixa', menu: 'Financeiro', desc: 'Caixas abertos, fechados e diferenças' },
-    { id: 'ponto', sec: 'vRH', nome: 'Ponto', perm: '**', menu: 'RH', desc: 'Bater o ponto, espelho, banco de horas e mapa das batidas' },
+    { id: 'rhdash', sec: 'vRH', nome: 'Dashboard', perm: 'rhv', menu: 'RH', desc: 'Presentes, atrasos e faltas do dia, banco de horas e alertas' },
+    { id: 'ponto', sec: 'vRH', nome: 'Configuração do ponto', perm: '**', menu: 'RH', desc: 'Rosto, Face ID/Touch ID, PIN, tablet da loja, raio do GPS e locais' },
     { id: 'rhfunc', sec: 'vRH', nome: 'Funcionários', perm: 'rhv', menu: 'RH', sub: 'Cadastro', subNome: 'Funcionários', desc: 'Cadastro da equipe: código do ponto, PIN, cargo, escala e pagamento' },
     { id: 'rhferiados', sec: 'vRH', nome: 'Feriados', perm: 'rhv', menu: 'RH', sub: 'Cadastro', subNome: 'Feriados', desc: 'Nacionais automáticos, estaduais, municipais e da empresa' },
     { id: 'rhjornada', sec: 'vRH', nome: 'Jornada de trabalho', perm: 'rhv', menu: 'RH', sub: 'Cadastro', subNome: 'Jornada de trabalho', desc: 'Horário de funcionamento de cada loja' },
@@ -5006,13 +5012,13 @@
   //  RH: ponto, funcionários, carreira, organograma, escala, registros e folha
   // =========================================================
   var RH = { d: null, em: 0 };
-  var RH_TIT = { ponto: 'Ponto', rhfunc: 'Funcionários', rhferiados: 'Feriados', rhjornada: 'Jornada de trabalho', rhescalas: 'Escalas', rhpontos: 'Folha de Pontos', rhverificar: 'Verificar folhas', rhbanco: 'Banco de Horas', rhcentral: 'Central de Relatórios', rhcarreira: 'Plano de carreira', rhorg: 'Organograma', rhferias: 'Férias e afastamentos', rhaval: 'Avaliação de desempenho', rhtrein: 'Treinamentos e integração', rhocorr: 'Ocorrências', rhdocs: 'Documentos', rhfolha: 'Folha (prévia)' };
+  var RH_TIT = { rhdash: 'Dashboard de RH', ponto: 'Configuração do ponto', rhfunc: 'Funcionários', rhferiados: 'Feriados', rhjornada: 'Jornada de trabalho', rhescalas: 'Escalas', rhpontos: 'Folha de Pontos', rhverificar: 'Verificar folhas', rhbanco: 'Banco de Horas', rhcentral: 'Central de Relatórios', rhcarreira: 'Plano de carreira', rhorg: 'Organograma', rhferias: 'Férias e afastamentos', rhaval: 'Avaliação de desempenho', rhtrein: 'Treinamentos e integração', rhocorr: 'Ocorrências', rhdocs: 'Documentos', rhfolha: 'Folha (prévia)' };
   function garantirRH(forcar) { if (!forcar && RH.d && Date.now() - RH.em < 60000) return Promise.resolve(RH.d); return call('rhDados', [S.token]).then(function (d) { RH.d = d; RH.em = Date.now(); return d; }); }
   function abrirRH(id) {
     $('rhTit').textContent = RH_TIT[id] || 'RH'; var box = $('rhCorpo'); box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
     garantirRH().then(function (D) {
       if (S.view !== id) return; box.innerHTML = '';
-      ({ ponto: rhPonto, rhfunc: rhFuncs, rhcarreira: rhCarreiraPg, rhorg: rhOrg, rhescalas: rhEscalasPg, rhferiados: rhFeriadosPg, rhjornada: rhJornadaPg, rhpontos: rhPontosPg, rhverificar: rhVerificarPg, rhbanco: rhBancoPg, rhcentral: rhCentralPg, rhfolha: rhFolhaPg }[id] || function (b, D2) { rhRegistrosPg(b, D2, { rhferias: 'ferias', rhaval: 'avaliacao', rhtrein: 'treinamento', rhocorr: 'ocorrencia', rhdocs: 'documento' }[id]); })(box, D);
+      ({ rhdash: rhDashPg, ponto: rhPonto, rhfunc: rhFuncs, rhcarreira: rhCarreiraPg, rhorg: rhOrg, rhescalas: rhEscalasPg, rhferiados: rhFeriadosPg, rhjornada: rhJornadaPg, rhpontos: rhPontosPg, rhverificar: rhVerificarPg, rhbanco: rhBancoPg, rhcentral: rhCentralPg, rhfolha: rhFolhaPg }[id] || function (b, D2) { rhRegistrosPg(b, D2, { rhferias: 'ferias', rhaval: 'avaliacao', rhtrein: 'treinamento', rhocorr: 'ocorrencia', rhdocs: 'documento' }[id]); })(box, D);
     }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
   }
   function rhNome(D, id) { var x = D.funcionarios.filter(function (z) { return z.id === id; })[0] || (D.orgExtra || []).filter(function (z) { return z.id === id; })[0]; return x ? x.nome : id; }
@@ -5105,18 +5111,80 @@
       var mp = L.map(m), b = [];
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(mp);
       Object.keys(locais || {}).forEach(function (k) { var l = locais[k]; L.circle([l.lat, l.lng], { radius: (RH.d && RH.d.pontoCfg.raio) || 100, color: '#2F5BFF', weight: 1 }).addTo(mp).bindTooltip(l.nome || k); b.push([l.lat, l.lng]); });
-      pontos.filter(function (p) { return p.lat !== null && p.lat !== '' && p.lat !== undefined; }).forEach(function (p) { L.marker([p.lat, p.lng]).addTo(mp).bindPopup('<b>' + (p.nome || '') + '</b><br>' + p.hora + ' · ' + p.tipo + (p.dist !== null && p.dist !== '' ? '<br>' + p.dist + ' m da loja' : '')); b.push([p.lat, p.lng]); });
+      // batida fora do raio da loja fica em vermelho
+      var raio = (RH.d && RH.d.pontoCfg && RH.d.pontoCfg.raio) || 100;
+      pontos.filter(function (p) { return p.lat !== null && p.lat !== '' && p.lat !== undefined; }).forEach(function (p) {
+        var fora = p.dist !== null && p.dist !== '' && p.dist !== undefined && Number(p.dist) > raio;
+        L.circleMarker([p.lat, p.lng], { radius: 9, color: fora ? '#b3261e' : '#137a3a', weight: 2, fillColor: fora ? '#b3261e' : '#137a3a', fillOpacity: 0.8 }).addTo(mp)
+          .bindPopup('<b>' + (p.nome || '') + '</b><br>' + p.hora + ' · ' + (p.tipo || '') + (p.dist !== null && p.dist !== '' && p.dist !== undefined ? '<br>' + p.dist + ' m da loja' + (fora ? ' · <b style="color:#b3261e">fora do raio</b>' : '') : ''));
+        b.push([p.lat, p.lng]);
+      });
       if (b.length) mp.fitBounds(b, { padding: [30, 30], maxZoom: 17 }); else mp.setView([-22.28, -42.53], 11);
       setTimeout(function () { mp.invalidateSize(); }, 200);
     }).catch(function (e) { m.textContent = e; });
   }
 
   // ---------- PONTO ----------
+  /** Dashboard de RH (protótipo aprovado): o dia, banco de horas, alertas e o mês; todas as empresas juntas para quem vê todas. */
+  function rhDashPg(box, D) {
+    var tp = el('div', 'ptopo'); box.appendChild(tp);
+    var emp = 'todas', se = null;
+    if (D.acesso.todas && D.empresas.length > 1) { se = empSel(D, 'todas', true); se.style.width = 'auto'; se.setAttribute('aria-label', 'Empresa'); tp.appendChild(se); se.onchange = function () { emp = se.value; carregar(); }; }
+    var corpo = el('div'); box.appendChild(corpo);
+    var ST = { presente: ['Presente', 'ok'], atrasado: ['Atrasado', 'warn'], falta: ['Falta', 'err'], aguardando: ['Ainda não bateu', ''], folga: ['Folga', 'off'], ferias: ['Férias', 'off'], afastado: ['Afastado', 'off'] };
+    var ORD = { falta: 0, atrasado: 1, aguardando: 2, presente: 3, afastado: 4, ferias: 5, folga: 6 };
+    function cartao(titulo, sub) { var c = el('div', 'card pecard'); c.appendChild(el('h2', '', titulo)); if (sub) c.appendChild(el('div', 'hint', sub)); return c; }
+    function linha(c, a, b, cls) { var r = el('div', 'rhdl'); r.appendChild(el('div', '', a)); var x = el('span', 'bdg ' + (cls || ''), b); r.appendChild(x); c.appendChild(r); }
+    function carregar() {
+      corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', 'Carregando…'));
+      call('rhDashboard', [S.token, emp]).then(function (X) {
+        corpo.innerHTML = '';
+        var todas = emp === 'todas' && D.empresas.length > 1;
+        corpo.appendChild(el('div', 'hint', 'Hoje, ' + isoBR(X.hoje) + ' · atualizado às ' + X.agora + (todas ? ' · todas as empresas' : '')));
+        var P = X.pessoas, n = function (st) { return P.filter(function (p) { return p.status === st; }).length; };
+        var pos = P.reduce(function (a, p) { return a + Math.max(p.banco, 0); }, 0), neg = P.reduce(function (a, p) { return a + Math.min(p.banco, 0); }, 0);
+        var k = el('div', 'kpis'); corpo.appendChild(k);
+        kpi(k, 'Presentes agora', (n('presente') + n('atrasado')) + ' / ' + X.escalados, 'escalados para hoje');
+        kpi(k, 'Atrasados', String(n('atrasado')), n('atrasado') ? 'maior atraso: ' + Math.max.apply(null, P.filter(function (p) { return p.status === 'atrasado'; }).map(function (p) { return p.atraso; })) + ' min' : 'ninguém atrasado');
+        kpi(k, 'Faltas hoje', String(n('falta')), n('falta') ? P.filter(function (p) { return p.status === 'falta'; }).map(function (p) { return p.nome.split(' ')[0]; }).join(', ') : 'nenhuma falta');
+        kpi(k, 'Banco de horas', hm(pos + neg), hm(pos) + ' a favor · ' + hm(neg) + ' devendo');
+        if (X.custos) kpi(k, 'Custo previsto da folha', brl(Object.keys(X.custos).reduce(function (a, e) { return a + X.custos[e]; }, 0)), 'salários dos ativos');
+        var g1 = el('div', 'rhdg'); corpo.appendChild(g1);
+        var cA = cartao('Agora nas lojas', P.length + ' funcionário(s)'); cA.classList.add('rhdw'); g1.appendChild(cA);
+        P.slice().sort(function (a, b) { return ORD[a.status] - ORD[b.status]; }).forEach(function (p) {
+          var r = el('div', 'rhdl'); r.tabIndex = 0; r.setAttribute('role', 'button');
+          var nm = el('div'); nm.appendChild(el('b', '', p.nome)); nm.appendChild(el('small', '', ' ' + [p.cargo, todas ? p.empresa : ''].filter(Boolean).join(' · ')));
+          r.appendChild(nm); r.appendChild(el('span', 'rhdh', p.entrada ? 'entrada ' + p.entrada : p.previsto ? 'previsto ' + p.previsto : '—'));
+          var s2 = ST[p.status]; r.appendChild(el('span', 'bdg ' + s2[1], p.status === 'atrasado' ? 'Atrasado ' + p.atraso + ' min' : s2[0]));
+          r.onclick = function () { formFunc(p.id, D); }; r.onkeydown = function (ev) { if (ev.key === 'Enter') r.onclick(); };
+          cA.appendChild(r);
+        });
+        var cR = cartao('Ranking de pontualidade', 'batidas no horário neste mês'); g1.appendChild(cR);
+        if (!X.ranking.length) cR.appendChild(el('div', 'hint', 'Sem batidas no mês.'));
+        X.ranking.forEach(function (r, i) { linha(cR, (i + 1) + 'º ' + r.nome + (todas ? ' · ' + r.empresa : ''), r.pct + '%', 'ok'); });
+        var g2 = el('div', 'rhdg3'); corpo.appendChild(g2);
+        var lista = function (titulo, sub, itens, f, vazio) { var c = cartao(titulo, sub); g2.appendChild(c); if (!itens.length) c.appendChild(el('div', 'hint', vazio)); itens.forEach(function (x) { var v = f(x); linha(c, x.nome + (todas && x.empresa ? ' · ' + x.empresa : '') + (v[2] ? ' · ' + v[2] : ''), v[0], v[1]); }); };
+        lista('Férias vencendo', 'período concessivo acaba em até 90 dias', X.ferias, function (x) { return [x.dias < 0 ? 'vencida há ' + (-x.dias) + ' dias' : 'vence em ' + x.dias + ' dias', x.dias <= 30 ? 'err' : 'warn']; }, 'Nada vencendo.');
+        lista('Experiência vencendo', 'contratos de 45 e 90 dias', X.experiencia, function (x) { return [x.marco + ' em ' + x.dias + ' dia(s)', x.dias <= 7 ? 'err' : 'warn']; }, 'Nenhum contrato vencendo.');
+        lista('Documentos pendentes', 'faltando ou para assinar', X.documentos, function (x) { return ['Pendente', 'warn', x.doc]; }, 'Tudo em dia.');
+        var g3 = el('div', 'rhdg3'); corpo.appendChild(g3);
+        var cO = cartao('Ocorrências do mês', X.ocorrencias.reduce(function (a, o) { return a + o.n; }, 0) + ' no total'); g3.appendChild(cO);
+        var mx = Math.max.apply(null, X.ocorrencias.map(function (o) { return o.n; }).concat([1]));
+        if (!X.ocorrencias.length) cO.appendChild(el('div', 'hint', 'Nenhuma ocorrência no mês.'));
+        X.ocorrencias.forEach(function (o) { var r = el('div', 'rhdl'); r.appendChild(el('div', '', o.tipo)); var b = el('div', 'rhdbar'); var f = el('i'); f.style.width = Math.round(o.n / mx * 100) + '%'; b.appendChild(f); r.appendChild(b); r.appendChild(el('b', '', String(o.n))); cO.appendChild(r); });
+        if (X.custos) { var cC = cartao('Custo da folha por empresa', 'salários previstos'); g3.appendChild(cC); Object.keys(X.custos).forEach(function (e) { linha(cC, e || '—', brl(X.custos[e]), ''); }); }
+        var cN = cartao('Aniversariantes', 'próximos 30 dias'); g3.appendChild(cN);
+        if (!X.aniversarios.length) cN.appendChild(el('div', 'hint', 'Ninguém nos próximos 30 dias.'));
+        X.aniversarios.forEach(function (a) { linha(cN, a.nome + (todas ? ' · ' + a.empresa : ''), a.dias ? a.dia : 'hoje 🎂', a.dias ? '' : 'ok'); });
+      }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', String(e))); });
+    }
+    carregar();
+  }
   function rhPonto(box, D) {
     var meu = el('div'); box.appendChild(meu);
     var carregarMeu = function () { meu.innerHTML = ''; meu.appendChild(el('div', 'empty', 'Carregando…')); call('pontoMeu', [S.token]).then(function (P) { meu.innerHTML = ''; desMeu(P); }).catch(function (e) { meu.innerHTML = ''; meu.appendChild(el('div', 'empty', e)); }); };
     function desMeu(P) {
-      var c = el('div', 'card pecard'); meu.appendChild(c); c.appendChild(el('h2', '', 'Meu ponto'));
+      var c = el('div', 'card pecard'); meu.appendChild(c); c.appendChild(el('h2', '', 'Minha configuração do ponto'));
       if (!P.consentimento) {
         c.appendChild(el('div', 'aviso', 'Antes de usar o ponto, leia e aceite o termo.'));
         var t = el('div', 'hint'); t.style.whiteSpace = 'pre-line';
@@ -5140,31 +5208,29 @@
         cr.onclick = function () { capturarRosto('Cadastro do rosto').then(function (r) { return call('pontoRosto', [S.token, '', r.desc]); }).then(function () { avisoTopo('O seu rosto foi cadastrado com sucesso'); carregarMeu(); }).catch(function (e) { if (e) msg('topMsg', e); }); };
         return;
       }
-      var big = el('button', 'btn ok', '⏱ Bater ponto: ' + P.proximo); big.type = 'button'; big.style.cssText = 'font-size:18px;padding:18px'; c.appendChild(big);
-      var st = el('div', 'hint'); c.appendChild(st);
-      big.onclick = function () {
-        big.disabled = true; var dados = {};
-        st.textContent = 'Pegando a localização…';
-        localizacao().then(function (g) { dados.lat = g.lat; dados.lng = g.lng; st.textContent = P.exigirRosto ? 'Abrindo a câmera…' : ''; return P.exigirRosto ? capturarRosto('Bater ponto: ' + P.proximo) : null; })
-          .then(function (r) { if (r) { dados.desc = r.desc; dados.foto = r.foto; } st.textContent = P.credenciais.length ? 'Confirme com a digital ou o Face ID…' : 'Registrando…'; return P.credenciais.length ? aparelhoConfirmar() : null; })
-          .then(function (w) { if (w) dados.webauthn = w; st.textContent = 'Registrando…'; return call('pontoBater', [S.token, dados]); })
-          .then(function (r) { avisoTopo(r.batida.tipo + ' registrada às ' + r.batida.hora); meu.innerHTML = ''; desMeu(r); })
-          .catch(function (e) { big.disabled = false; st.textContent = ''; if (e) msg('topMsg', e); });
-      };
-      if (P.hoje.length) lines(c, P.hoje.map(function (b) { return [b.tipo, b.hora + ' · ' + b.origem]; }));
-      else c.appendChild(el('div', 'hint', 'Nenhuma batida hoje.'));
+      // bater o ponto é no app Gestti Ponto (celular) ou no tablet da loja: aqui só a configuração
+      var ir = el('a', 'btn ok', '⏱ Abrir o app Gestti Ponto para bater o ponto'); ir.href = 'ponto.html'; ir.style.cssText = 'display:block;text-align:center;text-decoration:none'; c.appendChild(ir);
+      c.appendChild(el('div', 'hint', 'No celular, abra o link e use "Adicionar à tela de início" para ter o app. Seu espelho e sua escala ficam no app (Meu mês e Escala).'));
       var op = el('div', 'acoes'); op.style.flexWrap = 'wrap'; c.appendChild(op);
       if (window.PublicKeyCredential) { var ap = el('button', 'btn ghost', P.credenciais.length ? '✓ Digital/Face ID ligado (' + P.credenciais.map(function (x) { return x.nome; }).join(', ') + ')' : '🔒 Usar digital/Face ID deste celular'); ap.type = 'button'; ap.style.width = 'auto'; op.appendChild(ap); ap.onclick = function () { aparelhoCadastrar().then(function () { avisoTopo('A confirmação pela digital/Face ID foi ligada'); carregarMeu(); }).catch(function (e) { msg('topMsg', e && e.message ? e.message : e); }); }; }
       var pn = el('button', 'btn ghost', P.pin ? 'Trocar meu PIN' : 'Criar meu PIN'); pn.type = 'button'; pn.style.width = 'auto'; op.appendChild(pn);
       pn.onclick = function () { S.u.pinTemp = true; meu.innerHTML = ''; desMeu(Object.assign({}, P, { pinTemp: true })); };
       var rf = el('button', 'btn ghost', 'Recadastrar rosto'); rf.type = 'button'; rf.style.width = 'auto'; op.appendChild(rf);
       rf.onclick = function () { capturarRosto('Novo cadastro do rosto').then(function (r) { return call('pontoRosto', [S.token, '', r.desc]); }).then(function () { avisoTopo('O seu rosto foi atualizado'); }).catch(function (e) { if (e) msg('topMsg', e); }); };
-      var ce = el('div', 'card pecard'); meu.appendChild(ce); ce.appendChild(el('h2', '', 'Meu espelho de ponto'));
-      espelhoBox(ce, '', D);
     }
     carregarMeu();
     if (!D.acesso.ver) return;
-    // gestão: pontos do dia no mapa
+    // tablet
+    var ct = el('div', 'card pecard'); box.appendChild(ct); ct.appendChild(el('h2', '', 'Tablet de ponto na loja'));
+    ct.appendChild(el('div', 'hint', 'Use num tablet fixo na loja: o funcionário digita o código e o PIN e confirma com o rosto. O tablet fica travado só no ponto, sem acesso ao resto do sistema.'));
+    var g3 = grade(ct, 2), se = el('select'); D.empresas.forEach(function (e) { var o = el('option', '', e.nome); o.value = e.id; se.appendChild(o); }); se.value = (S.u.empresa && S.u.empresa.atual) || 'E1'; campo(g3[0], 'Empresa', se, true);
+    var tn = inp('text', 'Ex.: Balcão'); tn.maxLength = 40; campo(g3[1], 'Nome do tablet', tn, true);
+    var ta = el('button', 'btn', 'Usar ESTE aparelho como tablet de ponto'); ta.type = 'button'; ct.appendChild(ta);
+    ta.onclick = function () { if (!confirm('Este aparelho vai virar o tablet de ponto da loja e você vai sair do sistema nele. Continuar?')) return; call('pontoTabletAtivar', [S.token, { empresa: se.value, nome: tn.value }]).then(function (r) { LS.set('pontoTablet', r.chave); location.href = location.pathname + '?c=' + encodeURIComponent(CONTA) + '&ponto=tablet'; }).catch(function (e) { msg('topMsg', e); }); };
+    if (D.acesso.completo) cfgPonto(box, D);
+  }
+  /** Pontos da equipe num dia (lista + mapa) e o espelho de quem escolher: fica na Folha de Pontos. */
+  function pontosEquipe(box, D) {
     var cg = el('div', 'card pecard'); box.appendChild(cg); cg.appendChild(el('h2', '', 'Pontos da equipe'));
     var g2 = grade(cg, 2), dia = inpData(isoHoje()); campo(g2[0], 'Dia', dia, true);
     var sf = selFunc(D, '', 'Ver espelho de…'); campo(g2[1], 'Espelho de ponto', sf, true);
@@ -5185,14 +5251,6 @@
     dia.onchange = carregarDia; carregarDia();
     var eb = el('div'); cg.appendChild(eb);
     sf.onchange = function () { eb.innerHTML = ''; if (sf.value) { eb.appendChild(el('h3', 'ch', 'Espelho de ' + rhNome(D, sf.value))); espelhoBox(eb, sf.value, D); } };
-    // tablet
-    var ct = el('div', 'card pecard'); box.appendChild(ct); ct.appendChild(el('h2', '', 'Tablet de ponto na loja'));
-    ct.appendChild(el('div', 'hint', 'Use num tablet fixo na loja: o funcionário digita o código e o PIN e confirma com o rosto. O tablet fica travado só no ponto, sem acesso ao resto do sistema.'));
-    var g3 = grade(ct, 2), se = el('select'); D.empresas.forEach(function (e) { var o = el('option', '', e.nome); o.value = e.id; se.appendChild(o); }); se.value = (S.u.empresa && S.u.empresa.atual) || 'E1'; campo(g3[0], 'Empresa', se, true);
-    var tn = inp('text', 'Ex.: Balcão'); tn.maxLength = 40; campo(g3[1], 'Nome do tablet', tn, true);
-    var ta = el('button', 'btn', 'Usar ESTE aparelho como tablet de ponto'); ta.type = 'button'; ct.appendChild(ta);
-    ta.onclick = function () { if (!confirm('Este aparelho vai virar o tablet de ponto da loja e você vai sair do sistema nele. Continuar?')) return; call('pontoTabletAtivar', [S.token, { empresa: se.value, nome: tn.value }]).then(function (r) { LS.set('pontoTablet', r.chave); location.href = location.pathname + '?c=' + encodeURIComponent(CONTA) + '&ponto=tablet'; }).catch(function (e) { msg('topMsg', e); }); };
-    if (D.acesso.completo) cfgPonto(box, D);
   }
   function espelhoBox(box, id, D) {
     var mes = mesInp(), w = el('div'); campo(w, 'Mês', mes, true); box.appendChild(w);
@@ -5256,11 +5314,12 @@
   // ---------- FUNCIONÁRIOS ----------
   function rhFuncs(box, D) {
     var tp = el('div', 'ptopo'); box.appendChild(tp); var bq = inp('search', 'Buscar por nome ou código'); tp.appendChild(bq);
+    var empF = filtroEmpRH(tp, D, function () { des(); });
     if (D.acesso.completo) btn(tp, '+ Novo funcionário', '', function () { novoFunc(D); });
     var lst = el('div'); box.appendChild(lst);
     var des = function () {
-      lst.innerHTML = ''; var q = semAc(bq.value.trim());
-      var l = D.funcionarios.filter(function (x) { return !q || semAc(x.nome + ' ' + x.nomeCompleto + ' ' + x.codigo).indexOf(q) > -1; });
+      lst.innerHTML = ''; var q = semAc(bq.value.trim()), ef = empF();
+      var l = D.funcionarios.filter(function (x) { return (!q || semAc(x.nome + ' ' + x.nomeCompleto + ' ' + x.codigo).indexOf(q) > -1) && (!ef || x.empresaNome === ef); });
       var tab = el('div', 'ptab'), h = el('div', 'prow h'); ['', 'Funcionário', 'Cargo', D.acesso.completo ? 'Salário' : '', ''].forEach(function (t) { h.appendChild(el('div', '', t)); }); tab.appendChild(h);
       l.forEach(function (x) {
         var r = el('div', 'prow'); r.dataset.k = x.id; var ic = el('div', 'pimg'); ic.innerHTML = ICO_PES || ''; r.appendChild(ic);
@@ -5430,6 +5489,13 @@
   // ---------- utilidades da folha ----------
   var COD_NOME = { T: 'Trabalha', F: 'Folga', C: 'Convocado', FC: 'Folga compensatória', BH: 'Folga do banco de horas', FE: 'Férias', AF: 'Afastado', AT: 'Atestado', SU: 'Suspensão', FER: 'Feriado', '-': '—' };
   var DSEM = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  /** Filtro de empresa nas listas do RH (só para quem vê todas as empresas). Devolve () => nome da empresa escolhida ('' = todas). */
+  function filtroEmpRH(box, D, mudou) {
+    if (!(D.acesso && D.acesso.todas) || (D.empresas || []).length < 2) return function () { return ''; };
+    var s2 = empSel(D, 'todas', true); s2.style.width = 'auto'; s2.setAttribute('aria-label', 'Empresa'); box.appendChild(s2); s2.onchange = mudou;
+    return function () { if (s2.value === 'todas') return ''; var e = D.empresas.filter(function (x) { return x.id === s2.value; })[0]; return e ? e.nome : ''; };
+  }
+  function empDoFunc(D, id) { var x = (D.funcionarios || []).filter(function (z) { return z.id === id; })[0]; return x ? x.empresaNome || '' : ''; }
   function empSel(D, val, todas) { var s = el('select'); if (todas) s.appendChild(el('option', '', 'Todas as empresas')).value = 'todas'; D.empresas.forEach(function (e) { s.appendChild(el('option', '', e.nome)).value = e.id; }); s.value = val || (todas ? 'todas' : (S.u.empresa && S.u.empresa.atual) || 'E1'); return s; }
   function mesInp(v) { var m = el('input'); m.type = 'month'; m.value = v || isoHoje().slice(0, 7); return m; }
   function btn(box, t, cls, fn) { var b = el('button', 'btn ' + (cls || ''), t); b.type = 'button'; b.style.width = 'auto'; if (fn) b.onclick = fn; box.appendChild(b); return b; }
@@ -5553,7 +5619,17 @@
     if (L.pend.length) { var pp = el('div'); bdgPend(pp, L.pend); c.appendChild(pp); }
     c.appendChild(el('h3', 'ch', 'Batidas'));
     if (!L.batidas.length) c.appendChild(el('div', 'hint', 'Nenhuma batida.'));
-    L.batidas.forEach(function (b) { c.appendChild(el('div', 'hint', b.tipo + ' · ' + b.hora + (b.alterada ? ' (era ' + b.original + ')' : '') + ' · ' + b.origem + (b.dist !== null && b.dist !== undefined && b.dist !== '' ? ' · ' + b.dist + ' m' : '') + (b.motivo ? ' · ' + b.motivo : ''))); });
+    var raioL = (RH.d && RH.d.pontoCfg && RH.d.pontoCfg.raio) || 100;
+    L.batidas.forEach(function (b) {
+      var temGps = b.lat !== null && b.lat !== undefined && b.lat !== '', fora = temGps && b.dist !== null && b.dist !== undefined && b.dist !== '' && Number(b.dist) > raioL;
+      var ln = el('div', 'hint' + (fora ? ' err' : '')); c.appendChild(ln);
+      var txt = b.tipo + ' · ' + b.hora + (b.alterada ? ' (era ' + b.original + ')' : '') + ' · ' + b.origem + (b.dist !== null && b.dist !== undefined && b.dist !== '' ? ' · ' + b.dist + ' m' + (fora ? ' (fora do raio)' : '') : '') + (b.motivo ? ' · ' + b.motivo : '');
+      if (!temGps) { ln.textContent = txt; return; }
+      // clicar na batida abre o mapa com o local e o raio da loja
+      var bt = el('button', 'lnk', '📍 ' + txt); bt.type = 'button'; bt.title = 'Ver no mapa'; if (fora) bt.style.color = 'var(--err)'; ln.appendChild(bt);
+      var mw = el('div'); c.appendChild(mw);
+      bt.onclick = function () { if (mw.children.length) { mw.innerHTML = ''; return; } mapaPontos(mw, [Object.assign({ nome: L.nome }, b)], (RH.d && RH.d.pontoCfg && RH.d.pontoCfg.locais) || {}); };
+    });
     c.appendChild(el('h3', 'ch', 'Histórico do dia'));
     if (!L.ajustes.length) c.appendChild(el('div', 'hint', 'Sem ajustes.'));
     L.ajustes.forEach(function (a) {
@@ -5600,6 +5676,7 @@
     prx.onclick = function () { var d = new Date(dia.value + 'T12:00'); d.setDate(d.getDate() + 1); dia.value = d.toISOString().slice(0, 10); des(); };
     dia.onchange = se.onchange = mes.onchange = sf.onchange = des;
     montarFiltros(); des();
+    if (D.acesso.ver) pontosEquipe(box, D);
   }
   /** Folha do mês de uma pessoa (gestão e o próprio funcionário): tabela, totais, assinatura e impressão. */
   function folhaFuncBox(box, id, mes, D) {
@@ -6077,17 +6154,19 @@
   function rhRegistrosPg(box, D, tipo) {
     var tipos = tipo === 'ferias' ? ['ferias', 'afastamento'] : [tipo], tp = tipos[0];
     var hd = el('div', 'ptopo'); box.appendChild(hd); var sg = el('div', 'seg'); if (tipos.length > 1) { hd.appendChild(sg); }
+    var empR = filtroEmpRH(hd, D, function () { des(); });
     var nv = el('button', 'btn', '+ Novo registro'); nv.type = 'button'; nv.style.width = 'auto'; hd.appendChild(nv);
     var corpo = el('div'); box.appendChild(corpo);
     var des = function () {
       corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', 'Carregando…'));
       call('rhRegistros', [S.token, { tipo: tp }]).then(function (R) {
         corpo.innerHTML = ''; nv.classList.toggle('hide', !R.editar);
-        if (!R.lista.length) { corpo.appendChild(el('div', 'empty', 'Nenhum registro ainda.')); return; }
-        var tab = el('div', 'ptab'); R.lista.forEach(function (r) {
+        var ef = empR(), lista = R.lista.filter(function (r) { return !ef || empDoFunc(D, r.func) === ef; });
+        if (!lista.length) { corpo.appendChild(el('div', 'empty', R.lista.length ? 'Nenhum registro nesta empresa.' : 'Nenhum registro ainda.')); return; }
+        var tab = el('div', 'ptab'); lista.forEach(function (r) {
           var row = el('div', 'prow'); row.dataset.k = r.id; var ic = el('div', 'pimg'); ic.innerHTML = ICO_PES; row.appendChild(ic);
           var n = el('div'), nm = el('div', 'pnome', r.nome + ' · ' + (r.dados.sub || '') ); if (r.situacao) nm.appendChild(el('span', 'bdg ' + (/Concluíd|Assinado/.test(r.situacao) ? 'ok' : 'warn'), r.situacao)); n.appendChild(nm);
-          n.appendChild(el('div', 'psub', [r.dados.titulo, r.dados.nota !== '' && r.dados.nota !== undefined ? 'nota ' + r.dados.nota : '', r.dados.horas ? r.dados.horas + 'h' : ''].filter(Boolean).join(' · '))); row.appendChild(n);
+          n.appendChild(el('div', 'psub', [empDoFunc(D, r.func), r.dados.titulo, r.dados.nota !== '' && r.dados.nota !== undefined ? 'nota ' + r.dados.nota : '', r.dados.horas ? r.dados.horas + 'h' : ''].filter(Boolean).join(' · '))); row.appendChild(n);
           row.appendChild(el('div', 'psku', isoBR(r.data) + (r.ate ? ' a ' + isoBR(r.ate) : ''))); row.appendChild(el('div', 'ppre', '')); row.appendChild(el('div', 'chev', '›'));
           row.onclick = function () { formReg(r); }; tab.appendChild(row);
         }); corpo.appendChild(tab);
@@ -6205,7 +6284,7 @@
     }).catch(function (e) { b.disabled = false; b.textContent = 'Entrar'; msg('loginMsg', e); });
   };
   $('lPass').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('lBtn').click(); });
-  $('lgPontoBtn').onclick = function () { show('lgEntrar', false); show('lgPonto', true); $('lpCod').value = LS.get('codigoPonto', ''); msg('lpMsg', ''); ($('lpCod').value ? $('lpPin') : $('lpCod')).focus(); };
+  // "Bater o ponto" na tela de entrada abre o app Gestti Ponto (ponto.html)
   $('lpVoltar').onclick = function () { show('lgPonto', false); show('lgEntrar', true); };
   $('lpPin').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('lpBtn').click(); });
   $('lpBtn').onclick = function () {
