@@ -2,6 +2,7 @@ name: App do ponto (Android)
 on:
   push:
     branches: [main]
+    paths: ['app-ponto/**', '.github/workflows/app-ponto.yml']
   workflow_dispatch:
 permissions:
   contents: write

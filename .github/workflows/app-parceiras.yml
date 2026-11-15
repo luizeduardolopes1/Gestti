@@ -1,0 +1,53 @@
+name: App das parceiras (Android)
+on:
+  push:
+    branches: [main]
+    paths: ['app-parceiras/**', '.github/workflows/app-parceiras.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - versao: producao
+            arquivo: gestti-parceiras.apk
+            release: parceiras-teste
+            titulo: Gestti Parceiras (teste)
+          - versao: demo
+            arquivo: gestti-parceiras-demo.apk
+            release: parceiras-demo
+            titulo: Gestti Parceiras · demonstração
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Montar o projeto Android
+        working-directory: app-parceiras
+        run: |
+          npm install --no-audit --no-fund
+          node scripts/configurar.js ${{ matrix.versao }}
+          npx cap add android
+          node scripts/ajustar.js
+          npx cap sync android
+      - name: Gerar o APK
+        working-directory: app-parceiras/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon -q
+      - name: Publicar para baixar no celular
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app-parceiras/android/app/build/outputs/apk/debug/app-debug.apk ${{ matrix.arquivo }}
+          gh release delete ${{ matrix.release }} -y --cleanup-tag || true
+          gh release create ${{ matrix.release }} ${{ matrix.arquivo }} --prerelease --target "$GITHUB_SHA" \
+            --title "${{ matrix.titulo }} · build $GITHUB_RUN_NUMBER" \
+            --notes "APK do app das lojas parceiras. Baixe o arquivo ${{ matrix.arquivo }} no celular Android e instale (permita instalar de fontes desconhecidas). Para atualizar, desinstale a versão anterior antes."
