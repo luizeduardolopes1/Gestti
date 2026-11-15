@@ -92,6 +92,9 @@
   .prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
   .prefix input{padding-left:40px}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .cckb{display:flex;gap:12px;overflow-x:auto;padding-bottom:10px;align-items:flex-start}.cccol{flex:0 0 250px;background:var(--kan);border-radius:12px;padding:10px;min-height:120px}
+  .cccolh{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:8px}.cccard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer;font-size:14px;display:flex;flex-direction:column;gap:3px}
+  .cccard:hover{border-color:var(--brand)}.cccard small{color:var(--muted)}.cch{display:flex;justify-content:space-between;align-items:center}.ccv{font-weight:800}
   .rhdg{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}.rhdg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
   .rhdg>.card,.rhdg3>.card{margin:0;min-width:0}@media (max-width:900px){.rhdg,.rhdg3{grid-template-columns:1fr}}
   .rhdl{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}.rhdl>div:first-child{flex:1;min-width:0}.rhdl small{color:var(--muted)}
@@ -1514,6 +1517,11 @@
     <div class="ptopo"><h1>Comissões</h1></div>
     <div id="cmCorpo"></div>
   </section>
+  <section id="vCompraCel" class="hide">
+    <div class="crumb">Suprimento</div>
+    <div class="ptopo"><h1>Compra de Celulares</h1></div>
+    <div id="ccCorpo"></div>
+  </section>
   <section id="vMetRel" class="hide">
     <div class="crumb">Metas</div>
     <div class="ptopo"><h1>Relatórios</h1></div>
@@ -1941,6 +1949,7 @@
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
     { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios', menu: 'Suprimento', desc: 'Cadastro, preço e estoque dos produtos' },
+    { id: 'compracel', sec: 'vCompraCel', nome: 'Compra de Celulares', perm: 'cadastro', permOu: 'parceira', menu: 'Suprimento', desc: 'Compra de usado com contrato e assinatura, parceiras e Upgrade (Kanban)' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Produtos', desc: 'Aparelhos seminovos e outros produtos usados' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Manutenção', desc: 'Quadro de conserto dos aparelhos usados' },
     { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Suprimento', desc: 'Saldo de cada produto por loja e lançamentos' },
@@ -3780,11 +3789,24 @@
         doc.appendChild(el('div', 'hint', 'Assinado em ' + d.assinatura.em + ' · código de verificação ' + d.assinatura.codigo));
         var pr = el('button', 'btn ghost', '🖨 Imprimir / salvar em PDF'); pr.type = 'button'; pr.style.marginTop = '12px'; pr.onclick = function () { window.print(); }; doc.appendChild(pr);
       } else if (!d.aberto) doc.appendChild(el('div', 'aviso', 'Este documento não está mais aberto para assinatura.'));
-      else formulario();
+      else formulario(d);
       doc.appendChild(el('div', 'rodape', 'Assinatura eletrônica simples (Lei 14.063/2020): registramos o nome, o CPF, a data e a hora, a assinatura feita na tela e o código de verificação ' + d.codigo + ', que identifica o conteúdo exato deste documento.'));
     }
-    function formulario() {
+    function formulario(d) {
       var f = el('div'); f.style.marginTop = '12px'; doc.appendChild(f);
+      // Leva 5: o modelo pode pedir foto do documento, selfie e localização
+      var EX = d.exige || {}, FT = {};
+      var fotoCampo = function (k, rot, capt, dica) {
+        if (!EX[k === 'docFoto' ? 'doc' : k] || EX[k === 'docFoto' ? 'doc' : k] === 'nao') return;
+        var obr = EX[k === 'docFoto' ? 'doc' : k] === 'obrigatorio';
+        f.appendChild(el('label', '', rot + (obr ? ' *' : ' (opcional)')));
+        var lb = el('label', 'btn ghost', '📷 ' + dica), ip = el('input'); ip.type = 'file'; ip.accept = 'image/*'; ip.setAttribute('capture', capt); ip.className = 'hide'; lb.appendChild(ip); f.appendChild(lb);
+        var pv = el('img'); pv.alt = ''; pv.style.cssText = 'display:none;max-height:120px;border-radius:8px;margin:6px 0'; f.appendChild(pv);
+        ip.onchange = function () { var fl = ip.files && ip.files[0]; if (!fl) return; comprimirImg(fl, 1400, 0.8, function (url) { FT[k] = url; pv.src = url; pv.style.display = 'block'; lb.firstChild.textContent = '📷 Tirar de novo'; }); };
+      };
+      fotoCampo('docFoto', 'Foto do seu documento com foto (RG ou CNH)', 'environment', 'Fotografar o documento');
+      fotoCampo('selfie', 'Uma foto do seu rosto (selfie)', 'user', 'Tirar a selfie');
+      if (EX.gps && EX.gps !== 'nao') f.appendChild(el('div', 'hint', 'Ao assinar, vamos pedir a sua localização' + (EX.gps === 'obrigatorio' ? ' (obrigatória).' : ' (pode recusar).')));
       var nm = campo(f, 'Seu nome completo', inp('text', ''), true); nm.maxLength = 80; nm.autocomplete = 'name';
       var cp = campo(f, 'Seu CPF', inp('text', '000.000.000-00')); cp.inputMode = 'numeric'; cp.maxLength = 14;
       f.appendChild(el('label', '', 'Assine com o dedo no quadro'));
@@ -3804,9 +3826,15 @@
       bt.onclick = function () {
         m.classList.remove('show');
         var e = nm.value.trim().split(/\s+/).length < 2 ? 'Digite seu nome completo.' : String(cp.value).replace(/\D/g, '').length !== 11 ? 'Digite seu CPF.' : riscos < 8 ? 'Faça sua assinatura no quadro.' : !ac.checked ? 'Marque "Li e concordo com o termo".' : '';
+        if (!e && EX.doc === 'obrigatorio' && !FT.docFoto) e = 'Tire a foto do seu documento.';
+        if (!e && EX.selfie === 'obrigatorio' && !FT.selfie) e = 'Tire a sua selfie.';
         if (e) { m.textContent = e; m.classList.add('show'); return; }
         bt.disabled = true; bt.textContent = 'Enviando…';
-        call('assinaturaEnviar', [tok, { nome: nm.value.trim(), cpf: cp.value, aceite: true, img: cv.toDataURL('image/png'), nav: navigator.userAgent.slice(0, 200) }]).then(function (d) { mostrar(d); window.scrollTo(0, 0); pg.scrollTop = 0; })
+        var pegaGps = function () { if (!EX.gps || EX.gps === 'nao' || !navigator.geolocation) return Promise.resolve(null); return new Promise(function (ok) { navigator.geolocation.getCurrentPosition(function (p2) { ok({ lat: p2.coords.latitude, lng: p2.coords.longitude, acc: p2.coords.accuracy }); }, function () { ok(null); }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }); }); };
+        pegaGps().then(function (g) {
+          if (!g && EX.gps === 'obrigatorio') throw 'Permita a localização no navegador para assinar.';
+          return call('assinaturaEnviar', [tok, { nome: nm.value.trim(), cpf: cp.value, aceite: true, img: cv.toDataURL('image/png'), nav: navigator.userAgent.slice(0, 200), docFoto: FT.docFoto || '', selfie: FT.selfie || '', gps: g }]);
+        }).then(function (d) { mostrar(d); window.scrollTo(0, 0); pg.scrollTop = 0; })
           .catch(function (er) { bt.disabled = false; bt.textContent = 'Assinar'; m.textContent = er; m.classList.add('show'); });
       };
     }
@@ -6386,7 +6414,9 @@
   }
   $('sair').onclick = function () { var t = S.token; sairLocal(''); call('sair', [t]).catch(function () {}); };
 
-  function pode(p) { return !!(S.u && (p === '**' || (p === '*' && !S.u.soPonto) || (S.u.perms || []).indexOf(p) > -1)); }
+  // loja parceira (só a permissão "parceira"): não é funcionária, não recebe as telas de todos (ponto, escala, carreira…)
+  function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira'; }); }
+  function pode(p) { return !!(S.u && ((p === '**' && !soParceira()) || (p === '*' && !S.u.soPonto && !soParceira()) || (S.u.perms || []).indexOf(p) > -1)); }
   // ---------- várias empresas ----------
   var ICO_EMP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h1M14 9h1M9 13h1M14 13h1M9 17h1M14 17h1"/></svg>';
   function montarEmpresa() {
@@ -6447,8 +6477,9 @@
     $('sbBusca').value = ''; montarMenu(); guardarCtrlFixos();
     show('nav', true); document.body.classList.add('logado'); avisoPedidos();
     montarCadastro(d); montarAval(); montarCartao(); if (pode('compra')) montarCompra();
-    var ult = d.soPonto || d.pinTemp ? 'ponto' : pode('dashboard') ? 'dash' : LS.get('view', 'cadastro'); // o sistema sempre abre no Dashboard
-    var permitidas = VIEWS.filter(function (v) { return pode(v.perm); });
+    var soParc = (d.perms || []).indexOf('parceira') > -1 && (d.perms || []).every(function (x) { return x === 'parceira'; });
+    var ult = soParc ? 'compracel' : d.soPonto || d.pinTemp ? 'ponto' : pode('dashboard') ? 'dash' : LS.get('view', 'cadastro'); // o sistema sempre abre no Dashboard
+    var permitidas = VIEWS.filter(function (v) { return pode(v.perm) || (v.permOu && pode(v.permOu)); });
     if (ult !== 'config' && !permitidas.some(function (v) { return v.id === ult; })) ult = permitidas.length ? permitidas[0].id : '';
     if (!ult) { show('nav', false); document.body.classList.remove('logado'); msg('topMsg', 'Seu usuário ainda não tem nenhuma página liberada. Fale com o gerente.'); return; }
     ir(ult);
@@ -6542,6 +6573,7 @@
     if (id === 'metas') carregarMetas(S.mt ? S.mt.mes : '');
     if (id === 'comissoes') carregarMetas(S.mt ? S.mt.mes : '', 'com');
     if (id === 'metrel') carregarMetRel();
+    if (id === 'compracel') carregarCC();
     if (id === 'caixa') carregarCaixa(true);
     if (id === 'reservas') carregarReservas(true);
     if (id === 'encomendas') carregarEncomendas(true);
@@ -7173,6 +7205,7 @@
     var am = el('div', 'msg err'); bd.appendChild(am);
     function opcao(t, sub, cls, fn) { var b = el('button', 'opc' + (cls ? ' ' + cls : '')); b.type = 'button'; var d = el('div', '', t); if (sub) d.appendChild(el('small', '', sub)); b.appendChild(d); b.appendChild(el('span', 'ar', '›')); b.onclick = fn; bd.appendChild(b); return b; }
     opcao('Ver recibo', 'Imprimir ou enviar de novo', '', function () { fecharDrawer(); abrirRecibo(v, false); });
+    if ((v.troca || []).some(function (t) { return t.cc; })) opcao('Upgrade: aparelho aguardando conferência', v.troca.map(function (t) { return t.cc + ' · ' + t.modelo; }).join(', ') + ' — confira e gere o contrato em Compra de Celulares', '', function () { CC.d = null; ir('compracel'); });
     opcao('Enviar recibo por WhatsApp', fmtFone(v.cliente.whats), 'okc', function () { window.open('https://wa.me/55' + soDig(v.cliente.whats) + '?text=' + encodeURIComponent(textoRecibo(v)), '_blank', 'noopener'); });
     if (pode('cancelar_venda') && v.situacao !== 'Cancelada') {
       var bc = opcao('Cancelar venda', 'Os aparelhos voltam para o estoque e a troca sai', 'danger', function () {
@@ -10696,6 +10729,274 @@
     if (window.innerWidth < 820) document.body.style.overflow = 'hidden';
   }
 
+  // =========================================================
+  //  COMPRA DE CELULARES (Leva 5): Kanban, lista, nova compra, contrato, assinatura, conferência e parceiras
+  // =========================================================
+  var CC = { d: null, aba: 'Kanban', filtro: '' };
+  var CC_COR = { 'Em negociação': '', 'Aguardando assinatura': 'warn', 'Assinado e pago': 'ok', 'Aguardando chegada': 'warn', 'Upgrade aguardando conferência': 'warn', 'Em conferência': 'warn', 'No estoque': 'ok', 'Cancelada': 'off', 'Recusada': 'err' };
+  var CC_ORIG = { loja: 'Compra na loja', parceira: 'Parceira', upgrade: 'Upgrade' };
+  function carregarCC(depois) {
+    var b = $('ccCorpo'); if (!CC.d) { b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…')); }
+    call('ccDados', [S.token]).then(function (d) { CC.d = d; desenharCC(); if (depois) depois(); }).catch(function (e) { b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); });
+  }
+  function aposCC(d) { CC.d = d; desenharCC(); }
+  function desenharCC() {
+    var D = CC.d, b = $('ccCorpo'); b.innerHTML = '';
+    var tp = el('div', 'ptopo'); b.appendChild(tp);
+    var abas = ['Kanban', 'Lista'].concat(D.editarParceiras ? ['Parceiras'] : []).concat(D.parceira ? ['Pagamentos'] : []);
+    var sg = el('div', 'seg'); tp.appendChild(sg); seg(sg, abas, CC.aba, function (v) { CC.aba = v; desenharCC(); });
+    if (CC.aba === 'Kanban' || CC.aba === 'Lista') {
+      var nv = el('button', 'btn', '+ Nova compra'); nv.type = 'button'; nv.style.width = 'auto'; tp.appendChild(nv); nv.onclick = function () { formCC(null); };
+      if (D.conferir) { var cq = el('button', 'btn ghost', '📷 Conferir pelo código'); cq.type = 'button'; cq.style.width = 'auto'; tp.appendChild(cq); cq.onclick = conferirPorCodigo; }
+      var bq = inp('search', 'Buscar: código, cliente, modelo ou IMEI'); bq.value = CC.filtro; bq.style.maxWidth = '320px'; tp.appendChild(bq);
+      bq.oninput = function () { CC.filtro = bq.value; desLista(); };
+    }
+    if (D.parceira) b.appendChild(el('div', 'hint', 'Parceira: ' + D.parceira.nome + ' · os aparelhos vão para ' + D.parceira.loja + '. Lance o aparelho, gere o contrato com o seu cliente e envie: a loja confere na chegada.'));
+    var area = el('div'); b.appendChild(area);
+    if (CC.aba === 'Parceiras') return parceirasCC(area);
+    if (CC.aba === 'Pagamentos') return pagamentosParc(area);
+    function lista() { var q = semAc(CC.filtro.trim()); return D.lista.filter(function (x) { return !q || semAc([x.id, x.cliente.nome, x.aparelho.modelo, x.aparelho.imei, x.dados.parceiraNome].join(' ')).indexOf(q) > -1; }); }
+    function card(x) {
+      var c = el('div', 'cccard'); c.tabIndex = 0; c.setAttribute('role', 'button');
+      var h = el('div', 'cch'); h.appendChild(el('b', '', x.id)); h.appendChild(el('span', 'bdg ' + (x.origem === 'loja' ? '' : 'warn'), CC_ORIG[x.origem] || x.origem)); c.appendChild(h);
+      c.appendChild(el('div', '', x.aparelho.modelo + (x.aparelho.cor ? ' · ' + x.aparelho.cor : '')));
+      c.appendChild(el('small', '', x.cliente.nome + (x.dados.parceiraNome && !D.parceira ? ' · ' + x.dados.parceiraNome : '')));
+      c.appendChild(el('div', 'ccv', brl(x.valor)));
+      c.onclick = function () { detalheCC(x.id); }; c.onkeydown = function (ev) { if (ev.key === 'Enter') c.onclick(); };
+      return c;
+    }
+    function desLista() {
+      area.innerHTML = ''; var L = lista();
+      if (CC.aba === 'Kanban') {
+        var kb = el('div', 'cckb'); area.appendChild(kb);
+        D.situacoes.forEach(function (st) {
+          var itens = L.filter(function (x) { return x.situacao === st; });
+          if (!itens.length && /Cancelada|Recusada/.test(st)) return;
+          var col = el('div', 'cccol'); var hd = el('div', 'cccolh'); hd.appendChild(el('b', '', st)); hd.appendChild(el('span', 'bdg', String(itens.length))); col.appendChild(hd);
+          itens.forEach(function (x) { col.appendChild(card(x)); });
+          kb.appendChild(col);
+        });
+        return;
+      }
+      if (!L.length) { area.appendChild(el('div', 'empty', 'Nenhuma compra.')); return; }
+      var tab = el('div', 'ptab'), h = el('div', 'prow h'); ['', 'Compra', 'Situação', 'Valor', ''].forEach(function (t) { h.appendChild(el('div', '', t)); }); tab.appendChild(h);
+      L.forEach(function (x) {
+        var r = el('div', 'prow'); r.tabIndex = 0; r.setAttribute('role', 'button'); var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
+        var n = el('div'); n.appendChild(el('div', 'pnome', x.id + ' · ' + x.aparelho.modelo)); n.appendChild(el('div', 'psub', [x.cliente.nome, CC_ORIG[x.origem], x.dados.parceiraNome, x.em].filter(Boolean).join(' · '))); r.appendChild(n);
+        var sb = el('div', 'psku'); sb.appendChild(el('span', 'bdg ' + (CC_COR[x.situacao] || ''), x.situacao)); r.appendChild(sb);
+        r.appendChild(el('div', 'ppre', brl(x.valor))); r.appendChild(el('div', 'chev', '›'));
+        r.onclick = function () { detalheCC(x.id); }; tab.appendChild(r);
+      });
+      area.appendChild(tab);
+    }
+    desLista();
+  }
+  /** Formulário da compra: cliente (busca no CRM pelo CPF), aparelho, valor, loja e pagamento (pode dividir). */
+  function formCC(x) {
+    var D = CC.d, sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', x ? 'Compra ' + x.id : 'Nova compra de celular'));
+    var c = el('div', 'card'); sh.appendChild(c);
+    var C = x ? JSON.parse(JSON.stringify(x.cliente)) : {}, A = x ? JSON.parse(JSON.stringify(x.aparelho)) : { marca: 'Apple', classif: 'Bom' };
+    c.appendChild(el('h3', 'ch', 'Cliente (vendedor do aparelho)'));
+    var g1 = grade(c, 2), cpf = inp('text', '000.000.000-00'); cpf.inputMode = 'numeric'; cpf.value = C.cpf || ''; campo(g1[0], 'CPF *', cpf, true);
+    var nm = inp('text', 'Nome e sobrenome'); nm.value = C.nome || ''; campo(g1[1], 'Nome completo *', nm, true);
+    var g2 = grade(c, 2), rg = inp('text', 'RG'); rg.value = C.rg || ''; campo(g2[0], 'RG *', rg, true); var wp = inp('tel', '(22) 99999-9999'); wp.value = C.whats || ''; campo(g2[1], 'Celular *', wp, true);
+    var g3 = grade(c, 3), cep = inp('text', '00000-000'); cep.value = C.cep || ''; campo(g3[0], 'CEP', cep);
+    var en = inp('text', 'Rua, número'); en.value = C.endereco || ''; campo(g3[1], 'Endereço *', en, true); var ba = inp('text', 'Bairro'); ba.value = C.bairro || ''; campo(g3[2], 'Bairro', ba);
+    var ci = inp('text', 'Cidade/UF'); ci.value = C.cidade || ''; campo(c, 'Cidade *', ci, true);
+    cpf.onblur = function () {
+      var k = soDig(cpf.value); if (k.length !== 11) return; cpf.value = fmtDoc(k);
+      var p = (S.crm || []).filter(function (z) { return soDig(z.doc || z.cpf || '') === k; })[0];
+      if (p) { if (!nm.value) nm.value = p.nome || ''; if (!wp.value) wp.value = p.whats || ''; if (!en.value) en.value = p.endereco || ''; if (!ba.value) ba.value = p.bairro || ''; if (!ci.value) ci.value = p.cidade || ''; if (!cep.value) cep.value = p.cep || ''; avisoTopo('Cliente encontrado no CRM'); }
+    };
+    cep.oninput = function () { var k = soDig(cep.value).slice(0, 8); if (k.length !== 8) return; fetch('https://viacep.com.br/ws/' + k + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) { if (!j || j.erro) return; if (!en.value && j.logradouro) en.value = j.logradouro + ', '; if (!ba.value) ba.value = j.bairro || ''; if (!ci.value && j.localidade) ci.value = j.localidade + (j.uf ? '/' + j.uf : ''); }).catch(function () {}); };
+    c.appendChild(el('h3', 'ch', 'Aparelho'));
+    var g4 = grade(c, 3), mc = el('select'); avMarcas().map(function (m) { return m.nome; }).concat(['Outra']).forEach(function (m) { mc.appendChild(el('option', '', m)).value = m; }); mc.value = A.marca || 'Apple'; campo(g4[0], 'Marca', mc);
+    var md = inp('text', 'Ex.: IPHONE 13 128GB'); md.value = A.modelo || ''; md.setAttribute('list', 'ccModelos'); campo(g4[1], 'Modelo *', md, true);
+    var dl = el('datalist'); dl.id = 'ccModelos'; ((S.u.modelos || []).map(function (m) { return m.modelo || m; })).forEach(function (m) { dl.appendChild(el('option')).value = m; }); c.appendChild(dl);
+    var gb = inp('text', '128'); gb.value = A.gb || ''; campo(g4[2], 'GB', gb);
+    var g5 = grade(c, 3), cor = inp('text', 'Cor'); cor.value = A.cor || ''; campo(g5[0], 'Cor', cor); var im = inp('text', '15 números'); im.inputMode = 'numeric'; im.maxLength = 15; im.value = A.imei || ''; campo(g5[1], 'IMEI 1 *', im, true);
+    var im2 = inp('text', 'opcional'); im2.inputMode = 'numeric'; im2.maxLength = 15; im2.value = A.imei2 || ''; campo(g5[2], 'IMEI 2', im2);
+    var g6 = grade(c, 3), se = inp('text', 'opcional'); se.value = A.serial || ''; campo(g6[0], 'Número de série', se); var bt = inp('text', '%'); bt.value = A.bateria || ''; campo(g6[1], 'Bateria (%)', bt);
+    var cl = el('select'); ['Bom', 'Ótimo', 'Excelente', 'Recondicionado'].forEach(function (k) { cl.appendChild(el('option', '', k)).value = k; }); cl.value = A.classif || 'Bom'; campo(g6[2], 'Classificação', cl);
+    var ob = inp('text', 'Ex.: risco na lateral, sem caixa'); ob.value = A.obs || ''; campo(c, 'Observação (vai no contrato)', ob);
+    c.appendChild(el('h3', 'ch', 'Valor' + (D.parceira ? '' : ' e pagamento')));
+    var g7 = grade(c, 2), vl = inpValor(x ? vs(x.valor) : ''); campo(g7[0], 'Valor da compra *', vl, true);
+    var lj = el('select'); D.lojas.forEach(function (l) { lj.appendChild(el('option', '', depVer(l))).value = l; }); lj.value = x ? x.loja : (S.u.loja && D.lojas.indexOf(S.u.loja) > -1 ? S.u.loja : D.lojas[0]); if (!D.parceira) campo(g7[1], 'Loja', lj);
+    var pags = x && x.dados.pagamentos && x.dados.pagamentos.length ? JSON.parse(JSON.stringify(x.dados.pagamentos)) : [{ formaId: (D.formas[0] || {}).id, valor: '' }];
+    var pw = el('div'); if (!D.parceira) c.appendChild(pw);
+    function desPag() {
+      pw.innerHTML = '';
+      pags.forEach(function (p, i) {
+        var r = el('div', 'ed-et'), fs = el('select'); D.formas.forEach(function (f2) { fs.appendChild(el('option', '', f2.nome + (f2.destino === 'contas' ? ' (vai p/ contas a pagar)' : ''))).value = f2.id; }); fs.value = p.formaId; fs.onchange = function () { p.formaId = fs.value; };
+        var v = inpValor(p.valor ? vs(p.valor) : ''); v.input.oninput = function () { p.valor = num(v.input.value) || 0; }; v.input.setAttribute('aria-label', 'Valor desta forma');
+        r.appendChild(fs); r.appendChild(v); if (pags.length > 1) { var xb = el('button', 'x', '×'); xb.type = 'button'; xb.setAttribute('aria-label', 'Tirar esta forma'); xb.onclick = function () { pags.splice(i, 1); desPag(); }; r.appendChild(xb); }
+        pw.appendChild(r);
+      });
+      var ad = el('button', 'lnk', '+ Dividir em outra forma'); ad.type = 'button'; ad.onclick = function () { pags.push({ formaId: (D.formas[0] || {}).id, valor: '' }); desPag(); }; pw.appendChild(ad);
+      pw.appendChild(el('div', 'hint', 'Cada parte vai para o caixa ou para contas a pagar conforme a configuração da forma de pagamento. Com uma forma só, ela leva o valor todo.'));
+    }
+    desPag();
+    var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
+    btn(ac, x ? 'Salvar' : 'Salvar e continuar', '', function () {
+      var valor = num(vl.input.value) || 0, P = pags.map(function (p) { return { formaId: p.formaId, valor: pags.length === 1 && !p.valor ? valor : p.valor }; });
+      call('ccSalvar', [S.token, { id: x ? x.id : '', loja: lj.value, valor: valor, pagamentos: D.parceira ? [] : P,
+        cliente: { nome: nm.value, cpf: cpf.value, rg: rg.value, whats: wp.value, cep: cep.value, endereco: en.value, bairro: ba.value, cidade: ci.value },
+        aparelho: { marca: mc.value, modelo: md.value, gb: gb.value, cor: cor.value, imei: im.value, imei2: im2.value, serial: se.value, bateria: bt.value, classif: cl.value, obs: ob.value } }])
+        .then(function (r) { aposCC(r.dados); fecharModal(); avisoTopo('A compra ' + r.id + ' foi salva'); detalheCC(r.id); }).catch(function (e) { erroEm(m, e); });
+    });
+    btn(ac, 'Fechar', 'ghost', fecharModal); abrirModal();
+  }
+  function ccAchar(id) { return CC.d.lista.filter(function (z) { return z.id === id; })[0]; }
+  function linkAssCC(tok) { return location.origin + location.pathname + '?ass=' + tok; }
+  /** Detalhe da compra: dados, fotos, contrato/assinatura, ações da etapa e histórico. */
+  function detalheCC(id) {
+    var D = CC.d, x = ccAchar(id); if (!x) return;
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', x.id + ' · ' + x.aparelho.modelo));
+    var st = el('div', 'sub'); st.appendChild(el('span', 'bdg ' + (CC_COR[x.situacao] || ''), x.situacao)); st.appendChild(document.createTextNode(' ' + (CC_ORIG[x.origem] || '') + (x.dados.parceiraNome ? ' · ' + x.dados.parceiraNome : '') + (x.dados.vendaId ? ' · venda ' + x.dados.vendaId : '') + ' · ' + depVer(x.loja))); sh.appendChild(st);
+    var c = el('div', 'card'); sh.appendChild(c);
+    lines(c, [['Cliente', x.cliente.nome + (x.cliente.cpf ? ' · CPF ' + fmtDoc(x.cliente.cpf) : '')], ['Aparelho', [x.aparelho.marca, x.aparelho.modelo, x.aparelho.gb ? x.aparelho.gb + 'GB' : '', x.aparelho.cor].filter(Boolean).join(' ')], ['IMEI', x.aparelho.imei + (x.aparelho.imei2 ? ' / ' + x.aparelho.imei2 : '')],
+      ['Classificação', x.aparelho.classif + (x.aparelho.bateria ? ' · bateria ' + x.aparelho.bateria + '%' : '')], ['Valor', brl(x.valor) + (x.dados.ajuste ? ' (ajustado de ' + brl(x.dados.ajuste.de) + ': ' + x.dados.ajuste.motivo + ')' : '')]]
+      .concat((x.dados.pagamentos || []).length ? [['Pagamento', x.dados.pagamentos.map(function (p) { return p.forma + ' ' + brl(p.valor); }).join(' + ')]] : [])
+      .concat(x.dados.divergencia ? [['Diferença na conferência', brl(x.dados.divergencia.diferenca) + ' · ' + x.dados.divergencia.motivo + ' · vendedor ' + x.dados.divergencia.vendedor]] : [])
+      .concat(x.dados.recusa ? [['Recusado', x.dados.recusa.motivo]] : []));
+    var m = el('div', 'msg err'); var acoes = el('div', 'acoes'); acoes.style.flexWrap = 'wrap'; c.appendChild(acoes); c.appendChild(m);
+    var aberta = ['No estoque', 'Cancelada', 'Recusada'].indexOf(x.situacao) < 0;
+    var reabrir = function (d) { aposCC(d); detalheCC(x.id); };
+    // fotos do aparelho (anexo do contrato)
+    if (aberta || (x.dados.fotos || []).length) { var fw = el('div'); sh.appendChild(fw); fw.appendChild(el('h3', 'ch', 'Fotos do aparelho (vão como anexo do contrato)')); if (aberta) galeriaFotos(fw, { tipo: 'cc', id: x.id }, x.dados.fotos || [], true, function (l) { x.dados.fotos = l; }); else galeriaFotos(fw, { tipo: 'cc', id: x.id }, x.dados.fotos, false); }
+    if (x.situacao === 'Em negociação') { btn(acoes, 'Editar dados', 'ghost', function () { formCC(x); }); btn(acoes, '📄 Gerar contrato', '', function () { call('ccContrato', [S.token, x.id]).then(function (r) { reabrir(r.dados); }).catch(function (e) { erroEm(m, e); }); }); }
+    if (x.dados.contrato || x.origem === 'upgrade') {
+      var ca = el('div', 'card'); sh.insertBefore(ca, sh.children[3] || null); ca.appendChild(el('h2', '', 'Contrato'));
+      if (!x.dados.contrato) btn(ca, '📄 Gerar contrato do Upgrade', 'ghost', function () { call('ccContrato', [S.token, x.id]).then(function (r) { reabrir(r.dados); }).catch(function (e) { erroEm(m, e); }); });
+      else {
+        var A = x.dados.assinatura;
+        if (A) { ca.appendChild(el('div', 'aviso', '✓ Assinado por ' + A.nome + ' em ' + A.em + ' · código ' + A.codigo)); var ex = el('div', 'acoes'); ca.appendChild(ex);
+          if (A.docFoto) btn(ex, '🪪 Ver documento', 'ghost', function () { verAnexoCC(x.id, 'doc'); }); if (A.selfie) btn(ex, '🤳 Ver selfie', 'ghost', function () { verAnexoCC(x.id, 'selfie'); });
+          if (A.gps) { var a2 = el('a', 'btn ghost', '📍 Onde assinou'); a2.href = 'https://www.openstreetmap.org/?mlat=' + A.gps.lat + '&mlon=' + A.gps.lng + '#map=17/' + A.gps.lat + '/' + A.gps.lng; a2.target = '_blank'; a2.rel = 'noopener'; ex.appendChild(a2); } }
+        else if (x.dados.papel) ca.appendChild(el('div', 'hint', 'Assinado no papel (marcado por ' + x.dados.papel.por + ' em ' + x.dados.papel.em + ').'));
+        else if (aberta || x.origem === 'upgrade') {
+          ca.appendChild(el('div', 'hint', 'Peça para o cliente assinar no celular dele (link) ou aqui mesmo nesta tela. O modelo pede: ' + ['doc', 'selfie', 'gps'].filter(function (k) { return x.dados.contrato.exige[k] !== 'nao'; }).map(function (k) { return { doc: 'foto do documento', selfie: 'selfie', gps: 'localização' }[k] + (x.dados.contrato.exige[k] === 'opcional' ? ' (opcional)' : ''); }).join(', ') + '.'));
+          var la = el('div', 'acoes'); ca.appendChild(la); var lk = linkAssCC(x.dados.assTok);
+          btn(la, 'Copiar link', 'ghost', function (ev) { copiar(lk, ev && ev.target).then(function () { avisoTopo('Link copiado'); }); });
+          if (x.cliente.whats) btn(la, 'Enviar no WhatsApp', 'ok', function () { window.open('https://wa.me/55' + soDig(x.cliente.whats) + '?text=' + encodeURIComponent('Olá, ' + x.cliente.nome.split(' ')[0] + '! Segue o contrato de compra do seu ' + x.aparelho.modelo + ' para assinar: ' + lk), '_blank', 'noopener'); });
+          btn(la, 'Assinar nesta tela', 'ghost', function () { window.open(lk, '_blank', 'noopener'); });
+        }
+        btn(ca, '🖨 Imprimir contrato', 'ghost', function () { imprimirContratoCC(x); });
+      }
+    }
+    if (x.situacao === 'Aguardando assinatura' && x.origem === 'loja' && D.concluir) {
+      var pp = el('label', 'ckl'), ck = el('input'); ck.type = 'checkbox'; pp.appendChild(ck); pp.appendChild(document.createTextNode(' Assinado no papel (contrato impresso)')); if (!x.dados.assinatura) acoes.appendChild(pp);
+      btn(acoes, '✓ Concluir: pagar e pôr no estoque', 'ok', function () { call('ccConcluir', [S.token, x.id, { papel: ck.checked }]).then(function (d) { avisoTopo('Compra ' + x.id + ' concluída: aparelho no estoque'); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+    }
+    if (x.situacao === 'Aguardando assinatura' && D.parceira) {
+      var pp2 = el('label', 'ckl'), ck2 = el('input'); ck2.type = 'checkbox'; pp2.appendChild(ck2); pp2.appendChild(document.createTextNode(' Assinado no papel')); if (!x.dados.assinatura) acoes.appendChild(pp2);
+      btn(acoes, '📦 Enviar para a loja', 'ok', function () { call('ccEnviar', [S.token, x.id, { papel: ck2.checked }]).then(function (d) { avisoTopo('Aparelho enviado: código ' + x.id); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+    }
+    if (x.situacao === 'Aguardando chegada') btn(acoes, '🏷 Etiqueta com QR', 'ghost', function () { etiquetaCC(x); });
+    if ((x.situacao === 'Aguardando chegada' || x.situacao === 'Upgrade aguardando conferência') && D.conferir) painelConferir(c, x, m, reabrir);
+    if (x.situacao === 'Em conferência' && D.conferir) btn(acoes, 'Lançar no estoque', 'ok', function () { call('ccConferir', [S.token, x.id, { acao: 'lancar' }]).then(function (d) { avisoTopo('Aparelho no estoque'); reabrir(d); }).catch(function (e) { erroEm(m, e); }); });
+    if (aberta && x.origem !== 'upgrade' && !(x.origem === 'parceira' && x.situacao === 'Aguardando chegada' && !D.parceira)) btn(acoes, 'Cancelar compra', 'ghost', function () {
+      var mo = prompt('Motivo do cancelamento:'); if (!mo) return; call('ccCancelar', [S.token, x.id, mo]).then(function (d) { reabrir(d); }).catch(function (e) { erroEm(m, e); });
+    });
+    var hc = el('div', 'card'); sh.appendChild(hc); hc.appendChild(el('h2', '', 'Histórico'));
+    (x.dados.hist || []).slice().reverse().forEach(function (h) { hc.appendChild(el('div', 'hint', h.em + ' · ' + h.por + ' · ' + h.txt)); });
+    var fx = el('button', 'btn ghost', 'Fechar'); fx.type = 'button'; fx.style.marginTop = '10px'; fx.onclick = fecharModal; sh.appendChild(fx);
+    abrirModal();
+  }
+  function painelConferir(c, x, m, reabrir) {
+    var up = x.origem === 'upgrade', bx = el('div', 'opc-box'); c.appendChild(bx);
+    bx.appendChild(el('h3', 'ch', up ? 'Conferir o aparelho do Upgrade' : 'Conferir a chegada'));
+    bx.appendChild(el('div', 'hint', up ? 'Confira IMEI, bateria e estado. Se estiver pior do que o informado na venda, diga quanto ele vale e o motivo: a diferença fica registrada para o vendedor (o custo continua o valor dado).' : 'Confira com o que a parceira lançou. Se estiver diferente, ajuste o valor (com motivo) ou recuse.'));
+    var g = grade(bx, 2), v = inpValor(''); v.input.placeholder = up ? 'vazio = está como informado' : brl(x.valor); campo(g[0], up ? 'Quanto vale de verdade' : 'Valor ajustado (opcional)', v);
+    var mo = inp('text', 'Ex.: bateria 79%, risco na tela'); campo(g[1], 'Motivo', mo);
+    var ac = el('div', 'acoes'); bx.appendChild(ac);
+    btn(ac, up ? '✓ Conferido: pôr no estoque' : '✓ Aceitar', 'ok', function () { var d = { acao: 'aceitar', motivo: mo.value }; if (up) d.valorReal = v.input.value ? num(v.input.value) : ''; else d.valor = v.input.value ? num(v.input.value) : ''; call('ccConferir', [S.token, x.id, d]).then(function (r) { avisoTopo('Conferido'); reabrir(r); }).catch(function (e) { erroEm(m, e); }); });
+    if (!up) btn(ac, 'Recusar e devolver', 'ghost', function () { call('ccConferir', [S.token, x.id, { acao: 'recusar', motivo: mo.value }]).then(function (r) { reabrir(r); }).catch(function (e) { erroEm(m, e); }); });
+  }
+  function verAnexoCC(id, qual) {
+    var w = window.open('', '_blank'); call('ccAnexo', [S.token, id, qual]).then(function (r) { if (r && r.url) w.location = r.url; else { w.close(); msg('topMsg', 'Foto não encontrada.'); } }).catch(function (e) { w.close(); msg('topMsg', e); });
+  }
+  /** Contrato para imprimir: texto, assinaturas (cliente, loja automática, responsável) e as fotos do aparelho como anexo. */
+  function imprimirContratoCC(x) {
+    var k = x.dados.contrato || {}, A = x.dados.assinatura, w = el('div', 'contrato');
+    w.appendChild(el('h1', '', String(k.titulo || 'Contrato').toUpperCase()));
+    w.appendChild(el('div', 'ctxt', k.texto || ''));
+    var as = el('div', 'cass'); w.appendChild(as);
+    var bloco = function (rot, img, linhas) { var b = el('div', 'cab'); b.appendChild(el('b', '', rot)); if (img) { var i = el('img'); i.src = img; i.alt = 'Assinatura'; b.appendChild(i); } else b.appendChild(el('div', 'linha', '')); linhas.forEach(function (l) { if (l) b.appendChild(el('div', '', l)); }); as.appendChild(b); };
+    bloco('VENDEDOR (CLIENTE)', A && A.img, [x.cliente.nome, A ? 'Assinado eletronicamente em ' + A.em + ' · código ' + A.codigo : 'Assinatura']);
+    var L = k.assLoja; bloco('COMPRADOR (' + ((k.comprador || {}).nome || 'LOJISTA') + ')', L && L.img, [L ? L.nome + (L.cargo ? ' · ' + L.cargo : '') : 'Nome legível do representante', L ? 'Assinatura eletrônica da empresa' : '']);
+    bloco('RESPONSÁVEL PELO PREENCHIMENTO', null, [k.responsavel || '']);
+    if ((x.dados.fotos || []).length) { var an = el('div', 'canx'); an.appendChild(el('h2', '', 'Anexo: fotos do aparelho (' + x.id + ')')); x.dados.fotos.forEach(function (f) { var i = el('img'); i.src = fotoUrl(f, 900); an.appendChild(i); }); w.appendChild(an); }
+    var go = function () { imprimirHTML('Contrato ' + x.id, w, '.contrato{font:12px/1.5 "Times New Roman",serif;color:#111}.contrato h1{font-size:15px;text-align:center;margin:0 0 14px}.ctxt{white-space:pre-line;text-align:justify}.cass{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px;page-break-inside:avoid}.cab b{display:block;font-size:11px}.cab img{max-height:70px;max-width:100%;display:block;margin:4px 0}.cab .linha{border-bottom:1px solid #111;height:40px;margin:4px 0}.canx{page-break-before:always}.canx img{width:48%;margin:1%;border:1px solid #ccc}'); };
+    if (A && !A.img && x.dados.assTok) call('assinaturaVer', [x.dados.assTok]).then(function (v) { if (v.assinatura && v.assinatura.img) { A.img = v.assinatura.img; } w.innerHTML = ''; imprimirContratoCC(x); }).catch(go);
+    else go();
+  }
+  /** Etiqueta com QR (código da compra) para mandar junto com o aparelho. */
+  function etiquetaCC(x) {
+    var w = el('div', 'etq'); w.appendChild(el('b', '', 'GESTTI · ' + x.id)); w.appendChild(el('div', '', x.aparelho.modelo + ' · IMEI ' + x.aparelho.imei)); w.appendChild(el('div', '', (x.dados.parceiraNome || '') + ' → ' + depVer(x.loja)));
+    var q = el('div'); w.appendChild(q);
+    var fim = function () { imprimirHTML('Etiqueta ' + x.id, w, '.etq{font:13px system-ui;border:1px dashed #333;padding:10px;width:260px}.etq img,.etq canvas{margin-top:8px}'); };
+    var lib = function () { if (window.QRCode) return Promise.resolve(); return new Promise(function (ok, fail) { var s2 = document.createElement('script'); s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s2.onload = ok; s2.onerror = fail; document.head.appendChild(s2); }); };
+    lib().then(function () { new window.QRCode(q, { text: 'GESTTI:' + x.id, width: 140, height: 140 }); setTimeout(fim, 300); }).catch(function () { q.appendChild(el('div', '', 'Código: ' + x.id)); fim(); });
+  }
+  /** Conferência: lê o QR com a câmera (quando o navegador permite) ou digita o código. */
+  function conferirPorCodigo() {
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Conferir pelo código')); var c = el('div', 'card'); sh.appendChild(c);
+    var cod = inp('text', 'Ex.: CC00012'); cod.autocapitalize = 'characters'; campo(c, 'Código da compra', cod, true);
+    var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac); var vid = el('video'); vid.setAttribute('playsinline', ''); vid.muted = true; vid.style.cssText = 'width:100%;max-height:260px;border-radius:10px;background:#000;display:none;margin-top:10px'; c.appendChild(vid);
+    var abrirCod = function (t) { var k = String(t || '').toUpperCase().replace(/^GESTTI:/, '').trim(); if (!ccAchar(k)) return erroEm(m, 'Código não encontrado: ' + k); parar(); fecharModal(); detalheCC(k); };
+    var stream = null, parar = function () { if (stream) stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; };
+    btn(ac, 'Abrir', '', function () { abrirCod(cod.value); });
+    if ('BarcodeDetector' in window && navigator.mediaDevices) btn(ac, '📷 Ler QR', 'ghost', function () {
+      var det = new window.BarcodeDetector({ formats: ['qr_code'] });
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(function (s2) { stream = s2; vid.srcObject = s2; vid.style.display = 'block'; vid.play();
+        var lp = function () { if (!stream) return; det.detect(vid).then(function (r) { if (r && r[0]) abrirCod(r[0].rawValue); else setTimeout(lp, 250); }).catch(function () { setTimeout(lp, 400); }); }; lp();
+      }).catch(function () { erroEm(m, 'Não consegui abrir a câmera. Digite o código.'); });
+    });
+    btn(ac, 'Fechar', 'ghost', function () { parar(); fecharModal(); }); abrirModal(); setTimeout(function () { cod.focus(); }, 50);
+  }
+  /** Parceiras (layout das formas de pagamento): cadastro, destino, pagamento e login. */
+  function parceirasCC(box) {
+    var D = CC.d, c = el('div', 'card'); box.appendChild(c);
+    c.appendChild(el('div', 'hint', 'Lojas parceiras lançam os aparelhos que compram para você: geram o contrato com o cliente delas e mandam o aparelho com o código. Você confere na chegada.'));
+    var tab = el('div', 'ptab fmtab'), h = el('div', 'prow h'); ['', 'Parceira', 'Destino', 'Pagamento', ''].forEach(function (t) { h.appendChild(el('div', '', t)); }); tab.appendChild(h);
+    D.parceiras.forEach(function (p) {
+      var r = el('div', 'prow' + (p.ativa ? '' : ' off')); r.tabIndex = 0; r.setAttribute('role', 'button'); var ic = el('div', 'pimg'); ic.innerHTML = ICO_PES; r.appendChild(ic);
+      var n = el('div'); n.appendChild(el('div', 'pnome', p.nome)); n.appendChild(el('div', 'psub', [p.doc ? fmtDoc(p.doc) : '', p.responsavel, p.cidade].filter(Boolean).join(' · '))); r.appendChild(n);
+      r.appendChild(el('div', 'psku', depVer(p.loja) + ' · ' + (p.destino === 'compras' ? 'aprovação' : 'estoque'))); r.appendChild(el('div', 'psub', p.pagamento.modo === 'periodico' ? 'acerto ' + p.pagamento.periodo : 'na conferência + ' + p.pagamento.dias + ' dia(s)'));
+      r.appendChild(el('div', 'chev', '›')); r.onclick = function () { paginaParceira(box, p); }; tab.appendChild(r);
+    });
+    c.appendChild(tab);
+    var add = el('button', 'btn', '+ Nova parceira'); add.type = 'button'; add.style.cssText = 'width:auto;padding:11px 20px;margin-top:14px'; add.onclick = function () { paginaParceira(box, null); }; c.appendChild(add);
+  }
+  function paginaParceira(box, p) {
+    var D = CC.d; p = p ? JSON.parse(JSON.stringify(p)) : { nome: '', doc: '', responsavel: '', telefone: '', email: '', endereco: '', cidade: '', loja: D.lojas[0], destino: 'estoque', pagamento: { modo: 'conferencia', dias: 7, periodo: 'semanal' }, ativa: true };
+    box.innerHTML = ''; var vt = el('button', 'lnk', '← Todas as parceiras'); vt.type = 'button'; vt.onclick = function () { desenharCC(); }; box.appendChild(vt);
+    box.appendChild(el('h3', 'fmtit', p.id ? p.nome : 'Nova parceira'));
+    var c = el('div', 'card'); box.appendChild(c);
+    var g = grade(c, 2), nm = inp('text', 'Nome ou razão social'); nm.value = p.nome; campo(g[0], 'Nome *', nm, true); var dc = inp('text', 'CNPJ ou CPF'); dc.value = p.doc ? fmtDoc(p.doc) : ''; campo(g[1], 'CNPJ/CPF', dc);
+    var g2 = grade(c, 3), rs = inp('text', 'Quem responde'); rs.value = p.responsavel; campo(g2[0], 'Responsável', rs); var tl = inp('tel', '(22) 99999-9999'); tl.value = p.telefone; campo(g2[1], 'Telefone', tl); var em = inp('email', 'e-mail'); em.value = p.email; campo(g2[2], 'E-mail', em);
+    var g3 = grade(c, 2), en = inp('text', 'Endereço'); en.value = p.endereco; campo(g3[0], 'Endereço (vai no contrato dela)', en); var ci = inp('text', 'Cidade/UF'); ci.value = p.cidade; campo(g3[1], 'Cidade (foro do contrato dela)', ci);
+    c.appendChild(el('h3', 'ch', 'Destino e pagamento'));
+    var g4 = grade(c, 3), lj = el('select'); D.lojas.forEach(function (l) { lj.appendChild(el('option', '', depVer(l))).value = l; }); lj.value = p.loja; campo(g4[0], 'Loja de destino (fixa)', lj);
+    var ds = el('select'); [['estoque', 'Direto para o estoque'], ['compras', 'Conferência + aprovação de quem lança compras']].forEach(function (o) { ds.appendChild(el('option', '', o[1])).value = o[0]; }); ds.value = p.destino; campo(g4[1], 'Depois da conferência', ds);
+    var pm = el('select'); [['conferencia', 'Na conferência (vence em X dias)'], ['periodico', 'Acerto periódico']].forEach(function (o) { pm.appendChild(el('option', '', o[1])).value = o[0]; }); pm.value = p.pagamento.modo; campo(g4[2], 'Pagamento à parceira', pm);
+    var g5 = grade(c, 2), di = inp('number', '0'); di.min = 0; di.value = p.pagamento.dias; campo(g5[0], 'Dias para vencer (na conferência)', di);
+    var pe = el('select'); [['semanal', 'Semanal (vence no domingo)'], ['mensal', 'Mensal (vence no fim do mês)']].forEach(function (o) { pe.appendChild(el('option', '', o[1])).value = o[0]; }); pe.value = p.pagamento.periodo; campo(g5[1], 'Acerto', pe);
+    var at = el('label', 'ckl'), ak = el('input'); ak.type = 'checkbox'; ak.checked = p.ativa !== false; at.appendChild(ak); at.appendChild(document.createTextNode(' Ativa')); c.appendChild(at);
+    var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
+    btn(ac, 'Salvar', '', function () { call('parceiraSalvar', [S.token, { id: p.id || '', nome: nm.value, doc: dc.value, responsavel: rs.value, telefone: tl.value, email: em.value, endereco: en.value, cidade: ci.value, loja: lj.value, destino: ds.value, pagamento: { modo: pm.value, dias: di.value, periodo: pe.value }, ativa: ak.checked }])
+      .then(function (d) { CC.d = d; avisoTopo('Parceira salva'); CC.aba = 'Parceiras'; desenharCC(); }).catch(function (e) { erroEm(m, e); }); });
+    if (p.id && D.criarLogin) btn(ac, '🔑 Criar login da parceira', 'ghost', function () {
+      var u = prompt('Usuário de acesso da parceira (ex.: parceirax):'); if (!u) return;
+      call('parceiraLoginCriar', [S.token, p.id, u, rs.value || nm.value]).then(function (r) { perguntar('Login da parceira', 'Usuário: ' + r.usuario + '.' + (S.u.sistema ? S.u.sistema : '') + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nEla entra pela mesma tela do Gestti e só vê a Compra de Celulares dela. Anote agora: a senha não aparece de novo.'); }).catch(function (e) { erroEm(m, e); });
+    });
+  }
+  function pagamentosParc(box) {
+    var L = CC.d.pagamentos || [];
+    if (!L.length) { box.appendChild(el('div', 'empty', 'Nenhum pagamento ainda.')); return; }
+    tabela(box, 'Meus pagamentos', ['Descrição', 'Valor', 'Vencimento', 'Situação', 'Pago em'], L.map(function (c) { return [c.descricao, brl(c.valor), c.venc ? isoBR(c.venc) : '—', c.situacao, c.pagoEm ? isoBR(c.pagoEm) : '—']; }), 'pagamentos-parceira');
+  }
   // ---- Metas › Relatórios: vendedor vê o dele; gerente filtra por vendedor; supervisor por loja, gerente ou vendedor
   var MR = { per: 'mes', de: '', ate: '', loja: '', gerente: '', vendedor: '' };
   function isoDe(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
@@ -10736,8 +11037,9 @@
     var box = $('mrCorpo'); box.innerHTML = '';
     if (!d.linhas.length) { box.appendChild(el('div', 'empty', 'Nada no período.')); return; }
     var sup = d.nivel === 'supervisor';
-    var cab = (sup ? ['Loja'] : []).concat(['Vendedor'], sup ? ['Gerente'] : [], ['Vendido', 'Vendas', 'Ticket médio', 'OS entregues', 'OS faturado', 'Celulares', 'Celulares faturado', 'Meta', '% da meta']);
-    var linhas = d.linhas.map(function (x) { return (sup ? [x.empresa] : []).concat([x.nome], sup ? [x.gerente || '—'] : [], [brl(x.vendas.valor), x.vendas.qtd, brl(x.ticket), x.os.qtd, brl(x.os.valor), x.cel.qtd, brl(x.cel.valor), x.meta ? brl(x.meta) : '—', x.ating !== null ? nfmt(x.ating) + '%' : '—']); });
+    var temUpg = d.total.upg && d.total.upg.qtd;
+    var cab = (sup ? ['Loja'] : []).concat(['Vendedor'], sup ? ['Gerente'] : [], ['Vendido', 'Vendas', 'Ticket médio', 'OS entregues', 'OS faturado', 'Celulares', 'Celulares faturado', 'Meta', '% da meta'], temUpg ? ['Diferença em upgrades'] : []);
+    var linhas = d.linhas.map(function (x) { return (sup ? [x.empresa] : []).concat([x.nome], sup ? [x.gerente || '—'] : [], [brl(x.vendas.valor), x.vendas.qtd, brl(x.ticket), x.os.qtd, brl(x.os.valor), x.cel.qtd, brl(x.cel.valor), x.meta ? brl(x.meta) : '—', x.ating !== null ? nfmt(x.ating) + '%' : '—'], temUpg ? [x.upg && x.upg.qtd ? x.upg.qtd + ' · ' + brl(x.upg.valor) : '—'] : []); });
     tabela(box, 'Resultados por vendedor (' + d.linhas.length + ')', cab, linhas, 'relatorio-metas-' + d.de + '-a-' + d.ate);
   }
 
@@ -14531,6 +14833,72 @@
     }
     lista();
   }
+  /** Configurações › Modelos de documento (layout das formas de pagamento): texto com campos automáticos e as exigências da assinatura. */
+  var DOC_TIPOS = { compra: 'Contrato de compra de celular', reserva: 'Termo de reserva', encomenda: 'Termo de encomenda' };
+  var DOC_CAMPOS = ['COMPRADOR_NOME', 'COMPRADOR_DOC', 'COMPRADOR_ENDERECO', 'CLIENTE_NOME', 'CLIENTE_CPF', 'CLIENTE_RG', 'CLIENTE_CELULAR', 'CLIENTE_ENDERECO', 'MARCA', 'MODELO', 'GB', 'COR', 'IMEI1', 'IMEI2', 'SERIE', 'OBS', 'VALOR', 'VALOR_EXTENSO', 'CLAUSULA_PAGAMENTO', 'FORO', 'CIDADE_DATA', 'RESPONSAVEL'];
+  var EXIGE_ROT = { doc: 'Foto do documento', selfie: 'Selfie na hora', gps: 'Localização' }, EXIGE_OP = [['nao', 'Não pedir'], ['opcional', 'Opcional'], ['obrigatorio', 'Obrigatório']];
+  function cfgModelosDoc(box) {
+    var raiz = el('div'); box.appendChild(raiz); var L = null;
+    function carregar() { raiz.innerHTML = ''; raiz.appendChild(el('div', 'empty', 'Carregando…')); call('estoqueReservasDados', [S.token]).then(function (d) { L = d.termos; lista(); }).catch(function (e) { raiz.innerHTML = ''; raiz.appendChild(el('div', 'empty', String(e))); }); }
+    function salvar(nova, aviso, depois) { return call('termosSalvar', [S.token, nova]).then(function (t) { L = t; avisoTopo(aviso); depois(); }); }
+    function lista() {
+      raiz.innerHTML = ''; var c = el('div', 'card'); raiz.appendChild(c);
+      c.appendChild(el('div', 'hint', 'Clique em um modelo para mudar o texto e o que a assinatura pede (foto do documento, selfie, localização). O padrão de cada tipo é o usado nos documentos novos.'));
+      var tab = el('div', 'ptab fmtab'), h = el('div', 'prow h'); ['', 'Modelo', 'Tipo', 'A assinatura pede', ''].forEach(function (x) { h.appendChild(el('div', '', x)); }); tab.appendChild(h);
+      L.forEach(function (t, i) {
+        var r = el('div', 'prow'); r.tabIndex = 0; r.setAttribute('role', 'button'); var ic = el('div', 'pimg'); ic.innerHTML = svgIco('termo') || ''; r.appendChild(ic);
+        var n = el('div'), nm = el('div', 'pnome', t.titulo); if (t.padrao) nm.appendChild(el('span', 'bdg ok', 'Padrão')); n.appendChild(nm); r.appendChild(n);
+        r.appendChild(el('div', 'psku', DOC_TIPOS[t.tipo] || t.tipo));
+        var ex = t.exige || {}; r.appendChild(el('div', 'psub', ['doc', 'selfie', 'gps'].filter(function (k) { return ex[k] && ex[k] !== 'nao'; }).map(function (k) { return EXIGE_ROT[k] + (ex[k] === 'opcional' ? ' (opcional)' : ''); }).join(' · ') || 'só nome, CPF e assinatura'));
+        r.appendChild(el('div', 'chev', '›')); r.onclick = function () { pagina(i); }; tab.appendChild(r);
+      });
+      c.appendChild(tab);
+      var add = el('button', 'btn', '+ Novo modelo'); add.type = 'button'; add.style.cssText = 'width:auto;padding:11px 20px;margin-top:14px'; add.onclick = function () { pagina(-1); }; c.appendChild(add);
+    }
+    function pagina(i) {
+      var t = i > -1 ? JSON.parse(JSON.stringify(L[i])) : { id: '', tipo: 'compra', titulo: '', texto: '', padrao: false, exige: { doc: 'nao', selfie: 'nao', gps: 'nao' } };
+      raiz.innerHTML = ''; var vt = el('button', 'lnk', '← Todos os modelos'); vt.type = 'button'; vt.onclick = lista; raiz.appendChild(vt);
+      raiz.appendChild(el('h3', 'fmtit', t.titulo || 'Novo modelo')); var c = el('div', 'card'); raiz.appendChild(c);
+      var g = grade(c, 2), ti = inp('text', 'Título'); ti.value = t.titulo; ti.maxLength = 80; campo(g[0], 'Título *', ti, true);
+      var tp = el('select'); Object.keys(DOC_TIPOS).forEach(function (k) { tp.appendChild(el('option', '', DOC_TIPOS[k])).value = k; }); tp.value = t.tipo; tp.disabled = !!t.id; campo(g[1], 'Tipo', tp);
+      var tx = el('textarea'); tx.rows = 16; tx.value = t.texto; campo(c, 'Texto', tx, true);
+      var cw = el('div', 'chips'); c.appendChild(el('div', 'hint', 'Campos automáticos (o sistema preenche ao gerar o documento) — clique para inserir no texto:')); c.appendChild(cw);
+      DOC_CAMPOS.forEach(function (k) { var b = el('button', 'chip', '[' + k + ']'); b.type = 'button'; b.onclick = function () { var a = tx.selectionStart || tx.value.length; tx.value = tx.value.slice(0, a) + '[' + k + ']' + tx.value.slice(tx.selectionEnd || a); tx.focus(); }; cw.appendChild(b); });
+      c.appendChild(el('h3', 'ch', 'O que a assinatura pede'));
+      var g2 = grade(c, 3), sel = {};
+      ['doc', 'selfie', 'gps'].forEach(function (k, n) { var s2 = el('select'); EXIGE_OP.forEach(function (o) { s2.appendChild(el('option', '', o[1])).value = o[0]; }); s2.value = (t.exige || {})[k] || 'nao'; campo(g2[n], EXIGE_ROT[k], s2); sel[k] = s2; });
+      var pl = el('label', 'ckl'), pk = el('input'); pk.type = 'checkbox'; pk.checked = !!t.padrao; pl.appendChild(pk); pl.appendChild(document.createTextNode(' Padrão deste tipo')); c.appendChild(pl);
+      var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
+      btn(ac, 'Salvar', '', function () {
+        var n2 = { id: t.id, tipo: tp.value, titulo: ti.value, texto: tx.value, padrao: pk.checked, semDesistencia: t.semDesistencia, exige: { doc: sel.doc.value, selfie: sel.selfie.value, gps: sel.gps.value } };
+        var L2 = L.map(function (z) { return Object.assign({}, z, n2.padrao && z.tipo === n2.tipo && z.id !== n2.id ? { padrao: false } : {}); }); if (i > -1) L2[i] = n2; else L2.push(n2);
+        salvar(L2, 'O modelo foi salvo com sucesso', lista).catch(function (e) { erroEm(m, e); });
+      });
+      if (i > -1) btn(ac, 'Excluir', 'ghost', function () { if (!confirm('Excluir o modelo "' + t.titulo + '"?')) return; salvar(L.filter(function (z, k) { return k !== i; }), 'O modelo foi excluído', lista).catch(function (e) { erroEm(m, e); }); });
+    }
+    carregar();
+  }
+  /** Configurações › Assinatura da loja: desenhada uma vez, entra sozinha nos contratos (assinatura eletrônica simples). */
+  function cfgAssLoja(box) {
+    var c = el('div', 'card'); box.appendChild(c);
+    c.appendChild(el('div', 'hint', 'Assinatura eletrônica simples da empresa: o representante desenha uma vez e ela entra sozinha no campo do comprador (lojista) de todos os contratos. Só gerente e supervisor trocam, e cada troca fica no histórico.'));
+    var at = (CC.d && CC.d.assLoja) || null, ver = el('div'); c.appendChild(ver);
+    var mostrar = function (a) { ver.innerHTML = ''; if (a && a.img) { ver.appendChild(el('div', 'hint', 'Atual: ' + a.nome + (a.cargo ? ' · ' + a.cargo : '') + (a.em ? ' · desde ' + a.em : ''))); var im = el('img'); im.src = a.img; im.alt = 'Assinatura atual'; im.style.cssText = 'max-height:80px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px'; ver.appendChild(im); } };
+    mostrar(at); if (!at) call('ccDados', [S.token]).then(function (d) { CC.d = d; mostrar(d.assLoja); }).catch(function () {});
+    var g = grade(c, 2), nm = inp('text', 'Nome do representante'); campo(g[0], 'Representante *', nm, true); var cg = inp('text', 'Ex.: Sócio-administrador'); campo(g[1], 'Cargo', cg);
+    c.appendChild(el('label', '', 'Desenhe a assinatura'));
+    var cv = el('canvas'); cv.style.cssText = 'width:100%;height:170px;border:1px dashed var(--line);border-radius:10px;background:#fff;touch-action:none'; c.appendChild(cv);
+    var ctx, des = false, riscos = 0;
+    var prep = function () { var r = cv.getBoundingClientRect(); cv.width = Math.round(r.width) || 600; cv.height = 170; ctx = cv.getContext('2d'); ctx.lineWidth = 2.4; ctx.lineCap = 'round'; ctx.strokeStyle = '#111'; riscos = 0; };
+    setTimeout(prep, 0);
+    var pt = function (e) { var r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    cv.addEventListener('pointerdown', function (e) { des = true; cv.setPointerCapture(e.pointerId); var p = pt(e); ctx.beginPath(); ctx.moveTo(p[0], p[1]); e.preventDefault(); });
+    cv.addEventListener('pointermove', function (e) { if (!des) return; var p = pt(e); ctx.lineTo(p[0], p[1]); ctx.stroke(); riscos++; e.preventDefault(); });
+    cv.addEventListener('pointerup', function () { des = false; });
+    var lp = el('button', 'lnk', 'Limpar'); lp.type = 'button'; lp.onclick = prep; c.appendChild(lp);
+    var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
+    btn(ac, 'Salvar assinatura', '', function () { if (riscos < 8) return erroEm(m, 'Desenhe a assinatura no quadro.'); call('assLojaSalvar', [S.token, { nome: nm.value, cargo: cg.value, img: cv.toDataURL('image/png') }]).then(function (a) { if (CC.d) CC.d.assLoja = a; mostrar(a); prep(); avisoTopo('A assinatura da loja foi salva'); }).catch(function (e) { erroEm(m, e); }); });
+  }
   /** Configurações › Histórico: tudo o que foi feito, com filtros, antes/depois nas alterações e planilha. */
   function cfgHistorico(box) {
     var H = { de: '', ate: '', usuario: '', tipo: '', busca: '', empresa: (S.u.empresa && S.u.empresa.atual) || '' };
@@ -14646,6 +15014,8 @@
     if (pode('cancelar_os')) l.push(['osaux', 'Ordem de Serviço', 'Termos e prazos de garantia']);
     if (pode('equipe')) l.push(['empresas', 'Empresas', 'Outras empresas com dados separados (mesmo sistema e atualizações)']);
     if (pode('historico') || pode('equipe') || /^(Gerente|Supervisor)$/.test(S.u.perfil || '')) l.push(['historico', 'Histórico', 'Tudo o que foi feito no sistema: o quê, quem, quando e onde']);
+    if (pode('equipe') || pode('liberar')) l.push(['modelosdoc', 'Modelos de documento', 'Contrato de compra, termos de reserva/encomenda: texto e o que a assinatura pede']);
+    if (pode('equipe') || /^(Gerente|Supervisor)$/.test(S.u.perfil || '')) l.push(['assloja', 'Assinatura da loja', 'Assinatura eletrônica da empresa que entra sozinha nos contratos']);
     if (pode('equipe') || pode('crm')) l.push(['obrigatorios', 'Cadastro de pessoas: obrigatórios', 'Campos obrigatórios para pessoa física e jurídica']);
     if (pode('equipe')) l.push(['empresa', 'Dados da empresa', 'Nome, CNPJ, endereço (busca pelo CEP) e logo da impressão'], ['login', 'Tela de entrada', 'Contatos do rodapé "fale com a gente!"']);
     return l;
@@ -14693,6 +15063,8 @@
     else if (ab === 'manutcentral') cfgManutCentral(box);
     else if (ab === 'avalmarcas') cfgAvalMarcas(box, JSON.parse(JSON.stringify(((S.u.aval || {}).marcas) || [])));
     else if (ab === 'historico') cfgHistorico(box);
+    else if (ab === 'modelosdoc') cfgModelosDoc(box);
+    else if (ab === 'assloja') cfgAssLoja(box);
     else if (ab === 'obrigatorios') cfgObrigatorios(box);
     else if (ab === 'modelosmsg') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
