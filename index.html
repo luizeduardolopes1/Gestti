@@ -2187,6 +2187,24 @@
   // =========================================================
   //  RESERVAS
   // =========================================================
+  /** Leva 6 ampliada: "Buscar na Receita" em todo cadastro de pessoa jurídica. CNPJ válido digitado → busca os dados públicos
+   *  (BrasilAPI) e chama preencher(j) para completar só o que estiver vazio. aviso: elemento onde mostrar o resultado (opcional). */
+  function ligarReceita(docInp, preencher, aviso) {
+    var buscar = function () {
+      var k = soDig(docInp.value);
+      if (k.length !== 14 || !cnpjOk(k) || docInp.dataset.receita === k) return;
+      docInp.dataset.receita = k; if (aviso) { aviso.textContent = 'Buscando os dados do CNPJ na Receita…'; aviso.style.color = 'var(--muted)'; }
+      fetch('https://brasilapi.com.br/api/cnpj/v1/' + k, { credentials: 'omit' }).then(function (r) { if (!r.ok) throw r.status; return r.json(); }).then(function (j) {
+        preencher(j, function (inp2, v) { if (inp2 && !String(inp2.value || '').trim() && v) { inp2.value = v; try { inp2.dispatchEvent(new Event('input')); } catch (e) {} } });
+        if (aviso) { aviso.textContent = '✓ ' + (j.descricao_situacao_cadastral || 'CNPJ encontrado') + (j.nome_fantasia ? ' · ' + j.nome_fantasia : '') + ' · dados da Receita preenchidos'; aviso.style.color = /ATIVA/i.test(j.descricao_situacao_cadastral || '') ? 'var(--ok)' : 'var(--warn)'; }
+      }).catch(function () { if (aviso) { aviso.textContent = 'Não consegui buscar os dados do CNPJ agora (preencha à mão).'; aviso.style.color = 'var(--muted)'; } });
+    };
+    docInp.addEventListener('input', buscar); docInp.addEventListener('blur', buscar);
+  }
+  var rfCep = function (j) { return j.cep ? String(j.cep).replace(/\D/g, '').replace(/^(\d{5})(\d{3})$/, '$1-$2') : ''; };
+  var rfRua = function (j) { return [j.descricao_tipo_de_logradouro, j.logradouro].filter(Boolean).join(' '); };
+  var rfCid = function (j) { return j.municipio ? j.municipio + (j.uf ? '/' + j.uf : '') : ''; };
+  var rfTel = function (j) { var t = String(j.ddd_telefone_1 || '').replace(/\D/g, ''); return t.length >= 10 ? t : ''; };
   function waLink(whats, texto) { var w = String(whats || '').replace(/\D/g, ''); return 'https://wa.me/' + (w ? (w.length <= 11 ? '55' + w : w) : '') + '?text=' + encodeURIComponent(texto || ''); }
   function podeGerirRes(r) { return !!r && (r.vendedorId === S.u.id || pode('liberar')); }
   function resSerial(serial) { var k = String(serial || '').replace(/\s+/g, ' ').trim().toUpperCase(); return (S.resv || []).filter(function (r) { return r.ativa && r.tipo === 'produto' && r.chave.toUpperCase() === k; })[0] || null; }
@@ -2257,7 +2275,7 @@
     if (r.ativa && r.podeGerir) {
       var ac = el('div', 'acoes');
       var bw = el('button', 'btn', 'Enviar comprovante no WhatsApp'); bw.type = 'button'; bw.onclick = function () { window.open(waLink(r.whats, r.texto), '_blank'); }; ac.appendChild(bw);
-      if (r.link && !r.assinatura) { var ba = el('button', 'btn ghost', 'Cliente assina neste aparelho'); ba.type = 'button'; ba.onclick = function () { window.open(r.link, '_blank'); }; ac.appendChild(ba); }
+      if (r.link && !r.assinatura) { var ba = el('button', 'btn ghost', 'Cliente assina neste aparelho'); ba.type = 'button'; ba.onclick = function () { assinarAqui(r.link, ''); }; ac.appendChild(ba); }
       sh.appendChild(ac);
       if (r.link) { var cp = el('button', 'lnk', 'Copiar o link do termo'); cp.type = 'button'; cp.onclick = function () { copiar(r.link, cp); }; sh.appendChild(cp); }
       var bc = el('button', 'btn ghost', 'Cancelar a reserva'); bc.type = 'button'; bc.style.cssText = 'margin-top:14px;color:var(--err);border-color:var(--err)';
@@ -3801,7 +3819,7 @@
       var ac = el('div', 'acoes');
       if (e.situacao === 'Chegou' && e.textoChegou) { var bch = el('button', 'btn', 'Avisar o cliente que chegou'); bch.type = 'button'; bch.onclick = function () { window.open(waLink(e.whats, e.textoChegou), '_blank'); }; ac.appendChild(bch); }
       var bw = el('button', 'btn' + (e.situacao === 'Chegou' ? ' ghost' : ''), 'Enviar comprovante no WhatsApp'); bw.type = 'button'; bw.onclick = function () { window.open(waLink(e.whats, e.texto), '_blank'); }; ac.appendChild(bw);
-      if (!e.assinatura) { var ba = el('button', 'btn ghost', 'Cliente assina neste aparelho'); ba.type = 'button'; ba.onclick = function () { window.open(e.link, '_blank'); }; ac.appendChild(ba); }
+      if (!e.assinatura) { var ba = el('button', 'btn ghost', 'Cliente assina neste aparelho'); ba.type = 'button'; ba.onclick = function () { assinarAqui(e.link, ''); }; ac.appendChild(ba); }
       sh.appendChild(ac);
       if (e.situacao === 'Chegou' && pode('vender')) {
         var bv = el('button', 'btn', 'Vender (abate o sinal)'); bv.type = 'button'; bv.style.marginTop = '10px';
@@ -3851,6 +3869,8 @@
   // ---------- página pública: o cliente lê e assina ----------
   function paginaAssinatura() {
     var tok = (location.search.match(/[?&]ass=([a-f0-9]{40})/) || [])[1];
+    // veio de dentro do sistema/app: endereço de volta (só deste site)
+    var volta = (function () { var v = (location.search.match(/[?&]volta=([^&]+)/) || [])[1]; try { v = v ? decodeURIComponent(v) : ''; } catch (e) { v = ''; } return /^\/[^\/]/.test(v) ? v : ''; })();
     document.title = 'Assinatura do termo';
     var pg = el('div'); pg.id = 'assPg'; document.body.appendChild(pg); document.body.classList.add('assinatura'); document.body.style.overflow = 'hidden';
     var doc = el('div', 'doc'); pg.appendChild(doc); doc.appendChild(el('div', 'empty', 'Carregando…'));
@@ -3860,7 +3880,16 @@
       doc.appendChild(el('h1', '', d.titulo));
       var kv = el('div', 'kv'); d.linhas.forEach(function (p) { kv.appendChild(el('div', 'k', p[0])); kv.appendChild(el('div', '', p[1])); }); doc.appendChild(kv);
       doc.appendChild(el('h2', '', d.termo.titulo)); doc.appendChild(el('div', 'termo', d.termo.texto));
+      if (volta && !d.assinatura) { var vt0 = el('button', 'lnk', '← Voltar sem assinar'); vt0.type = 'button'; vt0.onclick = function () { location.href = volta; }; doc.insertBefore(vt0, doc.firstChild); }
       if (d.assinatura) {
+        if (volta) {
+          var fim = el('div', 'card'); fim.style.cssText = 'text-align:center;margin:10px 0 14px';
+          fim.appendChild(el('div', '', '✓')).style.cssText = 'font-size:40px;line-height:1';
+          fim.appendChild(el('h2', '', 'Contrato assinado'));
+          fim.appendChild(el('div', 'hint', d.assinatura.nome + ' assinou em ' + d.assinatura.em + '. O PDF já está na compra.'));
+          var vb = el('button', 'btn', 'Voltar para a compra'); vb.type = 'button'; vb.style.marginTop = '12px'; vb.onclick = function () { location.href = volta; }; fim.appendChild(vb);
+          doc.insertBefore(fim, doc.firstChild);
+        }
         var ok = el('div', 'aviso', '✓ Termo assinado'); ok.style.marginTop = '10px'; doc.appendChild(ok);
         if (d.assinatura.img) { var im = el('img', 'assimg'); im.src = d.assinatura.img; im.alt = 'Assinatura'; doc.appendChild(im); }
         doc.appendChild(el('div', '', d.assinatura.nome + ' · CPF ' + d.assinatura.cpf));
@@ -3875,14 +3904,16 @@
       // Leva 5: o modelo pode pedir foto do documento, selfie e localização
       var EX = d.exige || {}, FT = {};
       var fotoCampo = function (k, rot, capt, dica) {
-        if (!EX[k === 'docFoto' ? 'doc' : k] || EX[k === 'docFoto' ? 'doc' : k] === 'nao') return;
-        var obr = EX[k === 'docFoto' ? 'doc' : k] === 'obrigatorio';
+        var kx = k === 'docFoto' || k === 'docVerso' ? 'doc' : k;
+        if (!EX[kx] || EX[kx] === 'nao') return;
+        var obr = EX[kx] === 'obrigatorio';
         f.appendChild(el('label', '', rot + (obr ? ' *' : ' (opcional)')));
         var lb = el('label', 'btn ghost', '📷 ' + dica), ip = el('input'); ip.type = 'file'; ip.accept = 'image/*'; ip.setAttribute('capture', capt); ip.className = 'hide'; lb.appendChild(ip); f.appendChild(lb);
         var pv = el('img'); pv.alt = ''; pv.style.cssText = 'display:none;max-height:120px;border-radius:8px;margin:6px 0'; f.appendChild(pv);
         ip.onchange = function () { var fl = ip.files && ip.files[0]; if (!fl) return; comprimirImg(fl, 1400, 0.8, function (url) { FT[k] = url; pv.src = url; pv.style.display = 'block'; lb.firstChild.textContent = '📷 Tirar de novo'; }); };
       };
-      fotoCampo('docFoto', 'Foto do seu documento com foto (RG ou CNH)', 'environment', 'Fotografar o documento');
+      fotoCampo('docFoto', 'Foto da frente do seu documento com foto (RG ou CNH)', 'environment', 'Fotografar a frente');
+      fotoCampo('docVerso', 'Foto do verso do documento', 'environment', 'Fotografar o verso');
       fotoCampo('selfie', 'Uma foto do seu rosto (selfie)', 'user', 'Tirar a selfie');
       if (EX.gps && EX.gps !== 'nao') f.appendChild(el('div', 'hint', 'Ao assinar, vamos pedir a sua localização' + (EX.gps === 'obrigatorio' ? ' (obrigatória).' : ' (pode recusar).')));
       var nm = campo(f, 'Seu nome completo', inp('text', ''), true); nm.maxLength = 80; nm.autocomplete = 'name';
@@ -3904,14 +3935,15 @@
       bt.onclick = function () {
         m.classList.remove('show');
         var e = nm.value.trim().split(/\s+/).length < 2 ? 'Digite seu nome completo.' : String(cp.value).replace(/\D/g, '').length !== 11 ? 'Digite seu CPF.' : riscos < 8 ? 'Faça sua assinatura no quadro.' : !ac.checked ? 'Marque "Li e concordo com o termo".' : '';
-        if (!e && EX.doc === 'obrigatorio' && !FT.docFoto) e = 'Tire a foto do seu documento.';
+        if (!e && EX.doc === 'obrigatorio' && !FT.docFoto) e = 'Tire a foto da frente do seu documento.';
+        if (!e && EX.doc === 'obrigatorio' && !FT.docVerso) e = 'Tire a foto do verso do seu documento.';
         if (!e && EX.selfie === 'obrigatorio' && !FT.selfie) e = 'Tire a sua selfie.';
         if (e) { m.textContent = e; m.classList.add('show'); return; }
         bt.disabled = true; bt.textContent = 'Enviando…';
         var pegaGps = function () { if (!EX.gps || EX.gps === 'nao' || !navigator.geolocation) return Promise.resolve(null); return new Promise(function (ok) { navigator.geolocation.getCurrentPosition(function (p2) { ok({ lat: p2.coords.latitude, lng: p2.coords.longitude, acc: p2.coords.accuracy }); }, function () { ok(null); }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }); }); };
         pegaGps().then(function (g) {
           if (!g && EX.gps === 'obrigatorio') throw 'Permita a localização no navegador para assinar.';
-          return call('assinaturaEnviar', [tok, { nome: nm.value.trim(), cpf: cp.value, aceite: true, img: cv.toDataURL('image/png'), nav: navigator.userAgent.slice(0, 200), docFoto: FT.docFoto || '', selfie: FT.selfie || '', gps: g }]);
+          return call('assinaturaEnviar', [tok, { nome: nm.value.trim(), cpf: cp.value, aceite: true, img: cv.toDataURL('image/png'), nav: navigator.userAgent.slice(0, 200), docFoto: FT.docFoto || '', docVerso: FT.docVerso || '', selfie: FT.selfie || '', gps: g }]);
         }).then(function (d) { mostrar(d); window.scrollTo(0, 0); pg.scrollTop = 0; })
           .catch(function (er) { bt.disabled = false; bt.textContent = 'Assinar'; m.textContent = er; m.classList.add('show'); });
       };
@@ -4619,11 +4651,16 @@
     var g = grade(c, 2); t(g[0], 'Nome fantasia *', 'fantasia'); t(g[1], 'Razão social', 'razao', '', 120);
     var g2 = grade(c, 2); var cn = t(g2[0], 'CNPJ', 'cnpj', '00.000.000/0000-00', 18); cn.inputMode = 'numeric'; cn.value = fmtDoc(e.cnpj || ''); cn.oninput = function () { e.cnpj = soDig(cn.value); }; cn.onblur = function () { cn.value = fmtDoc(e.cnpj || ''); };
     t(g2[1], 'Inscrição estadual', 'ie', '', 20);
+    var rfAv = el('small', 'cepst'); g2[0].appendChild(rfAv);
     c.appendChild(el('h3', 'ch', 'Endereço'));
     var g3 = grade(c, 3);
     var cp = t(g3[0], 'CEP', 'cep', '00000-000', 9); cp.inputMode = 'numeric'; cp.value = e.cep ? e.cep.slice(0, 5) + (e.cep.length > 5 ? '-' + e.cep.slice(5) : '') : '';
     var cst = el('small', 'cepst'); g3[0].appendChild(cst);
     var ru = t(g3[1], 'Endereço (rua, avenida…)', 'rua', 'Preenchido pelo CEP', 120);
+    ligarReceita(cn, function (j, por) {
+      var porRot = function (rot) { var r2 = null; Array.prototype.forEach.call(c.querySelectorAll('label'), function (lb) { if (lb.textContent.indexOf(rot) === 0 && lb.parentNode.querySelector('input')) r2 = lb.parentNode.querySelector('input'); }); return r2; };
+      por(porRot('Nome fantasia'), j.nome_fantasia || j.razao_social); por(porRot('Razão social'), j.razao_social); por(cp, rfCep(j)); por(ru, rfRua(j));
+    }, rfAv);
     var nu = t(g3[2], 'Número', 'numero', 'Ex.: 120', 10);
     var g4 = grade(c, 4);
     var co = t(g4[0], 'Complemento', 'complemento', 'Opcional', 40);
@@ -6608,6 +6645,16 @@
     if (!ult) { show('nav', false); document.body.classList.remove('logado'); msg('topMsg', 'Seu usuário ainda não tem nenhuma página liberada. Fale com o gerente.'); return; }
     ir(ult);
     setTimeout(checarLinkLiberacao, 300);
+    // volta da assinatura do contrato (feita dentro do app): reabre a compra
+    var hc = /^#cc=([A-Za-z0-9-]{2,30})$/.exec(location.hash);
+    if (hc) {
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+      if (soParceira()) ptAbrirCompra(hc[1]); else if (viewVisivel({ id: 'compracel', perm: 'cadastro' })) { CC.aba = 'Kanban'; ir('compracel'); carregarCC(function () { detalheCC(hc[1]); }); }
+    }
+  }
+  /** Abre a assinatura nesta mesma tela (no app não sai para o navegador) e volta para a compra no fim. */
+  function assinarAqui(lk, compraId) {
+    location.href = lk + '&volta=' + encodeURIComponent(location.pathname + location.search.replace(/[?&]ass=[^&]*/, '') + (compraId ? '#cc=' + compraId : ''));
   }
 
   // menu suspenso da barra de cima (ex.: Tabela de Preços → Produtos Novos / Produtos Usados)
@@ -7396,6 +7443,11 @@
     var t = $('crTipo'), v = t.value; t.innerHTML = '';
     [['', 'Todos'], ['Cliente', 'Clientes'], ['Fornecedor', 'Fornecedores']].concat(S.crmTipos.slice(2).map(function (x) { return [x, x]; })).forEach(function (o) { var q = el('option', '', o[1]); q.value = o[0]; t.appendChild(q); });
     t.value = Array.prototype.some.call(t.options, function (o) { return o.value === v; }) ? v : '';
+  }
+  /** Abre um cadastro de Clientes/Fornecedores pelo id (ex.: a partir da parceira). */
+  function abrirPessoaId(id) {
+    ir('crm');
+    call('crmListar', [S.token]).then(function (r) { aposCrm(r); renderCrm(); var x = (S.crm || []).filter(function (z) { return z.id === id; })[0]; if (x) abrirPessoa(x); }).catch(function (e) { msg('topMsg', e); });
   }
   function ehCli(x) { return x.tipo === 'Cliente' || x.tipo === 'Ambos'; }
   function ehForn(x) { return x.tipo === 'Fornecedor' || x.tipo === 'Ambos'; }
@@ -11120,7 +11172,7 @@
           if (k.assinado) return carregarPortal(function () { portalTela('pinicio'); });
           tx.textContent = k.contrato.texto;
           var lk = location.origin + location.pathname + '?ass=' + k.tok;
-          btn(ac0, '✍️ Assinar o contrato', 'ok', function () { window.open(lk, '_blank', 'noopener'); });
+          btn(ac0, '✍️ Assinar o contrato', 'ok', function () { assinarAqui(lk, ''); });
           btn(ac0, 'Já assinei: atualizar', 'ghost', function () { carregarPortal(function () { portalTela('pinicio'); }); });
         }).catch(function (e) { tx.textContent = ''; erroEm(m0, e); });
       }
@@ -11309,7 +11361,7 @@
           var la = el('div', 'acoes'); ca.appendChild(la); var lk = linkAssCC(x.dados.assTok);
           btn(la, 'Copiar link', 'ghost', function (ev) { copiar(lk, ev && ev.target).then(function () { avisoTopo('Link copiado'); }); });
           if (x.cliente.whats) btn(la, 'Enviar no WhatsApp', 'ok', function () { window.open('https://wa.me/55' + soDig(x.cliente.whats) + '?text=' + encodeURIComponent('Olá, ' + x.cliente.nome.split(' ')[0] + '! Segue o contrato de compra do seu ' + x.aparelho.modelo + ' para assinar: ' + lk), '_blank', 'noopener'); });
-          btn(la, 'Assinar nesta tela', 'ghost', function () { window.open(lk, '_blank', 'noopener'); });
+          btn(la, 'Assinar nesta tela', 'ghost', function () { assinarAqui(lk, x.id); });
         }
         btn(ca, '🖨 Imprimir contrato', 'ghost', function () { imprimirContratoCC(x); });
       }
@@ -11427,7 +11479,20 @@
     bloco('VENDEDOR (CLIENTE)', A && A.img, [x.cliente.nome, A ? 'Assinado eletronicamente em ' + A.em + ' · código ' + A.codigo : 'Assinatura']);
     var L = k.assLoja; bloco('COMPRADOR (' + ((k.comprador || {}).nome || 'LOJISTA') + ')', L && L.img, [L ? L.nome + (L.cargo ? ' · ' + L.cargo : '') : 'Nome legível do representante', L ? 'Assinatura eletrônica da empresa' : '']);
     bloco('RESPONSÁVEL PELO PREENCHIMENTO', null, [k.responsavel || '']);
-    if ((x.dados.fotos || []).length) { var an = el('div', 'canx'); an.appendChild(el('h2', '', 'Anexo: fotos do aparelho (' + x.id + ')')); x.dados.fotos.forEach(function (f) { var i = el('img'); i.src = fotoUrl(f, 900); an.appendChild(i); }); w.appendChild(an); }
+    // Leva 6 ampliada: anexos = print da consulta de IMEI e documento do cliente (frente e verso). As fotos do aparelho ficam só na compra.
+    if (!imprimirContratoCC.anexos) {
+      var url = function (acao, args) { return call(acao, args).then(function (r) { return r && r.url ? r.url : null; }, function () { return null; }); };
+      var tem = function (k) { return A && A[k]; };
+      Promise.all([x.dados.imeiConsulta && x.dados.imeiConsulta.foto ? url('ccImeiVer', [S.token, x.id]) : null, tem('docFoto') ? url('ccAnexo', [S.token, x.id, 'doc']) : null,
+                   tem('docVerso') ? url('ccAnexo', [S.token, x.id, 'verso']) : null, tem('selfie') ? url('ccAnexo', [S.token, x.id, 'selfie']) : null])
+        .then(function (u) { imprimirContratoCC.anexos = { imei: u[0], doc: u[1], verso: u[2], selfie: u[3] }; w.innerHTML = ''; imprimirContratoCC(x); imprimirContratoCC.anexos = null; });
+      return;
+    }
+    var AX = imprimirContratoCC.anexos;
+    if (AX.selfie || (A && A.gps)) { var sv = el('div', 'canx'); sv.appendChild(el('h2', '', 'Identificação de quem assinou')); if (AX.selfie) { var si = el('img'); si.src = AX.selfie; si.alt = 'Selfie'; si.style.maxWidth = '45%'; sv.appendChild(si); } if (A && A.gps) sv.appendChild(el('div', '', 'Localização na assinatura: ' + A.gps.lat + ', ' + A.gps.lng)); w.appendChild(sv); }
+    if (AX.imei) { var ai = el('div', 'canx'); ai.appendChild(el('h2', '', 'Anexo: consulta de IMEI (' + x.aparelho.imei + ')')); var ii = el('img'); ii.src = AX.imei; ii.alt = 'Consulta de IMEI'; ai.appendChild(ii); if (x.dados.imeiConsulta.link) ai.appendChild(el('div', '', x.dados.imeiConsulta.link)); w.appendChild(ai); }
+    else if (x.dados.imeiConsulta && x.dados.imeiConsulta.link) { var al = el('div', 'canx'); al.appendChild(el('h2', '', 'Anexo: consulta de IMEI')); al.appendChild(el('div', '', x.dados.imeiConsulta.link)); w.appendChild(al); }
+    if (AX.doc || AX.verso) { var ad = el('div', 'canx'); ad.appendChild(el('h2', '', 'Anexo: documento do cliente (frente e verso)')); [AX.doc, AX.verso].forEach(function (u2) { if (!u2) return; var di = el('img'); di.src = u2; di.alt = 'Documento'; ad.appendChild(di); }); w.appendChild(ad); }
     var go = function () { imprimirHTML('Contrato ' + x.id, w, '.contrato{font:12px/1.5 "Times New Roman",serif;color:#111}.contrato h1{font-size:15px;text-align:center;margin:0 0 14px}.ctxt{white-space:pre-line;text-align:justify}.cass{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px;page-break-inside:avoid}.cab b{display:block;font-size:11px}.cab img{max-height:70px;max-width:100%;display:block;margin:4px 0}.cab .linha{border-bottom:1px solid #111;height:40px;margin:4px 0}.canx{page-break-before:always}.canx img{width:48%;margin:1%;border:1px solid #ccc}'); };
     if (A && !A.img && x.dados.assTok) call('assinaturaVer', [x.dados.assTok]).then(function (v) { if (v.assinatura && v.assinatura.img) { A.img = v.assinatura.img; } w.innerHTML = ''; imprimirContratoCC(x); }).catch(go);
     else go();
@@ -11495,6 +11560,8 @@
     var g = grade(c, 2), nm = inp('text', 'Nome ou razão social'); nm.value = p.nome; campo(g[0], 'Nome *', nm, true); var dc = inp('text', 'CNPJ ou CPF'); dc.value = p.doc ? fmtDoc(p.doc) : ''; campo(g[1], 'CNPJ/CPF', dc);
     var g2 = grade(c, 3), rs = inp('text', 'Quem responde'); rs.value = p.responsavel; campo(g2[0], 'Responsável', rs); var tl = inp('tel', '(22) 99999-9999'); tl.value = p.telefone; campo(g2[1], 'Telefone', tl); var em = inp('email', 'e-mail'); em.value = p.email; campo(g2[2], 'E-mail', em);
     var g3 = grade(c, 2), en = inp('text', 'Endereço'); en.value = p.endereco; campo(g3[0], 'Endereço (vai no contrato dela)', en); var ci = inp('text', 'Cidade/UF'); ci.value = p.cidade; campo(g3[1], 'Cidade (foro do contrato dela)', ci);
+    var rfP = el('div', 'hint'); g[1].appendChild(rfP);
+    ligarReceita(dc, function (j, por) { por(nm, j.razao_social); por(en, [rfRua(j), j.numero, j.bairro].filter(Boolean).join(', ')); por(ci, rfCid(j)); por(em, (j.email || '').toLowerCase()); por(tl, rfTel(j)); }, rfP);
     var cl = inp('text', 'ex.: lojax'); cl.value = p.codLogin || ''; cl.autocapitalize = 'off'; cl.maxLength = 15; campo(c, 'Código nos logins', cl);
     var clh = el('div', 'hint'); c.appendChild(clh);
     var clv = function () { clh.textContent = 'Logins da equipe dela: pessoa.' + (cl.value.trim().toLowerCase() || 'codigo') + '.' + (S.u.sistema || 'grupo') + ' (ex.: carlos.' + (cl.value.trim().toLowerCase() || 'codigo') + '.' + (S.u.sistema || 'grupo') + '). Em branco, o sistema sugere pelo nome. Não muda depois do primeiro login criado.'; };
@@ -11529,6 +11596,8 @@
     var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
     btn(ac, 'Salvar', '', function () { call('parceiraSalvar', [S.token, { id: p.id || '', codLogin: cl.disabled ? '' : cl.value.trim(), nome: nm.value, doc: dc.value, responsavel: rs.value, telefone: tl.value, email: em.value, endereco: en.value, cidade: ci.value, loja: lj.value, destino: ds.value, pagamento: { modo: pm.value, dias: di.value, periodo: pe.value }, emiteNfe: nfK.checked, modelo: Number(mo.value), comissao: { tipo: ct.value, valor: ct.value === 'nenhuma' ? 0 : num(cv.value), quando: cq.value }, pix: pix.value, ativa: ak.checked }])
       .then(function (d) { CC.d = d; avisoTopo('Parceira salva'); CC.aba = 'Parceiras'; desenharCC(); }).catch(function (e) { erroEm(m, e); }); });
+    if (p.crmId && pode('crm')) btn(ac, '🗂 Cadastro completo (Clientes/Fornecedores)', 'ghost', function () { abrirPessoaId(p.crmId); });
+    else if (!p.crmId) c.appendChild(el('div', 'hint', 'Com CNPJ, a parceira vira um cadastro completo em Clientes/Fornecedores (endereço, inscrição estadual, banco/PIX), ligado às contas a pagar dela.'));
     if (p.id && D.criarLogin) btn(ac, '🔑 Criar login da parceira', 'ghost', function () {
       var u = prompt('Nome da pessoa responsável, para o login (ex.: carlos). O login fica carlos.' + (p.codLogin || 'codigo') + '.' + (S.u.sistema || 'grupo') + ':'); if (!u) return;
       call('parceiraLoginCriar', [S.token, p.id, u, rs.value || nm.value]).then(function (r) { perguntar('Login da parceira', 'Login: ' + (r.login || r.usuario) + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nEla entra pela mesma tela do Gestti (ou instala o app Gestti Parceiras) e vê só o portal dela. Este é o login do responsável: ele assina o contrato de parceria e cria os logins dos funcionários. Anote agora: a senha não aparece de novo.'); }).catch(function (e) { erroEm(m, e); });
@@ -13900,6 +13969,8 @@
       var fn = campo(g1[0], 'Razão social / nome *', inp('text', '')); fn.maxLength = 80; fn.value = N.nome || ''; fn.oninput = function () { N.nome = fn.value; };
       var fd = campo(g1[1], 'CNPJ / CPF', inp('text', '00.000.000/0000-00')); fd.maxLength = 18; fd.inputMode = 'numeric'; fd.value = fmtDoc(N.doc || ''); fd.oninput = function () { N.doc = soDig(fd.value).slice(0, 14); };
       var fc = campo(g1[2], 'Cidade', inp('text', '')); fc.value = N.cidade || ''; fc.oninput = function () { N.cidade = fc.value; };
+      var rfF = el('div', 'hint'); g1[1].appendChild(rfF);
+      ligarReceita(fd, function (j, por) { por(fn, j.razao_social); por(fc, rfCid(j)); if (j.nome_fantasia && !N.fantasia) N.fantasia = j.nome_fantasia; }, rfF);
       c1.appendChild(el('div', 'hint', 'O fornecedor entra no CRM (Clientes/Fornecedores) quando a entrada for lançada.'));
     }
     // ---- 2. dados da nota
@@ -14773,6 +14844,7 @@
     var nome = campo(g1[1], '', inp('text', '')); nome.maxLength = 80; nome.value = F.nome; nome.oninput = function () { F.nome = nome.value; };
     var dh = el('div', 'hint'); w.appendChild(dh);
     var dp = el('div'); w.appendChild(dp);
+    var rfQ = el('div', 'hint'); w.appendChild(rfQ);
     function pessoa() {
       var pf = F.pessoa === 'Física';
       g1[0].querySelector('label').textContent = (pf ? 'CPF' : 'CNPJ') + (op.exigeDoc ? ' *' : '');
@@ -14800,6 +14872,7 @@
     var cep = campo(g3[0], 'CEP', inp('text', '00000-000'), true); cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = F.cep;
     var ru = campo(g3[1], 'Endereço (rua)', inp('text', 'Ex.: Rua Principal'), true); ru.maxLength = 120; ru.value = F.rua; ru.oninput = function () { F.rua = ru.value; };
     var nu = campo(g3[2], 'Número', inp('text', 'Ex.: 120'), true); nu.maxLength = 10; nu.value = F.numero; nu.oninput = function () { F.numero = nu.value; };
+    ligarReceita(doc, function (j, por) { if (F.pessoa === 'Física') return; por(nome, j.razao_social); por(em, (j.email || '').toLowerCase()); por(wp, rfTel(j)); por(cep, rfCep(j)); por(ru, rfRua(j)); por(nu, j.numero); }, rfQ);
     var g4 = grade(w, 3);
     var co = campo(g4[0], 'Complemento', inp('text', 'Opcional'), true); co.maxLength = 40; co.value = F.complemento; co.oninput = function () { F.complemento = co.value; };
     var ba = campo(g4[1], 'Bairro', inp('text', ''), true); ba.maxLength = 60; ba.value = F.bairro; ba.oninput = function () { F.bairro = ba.value; };
