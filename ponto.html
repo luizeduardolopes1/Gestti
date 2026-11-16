@@ -2,6 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-VhCgi6aS/tQaAL5S1hmX1hJE98R6UV3WPhxCeEw5T4M=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
 <title>Gestti Ponto</title>
@@ -155,7 +157,7 @@
   function carregarFace() {
     if (FACE) return FACE;
     FACE = new Promise(function (ok, fail) {
-      var s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/dist/face-api.js';
+      var s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/dist/face-api.js'; s.integrity = 'sha384-5SEinnOIOK1Nl6bzEIWwfXWMg4EaJhN2bXKgrjYC0Bq+fYNZHwhD3ntM92lTHnfL'; s.crossOrigin = 'anonymous';
       s.onload = function () { var M = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/model/'; Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(M), faceapi.nets.faceLandmark68Net.loadFromUri(M), faceapi.nets.faceRecognitionNet.loadFromUri(M)]).then(function () { ok(window.faceapi); }, function () { FACE = null; fail('Não deu para carregar o leitor de rosto.'); }); };
       s.onerror = function () { FACE = null; fail('Não deu para carregar o leitor de rosto (confira a internet).'); };
       document.head.appendChild(s);
