@@ -11803,9 +11803,10 @@
       area.innerHTML = ''; var t = semAc(q.value.trim()), c = el('div', 'card'), w = el('div', 'tbwrap'), tb = el('table', 'pttab'), h = el('tr');
       ['Modelo', 'Excelente', 'Ótimo', 'Bom'].forEach(function (k, i) { h.appendChild(el('th', i ? 'n' : '', k)); }); tb.appendChild(h);
       d.tabela.filter(function (x) { return !t || semAc(x.marca + ' ' + x.modelo).indexOf(t) > -1; }).forEach(function (x) {
-        var tr = el('tr'); tr.appendChild(el('td', '', (x.marca !== 'Apple' ? x.marca + ' ' : '') + x.modelo)); [x.excelente, x.otimo, x.bom].forEach(function (v) { tr.appendChild(el('td', 'n', v ? brl(v) : '—')); }); tb.appendChild(tr);
+        var tr = el('tr'); tr.appendChild(el('td', '', (x.marca !== 'Apple' ? x.marca + ' ' : '') + x.modelo + (x.coresDesconto ? ' *' : ''))); [x.excelente, x.otimo, x.bom].forEach(function (v) { tr.appendChild(el('td', 'n', v ? brl(v) : '—')); }); tb.appendChild(tr);
       });
       w.appendChild(tb); c.appendChild(w); area.appendChild(c);
+      if (d.tabela.some(function (x) { return x.coresDesconto; })) area.appendChild(el('div', 'hint', '* Algumas cores têm desconto.'));
     }
     q.oninput = des; des();
   }
@@ -13059,6 +13060,7 @@
       Object.keys(ins).forEach(function (k) { var v = !x ? '' : k === 'compra' || k === 'venda' ? x[k] : (x.desc[k.split(':')[0]] || [])[+k.split(':')[1]]; ins[k].value = v === null || v === undefined ? '' : String(v).replace('.', ','); ins[k].disabled = !x; });
     }
     var TV = avCamposTravado(c, marca, function () { return avModelos(marca).filter(function (y) { return y.modelo === sm.value; })[0]; });
+    var CR = avCoresEditor(c, marca, function () { return avModelos(marca).filter(function (y) { return y.modelo === sm.value; })[0]; }); sm.addEventListener('change', function () { CR.preencher(); });
     sm.onchange = function () { preencher(); TV.preencher(); }; preencher(); TV.preencher();
     var m = el('div', 'msg err'); c.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Fechar'); ok.type = cc.type = 'button'; ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac);
@@ -13092,6 +13094,7 @@
       campos.forEach(function (k) { var v = x[k[0]]; ins[k[0]].value = v === null || v === undefined ? '' : String(v).replace('.', ','); ins[k[0]].disabled = !x.modelo; });
     }
     var TV = avCamposTravado(c, 'Apple', function () { return avModelos('Apple').filter(function (y) { return y.modelo === sm.value; })[0]; });
+    var CR = avCoresEditor(c, 'Apple', function () { return avModelos('Apple').filter(function (y) { return y.modelo === sm.value; })[0]; }); sm.addEventListener('change', function () { CR.preencher(); });
     sm.onchange = function () { preencher(); TV.preencher(); }; preencher(); TV.preencher();
     var m = el('div', 'msg'); c.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar na planilha'), cc = el('button', 'btn ghost', 'Fechar'); ok.type = cc.type = 'button';
@@ -13120,7 +13123,7 @@
   function avMarca(nome) { return avMarcas().filter(function (m) { return m.nome === nome; })[0] || avMarcas()[0]; }
   /** Modelos de uma marca no formato único: { modelo, compra, venda, desc: { item: [valor por opção] } } */
   function avModelos(marca) {
-    if (marca === 'Apple') return (S.u.iphones || []).map(function (x) { return { marca: 'Apple', modelo: x.modelo, compra: x.compra, venda: x.venda, bruto: x, travado: (((S.u.aval || {}).apple || {})[x.modelo] || {}).travado, desc: { bat: [0, x.bat8480, x.bat80], tela: [0, x.tela], vidro: [0, x.vidro], gar: [0, x.g6, x.g3] } }; });
+    if (marca === 'Apple') return (S.u.iphones || []).map(function (x) { return { marca: 'Apple', modelo: x.modelo, compra: x.compra, venda: x.venda, bruto: x, travado: (((S.u.aval || {}).apple || {})[x.modelo] || {}).travado, cores: (((S.u.aval || {}).apple || {})[x.modelo] || {}).cores, desc: { bat: [0, x.bat8480, x.bat80], tela: [0, x.tela], vidro: [0, x.vidro], gar: [0, x.g6, x.g3] } }; });
     return (((S.u.aval || {}).modelos) || []).filter(function (x) { return x.marca === marca; });
   }
   function avMarcaDoModelo(modelo) { var ms = avMarcas(); for (var i = 0; i < ms.length; i++) if (avModelos(ms[i].nome).some(function (x) { return x.modelo === modelo; })) return ms[i].nome; return 'Apple'; }
@@ -13147,6 +13150,7 @@
       if (k > 0 && (v === null || v === undefined)) falta.push(it.nome.replace(/\?$/, ''));
       v = typeof v === 'number' ? v : 0; tot += v; linhas.push([it.nome.replace(/\?$/, '') + (k ? ': ' + it.opcoes[k] : ''), v]);
     });
+    if (escolhas.cor && m.cores && m.cores[escolhas.cor] > 0) { linhas.push(['Cor ' + escolhas.cor, -m.cores[escolhas.cor]]); tot -= m.cores[escolhas.cor]; }
     var alerta = semTabela ? 'Modelo sem tabela de abatimentos — CONSULTAR GERENTE.' : falta.length ? 'Sem valor na tabela para: ' + falta.join(', ') + ' — CONSULTAR GERENTE.' : '';
     return { base: base, cls: cls, linhas: linhas, oferta: Math.max(0, tot), alerta: alerta, detalhes: 'classificação ' + cls.toLowerCase() + ', ' + M.itens.map(function (it) { return it.nome.replace(/\?$/, '').toLowerCase() + ' ' + String(it.opcoes[escolhas[it.id] || 0]).toLowerCase(); }).join(' · ') };
   }
@@ -13166,7 +13170,36 @@
     opts($('aModelo'), avModelos(S.avMarca).map(function (x) { return x.modelo; }), $('aModelo').value, 'Selecione o modelo…');
     S.av = S.av && S.av.__m === S.avMarca ? S.av : { __m: S.avMarca };
     avPerguntas($('aItens'), S.avMarca, S.av, calcAval);
+    // Leva 6 ampliada: cor do aparelho (só as cores marcadas no modelo; desconto opcional por cor)
+    var mm = avModelos(S.avMarca).filter(function (x) { return x.modelo === $('aModelo').value; })[0];
+    if (mm && mm.cores && Object.keys(mm.cores).length) {
+      var ib = $('aItens'); ib.insertBefore(el('label', '', 'Cor'), ib.children[2] || null); var sc2 = el('div', 'seg'); ib.insertBefore(sc2, ib.children[3] || null);
+      var cs = Object.keys(mm.cores); if (cs.indexOf(S.av.cor) < 0) S.av.cor = cs[0];
+      seg(sc2, cs, S.av.cor, function (v) { S.av.cor = v; calcAval(); });
+    }
     calcAval();
+  }
+  /** Cores do modelo: marca a partir da lista padrão (ou cria), com desconto opcional por cor. */
+  function avCoresEditor(c, marca, modeloDe) {
+    var w = el('div'); c.appendChild(w);
+    var des = function () {
+      w.innerHTML = ''; w.appendChild(el('h3', 'ch', 'Cores deste modelo'));
+      var m = modeloDe(); if (!m) { w.appendChild(el('div', 'hint', 'Escolha o modelo.')); return; }
+      var sel = JSON.parse(JSON.stringify(m.cores || {})), novas = [];
+      w.appendChild(el('div', 'hint', 'Toque nas cores que o modelo tem. Só elas aparecem na avaliação. Desconto vazio = sem desconto (a cor só fica registrada).'));
+      var todas = CORES.filter(function (x) { return x !== 'Outra'; }).concat(((S.u.aval || {}).coresExtra) || []);
+      var ch = el('div', 'chips'); w.appendChild(ch); var tb = el('div'); w.appendChild(tb);
+      var pinta = function () {
+        ch.innerHTML = ''; todas.forEach(function (n) { var b = el('button', 'chip' + (n in sel ? ' on' : ''), n); b.type = 'button'; b.onclick = function () { if (n in sel) delete sel[n]; else sel[n] = 0; pinta(); }; ch.appendChild(b); });
+        tb.innerHTML = ''; Object.keys(sel).forEach(function (n) { var r = el('div', 'fl'); r.appendChild(el('div', 'n', n)); var i = inp('text', 'sem desconto'); i.inputMode = 'decimal'; i.style.maxWidth = '130px'; i.value = sel[n] ? String(sel[n]).replace('.', ',') : ''; i.oninput = function () { sel[n] = i.value; }; r.appendChild(i); tb.appendChild(r); });
+      };
+      pinta();
+      var nv = inp('text', 'Cor que não está na lista (ex.: Verde-alpino)'); w.appendChild(nv);
+      btn(w, '+ Criar cor', 'ghost', function () { var n = nv.value.trim(); if (!n) return; if (todas.indexOf(n) < 0) { todas.push(n); novas.push(n); } sel[n] = 0; nv.value = ''; pinta(); });
+      var m2 = el('div', 'msg err'); w.appendChild(m2);
+      btn(w, 'Salvar cores', 'ok', function () { call('avaliacaoCoresSalvar', [S.token, marca, m.modelo, sel, novas]).then(function (r) { S.u.aval = r.aval; avisoTopo('Cores salvas'); des(); }).catch(function (e) { erroEm(m2, e); }); });
+    };
+    des(); return { preencher: des };
   }
   // trocar de marca ou de modelo volta tudo ao padrão
   $('aMarca').addEventListener('change', function () { S.avMarca = $('aMarca').value; $('aModelo').value = ''; S.av = null; montarAval(); });
