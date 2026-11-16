@@ -6663,7 +6663,7 @@
   $('sair').onclick = function () { var t = S.token; sairLocal(''); call('sair', [t]).catch(function () {}); };
 
   // loja parceira (só a permissão "parceira"): não é funcionária, não recebe as telas de todos (ponto, escala, carreira…)
-  function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono'; }); }
+  function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono' || x.indexOf('parc_') === 0; }); }
   function pode(p) { return !!(S.u && ((p === '**' && !soParceira()) || (p === '*' && !S.u.soPonto && !soParceira()) || (S.u.perms || []).indexOf(p) > -1)); }
   // Leva 6 ampliada: telas da grade (tela × ação). Tela da grade aparece se a pessoa tem qualquer caixinha nela.
   var GRADE_TELA = { ccnova: 'compracel', cclista: 'compracel', 'rel-metas': 'metrel', 'rel-crm': 'crm' };
@@ -6684,7 +6684,10 @@
     if (!temGrade() || soParceira()) return;
     Object.keys(BOTOES_GRADE).forEach(function (bid) { var b = $(bid); if (!b) return; var ok = (S.u.perms || []).indexOf(BOTOES_GRADE[bid]) > -1; if (!ok) b.style.display = 'none'; else if (b.style.display === 'none') b.style.display = ''; });
   }
+  var VIEWS_PORTAL = ['pinicio', 'pnova', 'paparelhos', 'pfin', 'ptab', 'pcli', 'pav', 'ploja'];
   function viewVisivel(v) {
+    // portal da parceira: só para o login de parceira (o gerente tem a permissão antiga "Loja parceira", mas não usa o portal)
+    if (VIEWS_PORTAL.indexOf(v.id) > -1) return soParceira() && pode(v.perm);
     if (soParceira() || !temGrade() || TELAS_GRADE.indexOf(v.id) < 0) return (pode(v.perm) || (v.permOu && pode(v.permOu))) && !(v.perm2 && !pode(v.perm2));
     if (v.id === 'osnova') return podeTela('osnova', 'c');
     return podeTela(v.id) && !(v.perm2 && !pode(v.perm2));
