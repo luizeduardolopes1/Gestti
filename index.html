@@ -54,6 +54,8 @@
   .perm input{width:20px;height:20px;padding:0;margin:2px 0 0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
   .perm .t{font-size:14px;font-weight:600}.perm .t small{display:block;font-weight:400;color:var(--muted);font-size:12px}
   .perm.dis{opacity:.55}
+  .pfperm{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:8px 0}
+  .pfg{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:10px 0 2px}
   .pgtw{overflow-x:auto;margin-top:8px;border:1px solid var(--line);border-radius:10px;max-height:560px;overflow-y:auto}
   .pgt{width:100%;border-collapse:collapse;font-size:13.5px}
   .pgt th{position:sticky;top:0;background:var(--card);font-size:12px;color:var(--muted);padding:7px 6px;border-bottom:1px solid var(--line);text-align:center;z-index:1}
@@ -2013,13 +2015,13 @@
   var VIEWS = [
     // Leva 6: Portal da Parceira (só o login de parceira vê; Financeiro só o responsável)
     { id: 'pinicio', sec: 'vPortal', nome: 'Início', perm: 'parceira', desc: 'A receber, aparelhos do mês e pendências' },
-    { id: 'pnova', sec: 'vCompraCel', nome: 'Nova compra', perm: 'parceira', desc: 'Comprar um aparelho: cliente, fotos, consulta de IMEI e contrato' },
-    { id: 'paparelhos', sec: 'vCompraCel', nome: 'Meus aparelhos', perm: 'parceira', desc: 'Lista e Kanban dos aparelhos enviados' },
+    { id: 'pnova', sec: 'vCompraCel', nome: 'Nova compra', perm: 'parc_nova', desc: 'Comprar um aparelho: cliente, fotos, consulta de IMEI e contrato' },
+    { id: 'paparelhos', sec: 'vCompraCel', nome: 'Meus aparelhos', perm: 'parc_ap', desc: 'Lista e Kanban dos aparelhos enviados' },
     { id: 'pfin', sec: 'vPortal', nome: 'Financeiro', perm: 'parceira_dono', desc: 'A receber, recebidos e extrato' },
-    { id: 'ptab', sec: 'vPortal', nome: 'Tabela de referência', perm: 'parceira', desc: 'Quanto a loja paga por modelo' },
-    { id: 'pcli', sec: 'vPortal', nome: 'Meus clientes', perm: 'parceira', desc: 'Vendedores que você cadastrou' },
+    { id: 'ptab', sec: 'vPortal', nome: 'Tabela de referência', perm: 'parc_tab', desc: 'Quanto a loja paga por modelo' },
+    { id: 'pcli', sec: 'vPortal', nome: 'Meus clientes', perm: 'parc_cli', desc: 'Vendedores que você cadastrou' },
     { id: 'pav', sec: 'vPortal', nome: 'Avisos', perm: 'parceira', desc: 'Aparelhos conferidos, recusados e pagamentos' },
-    { id: 'ploja', sec: 'vPortal', nome: 'Minha loja', perm: 'parceira', desc: 'Dados, chave PIX e equipe' },
+    { id: 'ploja', sec: 'vPortal', nome: 'Minha loja', perm: 'parc_loja', desc: 'Dados, chave PIX e equipe' },
     { id: 'dash', sec: 'vDash', nome: 'Dashboard', perm: 'dashboard' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
@@ -11141,9 +11143,12 @@
   function aplicarPortal(d) {
     if (!d || !d.parceira) return;
     var antes = PT.d ? PT.novos : null; PT.d = d; PT.novos = d.avisosNovos || 0;
-    var pm = S.u.perms, tem = pm.indexOf('parceira_dono') > -1, mudou = false;
-    if (d.papel === 'dono' && !tem) { pm.push('parceira_dono'); mudou = true; }
-    if (d.papel !== 'dono' && tem) { pm.splice(pm.indexOf('parceira_dono'), 1); mudou = true; }
+    var pm = S.u.perms, mudou = false, pd = d.pode || [];
+    var quer = { parceira_dono: pd.indexOf('fin_receber') > -1 || pd.indexOf('fin_recebidos') > -1, parc_nova: pd.indexOf('nova_lancar') > -1,
+                 parc_ap: pd.indexOf('ap_andamento') > -1 || pd.indexOf('ap_finalizadas') > -1, parc_tab: pd.indexOf('tab_ver') > -1, parc_cli: pd.indexOf('cli_ver') > -1,
+                 parc_loja: d.papel === 'dono' || pd.indexOf('loja_ver') > -1 };
+    if (!d.pode) quer = { parceira_dono: d.papel === 'dono', parc_nova: true, parc_ap: true, parc_tab: true, parc_cli: true, parc_loja: true };
+    Object.keys(quer).forEach(function (k) { var i = pm.indexOf(k); if (quer[k] && i < 0) { pm.push(k); mudou = true; } if (!quer[k] && i > -1) { pm.splice(i, 1); mudou = true; } });
     if (mudou || antes !== PT.novos) montarMenu();
     // aviso no celular quando chega novidade (com o app aberto ou em segundo plano)
     if (antes !== null && PT.novos > antes && d.avisos.length && 'Notification' in window && Notification.permission === 'granted') {
@@ -11293,6 +11298,20 @@
     });
     if (n) call('parcAvisosLidos', [S.token]).then(function () { PT.novos = 0; PT.d.avisosNovos = 0; montarMenu(); }).catch(function () {});
   }
+  /** Opções detalhadas de um funcionário da parceira: grupos de caixinhas. salvar(lista) grava. */
+  function parcPermsEditor(box, opcoes, marcadas, salvar) {
+    var sel = marcadas.slice(), w = el('div', 'pfperm'); box.appendChild(w);
+    opcoes.forEach(function (g) {
+      w.appendChild(el('div', 'pfg', g[0]));
+      g[1].forEach(function (o) {
+        var lb = el('label', 'perm'), cb = el('input'); cb.type = 'checkbox'; cb.checked = sel.indexOf(o[0]) > -1;
+        cb.onchange = function () { var i = sel.indexOf(o[0]); if (cb.checked && i < 0) sel.push(o[0]); if (!cb.checked && i > -1) sel.splice(i, 1); };
+        lb.appendChild(cb); lb.appendChild(el('div', 't', o[1])); w.appendChild(lb);
+      });
+    });
+    w.appendChild(el('div', 'hint', 'Sempre só do responsável: assinar o contrato de parceria, mudar a chave PIX e cuidar da equipe.'));
+    btn(w, 'Salvar permissões', 'ok', function () { salvar(sel); });
+  }
   function ptLoja(b, d) {
     var P = d.parceira, dono = d.papel === 'dono', c = el('div', 'card'); b.appendChild(c); c.appendChild(el('h2', '', P.nome));
     var pg = P.pagamento || {}, cm = P.comissao || {};
@@ -11301,6 +11320,7 @@
       ['Pagamento', pg.modo === 'periodico' ? 'Acerto ' + (pg.periodo === 'mensal' ? 'mensal' : 'semanal') : pg.dias + ' dia(s) depois da conferência'],
       ['Comissão', P.modelo === 2 ? 'Não tem (o ganho é a diferença de preço)' : cm.tipo === 'fixa' ? brl(cm.valor) + ' por aparelho' : cm.tipo === 'pct' ? String(cm.valor).replace('.', ',') + '% do aparelho' : 'Sem comissão']]);
     if (!dono) { c.appendChild(el('div', 'hint', 'Só o responsável muda os dados e a equipe.')); return; }
+    if (P.codLogin) c.appendChild(el('div', 'hint', 'Logins da equipe: pessoa.' + P.codLogin + '.' + (S.u.sistema || 'grupo')));
     var e = el('div', 'card'); b.appendChild(e); e.appendChild(el('h2', '', 'Contato e PIX'));
     var g = grade(e, 2), tl = inp('tel', '(22) 99999-9999'); tl.value = P.telefone ? fmtFone(P.telefone) : ''; campo(g[0], 'Telefone', tl);
     var em = inp('email', 'e-mail'); em.value = P.email || ''; campo(g[1], 'E-mail', em);
@@ -11308,13 +11328,14 @@
     var m = el('div', 'msg err'); e.appendChild(m);
     btn(e, 'Salvar', 'ok', function () { call('parcLojaSalvar', [S.token, { telefone: tl.value, email: em.value, pix: px.value }]).then(function (d2) { aplicarPortal(d2); avisoTopo('Dados salvos'); }).catch(function (er) { erroEm(m, er); }); });
     var q = el('div', 'card'); b.appendChild(q); q.appendChild(el('h2', '', 'Equipe'));
-    q.appendChild(el('div', 'hint', 'Funcionários lançam compras e veem os aparelhos. Não veem o financeiro nem a equipe.'));
+    q.appendChild(el('div', 'hint', 'Toque em "Permissões" para escolher o que cada funcionário vê e pode fazer. Funcionário novo começa como Atendente.'));
     var lst = el('div'); q.appendChild(lst); var m2 = el('div', 'msg err');
     function desEq(l) {
       lst.innerHTML = ''; var tab = el('div', 'ptab ptlist pteq'); lst.appendChild(tab);
       l.forEach(function (u) {
         var r = el('div', 'prow'); r.style.cursor = 'default'; var n = el('div'); n.appendChild(el('div', 'pnome', u.nome + (u.eu ? ' (você)' : ''))); n.appendChild(el('div', 'psub', u.usuario + ' · ' + (u.papel === 'dono' ? 'Responsável' : 'Funcionário'))); r.appendChild(n);
         r.appendChild(el('span', 'bdg ' + (u.ativo ? 'ok' : 'off'), u.ativo ? 'Ativo' : 'Bloqueado'));
+        if (u.papel === 'func' && u.opcoes) { var pbx = el('div'); pbx.style.cssText = 'grid-column:1/-1;display:none'; var pb = el('button', 'btn ghost mini', 'Permissões'); pb.type = 'button'; pb.onclick = function () { pbx.style.display = pbx.style.display === 'none' ? '' : 'none'; if (!pbx.firstChild) parcPermsEditor(pbx, u.opcoes, u.perms || [], function (l2) { call('parcFuncPerms', [S.token, u.id, l2]).then(function (eq2) { desEq(eq2); avisoTopo('Permissões salvas'); }).catch(function (er) { erroEm(m2, er); }); }); }; r.appendChild(pb); r.appendChild(pbx); }
         var cl = el('div'); if (u.papel === 'func') { var bb = el('button', 'btn ghost mini', u.ativo ? 'Bloquear' : 'Liberar'); bb.type = 'button'; bb.onclick = function () { call('parcFuncAtivo', [S.token, u.id, !u.ativo]).then(desEq).catch(function (er) { erroEm(m2, er); }); }; cl.appendChild(bb); } r.appendChild(cl);
         tab.appendChild(r);
       });
@@ -11323,8 +11344,9 @@
     var gn = grade(q, 2), nm = inp('text', 'Nome e sobrenome'); campo(gn[0], 'Nome do funcionário', nm); var us = inp('text', 'ex.: joao'); us.autocapitalize = 'off'; campo(gn[1], 'Usuário (só o nome da pessoa)', us);
     q.appendChild(el('div', 'hint', 'O login fica pessoa.' + ((PT.d && PT.d.parceira && PT.d.parceira.codLogin) || 'loja') + '.' + (S.u.sistema || 'grupo') + ' (ex.: joao.' + ((PT.d && PT.d.parceira && PT.d.parceira.codLogin) || 'loja') + '.' + (S.u.sistema || 'grupo') + ').'));
     q.appendChild(m2);
+    var mdl = el('select'); [['atendente', 'Atendente (padrão)'], ['gerente', 'Gerente da loja']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; mdl.appendChild(op); }); campo(q, 'Começar de', mdl);
     btn(q, '+ Criar login', '', function () {
-      call('parcFuncCriar', [S.token, us.value, nm.value]).then(function (r) { nm.value = us.value = ''; perguntar('Login criado', 'Login: ' + (r.login || r.usuario) + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nAnote agora: a senha não aparece de novo.', [{ t: 'OK', v: true }]); call('parcEquipe', [S.token]).then(desEq); }).catch(function (er) { erroEm(m2, er); });
+      call('parcFuncCriar', [S.token, us.value, nm.value, mdl.value]).then(function (r) { nm.value = us.value = ''; perguntar('Login criado', 'Login: ' + (r.login || r.usuario) + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nAnote agora: a senha não aparece de novo.', [{ t: 'OK', v: true }]); call('parcEquipe', [S.token]).then(desEq); }).catch(function (er) { erroEm(m2, er); });
     });
   }
   function ccAchar(id) { return CC.d.lista.filter(function (z) { return z.id === id; })[0]; }
@@ -11597,6 +11619,19 @@
     btn(ac, 'Salvar', '', function () { call('parceiraSalvar', [S.token, { id: p.id || '', codLogin: cl.disabled ? '' : cl.value.trim(), nome: nm.value, doc: dc.value, responsavel: rs.value, telefone: tl.value, email: em.value, endereco: en.value, cidade: ci.value, loja: lj.value, destino: ds.value, pagamento: { modo: pm.value, dias: di.value, periodo: pe.value }, emiteNfe: nfK.checked, modelo: Number(mo.value), comissao: { tipo: ct.value, valor: ct.value === 'nenhuma' ? 0 : num(cv.value), quando: cq.value }, pix: pix.value, ativa: ak.checked }])
       .then(function (d) { CC.d = d; avisoTopo('Parceira salva'); CC.aba = 'Parceiras'; desenharCC(); }).catch(function (e) { erroEm(m, e); }); });
     if (p.crmId && pode('crm')) btn(ac, '🗂 Cadastro completo (Clientes/Fornecedores)', 'ghost', function () { abrirPessoaId(p.crmId); });
+    if (p.id && p.temLogin) {
+      var lgc = el('div', 'card'); box.appendChild(lgc); lgc.appendChild(el('h2', '', 'Logins e permissões da equipe'));
+      var lgl = el('div'); lgc.appendChild(lgl); var lgm = el('div', 'msg err'); lgc.appendChild(lgm);
+      var desLg = function (r) {
+        lgl.innerHTML = '';
+        r.equipe.forEach(function (u) {
+          var row = el('div', 'fl'), a = el('div'); a.appendChild(el('div', 'n', u.nome + (u.papel === 'dono' ? ' · responsável' : ''))); a.appendChild(el('div', 'd', u.login + (u.ativo ? '' : ' · bloqueado'))); row.appendChild(a);
+          if (u.papel === 'func') { var bx = el('div'); bx.style.cssText = 'display:none;width:100%'; var bp = el('button', 'btn ghost mini', 'Permissões'); bp.type = 'button'; bp.onclick = function () { bx.style.display = bx.style.display === 'none' ? '' : 'none'; if (!bx.firstChild) parcPermsEditor(bx, r.opcoes, u.perms || [], function (l2) { call('parcFuncPermsGrupo', [S.token, p.id, u.id, l2]).then(function (r2) { desLg(r2); avisoTopo('Permissões salvas'); }).catch(function (e) { erroEm(lgm, e); }); }); }; row.appendChild(bp); lgl.appendChild(row); lgl.appendChild(bx); }
+          else lgl.appendChild(row);
+        });
+      };
+      lgl.appendChild(el('div', 'empty', 'Carregando…')); call('parcEquipeGrupo', [S.token, p.id]).then(desLg).catch(function (e) { erroEm(lgm, e); });
+    }
     else if (!p.crmId) c.appendChild(el('div', 'hint', 'Com CNPJ, a parceira vira um cadastro completo em Clientes/Fornecedores (endereço, inscrição estadual, banco/PIX), ligado às contas a pagar dela.'));
     if (p.id && D.criarLogin) btn(ac, '🔑 Criar login da parceira', 'ghost', function () {
       var u = prompt('Nome da pessoa responsável, para o login (ex.: carlos). O login fica carlos.' + (p.codLogin || 'codigo') + '.' + (S.u.sistema || 'grupo') + ':'); if (!u) return;
