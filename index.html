@@ -2,6 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-4CsVEiA9S0gS8+d2bSmzg5oHolcXb/W6qXXVPfvxIBg=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2962,7 +2964,7 @@
   var QRLIB = null;
   function garantirQR(fn) {
     if (window.qrcode) return fn();
-    if (!QRLIB) { QRLIB = []; var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'; s.onload = function () { var l = QRLIB; QRLIB = 'ok'; l.forEach(function (f) { f(); }); }; s.onerror = function () { var l = QRLIB; QRLIB = null; l.forEach(function (f) { f(); }); }; document.head.appendChild(s); }
+    if (!QRLIB) { QRLIB = []; var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'; s.integrity = 'sha384-mZT2gIty7ZDdOGkxfP6joZcYdMW1Jvj9dRlfpTmaJAKKXTqzygtB22k7FLe+KZC1'; s.crossOrigin = 'anonymous'; s.onload = function () { var l = QRLIB; QRLIB = 'ok'; l.forEach(function (f) { f(); }); }; s.onerror = function () { var l = QRLIB; QRLIB = null; l.forEach(function (f) { f(); }); }; document.head.appendChild(s); }
     if (Array.isArray(QRLIB)) QRLIB.push(fn); else fn();
   }
   function svgQR(valor, lado) {
@@ -3924,7 +3926,7 @@
   function paginaAssinatura() {
     var tok = (location.search.match(/[?&]ass=([a-f0-9]{40})/) || [])[1];
     // veio de dentro do sistema/app: endereço de volta (só deste site)
-    var volta = (function () { var v = (location.search.match(/[?&]volta=([^&]+)/) || [])[1]; try { v = v ? decodeURIComponent(v) : ''; } catch (e) { v = ''; } return /^\/[^\/]/.test(v) ? v : ''; })();
+    var volta = (function () { var v = (location.search.match(/[?&]volta=([^&]+)/) || [])[1]; try { v = v ? decodeURIComponent(v) : ''; } catch (e) { v = ''; } return /^\/[^\/\\]/.test(v) && !/[\\\s]|^\/\/|:/.test(v.split('#')[0].split('?')[0]) ? v : ''; })();
     document.title = 'Assinatura do termo';
     var pg = el('div'); pg.id = 'assPg'; document.body.appendChild(pg); document.body.classList.add('assinatura'); document.body.style.overflow = 'hidden';
     var doc = el('div', 'doc'); pg.appendChild(doc); doc.appendChild(el('div', 'empty', 'Carregando…'));
@@ -4451,7 +4453,7 @@
   // =========================================================
   //  LOGIN: ESQUECI MINHA SENHA, NOVA SENHA PELO E-MAIL, RODAPÉ
   // =========================================================
-  function avisoPedidos() { var n = (S.u && S.u.pedidosSenha) || 0, g = $('gear'); g.classList.toggle('gpend', n > 0); g.title = n ? n + ' funcionário(s) pediram nova senha' : 'Configurações'; }
+  function avisoPedidos() { var n = (S.u && S.u.pedidosSenha) || 0, a = (S.u && S.u.alertasSeg) || 0, g = $('gear'); g.classList.toggle('gpend', n > 0 || a > 0); g.title = n ? n + ' funcionário(s) pediram nova senha' : a ? a + ' login(s) bloqueado(s) por senha errada nas últimas 24 h' : 'Configurações'; }
   function telaLogin(on) { document.body.classList.toggle('tela-login', !!on); if (on) document.body.classList.remove('logado'); }
   function painelLogin(p) { ['lgEntrar', 'lgEsq'].forEach(function (k) { show(k, k === p); }); }
   $('lgMarca').innerHTML = logoSvg(true) + '<span class="wm">gestti</span>';
@@ -5340,7 +5342,7 @@
     if (FACE && FACE.ok) return Promise.resolve(window.faceapi);
     if (FACE && FACE.p) return FACE.p;
     FACE = { p: new Promise(function (ok, fail) {
-      var s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/dist/face-api.js';
+      var s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/dist/face-api.js'; s.integrity = 'sha384-5SEinnOIOK1Nl6bzEIWwfXWMg4EaJhN2bXKgrjYC0Bq+fYNZHwhD3ntM92lTHnfL'; s.crossOrigin = 'anonymous';
       s.onload = function () {
         var M = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/model/';
         Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(M), faceapi.nets.faceLandmark68Net.loadFromUri(M), faceapi.nets.faceRecognitionNet.loadFromUri(M)])
@@ -5409,8 +5411,8 @@
     if (window.L && window.L.map) return Promise.resolve(window.L);
     if (LEAF) return LEAF;
     LEAF = new Promise(function (ok, fail) {
-      var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(css);
-      var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; s.onload = function () { ok(window.L); }; s.onerror = function () { LEAF = null; fail('Não deu para carregar o mapa.'); }; document.head.appendChild(s);
+      var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; css.integrity = 'sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb'; css.crossOrigin = 'anonymous'; document.head.appendChild(css);
+      var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; s.integrity = 'sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO'; s.crossOrigin = 'anonymous'; s.onload = function () { ok(window.L); }; s.onerror = function () { LEAF = null; fail('Não deu para carregar o mapa.'); }; document.head.appendChild(s);
     });
     return LEAF;
   }
@@ -6403,7 +6405,7 @@
       call('rhFotosMes', [S.token, mes.value, se.value]).then(function (L) {
         if (!L.length) return msg('topMsg', 'Nenhuma foto de batida neste mês.');
         avisoTopo('Baixando ' + L.length + ' foto(s)…');
-        var js = window.JSZip ? Promise.resolve() : new Promise(function (ok, fail) { var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'; s.onload = ok; s.onerror = function () { fail('Não deu para carregar o compactador.'); }; document.head.appendChild(s); });
+        var js = window.JSZip ? Promise.resolve() : new Promise(function (ok, fail) { var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'; s.integrity = 'sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG'; s.crossOrigin = 'anonymous'; s.onload = ok; s.onerror = function () { fail('Não deu para carregar o compactador.'); }; document.head.appendChild(s); });
         return js.then(function () {
           var z = new JSZip(), i = 0;
           var prox = function () {
@@ -12289,7 +12291,7 @@
     var w = el('div', 'etq'); w.appendChild(el('b', '', 'GESTTI · ' + x.id)); w.appendChild(el('div', '', x.aparelho.modelo + ' · IMEI ' + x.aparelho.imei)); w.appendChild(el('div', '', (x.dados.parceiraNome || '') + ' → ' + depVer(x.loja)));
     var q = el('div'); w.appendChild(q);
     var fim = function () { imprimirHTML('Etiqueta ' + x.id, w, '.etq{font:13px system-ui;border:1px dashed #333;padding:10px;width:260px}.etq img,.etq canvas{margin-top:8px}'); };
-    var lib = function () { if (window.QRCode) return Promise.resolve(); return new Promise(function (ok, fail) { var s2 = document.createElement('script'); s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s2.onload = ok; s2.onerror = fail; document.head.appendChild(s2); }); };
+    var lib = function () { if (window.QRCode) return Promise.resolve(); return new Promise(function (ok, fail) { var s2 = document.createElement('script'); s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s2.integrity = 'sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU'; s2.crossOrigin = 'anonymous'; s2.onload = ok; s2.onerror = fail; document.head.appendChild(s2); }); };
     lib().then(function () { new window.QRCode(q, { text: 'GESTTI:' + x.id, width: 140, height: 140 }); setTimeout(fim, 300); }).catch(function () { q.appendChild(el('div', '', 'Código: ' + x.id)); fim(); });
   }
   /** Conferência: lê o QR com a câmera (quando o navegador permite) ou digita o código. */
@@ -15368,7 +15370,7 @@
   var CSS_CUPOM = '@page{size:80mm auto;margin:3mm}body{margin:0}.cup{width:72mm;font:11px/1.35 Menlo,Consolas,monospace;color:#000}.cup .c{text-align:center}.cup .b{font-weight:700}.cup .g{font-size:15px;font-weight:700}.cup hr{border:0;border-top:1px dashed #000;margin:6px 0}.cup .lr{display:flex;justify-content:space-between;gap:6px}.cup .lr span:last-child{text-align:right;white-space:nowrap}.cup .inv{background:#000;color:#fff;text-align:center;font-weight:700;letter-spacing:.08em;padding:2px 0}.cup .qr{width:110px;margin:6px auto}.cup .qr img,.cup .qr canvas{width:110px!important;height:110px!important}.cup .ass{margin-top:26px;border-top:1px solid #000;text-align:center;font-size:10px;padding-top:2px}';
   /** QR na caixa (biblioteca carregada sob demanda). */
   function qrEm(box, texto, tam) {
-    var lib = window.QRCode ? Promise.resolve() : new Promise(function (ok, fail) { var s2 = document.createElement('script'); s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s2.onload = ok; s2.onerror = fail; document.head.appendChild(s2); });
+    var lib = window.QRCode ? Promise.resolve() : new Promise(function (ok, fail) { var s2 = document.createElement('script'); s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s2.integrity = 'sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU'; s2.crossOrigin = 'anonymous'; s2.onload = ok; s2.onerror = fail; document.head.appendChild(s2); });
     return lib.then(function () { new window.QRCode(box, { text: texto, width: tam || 120, height: tam || 120 }); return new Promise(function (ok) { setTimeout(ok, 250); }); });
   }
   // ---------- formulário (página inteira) ----------
@@ -16607,6 +16609,7 @@
     if (pode('equipe') || pode('liberar')) l.push(['modelosdoc', 'Modelos de documento', 'Contrato de compra, termos de reserva/encomenda: texto e o que a assinatura pede']);
     if (pode('equipe') || /^(Gerente|Supervisor)$/.test(S.u.perfil || '')) l.push(['assloja', 'Assinatura da loja', 'Assinatura eletrônica da empresa que entra sozinha nos contratos']);
     if (pode('equipe') || pode('crm')) l.push(['obrigatorios', 'Cadastro de pessoas: obrigatórios', 'Campos obrigatórios para pessoa física e jurídica']);
+    if (pode('equipe')) l.push(['seguranca', 'Segurança', S.u.alertasSeg ? '⚠ ' + S.u.alertasSeg + ' login(s) bloqueado(s) nas últimas 24 h' : 'Senhas erradas, bloqueios, acessos negados e links inválidos']);
     if (pode('equipe')) l.push(['empresa', 'Dados da empresa', 'Nome, CNPJ, endereço (busca pelo CEP) e logo da impressão'], ['login', 'Tela de entrada', 'Contatos do rodapé "fale com a gente!"']);
     return l;
   }
@@ -16633,6 +16636,7 @@
     else if (ab === 'empresa') cfgEmpresa(box);
     else if (ab === 'empresas') cfgEmpresas(box);
     else if (ab === 'login') cfgContatos(box);
+    else if (ab === 'seguranca') cfgSeguranca(box);
     else if (ab === 'depositos') cfgDepositos(box);
     else if (ab === 'categorias') cfgCatFin(box);
     else if (ab === 'reservas') {
@@ -16705,6 +16709,28 @@
     });
     c.appendChild(sg); c.appendChild(el('div', 'hint', 'Vale só para este aparelho. "Automático" segue o tema do celular/computador.'));
     box.appendChild(c);
+  }
+  /** Registro de segurança: logins errados e bloqueados, acessos negados e links inválidos (quem gerencia a equipe). */
+  function cfgSeguranca(box) {
+    box.appendChild(el('p', 'hint', 'O sistema registra aqui as tentativas suspeitas. Depois de 5 senhas erradas seguidas, o login fica bloqueado por 15 minutos (gerar uma nova senha desbloqueia na hora). Senha provisória vale 72 horas.'));
+    var fl = el('div', 'row'), sd = el('select'); [['1', 'Últimas 24 horas'], ['7', 'Últimos 7 dias'], ['30', 'Últimos 30 dias'], ['90', 'Últimos 90 dias']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; sd.appendChild(op); }); sd.value = '7';
+    fl.appendChild(sd); box.appendChild(fl);
+    var res = el('div'); box.appendChild(res);
+    var carregar = function () {
+      res.innerHTML = ''; res.appendChild(el('div', 'empty', 'Carregando…'));
+      call('segurancaLog', [S.token, Number(sd.value)]).then(function (d) {
+        if (!res.isConnected) return; res.innerHTML = '';
+        var r = d.resumo24h || {}, kp = el('div', 'hint');
+        kp.textContent = 'Nas últimas 24 h: ' + (r.senhaErrada || 0) + ' senha(s) errada(s) · ' + (r.bloqueios || 0) + ' bloqueio(s) · ' + (r.negados || 0) + ' acesso(s) negado(s) · ' + (r.links || 0) + ' link(s) inválido(s)';
+        res.appendChild(kp);
+        if (!d.lista.length) { res.appendChild(el('div', 'empty', 'Nada registrado no período.')); return; }
+        var w = el('div', 'ctwrap'), t = el('table', 'cttab'), h = el('tr');
+        ['Quando', 'Evento', 'Usuário', 'Detalhe', 'IP'].forEach(function (x) { h.appendChild(el('th', '', x)); }); t.appendChild(h);
+        d.lista.forEach(function (x) { var tr = el('tr'); [x.quando, x.evento, x.usuario || '—', x.det, x.ip || '—'].forEach(function (v, i) { var td = el('td', '', v); if (i === 1 && /bloqueado|desativado/i.test(v)) td.style.fontWeight = '700'; tr.appendChild(td); }); t.appendChild(tr); });
+        w.appendChild(t); res.appendChild(w);
+      }).catch(function (e) { res.innerHTML = ''; res.appendChild(el('div', 'msg err show', String(e))); });
+    };
+    sd.onchange = carregar; carregar();
   }
   function cfgSenha(box) {
     var c = el('div', 'card'); c.appendChild(el('h2', '', 'Trocar minha senha'));
