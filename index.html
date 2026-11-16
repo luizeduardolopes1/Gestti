@@ -7526,10 +7526,12 @@
   function baixarAnexo(p, a, btn) {
     var t0 = btn.textContent; btn.disabled = true; btn.textContent = 'Baixando…';
     call('crmAnexoBaixar', [S.token, p.id, a.id]).then(function (r) {
-      var bin = atob(r.b64), u8 = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
-      var url = URL.createObjectURL(new Blob([u8], { type: 'application/octet-stream' })), lk = document.createElement('a');
-      lk.href = url; lk.download = r.nome; document.body.appendChild(lk); lk.click(); lk.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-      btn.disabled = false; btn.textContent = t0;
+      if (!r || !r.url) throw 'Anexo não encontrado.';
+      return fetch(r.url).then(function (x) { if (!x.ok) throw 'Não consegui baixar o anexo.'; return x.blob(); }).then(function (b) {
+        var url = URL.createObjectURL(b), lk = document.createElement('a');
+        lk.href = url; lk.download = a.nome || 'anexo'; document.body.appendChild(lk); lk.click(); lk.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+        btn.disabled = false; btn.textContent = t0;
+      });
     }).catch(function (e) { btn.disabled = false; btn.textContent = 'Tentar de novo'; btn.title = e; });
   }
   // Lista de anexos já salvos (com baixar e, na edição, excluir)
