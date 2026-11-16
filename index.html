@@ -54,6 +54,20 @@
   .perm input{width:20px;height:20px;padding:0;margin:2px 0 0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
   .perm .t{font-size:14px;font-weight:600}.perm .t small{display:block;font-weight:400;color:var(--muted);font-size:12px}
   .perm.dis{opacity:.55}
+  .pgtw{overflow-x:auto;margin-top:8px;border:1px solid var(--line);border-radius:10px;max-height:560px;overflow-y:auto}
+  .pgt{width:100%;border-collapse:collapse;font-size:13.5px}
+  .pgt th{position:sticky;top:0;background:var(--card);font-size:12px;color:var(--muted);padding:7px 6px;border-bottom:1px solid var(--line);text-align:center;z-index:1}
+  .pgt th:first-child{text-align:left}
+  .pgt td{padding:6px;border-bottom:1px solid var(--line);text-align:center}
+  .pgt td:first-child{text-align:left}
+  .pgt tr.pgg td{background:var(--soft);font-weight:700}
+  .pgt tr.pgg td:last-child{text-align:right;font-weight:600}
+  .pgt input{width:18px;height:18px;cursor:pointer}
+  .pgall{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:12.5px}
+  .pgnova{font-size:10px;font-weight:800;background:var(--ok-bg);color:var(--ok);border-radius:5px;padding:1px 5px;margin-left:6px;text-transform:uppercase}
+  .pgexct{font-size:10px;font-weight:800;background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:1px 5px;margin-left:6px}
+  .pgt tr.pgexc td{background:var(--warn-bg)}
+  .pgacoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 14px}
   .pinbox{background:var(--ok-bg);border-radius:12px;padding:14px;text-align:center;margin-bottom:12px}
   .pinbox .v{font-size:30px;font-weight:800;letter-spacing:4px;color:var(--ok);margin:4px 0}
   .gcard{border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:var(--card)}
@@ -1942,7 +1956,16 @@
       if (h[3]) localStorage.setItem(AMBC.ls + 'usuario', JSON.stringify(decodeURIComponent(h[3])));
     } catch (e) {}
     lsRaw(AMBC.kc, h[2]); CONTA = h[2];
+    lsRaw('gestti_ultimo_amb', AMB);
     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { location.hash = ''; }
+  })();
+  // Leva 6 ampliada: no app (APK), abrir direto no último sistema usado. Ex.: login .demo feito no app das lojas:
+  // ao reabrir, o app começa nas lojas, onde não há sessão; vai para a demo, onde a sessão está.
+  (function () {
+    if (!(window.Capacitor || /[?&]app=1\b/.test(location.search))) return;
+    var ult = lsRaw('gestti_ultimo_amb'); if (!ult || ult === AMB || !AMBS[ult]) return;
+    var aqui = null, la = null; try { aqui = localStorage.getItem(AMBC.ls + 'token'); la = localStorage.getItem(AMBS[ult].ls + 'token'); } catch (e) {}
+    if (la && !aqui) location.replace(siteDe(ult) + (location.search || ''));
   })();
   if (AMB === 'homolog') {
     window.addEventListener('DOMContentLoaded', function () {
@@ -4082,7 +4105,7 @@
     nav.classList.toggle('busca', !!q);
     var grupos = {};
     VIEWS.forEach(function (v) {
-      if ((!pode(v.perm) && !(v.permOu && pode(v.permOu))) || (v.perm2 && !pode(v.perm2)) || v.oculta || (v.id === 'cadastro' && pode('produtos'))) return;
+      if (!viewVisivel(v) || v.oculta || (v.id === 'cadastro' && pode('produtos'))) return;
       if (q && semAc([v.nome, v.subNome, v.menu, v.sub, v.desc].join(' ')).indexOf(q) < 0) return;
       var it = itemMenu(v);
       if (!v.menu) { nav.appendChild(it); return; }
@@ -6391,21 +6414,24 @@
     var m = /^(.+)\.([a-z0-9][a-z0-9-]{1,39})$/i.exec(txt);
     if (!m || SRV !== 'sb') return Promise.resolve({ nome: txt, conta: CONTA, amb: AMB });
     return postEm(AMB, { acao: 'resolverLogin', args: [m[2].toLowerCase()] }).then(function (d) {
-      return { nome: m[1], conta: d.conta, amb: AMBS[d.ambiente] ? d.ambiente : 'producao' };
+      return { nome: m[1], conta: d.conta, amb: AMBS[d.ambiente] ? d.ambiente : 'producao', sistema: m[2].toLowerCase() };
     }, function (e) { throw /Sistema não encontrado/.test(e) ? 'Sistema "' + m[2] + '" não encontrado. Confira o que vem depois do ponto (ex.: luiz.grupo).' : e; });
   }
   /** Entra no sistema certo. Mesmo ambiente: entra aqui (trocando de conta se for outra). Outro ambiente: entra lá e abre o site dele
    *  já logado (só a sessão vai no endereço; a senha não). Resolve com {d, trocou} ou {fora: true}. */
   function entrarSistema(txt, acao, senha) {
     return resolverSistema(txt).then(function (R) {
+      var args = acao === 'entrar' ? [R.nome, senha, R.sistema || ''] : [R.nome, senha];
       if (R.amb !== AMB) {
-        return postEm(R.amb, { acao: acao, args: [R.nome, senha], c: R.conta }).then(function (d) {
+        return postEm(R.amb, { acao: acao, args: args, c: R.conta }).then(function (d) {
+          lsRaw('gestti_ultimo_amb', R.amb);
           location.href = siteDe(R.amb) + '#sessao=' + encodeURIComponent(d.token) + '&c=' + R.conta + '&u=' + encodeURIComponent(acao === 'entrar' ? txt : '');
           return { fora: true };
         });
       }
       var antes = CONTA; CONTA = R.conta;
-      return call(acao, [R.nome, senha]).then(function (d) {
+      return call(acao, args).then(function (d) {
+        lsRaw('gestti_ultimo_amb', AMB);
         if (R.conta !== antes) lsRaw(AMBC.kc, R.conta);
         return { d: d, trocou: R.conta !== antes };
       }, function (e) { CONTA = antes; throw e; });
@@ -6416,6 +6442,7 @@
   $('lBtn').onclick = function () {
     var u = $('lUser').value.trim(), p = $('lPass').value.trim();
     if (!u || !p) return msg('loginMsg', 'Informe usuário e senha.');
+    if (SRV === 'sb' && !/\.[a-z0-9][a-z0-9-]{1,39}$/i.test(u)) return msg('loginMsg', 'Digite o login completo, com o nome do sistema no final (ex.: ' + (u.split('.')[0] || 'luiz') + '.grupo).');
     msg('loginMsg', ''); var b = this; b.disabled = true; b.innerHTML = '<span class="spin"></span>Entrando…';
     entrarSistema(u, 'entrar', p).then(function (x) {
       if (x.fora) return;
@@ -6496,6 +6523,23 @@
   // loja parceira (só a permissão "parceira"): não é funcionária, não recebe as telas de todos (ponto, escala, carreira…)
   function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono'; }); }
   function pode(p) { return !!(S.u && ((p === '**' && !soParceira()) || (p === '*' && !S.u.soPonto && !soParceira()) || (S.u.perms || []).indexOf(p) > -1)); }
+  // Leva 6 ampliada: telas da grade (tela × ação). Tela da grade aparece se a pessoa tem qualquer caixinha nela.
+  var GRADE_TELA = { ccnova: 'compracel', cclista: 'compracel' };
+  function temGrade() { return !!(S.u && (S.u.perms || []).some(function (k) { return k.indexOf(':') > 0; })); }
+  function podeTela(id, a) {
+    var t = GRADE_TELA[id] || id, ps = (S.u && S.u.perms) || [];
+    if (a) return ps.indexOf(t + ':' + a) > -1;
+    for (var i = 0; i < ps.length; i++) if (ps[i].indexOf(t + ':') === 0) return true;
+    return false;
+  }
+  var TELAS_GRADE = ['dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
+    'compras', 'checkin', 'transf', 'balanco', 'etiquetas', 'compracel', 'ccnova', 'cclista', 'ccparc', 'novos', 'venda', 'pagar', 'receber', 'bancos', 'cred', 'dre', 'conferencia', 'metas', 'comissoes', 'metrel',
+    'aval', 'cartao', 'compra', 'proposta'];
+  function viewVisivel(v) {
+    if (soParceira() || !temGrade() || TELAS_GRADE.indexOf(v.id) < 0) return (pode(v.perm) || (v.permOu && pode(v.permOu))) && !(v.perm2 && !pode(v.perm2));
+    if (v.id === 'osnova') return podeTela('osnova', 'c');
+    return podeTela(v.id) && !(v.perm2 && !pode(v.perm2));
+  }
   // ---------- várias empresas ----------
   var ICO_EMP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h1M14 9h1M9 13h1M14 13h1M9 17h1M14 17h1"/></svg>';
   function montarEmpresa() {
@@ -6559,7 +6603,7 @@
     var soParc = (d.perms || []).indexOf('parceira') > -1 && (d.perms || []).every(function (x) { return x === 'parceira'; });
     if (soParc) portalIniciar();
     var ult = soParc ? 'pinicio' : d.soPonto || d.pinTemp ? 'ponto' : pode('dashboard') ? 'dash' : LS.get('view', 'cadastro'); // o sistema sempre abre no Dashboard
-    var permitidas = VIEWS.filter(function (v) { return pode(v.perm) || (v.permOu && pode(v.permOu)); });
+    var permitidas = VIEWS.filter(viewVisivel);
     if (ult !== 'config' && !permitidas.some(function (v) { return v.id === ult; })) ult = permitidas.length ? permitidas[0].id : '';
     if (!ult) { show('nav', false); document.body.classList.remove('logado'); msg('topMsg', 'Seu usuário ainda não tem nenhuma página liberada. Fale com o gerente.'); return; }
     ir(ult);
@@ -11224,10 +11268,11 @@
       });
     }
     lst.appendChild(el('div', 'empty', 'Carregando…')); call('parcEquipe', [S.token]).then(desEq).catch(function (er) { erroEm(m2, er); });
-    var gn = grade(q, 2), nm = inp('text', 'Nome e sobrenome'); campo(gn[0], 'Nome do funcionário', nm); var us = inp('text', 'ex.: joao_loja'); us.autocapitalize = 'off'; campo(gn[1], 'Usuário de acesso', us);
+    var gn = grade(q, 2), nm = inp('text', 'Nome e sobrenome'); campo(gn[0], 'Nome do funcionário', nm); var us = inp('text', 'ex.: joao'); us.autocapitalize = 'off'; campo(gn[1], 'Usuário (só o nome da pessoa)', us);
+    q.appendChild(el('div', 'hint', 'O login fica pessoa.' + ((PT.d && PT.d.parceira && PT.d.parceira.codLogin) || 'loja') + '.' + (S.u.sistema || 'grupo') + ' (ex.: joao.' + ((PT.d && PT.d.parceira && PT.d.parceira.codLogin) || 'loja') + '.' + (S.u.sistema || 'grupo') + ').'));
     q.appendChild(m2);
     btn(q, '+ Criar login', '', function () {
-      call('parcFuncCriar', [S.token, us.value, nm.value]).then(function (r) { nm.value = us.value = ''; perguntar('Login criado', 'Usuário: ' + r.usuario + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nAnote agora: a senha não aparece de novo.', [{ t: 'OK', v: true }]); call('parcEquipe', [S.token]).then(desEq); }).catch(function (er) { erroEm(m2, er); });
+      call('parcFuncCriar', [S.token, us.value, nm.value]).then(function (r) { nm.value = us.value = ''; perguntar('Login criado', 'Login: ' + (r.login || r.usuario) + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nAnote agora: a senha não aparece de novo.', [{ t: 'OK', v: true }]); call('parcEquipe', [S.token]).then(desEq); }).catch(function (er) { erroEm(m2, er); });
     });
   }
   function ccAchar(id) { return CC.d.lista.filter(function (z) { return z.id === id; })[0]; }
@@ -11424,6 +11469,23 @@
     });
     c.appendChild(tab);
     var add = el('button', 'btn', '+ Nova parceira'); add.type = 'button'; add.style.cssText = 'width:auto;padding:11px 20px;margin-top:14px'; add.onclick = function () { paginaParceira(box, null); }; c.appendChild(add);
+    if (D.criarLogin) {
+      var mg = el('div', 'card'); box.appendChild(mg);
+      mg.appendChild(el('div', 'hint', 'Logins de parceira no formato novo: pessoa.parceira.' + (S.u.sistema || 'grupo') + '. Logins antigos (sem o código da parceira) mudam de uma vez aqui; a senha continua a mesma. Depois, avise cada parceira pelo WhatsApp.'));
+      var mm = el('div', 'msg err'), lst2 = el('div');
+      btn(mg, 'Atualizar logins antigos das parceiras', 'ghost', function () {
+        call('parcLoginsMigrar', [S.token]).then(function (l) {
+          lst2.innerHTML = '';
+          if (!l.length) { lst2.appendChild(el('div', 'msg ok show', '✓ Todos os logins de parceira já estão no formato novo.')); return; }
+          l.forEach(function (o) {
+            var r = el('div', 'fl'), a = el('div'); a.appendChild(el('div', 'n', o.nome + ' · ' + o.parceira)); a.appendChild(el('div', 'd', o.antes + ' → ' + o.depois)); r.appendChild(a);
+            if (o.telefone) { var w = el('button', 'btn ghost mini', 'WhatsApp'); w.type = 'button'; w.onclick = function () { window.open(waLink(o.telefone, 'Olá, ' + o.nome.split(' ')[0] + '! O seu login do Gestti mudou para: ' + o.depois + ' (a senha continua a mesma).'), '_blank'); }; r.appendChild(w); }
+            lst2.appendChild(r);
+          });
+        }).catch(function (e) { erroEm(mm, e); });
+      });
+      mg.appendChild(mm); mg.appendChild(lst2);
+    }
   }
   function paginaParceira(box, p) {
     var D = CC.d; p = p ? JSON.parse(JSON.stringify(p)) : { nome: '', doc: '', responsavel: '', telefone: '', email: '', endereco: '', cidade: '', loja: D.lojas[0], destino: 'estoque', pagamento: { modo: 'conferencia', dias: 7, periodo: 'semanal' }, ativa: true };
@@ -11433,6 +11495,10 @@
     var g = grade(c, 2), nm = inp('text', 'Nome ou razão social'); nm.value = p.nome; campo(g[0], 'Nome *', nm, true); var dc = inp('text', 'CNPJ ou CPF'); dc.value = p.doc ? fmtDoc(p.doc) : ''; campo(g[1], 'CNPJ/CPF', dc);
     var g2 = grade(c, 3), rs = inp('text', 'Quem responde'); rs.value = p.responsavel; campo(g2[0], 'Responsável', rs); var tl = inp('tel', '(22) 99999-9999'); tl.value = p.telefone; campo(g2[1], 'Telefone', tl); var em = inp('email', 'e-mail'); em.value = p.email; campo(g2[2], 'E-mail', em);
     var g3 = grade(c, 2), en = inp('text', 'Endereço'); en.value = p.endereco; campo(g3[0], 'Endereço (vai no contrato dela)', en); var ci = inp('text', 'Cidade/UF'); ci.value = p.cidade; campo(g3[1], 'Cidade (foro do contrato dela)', ci);
+    var cl = inp('text', 'ex.: lojax'); cl.value = p.codLogin || ''; cl.autocapitalize = 'off'; cl.maxLength = 15; campo(c, 'Código nos logins', cl);
+    var clh = el('div', 'hint'); c.appendChild(clh);
+    var clv = function () { clh.textContent = 'Logins da equipe dela: pessoa.' + (cl.value.trim().toLowerCase() || 'codigo') + '.' + (S.u.sistema || 'grupo') + ' (ex.: carlos.' + (cl.value.trim().toLowerCase() || 'codigo') + '.' + (S.u.sistema || 'grupo') + '). Em branco, o sistema sugere pelo nome. Não muda depois do primeiro login criado.'; };
+    cl.oninput = clv; clv(); if (p.codLogin && p.temLogin) cl.disabled = true;
     c.appendChild(el('h3', 'ch', 'Destino e pagamento'));
     var g4 = grade(c, 3), lj = el('select'); D.lojas.forEach(function (l) { lj.appendChild(el('option', '', depVer(l))).value = l; }); lj.value = p.loja; campo(g4[0], 'Loja de destino (fixa)', lj);
     var ds = el('select'); [['estoque', 'Direto para o estoque'], ['compras', 'Conferência + aprovação de quem lança compras']].forEach(function (o) { ds.appendChild(el('option', '', o[1])).value = o[0]; }); ds.value = p.destino; campo(g4[1], 'Depois da conferência', ds);
@@ -11461,11 +11527,11 @@
     if (p.parceria && p.parceria.assinatura) c.appendChild(el('div', 'hint', '✓ Contrato de parceria assinado por ' + p.parceria.assinatura.nome + ' em ' + p.parceria.assinatura.em + '.'));
     else if (p.id) c.appendChild(el('div', 'hint', 'O contrato de parceria ainda não foi assinado: o responsável assina no primeiro acesso ao app.'));
     var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
-    btn(ac, 'Salvar', '', function () { call('parceiraSalvar', [S.token, { id: p.id || '', nome: nm.value, doc: dc.value, responsavel: rs.value, telefone: tl.value, email: em.value, endereco: en.value, cidade: ci.value, loja: lj.value, destino: ds.value, pagamento: { modo: pm.value, dias: di.value, periodo: pe.value }, emiteNfe: nfK.checked, modelo: Number(mo.value), comissao: { tipo: ct.value, valor: ct.value === 'nenhuma' ? 0 : num(cv.value), quando: cq.value }, pix: pix.value, ativa: ak.checked }])
+    btn(ac, 'Salvar', '', function () { call('parceiraSalvar', [S.token, { id: p.id || '', codLogin: cl.disabled ? '' : cl.value.trim(), nome: nm.value, doc: dc.value, responsavel: rs.value, telefone: tl.value, email: em.value, endereco: en.value, cidade: ci.value, loja: lj.value, destino: ds.value, pagamento: { modo: pm.value, dias: di.value, periodo: pe.value }, emiteNfe: nfK.checked, modelo: Number(mo.value), comissao: { tipo: ct.value, valor: ct.value === 'nenhuma' ? 0 : num(cv.value), quando: cq.value }, pix: pix.value, ativa: ak.checked }])
       .then(function (d) { CC.d = d; avisoTopo('Parceira salva'); CC.aba = 'Parceiras'; desenharCC(); }).catch(function (e) { erroEm(m, e); }); });
     if (p.id && D.criarLogin) btn(ac, '🔑 Criar login da parceira', 'ghost', function () {
-      var u = prompt('Usuário de acesso da parceira (ex.: parceirax):'); if (!u) return;
-      call('parceiraLoginCriar', [S.token, p.id, u, rs.value || nm.value]).then(function (r) { perguntar('Login da parceira', 'Usuário: ' + r.usuario + '.' + (S.u.sistema ? S.u.sistema : '') + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nEla entra pela mesma tela do Gestti (ou instala o app Gestti Parceiras) e vê só o portal dela. Este é o login do responsável: ele assina o contrato de parceria e cria os logins dos funcionários. Anote agora: a senha não aparece de novo.'); }).catch(function (e) { erroEm(m, e); });
+      var u = prompt('Nome da pessoa responsável, para o login (ex.: carlos). O login fica carlos.' + (p.codLogin || 'codigo') + '.' + (S.u.sistema || 'grupo') + ':'); if (!u) return;
+      call('parceiraLoginCriar', [S.token, p.id, u, rs.value || nm.value]).then(function (r) { perguntar('Login da parceira', 'Login: ' + (r.login || r.usuario) + '\nSenha provisória: ' + r.senha + ' (troca no 1º acesso)\n\nEla entra pela mesma tela do Gestti (ou instala o app Gestti Parceiras) e vê só o portal dela. Este é o login do responsável: ele assina o contrato de parceria e cria os logins dos funcionários. Anote agora: a senha não aparece de novo.'); }).catch(function (e) { erroEm(m, e); });
     });
   }
   function pagamentosParc(box) {
@@ -15658,6 +15724,63 @@
 
   function nomePerm(id) { var p = CFG.eq.permissoes.filter(function (x) { return x.id === id; })[0]; return p ? p.nome : id; }
   function permsGrupo(g) { var x = CFG.eq.grupos.filter(function (y) { return y.nome === g; })[0]; return x ? x.perms : []; }
+  function gradeGrupo(g) { var x = CFG.eq.grupos.filter(function (y) { return y.nome === g; })[0]; return x ? (x.grade || []).slice() : []; }
+  var ACAO_NOME = { v: 'Ver', c: 'Criar', e: 'Editar', x: 'Excluir' };
+  /** Grade tela × ação + ações sensíveis. marcadas: lista de caixinhas (muda no lugar). base: lista do grupo (para marcar o que é exceção). */
+  function gradePerms(box, marcadas, travado, onChange, base) {
+    var G = CFG.eq.grade || { telas: [], acoes: [] }, wrap = el('div', 'pgrade');
+    var tem = function (k) { return marcadas.indexOf(k) > -1; };
+    var por = function (k, on) { var i = marcadas.indexOf(k); if (on && i < 0) marcadas.push(k); if (!on && i > -1) marcadas.splice(i, 1); };
+    function desenhar() {
+      wrap.innerHTML = '';
+      var tw = el('div', 'pgtw'), t = el('table', 'pgt'), h = el('tr'); h.appendChild(el('th', '', 'Tela'));
+      'vcex'.split('').forEach(function (a) { var th = el('th', '', ACAO_NOME[a]); h.appendChild(th); }); t.appendChild(h);
+      var grupos = []; G.telas.forEach(function (x) { if (grupos.indexOf(x.grupo) < 0) grupos.push(x.grupo); });
+      grupos.forEach(function (gn) {
+        var telas = G.telas.filter(function (x) { return x.grupo === gn; }), todas = [];
+        telas.forEach(function (x) { x.acoes.split('').forEach(function (a) { todas.push(x.id + ':' + a); }); });
+        var gr = el('tr', 'pgg'), gc = el('td', '', gn); gr.appendChild(gc);
+        var gtd = el('td'); gtd.colSpan = 4; var gl = el('label', 'pgall'), gk = el('input'); gk.type = 'checkbox'; gk.disabled = !!travado;
+        gk.checked = todas.every(tem); gk.indeterminate = !gk.checked && todas.some(tem);
+        gk.onchange = function () { todas.forEach(function (k) { por(k, gk.checked); }); desenhar(); if (onChange) onChange(); };
+        gl.appendChild(gk); gl.appendChild(document.createTextNode(' marcar o grupo')); gtd.appendChild(gl); gr.appendChild(gtd); t.appendChild(gr);
+        telas.forEach(function (x) {
+          var tr = el('tr'), nm = el('td', '', x.nome);
+          if (x.nova) nm.appendChild(el('span', 'pgnova', 'novo'));
+          var difere = base && x.acoes.split('').some(function (a) { var k = x.id + ':' + a; return tem(k) !== (base.indexOf(k) > -1); });
+          if (difere) { tr.className = 'pgexc'; nm.appendChild(el('span', 'pgexct', 'exceção')); }
+          tr.appendChild(nm);
+          'vcex'.split('').forEach(function (a) {
+            var td = el('td'); if (x.acoes.indexOf(a) > -1) {
+              var k = x.id + ':' + a, cb = el('input'); cb.type = 'checkbox'; cb.checked = tem(k); cb.disabled = !!travado; cb.setAttribute('aria-label', x.nome + ': ' + ACAO_NOME[a]);
+              cb.onchange = function () {
+                por(k, cb.checked);
+                // criar/editar/excluir pedem ver; tirar "ver" tira o resto da tela
+                if (cb.checked && a !== 'v' && x.acoes.indexOf('v') > -1) por(x.id + ':v', true);
+                if (!cb.checked && a === 'v') x.acoes.split('').forEach(function (b) { por(x.id + ':' + b, false); });
+                desenhar(); if (onChange) onChange();
+              };
+              td.appendChild(cb);
+            }
+            tr.appendChild(td);
+          });
+          t.appendChild(tr);
+        });
+      });
+      tw.appendChild(t); wrap.appendChild(tw);
+      wrap.appendChild(el('h3', 'ch', 'Ações sensíveis'));
+      var al = el('div', 'pgacoes');
+      G.acoes.forEach(function (a) {
+        var row = el('label', 'perm' + (travado ? ' dis' : '')), cb = el('input'); cb.type = 'checkbox'; cb.checked = tem(a.id); cb.disabled = !!travado;
+        cb.onchange = function () { por(a.id, cb.checked); desenhar(); if (onChange) onChange(); };
+        var tt = el('div', 't', a.nome); tt.appendChild(el('small', '', a.desc));
+        if (base && tem(a.id) !== (base.indexOf(a.id) > -1)) tt.appendChild(el('span', 'pgexct', 'exceção'));
+        row.appendChild(cb); row.appendChild(tt); al.appendChild(row);
+      });
+      wrap.appendChild(al);
+    }
+    desenhar(); box.appendChild(wrap); return wrap;
+  }
   function listaPerms(box, marcadas, travado, onChange) {
     var wrap = el('div');
     CFG.eq.permissoes.forEach(function (p) {
@@ -15718,15 +15841,15 @@
     });
     if (outrasEmp.length) c.appendChild(el('div', 'hint', 'Escolha a loja em cada empresa que a pessoa pode acessar. "Sem acesso" esconde a empresa para ela. O grupo e as permissões valem para todas.'));
     var grupo = el('select'); opts(grupo, CFG.eq.grupos.map(function (g) { return g.nome; }), x ? x.grupo : 'Vendedor'); campo(c, 'Grupo', grupo);
-    var pers = x && x.custom ? x.custom.slice() : permsGrupo(grupo.value).slice();
+    var pers = x && x.custom && x.grade ? x.grade.slice() : gradeGrupo(grupo.value);
     var ck = el('label', 'perm'); var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!(x && x.custom);
-    var tt = el('div', 't', 'Personalizar permissões deste funcionário'); tt.appendChild(el('small', '', 'Desmarcado: segue as permissões do grupo.'));
+    var tt = el('div', 't', 'Exceção individual'); tt.appendChild(el('small', '', 'Desmarcado: segue o grupo. Marcado: vale o grupo com o que você der ou tirar só para esta pessoa (as diferenças aparecem como "exceção"). Mudanças no grupo continuam chegando nela.'));
     ck.appendChild(cb); ck.appendChild(tt); ck.style.marginTop = '12px'; c.appendChild(ck);
     var pbox = el('div'); c.appendChild(pbox);
     function redesenhar() {
       pbox.innerHTML = '';
-      if (!cb.checked) pers = permsGrupo(grupo.value).slice();
-      listaPerms(pbox, pers, !cb.checked);
+      if (!cb.checked) pers = gradeGrupo(grupo.value);
+      gradePerms(pbox, pers, !cb.checked, null, cb.checked ? gradeGrupo(grupo.value) : null);
     }
     cb.onchange = redesenhar; grupo.onchange = redesenhar; redesenhar();
     var ativo = null;
@@ -15766,7 +15889,9 @@
     cc.onclick = function () { box.innerHTML = ''; cfgFunc(box); };
     ok.onclick = function () {
       m.classList.remove('show');
-      var d = { nome: nome.value.trim(), usuario: usu.value.trim(), loja: loja.value, grupo: grupo.value, personalizar: cb.checked, perms: pers };
+      var bg = gradeGrupo(grupo.value);
+      var d = { nome: nome.value.trim(), usuario: usu.value.trim(), loja: loja.value, grupo: grupo.value,
+                excecao: cb.checked ? { mais: pers.filter(function (k) { return bg.indexOf(k) < 0; }), menos: bg.filter(function (k) { return pers.indexOf(k) < 0; }) } : { mais: [], menos: [] } };
       if (outrasEmp.length) { d.emp = {}; Object.keys(empSel).forEach(function (k) { d.emp[k] = empSel[k].value; }); }
       if (x) d.ativo = ativo.checked;
       if (x) d.limite = limCb.checked ? (limLer() || { usado: null, produto: null, total: null }) : null;
@@ -15879,7 +16004,8 @@
     return ler;
   }
   function cfgGrupos(box) {
-    var G = CFG.eq.grupos.map(function (g) { return { nome: g.nome, orig: g.nome, perms: g.perms.slice(), limite: g.limite || null }; });
+    var G = CFG.eq.grupos.map(function (g) { return { nome: g.nome, orig: g.nome, perms: (g.grade || g.perms).slice(), limite: g.limite || null }; });
+    var nCaixas = 0; (CFG.eq.grade ? CFG.eq.grade.telas : []).forEach(function (t) { nCaixas += t.acoes.length; }); nCaixas += CFG.eq.grade ? CFG.eq.grade.acoes.length : 0;
     var lista = el('div'); box.appendChild(lista);
     var m = el('div', 'msg err');
     function uso(nome) { return CFG.eq.funcionarios.filter(function (x) { return x.grupo === nome; }).length; }
@@ -15895,9 +16021,11 @@
           G.splice(i, 1); desenhar();
         };
         h.appendChild(nm); h.appendChild(dup); h.appendChild(del); c.appendChild(h);
-        c.appendChild(el('div', 'hint', (g.orig ? uso(g.orig) : 0) + ' funcionário(s) neste grupo · ' + g.perms.length + ' de ' + CFG.eq.permissoes.length + ' permissões'));
-        var det = el('details'); var sm = el('summary', '', 'Permissões'); sm.style.cssText = 'cursor:pointer;font-weight:600;font-size:14px;margin-top:6px;color:var(--accent)';
-        det.appendChild(sm); listaPerms(det, g.perms, false); c.appendChild(det);
+        var info = el('div', 'hint', ''); c.appendChild(info);
+        var conta = function () { info.textContent = (g.orig ? uso(g.orig) : 0) + ' funcionário(s) neste grupo · ' + g.perms.length + ' de ' + nCaixas + ' caixinhas marcadas'; }; conta();
+        var det = el('details'); var sm = el('summary', '', 'Permissões (telas e ações)'); sm.style.cssText = 'cursor:pointer;font-weight:600;font-size:14px;margin-top:6px;color:var(--accent)';
+        det.appendChild(sm); det.appendChild(el('div', 'hint', 'Ver = a tela aparece no menu. Criar, editar e excluir só aparecem como botões para quem tem a caixinha. O que não está marcado some do menu, das buscas e dos botões.'));
+        gradePerms(det, g.perms, false, conta); c.appendChild(det);
         var dl = el('details'), sl = el('summary', '', 'Limite de desconto · ' + (g.limite ? ['usado', 'produto', 'total'].map(function (k) { return g.limite[k] == null ? '' : ({ usado: 'usado ', produto: 'produto ', total: 'venda ' })[k] + String(g.limite[k]).replace('.', ',') + '%'; }).filter(Boolean).join(' · ') : 'sem limite'));
         sl.style.cssText = 'cursor:pointer;font-weight:600;font-size:14px;margin-top:6px;color:var(--accent)'; dl.appendChild(sl);
         dl.appendChild(el('div', 'hint', 'Máximo de desconto, em % do preço, sem precisar de liberação. Deixe em branco para não ter limite. Acima disso, um gerente ou supervisor libera na hora.'));
