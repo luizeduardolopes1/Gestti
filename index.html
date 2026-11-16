@@ -54,6 +54,26 @@
   .perm input{width:20px;height:20px;padding:0;margin:2px 0 0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
   .perm .t{font-size:14px;font-weight:600}.perm .t small{display:block;font-weight:400;color:var(--muted);font-size:12px}
   .perm.dis{opacity:.55}
+  .pnbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}.pnbar .pnsp{flex:1}.pnbar select{max-width:220px}
+  .pnabas{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1.5px solid var(--line);margin-bottom:10px}.pnabas button{background:none;border:0;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;padding:8px 12px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}.pnabas button.on{color:var(--ink);border-bottom-color:var(--accent)}
+  .pnpend{display:flex;gap:8px;overflow-x:auto;margin-bottom:10px}.pnpill{flex:0 0 auto;border:0;border-radius:10px;padding:8px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;background:var(--soft);color:var(--ink)}.pnpill b{font-size:16px}
+  .pnpill.err{background:var(--err-bg);color:var(--err)}.pnpill.warn{background:var(--warn-bg);color:var(--warn)}.pnpill.ok{background:var(--ok-bg);color:var(--ok)}
+  .pngrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:84px;grid-auto-flow:row dense;gap:12px}
+  .pnw{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0;min-height:0;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+  .pnw h3{margin:0;font-size:14px;display:flex;gap:8px;align-items:baseline}.pnar{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+  .pnbody{min-height:0;overflow:auto;flex:1 1 auto}.pnbig{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}.pnbig.s{font-size:19px}
+  .pnvar{font-size:12.5px;font-weight:700}.pnvar.up{color:var(--ok)}.pnvar.dn{color:var(--err)}.pnvar.nd{color:var(--muted);font-weight:600}
+  .pnkpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+  .pnch svg{width:100%;height:auto;display:block}.pnch text{fill:var(--muted);font-size:11px}.pnch .gl{stroke:var(--line)}.pnleg{display:flex;gap:12px;font-size:12px;color:var(--muted)}.pnleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+  .pnhb{margin-bottom:6px}.pnhbt{display:flex;justify-content:space-between;gap:8px;font-size:12.5px}.pnhbt span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pnrosca{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.pnrosca .pnch{width:150px;flex:0 0 auto}.pnrosca>div:last-child{flex:1;min-width:140px}
+  .pncal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;font-size:11.5px;text-align:center}.pncal>div{border-radius:7px;padding:4px 0;background:var(--soft);min-height:38px}.pncal .h{background:none;color:var(--muted);font-weight:700;min-height:0}.pncal .vz{background:none}.pncal .hoje{outline:2px solid var(--accent)}.pncal small{display:block;font-size:9.5px;font-weight:700}.pncal .p{color:var(--err)}.pncal .r{color:var(--ok)}
+  .pngrid.edit .pnw{border-style:dashed;border-color:var(--accent)}.pnctl{position:absolute;top:8px;right:16px;display:flex;gap:4px;z-index:3;background:var(--card)}.pnctl button{border:1px solid var(--line);background:var(--card);border-radius:7px;font-size:12px;padding:2px 7px;cursor:pointer;color:var(--ink)}
+  .pnrs{position:absolute;z-index:2;touch-action:none}.pnrs[data-rs="e"],.pnrs[data-rs="w"]{top:14px;bottom:14px;width:12px;cursor:ew-resize}.pnrs[data-rs="e"]{right:-2px}.pnrs[data-rs="w"]{left:-2px}
+  .pnrs[data-rs="n"],.pnrs[data-rs="s"]{left:14px;right:14px;height:12px;cursor:ns-resize}.pnrs[data-rs="n"]{top:-2px}.pnrs[data-rs="s"]{bottom:-2px}
+  .pnrs[data-rs="ne"],.pnrs[data-rs="nw"],.pnrs[data-rs="se"],.pnrs[data-rs="sw"]{width:16px;height:16px;background:var(--accent);border-radius:4px;opacity:.7}.pnrs[data-rs="ne"]{top:0;right:0;cursor:nesw-resize}.pnrs[data-rs="sw"]{bottom:0;left:0;cursor:nesw-resize}.pnrs[data-rs="nw"]{top:0;left:0;cursor:nwse-resize}.pnrs[data-rs="se"]{bottom:0;right:0;cursor:nwse-resize}
+  .pnrs[data-rs="e"]::after,.pnrs[data-rs="w"]::after{content:"";position:absolute;top:50%;left:4px;width:4px;height:30px;margin-top:-15px;border-radius:9px;background:var(--accent);opacity:.55}.pnrs[data-rs="n"]::after,.pnrs[data-rs="s"]::after{content:"";position:absolute;left:50%;top:4px;height:4px;width:30px;margin-left:-15px;border-radius:9px;background:var(--accent);opacity:.55}
+  @media (max-width:640px){.pngrid{grid-template-columns:minmax(0,1fr);grid-auto-rows:auto}.pnw{grid-column:1/-1!important;grid-row:auto!important}.pnrs{display:none}}
   .pckb{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:10px;overflow-x:auto;padding-bottom:8px}
   .pckb .kcol{background:var(--kan);border-radius:12px;padding:8px;min-height:160px}.pckb h4{margin:4px 6px 8px;font-size:13px}.pckb .kc{cursor:pointer}
   .pdvtopo{display:flex;align-items:center;gap:10px}.pdvtopo h1{flex:1}
@@ -1124,6 +1144,8 @@
   </section>
 
   <!-- DASHBOARD -->
+  <section id="vPainel" class="hide"><div id="pnCorpo"></div></section>
+  <section id="vRel" class="hide"><div class="ptopo"><h1 id="rlTit">📊 Relatórios</h1></div><div id="rlCorpo"></div></section>
   <section id="vDash" class="hide">
     <div class="ptopo"><h1>Dashboard</h1><button type="button" class="btn ghost" id="dbAtual" style="width:auto;padding:9px 16px;margin:0">↻ Atualizar</button></div>
     <div class="dbfil">
@@ -2043,7 +2065,13 @@
     { id: 'pcli', sec: 'vPortal', nome: 'Meus clientes', perm: 'parc_cli', desc: 'Vendedores que você cadastrou' },
     { id: 'pav', sec: 'vPortal', nome: 'Avisos', perm: 'parceira', desc: 'Aparelhos conferidos, recusados e pagamentos' },
     { id: 'ploja', sec: 'vPortal', nome: 'Minha loja', perm: 'parc_loja', desc: 'Dados, chave PIX e equipe' },
-    { id: 'dash', sec: 'vDash', nome: 'Dashboard', perm: 'dashboard' },
+    { id: 'dash', sec: 'vPainel', nome: 'Dashboard', perm: 'dashboard' },
+    { id: 'rel-faturamento', sec: 'vRel', nome: '📊 Relatórios', perm: 'vender', menu: 'Faturamento', desc: 'Vendas, formas de pagamento, rankings, devolução, vales' },
+    { id: 'rel-os', sec: 'vRel', nome: '📊 Relatórios', perm: 'os', menu: 'Ordem de Serviço', desc: 'OS por dia, conversão, tempo médio, garantias' },
+    { id: 'rel-suprimento', sec: 'vRel', nome: '📊 Relatórios', perm: 'estoque', menu: 'Suprimento', desc: 'Cobertura, giro, curva ABC, parados, usados, parceiras' },
+    { id: 'rel-financeiro', sec: 'vRel', nome: '📊 Relatórios', perm: 'financeiro', menu: 'Financeiro', desc: 'Saldos, compromissos, fluxo de caixa, previsto × realizado' },
+    { id: 'rel-metas', sec: 'vRel', nome: '📊 Relatórios', perm: 'metas', menu: 'Metas', desc: 'Progresso das metas, margem e desconto por vendedor' },
+    { id: 'rel-crm', sec: 'vRel', nome: '📊 Relatórios', perm: 'crm', menu: 'CRM', desc: 'Aniversariantes e ranking de clientes' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
     { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios', menu: 'Suprimento', desc: 'Cadastro, preço e estoque dos produtos' },
@@ -6638,7 +6666,7 @@
   function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono'; }); }
   function pode(p) { return !!(S.u && ((p === '**' && !soParceira()) || (p === '*' && !S.u.soPonto && !soParceira()) || (S.u.perms || []).indexOf(p) > -1)); }
   // Leva 6 ampliada: telas da grade (tela × ação). Tela da grade aparece se a pessoa tem qualquer caixinha nela.
-  var GRADE_TELA = { ccnova: 'compracel', cclista: 'compracel' };
+  var GRADE_TELA = { ccnova: 'compracel', cclista: 'compracel', 'rel-metas': 'metrel', 'rel-crm': 'crm' };
   function temGrade() { return !!(S.u && (S.u.perms || []).some(function (k) { return k.indexOf(':') > 0; })); }
   function podeTela(id, a) {
     var t = GRADE_TELA[id] || id, ps = (S.u && S.u.perms) || [];
@@ -6646,7 +6674,7 @@
     for (var i = 0; i < ps.length; i++) if (ps[i].indexOf(t + ':') === 0) return true;
     return false;
   }
-  var TELAS_GRADE = ['promocoes', 'cupons', 'pedidos', 'dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
+  var TELAS_GRADE = ['rel-faturamento', 'rel-os', 'rel-suprimento', 'rel-financeiro', 'rel-metas', 'rel-crm', 'promocoes', 'cupons', 'pedidos', 'dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
     'compras', 'checkin', 'transf', 'balanco', 'etiquetas', 'compracel', 'ccnova', 'cclista', 'ccparc', 'novos', 'venda', 'pagar', 'receber', 'bancos', 'cred', 'dre', 'conferencia', 'metas', 'comissoes', 'metrel',
     'aval', 'cartao', 'compra', 'proposta'];
   function viewVisivel(v) {
@@ -6801,7 +6829,8 @@
     show('dNovo', pode('cadastro')); show('dNovoP', pode('editar_acessorios')); show('cVoltar', pode('produtos'));
     if (id === 'novos') { carregarNovos(false); show('nNovo', pode('editar_precos')); show('nPrec', pode('editar_precos')); }
     if (id === 'venda') carregarVenda(false);
-    if (id === 'dash') carregarDash(false);
+    if (id === 'dash') painelIniciar();
+    if (REL_G[id]) relatoriosGrupo(id);
     if (id === 'vendas') abrirVendas();
     if (id === 'crm') carregarCrm(false);
     if (id === 'bancos') carregarFin(false);
@@ -9720,6 +9749,185 @@
     C.hr(); C.L(brl(x.valor), 'g c'); C.hr(); if (x.liberadoPor) C.LR('Liberado por', x.liberadoPor);
     var a1 = el('div', 'ass', (x.por || '') + ' · operador'), a2 = el('div', 'ass', 'Quem ' + (x.tipo === 'suprimento' ? 'entregou' : 'retirou') + ' (nome legível)'); C.w.appendChild(a1); C.w.appendChild(a2);
     imprimirHTML('Comprovante ' + (x.numero || ''), C.w, CSS_CUPOM);
+  }
+  // =========================================================
+  //  DASHBOARD EDITÁVEL E RELATÓRIOS (Leva 6 ampliada)
+  // =========================================================
+  var PN = { per: 'mes', loja: '', aba: 0, edit: false, layout: null, info: null, dados: null };
+  var PN_PADRAO = [{ nome: 'Visão geral', q: ['ind', 'diaSem', 'formas', 'rankProd', 'metas', 'osDia', 'osConv', 'tickets', 'devol', 'margemVend', 'vendasAno'] },
+    { nome: 'Financeiro', q: ['resumoFin', 'compPagar', 'compReceber', 'saldoContas', 'calendario', 'fluxoPrev', 'fluxoReal', 'despCat', 'efic', 'inadimp', 'vales', 'pxrPagar', 'pxrReceber', 'anualReceb', 'anualPag'] },
+    { nome: 'Estoque', q: ['cobertura', 'giro', 'negativo', 'abc', 'parado', 'usados', 'parceiras'] }];
+  function pnPeriodo() { var h = isoHoje(); if (PN.per === 'hoje') return { de: h, ate: h }; if (PN.per === 'semana') return { de: isoAdd(h, -6), ate: h }; if (PN.per === 'ano') return { de: h.slice(0, 4) + '-01-01', ate: h }; return { de: h.slice(0, 8) + '01', ate: h }; }
+  function painelIniciar() {
+    var b = $('pnCorpo'); if (!PN.info) { b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando o painel…')); }
+    var p = pnPeriodo();
+    Promise.all([PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token]), call('painelDados', [S.token, { de: p.de, ate: p.ate, loja: PN.loja }])]).then(function (r) {
+      PN.info = r[0]; PN.dados = r[1];
+      var ok = PN.info.catalogo.map(function (q) { return q.id; });
+      PN.layout = (PN.info.layout || PN_PADRAO).map(function (a) { return { nome: a.nome, q: (a.q || []).filter(function (id) { return ok.indexOf(id) > -1; }), sz: a.sz || {}, opt: a.opt || {} }; });
+      if (!PN.layout.length) PN.layout = [{ nome: 'Painel', q: [], sz: {}, opt: {} }];
+      painelDesenhar();
+    }).catch(function (e) { b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); });
+  }
+  var pnSalvarT = null;
+  function painelSalvar() { clearTimeout(pnSalvarT); pnSalvarT = setTimeout(function () { call('painelLayoutSalvar', [S.token, PN.layout]).then(function (r) { PN.info = r; }).catch(function (e) { msg('topMsg', e); }); }, 600); }
+  function pnQ(id) { return (PN.info.catalogo || []).filter(function (q) { return q.id === id; })[0]; }
+  function painelDesenhar() {
+    var b = $('pnCorpo'); b.innerHTML = '';
+    if (PN.aba >= PN.layout.length) PN.aba = 0;
+    var bar = el('div', 'pnbar'); b.appendChild(bar);
+    var sg = el('div', 'seg'); bar.appendChild(sg); seg(sg, ['Hoje', 'Semana', 'Mês', 'Ano'], { hoje: 'Hoje', semana: 'Semana', mes: 'Mês', ano: 'Ano' }[PN.per], function (v) { PN.per = { Hoje: 'hoje', Semana: 'semana', 'Mês': 'mes', Ano: 'ano' }[v]; painelIniciar(); });
+    var lj = el('select'); opts(lj, PN.dados.lojas || [], PN.loja, 'Todas as lojas'); lj.onchange = function () { PN.loja = lj.value; painelIniciar(); }; bar.appendChild(lj);
+    bar.appendChild(el('span', 'pnsp'));
+    if (!PN.edit) btn(bar, '✏️ Editar painel', 'ghost', function () { PN.edit = true; painelDesenhar(); });
+    var ab = el('div', 'pnabas'); b.appendChild(ab);
+    PN.layout.forEach(function (a, i) { var t = el('button', i === PN.aba ? 'on' : '', a.nome); t.type = 'button'; t.onclick = function () { PN.aba = i; painelDesenhar(); };
+      if (PN.edit) t.ondblclick = function () { var n = prompt('Nome da aba:', a.nome); if (n) { a.nome = n.slice(0, 30); painelSalvar(); painelDesenhar(); } }; ab.appendChild(t); });
+    var pd = el('div', 'pnpend'); b.appendChild(pd);
+    (PN.dados.pendencias || []).forEach(function (x) { var p = el('button', 'pnpill ' + x.tipo); p.type = 'button'; p.appendChild(el('b', '', String(x.n))); p.appendChild(document.createTextNode(' ' + x.txt)); p.onclick = function () { ir(x.ir); }; pd.appendChild(p); });
+    if (PN.edit) {
+      var eb = el('div', 'pnbar'); b.appendChild(eb);
+      btn(eb, '＋ Adicionar quadro', '', function () { painelCatalogoAbrir(); });
+      btn(eb, '＋ Nova aba', 'ghost', function () { PN.layout.push({ nome: 'Aba ' + (PN.layout.length + 1), q: [], sz: {}, opt: {} }); PN.aba = PN.layout.length - 1; painelSalvar(); painelDesenhar(); });
+      if (PN.layout.length > 1) btn(eb, 'Excluir esta aba', 'ghost', function () { PN.layout.splice(PN.aba, 1); PN.aba = 0; painelSalvar(); painelDesenhar(); });
+      btn(eb, '↺ Voltar ao padrão do perfil', 'ghost', function () { call('painelLayoutSalvar', [S.token, null]).then(function (r) { PN.info = r; PN.layout = null; painelIniciar(); }); });
+      if (PN.info.podePadrao) { var gs = el('select'); opts(gs, (CFG.eq && CFG.eq.grupos ? CFG.eq.grupos.map(function (g) { return g.nome; }) : [PN.info.grupo]), PN.info.grupo); eb.appendChild(gs);
+        btn(eb, 'Salvar como padrão deste perfil', 'ghost', function () { call('painelLayoutSalvar', [S.token, PN.layout, gs.value]).then(function () { avisoTopo('Padrão do perfil ' + gs.value + ' salvo'); }).catch(function (e) { msg('topMsg', e); }); }); }
+      eb.appendChild(el('span', 'pnsp')); btn(eb, '✓ Pronto', 'ok', function () { PN.edit = false; painelDesenhar(); });
+      eb.appendChild(el('div', 'hint', 'Arraste as bordas ou os cantos (◢) para mudar o tamanho; ◀ ▶ mudam a ordem; ↺ volta ao tamanho automático. Dois toques no nome da aba renomeia.'));
+    }
+    var g = el('div', 'pngrid' + (PN.edit ? ' edit' : '')); b.appendChild(g);
+    var aba = PN.layout[PN.aba];
+    if (!aba.q.length) g.appendChild(el('div', 'empty', 'Esta aba está vazia. Toque em Editar painel › Adicionar quadro.'));
+    var medir = [];
+    aba.q.forEach(function (id, i) {
+      var q = pnQ(id); if (!q) return;
+      var sz = aba.sz[id] || {}, c = sz.c || ({ p: 3, m: 6, g: 12 })[q.tam] || 6, w = el('section', 'pnw'); w.dataset.id = id; w.dataset.c = c;
+      w.style.gridColumn = 'span ' + pnCol(c); if (sz.r) w.style.gridRow = 'span ' + sz.r; else medir.push(w);
+      var h = el('h3', '', q.nome); h.appendChild(el('span', 'pnar', q.area)); w.appendChild(h);
+      var bd = el('div', 'pnbody'); w.appendChild(bd);
+      try { pnRender(bd, id, PN.dados.quadros[id], aba); } catch (e) { bd.appendChild(el('div', 'hint', 'Não deu para mostrar este quadro.')); }
+      if (PN.edit) {
+        var ctl = el('div', 'pnctl');
+        [['◀', function () { if (i > 0) { aba.q.splice(i, 1); aba.q.splice(i - 1, 0, id); } }], ['▶', function () { if (i < aba.q.length - 1) { aba.q.splice(i, 1); aba.q.splice(i + 1, 0, id); } }],
+         ['↺', function () { delete aba.sz[id]; }], ['✕', function () { aba.q.splice(i, 1); }]].forEach(function (x) { var bt = el('button', '', x[0]); bt.type = 'button'; bt.onclick = function () { x[1](); painelSalvar(); painelDesenhar(); }; ctl.appendChild(bt); });
+        w.appendChild(ctl);
+        ['n', 's', 'e', 'w', 'ne', 'nw', 'sw', 'se'].forEach(function (dd) { var hd = el('span', 'pnrs'); hd.dataset.rs = dd; if (dd === 'se') { hd.tabIndex = 0; hd.setAttribute('role', 'button'); hd.setAttribute('aria-label', 'Redimensionar (setas)'); } w.appendChild(hd); });
+      }
+      g.appendChild(w);
+    });
+    medir.forEach(function (w) { if (window.innerWidth <= 640) return; w.style.gridRow = 'span 1'; var bd = w.querySelector('.pnbody'), hh = w.clientHeight - bd.clientHeight + bd.scrollHeight; w.style.gridRow = 'span ' + Math.max(1, Math.ceil((hh + 12) / 96)); });
+    if (PN.edit) painelRedimensionar(g, aba);
+  }
+  function pnCol(c) { return window.innerWidth <= 1100 ? (c < 6 ? 6 : 12) : c; }
+  function painelRedimensionar(g, aba) {
+    var rz = null;
+    g.addEventListener('pointerdown', function (e) { var h = e.target.closest('.pnrs'); if (!h) return; e.preventDefault(); var w = h.closest('.pnw'), dir = h.dataset.rs, m = /span (\d+)/.exec(w.style.gridRow || '');
+      rz = { w: w, sx: dir.indexOf('e') > -1 ? 1 : dir.indexOf('w') > -1 ? -1 : 0, sy: dir.indexOf('s') > -1 ? 1 : dir.indexOf('n') > -1 ? -1 : 0, x: e.clientX, y: e.clientY, c: +w.dataset.c, r: m ? +m[1] : 1, cw: (g.clientWidth + 12) / 12 }; h.setPointerCapture(e.pointerId); });
+    g.addEventListener('pointermove', function (e) { if (!rz) return; var c = Math.max(2, Math.min(12, Math.round(rz.c + rz.sx * (e.clientX - rz.x) / rz.cw))), r = Math.max(1, Math.min(10, Math.round(rz.r + rz.sy * (e.clientY - rz.y) / 96))); rz.nc = c; rz.nr = r; rz.w.style.gridColumn = 'span ' + pnCol(c); rz.w.style.gridRow = 'span ' + r; });
+    g.addEventListener('pointerup', function () { if (!rz) return; var x = rz; rz = null; if (x.nc) { aba.sz[x.w.dataset.id] = { c: x.nc, r: x.nr }; painelSalvar(); } });
+    g.addEventListener('keydown', function (e) { var h = e.target.closest('.pnrs'); if (!h) return; var w = h.closest('.pnw'), id = w.dataset.id, m = /span (\d+)/.exec(w.style.gridRow || ''), c = +w.dataset.c, r = m ? +m[1] : 1;
+      if (e.key === 'ArrowRight') c++; else if (e.key === 'ArrowLeft') c--; else if (e.key === 'ArrowDown') r++; else if (e.key === 'ArrowUp') r--; else return; e.preventDefault();
+      aba.sz[id] = { c: Math.max(2, Math.min(12, c)), r: Math.max(1, Math.min(10, r)) }; painelSalvar(); painelDesenhar(); var n = document.querySelector('.pnw[data-id="' + id + '"] .pnrs[data-rs="se"]'); if (n) n.focus(); });
+  }
+  function painelCatalogoAbrir() {
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Adicionar quadro'));
+    var aba = PN.layout[PN.aba], areas = {};
+    PN.info.catalogo.forEach(function (q) { (areas[q.area] = areas[q.area] || []).push(q); });
+    sh.appendChild(el('div', 'sub', PN.info.catalogo.length + ' quadros disponíveis para o seu perfil. Quadros fora da sua permissão não aparecem.'));
+    Object.keys(areas).forEach(function (a) { sh.appendChild(el('h3', 'ch', a)); areas[a].forEach(function (q) { var ja = aba.q.indexOf(q.id) > -1, bt = el('button', 'btn ghost', q.nome + (ja ? ' · já está nesta aba' : '')); bt.type = 'button'; bt.disabled = ja; bt.style.cssText = 'display:block;width:100%;text-align:left;margin:4px 0';
+      bt.onclick = function () { aba.q.push(q.id); painelSalvar(); fecharModal(); painelDesenhar(); }; sh.appendChild(bt); }); });
+    var fc = el('button', 'btn ghost', 'Fechar'); fc.type = 'button'; fc.onclick = fecharModal; sh.appendChild(fc); abrirModal();
+  }
+  // ---------- desenho dos quadros (SVG simples, cores do tema) ----------
+  var PN_COR = ['var(--accent)', '#eb6834', '#1baf7a', '#eda100', '#e87ba4'];
+  function pnVar(v, rot) { if (v === null || v === undefined) return el('div', 'pnvar nd', 'sem dados para comparar'); return el('div', 'pnvar ' + (v >= 0 ? 'up' : 'dn'), (v >= 0 ? '▲ ' : '▼ ') + String(Math.abs(v)).replace('.', ',') + '% ' + (rot || 'vs período anterior')); }
+  function pnBig(bd, txt, v, sub) { bd.appendChild(el('div', 'pnbig', txt)); if (v !== undefined) bd.appendChild(pnVar(v)); if (sub) bd.appendChild(el('div', 'hint', sub)); }
+  function pnMax(v) { var p = Math.pow(10, Math.floor(Math.log10(v || 1))), m = v / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p; }
+  function pnSvg(w, h, inner) { var d = el('div', 'pnch'); d.innerHTML = '<svg viewBox="0 0 ' + w + ' ' + h + '" role="img">' + inner + '</svg>'; return d; }
+  function pnEsc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function pnBarras(bd, rot, series, fmt) {
+    fmt = fmt || function (v) { return brl(v); }; var W = 560, H = 190, L = 48, R = 8, T = 10, B = 24, iw = W - L - R, ih = H - T - B, n = rot.length, ns = series.length;
+    var vals = []; series.forEach(function (s) { (s.vals || []).forEach(function (v) { if (v !== null) vals.push(v); }); }); var mx = pnMax(Math.max.apply(null, vals.concat([1]))), g = '', gw = iw / n, bw = Math.min(24, (gw - 8) / ns - 2);
+    for (var k = 0; k <= 4; k++) { var y = T + ih - ih * k / 4; g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y + '" y2="' + y + '" class="gl"/><text x="' + (L - 6) + '" y="' + (y + 4) + '" text-anchor="end">' + pnEsc(fmt(mx * k / 4)).replace('R$ ', '').replace(/,00$/, '') + '</text>'; }
+    rot.forEach(function (r, i) { var x0 = L + gw * i + (gw - (bw * ns + 2 * (ns - 1))) / 2; series.forEach(function (s, j) { var v = (s.vals || [])[i]; if (v === null || v === undefined) return; var bh = Math.max(1, ih * v / mx), x = x0 + j * (bw + 2), y2 = T + ih - bh; g += '<rect x="' + x + '" y="' + y2 + '" width="' + bw + '" height="' + bh + '" rx="3" fill="' + s.cor + '"><title>' + pnEsc(r + ' · ' + s.nome + ': ' + fmt(v)) + '</title></rect>'; }); g += '<text x="' + (L + gw * i + gw / 2) + '" y="' + (H - 6) + '" text-anchor="middle">' + pnEsc(r) + '</text>'; });
+    bd.appendChild(pnSvg(W, H, g)); if (ns > 1) { var lg = el('div', 'pnleg'); series.forEach(function (s) { var sp = el('span'); var i2 = el('i'); i2.style.background = s.cor; sp.appendChild(i2); sp.appendChild(document.createTextNode(s.nome)); lg.appendChild(sp); }); bd.appendChild(lg); }
+  }
+  function pnLinhas(bd, rot, series, fmt) {
+    fmt = fmt || function (v) { return brl(v); }; var W = 560, H = 190, L = 48, R = 12, T = 10, B = 24, iw = W - L - R, ih = H - T - B, n = rot.length;
+    var vals = []; series.forEach(function (s) { (s.vals || []).forEach(function (v) { if (v !== null && v !== undefined) vals.push(v); }); }); var mx = pnMax(Math.max.apply(null, vals.concat([1]))), g = '';
+    var X = function (i) { return L + (n === 1 ? iw / 2 : iw * i / (n - 1)); }, Y = function (v) { return T + ih - ih * v / mx; };
+    for (var k = 0; k <= 4; k++) { var y = T + ih - ih * k / 4; g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y + '" y2="' + y + '" class="gl"/><text x="' + (L - 6) + '" y="' + (y + 4) + '" text-anchor="end">' + pnEsc(fmt(mx * k / 4)).replace('R$ ', '').replace(/,00$/, '') + '</text>'; }
+    rot.forEach(function (r, i) { g += '<text x="' + X(i) + '" y="' + (H - 6) + '" text-anchor="middle">' + pnEsc(r) + '</text>'; });
+    series.forEach(function (s) { var d = ''; (s.vals || []).forEach(function (v, i) { if (v === null || v === undefined) return; d += (d ? 'L' : 'M') + X(i) + ',' + Y(v); }); if (d) g += '<path d="' + d + '" fill="none" stroke="' + s.cor + '" stroke-width="2"/>'; (s.vals || []).forEach(function (v, i) { if (v === null || v === undefined) return; g += '<circle cx="' + X(i) + '" cy="' + Y(v) + '" r="3" fill="' + s.cor + '"><title>' + pnEsc(rot[i] + ' · ' + s.nome + ': ' + fmt(v)) + '</title></circle>'; }); });
+    bd.appendChild(pnSvg(W, H, g)); if (series.length > 1) { var lg = el('div', 'pnleg'); series.forEach(function (s) { var sp = el('span'); var i2 = el('i'); i2.style.background = s.cor; sp.appendChild(i2); sp.appendChild(document.createTextNode(s.nome)); lg.appendChild(sp); }); bd.appendChild(lg); }
+  }
+  function pnHbar(bd, itens, fmt, cor) { fmt = fmt || function (v) { return brl(v); }; var mx = Math.max.apply(null, itens.map(function (x) { return x.v; }).concat([1])); if (!itens.length) { bd.appendChild(el('div', 'hint', 'Nada no período.')); return; }
+    itens.forEach(function (x, i) { var r = el('div', 'pnhb'), t = el('div', 'pnhbt'); t.appendChild(el('span', '', (i + 1) + '. ' + x.n)); t.appendChild(el('b', '', fmt(x.v))); r.appendChild(t); var pg = el('div', 'prog'), sp = el('span'); sp.style.width = (100 * x.v / mx) + '%'; if (cor) sp.style.background = cor; pg.appendChild(sp); r.appendChild(pg); bd.appendChild(r); }); }
+  function pnRosca(bd, itens) { var tot = itens.reduce(function (a, x) { return a + x.v; }, 0); if (!tot) { bd.appendChild(el('div', 'hint', 'Nada no período.')); return; } var a0 = -Math.PI / 2, R = 62, r = 40, g = '';
+    itens.slice(0, 5).forEach(function (x, i) { var a1 = a0 + 2 * Math.PI * x.v / tot - 0.02, lg = a1 - a0 > Math.PI ? 1 : 0, p = function (a, rad) { return (80 + rad * Math.cos(a)) + ',' + (80 + rad * Math.sin(a)); }; g += '<path d="M' + p(a0, R) + 'A' + R + ',' + R + ' 0 ' + lg + ' 1 ' + p(a1, R) + 'L' + p(a1, r) + 'A' + r + ',' + r + ' 0 ' + lg + ' 0 ' + p(a0, r) + 'Z" fill="' + PN_COR[i] + '"><title>' + pnEsc(x.n + ': ' + brl(x.v)) + '</title></path>'; a0 = a1 + 0.02; });
+    var w = el('div', 'pnrosca'); w.appendChild(pnSvg(160, 160, g)); var ul = el('div'); itens.slice(0, 5).forEach(function (x, i) { var li = el('div', 'pnhbt'); var sp = el('span'); var i2 = el('i'); i2.style.cssText = 'display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:' + PN_COR[i]; sp.appendChild(i2); sp.appendChild(document.createTextNode(x.n)); li.appendChild(sp); li.appendChild(el('b', '', Math.round(x.v / tot * 100) + '%')); ul.appendChild(li); }); w.appendChild(ul); bd.appendChild(w); }
+  function pnTab(bd, cab, linhas) { if (!linhas.length) { bd.appendChild(el('div', 'hint', 'Nada no período.')); return; } var w = el('div', 'tbwrap'), t = el('table', 'ext'), h = el('tr'); cab.forEach(function (c, i) { h.appendChild(el('th', i ? 'v' : '', c)); }); t.appendChild(h); linhas.forEach(function (l) { var tr = el('tr'); l.forEach(function (v, i) { tr.appendChild(el('td', i ? 'v' : '', v)); }); t.appendChild(tr); }); w.appendChild(t); bd.appendChild(w); }
+  function pnSemAnt(bd) { bd.appendChild(el('div', 'hint', 'Ano anterior: sem dados até o Gestti completar um ano de vendas.')); }
+  function pnRender(bd, id, d, aba) {
+    if (!d) { bd.appendChild(el('div', 'hint', 'Sem dados.')); return; } if (d.erro) { bd.appendChild(el('div', 'hint', d.erro)); return; }
+    var pct = function (v) { return String(v).replace('.', ',') + '%'; };
+    if (id === 'ind') { var k = el('div', 'pnkpis'); [['Faturamento', brl(d.faturamento), d.var.faturamento], ['TM', brl(d.tm), d.var.tm], ['PA', String(d.pa).replace('.', ','), d.var.pa], ['PM', brl(d.pm), d.var.pm]].forEach(function (x) { var c = el('div'); c.appendChild(el('div', 'hint', x[0])); c.appendChild(el('div', 'pnbig s', x[1])); c.appendChild(pnVar(x[2])); k.appendChild(c); }); bd.appendChild(k); bd.appendChild(el('div', 'hint', 'TM = faturamento ÷ vendas · PA = itens ÷ vendas · PM = faturamento ÷ itens')); return; }
+    if (id === 'tm') return pnBig(bd, brl(d.valor), d.var);
+    if (id === 'tickets' || id === 'osDia') return pnBig(bd, String(d.valor), d.var);
+    if (id === 'diaSem') { pnBarras(bd, d.rot, [{ nome: 'Este período', cor: PN_COR[0], vals: d.atual }, { nome: 'Ano anterior', cor: 'var(--line)', vals: d.anterior || d.rot.map(function () { return null; }) }]); if (!d.anterior) pnSemAnt(bd); return; }
+    if (id === 'pctDia') return pnBarras(bd, d.rot, [{ nome: '%', cor: PN_COR[0], vals: d.pct }], function (v) { return Math.round(v) + '%'; });
+    if (id === 'vendasAno' || id === 'anualReceb' || id === 'anualPag') { pnLinhas(bd, d.rot, [{ nome: String(d.ano), cor: id === 'anualPag' ? PN_COR[1] : id === 'anualReceb' ? PN_COR[2] : PN_COR[0], vals: d.atual }, { nome: String(d.ano - 1), cor: 'var(--muted)', vals: d.anterior || [] }]); if (!d.anterior) pnSemAnt(bd); return; }
+    if (id === 'anoAno') { pnTab(bd, ['Ano', 'Vendas'], d.anos.map(function (x) { return [x.ano, brl(x.valor)]; })); if (d.anos.length < 2) pnSemAnt(bd); return; }
+    if (id === 'formas') return pnRosca(bd, d.itens.map(function (x) { return { n: x.nome, v: x.valor }; }));
+    if (id === 'rankProd') return pnHbar(bd, d.itens.slice(0, 8).map(function (x) { return { n: x.nome, v: x.valor }; }));
+    if (id === 'rankCli') return pnTab(bd, ['Cliente', 'Compras', 'Total'], d.itens.slice(0, 10).map(function (x) { return [x.nome, String(x.compras), brl(x.valor)]; }));
+    if (id === 'aniv') return pnTab(bd, ['Cliente', 'Dia'], d.itens.map(function (x) { return [x.nome, x.em === 0 ? 'hoje' : x.dia]; }));
+    if (id === 'devol') return pnBig(bd, pct(d.valor), undefined, brl(d.devolvido) + ' devolvido/trocado no período');
+    if (id === 'metas') { if (d.semMeta) { bd.appendChild(el('div', 'hint', 'Sem meta definida neste mês.')); return; } d.itens.forEach(function (x) { var r = el('div', 'pnhb'), t = el('div', 'pnhbt'); t.appendChild(el('span', '', x.nome)); t.appendChild(el('b', '', Math.round(x.ating) + '%')); r.appendChild(t); var pg = el('div', 'prog'), sp = el('span'); sp.style.width = Math.min(100, x.ating) + '%'; pg.appendChild(sp); r.appendChild(pg); bd.appendChild(r); }); if (d.hoje) bd.appendChild(el('div', 'hint', 'Para bater a meta: vender ' + brl(d.hoje.metaHoje) + ' hoje.')); return; }
+    if (id === 'margemVend') return pnTab(bd, ['Vendedor', 'Vendas', 'Margem', 'Desconto médio'], d.itens.map(function (x) { return [x.nome, brl(x.vendas), pct(x.margem), pct(x.desconto)]; }));
+    if (id === 'vales') return pnBig(bd, brl(d.valor), undefined, d.troca + ' vale-troca · ' + d.presente + ' vale-presente' + (d.vencem7 ? ' · ' + d.vencem7 + ' vencem em 7 dias' : ''));
+    if (id === 'osConv') return pnBig(bd, pct(d.valor), undefined, d.aprovados + ' aprovados de ' + d.enviados + ' orçamentos');
+    if (id === 'osTempo') return pnBig(bd, String(d.valor).replace('.', ',') + ' dias', undefined, 'da abertura até "Pronta" · ' + d.qtd + ' OS');
+    if (id === 'osGar') return pnHbar(bd, d.itens.map(function (x) { return { n: x.tecnico + ' · ' + x.servico, v: x.qtd }; }), function (v) { return v + ' OS'; }, PN_COR[1]);
+    if (id === 'cobertura') return pnTab(bd, ['Produto', 'Estoque', 'Venda/dia', 'Cobertura'], d.itens.map(function (x) { return [x.nome, String(x.estoque), String(x.porDia).replace('.', ','), x.dias === null ? 'sem venda' : x.dias + ' dias' + (x.dias < 15 ? ' ⚠' : '')]; }));
+    if (id === 'giro') return pnBig(bd, String(d.valor).replace('.', ',') + '×', undefined, 'custo das vendas ' + brl(d.custoVendido) + ' ÷ estoque a custo ' + brl(d.estoqueCusto));
+    if (id === 'abc') return pnTab(bd, ['Classe', 'Produtos', '% do faturamento', '% dos produtos'], d.classes.map(function (x) { return [x.classe, String(x.produtos), pct(x.pctFat), pct(x.pctProd)]; }));
+    if (id === 'negativo') return pnTab(bd, ['Produto', 'Saldo'], d.itens.map(function (x) { return [x.nome, String(x.saldo)]; }));
+    if (id === 'parado') { pnTab(bd, ['Produto', 'Sem venda há', 'Custo parado'], d.itens.map(function (x) { return [x.nome, x.dias === null ? 'nunca vendeu' : x.dias + ' dias', brl(x.custo)]; })); bd.appendChild(el('div', 'hint', 'Custo parado total: ' + brl(d.total))); return; }
+    if (id === 'usados') return pnBarras(bd, d.rot, [{ nome: 'Comprados', cor: PN_COR[0], vals: d.comprados }, { nome: 'Vendidos', cor: PN_COR[2], vals: d.vendidos }], function (v) { return String(Math.round(v)); });
+    if (id === 'parceiras') return pnHbar(bd, d.itens.map(function (x) { return { n: x.nome, v: x.qtd }; }), function (v) { return v + ' aparelho(s)'; }, PN_COR[2]);
+    if (id === 'saldoContas') { pnTab(bd, ['Conta', 'Saldo'], d.itens.map(function (x) { return [x.nome, brl(x.saldo)]; })); bd.appendChild(el('div', 'pnbig s', 'Total ' + brl(d.total))); return; }
+    if (id === 'compPagar' || id === 'compReceber') { pnTab(bd, [id === 'compPagar' ? 'A pagar hoje' : 'A receber hoje', 'Valor'], d.itens.map(function (x) { return [x.nome, brl(x.valor)]; })); if (d.itens.length) bd.appendChild(el('div', 'pnbig s', 'Total ' + brl(d.total))); return; }
+    if (id === 'calendario') { var cal = el('div', 'pncal'), ini = new Date(d.mes + '-01T12:00:00'), nd = new Date(ini.getFullYear(), ini.getMonth() + 1, 0).getDate(); ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].forEach(function (x) { cal.appendChild(el('div', 'h', x)); }); for (var i0 = 0; i0 < ini.getDay(); i0++) cal.appendChild(el('div', 'vz'));
+      for (var dd = 1; dd <= nd; dd++) { var key = ('0' + dd).slice(-2), m = d.dias[key], cel = el('div', d.hoje === d.mes + '-' + key ? 'hoje' : ''); cel.appendChild(el('div', '', String(dd))); if (m && m.pagar) cel.appendChild(el('small', 'p', '−' + Math.round(m.pagar))); if (m && m.receber) cel.appendChild(el('small', 'r', '+' + Math.round(m.receber))); if (m) cel.title = 'A pagar ' + brl(m.pagar) + ' · a receber ' + brl(m.receber); cal.appendChild(cel); }
+      bd.appendChild(cal); return; }
+    if (id === 'resumoFin') { var kk = el('div', 'pnkpis'); [['Saldo atual', brl(d.saldo)], ['Próximos 30 dias', brl(d.proximos)], ['Projeção de vendas à vista', brl(d.projecao)], ['Saldo previsto', brl(d.previsto)]].forEach(function (x) { var c2 = el('div'); c2.appendChild(el('div', 'hint', x[0])); c2.appendChild(el('div', 'pnbig s', x[1])); kk.appendChild(c2); }); bd.appendChild(kk); return; }
+    if (id === 'fluxoPrev') return pnBarras(bd, d.rot, [{ nome: 'Entradas', cor: PN_COR[2], vals: d.entradas }, { nome: 'Saídas', cor: PN_COR[1], vals: d.saidas }]);
+    if (id === 'fluxoReal') return pnLinhas(bd, d.rot, [{ nome: 'Saldo', cor: PN_COR[0], vals: d.saldo }]);
+    if (id === 'despCat') { var modo = (aba.opt && aba.opt.despCat) || 'barras', sw = el('div', 'seg'); sw.style.maxWidth = '200px'; bd.appendChild(sw); seg(sw, ['Barras', 'Pizza'], modo === 'pizza' ? 'Pizza' : 'Barras', function (v) { aba.opt = aba.opt || {}; aba.opt.despCat = v === 'Pizza' ? 'pizza' : 'barras'; painelSalvar(); painelDesenhar(); });
+      var it2 = d.itens.map(function (x) { return { n: x.nome, v: x.valor }; }); if (modo === 'pizza') pnRosca(bd, it2); else pnHbar(bd, it2, null, PN_COR[1]); return; }
+    if (id === 'efic') return pnBig(bd, pct(d.valor), undefined, d.emDia + ' de ' + d.pagas + ' contas pagas até o vencimento');
+    if (id === 'pxrPagar' || id === 'pxrReceber') return pnBarras(bd, d.rot, [{ nome: 'Previsto', cor: 'var(--line)', vals: d.previsto }, { nome: 'Realizado', cor: id === 'pxrPagar' ? PN_COR[1] : PN_COR[2], vals: d.realizado }]);
+    if (id === 'inadimp') return pnBig(bd, pct(d.valor), undefined, brl(d.vencido) + ' vencidos · ' + d.clientes + ' cliente(s)');
+    bd.appendChild(el('div', 'hint', 'Quadro sem desenho.'));
+  }
+  // ---------- 📊 Relatórios de cada grupo ----------
+  var REL_G = { 'rel-faturamento': 'Faturamento', 'rel-os': 'Ordem de Serviço', 'rel-suprimento': 'Suprimento', 'rel-financeiro': 'Financeiro', 'rel-metas': 'Metas', 'rel-crm': 'CRM' };
+  var RELP = { per: 'mes', loja: '' };
+  function relatoriosGrupo(view) {
+    var grupo = REL_G[view], b = $('rlCorpo'); $('rlTit').textContent = '📊 Relatórios · ' + grupo; b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…'));
+    var p = pnPeriodo.call(null); if (RELP.per !== PN.per) { var sv = PN.per; PN.per = RELP.per; p = pnPeriodo(); PN.per = sv; }
+    Promise.all([PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token]), call('painelDados', [S.token, { de: p.de, ate: p.ate, loja: RELP.loja }])]).then(function (r) {
+      PN.info = r[0]; var D = r[1]; b.innerHTML = '';
+      var bar = el('div', 'pnbar'); b.appendChild(bar); var sg = el('div', 'seg'); bar.appendChild(sg); seg(sg, ['Hoje', 'Semana', 'Mês', 'Ano'], { hoje: 'Hoje', semana: 'Semana', mes: 'Mês', ano: 'Ano' }[RELP.per], function (v) { RELP.per = { Hoje: 'hoje', Semana: 'semana', 'Mês': 'mes', Ano: 'ano' }[v]; relatoriosGrupo(view); });
+      var lj = el('select'); opts(lj, D.lojas || [], RELP.loja, 'Todas as lojas'); lj.onchange = function () { RELP.loja = lj.value; relatoriosGrupo(view); }; bar.appendChild(lj);
+      var lista = D.catalogo.filter(function (q) { return (q.grupos || []).indexOf(grupo) > -1; });
+      if (!lista.length) b.appendChild(el('div', 'empty', 'Nenhum relatório deste grupo liberado para você.'));
+      lista.forEach(function (q) { var c = el('div', 'card'); b.appendChild(c); var h = el('h2', '', q.nome); if ((q.grupos || []).length > 1) h.appendChild(el('span', 'pnar', '↔ ' + q.grupos.filter(function (x) { return x !== grupo; }).join(', '))); c.appendChild(h);
+        var bd = el('div'); c.appendChild(bd); try { pnRender(bd, q.id, D.quadros[q.id], { opt: {} }); } catch (e) { bd.appendChild(el('div', 'hint', 'Não deu para mostrar.')); }
+        btn(c, '⬇ Planilha', 'ghost', function () { var t = bd.querySelector('table'); if (!t) { msg('topMsg', 'Este relatório é um número ou gráfico: use a tela ou imprima.'); return; } var rows = Array.prototype.map.call(t.querySelectorAll('tr'), function (tr) { return Array.prototype.map.call(tr.children, function (td) { return td.textContent; }); }); baixarCSV(q.nome, rows[0], rows.slice(1)); }); });
+    }).catch(function (e) { b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); });
   }
   // =========================================================
   //  PROMOÇÕES E CUPONS (Leva 6 ampliada)
