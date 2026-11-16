@@ -6677,6 +6677,13 @@
   var TELAS_GRADE = ['rel-faturamento', 'rel-os', 'rel-suprimento', 'rel-financeiro', 'rel-metas', 'rel-crm', 'promocoes', 'cupons', 'pedidos', 'dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
     'compras', 'checkin', 'transf', 'balanco', 'etiquetas', 'compracel', 'ccnova', 'cclista', 'ccparc', 'novos', 'venda', 'pagar', 'receber', 'bancos', 'cred', 'dre', 'conferencia', 'metas', 'comissoes', 'metrel',
     'aval', 'cartao', 'compra', 'proposta'];
+  /** Leva 6 ampliada: botões de criar somem para quem não tem a caixinha "Criar" daquela tela. */
+  var BOTOES_GRADE = { crNovo: 'crm:c', fbConta: 'bancos:c', fbLanc: 'bancos:c', rcNovo: 'receber:c', pgNovo: 'pagar:c', cdAvulso: 'cred:c', acNovo: 'acess:c', enNova: 'encomendas:c',
+    ppNovaBtn: 'proposta:c', prNova: 'promocoes:c', pcNovo: 'pedidos:c', cpNova: 'compras:c', osNova: 'osnova:c', vdNovaBtn: 'pdv:c', dNovo: 'cadastro:c', dNovoP: 'cadastro:c' };
+  function botoesPorGrade() {
+    if (!temGrade() || soParceira()) return;
+    Object.keys(BOTOES_GRADE).forEach(function (bid) { var b = $(bid); if (!b) return; var ok = (S.u.perms || []).indexOf(BOTOES_GRADE[bid]) > -1; if (!ok) b.style.display = 'none'; else if (b.style.display === 'none') b.style.display = ''; });
+  }
   function viewVisivel(v) {
     if (soParceira() || !temGrade() || TELAS_GRADE.indexOf(v.id) < 0) return (pode(v.perm) || (v.permOu && pode(v.permOu))) && !(v.perm2 && !pode(v.perm2));
     if (v.id === 'osnova') return podeTela('osnova', 'c');
@@ -6811,6 +6818,7 @@
     S.view = id; if (id !== 'pessoa' && id !== 'prod' && id !== 'ctrlest') LS.set('view', id); msg('topMsg', ''); document.body.classList.add('wide'); fecharDrawer();
     var secs = {}; VIEWS.forEach(function (v) { secs[v.sec] = secs[v.sec] || v.id === id; }); Object.keys(secs).forEach(function (k) { show(k, secs[k]); });
     show('vConfig', id === 'config'); show('vPessoa', id === 'pessoa'); show('vProd', id === 'prod'); show('vCtrl', id === 'ctrlest'); fecharTags();
+    botoesPorGrade();
     if (id !== 'ctrlest') CT = null;
     if (id === 'ctrlest') carregarControle();
     if (id === 'transf') carregarTransf();
