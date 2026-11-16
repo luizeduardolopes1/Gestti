@@ -54,6 +54,8 @@
   .perm input{width:20px;height:20px;padding:0;margin:2px 0 0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
   .perm .t{font-size:14px;font-weight:600}.perm .t small{display:block;font-weight:400;color:var(--muted);font-size:12px}
   .perm.dis{opacity:.55}
+  .pckb{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:10px;overflow-x:auto;padding-bottom:8px}
+  .pckb .kcol{background:var(--kan);border-radius:12px;padding:8px;min-height:160px}.pckb h4{margin:4px 6px 8px;font-size:13px}.pckb .kc{cursor:pointer}
   .pdvtopo{display:flex;align-items:center;gap:10px}.pdvtopo h1{flex:1}
   .pdvham{border:1.5px solid var(--line);background:var(--card);border-radius:10px;width:44px;height:40px;font-size:20px;cursor:pointer;color:var(--ink)}
   .pdvwrap{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px;align-items:start}.pdvwrap.fechado{grid-template-columns:minmax(0,1fr)}.pdvwrap.fechado .pdvmenu{display:none}
@@ -1482,6 +1484,10 @@
   </section>
 
   <!-- ENTRADA DE COMPRAS -->
+  <section id="vPedidos" class="hide">
+    <div class="ptopo"><h1>Pedido de Compras</h1><button type="button" class="btn" id="pcNovo" style="width:auto">+ Novo pedido</button></div>
+    <div id="pcCorpo"></div>
+  </section>
   <section id="vCompras" class="hide">
     <button type="button" class="lnk hide" id="cpVoltar" style="margin:0 0 4px">← Voltar às entradas</button>
     <div id="cpListaW">
@@ -2051,6 +2057,7 @@
     { id: 'balanco', sec: 'vBalanco', nome: 'Balanço', perm: 'balanco', permOu: 'finalizar_balanco', menu: 'Suprimento', desc: 'Inventário: contagem às cegas, revisão e ajuste' },
     { id: 'etiquetas', sec: 'vEtiquetas', nome: 'Etiquetas', perm: 'acessorios', permOu: 'produtos', menu: 'Suprimento', desc: 'Imprimir etiquetas, modelos e impressoras' },
     { id: 'compras', sec: 'vCompras', nome: 'Entrada de Compras', perm: 'compras', menu: 'Suprimento', desc: 'Lançar nota de compra (XML da NF-e ou manual)' },
+    { id: 'pedidos', sec: 'vPedidos', nome: 'Pedido de Compras', perm: 'compras', menu: 'Suprimento', desc: 'Pedidos aos fornecedores: aberto, enviado, comprado, recebido' },
     { id: 'saldo', sec: 'vSaldo', nome: 'Saldo de Estoque', perm: 'estoque', menu: 'Suprimento', sub: 'Relatórios', subNome: 'Saldo de Estoque', desc: 'O que está disponível em estoque em um dia' },
     { id: 'finest', sec: 'vFinEst', nome: 'Visão Financeira de Estoque', perm: 'estoque', perm2: 'ver_custos', menu: 'Suprimento', sub: 'Relatórios', subNome: 'Visão Financeira de Estoque', desc: 'Quanto vale o estoque: custo da última compra e custo médio' },
     { id: 'vendas', sec: 'vVendas', nome: 'Vendas', perm: 'vender', menu: 'Faturamento', desc: 'Venda completa com troca, entrega e crediário' },
@@ -6635,7 +6642,7 @@
     for (var i = 0; i < ps.length; i++) if (ps[i].indexOf(t + ':') === 0) return true;
     return false;
   }
-  var TELAS_GRADE = ['dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
+  var TELAS_GRADE = ['pedidos', 'dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
     'compras', 'checkin', 'transf', 'balanco', 'etiquetas', 'compracel', 'ccnova', 'cclista', 'ccparc', 'novos', 'venda', 'pagar', 'receber', 'bancos', 'cred', 'dre', 'conferencia', 'metas', 'comissoes', 'metrel',
     'aval', 'cartao', 'compra', 'proposta'];
   function viewVisivel(v) {
@@ -6798,6 +6805,7 @@
     if (id === 'receber') carregarReceber(true);
     if (id === 'cred') carregarCred(false);
     if (id === 'pdv') pdvIniciar();
+    if (id === 'pedidos') carregarPedidos();
     if (id === 'acess') carregarAcess(false);
     if (id === 'estoque') carregarEstoque(false);
     if (id === 'saldo') carregarSaldo();
@@ -8712,6 +8720,7 @@
       r.appendChild(el('div', 'pskuc', x.sku || '—'));
       var es = el('div', 'psku'), es1 = el('div', 'esrow'); es1.appendChild(el('span', '', x.formato === 'composicao' ? inteiro(qt) + ' kit' + (qt === 1 ? '' : 's') : unTxt(x, qt))); if (x.formato === 'simples' || x.formato === 'variacao') { var eb = botaoEstoque(x); if (eb) es1.appendChild(eb); } es.appendChild(es1);
       if (!lj) { var lo = Object.keys(x.estoque).map(function (k) { return k.replace(/^.*\| /, '') + ' ' + x.estoque[k]; }).join(' · '); if (lo) es.appendChild(el('div', 'psub', lo)); }
+      var chg2 = S.ac && S.ac.chegando && S.ac.chegando[x.id]; if (chg2) es.appendChild(el('div', 'psub', '+' + chg2.qtd + ' chegando' + (chg2.prevista ? ' em ' + isoBR(chg2.prevista) : ''))).style.color = 'var(--accent)';
       r.appendChild(es);
       var pr = el('div', 'ppre' + (x.preco ? '' : ' sem'), x.preco ? brl(x.preco) : 'Consultar');
       if (x.preco && t12 && grupoOp(x.grupo, 'cartao')) pr.appendChild(el('small', '', '12x ' + brl(x.preco / (1 - t12.taxa) / 12)));
@@ -9202,6 +9211,7 @@
           var x = o.x, b = el('button'), a = el('span', '', o.tipo === 'a' ? x.modelo + ' ' + String(x.cor || '').toUpperCase() + ' · ' + x.classif : x.nome); b.type = 'button';
           var fl = o.tipo === 'a' ? x.fotos : fotosDeProduto(x); if (fl && fl.length) { var tf = el('img', 'vdthumb'); tf.alt = ''; tf.loading = 'lazy'; tf.src = fotoUrl(fl[0], 96); b.appendChild(tf); }
           a.appendChild(el('small', '', o.tipo === 'a' ? 'Seminovo · IMEI ' + x.imei : 'Produto · ' + (PDV.loja ? (x.estoque[PDV.loja] || 0) + ' na loja' : x.total + ' no total') + (x.sku ? ' · ' + x.sku : '')));
+          var chg = o.tipo === 'p' && S.ac && S.ac.chegando && S.ac.chegando[x.id]; if (chg) { var cg = el('span', 'bdg inf', '+' + chg.qtd + ' chegando' + (chg.prevista ? ' em ' + isoBR(chg.prevista).slice(0, 5) : '')); a.appendChild(cg); }
           b.appendChild(a); b.appendChild(el('b', '', x.preco ? brl(x.preco) : 'sem preço')); b.onclick = function () { bs.value = ''; pdvAdd(o); }; lst.appendChild(b);
         });
         rs.appendChild(lst);
@@ -9694,6 +9704,91 @@
     C.hr(); C.L(brl(x.valor), 'g c'); C.hr(); if (x.liberadoPor) C.LR('Liberado por', x.liberadoPor);
     var a1 = el('div', 'ass', (x.por || '') + ' · operador'), a2 = el('div', 'ass', 'Quem ' + (x.tipo === 'suprimento' ? 'entregou' : 'retirou') + ' (nome legível)'); C.w.appendChild(a1); C.w.appendChild(a2);
     imprimirHTML('Comprovante ' + (x.numero || ''), C.w, CSS_CUPOM);
+  }
+  // =========================================================
+  //  PEDIDO DE COMPRAS (Leva 6 ampliada)
+  // =========================================================
+  var PCD = null, PCAC = null;
+  function carregarPedidos() {
+    var box = $('pcCorpo'); box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando pedidos…'));
+    Promise.all([call('pedidosCompraListar', [S.token]), PCAC ? Promise.resolve(PCAC) : call('acessorios', [S.token])]).then(function (r) { PCD = r[0]; PCAC = r[1]; desenharPedidosCompra(); })
+      .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
+  }
+  $('pcNovo').onclick = function () { if (PCD) formPedidoCompra(null); };
+  function desenharPedidosCompra() {
+    var box = $('pcCorpo'); box.innerHTML = '';
+    var cols = [['Sem fornecedor', function (p) { return p.situacao === 'Aberto' && !p.fornecedor; }]].concat(PCD.etapas.map(function (e) { return [e, function (p) { return p.situacao === e && (e !== 'Aberto' || !!p.fornecedor); }]; }));
+    var kb = el('div', 'kb pckb'); box.appendChild(kb);
+    cols.forEach(function (c) {
+      var l = PCD.pedidos.filter(c[1]), col = el('div', 'kcol'); col.appendChild(el('h4', '', c[0] + ' (' + l.length + ')'));
+      l.forEach(function (p) {
+        var k = el('div', 'kc'); k.tabIndex = 0; k.setAttribute('role', 'button');
+        k.appendChild(el('b', '', p.id + (p.fornecedor ? ' · ' + p.fornecedor : '')));
+        k.appendChild(el('div', 'psub', p.itens.length + ' item(ns)' + (p.itens.some(function (x) { return x.encomendaId; }) ? ' · tem encomenda' : '') + (p.itens.some(function (x) { return x.os; }) ? ' · peça de OS' : '') + (p.prevista ? ' · previsão ' + isoBR(p.prevista) : '')));
+        if (PCD.ver && p.total) k.appendChild(el('div', 'psub', brl(p.total)));
+        k.onclick = function () { formPedidoCompra(p); }; col.appendChild(k);
+      });
+      kb.appendChild(col);
+    });
+    box.appendChild(el('div', 'hint', 'Encomendas "A pedir" e peças marcadas "Encomendar" na OS entram sozinhas no pedido aberto do fornecedor do produto (ou em "Sem fornecedor"). Em Comprado, o produto mostra "+N chegando" no cadastro e no PDV.'));
+  }
+  function formPedidoCompra(p) {
+    var box = $('pcCorpo'); box.innerHTML = '';
+    var P = p ? JSON.parse(JSON.stringify(p)) : { id: '', situacao: 'Aberto', fornId: '', loja: lojaUser(), itens: [], hist: [] };
+    var vt = el('button', 'lnk', '← Todos os pedidos'); vt.type = 'button'; vt.onclick = desenharPedidosCompra; box.appendChild(vt);
+    box.appendChild(el('h3', 'fmtit', P.id ? P.id + ' · ' + P.situacao : 'Novo pedido de compra'));
+    var c = el('div', 'card'); box.appendChild(c); var trava = ['Recebido', 'Cancelado'].indexOf(P.situacao) > -1;
+    var fo = el('select'); var o0 = el('option', '', 'Sem fornecedor (escolher depois)'); o0.value = ''; fo.appendChild(o0);
+    (PCAC.fornecedores || []).forEach(function (x) { var q = el('option', '', x.nome + (x.doc ? ' · ' + fmtDoc(x.doc) : '')); q.value = x.id; fo.appendChild(q); }); fo.value = P.fornId || ''; fo.disabled = trava;
+    var g = grade(c, 2); campo(g[0], 'Fornecedor', fo, true); var lj = el('select'); opts(lj, PCAC.lojas, P.loja || lojaUser()); lj.disabled = trava; campo(g[1], 'Loja de entrega', lj, true);
+    var nf = el('button', 'lnk', '＋ Cadastrar fornecedor (busca na Receita)'); nf.type = 'button'; nf.onclick = function () { ir('crm'); }; c.appendChild(nf);
+    var it = el('div'); c.appendChild(it);
+    function desItens() {
+      it.innerHTML = ''; it.appendChild(el('h3', 'ch', 'Itens'));
+      P.itens.forEach(function (x, i) {
+        var r = el('div', 'fl'), t = el('div'); t.appendChild(el('div', 'n', x.desc)); t.appendChild(el('div', 'd', [x.encomendaId ? 'Encomenda ' + x.encomendaId + (x.cliente ? ' · ' + x.cliente : '') : '', x.os ? 'Peça da OS ' + x.os : '', x.recebido ? 'recebido ' + x.recebido + ' de ' + x.qtd : ''].filter(Boolean).join(' · '))); r.appendChild(t);
+        var q = inp('number', 'Qtd'); q.min = 1; q.value = x.qtd; q.style.maxWidth = '80px'; q.disabled = trava; q.oninput = function () { x.qtd = q.value; }; r.appendChild(q);
+        if (PCD.ver) { var cu = inpValor(vs(x.custo || '')); cu.input.oninput = function () { x.custo = cu.input.value; }; cu.input.disabled = trava; cu.style.maxWidth = '120px'; r.appendChild(cu); }
+        if (!trava) { var xx = el('button', 'x', '×'); xx.type = 'button'; xx.onclick = function () { P.itens.splice(i, 1); desItens(); }; r.appendChild(xx); }
+        it.appendChild(r);
+      });
+      if (trava) return;
+      var bq = inp('text', 'Adicionar produto: nome ou SKU'); it.appendChild(bq); var rs = el('div'); it.appendChild(rs);
+      bq.oninput = function () { rs.innerHTML = ''; var q = bq.value.trim().toLowerCase(); if (q.length < 2) return;
+        (PCAC.produtos || []).filter(function (x) { return (x.formato === 'simples' || x.formato === 'variacao') && (x.nome.toLowerCase().indexOf(q) > -1 || (x.sku || '').toLowerCase().indexOf(q) > -1); }).slice(0, 8).forEach(function (x) {
+          var b = el('button', 'btn ghost mini', x.nome + (x.sku ? ' · ' + x.sku : '')); b.type = 'button'; b.style.cssText = 'display:block;margin:4px 0'; b.onclick = function () { P.itens.push({ prodId: x.id, desc: x.nome, qtd: 1, custo: x.custo || 0 }); bq.value = ''; desItens(); }; rs.appendChild(b); }); };
+      var av = el('button', 'lnk', '+ Item avulso (fora do cadastro)'); av.type = 'button'; av.onclick = function () { var d1 = prompt('Descrição do item:'); if (d1) { P.itens.push({ prodId: '', desc: d1, qtd: 1, custo: 0 }); desItens(); } }; it.appendChild(av);
+    }
+    desItens();
+    var m = el('div', 'msg err'); c.appendChild(m); var ac = el('div', 'acoes'); c.appendChild(ac);
+    var feito = function (r) { PCD = r; avisoTopo('Pedido salvo'); var n = r.pedidos.filter(function (x) { return x.id === (r.salvoId || P.id); })[0]; if (n) formPedidoCompra(n); else desenharPedidosCompra(); };
+    if (!trava) btn(ac, 'Salvar pedido', '', function () { call('pedidoCompraSalvar', [S.token, { id: P.id, fornId: fo.value, loja: lj.value, prevista: P.prevista || '', itens: P.itens }]).then(feito).catch(function (e) { erroEm(m, e); }); });
+    if (P.id && !trava) {
+      var et = el('select'); [['', 'Mudar etapa…'], ['Aberto', 'Aberto'], ['Enviado ao fornecedor', 'Enviado ao fornecedor'], ['Comprado', 'Comprado (com data prevista)'], ['Cancelado', 'Cancelar pedido']].forEach(function (o) { var q = el('option', '', o[1]); q.value = o[0]; et.appendChild(q); }); ac.appendChild(et);
+      et.onchange = function () { var e = et.value; et.value = ''; if (!e) return; var d = {};
+        if (e === 'Comprado') { var pv = prompt('Data prevista de chegada (dd/mm/aaaa):', ''); if (!pv) return; var mm = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(pv.trim()); if (!mm) return erroEm(m, 'Data no formato dd/mm/aaaa.'); d.prevista = mm[3] + '-' + mm[2] + '-' + mm[1]; }
+        if (e === 'Cancelado') { d.motivo = prompt('Motivo do cancelamento:', ''); if (!d.motivo) return; }
+        call('pedidoCompraEtapa', [S.token, P.id, e, d]).then(function (r) { PCD = r; PCAC = null; var n = r.pedidos.filter(function (x) { return x.id === P.id; })[0]; formPedidoCompra(n); }).catch(function (er) { erroEm(m, er); });
+      };
+      if (['Comprado', 'Parcial', 'Enviado ao fornecedor'].indexOf(P.situacao) > -1) btn(ac, '📥 Receber (gera a Entrada de Compras)', 'ok', function () { receberPedidoCompra(P); });
+      if (P.fornecedor) btn(ac, 'Enviar ao fornecedor (WhatsApp)', 'ghost', function () { window.open(waLink('', 'Pedido ' + P.id + ':\n' + P.itens.map(function (x) { return '• ' + x.qtd + 'x ' + x.desc; }).join('\n')), '_blank'); });
+    }
+    if ((P.hist || []).length) { var h = el('div', 'card'); box.appendChild(h); h.appendChild(el('h3', 'ch', 'Histórico')); P.hist.slice().reverse().forEach(function (x) { h.appendChild(el('div', 'hint', x.em + ' · ' + x.txt)); }); }
+  }
+  /** Recebimento: abre a Entrada de Compras já com o fornecedor e o que falta chegar (o check-in segue como hoje). */
+  function receberPedidoCompra(P) {
+    ir('compras');
+    garantirCp(function () {
+      novaCompra(null);
+      CP.pedidoId = P.id; CP.loja = P.loja || CP.loja; if (P.fornId) { CP.fornId = P.fornId; CP.fornModo = 'sel'; }
+      P.itens.forEach(function (x) {
+        var falta = (Number(x.qtd) || 0) - (Number(x.recebido) || 0); if (falta <= 0) return;
+        var pp = x.prodId ? prodCp(x.prodId) : null;
+        CP.itens.push({ prodId: pp ? pp.id : '', novo: pp ? null : { nome: x.desc, sku: '', gtin: '', unidade: 'UN', markup: '', preco: '', condicao: 'Novo' }, descricao: x.desc, codForn: '', ean: pp ? pp.codigo || '' : '', ncm: '', cfop: '', unidade: 'UN',
+                        qtd: String(falta), fator: '1', vUnit: x.custo ? vs(x.custo) : '', desconto: '', ipi: '', st: '', aberto: !pp, encomenda: x.encomendaId || '', encCli: x.cliente || '' });
+      });
+      desenharCompra(); avisoTopo('Entrada preenchida a partir do pedido ' + P.id + ': confira a nota e lance');
+    });
   }
   // =========================================================
   //  HISTÓRICO POR IMEI (OS)
@@ -14683,7 +14778,8 @@
         d.totalNota = null;
       }
       fin.disabled = true; fin.innerHTML = '<span class="spin"></span>Lançando…';
-      call('compraLancar', [S.token, d]).then(function (r) {
+      if (CP.pedidoId) d.pedidoId = CP.pedidoId;
+      call('compraLancar', [S.token, d]).then(function (r) { if (CP && CP.pedidoId) { PCD = null; PCAC = null; }
         S.ac = null; S.est = null; S.pagar = null; S.fin = null; S.crm = null; S.dispProd = null; S.disp = null;
         if (d.recebimento !== 'agora') { S.u.checkinPendentes = (S.u.checkinPendentes || 0) + 1; montarMenu(); }
         aposCompras(r); abaCompras('lista');
