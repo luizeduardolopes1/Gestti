@@ -54,6 +54,9 @@
   .perm input{width:20px;height:20px;padding:0;margin:2px 0 0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
   .perm .t{font-size:14px;font-weight:600}.perm .t small{display:block;font-weight:400;color:var(--muted);font-size:12px}
   .perm.dis{opacity:.55}
+  .ostl{display:flex;flex-direction:column;margin:12px 0}.ostl>div{display:flex;gap:10px;align-items:flex-start;padding:4px 0;font-size:14px;color:var(--muted)}
+  .ostl i{width:13px;height:13px;border-radius:99px;border:2px solid var(--line);margin-top:3px;flex:0 0 auto}.ostl .f i{background:var(--ok);border-color:var(--ok)}.ostl .a i{background:var(--accent);border-color:var(--accent)}.ostl .a,.ostl .f{color:var(--ink)}
+  .osfotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}.osfotos img{width:100%;border-radius:8px;background:var(--soft);aspect-ratio:3/4;object-fit:cover}
   .pfperm{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:8px 0}
   .pfg{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:10px 0 2px}
   .pgtw{overflow-x:auto;margin-top:8px;border:1px solid var(--line);border-radius:10px;max-height:560px;overflow-y:auto}
@@ -3952,6 +3955,57 @@
     }
     call('assinaturaVer', [tok]).then(mostrar).catch(function (e) { doc.innerHTML = ''; doc.appendChild(el('h1', '', 'Termo')); doc.appendChild(el('div', 'aviso', String(e))); });
   }
+  /** Leva 6 ampliada: acompanhamento da OS pelo cliente (link enviado pela loja, sem login). */
+  function paginaOSCliente() {
+    var tok = (location.search.match(/[?&]os=([a-f0-9]{40})/) || [])[1];
+    document.title = 'Acompanhe o seu aparelho';
+    var pg = el('div'); pg.id = 'assPg'; document.body.appendChild(pg); document.body.classList.add('assinatura'); document.body.style.overflow = 'hidden';
+    var doc = el('div', 'doc'); pg.appendChild(doc); doc.appendChild(el('div', 'empty', 'Carregando…'));
+    function mostrar(d) {
+      doc.innerHTML = '';
+      doc.appendChild(el('div', 'emp', d.empresa + ' · ' + d.loja));
+      doc.appendChild(el('h2', '', 'OS ' + d.id + ' · ' + d.aparelho));
+      doc.appendChild(el('div', 'hint', 'Olá, ' + d.cliente + '!' + (d.previsao && d.status !== 'Entregue' ? ' Previsão: ' + isoBR(d.previsao) + (d.horaPrevista ? ' às ' + d.horaPrevista : '') + '.' : '')));
+      if (d.garantiaOS) doc.appendChild(el('div', 'hint', 'Retorno em garantia da OS ' + d.garantiaOS + '.'));
+      var tl = el('div', 'ostl'); doc.appendChild(tl);
+      var feitos = d.linha.map(function (x) { return x.status; });
+      var passos = d.etapas.filter(function (e) { return e !== 'Orçamento recusado' || d.recusado; }).concat(['Entregue']);
+      var atual = passos.indexOf(d.status);
+      passos.forEach(function (e, i) { var it = el('div', i < atual || feitos.indexOf(e) > -1 && i <= atual ? 'f' : i === atual ? 'a' : ''); it.appendChild(el('i')); var t = el('div'); t.appendChild(el(i === atual ? 'b' : 'span', '', e)); var q = d.linha.filter(function (x) { return x.status === e; })[0]; if (q) t.appendChild(el('small', '', ' ' + q.em)); it.appendChild(t); tl.appendChild(it); });
+      if (d.orcamento) {
+        var oc = el('div', 'card'); doc.appendChild(oc); oc.appendChild(el('h3', '', 'Orçamento'));
+        var tb = el('table', 'ext');
+        d.orcamento.servicos.forEach(function (x) { var tr = el('tr'); tr.appendChild(el('td', '', 'Serviço: ' + x.desc)); tr.appendChild(el('td', 'v', brl(x.valor))); tb.appendChild(tr); });
+        d.orcamento.pecas.forEach(function (x) { var tr = el('tr'); tr.appendChild(el('td', '', 'Peça: ' + (x.qtd > 1 ? x.qtd + 'x ' : '') + x.desc)); tr.appendChild(el('td', 'v', brl(x.qtd * x.preco))); tb.appendChild(tr); });
+        if (d.orcamento.desconto) { var trd = el('tr'); trd.appendChild(el('td', '', 'Desconto')); trd.appendChild(el('td', 'v', '− ' + brl(d.orcamento.desconto))); tb.appendChild(trd); }
+        var trt = el('tr'); trt.appendChild(el('td', '', 'Total')); trt.appendChild(el('td', 'v', brl(d.orcamento.total))); tb.appendChild(trt); oc.appendChild(tb);
+        if (d.aguardaAprovacao) {
+          oc.appendChild(el('div', 'hint', 'Para aprovar ou recusar, digite os 4 últimos dígitos do seu CPF (ou do seu celular):'));
+          var dg = inp('text', '0000'); dg.inputMode = 'numeric'; dg.maxLength = 4; dg.style.maxWidth = '120px'; oc.appendChild(dg);
+          var m = el('div', 'msg err'); oc.appendChild(m); var ac = el('div', 'acoes'); oc.appendChild(ac);
+          var responder = function (ok) {
+            var mot = ok ? '' : (prompt('Quer dizer o motivo? (opcional)', '') || '');
+            call('osPublicoResponder', [tok, dg.value, ok, mot]).then(mostrar).catch(function (e) { m.textContent = e; m.classList.add('show'); });
+          };
+          btn(ac, 'Aprovar', '', function () { responder(true); }); btn(ac, 'Recusar', 'ghost', function () { responder(false); });
+        } else if (d.recusado) oc.appendChild(el('div', 'aviso', 'Você recusou este orçamento. A loja vai entrar em contato.'));
+      }
+      if (d.observacoes.length) { var ob = el('div', 'card'); doc.appendChild(ob); ob.appendChild(el('h3', '', 'Observações da loja')); d.observacoes.forEach(function (x) { var r = el('div', 'fl'); var t = el('div'); t.appendChild(el('div', 'n', x.texto)); t.appendChild(el('div', 'd', x.em)); r.appendChild(t); ob.appendChild(r); }); }
+      if (d.fotos.length) {
+        var fc = el('div', 'card'); doc.appendChild(fc); fc.appendChild(el('h3', '', 'Fotos de entrada')); var gl = el('div', 'osfotos'); fc.appendChild(gl);
+        d.fotos.forEach(function (fid) { var im = el('img'); im.alt = 'Foto de entrada'; gl.appendChild(im); call('osPublicoFoto', [tok, fid]).then(function (r) { if (r && r.url) im.src = r.url; }).catch(function () {}); });
+      }
+      if (d.garantia) {
+        var gc = el('div', 'card'); doc.appendChild(gc); gc.appendChild(el('h3', '', 'Termo de garantia'));
+        gc.appendChild(el('div', 'hint', 'Entregue em ' + isoBR(d.garantia.entregueEm) + (d.garantia.ate ? ' · garantia de ' + d.garantia.dias + ' dias, até ' + isoBR(d.garantia.ate) : ' · sem garantia')));
+        gc.appendChild(el('div', 'termo', d.garantia.termo));
+        var pr = el('button', 'btn ghost', '🖨 Imprimir / salvar em PDF'); pr.type = 'button'; pr.onclick = function () { window.print(); }; gc.appendChild(pr);
+      }
+      if (d.whats) { var wz = el('button', 'btn', 'Falar com a loja no WhatsApp'); wz.type = 'button'; wz.style.marginTop = '12px'; wz.onclick = function () { window.open(waLink(d.whats, 'Olá! Sobre a OS ' + d.id + ' (' + d.aparelho + ').'), '_blank'); }; doc.appendChild(wz); }
+      doc.appendChild(el('div', 'rodape', 'Link válido até 30 dias depois da entrega.'));
+    }
+    call('osPublico', [tok]).then(mostrar).catch(function (e) { doc.innerHTML = ''; doc.appendChild(el('h1', '', 'Ordem de serviço')); doc.appendChild(el('div', 'aviso', String(e))); });
+  }
   function seg(box, list, cur, onPick) {
     box.innerHTML = '';
     list.forEach(function (v) {
@@ -6648,6 +6702,8 @@
     ir(ult);
     setTimeout(checarLinkLiberacao, 300);
     // volta da assinatura do contrato (feita dentro do app): reabre a compra
+    var ho = /^#os=([A-Za-z0-9-]{2,20})$/.exec(location.hash);
+    if (ho) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} if (viewVisivel({ id: 'os', perm: 'os' })) { ir('oslista'); garantirOS(function () { var x = S.os.ordens.filter(function (z) { return z.id === ho[1]; })[0]; if (x) abrirOS(x); }); } }
     var hc = /^#cc=([A-Za-z0-9-]{2,30})$/.exec(location.hash);
     if (hc) {
       try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
@@ -9686,6 +9742,15 @@
     var des = function () {
       ckb.innerHTML = '';
       if (A.ligado !== 'SIM') { if (A.ligado === 'NÃO') ckb.appendChild(el('div', 'hint', 'Entrou desligado: o checklist de funcionamento não é feito na entrada. Registre na via do cliente.')); return; }
+      // Leva 6 ampliada: checklist pode não ser feito, com motivo (a frase sai no termo de entrada para o cliente assinar)
+      var nl = el('label', 'ckl'), nk = el('input'); nk.type = 'checkbox'; nk.checked = !!A.checklistNao; nl.appendChild(nk); nl.appendChild(document.createTextNode(' Checklist não realizado')); ckb.appendChild(nl);
+      nk.onchange = function () { A.checklistNao = nk.checked ? { motivo: 'Cliente sem tempo' } : null; des(); };
+      if (A.checklistNao) {
+        var ms = el('select'); ['Cliente sem tempo', 'Aparelho travado', 'Cliente não quis', 'Outro'].forEach(function (t) { ms.appendChild(el('option', '', t)); }); ms.value = A.checklistNao.motivo || 'Cliente sem tempo';
+        ms.onchange = function () { A.checklistNao.motivo = ms.value; }; campo(ckb, 'Motivo', ms);
+        ckb.appendChild(el('div', 'hint', 'O termo de entrada sai com: "Checklist não realizado a pedido do cliente; o estado das funções não foi verificado na entrada." Fica registrado quem marcou.'));
+        return;
+      }
       A.checklist = A.checklist || {};
       var pr = el('div', 'hint'); ckb.appendChild(pr);
       var prog = function () { var it = osCkItens(), f = it.filter(function (x) { return A.checklist[x.item]; }), fora = f.filter(function (x) { return A.checklist[x.item] !== x.ok; }); pr.textContent = 'Checklist de entrada: ' + f.length + ' de ' + it.length + ' testados' + (fora.length ? ' · com defeito: ' + fora.map(function (x) { return x.item; }).join(', ') : ''); pr.style.color = fora.length ? 'var(--warn)' : ''; };
@@ -14501,18 +14566,86 @@
       r.appendChild(pv);
       var tot = o.totais ? o.totais.total : o.total;
       r.appendChild(el('div', 'ppre' + (tot ? '' : ' sem'), tot ? brl(tot) : 'A orçar'));
-      r.appendChild(el('div', 'chev', '›'));
+      var mn = el('button', 'btn ghost mini', '⋮'); mn.type = 'button'; mn.setAttribute('aria-label', 'Status e mais opções da OS ' + o.id); mn.onclick = function (ev) { ev.stopPropagation(); abrirOS(o); }; r.appendChild(mn);
       r.onclick = function () { abrirOS(o); };
       tab.appendChild(r);
     });
     box.appendChild(tab);
+  }
+  // ---------- Leva 6 ampliada: link do cliente, anexos, observações, via do técnico, etiqueta ----------
+  function linkOS(o) { return location.origin + location.pathname + '?os=' + o.linkTok; }
+  function osAnexosCard(bd, o, reabrir, erro) {
+    var c = el('div', 'card'); bd.appendChild(c); c.appendChild(el('h2', '', 'Anexos (' + (o.anexos || []).length + ' de 6)'));
+    (o.anexos || []).forEach(function (a) {
+      var r = el('div', 'fl'), t = el('div'); t.appendChild(el('div', 'n', (/pdf/.test(a.tipo) ? '📄 ' : '📷 ') + a.nome)); t.appendChild(el('div', 'd', (a.cliente ? 'Foto de entrada (o cliente vê no link)' : 'Interno') + ' · ' + a.em)); r.appendChild(t);
+      var ac = el('div'); ac.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap';
+      var bv = el('button', 'btn ghost mini', 'Ver'); bv.type = 'button'; bv.onclick = function () { abrirUrl('osAnexoVer', [o.id, a.id]); }; ac.appendChild(bv);
+      var bm = el('button', 'btn ghost mini', a.cliente ? 'Tornar interno' : 'Mostrar ao cliente'); bm.type = 'button'; bm.onclick = function () { call('osAnexoMarcar', [S.token, o.id, a.id, !a.cliente]).then(reabrir).catch(erro); }; ac.appendChild(bm);
+      var bx = el('button', 'btn ghost mini', 'Excluir'); bx.type = 'button'; bx.onclick = function () { call('osAnexoExcluir', [S.token, o.id, a.id]).then(reabrir).catch(erro); }; ac.appendChild(bx);
+      r.appendChild(ac); c.appendChild(r);
+    });
+    if ((o.anexos || []).length >= 6) return;
+    var lb = el('label', 'btn ghost', '＋ Foto ou PDF'), ip = el('input'); ip.type = 'file'; ip.accept = 'image/*,application/pdf'; ip.className = 'hide'; lb.appendChild(ip);
+    var ck = el('label', 'ckl'), kc = el('input'); kc.type = 'checkbox'; kc.checked = true; ck.appendChild(kc); ck.appendChild(document.createTextNode(' Foto de entrada (o cliente vê no link)'));
+    c.appendChild(lb); c.appendChild(ck);
+    ip.onchange = function () {
+      var fl = ip.files && ip.files[0]; if (!fl) return;
+      var envia = function (b64, tipo) { lb.firstChild.textContent = 'Enviando…'; call('osAnexoEnviar', [S.token, o.id, { nome: fl.name, tipo: tipo, b64: b64, cliente: kc.checked && tipo !== 'application/pdf' }]).then(reabrir).catch(erro); };
+      if (/^image\//.test(fl.type)) comprimirImg(fl, 1600, 0.82, function (url) { envia(url.split(',')[1], 'image/jpeg'); });
+      else { var rd = new FileReader(); rd.onload = function () { envia(String(rd.result).split(',')[1], 'application/pdf'); }; rd.readAsDataURL(fl); }
+    };
+  }
+  function osObsCard(bd, o, reabrir, erro) {
+    var c = el('div', 'card'); bd.appendChild(c); c.appendChild(el('h2', '', 'Observações'));
+    (o.observacoes || []).slice().reverse().forEach(function (x) { var r = el('div', 'fl'), t = el('div'); t.appendChild(el('div', 'n', x.texto)); t.appendChild(el('div', 'd', x.em + ' · ' + x.por + (x.cliente ? ' · aparece no link do cliente' : ' · interna'))); r.appendChild(t); c.appendChild(r); });
+    var tx = el('textarea'); tx.rows = 2; tx.maxLength = 400; tx.placeholder = 'Ex.: a peça chega amanhã às 10h'; campo(c, 'Nova observação', tx);
+    var k1 = el('label', 'ckl'), c1 = el('input'); c1.type = 'checkbox'; c1.checked = true; k1.appendChild(c1); k1.appendChild(document.createTextNode(' Mostrar no link do cliente')); c.appendChild(k1);
+    var k2 = el('label', 'ckl'), c2 = el('input'); c2.type = 'checkbox'; k2.appendChild(c2); k2.appendChild(document.createTextNode(' Avisar o cliente no WhatsApp')); if ((o.cliente || {}).whats) c.appendChild(k2);
+    btn(c, 'Adicionar', '', function () {
+      var t = tx.value.trim(); if (t.length < 2) return erro('Escreva a observação.');
+      call('osObservacao', [S.token, o.id, { texto: t, cliente: c1.checked }]).then(function (r) { if (c2.checked && c1.checked) window.open(waLink(o.cliente.whats, 'OS ' + o.id + ': ' + t + (o.linkTok ? '\nAcompanhe: ' + linkOS(o) : '')), '_blank'); reabrir(r); }).catch(erro);
+    });
+  }
+  function imprimirOSTec(o) {
+    var T = o.totais || {}, a = o.aparelho || {}, c = o.cliente || {}, w = document.createElement('div'); w.className = 'cup';
+    var L = function (t, cls) { var d = document.createElement('div'); if (cls) d.className = cls; d.textContent = t; w.appendChild(d); return d; };
+    var LR = function (a1, b1) { var d = document.createElement('div'); d.className = 'lr'; var x = document.createElement('span'); x.textContent = a1; var y = document.createElement('span'); y.textContent = b1; d.appendChild(x); d.appendChild(y); w.appendChild(d); };
+    var hr = function () { w.appendChild(document.createElement('hr')); };
+    L('VIA DO TÉCNICO', 'inv'); L('OS ' + o.id, 'g c'); L('Aberta ' + String(o.aberta || '').slice(0, 16) + (o.atendente ? ' · ' + o.atendente.replace(/ \(.*\)$/, '') : ''), 'c'); hr();
+    LR('Cliente', c.nome || ''); LR('Telefone', c.whats ? fmtFone(c.whats) : ''); hr();
+    L(apTxt(o), 'b'); if (a.imei || a.serial) LR('IMEI/série', [a.imei, a.serial].filter(Boolean).join(' ')); LR('Senha/padrão', o.senhaInformada ? 'informada (anotada)' : '—'); LR('Acessórios', (a.acessorios || []).join(', ') || 'nenhum'); hr();
+    L('Defeito relatado', 'b'); L(o.defeito || ''); hr();
+    if (a.checklistNao) { L('Checklist não realizado', 'b'); L(a.checklistNao.motivo); hr(); }
+    else if (Object.keys(a.checklist || {}).length) { L('Checklist na entrada', 'b'); Object.keys(a.checklist).forEach(function (k) { LR(k, a.checklist[k] === 'SIM' ? 'OK' : 'FALHA'); }); hr(); }
+    L('Peças e serviços', 'b');
+    (o.servicos || []).forEach(function (sv) { LR('Serviço: ' + sv.desc, brl(sv.valor)); });
+    (o.pecas || []).forEach(function (pc) { LR('Peça: ' + (pc.qtd > 1 ? pc.qtd + 'x ' : '') + pc.desc + (pc.encomendar ? ' (encomendar)' : ''), brl(pc.qtd * pc.preco)); });
+    LR('Orçamento', T.total ? brl(T.total) : 'a orçar'); hr();
+    LR('Previsão', prevTxt(o)); LR('Técnico', o.tecnico && o.tecnico.nome || '—'); if (o.garantiaDe) LR('Garantia da OS', o.garantiaDe);
+    if (o.obsInterna) { hr(); L('Obs. interna', 'b'); L(o.obsInterna); }
+    var q = document.createElement('div'); q.className = 'qr'; w.appendChild(q);
+    var fim = function () { imprimirHTML('Via do técnico ' + o.id, w, CSS_CUPOM); };
+    qrEm(q, location.origin + location.pathname + '#os=' + o.id, 120).then(fim, fim);
+  }
+  function etiquetaOS(o) {
+    var w = el('div', 'etqos'), q = el('div', 'q'), t = el('div', 't'); w.appendChild(q); w.appendChild(t);
+    t.appendChild(el('b', '', 'OS ' + o.id)); t.appendChild(el('div', '', (o.cliente || {}).nome || '')); t.appendChild(el('div', '', apTxt(o)));
+    t.appendChild(el('div', 's', 'Entrada ' + String(o.aberta || '').slice(0, 5) + (o.previsao ? ' · Prev. ' + isoBR(o.previsao).slice(0, 5) : ''))); t.appendChild(el('div', 's', o.loja + (o.tecnico && o.tecnico.nome ? ' · ' + o.tecnico.nome : '')));
+    var fim = function () { imprimirHTML('Etiqueta ' + o.id, w, '@page{size:50mm 30mm;margin:0}body{margin:0}.etqos{width:50mm;height:30mm;box-sizing:border-box;padding:2mm;display:flex;gap:2mm;font:8pt system-ui,sans-serif;overflow:hidden}.etqos .q{width:24mm;flex:0 0 auto}.etqos .q img,.etqos .q canvas{width:24mm!important;height:24mm!important}.etqos b{font-size:11pt}.etqos .s{font-size:7pt;color:#333}'); };
+    qrEm(q, o.linkTok ? linkOS(o) : 'OS ' + o.id, 96).then(fim, fim);
+  }
+  var CSS_CUPOM = '@page{size:80mm auto;margin:3mm}body{margin:0}.cup{width:72mm;font:11px/1.35 Menlo,Consolas,monospace;color:#000}.cup .c{text-align:center}.cup .b{font-weight:700}.cup .g{font-size:15px;font-weight:700}.cup hr{border:0;border-top:1px dashed #000;margin:6px 0}.cup .lr{display:flex;justify-content:space-between;gap:6px}.cup .lr span:last-child{text-align:right;white-space:nowrap}.cup .inv{background:#000;color:#fff;text-align:center;font-weight:700;letter-spacing:.08em;padding:2px 0}.cup .qr{width:110px;margin:6px auto}.cup .qr img,.cup .qr canvas{width:110px!important;height:110px!important}.cup .ass{margin-top:26px;border-top:1px solid #000;text-align:center;font-size:10px;padding-top:2px}';
+  /** QR na caixa (biblioteca carregada sob demanda). */
+  function qrEm(box, texto, tam) {
+    var lib = window.QRCode ? Promise.resolve() : new Promise(function (ok, fail) { var s2 = document.createElement('script'); s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s2.onload = ok; s2.onerror = fail; document.head.appendChild(s2); });
+    return lib.then(function () { new window.QRCode(box, { text: texto, width: tam || 120, height: tam || 120 }); return new Promise(function (ok) { setTimeout(ok, 250); }); });
   }
   // ---------- formulário (página inteira) ----------
   function formOS(o) {
     var D = S.os;
     OSF = o ? { id: o.id, cli: JSON.parse(JSON.stringify(o.cliente || {})), cliModo: 'sel', loja: o.loja, tecnicoId: o.tecnico ? o.tecnico.id : '', aparelho: JSON.parse(JSON.stringify(o.aparelho || {})),
                 defeito: o.defeito || '', diagnostico: o.diagnostico || '', servicos: (o.servicos || []).map(function (s) { return { desc: s.desc, valor: vs(s.valor) }; }),
-                pecas: (o.pecas || []).map(function (p) { return { prodId: p.prodId || '', desc: p.desc, qtd: String(p.qtd), preco: vs(p.preco), custo: vs(p.custo) }; }),
+                pecas: (o.pecas || []).map(function (p) { return { prodId: p.prodId || '', desc: p.desc, qtd: String(p.qtd), preco: vs(p.preco), custo: vs(p.custo), encomendar: !!p.encomendar }; }),
                 desconto: vs(o.desconto || ''), previsao: o.previsao || '', horaPrevista: o.horaPrevista || '', garantiaDias: String(o.garantiaDias === undefined ? D.cfg.garantiaDias : o.garantiaDias), obs: o.obs || '', obsInt: o.obsInterna || '',
                 senhaInformada: !!o.senhaInformada, status: o.status }
           : { id: '', cli: { id: '', cpf: '', nome: '', whats: '', cep: '', endereco: '', bairro: '', cidade: '' }, cliModo: 'busca', loja: D.lojas.indexOf(S.u.loja) > -1 ? S.u.loja : (LS.get('loja', '') || D.lojas[0]),
@@ -14655,6 +14788,7 @@
         var r = el('div', 'osl osp');
         if (pp) { var nm = el('div', 'nm', pp.nome); nm.appendChild(el('small', '', (pp.estoque[OSF.loja] || 0) + ' em estoque nesta loja · sai do estoque na entrega')); r.appendChild(nm); }
         else { var d1 = inp('text', 'Descrição da peça'); d1.maxLength = 120; d1.value = p.desc; d1.oninput = function () { p.desc = d1.value; }; r.appendChild(d1); }
+        if (!pp) { var el2 = el('label', 'ckl'), ek = el('input'); ek.type = 'checkbox'; ek.checked = !!p.encomendar; ek.onchange = function () { p.encomendar = ek.checked; }; el2.appendChild(ek); el2.appendChild(document.createTextNode(' Encomendar (vai para o Pedido de Compras)')); el2.style.cssText = 'grid-column:1/-1;font-size:13px'; r.appendChild(el2); }
         var q2 = inp('number', 'Qtd'); q2.min = 1; q2.value = p.qtd; q2.className = 'q1'; q2.oninput = function () { p.qtd = q2.value; tot(); }; r.appendChild(q2);
         var vw = inpValor(p.preco); vw.input.oninput = function () { p.preco = vw.input.value; tot(); }; r.appendChild(vw);
         var x = el('button', 'x', '×'); x.type = 'button'; x.onclick = function () { OSF.pecas.splice(i, 1); desenharPecas(); tot(); }; r.appendChild(x);
@@ -14698,7 +14832,7 @@
       sv.disabled = si.disabled = true;
       var d = { id: OSF.id, loja: OSF.loja, tecnicoId: OSF.tecnicoId, cliente: C2, aparelho: OSF.aparelho, defeito: OSF.defeito, diagnostico: OSF.diagnostico,
                 servicos: OSF.servicos.filter(function (s) { return s.desc.trim(); }).map(function (s) { return { desc: s.desc, valor: num(s.valor) || 0 }; }),
-                pecas: OSF.pecas.map(function (p) { return { prodId: p.prodId, desc: p.desc, qtd: parseInt(p.qtd, 10), preco: num(p.preco) || 0, custo: num(p.custo) || 0 }; }),
+                pecas: OSF.pecas.map(function (p) { return { prodId: p.prodId, desc: p.desc, qtd: parseInt(p.qtd, 10), preco: num(p.preco) || 0, custo: num(p.custo) || 0, encomendar: !p.prodId && !!p.encomendar }; }),
                 desconto: num(OSF.desconto) || 0, previsao: OSF.previsao, horaPrevista: OSF.horaPrevista || '', garantiaDias: OSF.garantiaDias, termoId: OSF.termoId || '', obs: OSF.obs, obsInterna: OSF.obsInt, senhaInformada: OSF.senhaInformada };
       callM('osSalvar', [S.token, d]).then(function (r) {
         S.crm = null; aposOS(r); OSF = null; ir('oslista');
@@ -14735,7 +14869,10 @@
       ['Senha informada', o.senhaInformada ? 'sim (anotada no papel)' : ''], ['Defeito relatado', o.defeito], ['Diagnóstico', o.diagnostico], ['Loja', o.loja], ['Técnico', o.tecnico && o.tecnico.nome ? o.tecnico.nome : 'a definir'],
       ['Aberta em', o.aberta + (o.atendente ? ' por ' + o.atendente.replace(/ \(.*\)$/, '') : '')], ['Entrega prevista', prevTxt(o)], ['Entregue em', o.entregueEm ? isoBR(o.entregueEm) + (o.entreguePor ? ' por ' + o.entreguePor : '') : ''],
       ['Garantia até', o.garantiaAte ? isoBR(o.garantiaAte) : o.garantiaDias ? o.garantiaDias + ' dias a partir da entrega' : 'sem garantia'], ['Observações', o.obs], ['Observações internas', o.obsInterna],
-      ['Cancelamento', o.cancelamento ? o.cancelamento.motivo + ' · ' + o.cancelamento.por + ' · ' + o.cancelamento.em : '']]);
+      ['Cancelamento', o.cancelamento ? o.cancelamento.motivo + ' · ' + o.cancelamento.por + ' · ' + o.cancelamento.em : ''],
+      ['Garantia de', o.garantiaDe ? 'OS ' + o.garantiaDe + (o.convertida ? ' · convertida em OS normal (' + o.convertida.motivo + ')' : o.garantiaDentro === false ? ' · aberta fora do prazo' : ' · sem custo para o cliente') : ''],
+      ['Garantias abertas', (o.garantias || []).join(', ')], ['Checklist', a.checklistNao ? 'não realizado: ' + a.checklistNao.motivo + ' (' + a.checklistNao.por + ')' : ''],
+      ['Reaberta', (o.reaberturas || []).map(function (x) { return x.em + ' · ' + x.motivo; }).join(' | ')], ['Orçamento', o.recusa ? 'recusado pelo cliente em ' + o.recusa.em + (o.recusa.motivo ? ': ' + o.recusa.motivo : '') : o.aprovacao ? 'aprovado pelo cliente no link em ' + o.aprovacao.em : '']]);
     var co = el('div', 'card'); co.appendChild(el('h2', '', 'Orçamento')); var to = el('table', 'ext');
     (o.servicos || []).forEach(function (s) { var tr = el('tr'); tr.appendChild(el('td', '', s.desc)); tr.appendChild(el('td', 'v', brl(s.valor))); to.appendChild(tr); });
     (o.pecas || []).forEach(function (p) { var tr = el('tr'), td = el('td'); td.appendChild(document.createTextNode((p.qtd > 1 ? p.qtd + 'x ' : '') + p.desc)); td.appendChild(el('small', '', p.prodId ? 'do estoque' + (D.ver && p.custo !== undefined ? ' · custo ' + brl(p.custo * p.qtd) : '') : 'peça avulsa' + (D.ver && p.custo ? ' · custo ' + brl(p.custo * p.qtd) : ''))); tr.appendChild(td); tr.appendChild(el('td', 'v', brl(p.qtd * p.preco))); to.appendChild(tr); });
@@ -14747,6 +14884,7 @@
     var am = el('div', 'msg err'); bd.appendChild(am);
     var erro = function (e) { am.textContent = e; am.classList.add('show'); };
     var reabrir = function (r) { aposOS(r); var o2 = r.ordens.filter(function (x) { return x.id === o.id; })[0]; if (o2) abrirOS(o2); else fecharDrawer(); };
+    osAnexosCard(bd, o, reabrir, erro); osObsCard(bd, o, reabrir, erro);
     if (!osFinal(o)) {
       var bs = opcaoDw(bd, 'Mudar status', 'Agora: ' + o.status, 'okc', function () {
         if (bs.nextSibling && bs.nextSibling.classList && bs.nextSibling.classList.contains('opc-box')) { bs.nextSibling.remove(); return; }
@@ -14757,11 +14895,29 @@
         ok.onclick = function () { am.classList.remove('show'); ok.disabled = true; callM('osStatus', [S.token, o.id, esc, nt.value]).then(reabrir).catch(function (e) { ok.disabled = false; erro(e); }); };
       });
       opcaoDw(bd, 'Editar OS', 'Cliente, aparelho, diagnóstico, serviços, peças e prazos', '', function () { fecharDrawer(); formOS(o); });
-      var be = opcaoDw(bd, 'Entregar e receber', T.total ? 'Recebe ' + brl(T.total) + ', baixa as peças do estoque e inicia a garantia' : 'Entrega sem cobrança (ex.: garantia)', 'okc', function () { painelEntregaOS(be, o, am, reabrir); });
+      if (D.faturar === 'pdv') opcaoDw(bd, 'Faturar no PDV', T.total ? 'Leva ' + brl(T.total) + ' para o PDV (dá para somar produtos na mesma venda)' : 'Entrega sem cobrança pelo PDV', 'okc', function () { fecharDrawer(); S.pdvFaturarOS = o.id; ir('pdv'); });
+      else var be = opcaoDw(bd, 'Entregar e receber', T.total ? 'Recebe ' + brl(T.total) + ', baixa as peças do estoque e inicia a garantia' : 'Entrega sem cobrança (ex.: garantia)', 'okc', function () { painelEntregaOS(be, o, am, reabrir); });
     }
     if (c.whats) opcaoDw(bd, 'Avisar no WhatsApp', o.status === 'Pronta' ? 'Aviso de pronto para retirada' : o.status === 'Aguardando aprovação' ? 'Envia o orçamento para aprovação' : 'Atualização do status', '', function () { abrirWhats(c.whats, msgOS(o)); });
-    opcaoDw(bd, 'Imprimir OS', 'Via de entrada com termos e assinatura', '', function () { imprimirOS(o, false); });
-    if (o.status === 'Entregue') opcaoDw(bd, 'Imprimir comprovante de entrega', 'Serviços, pagamento e garantia', '', function () { imprimirOS(o, true); });
+    if (c.whats && o.linkTok) opcaoDw(bd, 'Enviar link de acompanhamento', 'O cliente vê o status, as observações e aprova ou recusa o orçamento', '', function () { window.open(waLink(c.whats, 'Olá, ' + String(c.nome || '').split(' ')[0] + '! Acompanhe o conserto do seu ' + apTxt(o) + ' (OS ' + o.id + '): ' + linkOS(o)), '_blank'); });
+    if (o.linkTok) opcaoDw(bd, 'Copiar link de acompanhamento', linkOS(o), '', function () { try { navigator.clipboard.writeText(linkOS(o)); avisoTopo('Link copiado'); } catch (e) { prompt('Link da OS', linkOS(o)); } });
+    opcaoDw(bd, 'Imprimir via do técnico', 'Cupom 80 mm para a bancada', '', function () { imprimirOSTec(o); });
+    opcaoDw(bd, 'Imprimir via do cliente', 'A4 com os termos, para o cliente assinar na entrada', '', function () { imprimirOS(o, false); });
+    opcaoDw(bd, 'Imprimir etiqueta', 'Nº da OS, cliente, modelo e QR do acompanhamento', '', function () { etiquetaOS(o); });
+    if (o.status === 'Entregue') opcaoDw(bd, 'Imprimir termo de garantia', 'Peças e serviços feitos, pagamento e garantia', '', function () { imprimirOS(o, true); });
+    if (o.status === 'Entregue') opcaoDw(bd, 'Abrir garantia', o.garantiaAte ? (o.garantiaAte >= isoHoje() ? 'Dentro do prazo (até ' + isoBR(o.garantiaAte) + ')' : 'Prazo vencido em ' + isoBR(o.garantiaAte)) : 'Sem garantia registrada', '', function () {
+      var df = prompt('O que o cliente relatou na volta?', ''); if (df === null) return;
+      call('osGarantiaAbrir', [S.token, o.id, { defeito: df }]).then(function (r) { aposOS(r); if (!r.garantiaDentro) avisoTopo('Garantia aberta fora do prazo'); var g = r.ordens.filter(function (x) { return x.id === r.salvoId; })[0]; if (g) abrirOS(g); }).catch(erro);
+    });
+    if (o.garantiaDe && !o.convertida && D.converterGarantia && !osFinal(o)) opcaoDw(bd, 'Converter em OS normal', 'O defeito não tem relação com o serviço: passa a cobrar', '', function () {
+      var mt = prompt('Por que o defeito não é da garantia?', ''); if (!mt) return;
+      call('osGarantiaConverter', [S.token, o.id, mt]).then(reabrir).catch(erro);
+    });
+    if (osFinal(o) && D.reabrir) opcaoDw(bd, 'Reabrir OS', 'Com motivo; OS faturada não reabre (abra uma garantia)', '', function () {
+      var mt = prompt('Motivo da reabertura:', ''); if (!mt) return;
+      call('osReabrir', [S.token, o.id, mt]).then(reabrir).catch(erro);
+    });
+    opcaoDw(bd, 'Duplicar', 'Nova OS com o mesmo cliente e aparelho', '', function () { fecharDrawer(); var cp = JSON.parse(JSON.stringify(o)); delete cp.id; cp.status = ''; cp.hist = []; formOS(cp); OSF.id = ''; });
     var bh = opcaoDw(bd, 'Histórico', (o.hist || []).length + ' registro(s)', '', function () {
       if (bh.nextSibling && bh.nextSibling.classList && bh.nextSibling.classList.contains('opc-box')) { bh.nextSibling.remove(); return; }
       var bx = el('div', 'opc-box'), t = el('table', 'ext');
@@ -14829,7 +14985,7 @@
     var E = function (tag, txt, cls) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; };
     var sec = function (tit) { var s = E('div', undefined, 'sec'); s.appendChild(E('h3', tit)); w.appendChild(s); return s; };
     var kv = function (box, pares) { var k = E('div', undefined, 'kv'); pares.forEach(function (p) { if (!p[1]) return; k.appendChild(E('b', p[0])); k.appendChild(E('span', p[1])); }); box.appendChild(k); };
-    var top = E('div', undefined, 'top'), tl = cabecalhoEmpresa(o.loja, entrega ? 'Comprovante de entrega' : 'Ordem de serviço');
+    var top = E('div', undefined, 'top'), tl = cabecalhoEmpresa(o.loja, entrega ? 'Termo de garantia' : 'Ordem de serviço');
     var tn = E('div', undefined, 'n'); tn.appendChild(E('div', o.id)); tn.appendChild(E('div', (entrega ? 'Entregue ' + isoBR(o.entregueEm) : 'Entrada ' + String(o.aberta || '').slice(0, 16)), ''));
     top.appendChild(tl); top.appendChild(tn); w.appendChild(top);
     kv(sec('Cliente'), [['Nome', c.nome], ['Celular', c.whats ? fmtFone(c.whats) : ''], ['CPF/CNPJ', c.cpf ? fmtDoc(c.cpf) : ''], ['Endereço', [c.endereco, c.bairro, c.cidade].filter(Boolean).join(' · ')]]);
@@ -14843,13 +14999,15 @@
     var tt = E('tr', undefined, 'tot'); tt.appendChild(E('td', 'Total')); tt.appendChild(E('td', T.total ? brl(T.total) : 'a orçar', 'v')); t.appendChild(tt); so.appendChild(t);
     if (entrega) kv(sec('Pagamento e garantia'), [['Pagamento', (o.pagamentos || []).map(function (p) { return formaTxt(p) + ' ' + brl(p.valor); }).join(' + ') || 'sem cobrança'],
       ['Garantia', o.garantiaAte ? o.garantiaDias + ' dias, até ' + isoBR(o.garantiaAte) + ' (serviço e peças trocadas)' : 'sem garantia']]);
-    else if (o.garantiaDias) kv(sec('Garantia'), [['Prazo', o.garantiaDias + ' dias a partir da entrega (serviço e peças trocadas)']]);
+    if (!entrega && a.checklistNao) { var sck = sec('Checklist de entrada'); sck.appendChild(E('div', 'Checklist não realizado a pedido do cliente; o estado das funções não foi verificado na entrada. (' + a.checklistNao.motivo + ')', 'b')); }
     if (o.obs) kv(sec('Observações'), [['', o.obs]]);
-    var tt = D ? ((D.cfg.textos || []).filter(function (x) { return x.id === o.termoId; })[0] || {}).texto || D.cfg.termos : ''; var st = sec('Termos'); st.appendChild(E('div', tt, 'termos'));
+    var tt = D ? ((D.cfg.textos || []).filter(function (x) { return x.id === o.termoId; })[0] || {}).texto || D.cfg.termos : ''; var st = sec(entrega ? 'Termos da garantia' : 'Termos'); st.appendChild(E('div', tt, 'termos'));
+    if (!entrega && o.linkTok) { var sq = sec('Acompanhe o seu aparelho'); var qb = E('div', undefined, 'qrm'); sq.appendChild(qb); sq.appendChild(E('div', 'Aponte a câmera do celular: você vê o status, as observações da loja e aprova ou recusa o orçamento. ' + linkOS(o))); w.qrBox = qb; }
     var ass = E('div', undefined, 'ass'); ass.appendChild(E('div', 'Assinatura do cliente')); ass.appendChild(E('div', 'Responsável pela loja')); w.appendChild(ass);
     if (!entrega) { var via = E('div', 'Via do cliente · ' + o.id + ' · ' + c.nome + ' · ' + apTxt(o) + (o.previsao ? ' · previsão ' + isoBR(o.previsao) : '') + ' · retirada só com esta via ou documento do titular', 'via'); w.appendChild(via); }
     var rpe = rodapeEmpresa(o.loja); if (rpe) w.appendChild(E('div', rpe, 'rod'));
-    imprimirHTML((entrega ? 'Entrega ' : 'OS ') + o.id, w, CSS_OS);
+    var fimA4 = function () { imprimirHTML((entrega ? 'Garantia ' : 'OS ') + o.id, w, CSS_OS + '.qrm{float:left;margin:0 10px 4px 0}.qrm img,.qrm canvas{width:80px!important;height:80px!important}'); };
+    if (w.qrBox) qrEm(w.qrBox, linkOS(o), 80).then(fimA4, fimA4); else fimA4();
   }
   function cfgOS() {
     var D = S.os, sh = $('fSheet'); sh.innerHTML = '';
@@ -14861,6 +15019,12 @@
     var m = el('div', 'msg err'); c.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Salvar'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button'; ac.appendChild(cc); ac.appendChild(ok); c.appendChild(ac);
     cc.onclick = fecharModal;
+    var fc = el('div', 'card'); sh.appendChild(fc); fc.appendChild(el('h2', '', 'Como a OS é faturada'));
+    var fr1 = el('label', 'ckl'), r1 = el('input'); r1.type = 'radio'; r1.name = 'osfat'; r1.checked = D.faturar !== 'os'; fr1.appendChild(r1); fr1.appendChild(document.createTextNode(' Só pelo PDV (menu do PDV › Faturar OS)')); fc.appendChild(fr1);
+    var fr2 = el('label', 'ckl'), r2 = el('input'); r2.type = 'radio'; r2.name = 'osfat'; r2.checked = D.faturar === 'os'; fr2.appendChild(r2); fr2.appendChild(document.createTextNode(' Pelo PDV e também pela própria OS')); fc.appendChild(fr2);
+    var ft = el('label', 'ckl'), tk = el('input'); tk.type = 'checkbox'; ft.appendChild(tk); ft.appendChild(document.createTextNode(' Aplicar a todas as empresas')); fc.appendChild(ft);
+    var fm = el('div', 'msg err'); fc.appendChild(fm);
+    btn(fc, 'Salvar forma de faturar', '', function () { call('osFaturarSalvar', [S.token, r2.checked ? 'os' : 'pdv', tk.checked]).then(function (r) { aposOS(r); avisoTopo('Forma de faturar salva'); }).catch(function (e) { erroEm(fm, e); }); });
     ok.onclick = function () { ok.disabled = true; call('osCfgSalvar', [S.token, { termos: tx.value, garantiaDias: gd.value }]).then(function (r) { aposOS(r); fecharModal(); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); }); };
     abrirPagina();
   }
@@ -16172,7 +16336,7 @@
   $('tfAtual').onclick = carregarTransf;
   $('ckAtual').onclick = carregarCheckin;
   $('verProd').onclick = function () { $('outro').click(); ir('disp'); carregarDisp(true); };
-  if (/[?&]ass=[a-f0-9]{40}/.test(location.search)) paginaAssinatura(); else iniciar();
+  if (/[?&]ass=[a-f0-9]{40}/.test(location.search)) paginaAssinatura(); else if (/[?&]os=[a-f0-9]{40}/.test(location.search)) paginaOSCliente(); else iniciar();
 })();
 </script>
 </body>
