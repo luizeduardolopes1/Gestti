@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-BIoGl+pv/6Bdw6RKEKhqJF1inPnbkkrCxz0I+kFJ5vQ=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-oVtq+/Wgf3IIWM3lBjk/Jm1RU5pAjyk0kWNKbcOh53Q=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -6773,7 +6773,36 @@
       .catch(function (e) { ov.remove(); msg('topMsg', String(e)); });
   }
 
+  /* Leva 7 · 1.5: o app das parceiras nunca abre o sistema normal. Quem gerencia parceiras escolhe "ver como a parceira X" (só olhar); os demais logins da equipe são recusados. */
+  var APP_PARC = /[?&](app=1|parceiras=1)\b/.test(location.search);
+  function perfilDeParceira(d) { var l = (d && d.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono' || x.indexOf('parc_') === 0; }); }
+  function escolherVerComo(d) {
+    show('vCarregando', false); show('vLogin', false); VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false);
+    var pg = $('vcEscolha'); if (!pg) { pg = el('div', 'esel'); pg.id = 'vcEscolha'; document.body.appendChild(pg); } pg.innerHTML = ''; pg.classList.remove('hide');
+    var w = el('div', 'card'); w.style.maxWidth = '460px'; w.style.margin = '40px auto'; pg.appendChild(w);
+    var sairApp = function (m) { var t = S.token; pg.classList.add('hide'); call('sair', [t]).catch(function () {}); sairLocal(m); };
+    call('parcVerComoOpcoes', [S.token]).then(function (o) {
+      if (!o.pode) { sairApp('Este app é só para lojas parceiras. Use o Gestti pelo endereço do sistema.'); return; }
+      w.appendChild(el('h2', '', 'Ver como qual parceira?')); w.appendChild(el('div', 'hint', 'Você entrou no app das parceiras com o login da equipe. Aqui você vê exatamente o que a parceira vê, só para conferir: nada pode ser lançado em nome dela.'));
+      if (!o.lista.length) w.appendChild(el('div', 'empty', 'Nenhuma parceira ativa.'));
+      o.lista.forEach(function (p) { var b = btn(w, p.nome, '', function () { b.disabled = true; call('parcVerComo', [S.token, p.id]).then(function (u) { pg.classList.add('hide'); abrirApp(u); }).catch(function (e) { b.disabled = false; msg('topMsg', e); }); }); b.style.width = '100%'; b.style.marginTop = '8px'; });
+      var s2 = btn(w, 'Sair', 'ghost', function () { sairApp(''); }); s2.style.marginTop = '14px';
+    }).catch(function (e) { sairApp(String(e)); });
+  }
+  /** No modo "ver como", esconde os botões que lançam algo (o servidor também recusa). */
+  function soOlhar(box) { if (!box || !S.u || !S.u.verComo) return; Array.prototype.forEach.call(box.querySelectorAll('button'), function (b) { if (/nova compra|assinar|salvar|enviar|criar|adicionar|cadastrar|excluir|confirmar|responder|aceitar|recusar|instalar|lançar/i.test(b.textContent)) b.classList.add('hide'); }); }
+  function faixaVerComo(d) {
+    if (!d || !d.verComo) { faixaTirar('vc'); return; }
+    faixaPor('vc', 'fx-conta', function (f) {
+      f.appendChild(document.createTextNode('👁 Vendo como ' + d.verComo.nome + ' · só para olhar'));
+      var a = document.createElement('a'); a.href = '#'; a.textContent = APP_PARC ? 'trocar de parceira' : 'sair deste modo';
+      a.onclick = function (e) { e.preventDefault(); call('parcVerComo', [S.token, '']).then(function (u) { faixaTirar('vc'); if (APP_PARC) escolherVerComo(u); else abrirApp(u); }).catch(function (er) { msg('topMsg', er); }); };
+      f.appendChild(document.createTextNode(' · ')); f.appendChild(a);
+    });
+  }
   function abrirApp(d) {
+    if (APP_PARC && !d.trocarSenha && !perfilDeParceira(d) && !d.verComo) { S.u = d; escolherVerComo(d); return; }
+    faixaVerComo(d);
     S.u = d;
     // permissões "virtuais" do RH: ver (gerente/supervisor) e completo (quem gerencia a equipe)
     var pm = d.perms = (d.perms || []).filter(function (x) { return x !== 'rhv' && x !== 'rhc'; });
@@ -11853,7 +11882,7 @@
     $('ccCrumb').textContent = soParceira() ? 'Portal da parceira' : 'Suprimento › Compra de Celulares';
     if (soParceira()) { var sgP = el('div', 'seg'); tp.appendChild(sgP); seg(sgP, ['Kanban', 'Lista'], CC.aba === 'Lista' ? 'Lista' : 'Kanban', function (v) { CC.aba = CC.abaP = v; desenharCC(); }); }
     if (CC.aba === 'Kanban' || CC.aba === 'Lista') {
-      var nv = el('button', 'btn', '+ Nova compra'); nv.type = 'button'; nv.style.width = 'auto'; tp.appendChild(nv); nv.onclick = function () { formCC(null); };
+      var nv = el('button', 'btn', '+ Nova compra'); nv.type = 'button'; nv.style.width = 'auto'; tp.appendChild(nv); nv.onclick = function () { formCC(null); }; if (S.u && S.u.verComo) nv.classList.add('hide');
       if (D.conferir) { var cq = el('button', 'btn ghost', '📷 Conferir pelo código'); cq.type = 'button'; cq.style.width = 'auto'; tp.appendChild(cq); cq.onclick = conferirPorCodigo; }
       var bq = inp('search', 'Buscar: código, cliente, modelo ou IMEI'); bq.value = CC.filtro; bq.style.maxWidth = '320px'; tp.appendChild(bq);
       bq.oninput = function () { CC.filtro = bq.value; desLista(); };
@@ -12065,7 +12094,7 @@
   function portalTela(id) {
     var b = $('ptCorpo'), tit = { pinicio: 'Início', pfin: 'Financeiro', ptab: 'Tabela de referência', pcli: 'Meus clientes', pav: 'Avisos', ploja: 'Minha loja' }[id];
     $('ptTit').textContent = tit; $('ptAc').innerHTML = '';
-    var desenhar = function () { if (S.view !== id || !PT.d) return; b.innerHTML = ''; $('ptAc').innerHTML = ''; ({ pinicio: ptInicio, pfin: ptFin, ptab: ptTab, pcli: ptCli, pav: ptAv, ploja: ptLoja })[id](b, PT.d); };
+    var desenhar = function () { if (S.view !== id || !PT.d) return; b.innerHTML = ''; $('ptAc').innerHTML = ''; ({ pinicio: ptInicio, pfin: ptFin, ptab: ptTab, pcli: ptCli, pav: ptAv, ploja: ptLoja })[id](b, PT.d); soOlhar(b); soOlhar($('ptAc')); };
     if (PT.d) desenhar(); else { b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…')); }
     carregarPortal(desenhar);
   }
@@ -12075,7 +12104,8 @@
     var P = d.parceira;
     if (!P.parceriaAssinada) {
       var cc = el('div', 'card'); b.appendChild(cc); cc.appendChild(el('h2', '', 'Contrato de parceria'));
-      if (d.papel !== 'dono') cc.appendChild(el('div', 'hint', 'O responsável pela loja precisa assinar o contrato de parceria antes da primeira compra.'));
+      if (S.u && S.u.verComo) cc.appendChild(el('div', 'hint', 'A parceira ainda não assinou o contrato de parceria (ela assina pelo app dela).'));
+      else if (d.papel !== 'dono') cc.appendChild(el('div', 'hint', 'O responsável pela loja precisa assinar o contrato de parceria antes da primeira compra.'));
       else {
         cc.appendChild(el('div', 'hint', 'Antes da primeira compra, leia e assine o contrato de parceria com a loja.'));
         var tx = el('div', 'ptcontrato', 'Carregando…'); cc.appendChild(tx); var ac0 = el('div', 'acoes'); cc.appendChild(ac0); var m0 = el('div', 'msg err'); cc.appendChild(m0);
