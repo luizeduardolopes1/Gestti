@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-y1sadMmjYPSY4dZlQyFO2XMI67QD+Vf1cTbFOp8pYWc=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ygru5O01LjUhoZUDKRXUdtttpRuB0xpMUOVKnu1OnHs=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -3980,9 +3980,9 @@
         if (volta) {
           var fim = el('div', 'card'); fim.style.cssText = 'text-align:center;margin:10px 0 14px';
           fim.appendChild(el('div', '', '✓')).style.cssText = 'font-size:40px;line-height:1';
-          fim.appendChild(el('h2', '', 'Contrato assinado'));
-          fim.appendChild(el('div', 'hint', d.assinatura.nome + ' assinou em ' + d.assinatura.em + '. O PDF já está na compra.'));
-          var vb = el('button', 'btn', 'Voltar para a compra'); vb.type = 'button'; vb.style.marginTop = '12px'; vb.onclick = function () { location.href = volta; }; fim.appendChild(vb);
+          fim.appendChild(el('h2', '', 'Documento assinado'));
+          fim.appendChild(el('div', 'hint', d.assinatura.nome + ' assinou em ' + d.assinatura.em + '. A assinatura já está registrada no sistema.'));
+          var vb = el('button', 'btn', 'Voltar ao sistema'); vb.type = 'button'; vb.style.marginTop = '12px'; vb.onclick = function () { location.href = volta; }; fim.appendChild(vb);
           doc.insertBefore(fim, doc.firstChild);
         }
         var ok = el('div', 'aviso', '✓ Termo assinado'); ok.style.marginTop = '10px'; doc.appendChild(ok);
@@ -7434,7 +7434,7 @@
   }
 
   // ---------- recibo
-  function reciboEl(v) {
+  function reciboEl(v, ass) {
     var r = el('div', 'recibo'), top = el('div', 'topo'), a = el('div'), n = el('div', 'n');
     a.appendChild(cabecalhoEmpresa(v.loja, empresaDe(v.loja) ? '' : 'mais de 10 anos de mercado'));
     n.appendChild(el('div', '', 'RECIBO DE VENDA')); n.appendChild(el('div', '', 'Nº ' + v.id)); n.appendChild(el('div', 'lj', v.dataTxt || dataBR(v.data)));
@@ -7484,7 +7484,12 @@
     if (v.itens.length) r.appendChild(el('div', 'gar', 'GARANTIA: 3 (três) meses a partir desta data para os aparelhos seminovos acima, contra defeitos de funcionamento. ' +
       'A garantia não cobre danos causados por queda, contato com líquidos, tela ou vidro quebrado, mau uso, abertura do aparelho por terceiros ou desgaste natural da bateria. ' +
       'Para usar a garantia, apresente este recibo.' + (v.troca && v.troca.length ? ' TROCA: o cliente declara ser o proprietário do aparelho entregue e que ele tem procedência lícita.' : '')));
-    var as = el('div', 'ass'); as.appendChild(el('div', '', v.cliente.nome)); as.appendChild(el('div', '', 'Vendedor: ' + String(v.vendedor || '').replace(/\s*\([^)]*\)\s*$/, ''))); r.appendChild(as);
+    // Leva 7 · 1.13: linha para assinar no papel; assinada pelo link, sai a assinatura com o código de verificação
+    var as = el('div', 'ass'), ac0 = el('div', '', v.cliente.nome + (v.cliente.cpf && v.cliente.cpf.length === 11 ? ' · CPF ' + fmtDoc(v.cliente.cpf) : ''));
+    if (ass && ass.img) { var wi = el('div'); wi.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:18px 0 -44px'; var im0 = el('img'); im0.src = ass.img; im0.alt = 'Assinatura do cliente'; im0.style.cssText = 'max-height:56px;max-width:100%;display:block;margin:0 auto'; wi.appendChild(im0); r.appendChild(wi); }
+    as.appendChild(ac0); as.appendChild(el('div', '', 'Vendedor: ' + String(v.vendedor || '').replace(/\s*\([^)]*\)\s*$/, ''))); r.appendChild(as);
+    var sa = (v.det || {}).assinatura;
+    if (sa) { var se = el('div', 'lj', 'Assinado eletronicamente por ' + sa.nome + ' (CPF ' + sa.cpf + ') em ' + sa.em + ' · código de verificação ' + sa.codigo + ' · Lei 14.063/2020'); se.style.cssText = 'text-align:center;margin-top:6px'; r.appendChild(se); }
     var rpv = rodapeEmpresa(v.loja); if (rpv) { var rr = el('div', 'lj', rpv); rr.style.cssText = 'text-align:center;margin-top:10px'; r.appendChild(rr); }
     r.appendChild(el('div', 'lj', REGRA_TROCA)).style.cssText = 'margin-top:8px';
     var nf = el('div', 'lj', 'NÃO É DOCUMENTO FISCAL'); nf.style.cssText = 'text-align:center;font-weight:800;margin-top:8px;letter-spacing:.06em'; r.appendChild(nf);
@@ -7501,12 +7506,43 @@
     return l.join('\n');
   }
   function imprimirRecibo(v) {
+    // assinada pelo link: busca a imagem da assinatura antes de imprimir
+    var dt = v.det || {};
+    if (dt.assinatura && dt.assTok && !imprimirRecibo.img) return call('assinaturaVer', [dt.assTok]).then(function (a) { imprimirRecibo.img = (a.assinatura || {}).img || ''; }).catch(function () { imprimirRecibo.img = ''; })
+      .then(function () { var img = imprimirRecibo.img; imprimirRecibo.img = null; imprimirRecibo2(v, img ? { img: img } : null); });
+    imprimirRecibo2(v, null);
+  }
+  function imprimirRecibo2(v, ass) {
     var css = Array.prototype.map.call(document.querySelectorAll('style'), function (st) { return st.textContent; }).join('\n').match(/\.recibo[^{]*\{[^}]*\}/g) || [];
     var f = document.createElement('iframe'); f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'; document.body.appendChild(f);
     var d = f.contentWindow.document;
     d.open(); d.write('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Recibo ' + v.id + '</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:16px}' + css.join('') + '.recibo{padding:0}</style></head><body></body></html>'); d.close();
-    d.body.appendChild(d.importNode(reciboEl(v), true));
+    d.body.appendChild(d.importNode(reciboEl(v, ass), true));
     setTimeout(function () { f.contentWindow.focus(); f.contentWindow.print(); setTimeout(function () { f.remove(); }, 1500); }, 200);
+  }
+  /** Leva 7 · 1.13: link de assinatura eletrônica da venda (o texto vem de Modelos de documento › Termo da venda). */
+  function assinaturaVenda(v) {
+    var sh = $('fSheet'); sh.innerHTML = '';
+    sh.appendChild(el('h2', 'tt', 'Assinatura da venda ' + v.id)); var cp0 = el('div', 'empty', 'Gerando o link…'); sh.appendChild(cp0); abrirModal();
+    call('vendaAssinaturaLink', [S.token, v.id]).then(function (r) {
+      sh.removeChild(cp0); var lk = location.origin + location.pathname + '?ass=' + r.tok;
+      if (r.assinatura) {
+        sh.appendChild(el('div', 'aviso', '✓ Assinada por ' + r.assinatura.nome + ' (CPF ' + r.assinatura.cpf + ') em ' + r.assinatura.em));
+        sh.appendChild(el('div', 'hint', 'Código de verificação ' + r.assinatura.codigo + '. O recibo A4 já sai com a assinatura.'));
+        (v.det = v.det || {}).assinatura = r.assinatura; v.det.assTok = r.tok;
+      } else {
+        sh.appendChild(el('div', 'sub', 'O cliente abre o link, confere a venda, lê o termo e assina com o dedo. O texto do termo fica em Configurações › Modelos de documento › Termo da venda.'));
+        var lkb = el('div', 'hint', lk); lkb.style.wordBreak = 'break-all'; sh.appendChild(lkb);
+      }
+      var ac = el('div', 'acoes'); sh.appendChild(ac);
+      if (!r.assinatura) {
+        btn(ac, 'Assinar aqui neste aparelho', '', function () { location.href = lk + '&volta=' + encodeURIComponent(location.pathname); });
+        if (v.cliente.whats) btn(ac, 'Enviar por WhatsApp', 'ok', function () { window.open('https://wa.me/55' + soDig(v.cliente.whats) + '?text=' + encodeURIComponent('Olá, ' + v.cliente.nome.split(' ')[0] + '! Para assinar a sua compra (venda ' + v.id + '), abra: ' + lk), '_blank', 'noopener'); });
+        var cpb = btn(ac, 'Copiar link', 'ghost', function () { copiar(lk).then(function (ok) { cpb.textContent = ok ? 'Link copiado ✓' : 'Não deu para copiar'; }); });
+      } else btn(ac, '🖨 Recibo A4 com a assinatura', '', function () { imprimirRecibo(v); });
+      btn(ac, 'Fechar', 'ghost', fecharModal);
+      S.vendas = null;
+    }).catch(function (e) { cp0.textContent = String(e); });
   }
   function abrirRecibo(v, nova) {
     var sh = $('fSheet'); sh.innerHTML = '';
@@ -7515,6 +7551,7 @@
     sh.appendChild(reciboEl(v));
     var ac = el('div', 'acoes'), cu = el('button', 'btn', '🧾 Cupom 80 mm'), pr = el('button', 'btn ghost', '🖨 A4'), wa = el('button', 'btn ok', 'Enviar por WhatsApp'); cu.type = pr.type = wa.type = 'button';
     ac.appendChild(cu); ac.appendChild(pr); ac.appendChild(wa); sh.appendChild(ac);
+    if (v.situacao !== 'Cancelada') { var asb = el('button', 'btn ghost', (v.det || {}).assinatura ? '✓ Assinada pelo cliente' : '✍ Assinatura eletrônica do cliente'); asb.type = 'button'; asb.style.marginTop = '8px'; asb.onclick = function () { assinaturaVenda(v); }; sh.appendChild(asb); }
     cu.onclick = function () { imprimirReciboCupom(v); };
     var cp = el('button', 'btn ghost', 'Copiar texto do recibo'), fc = el('button', 'btn ghost', 'Fechar'); cp.type = fc.type = 'button'; cp.style.marginTop = fc.style.marginTop = '8px';
     sh.appendChild(cp); sh.appendChild(fc);
@@ -7605,6 +7642,7 @@
     function opcao(t, sub, cls, fn) { var b = el('button', 'opc' + (cls ? ' ' + cls : '')); b.type = 'button'; var d = el('div', '', t); if (sub) d.appendChild(el('small', '', sub)); b.appendChild(d); b.appendChild(el('span', 'ar', '›')); b.onclick = fn; bd.appendChild(b); return b; }
     opcao('Ver recibo', 'Imprimir ou enviar de novo', '', function () { fecharDrawer(); abrirRecibo(v, false); });
     if ((v.troca || []).some(function (t) { return t.cc; })) opcao('Upgrade: aparelho aguardando conferência', v.troca.map(function (t) { return t.cc + ' · ' + t.modelo; }).join(', ') + ' — confira e gere o contrato em Compra de Celulares', '', function () { CC.d = null; ir('compracel'); });
+    if (v.situacao !== 'Cancelada') { var sa1 = (v.det || {}).assinatura; opcao(sa1 ? '✓ Assinada pelo cliente' : 'Assinatura eletrônica do cliente', sa1 ? sa1.nome + ' em ' + sa1.em + ' · código ' + sa1.codigo : 'Link para o cliente assinar no celular dele ou aqui na loja', '', function () { fecharDrawer(); assinaturaVenda(v); }); }
     opcao('Enviar recibo por WhatsApp', fmtFone(v.cliente.whats), 'okc', function () { window.open('https://wa.me/55' + soDig(v.cliente.whats) + '?text=' + encodeURIComponent(textoRecibo(v)), '_blank', 'noopener'); });
     if (pode('cancelar_venda') && v.situacao !== 'Cancelada') {
       var bc = opcao('Cancelar venda', 'Os aparelhos voltam para o estoque e a troca sai', 'danger', function () {
@@ -16837,7 +16875,7 @@
     lista();
   }
   /** Configurações › Modelos de documento (layout das formas de pagamento): texto com campos automáticos e as exigências da assinatura. */
-  var DOC_TIPOS = { compra: 'Contrato de compra de celular', compra_parceira: 'Compra pela parceira (Modelo 2)', parceria: 'Contrato de parceria', reserva: 'Termo de reserva', encomenda: 'Termo de encomenda' };
+  var DOC_TIPOS = { compra: 'Contrato de compra de celular', compra_parceira: 'Compra pela parceira (Modelo 2)', parceria: 'Contrato de parceria', reserva: 'Termo de reserva', encomenda: 'Termo de encomenda', venda: 'Termo da venda (assinatura do cliente)' };
   var DOC_CAMPOS = ['COMPRADOR_NOME', 'COMPRADOR_DOC', 'COMPRADOR_ENDERECO', 'CLIENTE_NOME', 'CLIENTE_CPF', 'CLIENTE_RG', 'CLIENTE_CELULAR', 'CLIENTE_ENDERECO', 'MARCA', 'MODELO', 'GB', 'COR', 'IMEI1', 'IMEI2', 'SERIE', 'OBS', 'VALOR', 'VALOR_EXTENSO', 'CLAUSULA_PAGAMENTO', 'FORO', 'CIDADE_DATA', 'RESPONSAVEL', 'LOJA_NOME', 'LOJA_DOC', 'LOJA_ENDERECO', 'PARCEIRA_NOME', 'PARCEIRA_DOC', 'PARCEIRA_ENDERECO', 'MODELO_TEXTO', 'PRAZO_TEXTO', 'GANHO_TEXTO'];
   var EXIGE_ROT = { doc: 'Foto do documento', selfie: 'Selfie na hora', gps: 'Localização' }, EXIGE_OP = [['nao', 'Não pedir'], ['opcional', 'Opcional'], ['obrigatorio', 'Obrigatório']];
   function cfgModelosDoc(box) {
