@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-oVtq+/Wgf3IIWM3lBjk/Jm1RU5pAjyk0kWNKbcOh53Q=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-d5sEMXY2pFfomuHFViuFP7v0GuMNdto/KaNEELoPSZw=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -1030,8 +1030,17 @@
   .pskuc{font-size:13.5px;font-variant-numeric:tabular-nums;color:var(--muted);word-break:break-all;min-width:0}
   .skumob{display:none}
   #acLista .prow,#nLista .prow{grid-template-columns:52px minmax(0,1fr) 130px 190px 130px 24px}
+  /* Leva 7: bateria em coluna própria, antes do SKU (Produtos e Produtos usados) */
+  #acLista .prow{grid-template-columns:52px minmax(0,1fr) 76px 110px 150px 120px 24px}
+  #dLista .prow{grid-template-columns:52px minmax(0,1fr) 86px 190px 130px 24px}
+  .pbat{font-size:13.5px;font-variant-numeric:tabular-nums;white-space:nowrap;display:flex;align-items:center;gap:6px}
+  .pbat i{display:inline-block;width:24px;height:10px;border:1.5px solid var(--muted);border-radius:3px;position:relative;flex:none}
+  .pbat i::after{content:"";position:absolute;right:-4px;top:2px;width:2px;height:4px;background:var(--muted);border-radius:1px}
+  .pbat i b{position:absolute;left:1px;top:1px;bottom:1px;border-radius:1px;background:var(--ok)}
+  .pbat.med i b{background:#d97706}.pbat.baixa i b{background:var(--err,#c62828)}
+  .pbatmob{display:none}
   .estmat td.sk{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
-  @media (max-width:899px){.pskuc{display:none}.skumob{display:block}#acLista .prow,#nLista .prow{grid-template-columns:44px minmax(0,1fr) auto}}
+  @media (max-width:899px){.pskuc{display:none}.skumob{display:block}#acLista .prow,#nLista .prow,#dLista .prow{grid-template-columns:44px minmax(0,1fr) auto}.pbat{display:none}.pbatmob{display:block}}
   .ccbusca{position:relative;margin-bottom:6px}.ccbusca .sug{position:absolute;left:0;right:0;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(16,24,40,.12);max-height:300px;overflow:auto}
   .ccbusca .sug button{display:block;width:100%;text-align:left;padding:9px 12px;background:none;border:0;border-top:1px solid var(--line);cursor:pointer;color:var(--ink)}.ccbusca .sug button:first-child{border-top:0}.ccbusca .sug button:hover{background:var(--soft2)}
   .ccbusca .sug small{color:var(--muted)}
@@ -8818,7 +8827,7 @@
     var box = $('acLista'); box.innerHTML = '';
     if (!l.length && !la.length) { box.appendChild(el('div', 'empty', D.produtos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto cadastrado ainda.' + (D.editar ? ' Use "+ Novo produto".' : ''))); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
-    ['', 'Produto', 'SKU', 'Estoque' + (lj ? ' (' + lj.replace(/^.*\| /, '') + ')' : ''), 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 4) d.style.textAlign = 'right'; h.appendChild(d); });
+    ['', 'Produto', 'Bateria', 'SKU', 'Estoque' + (lj ? ' (' + lj.replace(/^.*\| /, '') + ')' : ''), 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 5) d.style.textAlign = 'right'; h.appendChild(d); });
     tab.appendChild(h);
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     mix.forEach(function (it) {
@@ -8835,7 +8844,7 @@
       if (REDE.d && x.formato !== 'variacoes' && x.formato !== 'composicao') { var nr = redeAchar(REDE.d, '', { produto: x }).produtos.reduce(function (a, p) { return a + p.qtd; }, 0); if (nr) { var bR = el('span', 'bdg inf', '+' + nr + ' em outras empresas'); bR.title = 'Toque no produto para ver onde está e pedir transferência'; nm.appendChild(bR); } }
       else if (baixoMin(x, lj) || (x.filhos || []).some(function (id) { return M[id] && baixoMin(M[id], lj); })) nm.appendChild(el('span', 'bdg warn', 'Repor'));
       n.appendChild(nm); if (x.sku) n.appendChild(el('div', 'psub skumob', 'SKU ' + x.sku)); var sub = [x.grupo, x.codigo ? 'EAN ' + x.codigo : ''].filter(Boolean).join(' · '); if (sub) n.appendChild(el('div', 'psub', sub)); r.appendChild(n);
-      r.appendChild(el('div', 'pskuc', x.sku || '—'));
+      r.appendChild(celBat(x.bateria)); r.appendChild(el('div', 'pskuc', x.sku || '—'));
       var es = el('div', 'psku'), es1 = el('div', 'esrow'); es1.appendChild(el('span', '', x.formato === 'composicao' ? inteiro(qt) + ' kit' + (qt === 1 ? '' : 's') : unTxt(x, qt))); if (x.formato === 'simples' || x.formato === 'variacao') { var eb = botaoEstoque(x); if (eb) es1.appendChild(eb); } es.appendChild(es1);
       if (!lj) { var lo = Object.keys(x.estoque).map(function (k) { return k.replace(/^.*\| /, '') + ' ' + x.estoque[k]; }).join(' · '); if (lo) es.appendChild(el('div', 'psub', lo)); }
       var chg2 = S.ac && S.ac.chegando && S.ac.chegando[x.id]; if (chg2) es.appendChild(el('div', 'psub', '+' + chg2.qtd + ' chegando' + (chg2.prevista ? ' em ' + isoBR(chg2.prevista) : ''))).style.color = 'var(--accent)';
@@ -11412,14 +11421,14 @@
     var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic);
     var n = el('div'), nm = el('div', 'pnome'); nm.appendChild(document.createTextNode([a.modelo, String(a.cor || '').toUpperCase(), String(a.classif || '').toUpperCase()].filter(Boolean).join(' ')));
     nm.appendChild(el('span', 'bdg res', 'Disponível em ' + a.empresa)); n.appendChild(nm);
-    var bat = a.bateria !== '' && a.bateria != null ? (typeof a.bateria === 'number' ? a.bateria + '%' : a.bateria) : '';
-    n.appendChild(el('div', 'psub', [a.empresa + ' · ' + depVer(a.deposito), bat ? 'bateria ' + bat : '', 'IMEI final ' + String(a.imei).slice(-4)].filter(Boolean).join(' · ')));
+    var bat = batTxt(a.bateria); if (bat) n.appendChild(el('div', 'psub pbatmob', 'Bateria ' + bat));
+    n.appendChild(el('div', 'psub', [a.empresa + ' · ' + depVer(a.deposito), 'IMEI final ' + String(a.imei).slice(-4)].filter(Boolean).join(' · ')));
     var ac = el('div', 'acoes'); ac.style.margin = '6px 0 0';
     var bt = el('button', 'btn ghost mini', 'Pedir transferência'); bt.type = 'button'; bt.onclick = function (e) { e.stopPropagation(); pedirTransferencia(a, 'a', { motivo: 'Venda', depois: function () { REDE.em = 0; garantirRede(true).then(renderDisp); } }); };
     var bpc = el('button', 'btn mini', 'Proposta completa'); bpc.type = 'button'; bpc.onclick = function (e) { e.stopPropagation(); propostaCom(a, 'a'); };
     ac.appendChild(bt); if (pode('vender')) ac.appendChild(bpc); n.appendChild(ac);
     r.appendChild(n);
-    r.appendChild(el('div', 'psku', '—'));
+    r.appendChild(celBat(a.bateria)); r.appendChild(el('div', 'psku', '—'));
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
     var pr = el('div', 'ppre' + (a.preco ? '' : ' sem'), a.preco ? brl(a.preco) : 'Consultar');
     if (a.preco && t12) pr.appendChild(el('small', '', '12x ' + brl(a.preco / (1 - t12.taxa) / 12)));
@@ -11490,7 +11499,7 @@
     if (lr.length) $('dCont').textContent += ' · ' + lr.length + ' em outras empresas';
     if (!l.length && !lp.length && !lr.length) { box.appendChild(el('div', 'empty', 'Nenhum aparelho encontrado' + (todas ? '.' : ' nesta empresa.'))); if (!todas && qRede.length >= 2) redeBloco(box, qRede, { motivo: 'Venda' }); return; }
     var tab = el('div', 'ptab'), h = el('div', 'prow h');
-    ['', 'Nome', 'SKU', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 3) d.style.textAlign = 'right'; h.appendChild(d); });
+    ['', 'Nome', 'Bateria', 'SKU', 'Preço', ''].forEach(function (t, i) { var d = el('div', '', t); if (i === 4) d.style.textAlign = 'right'; h.appendChild(d); });
     tab.appendChild(h);
     l.forEach(function (x) { tab.appendChild(linhaProduto(x)); });
     if (lp.length) {
@@ -11659,10 +11668,11 @@
     var dpz = diasEstoque(x); if (dpz >= diasCfgParado()) nm.appendChild(el('span', 'bdg off', 'Parado há ' + dpz + ' dias'));
     if (x.reserva) { var rb = el('span', 'bdg ' + (x.reserva.vencida ? 'warn' : 'res'), (x.reserva.vencida ? 'Reserva vencida · ' : 'Reservado · ') + x.reserva.vendedor.split(' ')[0]); rb.title = txtRes(x.reserva); nm.appendChild(rb); }
     nm.appendChild(botaoCopiar(nomeProduto(x), 'Copiar nome', 'aparelho'));
-    var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
-    n.appendChild(nm); n.appendChild(el('div', 'psub', [depVer(x.loja), bat ? 'bateria ' + bat : '', x.grupo].filter(Boolean).join(' · ')));
+    var bat = batTxt(x.bateria);
+    n.appendChild(nm); if (bat) n.appendChild(el('div', 'psub pbatmob', 'Bateria ' + bat)); n.appendChild(el('div', 'psub', [depVer(x.loja), x.grupo].filter(Boolean).join(' · ')));
    
     r.appendChild(n);
+    r.appendChild(celBat(x.bateria));
     var cod = x.sku || x.imei;
     var sku = el('div', 'psku', cod); sku.appendChild(botaoCopiar(cod, 'Copiar SKU')); r.appendChild(sku);
     var pr = el('div', 'ppre' + (x.preco ? '' : ' sem'), x.preco ? brl(x.preco) : 'Consultar');
@@ -14595,6 +14605,7 @@
     n.appendChild(nm);
     var lo = Object.keys(x.estoque || {}).map(function (k) { return k.replace(/^.*\| /, '') + ' ' + x.estoque[k]; }).join(' · ');
     var ps = el('div', 'psub esrow', [lo || 'sem estoque', x.grupo].filter(Boolean).join(' · ')); var eb = botaoEstoque(x); if (eb) ps.appendChild(eb); n.appendChild(ps); r.appendChild(n);
+    r.appendChild(celBat(x.bateria));
     var cod = x.sku || x.codigo || '—', sku = el('div', 'psku', cod); if (x.sku || x.codigo) sku.appendChild(botaoCopiar(cod, 'Copiar SKU')); r.appendChild(sku);
     var pr = el('div', 'ppre' + (x.preco ? '' : ' sem'), x.preco ? brl(x.preco) : 'Consultar');
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
@@ -14603,6 +14614,15 @@
     r.onclick = function () { abrirUsadoProd(x); };
     return r;
   }
+  /** Célula da bateria (coluna antes do SKU); vazia para quem não tem. */
+  function celBat(v) {
+    var c = el('div', 'pbat'); if (v === '' || v === null || v === undefined) { c.textContent = ''; return c; }
+    var n = typeof v === 'number' ? v : parseInt(String(v), 10); if (isNaN(n)) { c.textContent = String(v); return c; }
+    if (n < 60) c.classList.add('baixa'); else if (n < 80) c.classList.add('med');
+    var i = el('i'), b = el('b'); b.style.width = Math.max(1, Math.min(19, Math.round(n / 100 * 19))) + 'px'; i.appendChild(b); c.appendChild(i); c.appendChild(document.createTextNode(n + '%'));
+    c.title = 'Saúde da bateria: ' + n + '%'; return c;
+  }
+  function batTxt(v) { return v === '' || v === null || v === undefined ? '' : (typeof v === 'number' ? v + '%' : String(v)); }
   function linhaAcAparelho(a) {
     var r = el('div', 'prow'); r.dataset.k = a.linha + '|' + a.imei;
     var ic = el('div', 'pimg'); ic.innerHTML = ICO_CEL; r.appendChild(ic); pimgFoto(ic, a.fotos);
@@ -14610,9 +14630,9 @@
     if (a.manut) nm.appendChild(el('span', 'badge-m', 'Em manutenção'));
     if (a.precoAparelho) nm.appendChild(el('span', 'bdg warn', 'Preço especial'));
     if (a.reserva) { var rb2 = el('span', 'bdg res', 'Reservado · ' + a.reserva.vendedor.split(' ')[0]); rb2.title = txtRes(a.reserva); nm.appendChild(rb2); }
-    var bat = typeof a.bateria === 'number' ? a.bateria + '%' : a.bateria;
-    n.appendChild(nm); if (a.sku) n.appendChild(el('div', 'psub skumob', 'SKU ' + a.sku)); n.appendChild(el('div', 'psub', ['Aparelho seminovo (Produtos Usados)', bat ? 'bateria ' + bat : '', a.grupo].filter(Boolean).join(' · '))); r.appendChild(n);
-    r.appendChild(el('div', 'pskuc', a.sku || '—'));
+    var bat = batTxt(a.bateria);
+    n.appendChild(nm); if (a.sku) n.appendChild(el('div', 'psub skumob', 'SKU ' + a.sku)); if (bat) n.appendChild(el('div', 'psub pbatmob', 'Bateria ' + bat)); n.appendChild(el('div', 'psub', ['Aparelho seminovo (Produtos Usados)', a.grupo].filter(Boolean).join(' · '))); r.appendChild(n);
+    r.appendChild(celBat(a.bateria)); r.appendChild(el('div', 'pskuc', a.sku || '—'));
     var es = el('div', 'psku'); es.appendChild(el('div', '', '1 un.')); es.appendChild(el('div', 'psub', String(a.loja || '').replace(/^.*\| /, ''))); r.appendChild(es);
     var pr = el('div', 'ppre' + (a.preco ? '' : ' sem'), a.preco ? brl(a.preco) : 'Consultar');
     var t12 = (S.u.taxas || []).filter(function (t) { return t.nome === '12x'; })[0];
