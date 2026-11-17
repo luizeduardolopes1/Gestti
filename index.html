@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-1bmIMt9YlWsRoNu+vNYCHSFqIHdH2ItLuKdQCS4QpBA=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-wM384goadeuGxNWxbpIsv+hvgIBi6CV+Jxrixh5tcb0=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -2010,7 +2010,7 @@
   var APPS = 'https://script.google.com/macros/s/AKfycbyBa4IS1qtGLHhIfWiwyXysL-UuJT0Y0wIkZbX08cnWP8_8DkftMv7N7GTElVS-DtnzsQ/exec';
   var SUPA = 'https://wcrfhxijeoxgklyqkhko.supabase.co';
   var SRV_PADRAO = 'sb'; // virada para o Supabase em 12/11/2026
-  // Ambiente deste site: 'producao' (/Gestti/) ou 'homolog' (/Gestti/homolog/, demonstração; gerado por scripts/gerar-homolog.js do gestti-servidor).
+  // Ambiente deste site: 'producao' (/Gestti/gesttisistema/) ou 'homolog' (/Gestti/gesttisistema/demo/, demonstração; gerado por scripts/gerar-homolog.js do gestti-servidor).
   // Cada um tem sua função no Supabase, sua conta padrão e suas próprias chaves no navegador (não se misturam).
   var AMB = 'producao';
   var AMBS = {
@@ -2018,8 +2018,8 @@
     homolog: { fn: 'api-homolog', conta: 'demo', ls: 'th_', kc: 'gestti_conta_h' }
   };
   var AMBC = AMBS[AMB];
-  var RAIZ = location.pathname.replace(/[^\/]*$/, '').replace(/homolog\/$/, ''); // pasta do site de produção
-  function siteDe(amb) { return location.origin + RAIZ + (amb === 'homolog' ? 'homolog/' : ''); }
+  var RAIZ = location.pathname.replace(/[^\/]*$/, '').replace(/(demo|homolog)\/$/, ''); // pasta do site de produção
+  function siteDe(amb) { return location.origin + RAIZ + (amb === 'homolog' ? 'demo/' : ''); }
   function lsRaw(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
   // ?srv=gs só para consulta pontual (o servidor antigo não grava mais); não fica salvo no aparelho
   var SRV = (function () {

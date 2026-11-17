@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gestti · Sistema de gestão</title>
+<meta name="description" content="Estoque, vendas, ordem de serviço, financeiro, loja virtual, entregas e ponto eletrônico num sistema só. Teste grátis por 30 dias.">
+<meta name="theme-color" content="#0F1B2D">
+<script>
+  // Endereços antigos: links de assinatura, entrega, loja virtual, liberação e os apps apontavam para /Gestti/?… — o sistema agora fica em gesttisistema/.
+  // Quem já entrou no sistema neste aparelho também vai direto (a página de apresentação continua em /Gestti/#site).
+  (function () {
+    var q = location.search, h = location.hash;
+    var soCampanha = /^\?((utm_[a-z]+|fbclid|gclid)=[^&]*&?)+$/i.test(q);
+    var para = '';
+    if ((q && !soCampanha) || /^#sessao=/.test(h)) para = 'gesttisistema/';
+    else if (h !== '#site') {
+      try {
+        if (localStorage.getItem('gestti_ultimo_amb') === 'homolog' && localStorage.getItem('th_token')) para = 'gesttisistema/demo/';
+        else if (localStorage.getItem('tc_token')) para = 'gesttisistema/';
+      } catch (e) {}
+    }
+    if (para) location.replace(para + (soCampanha ? '' : q) + (h === '#site' ? '' : h));
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<style>
+  .hero { background: linear-gradient(180deg, var(--soft) 0%, var(--surface) 100%) }
+  .hero .cx { padding-block: 56px 44px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 40px; align-items: center }
+  .hero h1 { font: 800 46px/1.08 var(--f-disp); letter-spacing: -.035em }
+  .hero h1 em { font-style: normal; color: var(--brand) }
+  .hero .txt { display: grid; gap: 18px }
+  .hero .lead { color: var(--muted); font-size: 18px }
+  .chips { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px }
+  .chips li { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 14px; font-weight: 500 }
+  .acoes { display: flex; gap: 10px; flex-wrap: wrap }
+  .sec { padding-block: 56px }
+  .sec.t { background: var(--tint) }
+  .sec .cx { display: grid; gap: 24px }
+  .sec header { display: grid; gap: 8px; text-align: center; justify-items: center }
+  .sec h2 { font: 700 30px/1.2 var(--f-disp); max-width: 26ch }
+  .sec header p { color: var(--muted); max-width: 62ch }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 6px; align-content: start; background: var(--surface) }
+  .card b { font-size: 16px }
+  .card span { color: var(--muted); font-size: 14.5px }
+  .g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px }
+  .g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px }
+  .g4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px }
+  .gs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px }
+  .pil { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap }
+  .pil button { font: 600 15px var(--f-text); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 9px 20px; cursor: pointer }
+  .pil button[aria-selected="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-brand) }
+  .alt { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 36px; align-items: center }
+  .alt .txt { display: grid; gap: 14px }
+  .alt h2 { max-width: none }
+  .alt.inv > :first-child { order: 2 }
+  .logos { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center }
+  .logos span { border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; font-weight: 600; color: var(--muted); background: var(--surface) }
+  /* telas ilustrativas */
+  .app { border-radius: 14px; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 24px 60px rgba(15,27,45,.16); overflow: hidden }
+  .app .tt { background: #0F1B2D; color: #fff; padding: 8px 12px; font: 700 13px var(--f-disp); display: flex; gap: 8px; align-items: center }
+  .app .tt i { width: 8px; height: 8px; border-radius: 50%; background: #FF5F57; display: inline-block }
+  .app .tt i + i { background: #FEBC2E } .app .tt i + i + i { background: #28C840 }
+  .app .c { padding: 12px; display: grid; gap: 8px }
+  .app .kp { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px }
+  .app .kp div { background: var(--tint); border-radius: 8px; padding: 8px; font-size: 11.5px; color: var(--muted) }
+  .app .kp b { display: block; font-size: 15px; color: var(--ink) }
+  .app .br { display: flex; align-items: end; gap: 5px; height: 72px }
+  .app .br span { flex: 1; background: var(--soft); border-radius: 4px 4px 0 0 }
+  .app .br span:nth-child(odd) { background: var(--brand) }
+  .app .ln { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; border-bottom: 1px solid var(--line); padding: 5px 0 }
+  .app .ln em { font-style: normal; color: var(--brand2); font-weight: 600 }
+  .cel { max-width: 300px; justify-self: center; border-radius: 28px; border: 10px solid #1b1f27; width: 100% }
+  .cel .c { justify-items: center; text-align: center; padding: 18px 14px }
+  .cel .rosto { width: 96px; height: 96px; border-radius: 50%; background: var(--tint); display: grid; place-items: center; font-size: 40px }
+  .cel .bater { background: var(--brand2); color: #fff; border-radius: 10px; padding: 10px; width: 100%; font-weight: 600 }
+  /* jornada */
+  .jornada { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; margin: 0; padding: 0; list-style: none }
+  .jornada::before { content: ""; position: absolute; left: 10%; right: 10%; top: 26px; border-top: 2px dashed var(--line) }
+  .etapa { display: grid; gap: 8px; justify-items: center; text-align: center; padding: 0 8px; position: relative }
+  .etapa .ic { width: 54px; height: 54px; border-radius: 50%; background: var(--surface); border: 2px solid var(--brand); display: grid; place-items: center; font-size: 22px }
+  .etapa span { color: var(--muted); font-size: 14px }
+  .etapa code { font: 500 12px var(--f-mono); background: var(--tint); padding: 2px 6px; border-radius: 5px }
+  /* mapa da entrega */
+  .mapa { position: relative; height: 230px; border-radius: 12px; overflow: hidden; background: repeating-linear-gradient(0deg, transparent 0 24px, var(--line) 24px 25px), repeating-linear-gradient(90deg, transparent 0 24px, var(--line) 24px 25px), var(--tint) }
+  .mapa .rua { position: absolute; background: var(--surface); border: 1px solid var(--line) }
+  .mapa .rota { position: absolute; border-top: 3px dashed var(--brand) }
+  .mapa .pin { position: absolute; font-size: 24px; transform: translate(-50%, -100%) }
+  .mapa .moto { position: absolute; font-size: 24px; transform: translate(-50%, -50%); transition: left 1.3s linear, top 1.3s linear }
+  @media (prefers-reduced-motion: reduce) { .mapa .moto { transition: none } }
+  /* contato */
+  .contato { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 28px; align-items: start; background: var(--tint); border-radius: 16px; padding: 28px }
+  .contato .txt { display: grid; gap: 12px }
+  .contato h2 { text-align: left }
+  .contato form { display: grid; gap: 10px }
+  .contato label { display: grid; gap: 4px; font-size: 13.5px; font-weight: 600 }
+  .contato input, .contato select { font: 400 16px var(--f-text); border: 1px solid var(--line); border-radius: 9px; padding: 10px 11px; color: var(--ink); background: var(--surface); width: 100% }
+  .contato .ok { display: flex; gap: 8px; align-items: flex-start; font-weight: 400 }
+  .contato .ok input { width: auto; margin-top: 4px }
+  .contato .erro { color: #C62828; font-size: 14px; min-height: 1.2em }
+  .faq { max-width: 780px; width: 100%; justify-self: center }
+  .faq details { border-bottom: 1px solid var(--line); padding: 12px 0 }
+  .faq summary { cursor: pointer; font-weight: 600 }
+  .faq p { color: var(--muted); margin-top: 6px }
+  .cta { background: var(--brand); color: var(--on-brand); text-align: center }
+  .cta .cx { padding-block: 52px; display: grid; gap: 14px; justify-items: center }
+  .cta h2 { font: 800 32px var(--f-disp); max-width: 24ch }
+  .cta .btn { background: var(--on-brand); color: var(--brand); border-color: var(--on-brand) }
+  @media (max-width: 900px) { .hero .cx, .alt, .contato { grid-template-columns: 1fr } .alt.inv > :first-child { order: 0 } .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)) } .jornada { grid-template-columns: 1fr; gap: 18px } .jornada::before { display: none } }
+  @media (max-width: 600px) { .g2, .g3, .g4 { grid-template-columns: 1fr } .hero h1 { font-size: 34px } .sec h2 { font-size: 24px } .cta h2 { font-size: 26px } .contato { padding: 18px } .sec { padding-block: 40px } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 64 64"><rect x="4" y="36" width="24" height="24" rx="7" fill="currentColor"/><rect x="34" y="36" width="24" height="24" rx="7" fill="currentColor"/><rect x="4" y="6" width="24" height="24" rx="7" fill="currentColor"/><rect x="38" y="2" width="24" height="24" rx="7" fill="var(--brand)"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="var(--surface)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<nav class="nav" aria-label="Principal"><div class="cx">
+  <a class="marca" href="#topo" aria-label="Gestti, início"><svg><use href="#logo"/></svg>gestti</a>
+  <a class="l" href="#plataforma">Plataforma</a><a class="l" href="#para-quem">Para quem</a><a class="l" href="#ponto">Ponto</a><a class="l" href="#entregas">Entregas</a><a class="l" href="#contato">Contato</a>
+  <span class="sp"></span>
+  <a class="btn sm" href="gesttisistema/">Entrar</a><a class="btn sm pri" href="#contato">Testar grátis</a>
+</div></nav>
+
+<main id="topo">
+<section class="hero"><div class="cx">
+  <div class="txt">
+    <span class="eb">Sistema de gestão completo</span>
+    <h1>Estoque, vendas, serviços e financeiro, <em>tudo conectado</em>.</h1>
+    <p class="lead">Do pedido de compra ao cliente satisfeito, e com o ponto da equipe junto: a sua empresa inteira num lugar só, no computador e no celular.</p>
+    <ul class="chips"><li>Estoque</li><li>PDV e vendas</li><li>Ordem de serviço</li><li>Financeiro</li><li>Loja virtual</li><li>Entregas</li><li>Ponto eletrônico</li></ul>
+    <div class="acoes"><a class="btn pri" href="#contato">Testar grátis por 30 dias</a><a class="btn" href="https://wa.me/5522998405334" target="_blank" rel="noopener">💬 Falar no WhatsApp</a></div>
+    <span class="muted" style="font-size:13.5px">Sem cartão de crédito · a gente configura junto com você</span>
+  </div>
+  <div class="app" aria-hidden="true"><div class="tt"><i></i><i></i><i></i>&nbsp; gestti · Dashboard</div><div class="c">
+    <div class="kp"><div>Vendas hoje<b>R$ 8.420</b></div><div>OS abertas<b>12</b></div><div>Pedidos online<b>9</b></div></div>
+    <div class="br"><span style="height:40%"></span><span style="height:55%"></span><span style="height:48%"></span><span style="height:70%"></span><span style="height:62%"></span><span style="height:84%"></span><span style="height:76%"></span></div>
+    <div class="ln"><span>Pedido #1043 · loja virtual</span><em>conferido</em></div><div class="ln"><span>OS 0451 · troca de tela</span><em>pronta</em></div><div class="ln"><span>V00312 · saiu para entrega</span><em>~8 min</em></div>
+  </div></div>
+</div></section>
+
+<section class="sec t" id="plataforma"><div class="cx">
+  <header><span class="eb">Plataforma</span><h2>Gerir, vender e entregar. Tudo conectado.</h2><p>O que entra no estoque já aparece no PDV, na loja virtual e no financeiro, sem digitar duas vezes. Você liga só os módulos que usa.</p></header>
+  <div class="pil" role="tablist" aria-label="Pilares">
+    <button type="button" role="tab" id="t-gerir" aria-controls="p-gerir" aria-selected="true">Gerir</button>
+    <button type="button" role="tab" id="t-vender" aria-controls="p-vender" aria-selected="false" tabindex="-1">Vender</button>
+    <button type="button" role="tab" id="t-entregar" aria-controls="p-entregar" aria-selected="false" tabindex="-1">Entregar</button>
+  </div>
+  <div class="g4" role="tabpanel" id="p-gerir" aria-labelledby="t-gerir">
+    <div class="card"><b>📦 Estoque</b><span>Produtos com variação, número de série, lote, depósitos, endereço na prateleira, etiquetas e balanço.</span></div>
+    <div class="card"><b>💰 Financeiro</b><span>Contas a pagar e receber, caixa, crediário, conciliação por forma de pagamento e DRE.</span></div>
+    <div class="card"><b>👥 Equipe e permissões</b><span>Cada pessoa vê só o que pode; registro de tudo e alerta de tentativa suspeita.</span></div>
+    <div class="card"><b>🕒 RH e ponto eletrônico</b><span>Cadastro completo, ponto pelo app, tablet ou computador com localização e rosto, folha e banco de horas.</span></div>
+  </div>
+  <div class="g4" role="tabpanel" id="p-vender" aria-labelledby="t-vender" hidden>
+    <div class="card"><b>🛒 PDV e vendas</b><span>Venda rápida, troca, vale, pré-venda, metas e recibo no WhatsApp ou impresso.</span></div>
+    <div class="card"><b>🌐 Loja virtual e marketplaces</b><span>Sua vitrine online com PIX, e os pedidos de todos os canais num quadro só.</span></div>
+    <div class="card"><b>🏷 Promoções e cupons</b><span>Preço promocional automático, cupom individual e cupom de pós-venda.</span></div>
+    <div class="card"><b>🤝 CRM e parceiros</b><span>Clientes, fornecedores, histórico, crediário e portal para parceiros comerciais.</span></div>
+  </div>
+  <div class="g4" role="tabpanel" id="p-entregar" aria-labelledby="t-entregar" hidden>
+    <div class="card"><b>🔧 Ordem de serviço</b><span>Para assistências e prestadores: link para o cliente acompanhar e aprovar, garantia e entrada paga.</span></div>
+    <div class="card"><b>📋 Separação e conferência</b><span>Lista na ordem das prateleiras e conferência lendo o código de cada item.</span></div>
+    <div class="card"><b>🛵 Entregas</b><span>Entregador com app próprio e o cliente acompanhando no mapa.</span></div>
+    <div class="card"><b>📥 Compras</b><span>Pedido de compra em lista ou Kanban, entrada com margem conferida e fornecedores.</span></div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="cx">
+  <header><span class="eb">Como funciona</span><h2>Do pedido de compra ao cliente satisfeito</h2></header>
+  <ol class="jornada">
+    <li class="etapa"><div class="ic" aria-hidden="true">📥</div><b>Compra</b><span>Pedido ao fornecedor e entrada com a margem conferida</span><code>PC0017</code></li>
+    <li class="etapa"><div class="ic" aria-hidden="true">📦</div><b>Estoque</b><span>Etiqueta, depósito e endereço na prateleira</span><code>3 depósitos</code></li>
+    <li class="etapa"><div class="ic" aria-hidden="true">🛒</div><b>Venda</b><span>No balcão, na loja virtual ou no marketplace</span><code>V00312</code></li>
+    <li class="etapa"><div class="ic" aria-hidden="true">🛵</div><b>Entrega</b><span>Separação, conferência e o cliente vendo no mapa</span><code>~8 min</code></li>
+    <li class="etapa"><div class="ic" aria-hidden="true">💰</div><b>Financeiro</b><span>Recebimento, caixa e DRE fechando sozinhos</span><code>DRE do mês</code></li>
+  </ol>
+</div></section>
+
+<section class="sec t" id="ponto"><div class="cx"><div class="alt">
+  <div class="txt">
+    <span class="eb">Ponto eletrônico integrado</span>
+    <h2>O ponto da equipe no mesmo sistema da empresa</h2>
+    <p class="muted">Sem relógio de parede e sem planilha: cada funcionário bate o ponto pelo celular, pelo tablet da loja ou pelo computador, e o RH já recebe tudo na folha.</p>
+    <div class="g2">
+      <div class="card"><b>📱 App Gestti Ponto</b><span>No celular do funcionário, com PIN ou a senha do sistema.</span></div>
+      <div class="card"><b>📍 Localização</b><span>Só vale dentro do raio da loja que você definir.</span></div>
+      <div class="card"><b>🙂 Reconhecimento do rosto</b><span>Confirma que quem bateu é a própria pessoa.</span></div>
+      <div class="card"><b>🖥 Tablet da loja</b><span>Um aparelho fixo na entrada para toda a equipe.</span></div>
+      <div class="card"><b>⏳ Banco de horas</b><span>Atrasos, extras e saldo calculados sozinhos pela escala.</span></div>
+      <div class="card"><b>📄 Folha para o contador</b><span>Ajustes, atestados com anexo, férias e exportação da folha.</span></div>
+    </div>
+    <a class="btn pri" href="#contato" style="justify-self:start">Quero o ponto integrado</a>
+  </div>
+  <div class="app cel" aria-hidden="true"><div class="tt" style="justify-content:center">Gestti Ponto</div><div class="c">
+    <div class="rosto">🙂</div><b>Ana Souza</b><span class="muted" style="font-size:12.5px">📍 Na loja · rosto confirmado</span>
+    <div class="kp" style="width:100%"><div>Entrada<b>08:02</b></div><div>Almoço<b>12:01</b></div><div>Volta<b>13:00</b></div></div>
+    <span class="bater">Registrar saída · 18:00</span><span class="muted" style="font-size:12.5px">Banco de horas no mês: +2h15</span>
+  </div></div>
+</div></div></section>
+
+<section class="sec" id="entregas"><div class="cx"><div class="alt inv">
+  <div class="txt">
+    <span class="eb">Entregas</span>
+    <h2>O seu cliente vê a entrega chegando no mapa</h2>
+    <p class="muted">Venda, pedido online ou ordem de serviço marcados para entregar caem num quadro só. A loja acompanha tudo e o cliente recebe o link de acompanhamento no WhatsApp.</p>
+    <div class="g2">
+      <div class="card"><b>🛵 App do entregador</b><span>Só com as entregas dele: endereço, valor a cobrar e "entreguei" com o nome de quem recebeu.</span></div>
+      <div class="card"><b>📍 Acompanhamento ao vivo</b><span>O cliente acompanha a moto pelo link enquanto o pedido está a caminho.</span></div>
+      <div class="card"><b>🤝 Entregador parceiro</b><span>Valor fixo, por bairro ou por km, com saldo a receber e acerto.</span></div>
+      <div class="card"><b>📋 Lista ou Kanban</b><span>A separar, pronto, saiu para entrega, entregue ou não entregue.</span></div>
+    </div>
+    <a class="btn pri" href="#contato" style="justify-self:start">Quero as entregas integradas</a>
+  </div>
+  <div class="card" style="gap:10px"><b>Seu pedido saiu para entrega</b><span>Pedido V00312 · a caminho</span>
+    <div class="mapa" aria-hidden="true"><div class="rua" style="left:0;right:0;top:48%;height:14px"></div><div class="rua" style="top:0;bottom:0;left:64%;width:14px"></div><div class="rota" style="left:12%;width:54%;top:54%"></div><span class="pin" style="left:68%;top:22%">🏠</span><span class="moto" id="moto" style="left:14%;top:54%">🛵</span></div>
+    <span class="muted" style="font-size:13px">O mapa atualiza sozinho e deixa de mostrar a moto quando o pedido é entregue.</span>
+  </div>
+</div></div></section>
+
+<section class="sec t" id="para-quem"><div class="cx">
+  <header><span class="eb">Para quem</span><h2>Um sistema para o seu jeito de trabalhar</h2></header>
+  <div class="gs">
+    <div class="card"><b>🏬 Varejo e lojas</b><span>PDV, estoque por loja, caixa, promoções e metas do dia.</span></div>
+    <div class="card"><b>🔧 Assistência e serviços</b><span>Ordem de serviço com link para o cliente, peças no estoque e garantia.</span></div>
+    <div class="card"><b>🌐 E-commerce</b><span>Loja virtual e pedidos online com separação, conferência e envio.</span></div>
+    <div class="card"><b>📦 Distribuidora e atacado</b><span>Pedidos de compra, depósitos, transferências e financeiro forte.</span></div>
+    <div class="card"><b>🏢 Redes e franquias</b><span>Cada unidade com seu estoque e caixa, e tudo junto no Dashboard.</span></div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="cx">
+  <header><span class="eb">Por que o Gestti</span><h2>Simples no dia a dia, completo quando você cresce</h2></header>
+  <div class="g3">
+    <div class="card"><b>🧩 Módulos que se ligam sozinhos</b><span>Escolha o que usa; o que um módulo precisa entra junto, e dá para crescer depois.</span></div>
+    <div class="card"><b>🔐 Seguro de verdade</b><span>Senha protegida, bloqueio de tentativas, registro de tudo e dados guardados no Brasil.</span></div>
+    <div class="card"><b>🧑‍💻 Suporte de gente</b><span>Chamado pelo próprio sistema e WhatsApp com quem conhece a sua empresa.</span></div>
+  </div>
+</div></section>
+
+<section class="sec t"><div class="cx">
+  <header><span class="eb">Integrações</span><h2>Conectado com o que você já usa</h2></header>
+  <div class="logos"><span>Loja virtual Gestti</span><span>PIX copia e cola</span><span>WhatsApp</span><span>Receita Federal (CNPJ)</span><span>ViaCEP</span><span>Mercado Livre · em breve</span><span>Shopee · em breve</span></div>
+</div></section>
+
+<section class="sec" id="contato"><div class="cx"><div class="contato">
+  <div class="txt">
+    <span class="eb">Fale com a gente</span>
+    <h2>Vamos conversar?</h2>
+    <p class="muted">Escolha como prefere: a gente responde no mesmo dia.</p>
+    <a class="btn" href="https://wa.me/5522998405334" target="_blank" rel="noopener">💬 Chamar no WhatsApp · (22) 99840-5334</a>
+    <button class="btn" type="button" id="ligar">📞 Receber uma ligação</button>
+    <span class="muted" style="font-size:13.5px">Já é cliente? Use o botão Ajuda dentro do sistema.</span>
+  </div>
+  <form id="form" novalidate>
+    <label>Seu nome<input name="nome" autocomplete="name" maxlength="80" required></label>
+    <label>WhatsApp<input name="whats" inputmode="tel" autocomplete="tel" maxlength="20" required placeholder="(22) 99999-0000"></label>
+    <label>Nome da empresa<input name="empresa" autocomplete="organization" maxlength="80" required></label>
+    <label>Área<select name="area"><option>Varejo e lojas</option><option>Assistência e serviços</option><option>E-commerce</option><option>Distribuidora e atacado</option><option>Rede ou franquia</option><option>Outra</option></select></label>
+    <label>Quantas unidades?<select name="unid"><option>1</option><option>2 a 5</option><option>Mais de 5</option></select></label>
+    <label class="ok"><input type="checkbox" name="aceite" required> <span>Li e aceito a <a href="privacidade.html">política de privacidade</a></span></label>
+    <p class="erro" id="erro" role="alert"></p>
+    <button class="btn pri" type="submit">Quero testar grátis</button>
+    <span class="muted" style="font-size:13px">Ao enviar, abrimos o WhatsApp com a sua mensagem pronta. Nada fica guardado nesta página.</span>
+  </form>
+</div></div></section>
+
+<section class="sec t"><div class="cx">
+  <header><span class="eb">Dúvidas</span><h2>Perguntas frequentes</h2></header>
+  <div class="faq">
+    <details><summary>Preciso instalar alguma coisa?</summary><p>Não. O Gestti abre no navegador e tem apps para ponto, parceiros e entregas.</p></details>
+    <details><summary>O ponto eletrônico vem junto?</summary><p>Sim, como módulo RH e Ponto: app no celular do funcionário, tablet na loja ou computador, com localização, reconhecimento do rosto, escala e banco de horas, tudo ligado ao cadastro da equipe.</p></details>
+    <details><summary>Serve para a minha área?</summary><p>Sim: você liga só os módulos que usa (estoque, vendas, serviços, financeiro, entregas, loja virtual…) e o sistema se adapta.</p></details>
+    <details><summary>Consigo usar em mais de uma unidade?</summary><p>Sim. Cada unidade tem estoque, caixa e financeiro próprios, e você vê tudo junto.</p></details>
+    <details><summary>Emite nota fiscal?</summary><p>A configuração fiscal (certificado e naturezas de operação) está chegando; a emissão vem numa próxima versão.</p></details>
+    <details><summary>E se eu atrasar a mensalidade?</summary><p>Você recebe aviso. Depois de <span class="preencher">[20]</span> dias o sistema fica só para consulta até o pagamento.</p></details>
+    <details><summary>Meus dados ficam seguros?</summary><p>Sim: senha protegida, bloqueio de tentativas, registro de tudo e dados guardados no Brasil.</p></details>
+  </div>
+</div></section>
+
+<section class="cta"><div class="cx">
+  <h2>Sua empresa organizada já no primeiro dia</h2>
+  <p>30 dias grátis, sem cartão. A gente cadastra tudo com você.</p>
+  <a class="btn" href="#contato">Começar o teste grátis</a>
+</div></section>
+</main>
+
+<footer class="foot"><div class="cx">
+  <div class="cols">
+    <div style="display:grid;gap:8px;align-content:start"><span class="marca"><svg><use href="#logo"/></svg>gestti</span><p>Sistema de gestão completo para empresas de todas as áreas.</p></div>
+    <div><b>Plataforma</b><a href="#plataforma">Estoque e financeiro</a><a href="#plataforma">Vendas e PDV</a><a href="#plataforma">Ordem de serviço</a><a href="#entregas">Entregas</a><a href="#ponto">Ponto eletrônico</a></div>
+    <div><b>Ajuda</b><a href="gesttisistema/">Entrar no sistema</a><a href="#contato">Falar com a gente</a><a href="https://wa.me/5522998405334" target="_blank" rel="noopener">WhatsApp</a></div>
+    <div><b>Legal</b><a href="privacidade.html">Política de privacidade</a><a href="termos.html">Termos de uso</a><a href="cookies.html">Política de cookies</a></div>
+  </div>
+  <div class="base"><span>© 2026 Gestti · <span class="preencher">[razão social]</span> · CNPJ <span class="preencher">[número]</span> · <span class="preencher">[cidade/UF]</span></span><span>WhatsApp (22) 99840-5334</span></div>
+</div></footer>
+
+<div class="cookie" id="cookie" hidden role="region" aria-label="Aviso de cookies">
+  <span>Este site usa só o armazenamento essencial para funcionar (nenhum rastreador ou anúncio). <a href="cookies.html">Saiba mais</a></span>
+  <button class="btn sm pri" type="button" id="cookieOk">Entendi</button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // abas dos pilares (setas do teclado também trocam)
+  var abas = Array.prototype.slice.call(document.querySelectorAll('.pil [role="tab"]'));
+  function abrir(t) {
+    abas.forEach(function (a) { var on = a === t; a.setAttribute('aria-selected', String(on)); a.tabIndex = on ? 0 : -1; document.getElementById(a.getAttribute('aria-controls')).hidden = !on; });
+  }
+  abas.forEach(function (a, i) {
+    a.addEventListener('click', function () { abrir(a); });
+    a.addEventListener('keydown', function (e) { var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; var n = abas[(i + d + abas.length) % abas.length]; abrir(n); n.focus(); });
+  });
+  // moto andando no mapa ilustrativo
+  var mt = document.getElementById('moto');
+  if (mt && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    var k = 0, pts = [[14, 54], [28, 54], [42, 54], [58, 54], [66, 40], [66, 26]];
+    setInterval(function () { k = (k + 1) % pts.length; mt.style.left = pts[k][0] + '%'; mt.style.top = pts[k][1] + '%'; }, 1500);
+  }
+  // contato: monta a mensagem e abre o WhatsApp (nada é enviado para servidor nenhum)
+  var WA = 'https://wa.me/5522998405334?text=';
+  function abrirWA(txt) { window.open(WA + encodeURIComponent(txt), '_blank', 'noopener'); }
+  var f = document.getElementById('form'), erro = document.getElementById('erro');
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = function (n) { return String(f.elements[n].value || '').trim(); };
+    var tel = v('whats').replace(/\D/g, '');
+    if (!v('nome') || !v('empresa')) { erro.textContent = 'Preencha o seu nome e o nome da empresa.'; return; }
+    if (tel.length < 10 || tel.length > 13) { erro.textContent = 'Confira o WhatsApp com DDD.'; return; }
+    if (!f.elements.aceite.checked) { erro.textContent = 'Para continuar, aceite a política de privacidade.'; return; }
+    erro.textContent = '';
+    abrirWA('Olá! Quero testar o Gestti grátis.\nNome: ' + v('nome') + '\nWhatsApp: ' + v('whats') + '\nEmpresa: ' + v('empresa') + '\nÁrea: ' + v('area') + '\nUnidades: ' + v('unid'));
+  });
+  document.getElementById('ligar').addEventListener('click', function () { abrirWA('Olá! Quero receber uma ligação para conhecer o Gestti.'); });
+  // aviso de cookies (só uma vez por aparelho)
+  var ck = document.getElementById('cookie');
+  var visto = false; try { visto = localStorage.getItem('gestti_cookies') === 'ok'; } catch (e2) {}
+  if (!visto) ck.hidden = false;
+  document.getElementById('cookieOk').addEventListener('click', function () { ck.hidden = true; try { localStorage.setItem('gestti_cookies', 'ok'); } catch (e3) {} });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+/* Gestti · página de apresentação e páginas legais (mesmas cores e letras do protótipo aprovado, Versão final A+C) */
+:root {
+  --bg: #F3F5F9; --surface: #FFFFFF; --ink: #0F1B2D; --muted: #586579; --line: #E1E6EE; --tint: #F6F8FB;
+  --brand: #2F5BFF; --brand2: #00B386; --soft: #EAF0FF; --navy: #0B1424; --on-brand: #FFFFFF;
+  --f-disp: "Sora", system-ui, sans-serif; --f-text: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0A1019; --surface: #121B28; --ink: #E8EDF3; --muted: #9AA8BA; --line: #26364A; --tint: #172233; --soft: #1C2950; --brand: #7C9BFF; --on-brand: #0A1019; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #0A1019; --surface: #121B28; --ink: #E8EDF3; --muted: #9AA8BA; --line: #26364A; --tint: #172233; --soft: #1C2950; --brand: #7C9BFF; --on-brand: #0A1019; color-scheme: dark }
+* { box-sizing: border-box }
+[hidden] { display: none !important }
+html { scroll-behavior: smooth; scroll-padding-top: 76px }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto } }
+body { margin: 0; background: var(--surface); color: var(--ink); font: 16px/1.6 var(--f-text); -webkit-font-smoothing: antialiased }
+a { color: var(--brand) }
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; font-family: var(--f-disp); letter-spacing: -.02em }
+p { margin: 0 }
+img, svg { max-width: 100% }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px }
+.cx { max-width: 1180px; margin: 0 auto; padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)) }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font: 600 15px var(--f-text); border-radius: 10px; padding: 11px 18px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; text-decoration: none; white-space: nowrap }
+.btn:hover { border-color: var(--muted) }
+.btn.pri { background: var(--brand); border-color: var(--brand); color: var(--on-brand) }
+.btn.pri:hover { filter: brightness(1.08) }
+.btn.sm { padding: 7px 12px; font-size: 14px; border-radius: 8px }
+.eb { font: 500 12px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--brand) }
+.muted { color: var(--muted) }
+.preencher { background: #FFF3D6; color: #6B4600; border-radius: 4px; padding: 0 4px }
+
+/* topo */
+.nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line) }
+.nav .cx { display: flex; align-items: center; gap: 18px; padding-block: 12px }
+.marca { font: 800 22px var(--f-disp); letter-spacing: -.03em; display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink) }
+.marca svg { width: 30px; height: 30px; flex: none }
+.nav a.l { text-decoration: none; font-size: 14.5px; color: var(--muted) }
+.nav a.l:hover { color: var(--ink) }
+.nav .sp { flex: 1 }
+
+/* rodapé */
+.foot { background: var(--navy); color: #B9C4D6; font-size: 14.5px }
+.foot .cx { padding-block: 40px 24px; display: grid; gap: 24px }
+.foot .cols { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 20px }
+.foot b { color: #fff; display: block; margin-bottom: 6px }
+.foot a { display: block; color: #B9C4D6; text-decoration: none; padding: 3px 0 }
+.foot a:hover { color: #fff }
+.foot .marca { color: #fff }
+.foot .base { border-top: 1px solid #22314A; padding-top: 14px; display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: space-between; font-size: 13px }
+.foot .preencher { background: #2A3A55; color: #FFE3A3 }
+
+/* aviso de cookies */
+.cookie { position: fixed; left: 16px; right: 16px; bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 20; max-width: 760px; margin: 0 auto; background: var(--navy); color: #fff; border-radius: 12px; padding: 14px 16px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; font-size: 14.5px; box-shadow: 0 16px 40px rgba(0,0,0,.3) }
+.cookie a { color: #9cc3ff }
+.cookie[hidden] { display: none }
+
+/* páginas legais */
+.legal { max-width: 780px; margin: 0 auto; padding: 40px 16px 64px; display: grid; gap: 14px }
+.legal h1 { font-size: 34px; line-height: 1.15 }
+.legal h2 { font-size: 21px; margin-top: 18px }
+.legal ul { margin: 0; padding-left: 22px; display: grid; gap: 4px }
+.legal .aviso { background: var(--tint); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 14.5px; color: var(--muted) }
+.legal table { border-collapse: collapse; width: 100%; font-size: 14.5px }
+.legal th, .legal td { text-align: left; border-bottom: 1px solid var(--line); padding: 8px 6px; vertical-align: top }
+.legal .tbl { overflow-x: auto }
+
+@media (max-width: 900px) { .foot .cols { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+@media (max-width: 640px) { .nav a.l { display: none } .nav .cx { gap: 10px } .legal h1 { font-size: 28px } }

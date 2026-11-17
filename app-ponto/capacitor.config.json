@@ -3,7 +3,7 @@
   "appName": "Gestti Ponto",
   "webDir": "www",
   "server": {
-    "url": "https://luizeduardolopes1.github.io/Gestti/ponto.html?app=1",
+    "url": "https://luizeduardolopes1.github.io/Gestti/gesttisistema/ponto.html?app=1",
     "androidScheme": "https",
     "allowNavigation": ["luizeduardolopes1.github.io", "wcrfhxijeoxgklyqkhko.supabase.co", "cdn.jsdelivr.net"]
   },
