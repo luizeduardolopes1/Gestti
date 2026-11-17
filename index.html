@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-wM384goadeuGxNWxbpIsv+hvgIBi6CV+Jxrixh5tcb0=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-CaQ/W/C/XYI3ZQS04N3sSJQGiMSCnfzMaXLKaspVYMA=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -720,6 +720,29 @@
   .empmenu{position:fixed;z-index:80;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.22);padding:6px;min-width:240px;max-width:calc(100vw - 32px)}
   .empmenu button{display:flex;width:100%;align-items:center;gap:8px;background:none;border:0;border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;color:inherit;text-align:left;cursor:pointer}
   .empmenu button:hover{background:var(--bg)}.empmenu button.on{font-weight:700;color:var(--brand)}.empmenu .sep{border-top:1px solid var(--line);margin:4px 0}
+  /* Leva 7 · 3.3: Ajuda */
+  .ajmenu .ajit{display:grid;gap:1px}.ajmenu .ajit small{display:block;padding:0;color:var(--muted);font-size:12.5px;font-weight:400}
+  .ajabas{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .chipbtn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+  .chipbtn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .ajbox{display:grid;gap:12px}.ajbox .card{display:grid;gap:8px}
+  .ajfr{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-weight:700;text-transform:uppercase;font-size:13px}
+  .ajfr button{font:inherit;font-size:13px;background:#3B2A6B;color:#fff;border:2px solid transparent;border-radius:6px;padding:5px 10px;cursor:pointer;text-transform:uppercase}
+  .ajfr button[aria-pressed="true"]{border-color:#F2A900}
+  .ajlst{display:grid;gap:10px;overflow-x:auto;padding:2px}
+  .ajhd,.ajch{display:grid;grid-template-columns:1fr .9fr 1.3fr 1.5fr 1.3fr 1.1fr 2fr 30px;gap:10px;align-items:center;padding:12px 14px;min-width:900px}
+  .ajhd{font-weight:700;text-transform:uppercase;font-size:12.5px;background:var(--card);border-radius:8px;box-shadow:0 1px 4px rgba(15,27,45,.12)}
+  .ajitem{background:var(--card);border-radius:8px;box-shadow:0 1px 4px rgba(15,27,45,.12);min-width:900px}
+  .ajch{cursor:pointer;font-size:14px}.ajch .ajass{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:uppercase}
+  .ajtg{border:0;background:none;color:inherit;font-size:16px;cursor:pointer}.ajatr{color:var(--err);font-weight:600}
+  .ajdt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:10px 14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:13.5px}
+  .ajds{padding:12px 14px;display:grid;gap:8px;font-size:14px}.ajpre{white-space:pre-wrap;margin:0;overflow-wrap:anywhere}
+  .ajconv{display:grid;gap:8px}.ajbal{max-width:80%;padding:8px 10px;border-radius:10px;background:var(--bg);display:grid;gap:4px}.ajbal.eu{justify-self:end;background:var(--soft)}.ajbal small{color:var(--muted);font-size:12px}
+  .ajest{display:flex;gap:4px}.ajest button{font-size:26px;line-height:1;border:0;background:none;color:var(--line);cursor:pointer;padding:2px}.ajest button.on{color:#F2A900}
+  .ajresp{display:grid;gap:6px}.ajfaqp{display:grid;gap:4px;background:var(--bg);border-radius:10px;padding:10px}
+  .ajfaq details{border-bottom:1px solid var(--line);padding:10px 0}.ajfaq summary{cursor:pointer;font-weight:600;display:flex;gap:8px;align-items:center;justify-content:space-between}
+  .ajquebra{white-space:normal;max-width:360px;overflow-wrap:anywhere}
+  @media (max-width:640px){.ajbal{max-width:100%}}
   .empmenu small{display:block;color:var(--muted);font-size:12px;padding:4px 12px 6px}
   .emptroca{position:fixed;inset:0;z-index:90;background:rgba(10,20,40,.55);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;padding:16px;text-align:center}
   .empcard{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}
@@ -1092,6 +1115,7 @@
     <div class="hdir">
       <button class="empbtn hide" id="empBtn" type="button" aria-haspopup="menu" title="Trocar de empresa"></button>
       <div class="who hide" id="who"><span class="uic" id="whoIc"></span><div class="wtx"><div id="whoNome"></div><div class="wl" id="whoLoja"></div></div></div>
+      <button class="gear ajbtn hide" id="ajudaBtn" type="button" title="Ajuda" aria-label="Ajuda" aria-haspopup="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></button>
       <button class="gear hide" id="gear" type="button" title="Configurações" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
       <button class="hbtn" id="sair" type="button" title="Sair" aria-label="Sair"></button>
     </div>
@@ -1686,6 +1710,7 @@
     <div id="peCorpo"></div>
   </section>
 
+  <section id="vAjuda" class="hide"><div class="ptopo"><h1 id="ajTit">Ajuda</h1></div><div id="ajCorpo"></div></section>
   <section id="vConfig" class="hide">
     <div class="ptopo"><h1>Configurações</h1></div>
     <div class="cfgwrap" id="cfgWrap"><div class="card cfgmenu" id="cfgMenu"></div><div class="cfgcorpo" id="cfgCorpo"></div></div>
@@ -6727,7 +6752,7 @@
     LS.del('token'); LS.del('loja'); LS.del('hist');
     VIEWS.forEach(function (v) { show(v.sec, false); });
     if ($('motoPg')) { $('motoPg').remove(); clearInterval(MOTO.timer); MOTO.d = null; motoGps(); }
-    show('nav', false); show('who', false); show('gear', false); show('rbW', false); show('vConfig', false); show('vNovaSenha', false); show('vCarregando', false); show('vEmpSel', false); show('vLogin', true);
+    show('nav', false); show('who', false); show('gear', false); show('ajudaBtn', false); show('rbW', false); show('vConfig', false); show('vNovaSenha', false); show('vCarregando', false); show('vEmpSel', false); show('vLogin', true);
     telaLogin(true); painelLogin('lgEntrar'); fecharSb(); $('sbBusca').value = '';
     $('fModal').classList.add('hide'); document.body.style.overflow = ''; S.senhaInicial = '';
     msg('loginMsg', motivo || '');
@@ -6821,7 +6846,7 @@
   function podeEnt(a) { return temGrade() ? pode('entregas:' + a) : a === 'x' ? pode('liberar') : pode('vender'); }
   function perfilDeParceira(d) { var l = (d && d.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono' || x.indexOf('parc_') === 0; }); }
   function escolherVerComo(d) {
-    show('vCarregando', false); show('vLogin', false); VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false);
+    show('vCarregando', false); show('vLogin', false); VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false); show('ajudaBtn', false);
     var pg = $('vcEscolha'); if (!pg) { pg = el('div', 'esel'); pg.id = 'vcEscolha'; document.body.appendChild(pg); } pg.innerHTML = ''; pg.classList.remove('hide');
     var w = el('div', 'card'); w.style.maxWidth = '460px'; w.style.margin = '40px auto'; pg.appendChild(w);
     var sairApp = function (m) { var t = S.token; pg.classList.add('hide'); call('sair', [t]).catch(function () {}); sairLocal(m); };
@@ -6857,7 +6882,7 @@
     $('whoNome').textContent = d.nome; $('whoLoja').textContent = d.perfil + (d.loja ? ' · ' + String(d.loja).replace(/^.*\| /, '') : ''); show('who', true);
     telaLogin(false); document.body.classList.remove('logado');
     if (d.trocarSenha) {
-      VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false); show('vConfig', false);
+      VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false); show('ajudaBtn', false); show('vConfig', false);
       $('nsNome').textContent = d.nome.split(' ')[0];
       show('nsAtualBox', !S.senhaInicial); msg('nsMsg', '');
       show('vNovaSenha', true); (S.senhaInicial ? $('nsNova') : $('nsAtual')).focus();
@@ -6867,7 +6892,7 @@
     // Leva 7 · 2.1: login de motoboy só vê as entregas dele (app Gestti Entregas); o app é só para motoboy
     if (soMotoboy()) { motoApp(); return; }
     if (APP_ENT) { var t0 = S.token; call('sair', [t0]).catch(function () {}); sairLocal('Este app é só para os motoboys. A loja acompanha as entregas pelo Gestti, no menu Entregas.'); return; }
-    show('gear', true); montarEmpresa();
+    show('gear', true); show('ajudaBtn', true); montarEmpresa();
     REDE.d = null; $('rbBusca').value = ''; S.rbPode = !!(d.empresa && d.empresa.lista && d.empresa.lista.length > 1) && ['vender', 'produtos', 'acessorios', 'os', 'estoque'].some(pode); show('rbW', false);
     $('sbBusca').value = ''; montarMenu(); guardarCtrlFixos();
     show('nav', true); document.body.classList.add('logado'); avisoPedidos();
@@ -6938,9 +6963,9 @@
     if (id === 'prod' && !PR) id = 'acess';
     if (id === 'ctrlest' && !CT) id = 'acess';
     if (id !== 'cadastro' && S.cadEdit) limparCadastro();
-    S.view = id; if (id !== 'pessoa' && id !== 'prod' && id !== 'ctrlest') LS.set('view', id); msg('topMsg', ''); document.body.classList.add('wide'); fecharDrawer();
+    S.view = id; if (id !== 'pessoa' && id !== 'prod' && id !== 'ctrlest' && id !== 'ajuda') LS.set('view', id); msg('topMsg', ''); document.body.classList.add('wide'); fecharDrawer();
     var secs = {}; VIEWS.forEach(function (v) { secs[v.sec] = secs[v.sec] || v.id === id; }); Object.keys(secs).forEach(function (k) { show(k, secs[k]); });
-    show('vConfig', id === 'config'); show('vPessoa', id === 'pessoa'); show('vProd', id === 'prod'); show('vCtrl', id === 'ctrlest'); fecharTags();
+    show('vConfig', id === 'config'); show('vAjuda', id === 'ajuda'); if (id === 'ajuda') ajudaDesenhar(); show('vPessoa', id === 'pessoa'); show('vProd', id === 'prod'); show('vCtrl', id === 'ctrlest'); fecharTags();
     botoesPorGrade();
     if (id !== 'ctrlest') CT = null;
     if (id === 'ctrlest') carregarControle();
@@ -8124,7 +8149,7 @@
   // ---------- app Gestti Entregas (login de motoboy) ----------
   var MOTO = { d: null, timer: null, gps: null, ultEnvio: 0 };
   function motoApp() {
-    VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false); show('vConfig', false); show('rbW', false); document.body.classList.remove('logado');
+    VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false); show('ajudaBtn', false); show('vConfig', false); show('rbW', false); document.body.classList.remove('logado');
     var pg = $('motoPg'); if (!pg) { pg = el('div'); pg.id = 'motoPg'; pg.style.cssText = 'max-width:560px;margin:0 auto;padding:12px 14px 40px'; document.querySelector('main').appendChild(pg); }
     pg.classList.remove('hide');
     $('topTit').textContent = 'Minhas entregas';
@@ -17435,6 +17460,220 @@
   $('fSheet').addEventListener('input', function () { MOD_SUJO = true; }); $('fSheet').addEventListener('change', function () { MOD_SUJO = true; });
   function fecharModalUsuario() { if (MOD_SUJO && !confirm('Descartar o que você preencheu?')) return; fecharModal(); }
   function abrirModal() { if (PG) fecharPagina(); MOD_SUJO = false; $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModalUsuario(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
+  // =============================================================
+  //  AJUDA (Leva 7 · 3.3): botão "?" ao lado da engrenagem
+  // =============================================================
+  var AJ = { modo: 'chamados', info: null, lista: null, sug: null, filtro: 'Todos', aberto: null };
+  var AJ_MODOS = [['abrir', '🆘 Abrir chamado', 'Algo não está funcionando'], ['chamados', '📋 Acompanhar chamados', ''], ['sugestao', '💡 Enviar sugestão', 'Ideia para melhorar o Gestti'],
+    ['online', '💬 Suporte online', 'WhatsApp'], ['faq', '❓ Perguntas frequentes', ''], ['novidades', '✨ Novidades da versão', '']];
+  function fecharMenuAjuda() { var m = $('ajMenu'); if (m) m.remove(); }
+  function abrirMenuAjuda(b) {
+    if ($('ajMenu')) { fecharMenuAjuda(); return; }
+    var m = el('div', 'empmenu ajmenu'); m.id = 'ajMenu'; m.setAttribute('role', 'menu');
+    AJ_MODOS.forEach(function (x) {
+      var it = el('button'); it.type = 'button'; it.setAttribute('role', 'menuitem');
+      var t = el('span', 'ajit'); t.appendChild(el('b', '', x[1]));
+      var sub = x[0] === 'online' ? 'WhatsApp ' + fmtFone(ajWhats()) : x[2];
+      if (x[0] === 'chamados' && AJ.lista) { var ab = AJ.lista.filter(ajAberto).length; sub = ab ? ab + (ab === 1 ? ' aberto' : ' abertos') : 'Nenhum aberto'; }
+      if (sub) t.appendChild(el('small', '', sub));
+      it.appendChild(t);
+      it.onclick = function () { fecharMenuAjuda(); if (x[0] === 'online') { window.open('https://wa.me/55' + ajWhats(), '_blank', 'noopener'); return; } AJ.modo = x[0]; ir('ajuda'); };
+      m.appendChild(it);
+    });
+    document.body.appendChild(m);
+    var r = b.getBoundingClientRect();
+    m.style.top = (r.bottom + 6) + 'px';
+    m.style.left = Math.max(16, Math.min(r.right - m.offsetWidth, window.innerWidth - m.offsetWidth - 16)) + 'px';
+    setTimeout(function () { document.addEventListener('click', fecharMenuAjuda, { once: true }); }, 0);
+    if (!AJ.info) ajCarregarInfo();
+  }
+  function ajWhats() { return soDig((AJ.info && AJ.info.suporteWhats) || '22998405334'); }
+  function ajAberto(c) { return c.situacao === 'Aberto' || c.situacao === 'Em andamento'; }
+  function ajCarregarInfo() { return call('ajudaInfo', [S.token]).then(function (r) { AJ.info = r; return r; }); }
+  function ajLerArq(f) { return new Promise(function (res, rej) { if (f.size > 5 * 1048576) { rej(f.name + ' passa de 5 MB'); return; } var r = new FileReader(); r.onload = function () { res({ nome: f.name, b64: String(r.result).split(',')[1] || '' }); }; r.onerror = function () { rej('Não consegui ler ' + f.name); }; r.readAsDataURL(f); }); }
+  function ajAnexos(inp) { var l = Array.prototype.slice.call(inp.files || []); if (l.length > 5) return Promise.reject('No máximo 5 anexos.'); return Promise.all(l.map(ajLerArq)); }
+  function ajBaixar(cid, a, b) {
+    var t0 = b.textContent; b.disabled = true; b.textContent = 'Baixando…';
+    call('ajudaAnexo', [S.token, cid, a.id]).then(function (r) {
+      if (!r || !r.url) throw 'Anexo não encontrado.';
+      return fetch(r.url).then(function (x) { if (!x.ok) throw 'Não consegui baixar o anexo.'; return x.blob(); }).then(function (bl) {
+        var url = URL.createObjectURL(bl), lk = document.createElement('a'); lk.href = url; lk.download = a.nome || 'anexo'; document.body.appendChild(lk); lk.click(); lk.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      });
+    }).catch(function (e) { alert(String(e)); }).then(function () { b.disabled = false; b.textContent = t0; });
+  }
+  function ajudaDesenhar() {
+    var c = $('ajCorpo'); c.textContent = '';
+    var tit = { abrir: 'Abrir chamado', chamados: 'Consulta de chamados', sugestao: 'Enviar sugestão', faq: 'Perguntas frequentes', novidades: 'Novidades da versão' }[AJ.modo] || 'Ajuda';
+    $('ajTit').textContent = tit;
+    var abas = el('div', 'ajabas'); c.appendChild(abas);
+    AJ_MODOS.filter(function (x) { return x[0] !== 'online'; }).forEach(function (x) { var b = el('button', 'chipbtn' + (x[0] === AJ.modo ? ' on' : ''), x[1]); b.type = 'button'; b.setAttribute('aria-pressed', String(x[0] === AJ.modo)); b.onclick = function () { AJ.modo = x[0]; ajudaDesenhar(); }; abas.appendChild(b); });
+    var on = el('button', 'chipbtn', '💬 Suporte online'); on.type = 'button'; on.onclick = function () { window.open('https://wa.me/55' + ajWhats(), '_blank', 'noopener'); }; abas.appendChild(on);
+    if (AJ.aviso) { var okm = el('div', 'msg ok show', AJ.aviso); okm.setAttribute('role', 'status'); c.appendChild(okm); AJ.aviso = ''; }
+    var box = el('div', 'ajbox'); c.appendChild(box);
+    box.appendChild(el('div', 'hint', 'Carregando…'));
+    var pronto = AJ.info ? Promise.resolve(AJ.info) : ajCarregarInfo();
+    pronto.then(function () {
+      box.textContent = '';
+      if (AJ.modo === 'abrir') ajAbrir(box);
+      else if (AJ.modo === 'sugestao') ajSugestao(box);
+      else if (AJ.modo === 'faq') ajFaq(box, '');
+      else if (AJ.modo === 'novidades') ajNovidades(box);
+      else ajChamados(box);
+    }).catch(function (e) { box.textContent = ''; box.appendChild(el('div', 'msg show', String(e))); });
+  }
+  function ajQuem(box, comContato) {
+    var q = AJ.info.quem, g = grade(box, 3);
+    var ro = function (cx, rot, v) { var i = el('input'); i.readOnly = true; i.value = v || '—'; campo(cx, rot, i); };
+    ro(g[0], 'Nome', q.nome); ro(g[1], 'Login', q.login); ro(g[2], 'Empresa', q.empresa.nome);
+    if (comContato) { var g2 = grade(box, 3); ro(g2[0], 'CNPJ', q.empresa.cnpj ? fmtDocBR(q.empresa.cnpj) : ''); ro(g2[1], 'WhatsApp', q.whats ? fmtFone(q.whats) : ''); ro(g2[2], 'E-mail', q.email); }
+    box.appendChild(el('div', 'hint', 'Vem do seu login e da empresa aberta; não precisa digitar.' + (comContato && !q.whats ? ' Sem WhatsApp no seu cadastro do RH: o suporte responde aqui no chamado.' : '')));
+  }
+  function fmtDocBR(d) { d = soDig(d); return d.length === 14 ? d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5') : d.length === 11 ? d.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4') : d; }
+  function ajFaqParecidas(txt) {
+    var pal = String(txt || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').split(/[^a-z0-9]+/).filter(function (w) { return w.length > 3; });
+    if (!pal.length) return [];
+    return (AJ.info.faq || []).map(function (q) { var t = (q.pergunta + ' ' + (q.area || '') + ' ' + q.resposta).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); var n = pal.filter(function (w) { return t.indexOf(w) > -1; }).length; return { q: q, n: n }; })
+      .filter(function (x) { return x.n > 0; }).sort(function (a, b) { return b.n - a.n; }).slice(0, 3).map(function (x) { return x.q; });
+  }
+  function ajAbrir(box) {
+    var card = el('div', 'card'); box.appendChild(card);
+    ajQuem(card, true);
+    var g = grade(card, 2);
+    var ass = campo(g[0], 'Assunto', el('input')); ass.maxLength = 120;
+    var pr = el('select'); AJ.info.prioridades.forEach(function (p) { var o = el('option', '', p.nome + ' · prazo ' + p.prazo + (p.nome === 'Urgente' ? ' (parou a empresa)' : '')); o.value = p.nome; pr.appendChild(o); }); pr.value = 'Média';
+    campo(g[1], 'Prioridade', pr);
+    var ds = campo(card, 'O que está acontecendo?', el('textarea')); ds.maxLength = 4000; ds.rows = 5; ds.placeholder = 'Conte o passo a passo: em qual tela, o que você fez e o que apareceu.';
+    var par = el('div', 'ajfaqp hide'); card.appendChild(par);
+    var t0 = null;
+    var sugerir = function () { clearTimeout(t0); t0 = setTimeout(function () { var l = ajFaqParecidas(ass.value + ' ' + ds.value); par.textContent = ''; par.classList.toggle('hide', !l.length); if (!l.length) return; par.appendChild(el('b', '', 'Isto pode ajudar:')); l.forEach(function (q) { var d = el('details'); d.appendChild(el('summary', '', '❓ ' + q.pergunta)); d.appendChild(el('p', '', q.resposta)); par.appendChild(d); }); }, 400); };
+    ass.addEventListener('input', sugerir); ds.addEventListener('input', sugerir);
+    var an = el('input'); an.type = 'file'; an.multiple = true; an.accept = 'image/*,application/pdf,.txt'; campo(card, 'Anexos (prints, fotos, PDF · até 5, 5 MB cada)', an);
+    var m = el('div', 'msg'); card.appendChild(m);
+    var ac = el('div', 'tbacoes'); card.appendChild(ac);
+    var ok = btn(ac, 'Abrir chamado', 'pri', function () {
+      m.classList.remove('show');
+      if (ass.value.trim().length < 3) { m.textContent = 'Escreva o assunto do chamado.'; m.classList.add('show'); return; }
+      if (ds.value.trim().length < 10) { m.textContent = 'Conte o que está acontecendo (pelo menos uma frase).'; m.classList.add('show'); return; }
+      ok.disabled = true; ok.textContent = 'Enviando…';
+      ajAnexos(an).then(function (ax) { return call('ajudaAbrir', [S.token, { assunto: ass.value, descricao: ds.value, prioridade: pr.value, anexos: ax }]); }).then(function (r) {
+        AJ.lista = null; AJ.modo = 'chamados'; AJ.filtro = 'Abertos'; AJ.aviso = 'Chamado aberto. Previsão de conclusão: ' + r.previsao + '.'; ajudaDesenhar();
+      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Abrir chamado'; m.textContent = String(e); m.classList.add('show'); });
+    });
+  }
+  function ajChamados(box) {
+    var carregar = AJ.lista ? Promise.resolve(AJ.lista) : call('ajudaChamados', [S.token]).then(function (l) { AJ.lista = l; return l; });
+    box.appendChild(el('div', 'hint', 'Carregando chamados…'));
+    carregar.then(function (l) {
+      box.textContent = '';
+      var grupos = { Abertos: l.filter(ajAberto), Fechados: l.filter(function (c) { return c.situacao === 'Fechado'; }), Resolvidos: l.filter(function (c) { return c.situacao === 'Resolvido'; }), Todos: l };
+      var top = el('div', 'tbacoes'); box.appendChild(top);
+      var fr = el('div', 'ajfr'); fr.appendChild(el('span', '', 'Filtros rápidos:')); top.appendChild(fr);
+      Object.keys(grupos).forEach(function (k) { var b = el('button', '', k + ' (' + grupos[k].length + ')'); b.type = 'button'; b.setAttribute('aria-pressed', String(AJ.filtro === k)); b.onclick = function () { AJ.filtro = k; box.textContent = ''; ajChamados(box); }; fr.appendChild(b); });
+      var at = el('span', 'sp'); top.appendChild(at);
+      btn(top, '↻ Atualizar', 'ghost', function () { AJ.lista = null; box.textContent = ''; ajChamados(box); });
+      btn(top, '+ Abrir chamado', 'pri', function () { AJ.modo = 'abrir'; ajudaDesenhar(); });
+      box.appendChild(el('p', 'hint', 'Os chamados listados correspondem ao último ano, contando a partir de hoje. Os chamados com status "Resolvido" foram concluídos pelo suporte e aguardam a sua validação por até 24 horas; depois disso fecham sozinhos.' + (AJ.info.todos ? ' Você vê os chamados de toda a empresa.' : '')));
+      var lst = grupos[AJ.filtro] || l;
+      if (!lst.length) { box.appendChild(el('div', 'vazio', AJ.filtro === 'Todos' ? 'Nenhum chamado no último ano.' : 'Nenhum chamado neste filtro.')); return; }
+      var wrap = el('div', 'ajlst'); box.appendChild(wrap);
+      var hd = el('div', 'ajhd'); ['Nº chamado', 'Prioridade', 'Abertura', 'Previsão conclusão', 'Fechamento', 'Status', 'Assunto', ''].forEach(function (t) { hd.appendChild(el('span', '', t)); }); wrap.appendChild(hd);
+      lst.forEach(function (c) { wrap.appendChild(ajItem(c)); });
+    }).catch(function (e) { box.textContent = ''; box.appendChild(el('div', 'msg show', String(e))); });
+  }
+  function ajSitBdg(c) { return el('span', 'bdg ' + ({ Aberto: 'inf', 'Em andamento': 'warn', Resolvido: 'ok', Fechado: 'off' }[c.situacao] || ''), c.situacao); }
+  function ajItem(c) {
+    var it = el('div', 'ajitem'), aberto = AJ.aberto === c.id;
+    var ln = el('div', 'ajch');
+    [c.n ? String(c.n).padStart(6, '0') : '—', c.prioridade, c.abertura, c.previsao, c.fechamento || ''].forEach(function (t, i) { var s = el('span', i === 3 && c.atrasado ? 'ajatr' : '', t + (i === 3 && c.atrasado ? ' (atrasado)' : '')); ln.appendChild(s); });
+    var st = el('span'); st.appendChild(ajSitBdg(c)); ln.appendChild(st);
+    ln.appendChild(el('span', 'ajass', c.assunto));
+    var tg = el('button', 'ajtg', aberto ? '⌃' : '⌄'); tg.type = 'button'; tg.setAttribute('aria-expanded', String(aberto)); tg.setAttribute('aria-label', aberto ? 'Fechar detalhes' : 'Abrir detalhes'); ln.appendChild(tg);
+    ln.onclick = function () { AJ.aberto = aberto ? null : c.id; var n = ajItem(c); it.replaceWith(n); };
+    it.appendChild(ln);
+    if (!aberto) return it;
+    var dt = el('div', 'ajdt');
+    [['CNPJ', c.empresa.cnpj ? fmtDocBR(c.empresa.cnpj) : '—'], ['Conta', c.empresa.nome || '—'], ['Contato', c.autor.nome || '—'], ['Login', c.autor.login || '—']].forEach(function (x) { var s = el('span'); s.appendChild(el('b', '', x[0] + ':')); s.appendChild(document.createTextNode(' ' + x[1])); dt.appendChild(s); });
+    it.appendChild(dt);
+    var ds = el('div', 'ajds'); it.appendChild(ds);
+    ds.appendChild(el('b', '', 'Descrição da abertura do chamado:'));
+    ds.appendChild(el('p', 'ajpre', c.descricao));
+    var anx = function (box2, l) { if (!l || !l.length) return; var r = el('div', 'tbacoes'); l.forEach(function (a) { btn(r, '📎 ' + a.nome, 'ghost', function (ev) { ev.stopPropagation(); ajBaixar(c.id, a, ev.currentTarget); }); }); box2.appendChild(r); };
+    anx(ds, c.anexos);
+    if (c.conversa.length) {
+      var cv = el('div', 'ajconv'); ds.appendChild(cv);
+      c.conversa.forEach(function (x) { var b = el('div', 'ajbal' + (x.de === 'cliente' ? ' eu' : '')); b.appendChild(el('p', 'ajpre', x.texto)); b.appendChild(el('small', '', (x.de === 'suporte' ? x.nome + ' · Suporte Gestti' : x.nome) + ' · ' + x.quando)); anx(b, x.anexos); cv.appendChild(b); });
+    }
+    if (c.situacao === 'Resolvido') {
+      var v = el('div', 'card ajval'); ds.appendChild(v);
+      v.appendChild(el('b', '', 'O suporte marcou como resolvido. Ficou certo?'));
+      var nota = 0, est = el('div', 'ajest'); est.setAttribute('role', 'radiogroup'); est.setAttribute('aria-label', 'Avaliação do atendimento');
+      for (var i = 1; i <= 5; i++) (function (k) { var s = el('button', '', '★'); s.type = 'button'; s.setAttribute('role', 'radio'); s.setAttribute('aria-label', k + (k === 1 ? ' estrela' : ' estrelas')); s.onclick = function (ev) { ev.stopPropagation(); nota = k; Array.prototype.forEach.call(est.children, function (z, j) { z.classList.toggle('on', j < k); z.setAttribute('aria-checked', String(j === k - 1)); }); }; est.appendChild(s); })(i);
+      v.appendChild(est);
+      var cm = el('input'); cm.placeholder = 'Comentário (opcional) ou o que ainda está acontecendo'; cm.maxLength = 300; v.appendChild(cm);
+      var mv = el('div', 'msg'); v.appendChild(mv);
+      var av = el('div', 'tbacoes'); v.appendChild(av);
+      var enviar = function (ok2) { mv.classList.remove('show'); call('ajudaValidar', [S.token, c.id, ok2, nota, cm.value]).then(function () { AJ.lista = null; ajudaDesenhar(); }).catch(function (e) { mv.textContent = String(e); mv.classList.add('show'); }); };
+      btn(av, 'Sim, pode fechar', 'pri', function (ev) { ev.stopPropagation(); enviar(true); });
+      btn(av, 'Não, continua acontecendo', 'ghost', function (ev) { ev.stopPropagation(); enviar(false); });
+      v.appendChild(el('div', 'hint', 'Sem resposta até ' + c.validarAte + ', o chamado fecha sozinho.'));
+      v.onclick = function (ev) { ev.stopPropagation(); };
+    }
+    if (c.avaliacao) ds.appendChild(el('div', 'hint', 'Sua avaliação: ' + '★★★★★'.slice(0, c.avaliacao.nota) + (c.avaliacao.comentario ? ' · ' + c.avaliacao.comentario : '')));
+    if (c.situacao !== 'Fechado') {
+      var rs = el('div', 'ajresp'); ds.appendChild(rs);
+      var tx = el('textarea'); tx.rows = 2; tx.maxLength = 4000; tx.placeholder = 'Escrever para o suporte…'; tx.setAttribute('aria-label', 'Mensagem para o suporte'); rs.appendChild(tx);
+      var fa = el('input'); fa.type = 'file'; fa.multiple = true; fa.accept = 'image/*,application/pdf,.txt'; fa.setAttribute('aria-label', 'Anexos da mensagem'); rs.appendChild(fa);
+      var mr = el('div', 'msg'); rs.appendChild(mr);
+      var eb = btn(rs, 'Enviar', 'pri', function () {
+        mr.classList.remove('show'); eb.disabled = true;
+        ajAnexos(fa).then(function (ax) { return call('ajudaMensagem', [S.token, c.id, tx.value, ax]); }).then(function () { AJ.lista = null; ajudaDesenhar(); })
+          .catch(function (e) { eb.disabled = false; mr.textContent = String(e); mr.classList.add('show'); });
+      });
+      rs.onclick = function (ev) { ev.stopPropagation(); };
+    }
+    ds.onclick = function (ev) { ev.stopPropagation(); };
+    return it;
+  }
+  function ajSugestao(box) {
+    var card = el('div', 'card'); box.appendChild(card);
+    ajQuem(card, false);
+    var t = campo(card, 'Sua ideia', el('textarea')); t.rows = 5; t.maxLength = 3000; t.placeholder = 'O que você gostaria que o Gestti fizesse? Para quê?';
+    var an = el('input'); an.type = 'file'; an.multiple = true; an.accept = 'image/*,application/pdf,.txt'; campo(card, 'Anexos (opcional)', an);
+    var m = el('div', 'msg'); card.appendChild(m);
+    var ac = el('div', 'tbacoes'); card.appendChild(ac);
+    var ok = btn(ac, 'Enviar sugestão', 'pri', function () {
+      m.classList.remove('show'); ok.disabled = true;
+      ajAnexos(an).then(function (ax) { return call('ajudaSugerir', [S.token, { texto: t.value, anexos: ax }]); }).then(function () { AJ.sug = null; AJ.aviso = 'Sugestão enviada. Obrigado!'; ajudaDesenhar(); })
+        .catch(function (e) { ok.disabled = false; m.textContent = String(e); m.classList.add('show'); });
+    });
+    card.appendChild(el('div', 'hint', 'Você vê aqui embaixo quando ela for analisada, planejada ou feita.'));
+    var ls = el('div', 'card'); box.appendChild(ls); ls.appendChild(el('h2', '', 'Sugestões enviadas'));
+    var carregar = AJ.sug ? Promise.resolve(AJ.sug) : call('ajudaSugestoes', [S.token]).then(function (l) { AJ.sug = l; return l; });
+    carregar.then(function (l) {
+      if (!l.length) { ls.appendChild(el('div', 'vazio', 'Nenhuma sugestão ainda.')); return; }
+      var tw = el('div', 'tw'), tb = el('table'); tw.appendChild(tb); ls.appendChild(tw);
+      var h = el('tr'); ['Data', 'Quem', 'Sugestão', 'Situação', 'Resposta'].forEach(function (x) { h.appendChild(el('th', '', x)); }); tb.appendChild(h);
+      l.forEach(function (s) { var r = el('tr'); r.appendChild(el('td', '', s.quando)); r.appendChild(el('td', '', s.nome)); r.appendChild(el('td', 'ajquebra', s.texto)); var st = el('td'); st.appendChild(el('span', 'bdg ' + ({ Feita: 'ok', 'Não vamos fazer': 'off', Planejada: 'inf' }[s.situacao] || 'warn'), s.situacao)); r.appendChild(st); r.appendChild(el('td', 'ajquebra', s.resposta || '')); tb.appendChild(r); });
+    }).catch(function (e) { ls.appendChild(el('div', 'msg show', String(e))); });
+  }
+  function ajFaq(box, filtro) {
+    var card = el('div', 'card'); box.appendChild(card);
+    var bs = el('input'); bs.type = 'search'; bs.placeholder = 'Buscar uma dúvida'; bs.value = filtro; bs.setAttribute('aria-label', 'Buscar nas perguntas frequentes'); card.appendChild(bs);
+    var lst = el('div', 'ajfaq'); card.appendChild(lst);
+    var desenhar = function () {
+      lst.textContent = '';
+      var q = bs.value.trim(), l = q ? ajFaqParecidas(q).concat((AJ.info.faq || []).filter(function (x) { return x.pergunta.toLowerCase().indexOf(q.toLowerCase()) > -1; })).filter(function (x, i, a) { return a.indexOf(x) === i; }) : (AJ.info.faq || []);
+      if (!l.length) { lst.appendChild(el('div', 'vazio', q ? 'Nada encontrado. Abra um chamado ou fale no suporte online.' : 'Ainda não há perguntas frequentes.')); return; }
+      l.forEach(function (x) { var d = el('details'); var s = el('summary', '', x.pergunta); if (x.area) s.appendChild(el('span', 'bdg off', x.area)); d.appendChild(s); d.appendChild(el('p', 'ajpre', x.resposta)); lst.appendChild(d); });
+    };
+    bs.addEventListener('input', desenhar); desenhar();
+  }
+  function ajNovidades(box) {
+    var l = AJ.info.novidades || [];
+    if (!l.length) { box.appendChild(el('div', 'vazio', 'As novidades de cada versão aparecem aqui.')); return; }
+    l.forEach(function (n) { var c = el('div', 'card'); var h = el('div', 'tbacoes'); h.appendChild(el('h2', '', n.versao || 'Versão')); if (n.data) h.appendChild(el('span', 'bdg off', n.data)); c.appendChild(h); c.appendChild(el('p', 'ajpre', n.texto || '')); box.appendChild(c); });
+  }
+  $('ajudaBtn').onclick = function (ev) { ev.stopPropagation(); abrirMenuAjuda($('ajudaBtn')); };
   $('gear').onclick = function () { CFG.aba = null; CFG.eq = null; ir('config'); }; // Leva 7: abre com os grupos fechados
 
   // ---------- Configurações › Transferências entre empresas
