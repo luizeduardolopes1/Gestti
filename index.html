@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-bZsRrQJN+ik04ZNHf+RiYQj8a7b+/1/MWhQYS/+ExtQ=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Io2nhLvEmSgB2eUQKHEDx4vBfPHqiYkaZbsTAAdLnwY=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -282,6 +282,17 @@
   .cfgmenu button small{display:block;font-weight:500;color:var(--muted);font-size:12.5px;margin-top:2px}
   .cfgmenu button:hover{background:var(--soft2)}
   .cfgmenu button.on{background:var(--navy);color:#fff}.cfgmenu button.on small{color:rgba(255,255,255,.8)}
+  /* Leva 7 · 1.12: configurações em grupos fechados, com busca */
+  .cfgmenu .cfgbusca{margin:0 0 8px}
+  .cfgmenu details{border-radius:10px;margin-bottom:4px}
+  .cfgmenu summary{list-style:none;cursor:pointer;padding:10px 12px;border-radius:10px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:10px}
+  .cfgmenu summary::-webkit-details-marker{display:none}
+  .cfgmenu summary:hover{background:var(--soft2)}
+  .cfgmenu summary .ic{width:20px;height:20px;display:inline-flex;color:var(--muted)}.cfgmenu summary .ic svg{width:20px;height:20px}
+  .cfgmenu summary .n{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+  .cfgmenu summary::after{content:"▸";color:var(--muted);font-size:12px}.cfgmenu details[open] summary::after{content:"▾"}
+  .cfgmenu details>div{padding:0 0 4px 12px}
+  .cfgmenu details button{font-size:14px;padding:9px 12px}
   .cfgcorpo h2.ct{font-size:20px;margin:2px 0 12px;color:var(--ink)}
   .cfgvolta{display:none}
   @media (max-width:819px){.cfgwrap{grid-template-columns:1fr}.cfgwrap.sel .cfgmenu{display:none}.cfgwrap:not(.sel) .cfgcorpo{display:none}.cfgvolta{display:inline-block;margin-bottom:6px}}
@@ -5203,6 +5214,7 @@
     if (ant === 'disp' || ant === 'venda') REDE.em = REDE.em; // a lista da rede continua em cache (1 min)
     if (ant === 'dash') { PN.per = 'mes'; PN.emp = ''; PN.edit = false; PN.aba = 0; }
     if (/^rel-/.test(ant)) RLX = { per: 'mes', de: '', ate: '', emp: '', busca: '' };
+    if (ant === 'config') { CFG.aba = null; CFG.busca = ''; CFG.abertos = {}; }
   }
   /** Tem algo preenchido que se perde ao sair? (só nas telas de lançamento) */
   function rascunhoSujo(id) {
@@ -14762,7 +14774,7 @@
   // =========================================================
   //  ENGRENAGEM: MINHA SENHA / FUNCIONÁRIOS / GRUPOS
   // =========================================================
-  var CFG = { aba: 'conta', eq: null };
+  var CFG = { aba: null, eq: null, busca: '', abertos: {} };
   // =========================================================
   //  PRODUTOS USADOS ↔ PRODUTOS (condição "Usado")
   // =========================================================
@@ -16641,7 +16653,7 @@
   $('fSheet').addEventListener('input', function () { MOD_SUJO = true; }); $('fSheet').addEventListener('change', function () { MOD_SUJO = true; });
   function fecharModalUsuario() { if (MOD_SUJO && !confirm('Descartar o que você preencheu?')) return; fecharModal(); }
   function abrirModal() { if (PG) fecharPagina(); MOD_SUJO = false; $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModalUsuario(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
-  $('gear').onclick = function () { CFG.aba = window.innerWidth >= 820 ? 'conta' : null; CFG.eq = null; ir('config'); };
+  $('gear').onclick = function () { CFG.aba = null; CFG.eq = null; ir('config'); }; // Leva 7: abre com os grupos fechados
 
   // ---------- Configurações › Transferências entre empresas
   function cfgTransfRede(box, d) {
@@ -16988,6 +17000,12 @@
         .catch(function (e) { b.disabled = false; m.className = 'msg err show'; m.textContent = e; });
     };
   }
+  /** Leva 7 · 1.12: cada configuração no grupo dela (ícone obrigatório em todo grupo). */
+  var CFG_GRUPOS = [['Geral', 'engrenagem'], ['Equipe', 'pessoas'], ['Suprimentos', 'caixa'], ['Vendas', 'sacola'], ['Financeiro', 'carteira'], ['Ordem de Serviço', 'ferramenta'], ['Documentos', 'pasta'], ['Entregas e Pedidos online', 'caminhao']];
+  var CFG_GRUPO_DE = { conta: 'Geral', empresa: 'Geral', login: 'Geral', empresas: 'Geral', fiscal: 'Geral', suporte: 'Geral', func: 'Equipe', acesso: 'Equipe', seguranca: 'Equipe',
+    depositos: 'Suprimentos', grupos: 'Suprimentos', tags: 'Suprimentos', reservas: 'Suprimentos', naturezas: 'Suprimentos', transfrede: 'Suprimentos', avalmarcas: 'Suprimentos',
+    caixa: 'Vendas', modelosmsg: 'Vendas', formas: 'Financeiro', categorias: 'Financeiro', osaux: 'Ordem de Serviço', checklists: 'Ordem de Serviço', manutcentral: 'Ordem de Serviço',
+    modelosdoc: 'Documentos', assloja: 'Documentos', obrigatorios: 'Documentos', historico: 'Equipe', entregas: 'Entregas e Pedidos online', pedonline: 'Entregas e Pedidos online' };
   function itensCfg() {
     var l = [['conta', 'Minha conta', 'Aparência e troca de senha']];
     if (pode('equipe')) l.push(['func', 'Funcionários', S.u.pedidosSenha ? '⚠ ' + S.u.pedidosSenha + ' pedido(s) de nova senha' : 'Cadastro, senhas e permissões'], ['acesso', 'Grupos de acesso', 'Permissões de cada grupo de funcionários']);
@@ -17014,18 +17032,29 @@
   }
   function desenharCfg() {
     var it = itensCfg();
-    if (CFG.aba && !it.some(function (a) { return a[0] === CFG.aba; })) CFG.aba = 'conta';
+    if (CFG.aba && !it.some(function (a) { return a[0] === CFG.aba; })) CFG.aba = null;
     var menu = $('cfgMenu'); menu.innerHTML = '';
     menu.appendChild(el('div', 'who2', S.u.nome + ' · usuário ' + S.u.usuario + ' · ' + S.u.perfil));
-    it.forEach(function (a) {
-      var b = el('button', a[0] === CFG.aba ? 'on' : ''); b.type = 'button';
-      b.appendChild(document.createTextNode(a[1])); b.appendChild(el('small', '', a[2]));
-      b.onclick = function () { CFG.aba = a[0]; desenharCfg(); window.scrollTo(0, 0); };
-      menu.appendChild(b);
-    });
+    var bq = inp('text', 'Buscar configuração (ex.: caixa)'); bq.className = 'cfgbusca'; bq.setAttribute('aria-label', 'Buscar configuração'); bq.value = CFG.busca || ''; menu.appendChild(bq);
+    var lw = el('div'); menu.appendChild(lw); var nada = el('div', 'hint', 'Nenhuma configuração com esse nome.'); nada.hidden = true; menu.appendChild(nada);
+    var grupos = CFG_GRUPOS.map(function (g) { return { g: g, l: it.filter(function (a) { return (CFG_GRUPO_DE[a[0]] || 'Geral') === g[0]; }) }; }).filter(function (x) { return x.l.length; });
+    var desMenu = function () {
+      lw.innerHTML = ''; var q = semAc(bq.value.trim()), algum = false; CFG.busca = bq.value;
+      grupos.forEach(function (x) {
+        var l = x.l.filter(function (a) { return !q || semAc(a[1] + ' ' + a[2] + ' ' + x.g[0]).indexOf(q) > -1; }); if (!l.length) return; algum = true;
+        var d = el('details'); d.open = !!q || l.some(function (a) { return a[0] === CFG.aba; }) || CFG.abertos[x.g[0]] === true;
+        d.addEventListener('toggle', function () { CFG.abertos[x.g[0]] = d.open; });
+        var sm = el('summary'), ic = el('span', 'ic'); ic.innerHTML = svgIco(x.g[1]); sm.appendChild(ic); sm.appendChild(el('span', '', x.g[0])); sm.appendChild(el('span', 'n', String(l.length))); d.appendChild(sm);
+        var w = el('div'); d.appendChild(w);
+        l.forEach(function (a) { var b = el('button', a[0] === CFG.aba ? 'on' : ''); b.type = 'button'; b.appendChild(document.createTextNode(a[1])); b.appendChild(el('small', '', a[2])); b.onclick = function () { CFG.aba = a[0]; desenharCfg(); window.scrollTo(0, 0); }; w.appendChild(b); });
+        lw.appendChild(d);
+      });
+      nada.hidden = algum;
+    };
+    bq.oninput = desMenu; desMenu();
     $('cfgWrap').classList.toggle('sel', !!CFG.aba);
     var corpo = $('cfgCorpo'); corpo.innerHTML = '';
-    if (!CFG.aba) return;
+    if (!CFG.aba) { corpo.appendChild(el('div', 'empty', 'Escolha um grupo à esquerda e depois a configuração. Ou use a busca.')); return; }
     var vt = el('button', 'lnk cfgvolta', '← Configurações'); vt.type = 'button'; vt.onclick = function () { CFG.aba = null; desenharCfg(); window.scrollTo(0, 0); }; corpo.appendChild(vt);
     var atual = it.filter(function (a) { return a[0] === CFG.aba; })[0];
     corpo.appendChild(el('h2', 'ct', atual[1]));
