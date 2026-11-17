@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-1zMVScGIIwkdW2zJ+ILZYHes7qU8gcJkRp7ObpZFR/8=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-D2r+Z/gwXZvoQ1hqgZmEOqRLXkSdcS6koFY514auLgU=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -1534,8 +1534,9 @@
   </section>
 
   <!-- ENTRADA DE COMPRAS -->
-  <section id="vPromo" class="hide"><div class="ptopo"><h1>Promoções</h1><button type="button" class="btn" id="prNova" style="width:auto">+ Nova promoção</button></div><div id="prCorpo"></div></section>
+  <section id="vPromo" class="hide"><div class="ptopo"><h1>Promoções e cupons</h1><button type="button" class="btn" id="prNova" style="width:auto">+ Nova promoção</button></div><div id="prCorpo"></div></section>
   <section id="vCupons" class="hide"><div class="ptopo"><h1>Cupons</h1></div><div id="cuCorpo"></div></section>
+  <section id="vCupomInd" class="hide"><div class="ptopo"><h1>Cupom individual</h1></div><div id="ciCorpo"></div></section>
   <section id="vPedidos" class="hide">
     <div class="ptopo"><h1>Pedido de Compras</h1><button type="button" class="btn" id="pcNovo" style="width:auto">+ Novo pedido</button></div>
     <div id="pcCorpo"></div>
@@ -2115,8 +2116,9 @@
     { id: 'balanco', sec: 'vBalanco', nome: 'Balanço', perm: 'balanco', permOu: 'finalizar_balanco', menu: 'Suprimento', desc: 'Inventário: contagem às cegas, revisão e ajuste' },
     { id: 'etiquetas', sec: 'vEtiquetas', nome: 'Etiquetas', perm: 'acessorios', permOu: 'produtos', menu: 'Suprimento', desc: 'Imprimir etiquetas, modelos e impressoras' },
     { id: 'compras', sec: 'vCompras', nome: 'Entrada de Compras', perm: 'compras', menu: 'Suprimento', desc: 'Lançar nota de compra (XML da NF-e ou manual)' },
-    { id: 'promocoes', sec: 'vPromo', nome: 'Promoções', perm: 'editar_acessorios', menu: 'Suprimento', desc: 'Diária, relâmpago ou por período: preço riscado no PDV' },
-    { id: 'cupons', sec: 'vCupons', nome: 'Cupons', perm: 'editar_acessorios', menu: 'Suprimento', desc: 'Cupons de desconto genéricos ou individuais (por CPF)' },
+    { id: 'promocoes', sec: 'vPromo', nome: 'Promoções e cupons', perm: 'editar_acessorios', menu: 'Promoções e Cupons', desc: 'Tudo o que está no ar, agendado ou encerrado: filtrar, editar, duplicar e encerrar' },
+    { id: 'cupons', sec: 'vCupons', nome: 'Cupons', perm: 'editar_acessorios', menu: 'Promoções e Cupons', desc: 'Cupom genérico (um código para todos) ou em lote (um por cliente)' },
+    { id: 'cupomind', sec: 'vCupomInd', nome: 'Cupom individual', perm: 'editar_acessorios', menu: 'Promoções e Cupons', desc: 'Cupom de desconto para um cliente (preso ao CPF)' },
     { id: 'pedidos', sec: 'vPedidos', nome: 'Pedido de Compras', perm: 'compras', menu: 'Suprimento', desc: 'Pedidos aos fornecedores: aberto, enviado, comprado, recebido' },
     { id: 'saldo', sec: 'vSaldo', nome: 'Saldo de Estoque', perm: 'estoque', menu: 'Suprimento', sub: 'Relatórios', subNome: 'Saldo de Estoque', desc: 'O que está disponível em estoque em um dia' },
     { id: 'finest', sec: 'vFinEst', nome: 'Visão Financeira de Estoque', perm: 'estoque', perm2: 'ver_custos', menu: 'Suprimento', sub: 'Relatórios', subNome: 'Visão Financeira de Estoque', desc: 'Quanto vale o estoque: custo da última compra e custo médio' },
@@ -4232,8 +4234,8 @@
     var b = escuro ? '#FFFFFF' : '#0F1B2D', a = escuro ? '#7D97FF' : '#2F5BFF', s = escuro ? '#0F1B2D' : '#FFFFFF';
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
-  var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'contato', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas', 'Cadastro': 'pasta', 'Folha': 'relogio', 'Gestão': 'camadas', 'Compra de Celulares': 'celcompra' };
-  var ICO_VIEW = { promocoes: 'promo', cupons: 'cupom', pedidos: 'pedido', 'rel-faturamento': 'grafico', 'rel-os': 'grafico', 'rel-suprimento': 'grafico', 'rel-financeiro': 'grafico', 'rel-metas': 'grafico', 'rel-crm': 'grafico', encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
+  var ICO_MENU = { 'Promoções e Cupons': 'promo', 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'contato', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas', 'Cadastro': 'pasta', 'Folha': 'relogio', 'Gestão': 'camadas', 'Compra de Celulares': 'celcompra' };
+  var ICO_VIEW = { promocoes: 'promo', cupons: 'cupom', cupomind: 'contato', pedidos: 'pedido', 'rel-faturamento': 'grafico', 'rel-os': 'grafico', 'rel-suprimento': 'grafico', 'rel-financeiro': 'grafico', 'rel-metas': 'grafico', 'rel-crm': 'grafico', encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista', proposta: 'recibo', finest: 'moedas',
                    compracel: 'quadro', ccnova: 'mais', cclista: 'lista', ccparc: 'aperto', pinicio: 'casa', pnova: 'mais', paparelhos: 'celular', pfin: 'carteira', ptab: 'etiqueta', pcli: 'pessoas', pav: 'sino', ploja: 'loja', metrel: 'grafico', rhdash: 'grafico', ponto: 'engrenagem', rhfunc: 'usuario', rhferiados: 'calendario', rhjornada: 'relogio', rhescalas: 'escala',
@@ -6722,7 +6724,7 @@
   function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono' || x.indexOf('parc_') === 0; }); }
   function pode(p) { return !!(S.u && ((p === '**' && !soParceira()) || (p === '*' && !S.u.soPonto && !soParceira()) || (S.u.perms || []).indexOf(p) > -1)); }
   // Leva 6 ampliada: telas da grade (tela × ação). Tela da grade aparece se a pessoa tem qualquer caixinha nela.
-  var GRADE_TELA = { ccnova: 'compracel', cclista: 'compracel', 'rel-metas': 'metrel', 'rel-crm': 'crm' };
+  var GRADE_TELA = { cupomind: 'cupons', ccnova: 'compracel', cclista: 'compracel', 'rel-metas': 'metrel', 'rel-crm': 'crm' };
   function temGrade() { return !!(S.u && (S.u.perms || []).some(function (k) { return k.indexOf(':') > 0; })); }
   function podeTela(id, a) {
     var t = GRADE_TELA[id] || id, ps = (S.u && S.u.perms) || [];
@@ -6937,6 +6939,7 @@
     if (id === 'pedidos') carregarPedidos();
     if (id === 'promocoes') carregarPromos();
     if (id === 'cupons') carregarCupons();
+    if (id === 'cupomind') cupomIndividual();
     if (id === 'acess') carregarAcess(false);
     if (id === 'estoque') carregarEstoque(false);
     if (id === 'saldo') carregarSaldo();
@@ -10128,75 +10131,187 @@
   //  PROMOÇÕES E CUPONS (Leva 6 ampliada)
   // =========================================================
   var PRD = null, DIAS_SEM = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-  function carregarPromos() { var b = $('prCorpo'); b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…')); call('promocoesListar', [S.token]).then(function (d) { PRD = d; desenharPromos(); }).catch(function (e) { b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); }); }
+  /* Leva 7 · 1.9: Promoções e cupons numa lista só (filtros por tipo e situação), cadastro de promoção com busca de produto e preço por produto, cupons e cupom individual. */
+  var PRF = { tipo: '', sit: 'ativos', busca: '' }, CUD = null;
+  function carregarPromos(depois) {
+    var b = $('prCorpo'); if (!depois) { b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…')); }
+    Promise.all([call('promocoesListar', [S.token]), call('cuponsListar', [S.token]), S.ac ? Promise.resolve(S.ac) : call('acessorios', [S.token])]).then(function (r) { PRD = r[0]; CUD = r[1]; S.ac = r[2]; if (depois) depois(); else desenharPromos(); })
+      .catch(function (e) { b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); });
+  }
   $('prNova').onclick = function () { if (PRD) formPromo(null); };
   function promoTxt(p) {
-    var d = p.desconto === 'pct' ? p.valor + '%' : p.desconto === 'fixo' ? 'preço fixo ' + brl(p.valor) : brl(p.valor) + ' de desconto';
-    var q = p.tipo === 'diaria' ? p.dias.map(function (x) { return DIAS_SEM[x]; }).join(', ') + (p.horaIni ? ' ' + p.horaIni + '–' + (p.horaFim || '24:00') : '') : (p.inicio ? new Date(p.inicio).toLocaleString('pt-BR').slice(0, 16) : '') + ' → ' + (p.fim ? new Date(p.fim).toLocaleString('pt-BR').slice(0, 16) : '');
+    var d = p.aplica === 'produto' && (p.itens || []).some(function (x) { return x.preco > 0; }) ? 'preço por produto' : p.desconto === 'pct' ? p.valor + '%' : p.desconto === 'fixo' ? 'preço fixo ' + brl(p.valor) : brl(p.valor) + ' de desconto';
+    var q = p.tipo === 'diaria' ? p.dias.map(function (x) { return DIAS_SEM[x]; }).join(', ') + (p.horaIni ? ' ' + p.horaIni + '–' + (p.horaFim || '24:00') : '') : (p.inicio ? new Date(p.inicio).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : '') + (p.fim ? ' até ' + new Date(p.fim).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : '');
     return d + ' · ' + q;
   }
+  function alvoTxt(p) {
+    if (p.aplica !== 'produto') return ({ grupo: 'Grupo', tag: 'Tag' })[p.aplica] + ': ' + p.alvo;
+    var M = {}; ((S.ac && S.ac.produtos) || []).forEach(function (x) { M[x.id] = x.nome; });
+    var l = (p.itens || []).map(function (x) { return M[x.id] || x.id; }); return l.length + ' produto(s): ' + l.slice(0, 3).join(', ') + (l.length > 3 ? '…' : '');
+  }
+  function sitChip(t) { return el('span', 'bdg ' + ({ 'No ar': 'ok', Ativo: 'ok', Agendada: 'res', 'Fora do horário': 'inf' }[t] || (t === 'Inativada' || t === 'Inativado' ? 'off' : 'warn')), t); }
   function desenharPromos() {
-    var b = $('prCorpo'); b.innerHTML = ''; var c = el('div', 'card'); b.appendChild(c);
-    c.appendChild(el('div', 'hint', 'No PDV aparece o preço riscado e o nome da promoção (na relâmpago, a hora em que termina). Etiquetas e Tabela de Preços não mudam. Promoções e cupons não acumulam, a não ser que os dois estejam marcados "pode acumular".'));
-    if (!PRD.promocoes.length) c.appendChild(el('div', 'empty', 'Nenhuma promoção ainda.'));
-    PRD.promocoes.forEach(function (p) {
-      var r = el('div', 'fl'), t = el('div'); t.appendChild(el('div', 'n', p.nome + ' · ' + ({ diaria: 'Diária', relampago: 'Relâmpago', periodo: 'Período' })[p.tipo] + (p.noAr ? ' · no ar' : !p.ativa ? ' · encerrada' : '')));
-      t.appendChild(el('div', 'd', ({ produto: 'Produto', grupo: 'Grupo', tag: 'Tag' })[p.aplica] + ': ' + (p.aplica === 'produto' ? ((PCAC || S.ac || { produtos: [] }).produtos.filter(function (x) { return x.id === p.alvo; })[0] || { nome: p.alvo }).nome : p.alvo) + ' · ' + promoTxt(p) + (p.acumula ? ' · acumula' : '')));
-      r.appendChild(t); var ac = el('div'); ac.style.cssText = 'display:flex;gap:6px';
-      if (PRD.editar) { var be = el('button', 'btn ghost mini', 'Editar'); be.type = 'button'; be.onclick = function () { formPromo(p); }; ac.appendChild(be);
-        var bt = el('button', 'btn ghost mini', p.ativa ? 'Encerrar' : 'Ativar'); bt.type = 'button'; bt.onclick = function () { call('promocaoAtivar', [S.token, p.id, !p.ativa]).then(function (d) { PRD = d; desenharPromos(); }).catch(function (e) { msg('topMsg', e); }); }; ac.appendChild(bt); }
-      r.appendChild(ac); c.appendChild(r);
-    });
+    var b = $('prCorpo'); b.innerHTML = '';
+    var top = el('div', 'acoes'); b.appendChild(top);
+    if (PRD.editar) { btn(top, '+ Cupom', 'ghost', function () { ir('cupons'); }); btn(top, '+ Cupom individual', 'ghost', function () { ir('cupomind'); }); }
+    var fl = el('div', 'dbfil'); b.appendChild(fl);
+    var f1 = el('div'), f2 = el('div'), f3 = el('div'); fl.appendChild(f1); fl.appendChild(f2); fl.appendChild(f3);
+    var tp = el('select'); [['', 'Promoções e cupons'], ['promo', 'Só promoções'], ['cupom', 'Só cupons']].forEach(function (o) { tp.appendChild(el('option', '', o[1])).value = o[0]; }); tp.value = PRF.tipo; campo(f1, 'Tipo', tp);
+    var st = el('select'); [['ativos', 'No ar e ativos'], ['agendadas', 'Agendadas'], ['encerradas', 'Encerradas, vencidas e usadas'], ['inativas', 'Inativadas'], ['todos', 'Todas as situações']].forEach(function (o) { st.appendChild(el('option', '', o[1])).value = o[0]; }); st.value = PRF.sit; campo(f2, 'Situação', st);
+    var bu = inp('text', 'Nome, código ou produto'); bu.value = PRF.busca; campo(f3, 'Buscar', bu);
+    var lw = el('div'); b.appendChild(lw);
+    var linhas = function () {
+      var L = [];
+      PRD.promocoes.forEach(function (p) { L.push({ t: 'promo', x: p, nome: p.nome, sit: p.situacao, det: promoTxt(p) + ' · ' + alvoTxt(p), busca: p.nome + ' ' + alvoTxt(p) }); });
+      (CUD ? CUD.cupons : []).forEach(function (c) { L.push({ t: 'cupom', x: c, nome: c.codigo + (c.nome ? ' · ' + c.nome : ''), sit: c.situacao, det: (c.desconto === 'pct' ? c.valor + '%' : brl(c.valor)) + (c.minimo ? ' · mínimo ' + brl(c.minimo) : '') + (c.soAcess ? ' · acessórios' : '') + ' · ' + c.tipo + (c.limite ? ' · ' + c.usos + '/' + c.limite + ' uso(s)' : ' · ' + c.usos + ' uso(s)') + (c.validade ? ' · até ' + isoBR(c.validade) : ''), busca: c.codigo + ' ' + (c.nome || '') + ' ' + (c.origem || '') }); });
+      (CUD ? CUD.lotes : []).forEach(function (c) { L.push({ t: 'cupom', x: c, lote: true, nome: c.codigo + ' (lote)', sit: c.situacao, det: (c.desconto === 'pct' ? c.valor + '%' : brl(c.valor)) + ' · ' + c.qtd + ' cupons, ' + c.usados + ' usados' + (c.validade ? ' · até ' + isoBR(c.validade) : '') + (c.origem ? ' · ' + c.origem : ''), busca: c.codigo + ' ' + (c.origem || '') }); });
+      var grupo = { 'No ar': 'ativos', Ativo: 'ativos', 'Fora do horário': 'ativos', Agendada: 'agendadas', Encerrada: 'encerradas', Vencido: 'encerradas', Usado: 'encerradas', Inativada: 'inativas', Inativado: 'inativas' };
+      var w = semAc(bu.value.trim()).split(/\s+/).filter(Boolean);
+      return L.filter(function (r) { return (!tp.value || r.t === tp.value) && (st.value === 'todos' || grupo[r.sit] === st.value) && (!w.length || w.every(function (z) { return semAc(r.busca).indexOf(z) > -1; })); });
+    };
+    var des = function () {
+      PRF = { tipo: tp.value, sit: st.value, busca: bu.value }; lw.innerHTML = '';
+      var L = linhas(); var c = el('div', 'card'); lw.appendChild(c);
+      c.appendChild(el('div', 'hint', 'No PDV aparece o preço riscado e o nome da promoção. Promoções e cupons não acumulam, a não ser que os dois estejam marcados para isso.'));
+      if (!L.length) { c.appendChild(el('div', 'empty', 'Nada nesta situação.')); return; }
+      L.forEach(function (r) {
+        var rw = el('div', 'fl'), t = el('div'), n = el('div', 'n'); n.appendChild(el('span', 'bdg ' + (r.t === 'promo' ? 'inf' : 'res'), r.t === 'promo' ? 'Promoção' : 'Cupom')); n.appendChild(document.createTextNode(' ' + r.nome + ' ')); n.appendChild(sitChip(r.sit)); t.appendChild(n); t.appendChild(el('div', 'd', r.det)); rw.appendChild(t);
+        var ac = el('div'); ac.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end'; rw.appendChild(ac);
+        if (PRD.editar) {
+          if (r.t === 'promo') {
+            btn(ac, 'Editar', 'ghost mini', function () { formPromo(r.x); });
+            btn(ac, 'Duplicar', 'ghost mini', function () { var cp = JSON.parse(JSON.stringify(r.x)); delete cp.id; cp.nome = (cp.nome + ' (cópia)').slice(0, 60); cp.ativa = true; formPromo(cp); });
+            btn(ac, r.x.ativa ? 'Encerrar agora' : 'Reativar', 'ghost mini', function () { call('promocaoAtivar', [S.token, r.x.id, !r.x.ativa]).then(function (d) { PRD = d; S.ac = null; carregarPromos(); avisoTopo(r.x.ativa ? 'Promoção encerrada' : 'Promoção reativada'); }).catch(function (e) { msg('topMsg', e); }); });
+          } else {
+            btn(ac, 'Editar', 'ghost mini', function () { formCupomEditar(r.x); });
+            btn(ac, r.sit === 'Inativado' ? 'Reativar' : 'Inativar', 'ghost mini', function () { call('cupomEditar', [S.token, r.x.codigo, { ativo: r.sit === 'Inativado' }]).then(function (d) { CUD = d; des(); }).catch(function (e) { msg('topMsg', e); }); });
+          }
+        }
+        c.appendChild(rw);
+      });
+    };
+    tp.onchange = des; st.onchange = des; bu.oninput = des; des();
+  }
+  function formCupomEditar(c) {
+    var b = $('prCorpo'); b.innerHTML = ''; var vt = el('button', 'lnk', '← Promoções e cupons'); vt.type = 'button'; vt.onclick = desenharPromos; b.appendChild(vt);
+    var k = el('div', 'card'); b.appendChild(k); k.appendChild(el('h2', '', 'Editar cupom ' + c.codigo));
+    var f = camposCupom(k, c); var lim = null;
+    if (c.tipo === 'Genérico') { lim = inp('number', 'sem limite'); lim.value = c.limite || ''; campo(k, 'Limite total de usos', lim); }
+    var m = el('div', 'msg err'); k.appendChild(m);
+    btn(k, 'Salvar cupom', 'ok', function () { call('cupomEditar', [S.token, c.codigo, Object.assign(f.dados(), { limite: lim ? lim.value : '' })]).then(function (d) { CUD = d; desenharPromos(); avisoTopo('Cupom salvo'); }).catch(function (e) { erroEm(m, e); }); });
+  }
+  /** Campos comuns de cupom (desconto, valor, mínimo, validade, acumula, só acessórios). */
+  function camposCupom(bx, x) {
+    x = x || {}; var g = grade(bx, 2), g2 = grade(bx, 2);
+    var dsc = el('select'); [['pct', '% de desconto'], ['valor', 'R$ de desconto']].forEach(function (o) { dsc.appendChild(el('option', '', o[1])).value = o[0]; }); dsc.value = x.desconto || 'pct'; campo(g[0], 'Desconto', dsc, true);
+    var v = inp('text', 'Ex.: 10'); v.inputMode = 'decimal'; v.dataset.rs = '1'; v.value = x.valor ? vs(x.valor) : ''; campo(g[1], 'Valor', v, true);
+    var un = function () { v.placeholder = dsc.value === 'pct' ? 'Ex.: 10 (%)' : 'Ex.: 20,00 (R$)'; v.previousElementSibling.textContent = dsc.value === 'pct' ? 'Valor (%)' : 'Valor (R$)'; }; dsc.onchange = un; un();
+    var mn = inp('text', 'Opcional'); mn.inputMode = 'decimal'; mn.value = x.minimo ? vs(x.minimo) : ''; campo(g2[0], 'Compra mínima (R$)', mn);
+    var va = inpData(x.validade || ''); if (!x.validade) va.value = ''; campo(g2[1], 'Validade', va);
+    var lk = el('label', 'ckl'), ak = el('input'); ak.type = 'checkbox'; ak.checked = !!x.acumula; lk.appendChild(ak); lk.appendChild(document.createTextNode(' Pode acumular com promoção')); bx.appendChild(lk);
+    var ls = el('label', 'ckl'), sa = el('input'); sa.type = 'checkbox'; sa.checked = !!x.soAcess; ls.appendChild(sa); ls.appendChild(document.createTextNode(' Só para acessórios (produtos)')); bx.appendChild(ls);
+    return { dados: function () { return { desconto: dsc.value, valor: v.value, minimo: mn.value, validade: va.value, acumula: ak.checked, soAcess: sa.checked }; } };
   }
   function formPromo(p) {
-    var b = $('prCorpo'); b.innerHTML = ''; var vt = el('button', 'lnk', '← Promoções'); vt.type = 'button'; vt.onclick = desenharPromos; b.appendChild(vt);
-    var P = p ? JSON.parse(JSON.stringify(p)) : { nome: '', tipo: 'relampago', aplica: 'grupo', alvo: '', desconto: 'pct', valor: '', dias: [], horaIni: '', horaFim: '', acumula: false, lojas: [] };
-    var c = el('div', 'card'); b.appendChild(c);
+    var b = $('prCorpo'); b.innerHTML = ''; var vt = el('button', 'lnk', '← Promoções e cupons'); vt.type = 'button'; vt.onclick = desenharPromos; b.appendChild(vt);
+    var P = p ? JSON.parse(JSON.stringify(p)) : { nome: '', tipo: 'relampago', aplica: 'produto', alvo: '', itens: [], desconto: 'pct', valor: '', dias: [], horaIni: '', horaFim: '', acumula: false, lojas: [] };
+    if (P.aplica === 'produto' && !(P.itens || []).length && P.alvo) P.itens = [{ id: P.alvo }];
+    var modo = (P.itens || []).some(function (x) { return x.preco > 0; }) ? 'individual' : 'todos';
+    var c = el('div', 'card'); b.appendChild(c); c.appendChild(el('h2', '', P.id ? 'Editar promoção' : 'Nova promoção'));
     var g = grade(c, 2), nm = inp('text', 'Ex.: Relâmpago Capas'); nm.value = P.nome; campo(g[0], 'Nome', nm, true);
-    var tp = el('select'); [['relampago', 'Relâmpago (início e fim com hora)'], ['diaria', 'Diária (dias da semana e horário)'], ['periodo', 'Período']].forEach(function (o) { var q = el('option', '', o[1]); q.value = o[0]; tp.appendChild(q); }); tp.value = P.tipo; campo(g[1], 'Tipo', tp, true);
-    var g2 = grade(c, 2), ap = el('select'); [['grupo', 'Grupo'], ['tag', 'Tag'], ['produto', 'Produto']].forEach(function (o) { var q = el('option', '', o[1]); q.value = o[0]; ap.appendChild(q); }); ap.value = P.aplica; campo(g2[0], 'Aplica a', ap, true);
-    var alvoBox = el('div'); g2[1].appendChild(alvoBox); var alvo = null;
-    var desAlvo = function () { alvoBox.innerHTML = ''; var cat = PRD.catalogo || { grupos: [], tags: [] };
-      if (ap.value === 'produto') { alvo = el('select'); ((S.ac && S.ac.produtos) || []).filter(function (x) { return x.formato !== 'variacoes'; }).forEach(function (x) { var q = el('option', '', x.nome); q.value = x.id; alvo.appendChild(q); }); if (!S.ac) call('acessorios', [S.token]).then(function (d) { S.ac = d; desAlvo(); }); }
-      else { alvo = el('select'); (ap.value === 'grupo' ? cat.grupos : cat.tags).forEach(function (x) { alvo.appendChild(el('option', '', x)); }); }
-      alvo.value = P.alvo; campo(alvoBox, ap.value === 'produto' ? 'Produto' : ap.value === 'grupo' ? 'Grupo' : 'Tag', alvo, true); };
-    ap.onchange = desAlvo; desAlvo();
-    var g3 = grade(c, 2), ds = el('select'); [['pct', '% sobre o preço'], ['fixo', 'Preço fixo'], ['valor', 'R$ de desconto']].forEach(function (o) { var q = el('option', '', o[1]); q.value = o[0]; ds.appendChild(q); }); ds.value = P.desconto; campo(g3[0], 'Desconto', ds, true);
-    var vl = inp('text', 'Ex.: 15'); vl.inputMode = 'decimal'; vl.value = P.valor ? String(P.valor).replace('.', ',') : ''; campo(g3[1], 'Valor', vl, true);
+    var tp = el('select'); [['relampago', 'Relâmpago (início e fim com hora)'], ['diaria', 'Diária (dias da semana e horário)'], ['periodo', 'Período']].forEach(function (o) { tp.appendChild(el('option', '', o[1])).value = o[0]; }); tp.value = P.tipo; campo(g[1], 'Tipo', tp, true);
+    var ap = el('select'); [['produto', 'Produtos escolhidos'], ['grupo', 'Um grupo de produtos'], ['tag', 'Uma tag']].forEach(function (o) { ap.appendChild(el('option', '', o[1])).value = o[0]; }); ap.value = P.aplica; campo(c, 'Vale para', ap, true);
+    var alvoBox = el('div'); c.appendChild(alvoBox); var alvo = null, descBox = el('div'), ds = null, vl = null;
+    var M = {}; ((S.ac && S.ac.produtos) || []).forEach(function (x) { M[x.id] = x; });
+    var desAlvo = function () {
+      alvoBox.innerHTML = ''; descBox.innerHTML = '';
+      if (ap.value === 'produto') {
+        var sg = el('div', 'seg'); sg.style.maxWidth = '420px'; alvoBox.appendChild(sg); seg(sg, ['Mesmo desconto para todos', 'Preço por produto'], modo === 'individual' ? 'Preço por produto' : 'Mesmo desconto para todos', function (v) { modo = /Preço/.test(v) ? 'individual' : 'todos'; desAlvo(); });
+        var bq = inp('text', 'Digite o nome, SKU ou código de barras do produto'); bq.setAttribute('aria-label', 'Buscar produto'); bq.style.marginTop = '10px'; alvoBox.appendChild(bq); var rs = el('div'); alvoBox.appendChild(rs);
+        bq.oninput = function () { rs.innerHTML = ''; var w = semAc(bq.value.trim()).split(/\s+/).filter(Boolean); if (!w.length || bq.value.trim().length < 2) return;
+          var l = Object.keys(M).map(function (k) { return M[k]; }).filter(function (x) { return x.formato !== 'variacoes' && x.formato !== 'composicao' && !P.itens.some(function (y) { return y.id === x.id; }) && w.every(function (z) { return semAc(x.nome + ' ' + (x.sku || '') + ' ' + (x.codigo || '')).indexOf(z) > -1; }); }).slice(0, 8);
+          var lst = el('div', 'vdres'); if (!l.length) rs.appendChild(el('div', 'hint', 'Nenhum produto encontrado.'));
+          l.forEach(function (x) { var bt = el('button'), a = el('span', '', x.nome); bt.type = 'button'; a.appendChild(el('small', '', [x.sku ? 'SKU ' + x.sku : '', x.preco ? 'preço ' + brl(x.preco) : 'sem preço'].filter(Boolean).join(' · '))); bt.appendChild(a); bt.onclick = function () { P.itens.push({ id: x.id }); bq.value = ''; rs.innerHTML = ''; desItens(); bq.focus(); }; lst.appendChild(bt); });
+          if (l.length) rs.appendChild(lst); };
+        var itw = el('div'); alvoBox.appendChild(itw);
+        var desItens = function () {
+          itw.innerHTML = ''; if (!P.itens.length) { itw.appendChild(el('div', 'hint', 'Nenhum produto ainda: digite acima para buscar.')); return; }
+          var t = el('table', 'ext'), h = el('tr'); ['Produto', 'Preço atual'].concat(modo === 'individual' ? ['Preço na promoção', 'Desconto'] : []).concat(['']).forEach(function (x) { h.appendChild(el('th', '', x)); }); t.appendChild(h);
+          P.itens.forEach(function (it, k) {
+            var x = M[it.id] || { nome: it.id, preco: 0 }, tr = el('tr'); tr.appendChild(el('td', '', x.nome)); tr.appendChild(el('td', 'v', x.preco ? brl(x.preco) : '—'));
+            if (modo === 'individual') { var td = el('td'), pv = inpValor(it.preco ? vs(it.preco) : ''); pv.input.setAttribute('aria-label', 'Preço na promoção de ' + x.nome); var dd = el('td', 'v', '');
+              var calc = function () { var n = num(pv.input.value); it.preco = n > 0 ? n : ''; dd.textContent = n > 0 && x.preco ? pct(1 - n / x.preco) : ''; }; pv.input.oninput = calc; calc(); td.appendChild(pv); tr.appendChild(td); tr.appendChild(dd); }
+            var tx = el('td'), xb = el('button', 'x', '×'); xb.type = 'button'; xb.title = 'Tirar'; xb.onclick = function () { P.itens.splice(k, 1); desItens(); }; tx.appendChild(xb); tr.appendChild(tx); t.appendChild(tr);
+          });
+          var w = el('div', 'tbwrap'); w.appendChild(t); itw.appendChild(w);
+        };
+        desItens();
+        if (modo === 'todos') desDesc();
+      } else {
+        var cat = PRD.catalogo || { grupos: [], tags: [] }; alvo = el('select'); (ap.value === 'grupo' ? cat.grupos : cat.tags).forEach(function (x) { alvo.appendChild(el('option', '', x)); }); alvo.value = P.alvo; campo(alvoBox, ap.value === 'grupo' ? 'Grupo' : 'Tag', alvo, true);
+        desDesc();
+      }
+    };
+    var desDesc = function () { descBox.innerHTML = ''; var g3 = grade(descBox, 2); ds = el('select'); [['pct', '% sobre o preço'], ['fixo', 'Preço fixo'], ['valor', 'R$ de desconto']].forEach(function (o) { ds.appendChild(el('option', '', o[1])).value = o[0]; }); ds.value = P.desconto; campo(g3[0], 'Desconto', ds, true);
+      vl = inp('text', 'Ex.: 15'); vl.inputMode = 'decimal'; vl.dataset.rs = '1'; vl.value = P.valor && P.desconto !== 'fixo' || (P.valor && modo === 'todos') ? vs(P.valor) : ''; campo(g3[1], 'Valor', vl, true); var un2 = function () { vl.previousElementSibling.textContent = ds.value === 'pct' ? 'Valor (%)' : 'Valor (R$)'; }; ds.onchange = un2; un2(); };
+    c.appendChild(descBox);
+    ap.onchange = function () { P.aplica = ap.value; desAlvo(); }; desAlvo();
     var qd = el('div'); c.appendChild(qd);
     var dt = function (ms) { if (!ms) return ''; var d2 = new Date(ms); return d2.getFullYear() + '-' + ('0' + (d2.getMonth() + 1)).slice(-2) + '-' + ('0' + d2.getDate()).slice(-2) + 'T' + ('0' + d2.getHours()).slice(-2) + ':' + ('0' + d2.getMinutes()).slice(-2); };
     var ini = inp('datetime-local', ''), fim = inp('datetime-local', ''), hi = inp('time', ''), hf = inp('time', ''); ini.value = dt(P.inicio); fim.value = dt(P.fim); hi.value = P.horaIni; hf.value = P.horaFim;
-    var dk = [];
     var desQ = function () { qd.innerHTML = '';
-      if (tp.value === 'diaria') { var dw = el('div', 'chips'); DIAS_SEM.forEach(function (n, i) { var bt = el('button', 'chip' + (P.dias.indexOf(i) > -1 ? ' on' : ''), n); bt.type = 'button'; bt.onclick = function () { var k = P.dias.indexOf(i); if (k > -1) P.dias.splice(k, 1); else P.dias.push(i); desQ(); }; dw.appendChild(bt); }); qd.appendChild(el('label', '', 'Dias da semana')); qd.appendChild(dw); var gg = grade(qd, 2); campo(gg[0], 'Das', hi); campo(gg[1], 'Até', hf); }
+      if (tp.value === 'diaria') { var dw = el('div', 'chips'); DIAS_SEM.forEach(function (n, i) { var bt = el('button', 'chip' + (P.dias.indexOf(i) > -1 ? ' on' : ''), n); bt.type = 'button'; bt.onclick = function () { var k = P.dias.indexOf(i); if (k > -1) P.dias.splice(k, 1); else P.dias.push(i); bt.classList.toggle('on'); }; dw.appendChild(bt); }); campo(qd, 'Dias da semana', dw, true); var gg = grade(qd, 2); campo(gg[0], 'Das', hi); campo(gg[1], 'Até', hf); }
       else { var gg2 = grade(qd, 2); campo(gg2[0], 'Início', ini, true); campo(gg2[1], 'Fim', fim, true); } };
     tp.onchange = desQ; desQ();
     var lk = el('label', 'ckl'), ak = el('input'); ak.type = 'checkbox'; ak.checked = !!P.acumula; lk.appendChild(ak); lk.appendChild(document.createTextNode(' Pode acumular com cupom')); c.appendChild(lk);
     var m = el('div', 'msg err'); c.appendChild(m);
     btn(c, 'Salvar promoção', 'ok', function () {
-      call('promocaoSalvar', [S.token, { id: P.id || '', nome: nm.value, tipo: tp.value, aplica: ap.value, alvo: alvo ? alvo.value : '', desconto: ds.value, valor: vl.value, dias: P.dias, horaIni: hi.value, horaFim: hf.value, inicio: ini.value, fim: fim.value, acumula: ak.checked }])
-        .then(function (d) { PRD = d; S.ac = null; desenharPromos(); avisoTopo('Promoção salva'); }).catch(function (e) { erroEm(m, e); });
+      var d = { id: P.id || '', nome: nm.value, tipo: tp.value, aplica: ap.value, alvo: alvo ? alvo.value : '', desconto: ds ? ds.value : 'fixo', valor: vl ? vl.value : '', dias: P.dias, horaIni: hi.value, horaFim: hf.value, inicio: ini.value, fim: fim.value, acumula: ak.checked, ativa: P.ativa !== false };
+      if (ap.value === 'produto') { d.itens = P.itens.map(function (x) { return modo === 'individual' ? { id: x.id, preco: x.preco } : { id: x.id }; }); d.precoModo = modo; }
+      call('promocaoSalvar', [S.token, d]).then(function (r) { PRD = r; S.ac = null; PRF.sit = 'todos'; carregarPromos(); avisoTopo('Promoção salva'); }).catch(function (e) { erroEm(m, e); });
     });
   }
   function carregarCupons() { var b = $('cuCorpo'); b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…')); call('cuponsListar', [S.token]).then(desenharCupons).catch(function (e) { b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); }); }
   function desenharCupons(d) {
-    var b = $('cuCorpo'); b.innerHTML = ''; var g = grade(b, 2), c1 = el('div', 'card'), c2 = el('div', 'card'); g[0].appendChild(c1); g[1].appendChild(c2);
-    var campos = function (bx) { var o = {}; var dsc = el('select'); [['pct', '% de desconto'], ['valor', 'R$ de desconto']].forEach(function (x) { var q = el('option', '', x[1]); q.value = x[0]; dsc.appendChild(q); }); campo(bx, 'Desconto', dsc); o.ds = dsc;
-      o.v = inp('text', 'Ex.: 10'); o.v.inputMode = 'decimal'; campo(bx, 'Valor', o.v); o.min = inp('text', 'Opcional'); o.min.inputMode = 'decimal'; campo(bx, 'Compra mínima (R$)', o.min); o.val = inpData(''); o.val.value = ''; campo(bx, 'Validade', o.val);
-      var ak = el('label', 'ckl'), ac = el('input'); ac.type = 'checkbox'; ak.appendChild(ac); ak.appendChild(document.createTextNode(' Pode acumular com promoção')); bx.appendChild(ak); o.ac = ac; return o; };
-    c1.appendChild(el('h2', '', 'Cupom genérico')); var cg = inp('text', 'Ex.: BLACK10'); cg.autocapitalize = 'characters'; campo(c1, 'Código', cg, true); var lim = inp('number', 'sem limite'); campo(c1, 'Limite total de usos', lim); var f1 = campos(c1); var m1 = el('div', 'msg err'); c1.appendChild(m1);
-    if (d.editar) btn(c1, 'Criar cupom', 'ok', function () { call('cupomSalvar', [S.token, { codigo: cg.value, limite: lim.value, desconto: f1.ds.value, valor: f1.v.value, minimo: f1.min.value, validade: f1.val.value, acumula: f1.ac.checked }]).then(desenharCupons).catch(function (e) { erroEm(m1, e); }); });
-    c2.appendChild(el('h2', '', 'Cupons individuais (um por cliente)')); var pf = inp('text', 'Ex.: VOLTA'); pf.autocapitalize = 'characters'; campo(c2, 'Prefixo', pf, true);
-    var pub = el('select'); [['sem_compra', 'Clientes sem compra há 90 dias'], ['aniversariantes', 'Aniversariantes do mês'], ['lista', 'Lista de CPFs']].forEach(function (x) { var q = el('option', '', x[1]); q.value = x[0]; pub.appendChild(q); }); campo(c2, 'Para quem', pub);
-    var cpfs = el('textarea'); cpfs.rows = 2; cpfs.placeholder = 'CPFs separados por vírgula'; campo(c2, 'CPFs (se for lista)', cpfs); var f2 = campos(c2); var m2 = el('div', 'msg err'); c2.appendChild(m2); var res = el('div'); c2.appendChild(res);
-    if (d.editar) btn(c2, 'Gerar cupons', 'ok', function () { call('cuponsGerarLote', [S.token, { prefixo: pf.value, publico: pub.value, cpfs: cpfs.value, desconto: f2.ds.value, valor: f2.v.value, minimo: f2.min.value, validade: f2.val.value, acumula: f2.ac.checked }]).then(function (r) {
+    CUD = d; var b = $('cuCorpo'); b.innerHTML = '';
+    b.appendChild(el('div', 'hint', 'Depois de criar, o cupom aparece em "Promoções e cupons", onde dá para filtrar, editar e inativar. Cupom para um cliente só: use "Cupom individual".'));
+    var g = grade(b, 2), c1 = el('div', 'card'), c2 = el('div', 'card'); g[0].appendChild(c1); g[1].appendChild(c2);
+    c1.appendChild(el('h2', '', 'Cupom genérico')); c1.appendChild(el('div', 'hint', 'Um código que qualquer cliente usa (ex.: BLACK10).'));
+    var cg = inp('text', 'Ex.: BLACK10'); cg.autocapitalize = 'characters'; campo(c1, 'Código', cg, true); var lim = inp('number', 'sem limite'); campo(c1, 'Limite total de usos', lim); var f1 = camposCupom(c1); var m1 = el('div', 'msg err'); c1.appendChild(m1);
+    if (d.editar) btn(c1, 'Criar cupom', 'ok', function () { call('cupomSalvar', [S.token, Object.assign(f1.dados(), { codigo: cg.value, limite: lim.value })]).then(function () { avisoTopo('Cupom criado'); PRF = { tipo: 'cupom', sit: 'ativos', busca: '' }; ir('promocoes'); }).catch(function (e) { erroEm(m1, e); }); });
+    c2.appendChild(el('h2', '', 'Cupons em lote (um por cliente)')); c2.appendChild(el('div', 'hint', 'Gera um código diferente para cada cliente do público, preso ao CPF de cada um.'));
+    var pf = inp('text', 'Ex.: VOLTA'); pf.autocapitalize = 'characters'; campo(c2, 'Prefixo', pf, true);
+    var pub = el('select'); [['sem_compra', 'Clientes sem compra há 90 dias'], ['aniversariantes', 'Aniversariantes do mês'], ['lista', 'Lista de CPFs']].forEach(function (x) { pub.appendChild(el('option', '', x[1])).value = x[0]; }); campo(c2, 'Para quem', pub);
+    var cpfs = el('textarea'); cpfs.rows = 2; cpfs.placeholder = 'CPFs separados por vírgula'; campo(c2, 'CPFs (se for lista)', cpfs); var f2 = camposCupom(c2); var m2 = el('div', 'msg err'); c2.appendChild(m2); var res = el('div'); c2.appendChild(res);
+    if (d.editar) btn(c2, 'Gerar cupons', 'ok', function () { call('cuponsGerarLote', [S.token, Object.assign(f2.dados(), { prefixo: pf.value, publico: pub.value, cpfs: cpfs.value })]).then(function (r) {
       res.innerHTML = ''; res.appendChild(el('div', 'msg ok show', '✓ ' + r.cupons.length + ' cupons gerados (lote ' + r.lote + ')'));
       r.cupons.forEach(function (x) { var rw = el('div', 'fl'), t = el('div'); t.appendChild(el('div', 'n', x.codigo + ' · ' + x.nome)); rw.appendChild(t); if (x.whats) { var w = el('button', 'btn ghost mini', 'WhatsApp'); w.type = 'button'; w.onclick = function () { window.open(waLink(x.whats, 'Olá, ' + x.nome.split(' ')[0] + '! Seu cupom de desconto: ' + x.codigo + '. Apresente na loja.'), '_blank'); }; rw.appendChild(w); } res.appendChild(rw); });
     }).catch(function (e) { erroEm(m2, e); }); });
-    var c3 = el('div', 'card'); b.appendChild(c3); c3.appendChild(el('h2', '', 'Cupons'));
-    d.cupons.forEach(function (x) { var r = el('div', 'fl'), t = el('div'); t.appendChild(el('div', 'n', x.codigo + ' · ' + (x.desconto === 'pct' ? x.valor + '%' : brl(x.valor)) + (x.minimo ? ' · mínimo ' + brl(x.minimo) : '') + (x.soAcess ? ' · acessórios' : ''))); t.appendChild(el('div', 'd', x.tipo + ' · ' + x.usos + (x.limite ? ' de ' + x.limite : '') + ' uso(s)' + (x.validade ? ' · até ' + isoBR(x.validade) : '') + (x.origem ? ' · ' + x.origem : ''))); r.appendChild(t); c3.appendChild(r); });
-    d.lotes.forEach(function (x) { var r = el('div', 'fl'), t = el('div'); t.appendChild(el('div', 'n', x.codigo + ' · ' + (x.desconto === 'pct' ? x.valor + '%' : brl(x.valor)))); t.appendChild(el('div', 'd', x.tipo + ' · ' + x.usados + ' de ' + x.qtd + ' usados' + (x.validade ? ' · até ' + isoBR(x.validade) : '') + ' · ' + x.origem)); r.appendChild(t); c3.appendChild(r); });
-    if (!d.cupons.length && !d.lotes.length) c3.appendChild(el('div', 'empty', 'Nenhum cupom ainda.'));
+  }
+  function cupomIndividual() {
+    var b = $('ciCorpo'); b.innerHTML = ''; var c = el('div', 'card'); b.appendChild(c);
+    c.appendChild(el('div', 'hint', 'O cupom fica preso ao CPF do cliente: só ele usa, uma vez. Depois de criar, mande pelo WhatsApp.'));
+    var CL = null, cb = el('div'); c.appendChild(cb);
+    var desCli = function () {
+      cb.innerHTML = '';
+      if (CL) { var sl = el('div', 'clisel'); sl.appendChild(el('div', 'pnome', CL.nome)); sl.appendChild(el('div', 'psub', [CL.cpf ? fmtDoc(CL.cpf) : 'sem CPF', CL.whats ? fmtFone(CL.whats) : ''].filter(Boolean).join(' · '))); var tr = el('button', 'lnk', 'Trocar cliente'); tr.type = 'button'; tr.onclick = function () { CL = null; desCli(); }; sl.appendChild(tr); cb.appendChild(sl); return; }
+      var q = inp('text', 'Cliente: nome, CPF ou celular'); q.setAttribute('aria-label', 'Buscar cliente'); campo(cb, 'Cliente', q, true); var rr = el('div'); cb.appendChild(rr); var tm = null;
+      q.oninput = function () { clearTimeout(tm); rr.innerHTML = ''; var t = q.value.trim(); if (t.length < 2) return; tm = setTimeout(function () { call('clientesBusca', [S.token, t]).then(function (l) { rr.innerHTML = ''; var lst = el('div', 'vdres'); if (!l.length) rr.appendChild(el('div', 'hint', 'Nenhum cliente encontrado.'));
+        l.forEach(function (x) { var bt = el('button'), a = el('span', '', x.nome); bt.type = 'button'; a.appendChild(el('small', '', [x.cpf ? fmtDoc(x.cpf) : 'sem CPF', x.whats ? fmtFone(x.whats) : ''].filter(Boolean).join(' · '))); bt.appendChild(a); bt.onclick = function () { CL = x; desCli(); }; lst.appendChild(bt); }); if (l.length) rr.appendChild(lst); }).catch(function (e) { rr.appendChild(el('div', 'msg err show', String(e))); }); }, 300); };
+    };
+    desCli();
+    var cod = inp('text', 'Em branco: o sistema cria (ex.: MARIA-7K2P)'); cod.autocapitalize = 'characters'; campo(c, 'Código', cod);
+    var f = camposCupom(c, { soAcess: false }); var m = el('div', 'msg err'); c.appendChild(m); var res = el('div'); c.appendChild(res);
+    btn(c, 'Criar cupom individual', 'ok', function () {
+      if (!CL) return erroEm(m, 'Escolha o cliente.');
+      call('cupomIndividualSalvar', [S.token, Object.assign(f.dados(), { clienteId: CL.id, codigo: cod.value })]).then(function (r) {
+        CUD = r; res.innerHTML = ''; var ok = el('div', 'msg ok show', '✓ Cupom ' + r.criado.codigo + ' criado para ' + r.criado.nome + '.'); res.appendChild(ok);
+        var ac = el('div', 'acoes'); res.appendChild(ac);
+        if (r.criado.whats) btn(ac, 'Enviar no WhatsApp', 'ok', function () { window.open(waLink(r.criado.whats, 'Olá, ' + r.criado.nome.split(' ')[0] + '! Seu cupom de desconto: ' + r.criado.codigo + '. Apresente na loja.'), '_blank'); });
+        btn(ac, 'Ver em Promoções e cupons', 'ghost', function () { PRF = { tipo: 'cupom', sit: 'ativos', busca: r.criado.codigo }; ir('promocoes'); });
+        btn(ac, 'Criar outro', 'ghost', function () { cupomIndividual(); });
+      }).catch(function (e) { erroEm(m, e); });
+    });
   }
   // =========================================================
   //  PEDIDO DE COMPRAS (Leva 6 ampliada)
