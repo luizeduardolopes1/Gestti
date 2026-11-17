@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-D2r+Z/gwXZvoQ1hqgZmEOqRLXkSdcS6koFY514auLgU=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-bZsRrQJN+ik04ZNHf+RiYQj8a7b+/1/MWhQYS/+ExtQ=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -9601,8 +9601,9 @@
     var cab = el('div', 'cab'), qn = el('div'); qn.appendChild(el('b', '', S.u.nome)); qn.appendChild(document.createTextNode((lojaUser() || '') + '')); cab.appendChild(qn);
     var fx = el('button', 'btn ghost mini', '✕'); fx.type = 'button'; fx.setAttribute('aria-label', 'Fechar menu'); fx.onclick = function () { PDVMA = false; pdvMenu(); }; cab.appendChild(fx); m.appendChild(cab);
     PDVM.forEach(function (x) {
-      if (x[0] === 'sep') { m.appendChild(el('div', 'sep', x[2])); return; }
-      if (['cxabrir', 'sangria', 'suprimento', 'cxfechar', 'cxrel'].indexOf(x[0]) > -1 && !pode('caixa') && !pode('conferir_caixa')) return;
+      var semCaixa = !(S.u.caixaCfg && S.u.caixaCfg.ativo); // Leva 7 · 1.11: empresa sem controle de caixa
+      if (x[0] === 'sep') { if (!(x[2] === 'Caixa' && semCaixa)) m.appendChild(el('div', 'sep', x[2])); return; }
+      if (['cxabrir', 'sangria', 'suprimento', 'cxfechar', 'cxrel'].indexOf(x[0]) > -1 && (semCaixa || (!pode('caixa') && !pode('conferir_caixa')))) return;
       if (x[0] === 'faturarOS' && !pode('os')) return;
       var b = el('button', x[0] === PDVT ? 'on' : '', x[1] + '  ' + x[2]); b.type = 'button'; b.onclick = function () { if (window.innerWidth <= 900) PDVMA = false; pdvTela(x[0]); }; m.appendChild(b);
     });
@@ -16583,16 +16584,21 @@
   }
   function cfgCaixa(box, d) {
     var C = JSON.parse(JSON.stringify(d.cfg)), c = el('div', 'card'); box.appendChild(c);
-    var l1 = el('label', 'ckl'), a = el('input'); a.type = 'checkbox'; a.checked = C.ativo; a.onchange = function () { C.ativo = a.checked; }; l1.appendChild(a); l1.appendChild(document.createTextNode(' Usar controle de abertura e fechamento de caixa')); c.appendChild(l1);
-    c.appendChild(el('label', '', 'Como funciona o caixa'));
+    // Leva 7 · 1.11: três jeitos, inclusive "esta empresa não faz controle de caixa"
+    c.appendChild(el('label', 'first', 'Controle de caixa desta empresa'));
     var sg = el('div', 'seg'); c.appendChild(sg);
-    var hm = el('div', 'hint'); c.appendChild(hm);
-    var txt = { geral: 'Um caixa por loja: tudo junto (vendas, PDV e ordens de serviço) no mesmo caixa. Qualquer funcionário com permissão de caixa abre e fecha.', funcionario: 'Um caixa por funcionário: cada um abre e fecha o seu caixa na loja; as vendas, o PDV e as OS entram no caixa de quem registrou.' };
-    seg(sg, ['Um caixa por loja (tudo junto)', 'Um caixa por funcionário'], C.modo === 'geral' ? 'Um caixa por loja (tudo junto)' : 'Um caixa por funcionário', function (v) { C.modo = /loja/.test(v) ? 'geral' : 'funcionario'; hm.textContent = txt[C.modo]; });
-    hm.textContent = txt[C.modo];
-    var l2 = el('label', 'ckl'), b = el('input'); b.type = 'checkbox'; b.checked = C.bloquear; b.onchange = function () { C.bloquear = b.checked; }; l2.appendChild(b); l2.appendChild(document.createTextNode(' Bloquear venda, PDV e entrega de OS com o caixa fechado')); c.appendChild(l2);
+    var hm = el('div', 'hint'); c.appendChild(hm); var opc = el('div'); c.appendChild(opc);
+    var txt = { geral: 'Um caixa por loja: tudo junto (vendas, PDV e ordens de serviço) no mesmo caixa. Qualquer funcionário com permissão de caixa abre e fecha.', funcionario: 'Um caixa por funcionário: cada um abre e fecha o seu caixa, e responde pelo que vendeu.', nenhum: 'Sem controle de caixa: vende sem abrir caixa, sem sangria, suprimento nem fechamento. Cada recebimento vai direto para a conta da forma de pagamento no financeiro.' };
+    var atual = !C.ativo ? 'nenhum' : C.modo;
+    var ROT = { geral: 'Um caixa por loja (tudo junto)', funcionario: 'Um caixa por funcionário', nenhum: 'Esta empresa não faz controle de caixa' };
+    var aplica = function () { hm.textContent = txt[atual]; opc.style.display = atual === 'nenhum' ? 'none' : ''; };
+    seg(sg, [ROT.geral, ROT.funcionario, ROT.nenhum], ROT[atual], function (v) { atual = Object.keys(ROT).filter(function (k) { return ROT[k] === v; })[0]; C.ativo = atual !== 'nenhum'; if (C.ativo) C.modo = atual; aplica(); });
+    var l2 = el('label', 'ckl'), b = el('input'); b.type = 'checkbox'; b.checked = C.bloquear; b.onchange = function () { C.bloquear = b.checked; }; l2.appendChild(b); l2.appendChild(document.createTextNode(' Bloquear venda, PDV e entrega de OS com o caixa fechado')); opc.appendChild(l2);
+    aplica();
+    var c0 = c; c = opc;
     var fw = inpValor(C.fundoPadrao ? vs(C.fundoPadrao) : ''); campo(c, 'Fundo de troco padrão (sugerido ao abrir)', fw);
     c.appendChild(el('div', 'hint', 'Quem confere os caixas: funcionários com a permissão "Auditoria de Caixa" (página Financeiro › Auditoria de Caixa). Cada funcionário abre e fecha o caixa em Faturamento › Conferência de Caixa.'));
+    c = c0;
     var m = el('div', 'msg err'); c.appendChild(m); var ok = el('button', 'btn', 'Salvar configuração do caixa'); ok.type = 'button'; ok.style.marginTop = '10px'; c.appendChild(ok);
     ok.onclick = function () { m.classList.remove('show'); ok.disabled = true; C.fundoPadrao = num(fw.input.value) || 0; call('caixaCfgSalvar', [S.token, C]).then(function (r) { aposCaixa(r); ok.disabled = false; ok.textContent = '✓ Salvo'; setTimeout(function () { ok.textContent = 'Salvar configuração do caixa'; }, 1500); }).catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); }); };
   }
