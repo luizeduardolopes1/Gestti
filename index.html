@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-HasxPKEzInSS47aOoPYQLugwshDibQu0znXdqPB/PsM=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Fhsusmbiyw5f55t9kmfK4dj8DY2tdMO+Z1BtbMQe8ss=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -1545,8 +1545,10 @@
   </section>
 
   <!-- ENTRADA DE COMPRAS -->
-  <section id="vPromo" class="hide"><div class="ptopo"><h1>Promoções e cupons</h1><button type="button" class="btn" id="prNova" style="width:auto">+ Nova promoção</button></div><div id="prCorpo"></div></section>
+  <section id="vPromo" class="hide"><div class="ptopo"><h1>Promoções e cupons</h1><button type="button" class="btn" id="prNova" style="width:auto">+ Nova promoção</button></div><div id="pmCorpo"></div></section>
   <section id="vCupons" class="hide"><div class="ptopo"><h1>Cupons</h1></div><div id="cuCorpo"></div></section>
+  <section id="vEntregas" class="hide"><div class="ptopo"><h1>Entregas</h1><button type="button" class="btn" id="egNova" style="width:auto">+ Entrega avulsa</button></div><div id="egCorpo"></div></section>
+  <section id="vEntAcerto" class="hide"><div class="ptopo"><h1>Motoboys e acerto</h1></div><div id="eaCorpo"></div></section>
   <section id="vCupomInd" class="hide"><div class="ptopo"><h1>Cupom individual</h1></div><div id="ciCorpo"></div></section>
   <section id="vPedidos" class="hide">
     <div class="ptopo"><h1>Pedido de Compras</h1><button type="button" class="btn" id="pcNovo" style="width:auto">+ Novo pedido</button></div>
@@ -2138,6 +2140,8 @@
     { id: 'encomendas', sec: 'vEncomendas', nome: 'Encomendas', perm: 'vender', menu: 'Faturamento', desc: 'Pedidos de clientes: sinal, termo, fornecedor e chegada' },
     { id: 'reservas', sec: 'vReservas', nome: 'Reservas', perm: 'vender', menu: 'Faturamento', desc: 'Aparelhos e produtos reservados, sinal e termo assinado' },
     { id: 'caixa', sec: 'vCaixa', nome: 'Conferência de Caixa', perm: 'caixa', menu: 'Faturamento', desc: 'Abrir, movimentar e fechar o caixa' },
+    { id: 'entregas', sec: 'vEntregas', nome: 'Entregas', perm: 'vender', menu: 'Entregas', desc: 'Lista ou Kanban: separar, motoboy, saiu e entregue; o cliente acompanha no mapa' },
+    { id: 'entacerto', sec: 'vEntAcerto', nome: 'Motoboys e acerto', perm: 'liberar', menu: 'Entregas', desc: 'Corridas dos motoboys parceiros, ajustes e acerto (vira conta a pagar)' },
     { id: 'osnova', sec: 'vOs', nome: 'Nova Ordem de Serviço', perm: 'os', menu: 'Ordem de Serviço', desc: 'Abrir uma OS' },
     { id: 'oslista', sec: 'vOs', nome: 'Lista', perm: 'os', menu: 'Ordem de Serviço', desc: 'Todas as OS por status' },
     { id: 'os', sec: 'vOs', nome: 'Quadro', perm: 'os', menu: 'Ordem de Serviço', desc: 'Kanban das OS e usados em manutenção' },
@@ -4196,6 +4200,7 @@
     busca: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
     camadas: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
     caminhao: '<path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+    moto: '<circle cx="5.5" cy="17" r="3"/><circle cx="18.5" cy="17" r="3"/><path d="M8.5 17h5l3-6h-4l-2-3H8M15 6h3l2 5"/>',
     etiqueta: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><path d="M7.5 7.5h.01"/>',
     celularok: '<rect x="4" y="2" width="11" height="20" rx="3"/><path d="M15 12.5l2.5 2.5 4.5-5"/>',
     cartao: '<rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/>',
@@ -4245,8 +4250,8 @@
     var b = escuro ? '#FFFFFF' : '#0F1B2D', a = escuro ? '#7D97FF' : '#2F5BFF', s = escuro ? '#0F1B2D' : '#FFFFFF';
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
-  var ICO_MENU = { 'Promoções e Cupons': 'promo', 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'contato', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas', 'Cadastro': 'pasta', 'Folha': 'relogio', 'Gestão': 'camadas', 'Compra de Celulares': 'celcompra' };
-  var ICO_VIEW = { promocoes: 'promo', cupons: 'cupom', cupomind: 'contato', pedidos: 'pedido', 'rel-faturamento': 'grafico', 'rel-os': 'grafico', 'rel-suprimento': 'grafico', 'rel-financeiro': 'grafico', 'rel-metas': 'grafico', 'rel-crm': 'grafico', encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
+  var ICO_MENU = { 'Entregas': 'moto', 'Promoções e Cupons': 'promo', 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'contato', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas', 'Cadastro': 'pasta', 'Folha': 'relogio', 'Gestão': 'camadas', 'Compra de Celulares': 'celcompra' };
+  var ICO_VIEW = { entregas: 'moto', entacerto: 'carteira', promocoes: 'promo', cupons: 'cupom', cupomind: 'contato', pedidos: 'pedido', 'rel-faturamento': 'grafico', 'rel-os': 'grafico', 'rel-suprimento': 'grafico', 'rel-financeiro': 'grafico', 'rel-metas': 'grafico', 'rel-crm': 'grafico', encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista', proposta: 'recibo', finest: 'moedas',
                    compracel: 'quadro', ccnova: 'mais', cclista: 'lista', ccparc: 'aperto', pinicio: 'casa', pnova: 'mais', paparelhos: 'celular', pfin: 'carteira', ptab: 'etiqueta', pcli: 'pessoas', pav: 'sino', ploja: 'loja', metrel: 'grafico', rhdash: 'grafico', ponto: 'engrenagem', rhfunc: 'usuario', rhferiados: 'calendario', rhjornada: 'relogio', rhescalas: 'escala',
@@ -6715,6 +6720,7 @@
     S.token = ''; S.u = null; S.disp = null; S.venda = null; S.manut = null; S.novos = null; S.prec = null;
     LS.del('token'); LS.del('loja'); LS.del('hist');
     VIEWS.forEach(function (v) { show(v.sec, false); });
+    if ($('motoPg')) { $('motoPg').remove(); clearInterval(MOTO.timer); MOTO.d = null; motoGps(); }
     show('nav', false); show('who', false); show('gear', false); show('rbW', false); show('vConfig', false); show('vNovaSenha', false); show('vCarregando', false); show('vEmpSel', false); show('vLogin', true);
     telaLogin(true); painelLogin('lgEntrar'); fecharSb(); $('sbBusca').value = '';
     $('fModal').classList.add('hide'); document.body.style.overflow = ''; S.senhaInicial = '';
@@ -6736,7 +6742,7 @@
   function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono' || x.indexOf('parc_') === 0; }); }
   function pode(p) { return !!(S.u && ((p === '**' && !soParceira()) || (p === '*' && !S.u.soPonto && !soParceira()) || (S.u.perms || []).indexOf(p) > -1)); }
   // Leva 6 ampliada: telas da grade (tela × ação). Tela da grade aparece se a pessoa tem qualquer caixinha nela.
-  var GRADE_TELA = { cupomind: 'cupons', ccnova: 'compracel', cclista: 'compracel', 'rel-metas': 'metrel', 'rel-crm': 'crm' };
+  var GRADE_TELA = { entacerto: 'entregas', cupomind: 'cupons', ccnova: 'compracel', cclista: 'compracel', 'rel-metas': 'metrel', 'rel-crm': 'crm' };
   function temGrade() { return !!(S.u && (S.u.perms || []).some(function (k) { return k.indexOf(':') > 0; })); }
   function podeTela(id, a) {
     var t = GRADE_TELA[id] || id, ps = (S.u && S.u.perms) || [];
@@ -6744,11 +6750,11 @@
     for (var i = 0; i < ps.length; i++) if (ps[i].indexOf(t + ':') === 0) return true;
     return false;
   }
-  var TELAS_GRADE = ['rel-faturamento', 'rel-os', 'rel-suprimento', 'rel-financeiro', 'rel-metas', 'rel-crm', 'promocoes', 'cupons', 'pedidos', 'dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
+  var TELAS_GRADE = ['entregas', 'entacerto', 'rel-faturamento', 'rel-os', 'rel-suprimento', 'rel-financeiro', 'rel-metas', 'rel-crm', 'promocoes', 'cupons', 'pedidos', 'dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
     'compras', 'checkin', 'transf', 'balanco', 'etiquetas', 'compracel', 'ccnova', 'cclista', 'ccparc', 'novos', 'venda', 'pagar', 'receber', 'bancos', 'cred', 'dre', 'conferencia', 'metas', 'comissoes', 'metrel',
     'aval', 'cartao', 'compra', 'proposta'];
   /** Leva 6 ampliada: botões de criar somem para quem não tem a caixinha "Criar" daquela tela. */
-  var BOTOES_GRADE = { crNovo: 'crm:c', fbConta: 'bancos:c', fbLanc: 'bancos:c', rcNovo: 'receber:c', pgNovo: 'pagar:c', cdAvulso: 'cred:c', acNovo: 'acess:c', enNova: 'encomendas:c',
+  var BOTOES_GRADE = { egNova: 'entregas:c', crNovo: 'crm:c', fbConta: 'bancos:c', fbLanc: 'bancos:c', rcNovo: 'receber:c', pgNovo: 'pagar:c', cdAvulso: 'cred:c', acNovo: 'acess:c', enNova: 'encomendas:c',
     ppNovaBtn: 'proposta:c', prNova: 'promocoes:c', pcNovo: 'pedidos:c', cpNova: 'compras:c', osNova: 'osnova:c', vdNovaBtn: 'pdv:c', dNovo: 'cadastro:c', dNovoP: 'cadastro:c' };
   function botoesPorGrade() {
     if (!temGrade() || soParceira()) return;
@@ -6760,6 +6766,7 @@
     if (VIEWS_PORTAL.indexOf(v.id) > -1) return soParceira() && pode(v.perm);
     if (soParceira() || !temGrade() || TELAS_GRADE.indexOf(v.id) < 0) return (pode(v.perm) || (v.permOu && pode(v.permOu))) && !(v.perm2 && !pode(v.perm2));
     if (v.id === 'osnova') return podeTela('osnova', 'c');
+    if (v.id === 'entacerto') return podeTela('entregas', 'x');
     return podeTela(v.id) && !(v.perm2 && !pode(v.perm2));
   }
   // ---------- várias empresas ----------
@@ -6802,6 +6809,9 @@
 
   /* Leva 7 · 1.5: o app das parceiras nunca abre o sistema normal. Quem gerencia parceiras escolhe "ver como a parceira X" (só olhar); os demais logins da equipe são recusados. */
   var APP_PARC = /[?&](app=1|parceiras=1)\b/.test(location.search);
+  var APP_ENT = /[?&]entregas=1\b/.test(location.search);
+  function soMotoboy() { var l = (S.u && S.u.perms) || []; return l.indexOf('motoboy') > -1 && l.every(function (x) { return x === 'motoboy'; }); }
+  function podeEnt(a) { return temGrade() ? pode('entregas:' + a) : a === 'x' ? pode('liberar') : pode('vender'); }
   function perfilDeParceira(d) { var l = (d && d.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono' || x.indexOf('parc_') === 0; }); }
   function escolherVerComo(d) {
     show('vCarregando', false); show('vLogin', false); VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false);
@@ -6846,7 +6856,11 @@
       show('vNovaSenha', true); (S.senhaInicial ? $('nsNova') : $('nsAtual')).focus();
       return;
     }
-    show('vNovaSenha', false); show('gear', true); montarEmpresa();
+    show('vNovaSenha', false);
+    // Leva 7 · 2.1: login de motoboy só vê as entregas dele (app Gestti Entregas); o app é só para motoboy
+    if (soMotoboy()) { motoApp(); return; }
+    if (APP_ENT) { var t0 = S.token; call('sair', [t0]).catch(function () {}); sairLocal('Este app é só para os motoboys. A loja acompanha as entregas pelo Gestti, no menu Entregas.'); return; }
+    show('gear', true); montarEmpresa();
     REDE.d = null; $('rbBusca').value = ''; S.rbPode = !!(d.empresa && d.empresa.lista && d.empresa.lista.length > 1) && ['vender', 'produtos', 'acessorios', 'os', 'estoque'].some(pode); show('rbW', false);
     $('sbBusca').value = ''; montarMenu(); guardarCtrlFixos();
     show('nav', true); document.body.classList.add('logado'); avisoPedidos();
@@ -6949,6 +6963,8 @@
     if (id === 'cred') carregarCred(false);
     if (id === 'pdv') pdvIniciar();
     if (id === 'pedidos') carregarPedidos();
+    if (id === 'entregas') carregarEntregas();
+    if (id === 'entacerto') carregarAcertos();
     if (id === 'promocoes') carregarPromos();
     if (id === 'cupons') carregarCupons();
     if (id === 'cupomind') cupomIndividual();
@@ -7520,6 +7536,313 @@
     d.body.appendChild(d.importNode(reciboEl(v, ass), true));
     setTimeout(function () { f.contentWindow.focus(); f.contentWindow.print(); setTimeout(function () { f.remove(); }, 1500); }, 200);
   }
+  // =========================================================
+  //  ENTREGAS (Leva 7 · 2.1)
+  // =========================================================
+  var EN = { d: null, vis: 'kanban', mb: '', q: '', sit: 'ativas' };
+  var EN_KB = ['A separar', 'Pronto', 'Saiu para entrega', 'Não entregue', 'Entregue'];
+  function enBadge(sit) { return el('span', sit === 'Saiu para entrega' ? 'bdg inf' : sit === 'Não entregue' || sit === 'Cancelada' ? 'badge-m canc' : 'bdg', sit); }
+  function enEndereco(e) { return [e.endereco, e.complemento, e.bairro, e.cidade].filter(Boolean).join(' · '); }
+  function enMapa(e) { return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent([e.endereco, e.bairro, e.cidade].filter(Boolean).join(', ')); }
+  $('egNova').onclick = function () { formEntrega('avulsa', ''); };
+  function carregarEntregas() {
+    var box = $('egCorpo'); if (!EN.d) { box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…')); }
+    call('entregasListar', [S.token]).then(function (d) { EN.d = d; if (S.view === 'entregas') desenharEntregas(); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
+  }
+  function enAtualizar(x) { if (!EN.d) return; var i = EN.d.lista.map(function (z) { return z.id; }).indexOf(x.id); if (i > -1) EN.d.lista[i] = x; else EN.d.lista.unshift(x); }
+  function desenharEntregas() {
+    var box = $('egCorpo'), D = EN.d; box.innerHTML = '';
+    var fl = el('div'); fl.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px'; box.appendChild(fl);
+    var tg = el('div', 'seg'); tg.style.cssText = 'width:220px;margin:0'; fl.appendChild(tg); seg(tg, ['Lista', 'Kanban'], EN.vis === 'lista' ? 'Lista' : 'Kanban', function (v) { EN.vis = v === 'Lista' ? 'lista' : 'kanban'; desenharEntregas(); });
+    var sm = el('select'); sm.setAttribute('aria-label', 'Motoboy'); [['', 'Todos os motoboys'], ['-', 'Sem motoboy']].concat(D.motoboys.map(function (m) { return [m.id, m.nome + (m.parceiro ? ' (parceiro)' : '')]; })).forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; sm.appendChild(op); });
+    sm.value = EN.mb; sm.onchange = function () { EN.mb = sm.value; desenharEntregas(); }; fl.appendChild(sm);
+    if (EN.vis === 'lista') { var ss = el('select'); ss.setAttribute('aria-label', 'Situação'); [['ativas', 'Em andamento'], ['', 'Todas']].concat(D.situacoes.map(function (x) { return [x, x]; })).forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; ss.appendChild(op); }); ss.value = EN.sit; ss.onchange = function () { EN.sit = ss.value; desenharEntregas(); }; fl.appendChild(ss); }
+    var bu = inp('search', 'Buscar: pedido, cliente, bairro'); bu.value = EN.q; bu.setAttribute('aria-label', 'Buscar entrega'); fl.appendChild(bu);
+    Array.prototype.forEach.call(fl.querySelectorAll('select,input'), function (x) { x.style.cssText = 'flex:1;min-width:170px;width:auto;margin:0'; });
+    var corpo = el('div'); box.appendChild(corpo);
+    function filtrada() {
+      var w = semAc(EN.q).split(/\s+/).filter(Boolean);
+      return D.lista.filter(function (e) {
+        if (EN.mb === '-' ? e.motoboyId : EN.mb && e.motoboyId !== EN.mb) return false;
+        if (w.length) { var t = semAc([e.id, e.ref, e.cliente.nome, e.bairro, e.cidade, e.motoboy].join(' ')); if (!w.every(function (x) { return t.indexOf(x) > -1; })) return false; }
+        return true;
+      });
+    }
+    function desenhar() {
+      corpo.innerHTML = ''; var L = filtrada();
+      if (EN.vis === 'lista') {
+        L = L.filter(function (e) { return EN.sit === 'ativas' ? ['Entregue', 'Cancelada'].indexOf(e.situacao) < 0 : !EN.sit || e.situacao === EN.sit; });
+        if (!L.length) { corpo.appendChild(el('div', 'empty', D.lista.length ? 'Nenhuma entrega com esses filtros.' : 'Nenhuma entrega ainda. Use "Entregar" na venda, no PDV ou na OS.')); return; }
+        var tab = el('div', 'ptab'), h = el('div', 'prow h'); ['', 'Pedido e cliente', 'Bairro · motoboy', 'Previsão', 'Situação', ''].forEach(function (t) { h.appendChild(el('div', '', t)); }); tab.appendChild(h);
+        L.forEach(function (e) {
+          var r = el('div', 'prow'); r.tabIndex = 0; r.setAttribute('role', 'button'); var ic = el('div', 'pimg'); ic.innerHTML = svgIco('moto'); r.appendChild(ic);
+          var n = el('div'); n.appendChild(el('div', 'pnome', (e.ref || e.id) + ' · ' + e.cliente.nome)); n.appendChild(el('div', 'psub', e.endereco)); r.appendChild(n);
+          r.appendChild(el('div', 'psku', e.bairro + ' · ' + (e.motoboy || 'sem motoboy'))); r.appendChild(el('div', 'psku', e.previsao || '—'));
+          var sc = el('div'); sc.appendChild(enBadge(e.situacao)); r.appendChild(sc); r.appendChild(el('div', 'chev', '›'));
+          r.onclick = function () { abrirEntrega(e); }; r.onkeydown = function (ev) { if (ev.key === 'Enter') abrirEntrega(e); }; tab.appendChild(r);
+        });
+        corpo.appendChild(tab); return;
+      }
+      var kb = el('div', 'kb pckb'); corpo.appendChild(kb);
+      EN_KB.forEach(function (c) {
+        var l = L.filter(function (e) { return e.situacao === c; }); if (c === 'Entregue') l = l.slice(0, 15);
+        var col = el('div', 'kcol'); col.appendChild(el('h4', '', c + ' (' + l.length + ')'));
+        l.forEach(function (e) {
+          var k = el('div', 'kc'); k.tabIndex = 0; k.setAttribute('role', 'button');
+          k.appendChild(el('b', '', (e.ref || e.id) + ' · ' + e.cliente.nome));
+          k.appendChild(el('div', 'psub', e.bairro + (e.previsao ? ' · ' + e.previsao : '')));
+          k.appendChild(el('div', 'psub', e.motoboy ? '🛵 ' + e.motoboy : 'sem motoboy'));
+          if (c === 'Entregue' && e.recebidoPor) k.appendChild(el('div', 'psub', 'recebido por ' + e.recebidoPor));
+          if (c === 'Não entregue' && e.motivo) k.appendChild(el('div', 'psub', e.motivo));
+          k.onclick = function () { abrirEntrega(e); }; k.onkeydown = function (ev) { if (ev.key === 'Enter') abrirEntrega(e); }; col.appendChild(k);
+        });
+        kb.appendChild(col);
+      });
+      corpo.appendChild(el('div', 'hint', 'O motoboy usa o app Gestti Entregas: ele marca "Saí para entrega" e o cliente acompanha a moto no mapa pelo link, até a entrega.'));
+    }
+    bu.oninput = function () { EN.q = bu.value; desenhar(); };
+    desenhar();
+  }
+  function abrirEntrega(e) {
+    var D = EN.d || { pode: {}, motoboys: [] }, fim = e.situacao === 'Entregue' || e.situacao === 'Cancelada';
+    var bd = abrirDw('Entrega ' + e.id, (e.ref ? (e.origem === 'os' ? 'OS ' : 'Venda ') + e.ref + ' · ' : '') + e.situacao);
+    kvCard(bd, [['Situação', e.situacao], ['Quem recebe', e.cliente.nome], ['Celular', e.cliente.whats ? fmtFone(e.cliente.whats) : ''], ['Endereço', enEndereco(e) + (e.cep ? ' · CEP ' + e.cep : '')], ['Referência', e.referencia],
+      ['Previsão', e.previsao], ['Motoboy', e.motoboy || 'a definir'], ['Taxa de entrega', e.taxa ? brl(e.taxa) : ''], ['Receber na entrega', e.cobrar ? brl(e.cobrar) : ''], ['Observação', e.obs], ['Depósito', e.loja],
+      ['Saiu', e.saiu], ['Terminou', e.fim], ['Recebido por', e.recebidoPor], ['Motivo', e.situacao === 'Não entregue' || e.situacao === 'Cancelada' ? e.motivo : ''],
+      ['Km', e.kmGps || e.kmEstimado ? (e.kmGps ? String(e.kmGps).replace('.', ',') + ' km pelo GPS' : '') + (e.kmEstimado ? (e.kmGps ? ' · ' : '') + 'estimado ' + String(e.kmEstimado).replace('.', ',') + ' km' : '') : ''],
+      ['Link do cliente', e.link && e.situacao === 'Saiu para entrega' ? e.link : '', 'copiar']]);
+    var am = el('div', 'msg err'); bd.appendChild(am);
+    var erro = function (x) { am.textContent = x; am.classList.add('show'); };
+    var mudar = function (d) { am.classList.remove('show'); return call('entregaMudar', [S.token, e.id, d]).then(function (x) { enAtualizar(x); if (S.view === 'entregas') desenharEntregas(); abrirEntrega(x); }).catch(erro); };
+    if (!fim && D.pode.e) {
+      var bm = opcaoDw(bd, 'Motoboy', e.motoboy || 'Escolher quem leva', '', function () {
+        if (bm.nextSibling && bm.nextSibling.classList && bm.nextSibling.classList.contains('opc-box')) { bm.nextSibling.remove(); return; }
+        var bx = el('div', 'opc-box'), sl = el('select'); [['', 'Sem motoboy']].concat(D.motoboys.map(function (m) { return [m.id, m.nome + (m.parceiro ? ' (parceiro)' : '')]; })).forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; sl.appendChild(op); }); sl.value = e.motoboyId;
+        campo(bx, 'Motoboy', sl, true); if (!D.motoboys.length) bx.appendChild(el('div', 'hint', 'Nenhum motoboy: crie o login em Configurações › Funcionários com o grupo "Motoboy".'));
+        btn(bx, 'Salvar', '', function () { mudar({ motoboyId: sl.value }); }); bm.after(bx);
+      });
+      if (e.situacao === 'A separar') opcaoDw(bd, 'Pronto para sair', 'Separado e embalado', 'okc', function () { mudar({ situacao: 'Pronto' }); });
+      if (['A separar', 'Pronto', 'Não entregue'].indexOf(e.situacao) > -1) opcaoDw(bd, 'Saiu para entrega', e.motoboyId ? 'Com ' + e.motoboy + ' · o cliente recebe o link do mapa' : 'Escolha o motoboy antes', 'okc', function () {
+        var km = prompt('Km estimado até o cliente (opcional, para quem recebe por km):', ''); if (km === null) return; mudar({ situacao: 'Saiu para entrega', kmEstimado: km });
+      });
+      if (e.situacao === 'Saiu para entrega') {
+        opcaoDw(bd, 'Entregue', 'Quem recebeu', 'okc', function () { var q = prompt('Quem recebeu?', e.cliente.nome.split(' ')[0]); if (q) mudar({ situacao: 'Entregue', recebidoPor: q }); });
+        opcaoDw(bd, 'Não entregue', 'Ninguém em casa, endereço errado, recusou…', '', function () { var q = prompt('Por que não entregou?', ''); if (q) mudar({ situacao: 'Não entregue', motivo: q }); });
+      }
+      if (e.situacao === 'Não entregue') opcaoDw(bd, 'Reagendar', 'Volta para "Pronto"', '', function () { mudar({ situacao: 'Pronto' }); });
+    }
+    if (e.link && e.situacao === 'Saiu para entrega' && e.cliente.whats) opcaoDw(bd, 'Mandar o acompanhamento ao cliente', 'WhatsApp com o link do mapa', 'okc', function () {
+      window.open('https://wa.me/55' + soDig(e.cliente.whats) + '?text=' + encodeURIComponent('Olá, ' + e.cliente.nome.split(' ')[0] + '! Seu pedido saiu para entrega. Acompanhe pelo mapa: ' + e.link), '_blank', 'noopener');
+    });
+    opcaoDw(bd, 'Abrir o endereço no mapa', enEndereco(e), '', function () { window.open(enMapa(e), '_blank', 'noopener'); });
+    if ((e.corridas || []).length) { var cc = el('div', 'card'); cc.appendChild(el('h3', '', 'Corridas do motoboy parceiro')); e.corridas.forEach(function (c) { cc.appendChild(el('div', 'hint', brl(c.valor) + ' · ' + c.situacao + ' · ' + c.em + (c.km ? ' · ' + String(c.km).replace('.', ',') + ' km' : '') + (c.acerto ? ' · acertada (' + c.acerto + ')' : ' · a acertar') + (c.ajuste ? ' · ajuste: ' + c.ajuste : ''))); }); bd.appendChild(cc); }
+    if (!fim && D.pode.x) opcaoDw(bd, 'Cancelar entrega', 'Ex.: cliente buscou na loja', 'danger', function () { var q = prompt('Motivo do cancelamento:', ''); if (q) mudar({ situacao: 'Cancelada', motivo: q }); });
+    var bh = opcaoDw(bd, 'Histórico', (e.hist || []).length + ' registro(s)', '', function () {
+      if (bh.nextSibling && bh.nextSibling.classList && bh.nextSibling.classList.contains('opc-box')) { bh.nextSibling.remove(); return; }
+      var bx = el('div', 'opc-box'), t = el('table', 'ext'); (e.hist || []).slice().reverse().forEach(function (hh) { var tr = el('tr'), td = el('td'); td.appendChild(document.createTextNode(hh.txt)); td.appendChild(el('small', '', hh.em + ' · ' + hh.por)); tr.appendChild(td); t.appendChild(tr); });
+      bx.appendChild(t); bh.after(bx);
+    });
+  }
+  /** "Entregar" da venda, do PDV, da OS ou avulsa: quem recebe, endereço (do CRM), data/turno, taxa e motoboy. */
+  function formEntrega(origem, ref) {
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Entregar' + (ref ? ' · ' + ref : ' (avulsa)'))); var cg = el('div', 'empty', 'Carregando…'); sh.appendChild(cg); abrirModal();
+    call('entregaSugestao', [S.token, origem, ref || '']).then(function (s2) {
+      sh.removeChild(cg);
+      if (s2.ja) { sh.appendChild(el('div', 'aviso', 'Já existe a entrega ' + s2.ja.id + ' (' + s2.ja.situacao + ') para ' + ref + '.')); var a0 = el('div', 'acoes'); sh.appendChild(a0); btn(a0, 'Ver em Entregas', '', function () { fecharModal(); EN.q = s2.ja.id; ir('entregas'); }); btn(a0, 'Fechar', 'ghost', fecharModal); return; }
+      sh.appendChild(el('div', 'sub', 'O motoboy vê no app Gestti Entregas. Quando ele sair, o cliente pode acompanhar no mapa.'));
+      var g1 = grade(sh, 2), nm = campo(g1[0], 'Quem recebe', inp('text', 'Nome'), true), wh = campo(g1[1], 'Celular (WhatsApp)', inp('tel', '(22) 99999-9999'), true);
+      nm.value = s2.cliente.nome || ''; nm.maxLength = 80; wh.value = s2.cliente.whats ? fmtFone(s2.cliente.whats) : '';
+      var E = s2.endereco || {}, g2 = grade(sh, 2), cep = campo(g2[0], 'CEP', inp('text', '00000-000')), en = campo(g2[1], 'Endereço (rua e número)', inp('text', 'Rua, número'));
+      cep.inputMode = 'numeric'; cep.maxLength = 9; cep.value = E.cep || ''; en.value = E.endereco || ''; en.maxLength = 150;
+      var g3 = grade(sh, 2), co = campo(g3[0], 'Complemento', inp('text', 'Apto, bloco, fundos')), rf = campo(g3[1], 'Ponto de referência', inp('text', 'Ex.: em frente à padaria')); co.maxLength = 80; rf.maxLength = 120;
+      var g4 = grade(sh, 2), ba = campo(g4[0], 'Bairro', inp('text', '')), ci = campo(g4[1], 'Cidade', inp('text', '')); ba.value = E.bairro || ''; ci.value = E.cidade || ''; ba.maxLength = ci.maxLength = 60;
+      cep.oninput = function () { var k = soDig(cep.value).slice(0, 8); if (k.length !== 8) return; fetch('https://viacep.com.br/ws/' + k + '/json/', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (j) { if (!j || j.erro) return; if (!en.value && j.logradouro) en.value = j.logradouro + ', '; if (!ba.value) ba.value = j.bairro || ''; if (!ci.value && j.localidade) ci.value = j.localidade; }).catch(function () {}); };
+      var g5 = grade(sh, 3), dt = campo(g5[0], 'Data', inpData(isoHoje())), tu = el('select'); [''].concat(s2.turnos).forEach(function (t) { var op = el('option', '', t || 'Qualquer horário'); op.value = t; tu.appendChild(op); }); campo(g5[1], 'Turno', tu);
+      var mb = el('select'); [['', 'Escolher depois']].concat(s2.motoboys.map(function (m) { return [m.id, m.nome + (m.parceiro ? ' (parceiro)' : '')]; })).forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; mb.appendChild(op); }); campo(g5[2], 'Motoboy', mb);
+      var g6 = grade(sh, 2), tx = inpValor(s2.taxaPadrao ? String(s2.taxaPadrao) : ''), cb = inpValor('');
+      campo(g6[0], 'Taxa de entrega (informativa)', tx); campo(g6[1], 'Receber na entrega (R$)', cb);
+      sh.appendChild(el('div', 'hint', 'Para cobrar a taxa do cliente, lance em "Outras despesas" na venda. "Receber na entrega" aparece para o motoboy cobrar na porta.'));
+      var ob = el('textarea'); ob.maxLength = 400; ob.placeholder = 'Ex.: ligar antes; portão azul'; campo(sh, 'Observação para o motoboy', ob);
+      var m = el('div', 'msg err'); sh.appendChild(m);
+      var ac = el('div', 'acoes'); sh.appendChild(ac);
+      var ok = btn(ac, 'Criar entrega', '', function () {
+        m.classList.remove('show'); ok.disabled = true;
+        call('entregaCriar', [S.token, { origem: origem, ref: ref || '', loja: s2.loja, cliente: { nome: nm.value.trim(), whats: soDig(wh.value) }, cep: soDig(cep.value), endereco: en.value.trim().replace(/,\s*$/, ''), complemento: co.value.trim(), referencia: rf.value.trim(),
+          bairro: ba.value.trim(), cidade: ci.value.trim(), data: dt.value, turno: tu.value, motoboyId: mb.value, taxa: num(tx.input.value) || 0, cobrar: num(cb.input.value) || 0, obs: ob.value }])
+          .then(function (x) { MOD_SUJO = false; fecharModal(); enAtualizar(x); avisoTopo('Entrega ' + x.id + ' criada'); if (S.view === 'entregas') desenharEntregas(); })
+          .catch(function (e) { ok.disabled = false; m.textContent = e; m.classList.add('show'); });
+      });
+      btn(ac, 'Cancelar', 'ghost', fecharModalUsuario);
+      (nm.value ? en : nm).focus();
+    }).catch(function (e) { cg.textContent = String(e); });
+  }
+  /** Motoboys e acerto: corridas dos parceiros, ajustes e acerto (vira conta a pagar). */
+  function carregarAcertos() {
+    var box = $('eaCorpo'); box.innerHTML = ''; box.appendChild(el('div', 'empty', 'Carregando…'));
+    call('motoboyAcertos', [S.token]).then(function (d) { desenharAcertos(d); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
+  }
+  function desenharAcertos(d) {
+    var box = $('eaCorpo'); box.innerHTML = '';
+    box.appendChild(el('div', 'hint', 'O valor de cada corrida sai da configuração do motoboy (Configurações › Motoboys e valores). O acerto junta as corridas pendentes numa conta a pagar ("Fretes e entregas").'));
+    if (!d.motoboys.length) box.appendChild(el('div', 'empty', 'Nenhum motoboy parceiro com corridas.'));
+    d.motoboys.forEach(function (m) {
+      var c = el('div', 'card'); box.appendChild(c);
+      var h = el('h2', '', m.nome + (m.parceiro ? '' : ' (funcionário)')); c.appendChild(h);
+      c.appendChild(el('div', 'hint', m.itens.length + ' corrida(s) a acertar · ' + brl(m.total) + (m.pix ? ' · PIX ' + m.pix : '') + (m.acerto ? ' · acerto: ' + m.acerto : '')));
+      if (m.itens.length) {
+        var t = el('table', 'ext');
+        m.itens.forEach(function (x) {
+          var tr = el('tr'), td = el('td'); td.appendChild(document.createTextNode(x.entrega + (x.ref ? ' (' + x.ref + ')' : '') + ' · ' + x.cliente + ' · ' + x.bairro)); td.appendChild(el('small', '', x.em + ' · ' + x.situacao + (x.km ? ' · ' + String(x.km).replace('.', ',') + ' km' : '') + (x.ajuste ? ' · ajuste: ' + x.ajuste : ''))); tr.appendChild(td);
+          var tv = el('td', 'v', brl(x.valor)); tr.appendChild(tv);
+          var ta = el('td'), aj = el('button', 'lnk', 'Ajustar'); aj.type = 'button'; aj.onclick = function () { var v = prompt('Novo valor da corrida (R$):', String(x.valor).replace('.', ',')); if (v === null) return; var mt = prompt('Motivo do ajuste:', ''); if (!mt) return; call('entregaCorridaAjustar', [S.token, x.entrega, x.i, num(v), mt]).then(desenharAcertos).catch(function (e) { alert(e); }); }; ta.appendChild(aj); tr.appendChild(ta);
+          t.appendChild(tr);
+        });
+        c.appendChild(t);
+        var g = grade(c, 2), vc = campo(g[0], 'Vencimento da conta a pagar', inpData(isoHoje()), true);
+        var bt = el('button', 'btn', 'Fechar acerto · ' + brl(m.total)); bt.type = 'button'; g[1].appendChild(bt); bt.style.marginTop = '22px';
+        bt.onclick = function () { if (!confirm('Fechar o acerto de ' + m.nome + ' (' + brl(m.total) + ')? As corridas viram uma conta a pagar.')) return; bt.disabled = true; call('motoboyAcertar', [S.token, m.id, { venc: vc.value }]).then(function (r) { avisoTopo('Acerto de ' + m.nome + ' lançado em Contas a Pagar'); S.fin = null; desenharAcertos(r); }).catch(function (e) { bt.disabled = false; alert(e); }); };
+      }
+    });
+    if (d.acertos.length) { var ca = el('div', 'card'); ca.appendChild(el('h2', '', 'Acertos lançados')); var t2 = el('table', 'ext'); d.acertos.forEach(function (a) { var tr = el('tr'); tr.appendChild(el('td', '', a.id + ' · ' + a.descricao + ' · ' + a.situacao)); tr.appendChild(el('td', 'v', brl(a.valor))); t2.appendChild(tr); }); ca.appendChild(t2); box.appendChild(ca); }
+  }
+  /** Configurações › Motoboys e valores. */
+  function cfgEntregas(box, d) {
+    var c = el('div', 'card'); c.appendChild(el('h2', '', 'Geral')); box.appendChild(c);
+    var g = grade(c, 2), tx = inpValor(d.taxaPadrao ? String(d.taxaPadrao) : ''); campo(g[0], 'Taxa de entrega padrão', tx, true);
+    var tu = campo(g[1], 'Turnos (separados por vírgula)', inp('text', 'Manhã, Tarde, Noite'), true); tu.value = d.turnos.join(', ');
+    var lb = el('label', 'ckl'), pn = el('input'); pn.type = 'checkbox'; pn.checked = d.pagarNaoEntregue; lb.appendChild(pn); lb.appendChild(document.createTextNode(' Pagar a corrida também quando "Não entregue" (o motoboy foi até lá)')); c.appendChild(lb);
+    var cm = el('div', 'card'); cm.appendChild(el('h2', '', 'Motoboys')); box.appendChild(cm);
+    cm.appendChild(el('div', 'hint', 'Motoboy é um login no grupo "' + d.grupoMotoboy + '" (Configurações › Funcionários): ele entra só no app Gestti Entregas. Marque "Parceiro" para quem não é funcionário: as corridas viram saldo a receber e o acerto vira conta a pagar.'));
+    if (pode('equipe')) { var irF = el('button', 'lnk', '→ Cadastrar motoboy em Funcionários'); irF.type = 'button'; irF.onclick = function () { CFG.aba = 'func'; desenharCfg(); }; cm.appendChild(irF); }
+    if (!d.motoboys.length) cm.appendChild(el('div', 'empty', 'Nenhum motoboy cadastrado ainda.'));
+    var M = {}, cidades = Object.keys(d.bairrosPorCidade || {}).sort();
+    d.motoboys.forEach(function (m) {
+      var X = M[m.id] = { parceiro: m.parceiro, modo: m.modo, fixo: m.fixo, porKm: m.porKm, minimo: m.minimo, cidade: m.cidade, bairros: Object.assign({}, m.bairros), padrao: m.padrao, acerto: m.acerto, pix: m.pix, whats: m.whats };
+      var w = el('details', 'grpbox'); var sm = el('summary', '', m.nome + ' · ' + m.usuario + (m.parceiro ? ' · parceiro' : ' · funcionário')); sm.style.cssText = 'cursor:pointer;font-weight:700'; w.appendChild(sm); cm.appendChild(w);
+      var corpo = el('div'); w.appendChild(corpo);
+      function des() {
+        corpo.innerHTML = '';
+        var l2 = el('label', 'ckl'), pc = el('input'); pc.type = 'checkbox'; pc.checked = X.parceiro; pc.onchange = function () { X.parceiro = pc.checked; des(); }; l2.appendChild(pc); l2.appendChild(document.createTextNode(' Parceiro (sem vínculo): recebe por corrida')); corpo.appendChild(l2);
+        if (!X.parceiro) { corpo.appendChild(el('div', 'hint', 'Funcionário: não gera corrida a pagar (o salário fica no RH).')); return; }
+        var sg = el('div', 'seg'); sg.style.maxWidth = '460px'; corpo.appendChild(sg);
+        var MOD = { fixo: 'Valor fixo por entrega', bairro: 'Tabela por bairro', km: 'Por km rodado' };
+        seg(sg, [MOD.fixo, MOD.bairro, MOD.km], MOD[X.modo], function (v) { X.modo = Object.keys(MOD).filter(function (k) { return MOD[k] === v; })[0]; des(); });
+        var g2 = grade(corpo, 2);
+        if (X.modo === 'fixo') { var fx = inpValor(X.fixo ? String(X.fixo) : ''); fx.input.oninput = function () { X.fixo = num(fx.input.value) || 0; }; campo(g2[0], 'Valor por entrega', fx, true); }
+        if (X.modo === 'km') {
+          var pk = inpValor(X.porKm ? String(X.porKm) : ''), mi = inpValor(X.minimo ? String(X.minimo) : ''); pk.input.oninput = function () { X.porKm = num(pk.input.value) || 0; }; mi.input.oninput = function () { X.minimo = num(mi.input.value) || 0; };
+          campo(g2[0], 'Valor por km', pk, true); campo(g2[1], 'Valor mínimo da corrida', mi, true);
+          corpo.appendChild(el('div', 'hint', 'Na saída a loja pode informar o km estimado; o valor final sai do percurso real do GPS (o gerente ajusta antes do acerto, se precisar).'));
+        }
+        if (X.modo === 'bairro') {
+          var cs = el('select'); [''].concat(cidades.indexOf(X.cidade) < 0 && X.cidade ? [X.cidade] : []).concat(cidades).forEach(function (k) { var op = el('option', '', k || 'Escolha a cidade'); op.value = k; cs.appendChild(op); }); cs.value = X.cidade || '';
+          cs.onchange = function () { X.cidade = cs.value; (d.bairrosPorCidade[X.cidade] || []).forEach(function (b) { if (!(b in X.bairros)) X.bairros[b] = ''; }); des(); };
+          campo(g2[0], 'Cidade', cs, true);
+          var pd = inpValor(X.padrao ? String(X.padrao) : ''); pd.input.oninput = function () { X.padrao = num(pd.input.value) || 0; }; campo(g2[1], 'Valor padrão (bairro sem preço)', pd, true);
+          var t = el('table', 'ext'); corpo.appendChild(t);
+          Object.keys(X.bairros).sort().forEach(function (b) {
+            var tr = el('tr'); tr.appendChild(el('td', '', b)); var td = el('td'), vv = inpValor(X.bairros[b] === '' ? '' : String(X.bairros[b])); vv.input.oninput = function () { X.bairros[b] = num(vv.input.value) || 0; }; td.appendChild(vv); tr.appendChild(td);
+            var tx2 = el('td'), rm = el('button', 'lnk', 'Tirar'); rm.type = 'button'; rm.onclick = function () { delete X.bairros[b]; des(); }; tx2.appendChild(rm); tr.appendChild(tx2); t.appendChild(tr);
+          });
+          var ad = el('button', 'lnk', '+ Adicionar bairro'); ad.type = 'button'; ad.onclick = function () { var b = (prompt('Nome do bairro:', '') || '').trim(); if (b) { X.bairros[b] = ''; des(); } }; corpo.appendChild(ad);
+          corpo.appendChild(el('div', 'hint', 'Os bairros vêm dos endereços dos clientes e das entregas da cidade escolhida.'));
+        }
+        var g3 = grade(corpo, 3), ac = campo(g3[0], 'Acerto', inp('text', 'Ex.: semanal (sexta)')), px = campo(g3[1], 'Chave PIX', inp('text', '')), wz = campo(g3[2], 'WhatsApp', inp('tel', ''));
+        ac.value = X.acerto || ''; px.value = X.pix || ''; wz.value = X.whats ? fmtFone(X.whats) : ''; ac.oninput = function () { X.acerto = ac.value; }; px.oninput = function () { X.pix = px.value; }; wz.oninput = function () { X.whats = soDig(wz.value); };
+      }
+      des();
+    });
+    var m = el('div', 'msg err'); box.appendChild(m);
+    var sv = el('button', 'btn', 'Salvar'); sv.type = 'button'; sv.style.marginTop = '10px'; box.appendChild(sv);
+    sv.onclick = function () {
+      m.classList.remove('show'); sv.disabled = true;
+      call('entregasCfgSalvar', [S.token, { taxaPadrao: num(tx.input.value) || 0, turnos: tu.value.split(',').map(function (x) { return x.trim(); }).filter(Boolean), pagarNaoEntregue: pn.checked, motoboys: M }])
+        .then(function (r) { sv.disabled = false; box.innerHTML = ''; cfgEntregas(box, r); box.insertBefore(el('div', 'msg ok show', '✓ Salvo.'), box.firstChild); EN.d = null; })
+        .catch(function (e) { sv.disabled = false; m.textContent = e; m.classList.add('show'); });
+    };
+  }
+  // ---------- app Gestti Entregas (login de motoboy) ----------
+  var MOTO = { d: null, timer: null, gps: null, ultEnvio: 0 };
+  function motoApp() {
+    VIEWS.forEach(function (v) { show(v.sec, false); }); show('nav', false); show('gear', false); show('vConfig', false); show('rbW', false); document.body.classList.remove('logado');
+    var pg = $('motoPg'); if (!pg) { pg = el('div'); pg.id = 'motoPg'; pg.style.cssText = 'max-width:560px;margin:0 auto;padding:12px 14px 40px'; document.querySelector('main').appendChild(pg); }
+    pg.classList.remove('hide');
+    $('topTit').textContent = 'Minhas entregas';
+    motoCarregar();
+    clearInterval(MOTO.timer); MOTO.timer = setInterval(function () { if (document.visibilityState !== 'hidden' && soMotoboy()) motoCarregar(); }, 60000);
+  }
+  function motoCarregar() { call('entregasMinhas', [S.token]).then(function (d) { MOTO.d = d; motoDesenhar(); motoGps(); }).catch(function (e) { var pg = $('motoPg'); if (pg) { pg.innerHTML = ''; pg.appendChild(el('div', 'empty', String(e))); } }); }
+  function motoDesenhar() {
+    var pg = $('motoPg'), D = MOTO.d; pg.innerHTML = '';
+    var saindo = D.ativas.some(function (e) { return e.situacao === 'Saiu para entrega'; });
+    var st = el('div', saindo ? 'aviso' : 'hint', saindo ? '📍 GPS ligado: a loja e o cliente veem onde você está até terminar as entregas.' : 'O GPS só liga quando você marca "Saí para entrega".'); pg.appendChild(st);
+    if (D.motoboy.parceiro) {
+      var sc = el('div', 'card'); pg.appendChild(sc); sc.appendChild(el('h2', '', 'Meu saldo a receber'));
+      sc.appendChild(el('div', 'kpiv', brl(D.saldo.pendente))).style.cssText = 'font-size:26px;font-weight:800';
+      sc.appendChild(el('div', 'hint', D.saldo.corridas + ' corrida(s) ainda não acertada(s)'));
+      D.saldo.acertos.slice(-5).reverse().forEach(function (a) { sc.appendChild(el('div', 'hint', 'Acerto ' + a.id + ': ' + brl(a.valor) + ' · ' + (a.situacao === 'Pago' ? 'pago em ' + isoBR(a.pagoEm) : 'a pagar até ' + isoBR(a.venc)))); });
+    }
+    pg.appendChild(el('h2', 'fmtit', 'Minhas entregas (' + D.ativas.length + ')'));
+    if (!D.ativas.length) pg.appendChild(el('div', 'empty', 'Nenhuma entrega com você agora.'));
+    D.ativas.forEach(function (e) {
+      var c = el('div', 'card'); pg.appendChild(c);
+      var t = el('div', 'pnome', (e.ref || e.id) + ' · ' + e.cliente.nome); c.appendChild(t); c.appendChild(enBadge(e.situacao));
+      c.appendChild(el('div', '', enEndereco(e))); if (e.referencia) c.appendChild(el('div', 'hint', 'Referência: ' + e.referencia));
+      if (e.previsao) c.appendChild(el('div', 'hint', 'Previsão: ' + e.previsao)); if (e.obs) c.appendChild(el('div', 'hint', 'Obs.: ' + e.obs));
+      if (e.cobrar) c.appendChild(el('div', 'aviso', '💰 Receber na entrega: ' + brl(e.cobrar)));
+      var ac = el('div', 'acoes'); c.appendChild(ac);
+      btn(ac, '🗺 Abrir no mapa', 'ghost', function () { window.open(enMapa(e), '_blank', 'noopener'); });
+      if (e.cliente.whats) btn(ac, '📞 Ligar', 'ghost', function () { location.href = 'tel:' + soDig(e.cliente.whats); });
+      var m = el('div', 'msg err'); c.appendChild(m);
+      var mudar = function (d, b) { m.classList.remove('show'); b.disabled = true; call('entregaMudar', [S.token, e.id, d]).then(function (r) { MOTO.d = r; motoDesenhar(); motoGps(); }).catch(function (x) { b.disabled = false; m.textContent = x; m.classList.add('show'); }); };
+      var a2 = el('div', 'acoes'); c.appendChild(a2);
+      if (e.situacao !== 'Saiu para entrega') { var bs = btn(a2, 'Saí para entrega', 'ok', function () { mudar({ situacao: 'Saiu para entrega' }, bs); }); }
+      else {
+        var be = btn(a2, '✓ Entregue', 'ok', function () { var q = prompt('Quem recebeu?', e.cliente.nome.split(' ')[0]); if (q) mudar({ situacao: 'Entregue', recebidoPor: q }, be); });
+        var bn = btn(a2, 'Não entregue', 'ghost', function () { var q = prompt('Por que não entregou?', 'Ninguém em casa'); if (q) mudar({ situacao: 'Não entregue', motivo: q }, bn); });
+      }
+    });
+    if (D.feitas.length) { pg.appendChild(el('h2', 'fmtit', 'Últimos 7 dias')); var t2 = el('table', 'ext'); D.feitas.forEach(function (e) { var tr = el('tr'); tr.appendChild(el('td', '', (e.ref || e.id) + ' · ' + e.cliente.nome + ' · ' + e.bairro)); tr.appendChild(el('td', 'v', e.situacao)); t2.appendChild(tr); }); pg.appendChild(t2); }
+    var at = el('button', 'lnk', '↻ Atualizar'); at.type = 'button'; at.onclick = motoCarregar; pg.appendChild(at);
+  }
+  /** Liga o GPS enquanto houver entrega "Saiu" (no app Android segue com a tela apagada) e manda a posição a cada ~15 s. */
+  function motoGps() {
+    var precisa = MOTO.d && MOTO.d.ativas.some(function (e) { return e.situacao === 'Saiu para entrega'; });
+    var enviar = function (lat, lng, acc) { var ag = Date.now(); if (ag - MOTO.ultEnvio < 14000) return; MOTO.ultEnvio = ag; call('entregaPosicao', [S.token, { lat: lat, lng: lng, acc: acc }]).catch(function () {}); };
+    var BG = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.BackgroundGeolocation;
+    if (precisa && !MOTO.gps) {
+      if (BG) BG.addWatcher({ backgroundMessage: 'Mandando sua posição para a loja e o cliente', backgroundTitle: 'Gestti Entregas', requestPermissions: true, stale: false, distanceFilter: 10 }, function (loc, err) { if (loc) enviar(loc.latitude, loc.longitude, loc.accuracy); })
+        .then(function (id) { MOTO.gps = { bg: id }; });
+      else if (navigator.geolocation) MOTO.gps = { web: navigator.geolocation.watchPosition(function (p) { enviar(p.coords.latitude, p.coords.longitude, p.coords.accuracy); }, function () {}, { enableHighAccuracy: true, maximumAge: 10000, timeout: 30000 }) };
+    }
+    if (!precisa && MOTO.gps) { if (MOTO.gps.bg && BG) BG.removeWatcher({ id: MOTO.gps.bg }); if (MOTO.gps.web !== undefined && navigator.geolocation) navigator.geolocation.clearWatch(MOTO.gps.web); MOTO.gps = null; }
+  }
+  /** Público: o cliente acompanha a entrega pelo link (?ent=…), com a moto no mapa enquanto "Saiu para entrega". */
+  function paginaEntregaCliente() {
+    var tok = (location.search.match(/[?&]ent=([a-f0-9]{40})/) || [])[1];
+    document.title = 'Acompanhe a sua entrega';
+    var pg = el('div'); pg.id = 'assPg'; document.body.appendChild(pg); document.body.classList.add('assinatura'); document.body.style.overflow = 'hidden';
+    var doc = el('div', 'doc'); pg.appendChild(doc); doc.appendChild(el('div', 'empty', 'Carregando…'));
+    var mapa = null, mk = null, timer = null, box = null, info = null;
+    function mostrar(d) {
+      if (!box) { doc.innerHTML = ''; doc.appendChild(el('div', 'emp', d.empresa)); info = el('div'); doc.appendChild(info); box = el('div'); box.style.cssText = 'height:340px;border-radius:12px;overflow:hidden;margin-top:12px;border:1px solid #ddd'; doc.appendChild(box); doc.appendChild(el('div', 'rodape', 'O mapa atualiza sozinho a cada 15 segundos e para de mostrar a moto quando o pedido é entregue.')); }
+      info.innerHTML = '';
+      var tit = d.situacao === 'Saiu para entrega' ? 'Seu pedido saiu para entrega' : d.situacao === 'Entregue' ? '✓ Pedido entregue' : d.situacao === 'Não entregue' ? 'Não conseguimos entregar' : 'Pedido ' + d.situacao.toLowerCase();
+      info.appendChild(el('h1', '', tit)); info.appendChild(el('div', 'hint', 'Pedido ' + d.pedido + ' · ' + d.loja + (d.motoboy ? ' · com ' + d.motoboy : '')));
+      if (d.situacao === 'Entregue') info.appendChild(el('div', 'hint', 'Entregue em ' + d.fim + (d.recebidoPor ? ' · recebido por ' + d.recebidoPor : '')));
+      if (d.situacao === 'Saiu para entrega') info.appendChild(el('div', 'hint', d.pos ? 'Posição atualizada há ' + (d.pos.seg < 60 ? d.pos.seg + ' s' : Math.round(d.pos.seg / 60) + ' min') : 'Aguardando o GPS do entregador…'));
+      if (d.situacao !== 'Saiu para entrega') { box.style.display = 'none'; clearInterval(timer); return; }
+      if (!d.pos) return;
+      carregarMapa().then(function (L) {
+        if (!mapa) { mapa = L.map(box); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(mapa); mapa.setView([d.pos.lat, d.pos.lng], 15); }
+        var ic = L.divIcon({ html: '<div style="font-size:30px;line-height:30px">🛵</div>', className: '', iconSize: [30, 30], iconAnchor: [15, 15] });
+        if (!mk) mk = L.marker([d.pos.lat, d.pos.lng], { icon: ic }).addTo(mapa); else mk.setLatLng([d.pos.lat, d.pos.lng]);
+        mapa.panTo([d.pos.lat, d.pos.lng]);
+      }).catch(function () {});
+    }
+    function buscar() { call('entregaPublico', [tok]).then(mostrar).catch(function (e) { clearInterval(timer); doc.innerHTML = ''; doc.appendChild(el('h1', '', 'Entrega')); doc.appendChild(el('div', 'aviso', String(e))); }); }
+    buscar(); timer = setInterval(function () { if (document.visibilityState !== 'hidden') buscar(); }, 15000);
+  }
   /** Leva 7 · 1.13: link de assinatura eletrônica da venda (o texto vem de Modelos de documento › Termo da venda). */
   function assinaturaVenda(v) {
     var sh = $('fSheet'); sh.innerHTML = '';
@@ -7551,6 +7874,7 @@
     sh.appendChild(reciboEl(v));
     var ac = el('div', 'acoes'), cu = el('button', 'btn', '🧾 Cupom 80 mm'), pr = el('button', 'btn ghost', '🖨 A4'), wa = el('button', 'btn ok', 'Enviar por WhatsApp'); cu.type = pr.type = wa.type = 'button';
     ac.appendChild(cu); ac.appendChild(pr); ac.appendChild(wa); sh.appendChild(ac);
+    if (v.situacao !== 'Cancelada' && podeEnt('c')) { var enb = el('button', 'btn ghost', '🛵 Entregar no endereço do cliente'); enb.type = 'button'; enb.style.marginTop = '8px'; enb.onclick = function () { formEntrega('venda', v.id); }; sh.appendChild(enb); }
     if (v.situacao !== 'Cancelada') { var asb = el('button', 'btn ghost', (v.det || {}).assinatura ? '✓ Assinada pelo cliente' : '✍ Assinatura eletrônica do cliente'); asb.type = 'button'; asb.style.marginTop = '8px'; asb.onclick = function () { assinaturaVenda(v); }; sh.appendChild(asb); }
     cu.onclick = function () { imprimirReciboCupom(v); };
     var cp = el('button', 'btn ghost', 'Copiar texto do recibo'), fc = el('button', 'btn ghost', 'Fechar'); cp.type = fc.type = 'button'; cp.style.marginTop = fc.style.marginTop = '8px';
@@ -7643,6 +7967,7 @@
     opcao('Ver recibo', 'Imprimir ou enviar de novo', '', function () { fecharDrawer(); abrirRecibo(v, false); });
     if ((v.troca || []).some(function (t) { return t.cc; })) opcao('Upgrade: aparelho aguardando conferência', v.troca.map(function (t) { return t.cc + ' · ' + t.modelo; }).join(', ') + ' — confira e gere o contrato em Compra de Celulares', '', function () { CC.d = null; ir('compracel'); });
     if (v.situacao !== 'Cancelada') { var sa1 = (v.det || {}).assinatura; opcao(sa1 ? '✓ Assinada pelo cliente' : 'Assinatura eletrônica do cliente', sa1 ? sa1.nome + ' em ' + sa1.em + ' · código ' + sa1.codigo : 'Link para o cliente assinar no celular dele ou aqui na loja', '', function () { fecharDrawer(); assinaturaVenda(v); }); }
+    if (v.situacao !== 'Cancelada' && podeEnt('c')) opcao('Entregar', 'Mandar pelo motoboy: endereço, data/turno e taxa', '', function () { fecharDrawer(); formEntrega('venda', v.id); });
     opcao('Enviar recibo por WhatsApp', fmtFone(v.cliente.whats), 'okc', function () { window.open('https://wa.me/55' + soDig(v.cliente.whats) + '?text=' + encodeURIComponent(textoRecibo(v)), '_blank', 'noopener'); });
     if (pode('cancelar_venda') && v.situacao !== 'Cancelada') {
       var bc = opcao('Cancelar venda', 'Os aparelhos voltam para o estoque e a troca sai', 'danger', function () {
@@ -10185,7 +10510,7 @@
   /* Leva 7 · 1.9: Promoções e cupons numa lista só (filtros por tipo e situação), cadastro de promoção com busca de produto e preço por produto, cupons e cupom individual. */
   var PRF = { tipo: '', sit: 'ativos', busca: '' }, CUD = null;
   function carregarPromos(depois) {
-    var b = $('prCorpo'); if (!depois) { b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…')); }
+    var b = $('pmCorpo'); if (!depois) { b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…')); }
     Promise.all([call('promocoesListar', [S.token]), call('cuponsListar', [S.token]), S.ac ? Promise.resolve(S.ac) : call('acessorios', [S.token])]).then(function (r) { PRD = r[0]; CUD = r[1]; S.ac = r[2]; if (depois) depois(); else desenharPromos(); })
       .catch(function (e) { b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); });
   }
@@ -10202,7 +10527,7 @@
   }
   function sitChip(t) { return el('span', 'bdg ' + ({ 'No ar': 'ok', Ativo: 'ok', Agendada: 'res', 'Fora do horário': 'inf' }[t] || (t === 'Inativada' || t === 'Inativado' ? 'off' : 'warn')), t); }
   function desenharPromos() {
-    var b = $('prCorpo'); b.innerHTML = '';
+    var b = $('pmCorpo'); b.innerHTML = '';
     var top = el('div', 'acoes'); b.appendChild(top);
     if (PRD.editar) { btn(top, '+ Cupom', 'ghost', function () { ir('cupons'); }); btn(top, '+ Cupom individual', 'ghost', function () { ir('cupomind'); }); }
     var fl = el('div', 'dbfil'); b.appendChild(fl);
@@ -10244,7 +10569,7 @@
     tp.onchange = des; st.onchange = des; bu.oninput = des; des();
   }
   function formCupomEditar(c) {
-    var b = $('prCorpo'); b.innerHTML = ''; var vt = el('button', 'lnk', '← Promoções e cupons'); vt.type = 'button'; vt.onclick = desenharPromos; b.appendChild(vt);
+    var b = $('pmCorpo'); b.innerHTML = ''; var vt = el('button', 'lnk', '← Promoções e cupons'); vt.type = 'button'; vt.onclick = desenharPromos; b.appendChild(vt);
     var k = el('div', 'card'); b.appendChild(k); k.appendChild(el('h2', '', 'Editar cupom ' + c.codigo));
     var f = camposCupom(k, c); var lim = null;
     if (c.tipo === 'Genérico') { lim = inp('number', 'sem limite'); lim.value = c.limite || ''; campo(k, 'Limite total de usos', lim); }
@@ -10264,7 +10589,7 @@
     return { dados: function () { return { desconto: dsc.value, valor: v.value, minimo: mn.value, validade: va.value, acumula: ak.checked, soAcess: sa.checked }; } };
   }
   function formPromo(p) {
-    var b = $('prCorpo'); b.innerHTML = ''; var vt = el('button', 'lnk', '← Promoções e cupons'); vt.type = 'button'; vt.onclick = desenharPromos; b.appendChild(vt);
+    var b = $('pmCorpo'); b.innerHTML = ''; var vt = el('button', 'lnk', '← Promoções e cupons'); vt.type = 'button'; vt.onclick = desenharPromos; b.appendChild(vt);
     var P = p ? JSON.parse(JSON.stringify(p)) : { nome: '', tipo: 'relampago', aplica: 'produto', alvo: '', itens: [], desconto: 'pct', valor: '', dias: [], horaIni: '', horaFim: '', acumula: false, lojas: [] };
     if (P.aplica === 'produto' && !(P.itens || []).length && P.alvo) P.itens = [{ id: P.alvo }];
     var modo = (P.itens || []).some(function (x) { return x.preco > 0; }) ? 'individual' : 'todos';
@@ -16123,6 +16448,7 @@
       var mt = prompt('Motivo da reabertura:', ''); if (!mt) return;
       call('osReabrir', [S.token, o.id, mt]).then(reabrir).catch(erro);
     });
+    if (o.status !== 'Cancelada' && podeEnt('c')) opcaoDw(bd, 'Entregar', 'Levar o aparelho ao cliente pelo motoboy', '', function () { fecharDrawer(); formEntrega('os', o.id); });
     opcaoDw(bd, 'Duplicar', 'Nova OS com o mesmo cliente e aparelho', '', function () { fecharDrawer(); var cp = JSON.parse(JSON.stringify(o)); delete cp.id; cp.status = ''; cp.hist = []; formOS(cp); OSF.id = ''; });
     var bh = opcaoDw(bd, 'Histórico', (o.hist || []).length + ' registro(s)', '', function () {
       if (bh.nextSibling && bh.nextSibling.classList && bh.nextSibling.classList.contains('opc-box')) { bh.nextSibling.remove(); return; }
@@ -17148,6 +17474,7 @@
     if (pode('conferir_caixa')) l.push(['caixa', 'Caixa', 'Abertura e fechamento: por loja (tudo junto) ou por funcionário']);
     if (pode('equipe')) l.push(['depositos', 'Depósitos', 'Criar, renomear e excluir os locais de estoque desta empresa']);
     if (pode('cancelar_os')) l.push(['osaux', 'Ordem de Serviço', 'Termos e prazos de garantia']);
+    if (podeEnt('x')) l.push(['entregas', 'Motoboys e valores', 'Taxa, turnos e quanto cada motoboy parceiro recebe: fixo, por bairro ou por km']);
     if (pode('equipe')) l.push(['empresas', 'Empresas', 'Outras empresas com dados separados (mesmo sistema e atualizações)']);
     if (pode('historico') || pode('equipe') || /^(Gerente|Supervisor)$/.test(S.u.perfil || '')) l.push(['historico', 'Histórico', 'Tudo o que foi feito no sistema: o quê, quem, quando e onde']);
     if (pode('equipe') || pode('liberar')) l.push(['modelosdoc', 'Modelos de documento', 'Contrato de compra, termos de reserva/encomenda: texto e o que a assinatura pede']);
@@ -17219,6 +17546,10 @@
       box.appendChild(el('div', 'empty', 'Carregando…'));
       call('modelosMsgDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; MSGM = d; cfgModelosMsg(box, JSON.parse(JSON.stringify(d))); listaPadrao(box, { ico: 'recibo', col1: 'Modelo', voltar: 'Todos os modelos', nome: function (c, i) { return i === 0 ? 'Garantia mostrada nas mensagens' : ''; }, det: function (c, i) { if (i === 0) { var g = c.querySelector('input'); return g ? g.value : ''; } return c.querySelector('input[type=checkbox]:checked') ? 'Padrão' : ''; } }); })
         .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
+    }
+    else if (ab === 'entregas') {
+      box.appendChild(el('div', 'empty', 'Carregando…'));
+      call('entregasCfg', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgEntregas(box, d); }).catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
     }
     else if (ab === 'naturezas') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
@@ -17668,7 +17999,7 @@
   $('tfAtual').onclick = carregarTransf;
   $('ckAtual').onclick = carregarCheckin;
   $('verProd').onclick = function () { $('outro').click(); ir('disp'); carregarDisp(true); };
-  if (/[?&]ass=[a-f0-9]{40}/.test(location.search)) paginaAssinatura(); else if (/[?&]os=[a-f0-9]{40}/.test(location.search)) paginaOSCliente(); else iniciar();
+  if (/[?&]ent=[a-f0-9]{40}/.test(location.search)) paginaEntregaCliente(); else if (/[?&]ass=[a-f0-9]{40}/.test(location.search)) paginaAssinatura(); else if (/[?&]os=[a-f0-9]{40}/.test(location.search)) paginaOSCliente(); else iniciar();
 })();
 </script>
 </body>
