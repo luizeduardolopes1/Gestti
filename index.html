@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ygru5O01LjUhoZUDKRXUdtttpRuB0xpMUOVKnu1OnHs=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-HasxPKEzInSS47aOoPYQLugwshDibQu0znXdqPB/PsM=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -15981,6 +15981,16 @@
       L('Total da OS', brl(T.total), 'big');
       rl.innerHTML = ''; rl.appendChild(el('div', 'k', 'Total da OS')); rl.appendChild(el('div', 'v', brl(T.total))); if (!T.total) rl.appendChild(el('div', 's', 'pode salvar sem valor e orçar depois'));
     }
+    // ---- Leva 7 · 1.14: valor pago na entrada (só na abertura; depois, pela OS › Adiantamento)
+    if (!OSF.id) {
+      if (!OSF.adi) OSF.adi = { formaId: '', valor: '' };
+      var cA = el('div', 'card pecard'); cA.appendChild(el('h2', '', 'Valor pago na entrada (opcional)')); W.appendChild(cA);
+      cA.appendChild(el('div', 'hint', 'Entra no caixa como "Adiantamento de OS" e é abatido quando a OS for faturada. Se a OS for cancelada, volta em dinheiro (com liberação do gerente) ou em vale-troca.'));
+      var gA = grade(cA, 2), fa = el('select'), fz = formasV().filter(function (f) { return f.cartao !== 'crediario'; });
+      fz.forEach(function (f) { var o2 = el('option', '', f.nome); o2.value = f.id || f.nome; fa.appendChild(o2); }); fa.value = OSF.adi.formaId || (fz[0] ? fz[0].id || fz[0].nome : ''); OSF.adi.formaId = fa.value;
+      fa.onchange = function () { OSF.adi.formaId = fa.value; }; campo(gA[0], 'Forma de pagamento', fa, true);
+      var va = inpValor(OSF.adi.valor); va.input.oninput = function () { OSF.adi.valor = va.input.value; }; campo(gA[1], 'Valor pago agora', va, true);
+    }
     // ---- 6. dados adicionais
     var c6 = el('div', 'card pecard'); c6.appendChild(el('h2', '', 'Dados adicionais')); W.appendChild(c6);
     var g6 = grade(c6, 2);
@@ -16002,12 +16012,14 @@
       else if (OSF.defeito.trim().length < 3) erro = 'Descreva o defeito relatado pelo cliente.';
       else if (OSF.pecas.some(function (p) { return !(parseInt(p.qtd, 10) > 0) || (!p.prodId && !p.desc.trim()); })) erro = 'Confira as peças: descrição e quantidade.';
       else if (totaisOS().total < 0) erro = 'O desconto está maior que o valor da OS.';
+      else if (!OSF.id && OSF.adi && num(OSF.adi.valor) > 0 && totaisOS().total > 0 && num(OSF.adi.valor) > totaisOS().total + 0.009) erro = 'O valor pago na entrada passa do total da OS.';
       if (erro) { m.textContent = erro; m.classList.add('show'); return; }
       sv.disabled = si.disabled = true;
       var d = { id: OSF.id, loja: OSF.loja, tecnicoId: OSF.tecnicoId, cliente: C2, aparelho: OSF.aparelho, defeito: OSF.defeito, diagnostico: OSF.diagnostico,
                 servicos: OSF.servicos.filter(function (s) { return s.desc.trim(); }).map(function (s) { return { desc: s.desc, valor: num(s.valor) || 0 }; }),
                 pecas: OSF.pecas.map(function (p) { return { prodId: p.prodId, desc: p.desc, qtd: parseInt(p.qtd, 10), preco: num(p.preco) || 0, custo: num(p.custo) || 0, encomendar: !p.prodId && !!p.encomendar }; }),
                 desconto: num(OSF.desconto) || 0, previsao: OSF.previsao, horaPrevista: OSF.horaPrevista || '', garantiaDias: OSF.garantiaDias, termoId: OSF.termoId || '', obs: OSF.obs, obsInterna: OSF.obsInt, senhaInformada: OSF.senhaInformada };
+      if (!OSF.id && OSF.adi && num(OSF.adi.valor) > 0) { var fA = formasV().filter(function (f) { return (f.id || f.nome) === OSF.adi.formaId; })[0] || {}; d.adiantamento = { formaId: fA.id || '', forma: fA.nome || '', valor: num(OSF.adi.valor) }; }
       callM('osSalvar', [S.token, d]).then(function (r) {
         S.crm = null; aposOS(r); OSF = null; ir('oslista');
         var o = r.ordens.filter(function (x) { return x.id === r.salvoId; })[0];
@@ -16054,6 +16066,12 @@
     var trt = el('tr'); trt.appendChild(el('td', '', 'Total')); trt.appendChild(el('td', 'v', brl(T.total || 0))); to.appendChild(trt);
     if (!to.children.length) co.appendChild(el('div', 'hint', 'Sem serviços lançados ainda.')); else co.appendChild(to);
     if (o.pagamentos && o.pagamentos.length) co.appendChild(el('div', 'hint', 'Pago: ' + o.pagamentos.map(function (p) { return formaTxt(p) + ' ' + brl(p.valor); }).join(' + ')));
+    var AD = osAdi(o);
+    if (AD.total) {
+      co.appendChild(el('div', 'hint', 'Pago na entrada: ' + (o.adiantamentos || []).map(function (a) { return formaTxt(a) + ' ' + brl(a.valor) + ' em ' + isoBR(a.em) + (a.porFora ? ' (estornado no cartão)' : ''); }).join(' + ') +
+        (AD.abatido ? ' · abatido ' + brl(AD.abatido) : '') + (AD.livre && !osFinal(o) ? ' · falta pagar ' + brl(Math.max(0, r2((T.total || 0) - AD.livre))) : '')));
+      (o.adiantDev || []).forEach(function (x) { co.appendChild(el('div', 'hint', 'Devolução: ' + brl(x.valor) + ' ' + ({ dinheiro: 'em dinheiro', vale: 'em vale-troca ' + (x.vale || ''), por_fora: 'estornado no cartão' })[x.destino] + ' · ' + x.em + (x.liberadoPor ? ' · liberado por ' + x.liberadoPor : ''))); });
+    }
     bd.appendChild(co);
     var am = el('div', 'msg err'); bd.appendChild(am);
     var erro = function (e) { am.textContent = e; am.classList.add('show'); };
@@ -16069,8 +16087,22 @@
         ok.onclick = function () { am.classList.remove('show'); ok.disabled = true; callM('osStatus', [S.token, o.id, esc, nt.value]).then(reabrir).catch(function (e) { ok.disabled = false; erro(e); }); };
       });
       opcaoDw(bd, 'Editar OS', 'Cliente, aparelho, diagnóstico, serviços, peças e prazos', '', function () { fecharDrawer(); formOS(o); });
-      if (D.faturar === 'pdv') opcaoDw(bd, 'Faturar no PDV', T.total ? 'Leva ' + brl(T.total) + ' para o PDV (dá para somar produtos na mesma venda)' : 'Entrega sem cobrança pelo PDV', 'okc', function () { fecharDrawer(); S.pdvFaturarOS = o.id; ir('pdv'); });
-      else var be = opcaoDw(bd, 'Entregar e receber', T.total ? 'Recebe ' + brl(T.total) + ', baixa as peças do estoque e inicia a garantia' : 'Entrega sem cobrança (ex.: garantia)', 'okc', function () { painelEntregaOS(be, o, am, reabrir); });
+      if (!(o.garantiaDe && !o.convertida)) var ba = opcaoDw(bd, 'Receber adiantamento', AD.total ? 'Já pago na entrada: ' + brl(AD.livre) : 'Cliente pagou uma parte antes (entra no caixa e é abatido no faturamento)', '', function () {
+        if (ba.nextSibling && ba.nextSibling.classList && ba.nextSibling.classList.contains('opc-box')) { ba.nextSibling.remove(); return; }
+        var bx = el('div', 'opc-box'), fz = formasV().filter(function (f) { return f.cartao !== 'crediario'; }), fs = el('select');
+        fz.forEach(function (f) { var o2 = el('option', '', f.nome); o2.value = f.id || f.nome; fs.appendChild(o2); }); campo(bx, 'Forma de pagamento', fs, true);
+        var vw = inpValor(''); campo(bx, 'Valor', vw);
+        var ok = el('button', 'btn', 'Registrar adiantamento'); ok.type = 'button'; ok.style.marginTop = '10px'; bx.appendChild(ok); ba.after(bx);
+        ok.onclick = function () {
+          var v = num(vw.input.value); if (!(v > 0)) { erro('Informe o valor.'); return; }
+          var f2 = fz.filter(function (f) { return (f.id || f.nome) === fs.value; })[0] || {};
+          am.classList.remove('show'); ok.disabled = true;
+          callM('osAdiantar', [S.token, o.id, { formaId: f2.id || '', forma: f2.nome || '', valor: v }]).then(function (r) { S.fin = null; reabrir(r); }).catch(function (e) { ok.disabled = false; erro(e); });
+        };
+        vw.input.focus();
+      });
+      if (D.faturar === 'pdv') opcaoDw(bd, 'Faturar no PDV', T.total ? 'Leva ' + brl(Math.max(0, r2(T.total - AD.livre))) + (AD.livre ? ' (já abatido o pago na entrada)' : '') + ' para o PDV (dá para somar produtos na mesma venda)' : 'Entrega sem cobrança pelo PDV', 'okc', function () { fecharDrawer(); S.pdvFaturarOS = o.id; ir('pdv'); });
+      else var be = opcaoDw(bd, 'Entregar e receber', T.total ? 'Recebe ' + brl(Math.max(0, r2(T.total - AD.livre))) + (AD.livre ? ' (já abatido o pago na entrada)' : '') + ', baixa as peças do estoque e inicia a garantia' : 'Entrega sem cobrança (ex.: garantia)', 'okc', function () { painelEntregaOS(be, o, am, reabrir); });
     }
     if (c.whats) opcaoDw(bd, 'Avisar no WhatsApp', o.status === 'Pronta' ? 'Aviso de pronto para retirada' : o.status === 'Aguardando aprovação' ? 'Envia o orçamento para aprovação' : 'Atualização do status', '', function () { abrirWhats(c.whats, msgOS(o)); });
     if (c.whats && o.linkTok) opcaoDw(bd, 'Enviar link de acompanhamento', 'O cliente vê o status, as observações e aprova ou recusa o orçamento', '', function () { window.open(waLink(c.whats, 'Olá, ' + String(c.nome || '').split(' ')[0] + '! Acompanhe o conserto do seu ' + apTxt(o) + ' (OS ' + o.id + '): ' + linkOS(o)), '_blank'); });
@@ -16102,15 +16134,36 @@
       var bc = opcaoDw(bd, o.status === 'Entregue' ? 'Estornar entrega e cancelar' : 'Cancelar OS', o.status === 'Entregue' ? 'As peças voltam ao estoque e o recebimento sai do financeiro' : 'Cliente desistiu ou orçamento recusado', 'danger', function () {
         if (bc.nextSibling && bc.nextSibling.classList && bc.nextSibling.classList.contains('opc-box')) { bc.nextSibling.remove(); return; }
         var bx = el('div', 'opc-box'), mo = inp('text', 'Ex.: orçamento recusado'); mo.maxLength = 200; campo(bx, 'Motivo *', mo, true);
+        var devV = r2(AD.livre + AD.abatido), dsel = null;
+        if (devV > 0) dsel = destinoAdiant(bx, o, devV);
         var ok = el('button', 'btn danger', 'Confirmar cancelamento'); ok.type = 'button'; ok.style.marginTop = '10px'; bx.appendChild(ok); bc.after(bx);
-        ok.onclick = function () { am.classList.remove('show'); ok.disabled = true; call('osCancelar', [S.token, o.id, mo.value]).then(function (r) { S.ac = null; S.est = null; S.fin = null; reabrir(r); }).catch(function (e) { ok.disabled = false; erro(e); }); };
+        ok.onclick = function () {
+          am.classList.remove('show'); if (dsel && !dsel.value) { erro('Escolha o que fazer com o valor pago na entrada.'); return; }
+          ok.disabled = true;
+          comLiberacao('osCancelar', [S.token, o.id, mo.value, dsel ? { destino: dsel.value } : {}], 3).then(function (r) { S.ac = null; S.est = null; S.fin = null; reabrir(r); }).catch(function (e) { ok.disabled = false; erro(e); });
+        };
         mo.focus();
       });
     }
   }
+  /** Leva 7 · 1.14: quanto foi pago na entrada, abatido, devolvido e o que ainda vale. */
+  function osAdi(o) {
+    var t = r2(soma((o.adiantamentos || []).filter(function (a) { return !a.porFora; }), function (a) { return a.valor || 0; })), dv = r2(soma(o.adiantDev || [], function (x) { return x.valor || 0; })), ab = o.adiantAbatido || 0;
+    return { total: r2(soma(o.adiantamentos || [], function (a) { return a.valor || 0; })), abatido: ab, devolvido: dv, livre: r2(Math.max(0, t - ab - dv)) };
+  }
+  /** Escolha do destino do valor pago na entrada (dinheiro com liberação do gerente, vale-troca ou estorno no cartão). */
+  function destinoAdiant(box, o, valor) {
+    var cartao = (o.adiantamentos || []).some(function (a) { return a.cartao; }), s2 = el('select');
+    [['', 'Escolha…']].concat(cartao ? [['por_fora', 'Estornado no cartão (na maquininha)']] : [['dinheiro', 'Devolver em dinheiro' + (pode('liberar') ? '' : ' (precisa de liberação do gerente)')]]).concat([['vale', 'Vale-troca para o cliente']])
+      .forEach(function (x) { var op = el('option', '', x[1]); op.value = x[0]; s2.appendChild(op); });
+    campo(box, 'Valor pago na entrada: ' + brl(valor) + ' — o que fazer?', s2, true);
+    return s2;
+  }
   function painelEntregaOS(btn, o, am, reabrir) {
     if (btn.nextSibling && btn.nextSibling.classList && btn.nextSibling.classList.contains('opc-box')) { btn.nextSibling.remove(); return; }
-    var T = o.totais || {}, total = T.total || 0, bx = el('div', 'opc-box');
+    var T = o.totais || {}, AD = osAdi(o), total = r2(Math.max(0, (T.total || 0) - AD.livre)), sobra = r2(Math.max(0, AD.livre - (T.total || 0))), bx = el('div', 'opc-box'), dsob = null;
+    if (AD.livre) bx.appendChild(el('div', 'aviso', 'Pago na entrada: ' + brl(AD.livre) + ' (abatido). ' + (sobra ? 'Sobra ' + brl(sobra) + ' para devolver.' : 'Falta receber ' + brl(total) + '.')));
+    if (sobra) dsob = destinoAdiant(bx, o, sobra);
     var formas = formasV().filter(function (f) { return f.cartao !== 'crediario'; });
     var pags = total > 0 ? [{ formaId: formas[0].id, forma: formas[0].nome, cartao: formas[0].cartao, valor: vs(total.toFixed(2)), parcelas: '', categoria: 'Recebimento com serviços' }] : [];
     // quem entrega é quem conta na meta e na bonificação de OS: fica fixo (o usuário logado), sem opção de trocar
@@ -16118,7 +16171,7 @@
     var lb = el('div'); bx.appendChild(lb); var inf = el('div', 'hint'); bx.appendChild(inf);
     function desenhar() {
       lb.innerHTML = '';
-      if (!total) { lb.appendChild(el('div', 'hint', 'OS sem valor: será entregue sem cobrança.')); return; }
+      if (!total) { lb.appendChild(el('div', 'hint', AD.livre ? 'Nada a receber: o valor pago na entrada cobre a OS.' : 'OS sem valor: será entregue sem cobrança.')); return; }
       pags.forEach(function (p, i) {
         var r = el('div', 'pdvpg'), hd = el('div', 'hd'), fs = el('select');
         formas.forEach(function (f) { var o2 = el('option', '', f.nome); o2.value = f.id || f.nome; fs.appendChild(o2); }); fs.value = p.formaId || p.forma;
@@ -16143,9 +16196,12 @@
     btn.after(bx); desenhar();
     ok.onclick = function () {
       am.classList.remove('show');
-      if (total && Math.abs(r2(total - soma(pags, function (p) { return num(p.valor) || 0; }))) > 0.009) { am.textContent = 'A soma dos pagamentos precisa ser igual ao total da OS.'; am.classList.add('show'); return; }
+      if (total && Math.abs(r2(total - soma(pags, function (p) { return num(p.valor) || 0; }))) > 0.009) { am.textContent = 'A soma dos pagamentos precisa ser igual ao que falta pagar da OS.'; am.classList.add('show'); return; }
+      if (dsob && !dsob.value) { am.textContent = 'Escolha como devolver a sobra do valor pago na entrada.'; am.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Registrando…';
-      callM('osEntregar', [S.token, o.id, { viaPdv: S.view === 'pdv' || (S.os && S.os.faturar === 'os'), pagamentos: pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, categoria: p.categoria, bandeira: p.bandeira || '' }; }) }])
+      var dE = { viaPdv: S.view === 'pdv' || (S.os && S.os.faturar === 'os'), pagamentos: total ? pags.map(function (p) { return { formaId: p.formaId, forma: p.forma, valor: num(p.valor), parcelas: p.parcelas, categoria: p.categoria, bandeira: p.bandeira || '' }; }) : [] };
+      if (dsob) dE.sobra = { destino: dsob.value };
+      (dsob && dsob.value === 'dinheiro' && !(MC.on && mcAqui()) ? comLiberacao('osEntregar', [S.token, o.id, dE], 2) : callM('osEntregar', [S.token, o.id, dE]))
         .then(function (r) { S.ac = null; S.est = null; S.fin = null; reabrir(r); var o2 = r.ordens.filter(function (x) { return x.id === o.id; })[0]; if (o2 && ckp.checked) imprimirOS(o2, true); })
         .catch(function (e) { ok.disabled = false; ok.textContent = 'Confirmar entrega'; am.textContent = e; am.classList.add('show'); });
     };
@@ -16170,8 +16226,10 @@
     (o.servicos || []).forEach(function (s) { var tr = E('tr'); tr.appendChild(E('td', s.desc)); tr.appendChild(E('td', brl(s.valor), 'v')); t.appendChild(tr); });
     (o.pecas || []).forEach(function (p) { var tr = E('tr'); tr.appendChild(E('td', (p.qtd > 1 ? p.qtd + 'x ' : '') + p.desc)); tr.appendChild(E('td', brl(p.qtd * p.preco), 'v')); t.appendChild(tr); });
     if (o.desconto) { var trd = E('tr'); trd.appendChild(E('td', 'Desconto')); trd.appendChild(E('td', '− ' + brl(o.desconto), 'v')); t.appendChild(trd); }
-    var tt = E('tr', undefined, 'tot'); tt.appendChild(E('td', 'Total')); tt.appendChild(E('td', T.total ? brl(T.total) : 'a orçar', 'v')); t.appendChild(tt); so.appendChild(t);
-    if (entrega) kv(sec('Pagamento e garantia'), [['Pagamento', (o.pagamentos || []).map(function (p) { return formaTxt(p) + ' ' + brl(p.valor); }).join(' + ') || 'sem cobrança'],
+    var tt = E('tr', undefined, 'tot'); tt.appendChild(E('td', 'Total')); tt.appendChild(E('td', T.total ? brl(T.total) : 'a orçar', 'v')); t.appendChild(tt);
+    var ADp = osAdi(o); if (ADp.total) { var tra = E('tr'); tra.appendChild(E('td', 'Pago na entrada (' + (o.adiantamentos || []).map(function (a) { return a.forma; }).join(' + ') + ')')); tra.appendChild(E('td', '− ' + brl(ADp.total), 'v')); t.appendChild(tra); if (T.total) { var trf = E('tr', undefined, 'tot'); trf.appendChild(E('td', 'Falta pagar')); trf.appendChild(E('td', brl(Math.max(0, r2(T.total - ADp.total))), 'v')); t.appendChild(trf); } }
+    so.appendChild(t);
+    if (entrega) kv(sec('Pagamento e garantia'), [['Pagamento', (o.pagamentos || []).map(function (p) { return formaTxt(p) + ' ' + brl(p.valor); }).concat(o.adiantAbatido ? ['pago na entrada ' + brl(o.adiantAbatido)] : []).join(' + ') || 'sem cobrança'],
       ['Garantia', o.garantiaAte ? o.garantiaDias + ' dias, até ' + isoBR(o.garantiaAte) + ' (serviço e peças trocadas)' : 'sem garantia']]);
     if (!entrega && a.checklistNao) { var sck = sec('Checklist de entrada'); sck.appendChild(E('div', 'Checklist não realizado a pedido do cliente; o estado das funções não foi verificado na entrada. (' + a.checklistNao.motivo + ')', 'b')); }
     if (o.obs) kv(sec('Observações'), [['', o.obs]]);
