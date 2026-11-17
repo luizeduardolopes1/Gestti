@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-4CsVEiA9S0gS8+d2bSmzg5oHolcXb/W6qXXVPfvxIBg=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-SNAa6jVg+wNq/BcwsHN2g4+19pPx0Q385kUetAiimok=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -513,6 +513,8 @@
   .cxl{display:grid;grid-template-columns:minmax(0,1fr) 150px 100px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}.cxl small{display:block;color:var(--muted);font-size:12px}.cxl .dv{text-align:right;font-weight:700;font-size:13px}.cxl .prefix input{margin:0}
 
   .subnav{max-width:320px;margin:0 0 10px}
+  .grpbox{border:1px solid var(--line);border-radius:12px;padding:10px 12px 12px;margin:12px 0}
+  .grpbox h3{margin:0 0 4px;font-size:15px}
   .siln{border:1px dashed var(--line);border-radius:10px;padding:4px 12px 12px;margin-bottom:8px}
   .vdac .qp{display:grid;grid-template-columns:90px 1fr;gap:8px}.vdac .qp label{margin-top:6px}
   .p4 b{font-weight:700;color:var(--ink);background:none;padding:0}.p4 b.ok{color:var(--ok)}.p4 b.warn{color:var(--warn)}.p4 b.err{color:var(--err)}
@@ -1155,7 +1157,7 @@
         <option value="hoje">Hoje</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option>
         <option value="mes">Este mês</option><option value="mespass">Mês passado</option><option value="90">Últimos 90 dias</option><option value="365">Últimos 12 meses</option></select></div>
       <div id="dbEmpW" class="hide"><label for="dbEmp">Empresa</label><select id="dbEmp"></select></div>
-      <div><label for="dbLoja">Loja</label><select id="dbLoja"></select></div>
+      <div><label for="dbLoja">Depósito</label><select id="dbLoja"></select></div>
     </div>
     <div class="stabs dbrel" id="dbRel" role="tablist" aria-label="Relatórios"></div>
     <div id="dbCorpo"><div class="empty">Carregando…</div></div>
@@ -1175,7 +1177,7 @@
           <input id="hBusca" placeholder="Cliente, CPF, IMEI ou nº" autocomplete="off">
           <label for="hPer">Período</label>
           <select id="hPer"><option value="hoje">Hoje</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option><option value="mes">Este mês</option><option value="mespass">Mês passado</option><option value="90">Últimos 90 dias</option><option value="365">Últimos 12 meses</option></select>
-          <label for="hLoja">Loja</label><select id="hLoja"></select>
+          <label for="hLoja">Depósito</label><select id="hLoja"></select>
           <label for="hVend">Vendedor</label><select id="hVend"></select>
           <label for="hSit">Situação</label>
           <select id="hSit"><option value="">Ativas</option><option value="Cancelada">Canceladas</option><option value="todas">Todas</option></select>
@@ -1244,7 +1246,7 @@
         <label for="rcPer">Vencimento</label>
         <select id="rcPer"><option value="">Qualquer data</option><option value="mes">Este mês</option><option value="prox">Próximo mês</option><option value="7">Próximos 7 dias</option><option value="30">Próximos 30 dias</option></select>
         <label for="rcCat">Categoria</label><select id="rcCat"></select>
-        <label for="rcLoja">Loja</label><select id="rcLoja"></select>
+        <label for="rcLoja">Depósito</label><select id="rcLoja"></select>
         <button type="button" class="btn ghost" id="rcLimpar">Limpar filtros</button>
       </aside>
       <div>
@@ -1269,7 +1271,7 @@
         <label for="pgPer">Vencimento</label>
         <select id="pgPer"><option value="">Qualquer data</option><option value="mes">Este mês</option><option value="prox">Próximo mês</option><option value="7">Próximos 7 dias</option><option value="30">Próximos 30 dias</option></select>
         <label for="pgCat">Categoria</label><select id="pgCat"></select>
-        <label for="pgLoja">Loja</label><select id="pgLoja"></select>
+        <label for="pgLoja">Depósito</label><select id="pgLoja"></select>
         <button type="button" class="btn ghost" id="pgLimpar">Limpar filtros</button>
       </aside>
       <div>
@@ -1292,7 +1294,7 @@
         <input id="cdBusca" placeholder="Cliente, CPF, celular ou contrato" autocomplete="off">
         <div id="cdSitW"><label for="cdSit">Situação</label>
         <select id="cdSit"><option value="">Em aberto</option><option value="atrasadas">Atrasadas</option><option value="7">Vencem em 7 dias</option><option value="Paga">Pagas</option><option value="Cancelada">Canceladas</option><option value="todas">Todas</option></select></div>
-        <label for="cdLoja">Loja</label><select id="cdLoja"></select>
+        <label for="cdLoja">Depósito</label><select id="cdLoja"></select>
         <button type="button" class="btn ghost" id="cdLimpar">Limpar filtros</button>
       </aside>
       <div>
@@ -1321,7 +1323,7 @@
         <select id="acFmt"><option value="">Todos</option><option value="simples">Simples</option><option value="variacoes">Com variações</option><option value="composicao">Kits (composição)</option></select>
         <label for="acGrupo">Categoria</label><select id="acGrupo"></select>
         <label for="acTag">Tag</label><select id="acTag"></select>
-        <label for="acLoja">Loja</label><select id="acLoja"></select>
+        <label for="acLoja">Depósito</label><select id="acLoja"></select>
         <label for="acSit">Estoque</label>
         <select id="acSit"><option value="">Todos</option><option value="com">Com estoque</option><option value="sem">Sem estoque</option><option value="min">Abaixo do mínimo (repor)</option></select>
         <label for="acOrdem">Ordenar por</label>
@@ -1357,7 +1359,7 @@
   <section id="vTransf" class="hide">
     <div class="crumb">Suprimento</div>
     <div class="ptopo"><h1>Transferências</h1><button type="button" class="btn ghost" id="tfAtual" style="width:auto;padding:9px 16px;margin:0">↻ Atualizar</button></div>
-    <div class="hint">Envios entre depósitos e entre empresas. Para enviar, abra o produto (ou o aparelho) › Controle de estoque › Transferência, ou use "Enviar para outra loja" no PDV. Quem está no destino confirma o recebimento aqui.</div>
+    <div class="hint">Envios entre depósitos e entre empresas. Para enviar, abra o produto (ou o aparelho) › Controle de estoque › Transferência, ou use "Enviar para outro depósito ou empresa" no PDV. Quem está no destino confirma o recebimento aqui.</div>
     <div id="tfCorpo"></div>
   </section>
 
@@ -1407,7 +1409,7 @@
         <label for="cfBusca">Buscar</label><input id="cfBusca" placeholder="Funcionário ou nº do caixa" autocomplete="off">
         <label for="cfSit">Situação</label>
         <select id="cfSit"><option value="">Fechados para conferir</option><option value="Aberto">Abertos agora</option><option value="conf">Conferidos</option><option value="div">Com diferença</option><option value="todos">Todos</option></select>
-        <label for="cfLoja">Loja</label><select id="cfLoja"></select>
+        <label for="cfLoja">Depósito</label><select id="cfLoja"></select>
       </aside>
       <div>
         <div class="crumb">Financeiro</div>
@@ -1485,7 +1487,7 @@
         <h3>Filtros</h3>
         <label for="esBusca">Produto, SKU ou código de barras</label>
         <input id="esBusca" placeholder="Ex.: capa 13 ou leia o código" autocomplete="off">
-        <label for="esLoja">Loja</label><select id="esLoja"></select>
+        <label for="esLoja">Depósito</label><select id="esLoja"></select>
         <label for="esGrupo">Categoria</label><select id="esGrupo"></select>
         <div id="esSitW"><label for="esSit">Situação</label>
         <select id="esSit"><option value="">Todos</option><option value="com">Com estoque</option><option value="zero">Zerados</option><option value="min">Abaixo do mínimo (repor)</option><option value="max">Acima do máximo</option></select></div>
@@ -1524,7 +1526,7 @@
           <input id="cpBusca" placeholder="Nº da nota, fornecedor, produto ou chave" autocomplete="off">
           <label for="cpPer">Período (entrada)</label>
           <select id="cpPer"><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option><option value="mes">Este mês</option><option value="mespass">Mês passado</option><option value="90" selected>Últimos 90 dias</option><option value="365">Últimos 12 meses</option></select>
-          <label for="cpLoja">Loja</label><select id="cpLoja"></select>
+          <label for="cpLoja">Depósito</label><select id="cpLoja"></select>
           <label for="cpSit">Situação</label>
           <select id="cpSit"><option value="">Lançadas</option><option value="Estornada">Estornadas</option><option value="todas">Todas</option></select>
           <button type="button" class="btn ghost" id="cpLimpar">Limpar filtros</button>
@@ -1551,7 +1553,7 @@
           <h3>Filtros</h3>
           <label for="osBusca">Buscar</label>
           <input id="osBusca" placeholder="Nº, cliente, celular, IMEI ou modelo" autocomplete="off">
-          <label for="osLoja">Loja</label><select id="osLoja"></select>
+          <label for="osLoja">Depósito</label><select id="osLoja"></select>
           <label for="osTec">Técnico</label><select id="osTec"></select>
           <button type="button" class="btn ghost" id="osLimpar">Limpar filtros</button>
         </aside>
@@ -1591,7 +1593,7 @@
       <div id="drDeW" class="hide"><label for="drDe">De</label><input type="date" id="drDe"></div>
       <div id="drAteW" class="hide"><label for="drAte">Até</label><input type="date" id="drAte"></div>
       <div id="drEmpW" class="hide"><label for="drEmp">Empresa</label><select id="drEmp"></select></div>
-      <div id="drLojaW"><label for="drLoja">Loja</label><select id="drLoja"><option value="">Todas as lojas</option></select></div>
+      <div id="drLojaW"><label for="drLoja">Depósito</label><select id="drLoja"><option value="">Todos os depósitos</option></select></div>
       <div><label>Visão</label><div class="seg" id="drModo"></div></div>
     </div>
     <div id="drCorpo"></div>
@@ -1785,7 +1787,7 @@
         <input id="dImei" placeholder="Qualquer parte" autocomplete="off">
         <label for="dClassif">Classificação</label>
         <select id="dClassif"></select>
-        <label for="dLoja">Loja</label>
+        <label for="dLoja">Depósito</label>
         <select id="dLoja"></select>
         <label for="dCor">Cor</label>
         <select id="dCor"></select>
@@ -2083,7 +2085,7 @@
     { id: 'ccparc', sec: 'vCompraCel', nome: 'Lojas Parceiras', perm: 'compras', permOu: 'equipe', menu: 'Suprimento', sub: 'Compra de Celulares', subNome: 'Lojas Parceiras', desc: 'Cadastro das lojas parceiras, login e pagamento' },
     { id: 'disp', sec: 'vDisp', nome: 'Produtos Usados', perm: 'produtos', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Produtos', desc: 'Aparelhos seminovos e outros produtos usados' },
     { id: 'manut', sec: 'vManut', nome: 'Manutenção', perm: 'manutencao', menu: 'Suprimento', sub: 'Produtos Usados', subNome: 'Manutenção', desc: 'Quadro de conserto dos aparelhos usados' },
-    { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Suprimento', desc: 'Saldo de cada produto por loja e lançamentos' },
+    { id: 'estoque', sec: 'vEstoque', nome: 'Controle de Estoque', perm: 'estoque', menu: 'Suprimento', desc: 'Saldo de cada produto por depósito e lançamentos' },
     { id: 'transf', sec: 'vTransf', nome: 'Transferências', perm: 'transferir', menu: 'Suprimento', desc: 'Enviar e receber entre depósitos e empresas' },
     { id: 'checkin', sec: 'vCheckin', nome: 'Recebimento (check-in)', perm: 'receber', permOu: 'compras', menu: 'Suprimento', desc: 'Conferir a mercadoria da compra e dar entrada no estoque' },
     { id: 'balanco', sec: 'vBalanco', nome: 'Balanço', perm: 'balanco', permOu: 'finalizar_balanco', menu: 'Suprimento', desc: 'Inventário: contagem às cegas, revisão e ajuste' },
@@ -2321,7 +2323,7 @@
     var sh = $('fSheet'); sh.innerHTML = '';
     sh.appendChild(el('h2', 'tt', (nova ? '✓ ' : '') + 'Reserva ' + r.id));
     var st = el('div', 'sub'); st.appendChild(el('span', 'bdg ' + (r.ativa ? (r.vencida ? 'warn' : r.situacao === 'Ativa' ? 'res' : 'inf') : 'off'), r.vencida ? 'Sinal vencido' : r.situacao)); st.style.marginLeft = '-6px'; sh.appendChild(st);
-    var pares = [['Cliente', r.cliente + (r.whats ? ' · ' + fmtFone(r.whats) : '')], ['Produto', r.produto], [r.tipo === 'produto' ? 'Serial' : 'IMEI', r.chave], ['Loja', r.loja], ['Preço combinado', brl(r.preco) + (r.precoTabela && r.precoTabela !== r.preco ? ' (tabela ' + brl(r.precoTabela) + ')' : '')],
+    var pares = [['Cliente', r.cliente + (r.whats ? ' · ' + fmtFone(r.whats) : '')], ['Produto', r.produto], [r.tipo === 'produto' ? 'Serial' : 'IMEI', r.chave], ['Depósito', r.loja], ['Preço combinado', brl(r.preco) + (r.precoTabela && r.precoTabela !== r.preco ? ' (tabela ' + brl(r.precoTabela) + ')' : '')],
                  ['Sinal', r.sinal ? brl(r.sinal) + ' · ' + r.sinalForma : 'Sem sinal'], ['Falta pagar', r.sinal ? brl(Math.max(0, r.preco - r.sinal)) : ''], ['Vence', r.vence], ['Reservado por', r.vendedor + ' em ' + r.criada],
                  ['Termo', r.termo ? r.termo.titulo : ''], ['Assinatura', r.assinatura ? '✓ ' + r.assinatura.nome + ' em ' + r.assinatura.em : r.termo ? 'Aguardando o cliente assinar' : ''], ['Observação', r.obs]];
     if (r.fim) pares.push(['Encerrada', r.fim.em + ' · ' + r.fim.por + (r.fim.venda ? ' · venda ' + r.fim.venda : '') + (r.fim.motivo ? ' · ' + r.fim.motivo : '') + ({ devolvido: ' · sinal devolvido', retido: ' · sinal retido', por_fora: ' · sinal devolvido por fora' }[r.fim.destino] || '')]);
@@ -2975,7 +2977,7 @@
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + n + ' ' + n + '" width="' + lado + 'mm" height="' + lado + 'mm" shape-rendering="crispEdges">' + r + '</svg>';
   }
   var ETQ_CAMPOS = [['nome', 'Nome do produto'], ['preco', 'Preço de venda'], ['parcela', 'Parcela 12x'], ['sku', 'SKU'], ['codigo', 'Código de barras (GTIN/EAN)'], ['imei', 'IMEI1'], ['imei2', 'IMEI2'], ['serial', 'Serial'],
-    ['modelo', 'Modelo'], ['cor', 'Cor'], ['classif', 'Classificação'], ['bateria', 'Bateria'], ['grupo', 'Grupo'], ['loja', 'Loja'], ['local', 'Localização'], ['data', 'Data de hoje'], ['empresa', 'Nome da empresa']];
+    ['modelo', 'Modelo'], ['cor', 'Cor'], ['classif', 'Classificação'], ['bateria', 'Bateria'], ['grupo', 'Grupo'], ['loja', 'Depósito'], ['local', 'Localização'], ['data', 'Data de hoje'], ['empresa', 'Nome da empresa']];
   function etqValor(campo, d) {
     var v = d[campo];
     if (campo === 'preco') return d.preco ? brl(d.preco) : '';
@@ -3863,7 +3865,7 @@
     var pares = [['Cliente', e.cliente + (e.whats ? ' · ' + fmtFone(e.whats) : '')], ['Produto', e.produto], ['Preço combinado', brl(e.preco)],
                  ['Sinal', e.sinal ? brl(e.sinal) + ' · ' + e.sinalForma : 'Sem sinal'], ['Falta pagar', brl(Math.max(0, e.preco - e.sinal))],
                  ['Sinal abaixo do mínimo', e.motivoSinal ? e.motivoSinal + (e.sinalLiberadoPor ? ' · liberado por ' + e.sinalLiberadoPor : '') : ''],
-                 ['Vendedor', e.vendedor + ' em ' + e.criada], ['Loja', e.loja], ['Termo', e.termo ? e.termo.titulo : ''], ['Assinatura', e.assinatura ? '✓ ' + e.assinatura.nome + ' em ' + e.assinatura.em : 'Aguardando o cliente assinar'],
+                 ['Vendedor', e.vendedor + ' em ' + e.criada], ['Depósito', e.loja], ['Termo', e.termo ? e.termo.titulo : ''], ['Assinatura', e.assinatura ? '✓ ' + e.assinatura.nome + ' em ' + e.assinatura.em : 'Aguardando o cliente assinar'],
                  ['Fornecedor', P ? P.fornecedor : ''], ['Previsão de chegada', e.previstaTxt ? e.previstaTxt + (e.atrasada ? ' (atrasada ' + e.diasAtraso + ' dia(s))' : '') : ''],
                  ['Custo previsto', P && P.custoPrevisto != null ? brl(P.custoPrevisto) + (e.margemPrevista != null ? ' · margem ' + pct(e.margemPrevista) : '') : ''],
                  ['Chegou', e.chegada ? e.chegada.em + ' · compra ' + e.chegada.compra + (e.chegada.imei ? ' · IMEI ' + e.chegada.imei : e.chegada.serial ? ' · serial ' + e.chegada.serial : '') : ''],
@@ -4574,13 +4576,13 @@
   function desenharEmpresas(box, d, okTxt) {
     box.innerHTML = '';
     var c = el('div', 'card'); box.appendChild(c);
-    c.appendChild(el('div', 'hint', 'Cada empresa tem os próprios dados (produtos, estoque, clientes, vendas, financeiro e lojas), guardados numa planilha separada. O sistema é um só: toda atualização vale para todas as empresas ao mesmo tempo. Os usuários e grupos de acesso também são os mesmos — em Funcionários você escolhe quem entra em cada empresa e em qual loja.'));
+    c.appendChild(el('div', 'hint', 'Cada empresa tem os próprios dados (produtos, estoque, clientes, vendas, financeiro e depósitos), guardados numa planilha separada. O sistema é um só: toda atualização vale para todas as empresas ao mesmo tempo. Os usuários e grupos de acesso também são os mesmos — em Funcionários você escolhe quem entra em cada empresa e em qual loja.'));
     var m = el('div', okTxt ? 'msg ok show' : 'msg'); m.textContent = okTxt || ''; c.appendChild(m);
     d.lista.forEach(function (e) {
       var k = el('div', 'empcard'), info = el('div');
       var h = el('h3', '', e.nome); if (e.principal) h.appendChild(el('span', 'empbadge', 'Principal')); if (S.u.empresa && S.u.empresa.atual === e.id) h.appendChild(el('span', 'empbadge', 'Você está aqui'));
       info.appendChild(h);
-      info.appendChild(el('div', 'hint', (e.lojas.length ? 'Lojas: ' + e.lojas.join(', ') : 'Sem lojas') + ' · ' + e.usuarios + ' usuário(s) com acesso' + (e.criada ? ' · criada em ' + e.criada : '')));
+      info.appendChild(el('div', 'hint', (e.lojas.length ? 'Depósitos: ' + e.lojas.join(', ') : 'Sem depósitos') + ' · ' + e.usuarios + ' usuário(s) com acesso' + (e.criada ? ' · criada em ' + e.criada : '')));
       k.appendChild(info);
       var rn = el('button', 'btn ghost', 'Renomear'); rn.type = 'button'; rn.style.flex = '0 0 auto';
       rn.onclick = function () {
@@ -4647,8 +4649,19 @@
   function desenharDep(box, d, ok) {
     box.innerHTML = '';
     var c = el('div', 'card'); box.appendChild(c);
-    c.appendChild(el('div', 'hint', 'Os depósitos são as lojas e locais de estoque. Eles aparecem em todas as opções de "Loja" do sistema (vendas, produtos, estoque, OS, caixa, metas…). Renomear atualiza todos os registros com o nome novo.'));
+    c.appendChild(el('div', 'hint', 'Cada empresa é uma loja. Os depósitos são os lugares do estoque dentro dela (ex.: Loja, Defeito) e aparecem nas opções de "Depósito" do sistema. Renomear atualiza todos os registros com o nome novo.'));
     var m = el('div', ok ? 'msg ok show' : 'msg'); m.textContent = ok || ''; c.appendChild(m);
+    // Leva 7: depósitos com o nome da empresa (do tempo de sistema único) viram "Loja" e "Defeito"
+    if (d.padronizar && d.padronizar.length) {
+      var pz = el('div', 'grpbox'); c.appendChild(pz); pz.appendChild(el('h3', '', 'Padronizar nomes dos depósitos'));
+      pz.appendChild(el('div', 'hint', 'Estes depósitos ainda têm o nome da loja, do tempo em que tudo era um sistema só. Como agora cada loja é uma empresa, eles passam a se chamar "Loja" e "Defeito". Estoque, vendas e todo o histórico vão junto.'));
+      d.padronizar.forEach(function (x) { pz.appendChild(el('div', '', x.empresa + ': "' + x.de + '" → "' + x.para + '"')); });
+      var bp = btn(pz, 'Padronizar agora', 'ok', function () {
+        bp.disabled = true; m.className = 'msg ok show'; m.textContent = 'Renomeando e atualizando todos os registros… pode levar até 1 minuto.';
+        call('depositosPadronizar', [S.token]).then(function (r) { limparCaches(); call('retomar', [S.token]).then(function (u) { S.u = u; }).catch(function () {}); desenharDep(box, r.dados, '✓ ' + r.feitos.length + ' depósito(s) renomeado(s).'); })
+          .catch(function (e) { bp.disabled = false; m.className = 'msg err show'; m.textContent = e; });
+      });
+    }
     var lst = el('div', 'deplst'); c.appendChild(lst);
     var enviar = function (dd, txt) { m.className = dd.acao === 'renomear' ? 'msg ok show' : 'msg'; m.textContent = dd.acao === 'renomear' ? 'Renomeando e atualizando todos os registros… pode levar até 1 minuto.' : ''; Array.prototype.forEach.call(c.querySelectorAll('button'), function (b) { b.disabled = true; });
       call('depositoSalvar', [S.token, dd]).then(function (r) { if (S.u) S.u.lojas = r.lista.map(function (x) { return x.nome; }); limparCaches(); desenharDep(box, r, txt); })
@@ -5038,7 +5051,7 @@
     var p = periodoDre(), corpo = $('drCorpo');
     corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', 'Calculando o resultado…'));
     call('dre', [S.token, { de: p[0], ate: p[1], loja: DREF.emp === 'todas' ? '' : DREF.loja, empresa: DREF.emp }]).then(function (d) {
-      S.dre = d; var lj = $('drLoja'); if (lj.options.length <= 1 && !d.consolidado) { opts(lj, d.lojas, DREF.loja, 'Todas as lojas'); }
+      S.dre = d; var lj = $('drLoja'); if (lj.options.length <= 1 && !d.consolidado) { opts(lj, d.lojas, DREF.loja, 'Todos os depósitos'); }
       if (S.view === 'dre') renderDre();
     }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', e)); });
   }
@@ -5055,7 +5068,7 @@
     var av = el('div', 'drres ' + (liq >= 0 ? 'pos' : 'neg'), liq > 0 ? 'A loja deu LUCRO no período.' : liq < 0 ? 'A loja deu PREJUÍZO no período: as despesas foram maiores que o que sobrou das vendas.' : 'Sem resultado no período.');
     corpo.appendChild(av);
     if (d.qtdSemCusto) corpo.appendChild(el('div', 'hint drav', '⚠ ' + d.qtdSemCusto + ' item(ns) vendido(s) sem custo cadastrado: o lucro pode estar maior que o real. Ex.: ' + d.semCusto.slice(0, 3).join('; ') + '.'));
-    if (d.loja) corpo.appendChild(el('div', 'hint drav', 'Filtrando uma loja: contas lançadas como "Geral (todas)" não entram. Veja "Todas as lojas" para o resultado completo.'));
+    if (d.loja) corpo.appendChild(el('div', 'hint drav', 'Filtrando um depósito: contas lançadas como "Geral (todas)" não entram. Veja "Todos os depósitos" para o resultado completo.'));
     var c = el('div', 'card drcard'), tb = el('div', 'drtab'); c.appendChild(tb); corpo.appendChild(c);
     var hd = el('div', 'drl h'); ['Descrição', 'Valor', '% receita líq.'].forEach(function (x) { hd.appendChild(el('div', '', x)); }); tb.appendChild(hd);
     var anal = DREF.modo === 'Analítico';
@@ -7074,7 +7087,7 @@
     var vs = el('select'); var vends = (S.u.vendedores || []).slice(); if (!vends.some(function (x) { return x.id === S.u.id; })) vends.unshift({ id: S.u.id, nome: S.u.nome });
     vends.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; vs.appendChild(o); }); vs.value = V.vendedorId; vs.onchange = function () { V.vendedorId = vs.value; };
     campo(v1, 'Vendedor *', vs, true);
-    V.loja = lojaUser(); v2.appendChild(el('label', 'first', 'Loja da venda')); v2.appendChild(el('div', 'lojafixa' + (V.loja ? '' : ' err'), V.loja || 'Seu usuário não tem loja de venda. Peça ao gerente para ajustar em Configurações › Funcionários.'));
+    V.loja = lojaUser(); v2.appendChild(el('label', 'first', 'Depósito da venda')); v2.appendChild(el('div', 'lojafixa' + (V.loja ? '' : ' err'), V.loja || 'Seu usuário não tem depósito padrão. Peça ao gerente para ajustar em Configurações › Funcionários.'));
     // ---- 3. produtos
     var c3 = el('div', 'card pecard'); c3.appendChild(el('h2', '', 'Produtos')); W.appendChild(c3);
     var busca = inp('text', 'Buscar: modelo, IMEI, nome do produto, SKU ou código de barras'); busca.setAttribute('aria-label', 'Buscar produto'); c3.appendChild(busca);
@@ -7444,7 +7457,7 @@
   function renderHist() {
     if (!S.vendas) return;
     var uniq = function (f) { var u = []; S.vendas.forEach(function (v) { var k = f(v); if (k && u.indexOf(k) < 0) u.push(k); }); return u.sort(); };
-    opts($('hLoja'), uniq(function (v) { return v.loja; }), $('hLoja').value, 'Todas as lojas');
+    opts($('hLoja'), uniq(function (v) { return v.loja; }), $('hLoja').value, 'Todos os depósitos');
     opts($('hVend'), uniq(function (v) { return v.vendedor; }), $('hVend').value, 'Todos os vendedores');
     var P = periodo($('hPer').value), loja = $('hLoja').value, ven = $('hVend').value, sit = $('hSit').value, q = $('hBusca').value.trim().toLowerCase(), qd = soDig(q);
     var l = S.vendas.filter(function (v) {
@@ -7951,7 +7964,7 @@
     var k = el('div', 'card');
     var nome = campo(k, 'Nome *', inp('text', 'Ex.: Banco Inter, Caixa Cordeiro'), true); nome.value = c ? c.nome : ''; nome.maxLength = 40;
     var tp = el('select'); opts(tp, (S.fin && S.fin.tipos) || ['Caixa', 'Banco', 'Carteira digital'], c ? c.tipo : 'Banco'); campo(k, 'Tipo', tp);
-    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), c ? c.loja : '', 'Todas / nenhuma'); campo(k, 'Loja (opcional)', lj);
+    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), c ? c.loja : '', 'Todas / nenhuma'); campo(k, 'Depósito (opcional)', lj);
     var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
     var vi = inpValor(c ? c.inicial : 0); campo(a1, 'Saldo inicial', vi);
     var dt = inpData(c ? c.desde : isoHoje()); campo(a2, 'Saldo inicial em', dt);
@@ -8015,7 +8028,7 @@
     var D = S.pagar; if (!D) return;
     var hoje = isoHoje();
     opts($('pgCat'), D.todasCategorias || D.categorias, $('pgCat').value, 'Todas as categorias');
-    opts($('pgLoja'), (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('pgLoja').value, 'Todas as lojas');
+    opts($('pgLoja'), (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('pgLoja').value, 'Todos os depósitos');
     var sit = $('pgSit').value, per = $('pgPer').value, cat = $('pgCat').value, lj = $('pgLoja').value, q = $('pgBusca').value.trim().toLowerCase();
     var mesIni = hoje.slice(0, 8) + '01', proxIni = isoAdd(mesIni, 32).slice(0, 8) + '01', proxFim = isoAdd(isoAdd(proxIni, 32).slice(0, 8) + '01', -1), mesFim = isoAdd(proxIni, -1);
     var l = D.contas.filter(function (x) {
@@ -8067,7 +8080,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('#pgLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.id); });
     var hoje = isoHoje(), st = situacaoPg(x, hoje);
     var bd = abrirDw(x.descricao, brl(x.valor) + ' · ' + (st === 'Pago' ? 'paga em ' + isoBR(x.pagoEm) : st === 'Cancelada' ? 'cancelada' : 'vence ' + isoBR(x.venc)));
-    kvCard(bd, [['Situação', st === 'Pago' ? 'Paga' : st], ['Valor', brl(x.valor)], ['Vencimento', isoBR(x.venc)], ['Fornecedor', x.fornecedor], ['Categoria', x.categoria], ['Loja', x.loja],
+    kvCard(bd, [['Situação', st === 'Pago' ? 'Paga' : st], ['Valor', brl(x.valor)], ['Vencimento', isoBR(x.venc)], ['Fornecedor', x.fornecedor], ['Categoria', x.categoria], ['Depósito', x.loja],
                 ['Pago em', x.pagoEm ? isoBR(x.pagoEm) : ''], ['Saiu de', x.conta ? nomeContaPg(x.conta) : ''], ['Forma', x.forma], ['Observação', x.obs], ['Lançada por', x.lancado], ['Paga por', x.pagoPor], ['Nº', x.id]]);
     var am = el('div', 'msg err'); bd.appendChild(am);
     if (/^Parceira PC\d+ /.test(x.obs || '') && x.situacao !== 'Cancelada') {
@@ -8118,7 +8131,7 @@
     fo.onchange = function () { nf.classList.toggle('hide', fo.value !== '__novo'); if (fo.value === '__novo') nf.focus(); };
     var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
     var ca = el('select'); opts(ca, x && D.categorias.indexOf(x.categoria) < 0 ? D.categorias.concat([x.categoria]) : D.categorias, x ? x.categoria : 'Outros'); campo(a1, 'Categoria', ca);
-    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x ? x.loja : '', 'Geral (todas)'); campo(a2, 'Loja', lj);
+    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x ? x.loja : '', 'Geral (todas)'); campo(a2, 'Depósito', lj);
     var lv = el('div', 'row'), b1 = el('div'), b2 = el('div'); lv.appendChild(b1); lv.appendChild(b2); k.appendChild(lv);
     var vi = inpValor(x ? x.valor : ''); campo(b1, 'Valor *', vi); var ve = inpData(x ? x.venc : isoHoje()); campo(b2, 'Vencimento *', ve);
     var rp = null;
@@ -8172,7 +8185,7 @@
     var D = S.receber; if (!D) return;
     var hoje = isoHoje();
     opts($('rcCat'), D.todasCategorias || D.categorias, $('rcCat').value, 'Todas as categorias');
-    opts($('rcLoja'), D.lojas || (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('rcLoja').value, 'Todas as lojas');
+    opts($('rcLoja'), D.lojas || (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('rcLoja').value, 'Todos os depósitos');
     var sit = $('rcSit').value, per = $('rcPer').value, cat = $('rcCat').value, lj = $('rcLoja').value, q = $('rcBusca').value.trim().toLowerCase();
     var mesIni = hoje.slice(0, 8) + '01', proxIni = isoAdd(mesIni, 32).slice(0, 8) + '01', proxFim = isoAdd(isoAdd(proxIni, 32).slice(0, 8) + '01', -1), mesFim = isoAdd(proxIni, -1);
     var todas = D.contas.concat(D.crediario || []);
@@ -8225,7 +8238,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('#rcLista .prow'), function (r) { r.classList.toggle('sel', r.dataset.k === x.id); });
     var hoje = isoHoje(), st = situacaoRc(x, hoje);
     var bd = abrirDw(x.descricao, brl(x.valor) + ' · ' + (st === 'Recebida' ? 'recebida em ' + isoBR(x.recebidoEm) : st === 'Cancelada' ? 'cancelada' : 'vence ' + isoBR(x.venc)));
-    kvCard(bd, [['Situação', st], ['Valor', brl(x.valor)], ['Vencimento', isoBR(x.venc)], ['Cliente', x.cliente], ['Categoria', x.categoria], ['Loja', x.loja],
+    kvCard(bd, [['Situação', st], ['Valor', brl(x.valor)], ['Vencimento', isoBR(x.venc)], ['Cliente', x.cliente], ['Categoria', x.categoria], ['Depósito', x.loja],
                 ['Recebida em', x.recebidoEm ? isoBR(x.recebidoEm) : ''], [x.situacao === 'Recebida' ? 'Entrou em' : 'Vai entrar em', x.conta ? nomeContaRc(x.conta) : ''], ['Origem', x.origem], ['Forma', x.forma], ['Observação', x.obs], ['Lançada por', x.lancado], ['Recebida por', x.recebidoPor], ['Nº', x.id]]);
     if (x.crediario) {
       bd.appendChild(el('div', 'hint', 'Parcela do crediário: o recebimento (com juros e multa de atraso) é feito na página Crediário.'));
@@ -8274,7 +8287,7 @@
     fo.onchange = function () { nf.classList.toggle('hide', fo.value !== '__novo'); if (fo.value === '__novo') nf.focus(); };
     var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
     var ca = el('select'); opts(ca, x && D.categorias.indexOf(x.categoria) < 0 ? D.categorias.concat([x.categoria]) : D.categorias, x ? x.categoria : 'Outras receitas'); campo(a1, 'Categoria', ca);
-    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x ? x.loja : '', 'Geral (todas)'); campo(a2, 'Loja', lj);
+    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x ? x.loja : '', 'Geral (todas)'); campo(a2, 'Depósito', lj);
     var lv = el('div', 'row'), b1 = el('div'), b2 = el('div'); lv.appendChild(b1); lv.appendChild(b2); k.appendChild(lv);
     var vi = inpValor(x ? x.valor : ''); campo(b1, 'Valor *', vi); var ve = inpData(x ? x.venc : isoHoje()); campo(b2, 'Vencimento *', ve);
     var rp = null;
@@ -8351,7 +8364,7 @@
   function renderCred() {
     var D = S.cred; if (!D) return;
     var hoje = isoHoje(), mesIni = hoje.slice(0, 8) + '01';
-    opts($('cdLoja'), D.lojas || [], $('cdLoja').value, 'Todas as lojas');
+    opts($('cdLoja'), D.lojas || [], $('cdLoja').value, 'Todos os depósitos');
     var lj = $('cdLoja').value, q = $('cdBusca').value.trim().toLowerCase(), qd = soDig(q), sit = $('cdSit').value;
     var ab = D.parcelas.filter(function (p) { return p.situacao === 'Em aberto' && (!lj || p.loja === lj); });
     var atr = ab.filter(function (p) { return diasIso(p.venc, hoje) > 0; }), sete = ab.filter(function (p) { var d = diasIso(hoje, p.venc); return d >= 0 && d <= 7; });
@@ -8448,7 +8461,7 @@
     var bd = abrirDw(p.cliente, 'Parcela ' + p.parcela + ' · ' + p.contrato + ' · ' + st);
     kvCard(bd, [['Situação', st + (st === 'Atrasada' ? ' há ' + e.dias + ' dia(s)' : '')], ['Vencimento', isoBR(p.venc)], ['Valor da parcela', brl(p.valor)], ['Já recebido', p.recebido ? brl(p.recebido) : ''],
                 ['Saldo', p.situacao === 'Em aberto' ? brl(p.saldo) : ''], ['Multa', e.multa ? brl(e.multa) : ''], ['Juros de mora', e.juros ? brl(e.juros) : ''], ['Total hoje', p.situacao === 'Em aberto' ? brl(r2(p.saldo + e.multa + e.juros)) : ''],
-                ['CPF/CNPJ', p.doc ? fmtDoc(p.doc) : ''], ['Celular', p.whats ? fmtFone(p.whats) : ''], ['Loja', p.loja], ['Origem', p.origem === 'Venda' ? 'Venda ' + p.contrato : 'Lançado à mão'], ['Descrição', p.desc]]);
+                ['CPF/CNPJ', p.doc ? fmtDoc(p.doc) : ''], ['Celular', p.whats ? fmtFone(p.whats) : ''], ['Depósito', p.loja], ['Origem', p.origem === 'Venda' ? 'Venda ' + p.contrato : 'Lançado à mão'], ['Descrição', p.desc]]);
     if ((p.recs || []).length) {
       var c = el('div', 'card'); c.appendChild(el('h2', '', 'Recebimentos'));
       var t = el('table', 'ext');
@@ -8641,7 +8654,7 @@
       campo(c, 'Cliente * (cadastrado no CRM)', cl, true);
       var ncb = el('button', 'lnk', '+ Cadastrar cliente novo'); ncb.type = 'button'; c.appendChild(ncb); var ncx = el('div'); c.appendChild(ncx);
       ncb.onclick = function () { ncb.classList.add('hide'); formCliente(ncx, {}, { exigeDoc: true, exigeWhats: true }, function (cli) { var o = el('option', '', cli.nome + (cli.cpf ? ' · ' + fmtDoc(cli.cpf) : '')); o.value = cli.id; cl.appendChild(o); cl.value = cli.id; ncx.innerHTML = ''; ncb.classList.remove('hide'); }, function () { ncx.innerHTML = ''; ncb.classList.remove('hide'); }); };
-      var lj = el('select'); opts(lj, S.cred.lojas, S.u.loja, 'Escolha a loja…'); campo(c, 'Loja *', lj);
+      var lj = el('select'); opts(lj, S.cred.lojas, S.u.loja, 'Escolha o depósito…'); campo(c, 'Depósito *', lj);
       var ds = campo(c, 'Descrição *', inp('text', 'Ex.: carnê antigo · iPhone 11 vendido em 08/2026')); ds.maxLength = 120;
       var g = el('div', 'g3'), a1 = el('div'), a2 = el('div'), a3 = el('div'); [a1, a2, a3].forEach(function (z) { g.appendChild(z); }); c.appendChild(g);
       var np = inp('number', 'Ex.: 5'); np.min = 1; np.max = 60; campo(a1, 'Nº de parcelas *', np); var vp = inpValor(''); campo(a2, 'Valor da parcela *', vp); var pv = inpData(isoAdd(isoHoje(), cfgCred().diasPrimeiro)); campo(a3, '1º vencimento *', pv);
@@ -8653,7 +8666,7 @@
       cc.onclick = fecharModal;
       ok.onclick = function () {
         m.classList.remove('show');
-        var erro = !cl.value ? 'Escolha o cliente.' : !lj.value ? 'Escolha a loja.' : ds.value.trim().length < 3 ? 'Descreva o crediário.' : !(+np.value >= 1) ? 'Informe o nº de parcelas.' : !(num(vp.input.value) > 0) ? 'Informe o valor da parcela.' : '';
+        var erro = !cl.value ? 'Escolha o cliente.' : !lj.value ? 'Escolha o depósito.' : ds.value.trim().length < 3 ? 'Descreva o crediário.' : !(+np.value >= 1) ? 'Informe o nº de parcelas.' : !(num(vp.input.value) > 0) ? 'Informe o valor da parcela.' : '';
         if (erro) { m.textContent = erro; m.classList.add('show'); return; }
         ok.disabled = true; ok.textContent = 'Salvando…';
         call('credAvulso', [S.token, { clienteId: cl.value, loja: lj.value, descricao: ds.value, parcelas: +np.value, valorParcela: num(vp.input.value), primeiroVenc: pv.value }])
@@ -8677,7 +8690,7 @@
   }
   function aposAcess(d) {
     S.ac = d; S.dispProd = null; show('acNovo', d.editar);
-    opts($('acLoja'), d.lojas, $('acLoja').value, 'Todas as lojas');
+    opts($('acLoja'), d.lojas, $('acLoja').value, 'Todos os depósitos');
     var g = $('acGrupo'), t = $('acTag'); optsArvore(g, cat().grupos, g.value, 'Todas as categorias'); optsArvore(t, cat().tags, t.value, 'Todas as tags');
     renderAcess();
   }
@@ -8851,7 +8864,7 @@
   function painelEstoque(btn, x, tipo, am) {
     if (btn.nextSibling && btn.nextSibling.classList && btn.nextSibling.classList.contains('opc-box')) { btn.nextSibling.remove(); return; }
     var D = S.ac, bx = el('div', 'opc-box');
-    var lj = el('select'); opts(lj, D.lojas, $('acLoja').value || S.u.loja); campo(bx, tipo === 'transferencia' ? 'Sai da loja' : 'Loja / depósito', lj, true);
+    var lj = el('select'); opts(lj, D.lojas, $('acLoja').value || S.u.loja); campo(bx, tipo === 'transferencia' ? 'Sai da loja' : 'Depósito', lj, true);
     var de = null; if (tipo === 'transferencia') { de = el('select'); opts(de, D.lojas, ''); campo(bx, 'Vai para a loja', de); }
     var qt = inp('number', tipo === 'ajuste' ? 'Quantidade contada' : 'Quantidade'); qt.min = tipo === 'ajuste' ? 0 : 1; campo(bx, tipo === 'ajuste' ? 'Quantidade contada na loja' : 'Quantidade', qt);
     var cu = null; if (tipo === 'entrada') { cu = inpValor(x.custo || ''); campo(bx, 'Custo unitário desta compra', cu); }
@@ -9244,7 +9257,7 @@
     var top = el('div', 'pdvtop2'); PDV.loja = lojaUser();
     var vs2 = el('select'), vends = (S.u.vendedores || []).slice(); if (!vends.some(function (x) { return x.id === S.u.id; })) vends.unshift({ id: S.u.id, nome: S.u.nome });
     vends.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; vs2.appendChild(o); }); vs2.value = PDV.vendedorId; vs2.onchange = function () { PDV.vendedorId = vs2.value; };
-    var w1 = el('div'), w2 = el('div'); w1.appendChild(el('label', 'first', 'Loja')); w1.appendChild(el('div', 'lojafixa' + (PDV.loja ? '' : ' err'), PDV.loja || 'Usuário sem loja de venda')); campo(w2, 'Vendedor', vs2, true); top.appendChild(w1); top.appendChild(w2); c1.appendChild(top);
+    var w1 = el('div'), w2 = el('div'); w1.appendChild(el('label', 'first', 'Depósito')); w1.appendChild(el('div', 'lojafixa' + (PDV.loja ? '' : ' err'), PDV.loja || 'Usuário sem depósito padrão')); campo(w2, 'Vendedor', vs2, true); top.appendChild(w1); top.appendChild(w2); c1.appendChild(top);
     var bs = inp('text', 'Leia o código de barras / IMEI ou digite o nome do produto'); bs.id = 'pdvBusca'; bs.className = 'pdvbusca'; bs.setAttribute('aria-label', 'Buscar produto'); c1.appendChild(bs);
     var rs = el('div'); c1.appendChild(rs);
     var buscar = function (enter) {
@@ -9334,7 +9347,7 @@
     rod.appendChild(nv);
     if (PDV.itens.length || PDV.acess.length) { var bpv = el('button', 'btn ghost', PDV.preVendaId ? 'Atualizar pré-venda ' + PDV.preVendaId : 'Salvar como pré-venda'); bpv.type = 'button'; bpv.onclick = function () { pdvSalvarPreVenda(); }; rod.appendChild(bpv); }
     if (pode('transferir')) {
-      var en = el('button', 'btn ghost', 'Enviar para outra loja'); en.type = 'button'; rod.appendChild(en);
+      var en = el('button', 'btn ghost', 'Enviar para outro depósito ou empresa'); en.type = 'button'; rod.appendChild(en);
       en.onclick = function () {
         m.classList.remove('show');
         var er = !PDV.loja ? 'Seu usuário não tem loja definida.' : !PDV.itens.length && !PDV.acess.length ? 'Coloque no carrinho o que vai ser enviado.' : PDV.acess.some(function (a) { return a.serial && a.seriais.length !== a.qtd; }) ? 'Leia o serial de cada unidade dos produtos com controle de serial.' : PDV.itens.some(function (i) { return i.loja !== PDV.loja; }) ? 'Tem aparelho no carrinho que não está nesta loja.' : '';
@@ -9520,7 +9533,7 @@
       if (x[0] === 'faturarOS' && !pode('os')) return;
       var b = el('button', x[0] === PDVT ? 'on' : '', x[1] + '  ' + x[2]); b.type = 'button'; b.onclick = function () { if (window.innerWidth <= 900) PDVMA = false; pdvTela(x[0]); }; m.appendChild(b);
     });
-    var bar = $('pdvBar'); bar.innerHTML = ''; [['Vendedor', S.u.nome], ['Loja', lojaUser() || '—'], ['Tipo', 'Recibo (não fiscal)']].forEach(function (q) { var sp = el('span', '', q[0] + ': '); sp.appendChild(el('b', '', q[1])); bar.appendChild(sp); });
+    var bar = $('pdvBar'); bar.innerHTML = ''; [['Vendedor', S.u.nome], ['Depósito', lojaUser() || '—'], ['Tipo', 'Recibo (não fiscal)']].forEach(function (q) { var sp = el('span', '', q[0] + ': '); sp.appendChild(el('b', '', q[1])); bar.appendChild(sp); });
   }
   function pdvTela(id) {
     PDVT = id; pdvMenu();
@@ -9771,10 +9784,19 @@
     { nome: 'Financeiro', q: ['resumoFin', 'compPagar', 'compReceber', 'saldoContas', 'calendario', 'fluxoPrev', 'fluxoReal', 'despCat', 'efic', 'inadimp', 'vales', 'pxrPagar', 'pxrReceber', 'anualReceb', 'anualPag'] },
     { nome: 'Estoque', q: ['cobertura', 'giro', 'negativo', 'abc', 'parado', 'usados', 'parceiras'] }];
   function pnPeriodo() { var h = isoHoje(); if (PN.per === 'hoje') return { de: h, ate: h }; if (PN.per === 'semana') return { de: isoAdd(h, -6), ate: h }; if (PN.per === 'ano') return { de: h.slice(0, 4) + '-01-01', ate: h }; return { de: h.slice(0, 8) + '01', ate: h }; }
+  /** Leva 7: a loja é a empresa. Filtro de empresa (esta, outra que a pessoa acessa ou todas) — só aparece com mais de uma. */
+  function selEmpresa(box, D, atual, mudou) {
+    var l = (D && D.empresas) || []; if (l.length < 2) return null;
+    var s = el('select'); s.setAttribute('aria-label', 'Empresa');
+    l.forEach(function (e) { var o = el('option', '', e.nome); o.value = e.id; s.appendChild(o); });
+    if (D.consolidado) { var t = el('option', '', 'Todas as empresas (' + l.length + ')'); t.value = 'todas'; s.appendChild(t); }
+    s.value = atual || D.empresa || ((S.u.empresa || {}).id) || l[0].id;
+    s.onchange = function () { mudou(s.value); }; box.appendChild(s); return s;
+  }
   function painelIniciar() {
     var b = $('pnCorpo'); if (!PN.info) { b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando o painel…')); }
     var p = pnPeriodo();
-    Promise.all([PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token]), call('painelDados', [S.token, { de: p.de, ate: p.ate, loja: PN.loja }])]).then(function (r) {
+    Promise.all([PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token]), call('painelDados', [S.token, { de: p.de, ate: p.ate, empresa: PN.emp || '' }])]).then(function (r) {
       PN.info = r[0]; PN.dados = r[1];
       var ok = PN.info.catalogo.map(function (q) { return q.id; });
       PN.layout = (PN.info.layout || PN_PADRAO).map(function (a) { return { nome: a.nome, q: (a.q || []).filter(function (id) { return ok.indexOf(id) > -1; }), sz: a.sz || {}, opt: a.opt || {} }; });
@@ -9790,7 +9812,7 @@
     if (PN.aba >= PN.layout.length) PN.aba = 0;
     var bar = el('div', 'pnbar'); b.appendChild(bar);
     var sg = el('div', 'seg'); bar.appendChild(sg); seg(sg, ['Hoje', 'Semana', 'Mês', 'Ano'], { hoje: 'Hoje', semana: 'Semana', mes: 'Mês', ano: 'Ano' }[PN.per], function (v) { PN.per = { Hoje: 'hoje', Semana: 'semana', 'Mês': 'mes', Ano: 'ano' }[v]; painelIniciar(); });
-    var lj = el('select'); opts(lj, PN.dados.lojas || [], PN.loja, 'Todas as lojas'); lj.onchange = function () { PN.loja = lj.value; painelIniciar(); }; bar.appendChild(lj);
+    selEmpresa(bar, PN.dados, PN.emp, function (v) { PN.emp = v; painelIniciar(); });
     bar.appendChild(el('span', 'pnsp'));
     if (!PN.edit) btn(bar, '✏️ Editar painel', 'ghost', function () { PN.edit = true; painelDesenhar(); });
     var ab = el('div', 'pnabas'); b.appendChild(ab);
@@ -9931,10 +9953,10 @@
   function relatoriosGrupo(view) {
     var grupo = REL_G[view], b = $('rlCorpo'); $('rlTit').textContent = '📊 Relatórios · ' + grupo; b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…'));
     var p = pnPeriodo.call(null); if (RELP.per !== PN.per) { var sv = PN.per; PN.per = RELP.per; p = pnPeriodo(); PN.per = sv; }
-    Promise.all([PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token]), call('painelDados', [S.token, { de: p.de, ate: p.ate, loja: RELP.loja }])]).then(function (r) {
+    Promise.all([PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token]), call('painelDados', [S.token, { de: p.de, ate: p.ate, empresa: RELP.emp || '' }])]).then(function (r) {
       PN.info = r[0]; var D = r[1]; b.innerHTML = '';
       var bar = el('div', 'pnbar'); b.appendChild(bar); var sg = el('div', 'seg'); bar.appendChild(sg); seg(sg, ['Hoje', 'Semana', 'Mês', 'Ano'], { hoje: 'Hoje', semana: 'Semana', mes: 'Mês', ano: 'Ano' }[RELP.per], function (v) { RELP.per = { Hoje: 'hoje', Semana: 'semana', 'Mês': 'mes', Ano: 'ano' }[v]; relatoriosGrupo(view); });
-      var lj = el('select'); opts(lj, D.lojas || [], RELP.loja, 'Todas as lojas'); lj.onchange = function () { RELP.loja = lj.value; relatoriosGrupo(view); }; bar.appendChild(lj);
+      selEmpresa(bar, D, RELP.emp, function (v) { RELP.emp = v; relatoriosGrupo(view); });
       var lista = D.catalogo.filter(function (q) { return (q.grupos || []).indexOf(grupo) > -1; });
       if (!lista.length) b.appendChild(el('div', 'empty', 'Nenhum relatório deste grupo liberado para você.'));
       lista.forEach(function (q) { var c = el('div', 'card'); b.appendChild(c); var h = el('h2', '', q.nome); if ((q.grupos || []).length > 1) h.appendChild(el('span', 'pnar', '↔ ' + q.grupos.filter(function (x) { return x !== grupo; }).join(', '))); c.appendChild(h);
@@ -10051,7 +10073,7 @@
     var c = el('div', 'card'); box.appendChild(c); var trava = ['Recebido', 'Cancelado'].indexOf(P.situacao) > -1;
     var fo = el('select'); var o0 = el('option', '', 'Sem fornecedor (escolher depois)'); o0.value = ''; fo.appendChild(o0);
     (PCAC.fornecedores || []).forEach(function (x) { var q = el('option', '', x.nome + (x.doc ? ' · ' + fmtDoc(x.doc) : '')); q.value = x.id; fo.appendChild(q); }); fo.value = P.fornId || ''; fo.disabled = trava;
-    var g = grade(c, 2); campo(g[0], 'Fornecedor', fo, true); var lj = el('select'); opts(lj, PCAC.lojas, P.loja || lojaUser()); lj.disabled = trava; campo(g[1], 'Loja de entrega', lj, true);
+    var g = grade(c, 2); campo(g[0], 'Fornecedor', fo, true); var lj = el('select'); opts(lj, PCAC.lojas, P.loja || lojaUser()); lj.disabled = trava; campo(g[1], 'Depósito de entrega', lj, true);
     var nf = el('button', 'lnk', '＋ Cadastrar fornecedor (busca na Receita)'); nf.type = 'button'; nf.onclick = function () { ir('crm'); }; c.appendChild(nf);
     var it = el('div'); c.appendChild(it);
     function desItens() {
@@ -10506,7 +10528,7 @@
     $('dbCorpo').innerHTML = ''; $('dbCorpo').appendChild(el('div', 'empty', emp === 'todas' ? 'Somando as empresas…' : 'Carregando relatórios…'));
     call('dashboard', [S.token, { empresa: emp }]).then(function (d) {
       S.dash = d; S.dashEmp = emp;
-      opts($('dbLoja'), (d.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('dbLoja').value, 'Todas as lojas');
+      opts($('dbLoja'), (d.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), $('dbLoja').value, 'Todos os depósitos');
       renderDash();
     }).catch(function (e) { $('dbCorpo').innerHTML = ''; $('dbCorpo').appendChild(el('div', 'empty', e)); });
   }
@@ -10694,7 +10716,7 @@
     if (ctx.D.todas) barras(g, 'Por empresa', agrupar(V, function (v) { return v.emp; }).map(linha));
     barras(g, 'Por produto / modelo', agrupar(V, function (v) { return v.m; }).map(linha));
     barras(g, 'Aparelhos por classificação', agrupar(V.filter(function (v) { return v.tp === 'Aparelho'; }), function (v) { return v.c; }).map(linha));
-    var cab = ['Data', 'Venda/OS', 'Tipo', 'Item', 'Qtd', 'Loja', 'Vendedor', 'Valor'].concat(ctx.C ? ['Custo', 'Lucro'] : []).concat(ctx.D.todas ? ['Empresa'] : []);
+    var cab = ['Data', 'Venda/OS', 'Tipo', 'Item', 'Qtd', 'Depósito', 'Vendedor', 'Valor'].concat(ctx.C ? ['Custo', 'Lucro'] : []).concat(ctx.D.todas ? ['Empresa'] : []);
     tabela(box, 'Itens vendidos no período (' + V.length + ')', cab, V.slice().sort(function (a, b) { return b.d - a.d; }).map(function (v) {
       return [dataBR(v.d), v.vd || '—', v.tp, v.m, v.q || 1, v.l, v.quem, v.v ? brl(v.v) : '—'].concat(ctx.C ? [v.cu ? brl(v.cu) : '—', lucroVenda(v) !== null ? brl(lucroVenda(v)) : '—'] : []).concat(ctx.D.todas ? [v.emp] : []);
     }), 'vendas');
@@ -10725,7 +10747,7 @@
     F.receber.filter(function (x) { return x.venc && x.venc < h; }).forEach(function (x) { venc.push(['A receber', isoBR(x.venc), x.desc + (x.cli ? ' · ' + x.cli : ''), brl(x.v), x.l || '—'].concat(ctx.D.todas ? [x.emp] : [])); });
     F.cred.filter(function (x) { return x.venc && x.venc < h; }).forEach(function (x) { venc.push(['Crediário', isoBR(x.venc), x.cli, brl(x.v), x.l || '—'].concat(ctx.D.todas ? [x.emp] : [])); });
     venc.sort(function (a, b) { return a[1].split('/').reverse().join('') < b[1].split('/').reverse().join('') ? -1 : 1; });
-    tabela(box, 'Contas vencidas (' + venc.length + ')', ['Tipo', 'Vencimento', 'Descrição', 'Valor', 'Loja'].concat(ctx.D.todas ? ['Empresa'] : []), venc, 'contas-vencidas');
+    tabela(box, 'Contas vencidas (' + venc.length + ')', ['Tipo', 'Vencimento', 'Descrição', 'Valor', 'Depósito'].concat(ctx.D.todas ? ['Empresa'] : []), venc, 'contas-vencidas');
   }
   function relProd(box, ctx) {
     var P = ctx.produtos, comE = P.filter(function (x) { return x.qt > 0; }), k = el('div', 'kpis'); box.appendChild(k);
@@ -10760,7 +10782,7 @@
     barras(g, 'Entregues por técnico', agrupar(ent, function (o) { return o.tec || 'Sem técnico'; }).map(function (x) { return linhaValor(x, function (o) { return o.v; }, function (x) { return inteiro(x.itens.length) + ' OS'; }); }));
     barras(g, 'Entregues por loja', agrupar(ent, function (o) { return o.l; }).map(function (x) { return linhaValor(x, function (o) { return o.v; }, function (x) { return inteiro(x.itens.length) + ' OS'; }); }));
     var st = serieTempo(ent.map(function (o) { return { d: o.ent, v: o.v }; }), ctx.ini, ctx.fim, function (x) { return x.v; }, brl); colunas(g, 'Faturamento de OS por ' + st.passo, st.serie);
-    tabela(box, 'Abertas há mais tempo', ['OS', 'Aparelho', 'Status', 'Dias aberta', 'Previsão', 'Técnico', 'Loja'].concat(ctx.D.todas ? ['Empresa'] : []), da.sort(function (a, b) { return a.a - b.a; }).map(function (o) {
+    tabela(box, 'Abertas há mais tempo', ['OS', 'Aparelho', 'Status', 'Dias aberta', 'Previsão', 'Técnico', 'Depósito'].concat(ctx.D.todas ? ['Empresa'] : []), da.sort(function (a, b) { return a.a - b.a; }).map(function (o) {
       return [o.id, o.m || '—', o.st, Math.floor((ag - o.a) / DIA), o.prev ? dataBR(o.prev) : '—', o.tec || '—', o.l].concat(ctx.D.todas ? [o.emp] : []);
     }), 'os-abertas');
   }
@@ -10777,7 +10799,7 @@
     barras(g, 'Por modelo', agrupar(E, function (x) { return x.m; }).map(linha));
     barras(g, 'Por classificação', agrupar(E, function (x) { return x.c; }).map(linha));
     barras(g, 'Por tipo de compra', agrupar(E, function (x) { return x.t; }).map(linha));
-    if (sp.length) tabela(box, 'Aparelhos sem preço de venda (' + sp.length + ')', ['Modelo', 'Classificação', 'Loja'], sp.map(function (x) { return [x.m, x.c, x.l]; }), 'sem-preco');
+    if (sp.length) tabela(box, 'Aparelhos sem preço de venda (' + sp.length + ')', ['Modelo', 'Classificação', 'Depósito'], sp.map(function (x) { return [x.m, x.c, x.l]; }), 'sem-preco');
   }
   function relParado(box, ctx) {
     var ag = ctx.D.agora, E = ctx.estoque.filter(function (x) { return x.d; });
@@ -10794,7 +10816,7 @@
     linhas.forEach(function (l) { var r = el('div', 'br'); r.appendChild(el('div', 'rt', l.rot)); var tr = el('div', 'tr'), fi = el('div', 'fi'); fi.style.width = (l.val / top * 100) + '%'; tr.appendChild(fi); r.appendChild(tr); var vl = el('div', 'vl', l.txt); if (l.sub) vl.appendChild(el('small', '', l.sub)); r.appendChild(vl); lst.appendChild(r); });
     barras(g, 'Média de dias parado por loja', agrupar(E, function (x) { return x.l; }).map(function (x) { var m = soma(x.itens, function (i) { return diasParado(i, ag); }) / x.itens.length; return { rot: x.k, val: m, txt: inteiro(m) + ' dias', sub: x.itens.length + ' aparelhos' }; }));
     var sem = ctx.estoque.length - E.length;
-    var cab = ['Modelo', 'Classificação', 'Loja', 'Dias', 'Cadastrado em', 'Preço'].concat(ctx.C ? ['Custo'] : []);
+    var cab = ['Modelo', 'Classificação', 'Depósito', 'Dias', 'Cadastrado em', 'Preço'].concat(ctx.C ? ['Custo'] : []);
     tabela(box, 'Mais antigos no estoque', cab, E.slice().sort(function (a, b) { return a.d - b.d; }).map(function (x) {
       return [x.m, x.c, x.l, diasParado(x, ag), dataBR(x.d), x.p ? brl(x.p) : '—'].concat(ctx.C ? [x.cu ? brl(x.cu) : '—'] : []);
     }), 'estoque-parado');
@@ -11225,7 +11247,7 @@
     call('disponiveis', [S.token]).then(function (l) {
       S.disp = l;
       var uniq = function (k) { var u = []; l.forEach(function (x) { var v = String(x[k] || '').trim(); if (v && u.indexOf(v) < 0) u.push(v); }); return u.sort(); };
-      opts($('dLoja'), uniq('loja'), $('dLoja').value, 'Todas as lojas');
+      opts($('dLoja'), uniq('loja'), $('dLoja').value, 'Todos os depósitos');
       opts($('dCor'), uniq('cor'), $('dCor').value, 'Todas as cores');
       var cl = (S.u.classificacoes || ['Bom', 'Ótimo', 'Excelente']);
       opts($('dClassif'), cl, $('dClassif').value, 'Todas as classificações');
@@ -11601,7 +11623,7 @@
 
     var info = el('div', 'card'), kv = el('div', 'kv');
     var bat = typeof x.bateria === 'number' ? x.bateria + '%' : x.bateria;
-    [['SKU', x.sku || '', 1], ['IMEI1', x.imei, 1], ['IMEI2', x.imei2 || '', 1], ['Serial', x.serial || '', 1], ['Classificação', x.classif], ['Bateria', bat], ['Loja', x.loja], ['Localização', x.local || ''],
+    [['SKU', x.sku || '', 1], ['IMEI1', x.imei, 1], ['IMEI2', x.imei2 || '', 1], ['Serial', x.serial || '', 1], ['Classificação', x.classif], ['Bateria', bat], ['Depósito', x.loja], ['Localização', x.local || ''],
      ['Situação', x.transito ? 'Em trânsito' + (x.transito.id ? ' · ' + x.transito.id + ' para ' + x.transito.destino : '') : x.manut ? 'Em manutenção' : 'Disponível'],
      ['Tipo', x.tipo], ['Custo', pode('ver_custos') && x.custo !== null && x.custo !== undefined ? brl((x.custo || 0) + (x.peca || 0)) : ''], ['Observação', x.obs], ['Consulta do IMEI', x.consulta || ''],
      ['Reserva', x.reserva ? x.reserva.id + ' · ' + txtRes(x.reserva) + (x.reserva.sinal ? ' · sinal ' + brl(x.reserva.sinal) : '') : ''],
@@ -11836,7 +11858,7 @@
     fW.appendChild(el('div', 'hint', 'Fotos do aparelho (opcional, até 6). Recomendado: frente, verso e tela ligada.'));
     c.appendChild(el('h3', 'ch', 'Valor' + (D.parceira ? '' : ' e pagamento')));
     var g7 = grade(c, 2), vl = inpValor(x ? vs(x.valor) : ''); campo(g7[0], 'Valor da compra *', vl);
-    var lj = el('select'); D.lojas.forEach(function (l) { lj.appendChild(el('option', '', depVer(l))).value = l; }); lj.value = x ? x.loja : (S.u.loja && D.lojas.indexOf(S.u.loja) > -1 ? S.u.loja : D.lojas[0]); if (!D.parceira) campo(g7[1], 'Loja', lj);
+    var lj = el('select'); D.lojas.forEach(function (l) { lj.appendChild(el('option', '', depVer(l))).value = l; }); lj.value = x ? x.loja : (S.u.loja && D.lojas.indexOf(S.u.loja) > -1 ? S.u.loja : D.lojas[0]); if (!D.parceira) campo(g7[1], 'Depósito', lj);
     var pags = x && x.dados.pagamentos && x.dados.pagamentos.length ? JSON.parse(JSON.stringify(x.dados.pagamentos)) : [{ formaId: (D.formas[0] || {}).id, valor: '' }];
     var pw = el('div'); if (!D.parceira) c.appendChild(pw);
     function desPag() {
@@ -12082,7 +12104,7 @@
   function ptLoja(b, d) {
     var P = d.parceira, dono = d.papel === 'dono', c = el('div', 'card'); b.appendChild(c); c.appendChild(el('h2', '', P.nome));
     var pg = P.pagamento || {}, cm = P.comissao || {};
-    lines(c, [['CNPJ/CPF', P.doc ? fmtDoc(P.doc) : '—'], ['Responsável', P.responsavel || '—'], ['Endereço', [P.endereco, P.cidade].filter(Boolean).join(' – ') || '—'], ['Loja de destino', depVer(P.loja)],
+    lines(c, [['CNPJ/CPF', P.doc ? fmtDoc(P.doc) : '—'], ['Responsável', P.responsavel || '—'], ['Endereço', [P.endereco, P.cidade].filter(Boolean).join(' – ') || '—'], ['Depósito de destino', depVer(P.loja)],
       ['Modelo', P.modelo === 2 ? 'Modelo 2: você compra do cliente e revende à loja com NF-e' : 'Modelo 1: a loja compra do cliente; você paga em nome da loja e recebe o reembolso'],
       ['Pagamento', pg.modo === 'periodico' ? 'Acerto ' + (pg.periodo === 'mensal' ? 'mensal' : 'semanal') : pg.dias + ' dia(s) depois da conferência'],
       ['Comissão', P.modelo === 2 ? 'Não tem (o ganho é a diferença de preço)' : cm.tipo === 'fixa' ? brl(cm.valor) + ' por aparelho' : cm.tipo === 'pct' ? String(cm.valor).replace('.', ',') + '% do aparelho' : 'Sem comissão']]);
@@ -12356,7 +12378,7 @@
     var clv = function () { clh.textContent = 'Logins da equipe dela: pessoa.' + (cl.value.trim().toLowerCase() || 'codigo') + '.' + (S.u.sistema || 'grupo') + ' (ex.: carlos.' + (cl.value.trim().toLowerCase() || 'codigo') + '.' + (S.u.sistema || 'grupo') + '). Em branco, o sistema sugere pelo nome. Não muda depois do primeiro login criado.'; };
     cl.oninput = clv; clv(); if (p.codLogin && p.temLogin) cl.disabled = true;
     c.appendChild(el('h3', 'ch', 'Destino e pagamento'));
-    var g4 = grade(c, 3), lj = el('select'); D.lojas.forEach(function (l) { lj.appendChild(el('option', '', depVer(l))).value = l; }); lj.value = p.loja; campo(g4[0], 'Loja de destino (fixa)', lj);
+    var g4 = grade(c, 3), lj = el('select'); D.lojas.forEach(function (l) { lj.appendChild(el('option', '', depVer(l))).value = l; }); lj.value = p.loja; campo(g4[0], 'Depósito de destino (fixo)', lj);
     var ds = el('select'); [['estoque', 'Direto para o estoque'], ['compras', 'Conferência + aprovação de quem lança compras']].forEach(function (o) { ds.appendChild(el('option', '', o[1])).value = o[0]; }); ds.value = p.destino; campo(g4[1], 'Depois da conferência', ds);
     var pm = el('select'); [['conferencia', 'Na conferência (vence em X dias)'], ['periodico', 'Acerto periódico']].forEach(function (o) { pm.appendChild(el('option', '', o[1])).value = o[0]; }); pm.value = p.pagamento.modo; campo(g4[2], 'Pagamento à parceira', pm);
     var g5 = grade(c, 2), di = inp('number', '0'); di.min = 0; di.value = p.pagamento.dias; campo(g5[0], 'Dias para vencer (na conferência)', di);
@@ -12435,7 +12457,7 @@
     ps.onchange = function () { MR.per = ps.value; if (MR.per === 'livre') { var q = periodoMR(); MR.de = q[0]; MR.ate = q[1]; } carregarMetRel(); };
     di.onchange = ai.onchange = function () { MR.de = di.value; MR.ate = ai.value; if (MR.de && MR.ate) carregarMetRel(); };
     var sel = function (box, rot, lista, k, todos) { var s2 = el('select'); s2.appendChild(el('option', '', todos)).value = ''; lista.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; s2.appendChild(o); }); s2.value = MR[k]; campo(box, rot, s2, true); s2.onchange = function () { MR[k] = s2.value; carregarMetRel(); }; };
-    if (d.nivel === 'supervisor') { sel(g[1], 'Loja', d.opcoes.lojas, 'loja', 'Todas as lojas'); sel(g[2], 'Gerente', d.opcoes.gerentes, 'gerente', 'Todos os gerentes'); sel(g[3], 'Vendedor', d.opcoes.vendedores, 'vendedor', 'Todos os vendedores'); }
+    if (d.nivel === 'supervisor') { sel(g[1], 'Depósito', d.opcoes.lojas, 'loja', 'Todos os depósitos'); sel(g[2], 'Gerente', d.opcoes.gerentes, 'gerente', 'Todos os gerentes'); sel(g[3], 'Vendedor', d.opcoes.vendedores, 'vendedor', 'Todos os vendedores'); }
     else if (d.nivel === 'gerente') sel(g[1], 'Vendedor', d.opcoes.vendedores, 'vendedor', 'Visão geral (todos)');
   }
   function renderMR(d) {
@@ -12451,7 +12473,7 @@
     if (!d.linhas.length) { box.appendChild(el('div', 'empty', 'Nada no período.')); return; }
     var sup = d.nivel === 'supervisor';
     var temUpg = d.total.upg && d.total.upg.qtd;
-    var cab = (sup ? ['Loja'] : []).concat(['Vendedor'], sup ? ['Gerente'] : [], ['Vendido', 'Vendas', 'Ticket médio', 'OS entregues', 'OS faturado', 'Celulares', 'Celulares faturado', 'Meta', '% da meta'], temUpg ? ['Diferença em upgrades'] : []);
+    var cab = (sup ? ['Depósito'] : []).concat(['Vendedor'], sup ? ['Gerente'] : [], ['Vendido', 'Vendas', 'Ticket médio', 'OS entregues', 'OS faturado', 'Celulares', 'Celulares faturado', 'Meta', '% da meta'], temUpg ? ['Diferença em upgrades'] : []);
     var linhas = d.linhas.map(function (x) { return (sup ? [x.empresa] : []).concat([x.nome], sup ? [x.gerente || '—'] : [], [brl(x.vendas.valor), x.vendas.qtd, brl(x.ticket), x.os.qtd, brl(x.os.valor), x.cel.qtd, brl(x.cel.valor), x.meta ? brl(x.meta) : '—', x.ating !== null ? nfmt(x.ating) + '%' : '—'], temUpg ? [x.upg && x.upg.qtd ? x.upg.qtd + ' · ' + brl(x.upg.valor) : '—'] : []); });
     tabela(box, 'Resultados por vendedor (' + d.linhas.length + ')', cab, linhas, 'relatorio-metas-' + d.de + '-a-' + d.ate);
   }
@@ -12894,7 +12916,7 @@
     sh.appendChild(el('div', 'sub', 'Corrija o que estiver errado. A alteração fica registrada no Histórico.'));
     var c = el('div', 'card');
     var sel = function (rot, lista, val, first) { var s2 = el('select'); var l = lista.slice(); if (val && l.indexOf(val) < 0) l.unshift(val); opts(s2, l, val); campo(c, rot, s2, first); return s2; };
-    var loja = sel('Loja', S.u.lojas || [], x.loja, true);
+    var loja = sel('Depósito', S.u.lojas || [], x.loja, true);
     var txtL = function (rot, lista, val, idl) { var i2 = inp('text'); i2.maxLength = rot === 'Cor' ? 30 : 80; i2.value = val || ''; i2.setAttribute('list', idl); i2.autocomplete = 'off'; var dl2 = el('datalist'); dl2.id = idl; lista.forEach(function (v2) { if (/^\(/.test(v2) || v2 === 'Outra') return; var o = el('option'); o.value = v2; dl2.appendChild(o); }); campo(c, rot, i2); c.appendChild(dl2); return i2; };
     var modelo = txtL('Modelo', S.u.modelos || [], x.modelo, 'dlModeloE'); modelo.style.textTransform = 'uppercase';
     var cor = txtL('Cor', CORES, x.cor, 'dlCorE');
@@ -12944,14 +12966,14 @@
     var c = el('div', 'card');
     c.appendChild(el('div', '', x.modelo + ' · ' + [x.cor, 'IMEI ' + x.imei].filter(Boolean).join(' · ')));
     c.appendChild(el('div', 'hint', 'Use quando o aparelho foi colocado em manutenção por engano. Ele volta como Disponível, sem checklist e sem lançar peça. Fica registrado no Histórico.'));
-    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x.loja !== 'Manutenção' ? x.loja : (LS.get('loja', '') || ''), 'Escolha a loja…'); campo(c, 'Volta para a loja', lj);
+    var lj = el('select'); opts(lj, (S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x.loja !== 'Manutenção' ? x.loja : (LS.get('loja', '') || ''), 'Escolha o depósito…'); campo(c, 'Volta para a loja', lj);
     var mot = el('textarea'); mot.placeholder = 'Ex.: marcado em manutenção por engano'; campo(c, 'Motivo', mot);
     var m = el('div', 'msg err'); c.appendChild(m);
     var ac = el('div', 'acoes'), ok = el('button', 'btn', 'Tirar da manutenção'), cc = el('button', 'btn ghost', 'Cancelar'); ok.type = cc.type = 'button';
     ac.appendChild(ok); ac.appendChild(cc); c.appendChild(ac); sh.appendChild(c);
     cc.onclick = fecharModal;
     ok.onclick = function () {
-      if (!lj.value) { m.textContent = 'Escolha a loja.'; m.classList.add('show'); return; }
+      if (!lj.value) { m.textContent = 'Escolha o depósito.'; m.classList.add('show'); return; }
       if (mot.value.trim().length < 3) { m.textContent = 'Informe o motivo.'; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Salvando…';
       callM('tirarManutencao', [S.token, x.linha, x.imei, lj.value, mot.value.trim()]).then(function () { S.manut = null; S.disp = null; fecharModal(); if (depois) depois(); })
@@ -14247,7 +14269,7 @@
     if (!pode('acessorios')) { pq.classList.add('hide'); pmW.classList.remove('hide'); }
     tot();
     c1.appendChild(el('label', '', 'Vai para a loja'));
-    var lj = el('select'); opts(lj, (M.lojas || S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x.loja !== 'Manutenção' ? x.loja : (LS.get('loja', '') || ''), 'Escolha a loja…'); c1.appendChild(lj);
+    var lj = el('select'); opts(lj, (M.lojas || S.u.lojas || []).filter(function (l) { return l !== 'Manutenção'; }), x.loja !== 'Manutenção' ? x.loja : (LS.get('loja', '') || ''), 'Escolha o depósito…'); c1.appendChild(lj);
     sh.appendChild(c1);
 
     var c2 = el('div', 'card'); c2.appendChild(el('h2', '', 'Checklist de testes'));
@@ -14468,7 +14490,7 @@
   }
   function aposEstoque(d) {
     S.est = d; show('esLanc', d.editar);
-    opts($('esLoja'), d.lojas, $('esLoja').value, 'Todas as lojas');
+    opts($('esLoja'), d.lojas, $('esLoja').value, 'Todos os depósitos');
     optsArvore($('esGrupo'), cat().grupos, $('esGrupo').value, 'Todas as categorias');
     var tipos = []; d.movs.forEach(function (m) { var t = m.tipo.replace(/ \(.*\)$/, ''); if (tipos.indexOf(t) < 0) tipos.push(t); });
     opts($('esTipo'), tipos.sort(), $('esTipo').value, 'Todos os tipos');
@@ -14563,7 +14585,7 @@
     var ent = soma(l, function (m) { return m.qtd > 0 ? m.qtd : 0; }), sai = soma(l, function (m) { return m.qtd < 0 ? -m.qtd : 0; });
     $('esCont').textContent = l.length + ' movimentaç' + (l.length === 1 ? 'ão' : 'ões') + ' · ' + per[2] + ' · entraram ' + inteiro(ent) + ' · saíram ' + inteiro(sai);
     var linhas = l.map(function (m) { return [m.data, m.produto, m.tipo, m.loja.replace(/^.*\| /, '') + (m.destino ? ' → ' + m.destino.replace(/^.*\| /, '') : ''), (m.qtd > 0 ? '+' : '') + m.qtd, m.depois, m.por, m.obs]; });
-    tabela(box, 'Movimentações de estoque', ['Data', 'Produto', 'Tipo', 'Loja', 'Qtd.', 'Saldo na loja', 'Por', 'Referência'], linhas, 'movimentacoes-estoque');
+    tabela(box, 'Movimentações de estoque', ['Data', 'Produto', 'Tipo', 'Depósito', 'Qtd.', 'Saldo no depósito', 'Por', 'Referência'], linhas, 'movimentacoes-estoque');
     if (D.movs.length >= 1500) box.appendChild(el('div', 'hint', 'Mostrando as 1.500 movimentações mais recentes.'));
   }
   function abrirEstProd(x) {
@@ -14625,7 +14647,7 @@
     }
     function desenharTipo() {
       corpo.innerHTML = '';
-      campo(corpo, tipo === 'transferencia' ? 'Sai da loja' : 'Loja / depósito', lj);
+      campo(corpo, tipo === 'transferencia' ? 'Sai da loja' : 'Depósito', lj);
       if (tipo === 'transferencia') { opts(de, D.lojas.filter(function (l) { return l !== lj.value; }), de.value); campo(corpo, 'Vai para a loja', de); }
       campo(corpo, tipo === 'ajuste' ? 'Quantidade contada na loja' : 'Quantidade', qt); qt.min = tipo === 'ajuste' ? 0 : 1; qt.readOnly = false; csE = null;
       if (prod && prod.serial) {
@@ -14664,7 +14686,7 @@
     $('cpLista').innerHTML = ''; $('cpLista').appendChild(el('div', 'empty', 'Carregando entradas…')); $('cpCont').textContent = '';
     call('compras', [S.token]).then(aposCompras).catch(function (e) { $('cpLista').innerHTML = ''; $('cpLista').appendChild(el('div', 'empty', e)); });
   }
-  function aposCompras(d) { S.cp = d; opts($('cpLoja'), d.lojas, $('cpLoja').value, 'Todas as lojas'); renderCompras(); }
+  function aposCompras(d) { S.cp = d; opts($('cpLoja'), d.lojas, $('cpLoja').value, 'Todos os depósitos'); renderCompras(); }
   function garantirCp(cb) { if (S.cp) return cb(); call('compras', [S.token]).then(function (d) { aposCompras(d); cb(); }).catch(function (e) { msg('topMsg', e); }); }
   function abaCompras(modo) {
     show('cpListaW', modo !== 'form'); show('cpForm', modo === 'form'); show('cpVoltar', modo === 'form');
@@ -15231,7 +15253,7 @@
   }
   function aposOS(d) {
     S.os = d;
-    opts($('osLoja'), d.lojas, $('osLoja').value, 'Todas as lojas');
+    opts($('osLoja'), d.lojas, $('osLoja').value, 'Todos os depósitos');
     var tc = $('osTec'), v = tc.value; tc.innerHTML = '<option value="">Todos os técnicos</option>'; d.tecnicos.forEach(function (t) { var o = el('option', '', t.nome); o.value = t.nome; tc.appendChild(o); }); tc.value = v;
     renderOS();
   }
@@ -15439,7 +15461,7 @@
     // ---- 2. loja, técnico e prazos
     var c2 = el('div', 'card pecard'); W.appendChild(c2);
     var g2 = grade(c2, 2), g2b = grade(c2, 3);
-    var lj = el('select'); opts(lj, D.lojas, OSF.loja); campo(g2[0], 'Loja *', lj, true); lj.onchange = function () { OSF.loja = lj.value; desenharPecas(); };
+    var lj = el('select'); opts(lj, D.lojas, OSF.loja); campo(g2[0], 'Depósito *', lj, true); lj.onchange = function () { OSF.loja = lj.value; desenharPecas(); };
     var tc = el('select'); tc.appendChild(el('option', '', 'A definir')).value = ''; D.tecnicos.forEach(function (t) { var o2 = el('option', '', t.nome); o2.value = t.id; tc.appendChild(o2); }); tc.value = OSF.tecnicoId; campo(g2[1], 'Técnico responsável', tc, true); tc.onchange = function () { OSF.tecnicoId = tc.value; };
     var pv = inpData(OSF.previsao); if (!OSF.previsao) pv.value = ''; pv.min = isoHoje(); campo(g2b[0], 'Data prevista para entrega', pv, true); pv.onchange = function () { OSF.previsao = pv.value; };
     var hp = inp('time', ''); hp.value = OSF.horaPrevista || ''; campo(g2b[1], 'Horário previsto para entrega', hp, true); hp.onchange = function () { OSF.horaPrevista = hp.value; };
@@ -15599,7 +15621,7 @@
     var a = o.aparelho || {}, c = o.cliente || {};
     kvCard(bd, [['Status', o.status], ['Cliente', c.nome], ['Celular', c.whats ? fmtFone(c.whats) : ''], ['CPF/CNPJ', c.cpf ? fmtDoc(c.cpf) : ''], ['Aparelho', apTxt(o)], ['IMEI / série', [a.imei, a.serial].filter(Boolean).join(' · ')],
       ['Acessórios deixados', (a.acessorios || []).join(', ') || 'nenhum'], ['Entrou ligado', a.ligado === 'SIM' ? 'sim' : a.ligado === 'NÃO' ? 'não' : ''], ['Checklist de entrada', Object.keys(a.checklist || {}).map(function (k) { return k + ': ' + (a.checklist[k] === 'SIM' ? 'ok' : 'NÃO'); }).join(' · ')], ['Estado na entrada', Object.keys(a.estado || {}).map(function (k) { return k + ': ' + (a.estado[k] === 'SIM' ? 'sim' : 'não'); }).join(' · ') + (a.estadoObs ? (Object.keys(a.estado || {}).length ? '\n' : '') + a.estadoObs : '')],
-      ['Senha informada', o.senhaInformada ? 'sim (anotada no papel)' : ''], ['Defeito relatado', o.defeito], ['Diagnóstico', o.diagnostico], ['Loja', o.loja], ['Técnico', o.tecnico && o.tecnico.nome ? o.tecnico.nome : 'a definir'],
+      ['Senha informada', o.senhaInformada ? 'sim (anotada no papel)' : ''], ['Defeito relatado', o.defeito], ['Diagnóstico', o.diagnostico], ['Depósito', o.loja], ['Técnico', o.tecnico && o.tecnico.nome ? o.tecnico.nome : 'a definir'],
       ['Aberta em', o.aberta + (o.atendente ? ' por ' + o.atendente.replace(/ \(.*\)$/, '') : '')], ['Entrega prevista', prevTxt(o)], ['Entregue em', o.entregueEm ? isoBR(o.entregueEm) + (o.entreguePor ? ' por ' + o.entreguePor : '') : ''],
       ['Garantia até', o.garantiaAte ? isoBR(o.garantiaAte) : o.garantiaDias ? o.garantiaDias + ' dias a partir da entrega' : 'sem garantia'], ['Observações', o.obs], ['Observações internas', o.obsInterna],
       ['Cancelamento', o.cancelamento ? o.cancelamento.motivo + ' · ' + o.cancelamento.por + ' · ' + o.cancelamento.em : ''],
@@ -16086,7 +16108,7 @@
     var abertos = meus.map(function (x) { return x.loja; }), livres = D.lojas.filter(function (l) { return abertos.indexOf(l) < 0; });
     if (livres.length) {
       var ca = el('div', 'card'); box.appendChild(ca); ca.appendChild(el('h2', '', meus.length ? 'Abrir caixa em outra loja' : 'Abrir caixa'));
-      var g = grade(ca, 2), lj = el('select'); opts(lj, livres, livres.indexOf(S.u.loja) > -1 ? S.u.loja : livres[0]); campo(g[0], 'Loja *', lj, true);
+      var g = grade(ca, 2), lj = el('select'); opts(lj, livres, livres.indexOf(S.u.loja) > -1 ? S.u.loja : livres[0]); campo(g[0], 'Depósito *', lj, true);
       var fw = inpValor(D.cfg.fundoPadrao ? vs(D.cfg.fundoPadrao) : ''); campo(g[1], 'Fundo de troco (dinheiro na gaveta)', fw, true);
       var ob = inp('text', 'Opcional'); ob.maxLength = 200; campo(ca, 'Observação', ob);
       var m = el('div', 'msg err'); ca.appendChild(m); var ok = el('button', 'btn ok', 'Abrir caixa'); ok.type = 'button'; ok.style.marginTop = '10px'; ca.appendChild(ok);
@@ -16133,7 +16155,7 @@
   $('cfBusca').addEventListener('input', renderConf);
   function renderConf() {
     var D = S.cx; if (!D) return;
-    opts($('cfLoja'), D.lojas, $('cfLoja').value, 'Todas as lojas');
+    opts($('cfLoja'), D.lojas, $('cfLoja').value, 'Todos os depósitos');
     var lj = $('cfLoja').value, sit = $('cfSit').value, q = $('cfBusca').value.trim().toLowerCase(), hoje = isoHoje();
     var rs = $('cfResumo'); rs.innerHTML = ''; var k = el('div', 'kpis'); rs.appendChild(k);
     var ab = D.caixas.filter(function (x) { return x.situacao === 'Aberto'; }), pc = D.caixas.filter(function (x) { return x.situacao === 'Fechado'; });
@@ -16512,7 +16534,7 @@
         corpo.innerHTML = '';
         if (!X.linhas.length) { corpo.appendChild(el('div', 'empty', 'Nada no filtro.')); return; }
         var multi = se.value === 'todas';
-        tabela(corpo, 'Histórico', ['Quando', 'Usuário'].concat(multi ? ['Empresa'] : []).concat(['Ação', 'Loja', 'Item', 'Detalhe']), X.linhas.map(function (x) { return [x.quando, x.quem].concat(multi ? [x.empresa] : []).concat([x.tipo, x.loja || '—', [x.modelo, x.imei].filter(Boolean).join(' · ') || '—', x.texto || '—']); }), 'historico-' + X.de + '-a-' + X.ate);
+        tabela(corpo, 'Histórico', ['Quando', 'Usuário'].concat(multi ? ['Empresa'] : []).concat(['Ação', 'Depósito', 'Item', 'Detalhe']), X.linhas.map(function (x) { return [x.quando, x.quem].concat(multi ? [x.empresa] : []).concat([x.tipo, x.loja || '—', [x.modelo, x.imei].filter(Boolean).join(' · ') || '—', x.texto || '—']); }), 'historico-' + X.de + '-a-' + X.ate);
       }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', String(e))); });
     }
     [de, ate, su, st, se].forEach(function (x) { x.onchange = carregar; });
@@ -16864,13 +16886,15 @@
     usu.oninput = function () { usu.dataset.mexeu = '1'; };
     var outrasEmp = CFG.eq.empresas || [];
     var lojaPadrao = x ? x.loja : ((S.u.empresa && S.u.empresa.atual !== 'E1') ? '' : (S.u.loja || ''));
-    var loja = el('select'); opts(loja, CFG.eq.lojas, lojaPadrao, 'Selecione…'); campo(c, outrasEmp.length ? 'Loja em ' + (CFG.eq.empresaPrincipal || 'empresa principal') : 'Loja', loja);
+    // Leva 7: a loja é a empresa; o depósito é só de onde sai o estoque quando a pessoa vende
+    var we = el('div', 'grpbox'); c.appendChild(we); we.appendChild(el('h3', '', outrasEmp.length ? 'Empresas onde trabalha' : 'Depósito padrão'));
+    var loja = el('select'); opts(loja, CFG.eq.lojas, lojaPadrao, 'Selecione…'); campo(we, outrasEmp.length ? (CFG.eq.empresaPrincipal || 'Empresa principal') + ' · depósito padrão' : 'Depósito padrão para vender', loja);
     var empSel = {};
     outrasEmp.forEach(function (e) {
-      var s2 = el('select'); opts(s2, e.lojas, (x && x.emp && x.emp[e.id]) || '', 'Sem acesso a esta empresa');
-      campo(c, 'Loja em ' + e.nome, s2); empSel[e.id] = s2;
+      var s2 = el('select'); opts(s2, e.lojas, (x && x.emp && x.emp[e.id]) || '', 'Não trabalha nesta empresa');
+      campo(we, e.nome + ' · depósito padrão', s2); empSel[e.id] = s2;
     });
-    if (outrasEmp.length) c.appendChild(el('div', 'hint', 'Escolha a loja em cada empresa que a pessoa pode acessar. "Sem acesso" esconde a empresa para ela. O grupo e as permissões valem para todas.'));
+    we.appendChild(el('div', 'hint', outrasEmp.length ? 'Em cada empresa onde a pessoa trabalha, escolha o depósito de onde saem os produtos quando ela vende. "Não trabalha nesta empresa" esconde a empresa para ela. O grupo e as permissões valem para todas.' : 'De onde saem os produtos quando a pessoa vende.'));
     var grupo = el('select'); opts(grupo, CFG.eq.grupos.map(function (g) { return g.nome; }), x ? x.grupo : 'Vendedor'); campo(c, 'Grupo', grupo);
     var pers = x && x.custom && x.grade ? x.grade.slice() : gradeGrupo(grupo.value);
     var ck = el('label', 'perm'); var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!(x && x.custom);
@@ -16928,7 +16952,7 @@
       if (x) d.limite = limCb.checked ? (limLer() || { usado: null, produto: null, total: null }) : null;
       if (d.nome.length < 2) { m.textContent = 'Informe o nome.'; m.classList.add('show'); return; }
       if (!x && d.usuario.length < 3) { m.textContent = 'O usuário precisa ter pelo menos 3 letras.'; m.classList.add('show'); return; }
-      if (!d.loja) { m.textContent = 'Escolha a loja.'; m.classList.add('show'); return; }
+      if (!d.loja) { m.textContent = 'Escolha o depósito.'; m.classList.add('show'); return; }
       ok.disabled = true; ok.textContent = 'Salvando…';
       (x ? call('equipeEditar', [S.token, x.id, d]) : call('equipeCriar', [S.token, d])).then(function (r) {
         CFG.eq = x ? r : r.dados; box.innerHTML = ''; cfgFunc(box);
