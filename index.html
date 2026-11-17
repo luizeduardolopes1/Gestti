@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-3p0d9IVd49F1OcrpvX2fuUOLmjpY3RBDVh/pPvgF0Dk=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-1zMVScGIIwkdW2zJ+ILZYHes7qU8gcJkRp7ObpZFR/8=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -1173,7 +1173,7 @@
 
   <!-- DASHBOARD -->
   <section id="vPainel" class="hide"><div id="pnCorpo"></div></section>
-  <section id="vRel" class="hide"><div class="ptopo"><h1 id="rlTit">📊 Relatórios</h1></div><div id="rlCorpo"></div></section>
+  <section id="vRel" class="hide"><div class="ptopo"><h1 id="rlTit">Relatórios</h1></div><div id="rlCorpo"></div></section>
   <section id="vDash" class="hide">
     <div class="ptopo"><h1>Dashboard</h1><button type="button" class="btn ghost" id="dbAtual" style="width:auto;padding:9px 16px;margin:0">↻ Atualizar</button></div>
     <div class="dbfil">
@@ -2094,12 +2094,12 @@
     { id: 'pav', sec: 'vPortal', nome: 'Avisos', perm: 'parceira', desc: 'Aparelhos conferidos, recusados e pagamentos' },
     { id: 'ploja', sec: 'vPortal', nome: 'Minha loja', perm: 'parc_loja', desc: 'Dados, chave PIX e equipe' },
     { id: 'dash', sec: 'vPainel', nome: 'Dashboard', perm: 'dashboard' },
-    { id: 'rel-faturamento', sec: 'vRel', nome: '📊 Relatórios', perm: 'vender', menu: 'Faturamento', desc: 'Vendas, formas de pagamento, rankings, devolução, vales' },
-    { id: 'rel-os', sec: 'vRel', nome: '📊 Relatórios', perm: 'os', menu: 'Ordem de Serviço', desc: 'OS por dia, conversão, tempo médio, garantias' },
-    { id: 'rel-suprimento', sec: 'vRel', nome: '📊 Relatórios', perm: 'estoque', menu: 'Suprimento', desc: 'Cobertura, giro, curva ABC, parados, usados, parceiras' },
-    { id: 'rel-financeiro', sec: 'vRel', nome: '📊 Relatórios', perm: 'financeiro', menu: 'Financeiro', desc: 'Saldos, compromissos, fluxo de caixa, previsto × realizado' },
-    { id: 'rel-metas', sec: 'vRel', nome: '📊 Relatórios', perm: 'metas', menu: 'Metas', desc: 'Progresso das metas, margem e desconto por vendedor' },
-    { id: 'rel-crm', sec: 'vRel', nome: '📊 Relatórios', perm: 'crm', menu: 'CRM', desc: 'Aniversariantes e ranking de clientes' },
+    { id: 'rel-faturamento', sec: 'vRel', nome: 'Relatórios', perm: 'vender', menu: 'Faturamento', desc: 'Vendas, formas de pagamento, rankings, devolução, vales' },
+    { id: 'rel-os', sec: 'vRel', nome: 'Relatórios', perm: 'os', menu: 'Ordem de Serviço', desc: 'OS por dia, conversão, tempo médio, garantias' },
+    { id: 'rel-suprimento', sec: 'vRel', nome: 'Relatórios', perm: 'estoque', menu: 'Suprimento', desc: 'Cobertura, giro, curva ABC, parados, usados, parceiras' },
+    { id: 'rel-financeiro', sec: 'vRel', nome: 'Relatórios', perm: 'financeiro', menu: 'Financeiro', desc: 'Saldos, compromissos, fluxo de caixa, previsto × realizado' },
+    { id: 'rel-metas', sec: 'vRel', nome: 'Relatórios', perm: 'metas', menu: 'Metas', desc: 'Progresso das metas, margem e desconto por vendedor' },
+    { id: 'rel-crm', sec: 'vRel', nome: 'Relatórios', perm: 'crm', menu: 'CRM', desc: 'Aniversariantes e ranking de clientes' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'crm', sec: 'vCrm', nome: 'Clientes/Fornecedores', perm: 'crm', menu: 'CRM', desc: 'Cadastro, histórico de compras e contato' },
     { id: 'acess', sec: 'vAcess', nome: 'Produtos', perm: 'acessorios', menu: 'Suprimento', desc: 'Cadastro, preço e estoque dos produtos' },
@@ -4165,6 +4165,9 @@
   //  GESTTI: ÍCONES, MENU LATERAL (FIXO / MÓVEL)
   // =========================================================
   var ICO = {
+    cupom: '<path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/><path d="M7.5 10.5h3M7.5 13.5h3"/>',
+    promo: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/><path d="M10 16l6-6"/><circle cx="11" cy="11" r=".6"/><circle cx="15" cy="15" r=".6"/>',
+    pedido: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/>',
     entrada: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 8v6"/><path d="M9 11l3 3 3-3"/><path d="M7 18h10"/>',
     dre: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/><path d="M15 8h4v4"/>',
     grafico: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
@@ -4230,7 +4233,7 @@
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
   var ICO_MENU = { 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'contato', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas', 'Cadastro': 'pasta', 'Folha': 'relogio', 'Gestão': 'camadas', 'Compra de Celulares': 'celcompra' };
-  var ICO_VIEW = { encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
+  var ICO_VIEW = { promocoes: 'promo', cupons: 'cupom', pedidos: 'pedido', 'rel-faturamento': 'grafico', 'rel-os': 'grafico', 'rel-suprimento': 'grafico', 'rel-financeiro': 'grafico', 'rel-metas': 'grafico', 'rel-crm': 'grafico', encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista', proposta: 'recibo', finest: 'moedas',
                    compracel: 'quadro', ccnova: 'mais', cclista: 'lista', ccparc: 'aperto', pinicio: 'casa', pnova: 'mais', paparelhos: 'celular', pfin: 'carteira', ptab: 'etiqueta', pcli: 'pessoas', pav: 'sino', ploja: 'loja', metrel: 'grafico', rhdash: 'grafico', ponto: 'engrenagem', rhfunc: 'usuario', rhferiados: 'calendario', rhjornada: 'relogio', rhescalas: 'escala',
@@ -10061,7 +10064,7 @@
   }
   function relPeriodo() { if (RLX.de && RLX.ate) return { de: RLX.de, ate: RLX.ate }; var sv = PN.per; PN.per = RLX.per; var p = pnPeriodo(); PN.per = sv; return p; }
   function relatoriosGrupo(view) {
-    var grupo = REL_G[view], b = $('rlCorpo'); $('rlTit').textContent = '📊 Relatórios · ' + grupo; b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…'));
+    var grupo = REL_G[view], b = $('rlCorpo'); $('rlTit').textContent = 'Relatórios · ' + grupo; b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…'));
     (PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token])).then(function (info) {
       PN.info = info; b.innerHTML = '';
       var lista = info.catalogo.filter(function (q) { return (q.grupos || []).indexOf(grupo) > -1; });
@@ -10076,7 +10079,7 @@
   }
   function relatorioAbrir(view, q) {
     var grupo = REL_G[view], b = $('rlCorpo'); b.innerHTML = '';
-    $('rlTit').textContent = '📊 Relatórios · ' + grupo;
+    $('rlTit').textContent = 'Relatórios · ' + grupo;
     var pg = el('div', 'pgrid'); b.appendChild(pg);
     var fil = el('aside', 'pfil'); pg.appendChild(fil); fil.appendChild(el('h3', '', 'Filtros'));
     var main = el('div'); pg.appendChild(main);
@@ -10208,7 +10211,7 @@
   var PCV = 'kanban';
   function desenharPedidosCompra() {
     var box = $('pcCorpo'); box.innerHTML = '';
-    var tg = el('div', 'seg'); tg.style.marginBottom = '10px'; box.appendChild(tg); seg(tg, ['Lista', 'Kanban'], PCV === 'lista' ? 'Lista' : 'Kanban', function (v) { PCV = v === 'Lista' ? 'lista' : 'kanban'; desenharPedidosCompra(); });
+    var tg = el('div', 'seg'); tg.style.cssText = 'margin-bottom:10px;max-width:260px'; box.appendChild(tg); seg(tg, ['Lista', 'Kanban'], PCV === 'lista' ? 'Lista' : 'Kanban', function (v) { PCV = v === 'Lista' ? 'lista' : 'kanban'; desenharPedidosCompra(); });
     if (PCV === 'lista') {
       var bu = inp('text', 'Buscar: pedido, fornecedor ou produto'); bu.setAttribute('aria-label', 'Buscar pedido'); box.appendChild(bu);
       var lw = el('div'); box.appendChild(lw);
