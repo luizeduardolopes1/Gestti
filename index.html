@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-LVhiZlpbROhwV4KMhlWQ8ypPUkpCg5nqmvv8+gVB0Iw=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-BIoGl+pv/6Bdw6RKEKhqJF1inPnbkkrCxz0I+kFJ5vQ=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -5186,6 +5186,8 @@
     if (ant === 'dash') { ['dbEmp', 'dbPer', 'dbRel'].forEach(function (k) { LS.del(k); }); if ($('dbPer')) $('dbPer').value = '30'; }
     if (ant === 'crm' && $('hPer')) { LS.del('hPer'); $('hPer').value = '30'; }
     if (ant === 'disp' || ant === 'venda') REDE.em = REDE.em; // a lista da rede continua em cache (1 min)
+    if (ant === 'dash') { PN.per = 'mes'; PN.emp = ''; PN.edit = false; PN.aba = 0; }
+    if (/^rel-/.test(ant)) RLX = { per: 'mes', de: '', ate: '', emp: '', busca: '' };
   }
   /** Tem algo preenchido que se perde ao sair? (só nas telas de lançamento) */
   function rascunhoSujo(id) {
@@ -5196,7 +5198,7 @@
     return false;
   }
   function limparRascunhos(ant, novo) {
-    if (secDe(ant) !== secDe(novo)) limparFiltros(ant);
+    limparFiltros(ant); // Leva 7: saiu da tela, ao voltar ela vem limpa
     if (ant === 'proposta') PP = null;
     var osv = ['os', 'oslista', 'osnova'];
     if (ant === 'vendas') { V = null; if ($('vdNova')) $('vdNova').innerHTML = ''; }
@@ -6682,6 +6684,7 @@
   $('eselVoltar').onclick = function () { var t = S.token; ESEL.d = null; sairLocal(''); call('sair', [t]).catch(function () {}); };
 
   function sairLocal(motivo) {
+    if (motivo) { limparDaPessoa(); }
     S.token = ''; S.u = null; S.disp = null; S.venda = null; S.manut = null; S.novos = null; S.prec = null;
     LS.del('token'); LS.del('loja'); LS.del('hist');
     VIEWS.forEach(function (v) { show(v.sec, false); });
@@ -6690,7 +6693,17 @@
     $('fModal').classList.add('hide'); document.body.style.overflow = ''; S.senhaInicial = '';
     msg('loginMsg', motivo || '');
   }
-  $('sair').onclick = function () { var t = S.token; sairLocal(''); call('sair', [t]).catch(function () {}); };
+  /** Leva 7: ao sair, nada da pessoa anterior fica (última tela, filtros, rascunhos, último usuário); só o que é do aparelho (tema, menu, tablet do ponto). */
+  var LS_APARELHO = ['tema', 'sbModo', 'pontoTablet', 'contatos', 'rpMin'];
+  function limparDaPessoa() {
+    try { var pre = AMBC.ls; Object.keys(localStorage).forEach(function (k) { if (k.indexOf(pre) === 0 && LS_APARELHO.indexOf(k.slice(pre.length)) < 0) localStorage.removeItem(k); }); } catch (e) {}
+    try { sessionStorage.clear(); } catch (e) {}
+  }
+  $('sair').onclick = function () {
+    var t = S.token; sairLocal('');
+    var fim = function () { limparDaPessoa(); location.replace(location.pathname + (location.search || '')); };
+    call('sair', [t]).then(fim, fim);
+  };
 
   // loja parceira (só a permissão "parceira"): não é funcionária, não recebe as telas de todos (ponto, escala, carreira…)
   function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono' || x.indexOf('parc_') === 0; }); }
@@ -16368,7 +16381,10 @@
     if (PG.sujo && !confirm('Descartar alterações?')) { try { history.pushState({ gpg: 1 }, ''); } catch (e) {} return; }
     fecharPagina(true);
   });
-  function abrirModal() { if (PG) fecharPagina(); $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModal(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
+  var MOD_SUJO = false;
+  $('fSheet').addEventListener('input', function () { MOD_SUJO = true; }); $('fSheet').addEventListener('change', function () { MOD_SUJO = true; });
+  function fecharModalUsuario() { if (MOD_SUJO && !confirm('Descartar o que você preencheu?')) return; fecharModal(); }
+  function abrirModal() { if (PG) fecharPagina(); MOD_SUJO = false; $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModalUsuario(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
   $('gear').onclick = function () { CFG.aba = window.innerWidth >= 820 ? 'conta' : null; CFG.eq = null; ir('config'); };
 
   // ---------- Configurações › Transferências entre empresas
