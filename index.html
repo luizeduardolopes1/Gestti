@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-SNAa6jVg+wNq/BcwsHN2g4+19pPx0Q385kUetAiimok=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Uyr1QJI7aALLhVZEHkszLBfH3Eo8yarKPpJVgM3qSgo=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -9950,19 +9950,109 @@
   // ---------- 📊 Relatórios de cada grupo ----------
   var REL_G = { 'rel-faturamento': 'Faturamento', 'rel-os': 'Ordem de Serviço', 'rel-suprimento': 'Suprimento', 'rel-financeiro': 'Financeiro', 'rel-metas': 'Metas', 'rel-crm': 'CRM' };
   var RELP = { per: 'mes', loja: '' };
+  /* Leva 7 · 1.2: cada relatório é uma tela no padrão do Saldo de estoque (filtros à esquerda, indicadores, tabela com total e planilha). */
+  var RLX = { per: 'mes', de: '', ate: '', emp: '', busca: '' };
+  var REL_DESC = { ind: 'Faturamento, ticket médio, peças por atendimento e preço médio, comparados ao período anterior.', diaSem: 'Quanto cada dia da semana vendeu, ao lado do mesmo período do ano anterior.', rankProd: 'Produtos e serviços que mais faturaram no período.', rankCli: 'Clientes que mais compraram no período.', margemVend: 'Margem e desconto dado por vendedor.', osGar: 'OS de garantia que voltaram, por técnico e serviço.', cobertura: 'Para quantos dias o estoque de cada produto dá, pelo ritmo de venda.', abc: 'Produtos que fazem 80% (A), 15% (B) e 5% (C) do faturamento.', parado: 'Produtos sem venda há mais de 90 dias e o valor parado.', despCat: 'Despesas pagas em cada categoria.', fluxoPrev: 'Entradas e saídas previstas nas próximas semanas.' };
+  var REL_ROT = { nome: 'Nome', valor: 'Valor', faturamento: 'Faturamento', tm: 'Ticket médio', pa: 'Peças por atendimento', pm: 'Preço médio', compras: 'Compras', vendas: 'Vendas', margem: 'Margem', desconto: 'Desconto', meta: 'Meta', vendido: 'Vendido', ating: '% da meta', estoque: 'Estoque', porDia: 'Venda por dia', dias: 'Dias', custo: 'Custo', saldo: 'Saldo', total: 'Total', classe: 'Classe', produtos: 'Produtos', pctFat: '% do faturamento', pctProd: '% dos produtos', tecnico: 'Técnico', servico: 'Serviço', qtd: 'Quantidade', os: 'OS', atual: 'Período atual', anterior: 'Ano anterior', pct: '% do total', comprados: 'Comprados', vendidos: 'Vendidos', ent: 'Entradas', sai: 'Saídas', prev: 'Previsto', real: 'Realizado', ano: 'Ano', data: 'Data', em: 'Data', whats: 'WhatsApp', vencido: 'Vencido', clientes: 'Clientes', custoVendido: 'Custo vendido', estoqueCusto: 'Estoque a custo', proximos: 'Próximos 30 dias', projecao: 'Projeção', previsto: 'Saldo previsto', troca: 'Vales-troca', presente: 'Vales-presente', vencem7: 'Vencem em 7 dias', pagar: 'A pagar', receber: 'A receber', dia: 'Dia', quantidade: 'Quantidade', pago: 'Pago', emDia: 'Em dia', aparelhos: 'Aparelhos', parceira: 'Parceira' };
+  var REL_MOEDA = /^(valor|faturamento|tm|pm|vendas|meta|vendido|custo|saldo|total|atual|anterior|ent|sai|prev|real|vencido|custoVendido|estoqueCusto|proximos|projecao|previsto|pago|pagar|receber)$/;
+  var REL_PCT = /^(margem|desconto|ating|pctFat|pctProd|pct|var)$/;
+  function relFmt(k, v) {
+    if (v === null || v === undefined || v === '') return '—';
+    if (Array.isArray(v)) return v.join(', ');
+    if (typeof v !== 'number') return String(v);
+    if (REL_MOEDA.test(k)) return brl(v);
+    if (REL_PCT.test(k)) return String(Math.round(v * 10) / 10).replace('.', ',') + '%';
+    return String(Math.round(v * 100) / 100).replace('.', ',');
+  }
+  /** Converte o quadro em {kpis, cab, linhas, total} (mesmo formato para todos os relatórios). */
+  function relMontar(d) {
+    var R = { kpis: [], cab: [], linhas: [], total: null };
+    if (!d || typeof d !== 'object') return R;
+    if (d.erro) { R.erro = d.erro; return R; }
+    Object.keys(d).forEach(function (k) { var v = d[k]; if (typeof v === 'number' && k !== 'ano') R.kpis.push([REL_ROT[k] || k, relFmt(k === 'valor' && d.pct !== undefined ? 'pct' : k, v), d['var'] && typeof d['var'] === 'object' && d['var'][k] !== null && d['var'][k] !== undefined ? 'vs anterior: ' + relFmt('var', d['var'][k]) : (k === 'valor' && typeof d['var'] === 'number' ? 'vs anterior: ' + relFmt('var', d['var']) : '')]); });
+    var lista = d.itens || d.classes || d.anos;
+    if (Array.isArray(lista) && lista.length && typeof lista[0] === 'object') {
+      var ks = Object.keys(lista[0]).filter(function (k) { return typeof lista[0][k] !== 'object' || Array.isArray(lista[0][k]); });
+      R.cab = ks.map(function (k) { return REL_ROT[k] || k; });
+      R.linhas = lista.map(function (x) { return ks.map(function (k) { return relFmt(k, x[k]); }); });
+      var somar = ks.map(function (k) { return REL_MOEDA.test(k) || k === 'qtd' || k === 'compras' || k === 'produtos' || k === 'estoque'; });
+      if (somar.some(Boolean) && lista.length > 1) R.total = ks.map(function (k, i) { return i === 0 ? 'Total' : somar[i] ? relFmt(k, lista.reduce(function (a, x) { return a + (Number(x[k]) || 0); }, 0)) : ''; });
+    } else if (d.dias && typeof d.dias === 'object' && !Array.isArray(d.dias)) {
+      var dd = Object.keys(d.dias).sort();
+      R.cab = ['Dia', 'A pagar', 'A receber', 'Saldo do dia'];
+      R.linhas = dd.map(function (k) { var x = d.dias[k]; return [k + '/' + String(d.mes || '').slice(5, 7), brl(x.pagar || 0), brl(x.receber || 0), brl((x.receber || 0) - (x.pagar || 0))]; });
+      var tp = dd.reduce(function (a, k) { return a + (d.dias[k].pagar || 0); }, 0), tr = dd.reduce(function (a, k) { return a + (d.dias[k].receber || 0); }, 0);
+      if (dd.length > 1) R.total = ['Total', brl(tp), brl(tr), brl(tr - tp)];
+      R.kpis.push(['A pagar no mês', brl(tp), ''], ['A receber no mês', brl(tr), '']);
+    } else if (Array.isArray(d.rot)) {
+      var series = Object.keys(d).filter(function (k) { return k !== 'rot' && Array.isArray(d[k]); });
+      R.cab = ['Período'].concat(series.map(function (k) { return k === 'atual' && d.ano ? String(d.ano) : k === 'anterior' && d.ano ? String(d.ano - 1) : (REL_ROT[k] || k); }));
+      R.linhas = d.rot.map(function (r, i) { return [r].concat(series.map(function (k) { return relFmt(k, d[k][i]); })); });
+      R.total = ['Total'].concat(series.map(function (k) { return k === 'pct' || k === 'saldo' ? '' : relFmt(k, d[k].reduce(function (a, x) { return a + (Number(x) || 0); }, 0)); }));
+    }
+    return R;
+  }
+  function relPeriodo() { if (RLX.de && RLX.ate) return { de: RLX.de, ate: RLX.ate }; var sv = PN.per; PN.per = RLX.per; var p = pnPeriodo(); PN.per = sv; return p; }
   function relatoriosGrupo(view) {
     var grupo = REL_G[view], b = $('rlCorpo'); $('rlTit').textContent = '📊 Relatórios · ' + grupo; b.innerHTML = ''; b.appendChild(el('div', 'empty', 'Carregando…'));
-    var p = pnPeriodo.call(null); if (RELP.per !== PN.per) { var sv = PN.per; PN.per = RELP.per; p = pnPeriodo(); PN.per = sv; }
-    Promise.all([PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token]), call('painelDados', [S.token, { de: p.de, ate: p.ate, empresa: RELP.emp || '' }])]).then(function (r) {
-      PN.info = r[0]; var D = r[1]; b.innerHTML = '';
-      var bar = el('div', 'pnbar'); b.appendChild(bar); var sg = el('div', 'seg'); bar.appendChild(sg); seg(sg, ['Hoje', 'Semana', 'Mês', 'Ano'], { hoje: 'Hoje', semana: 'Semana', mes: 'Mês', ano: 'Ano' }[RELP.per], function (v) { RELP.per = { Hoje: 'hoje', Semana: 'semana', 'Mês': 'mes', Ano: 'ano' }[v]; relatoriosGrupo(view); });
-      selEmpresa(bar, D, RELP.emp, function (v) { RELP.emp = v; relatoriosGrupo(view); });
-      var lista = D.catalogo.filter(function (q) { return (q.grupos || []).indexOf(grupo) > -1; });
-      if (!lista.length) b.appendChild(el('div', 'empty', 'Nenhum relatório deste grupo liberado para você.'));
-      lista.forEach(function (q) { var c = el('div', 'card'); b.appendChild(c); var h = el('h2', '', q.nome); if ((q.grupos || []).length > 1) h.appendChild(el('span', 'pnar', '↔ ' + q.grupos.filter(function (x) { return x !== grupo; }).join(', '))); c.appendChild(h);
-        var bd = el('div'); c.appendChild(bd); try { pnRender(bd, q.id, D.quadros[q.id], { opt: {} }); } catch (e) { bd.appendChild(el('div', 'hint', 'Não deu para mostrar.')); }
-        btn(c, '⬇ Planilha', 'ghost', function () { var t = bd.querySelector('table'); if (!t) { msg('topMsg', 'Este relatório é um número ou gráfico: use a tela ou imprima.'); return; } var rows = Array.prototype.map.call(t.querySelectorAll('tr'), function (tr) { return Array.prototype.map.call(tr.children, function (td) { return td.textContent; }); }); baixarCSV(q.nome, rows[0], rows.slice(1)); }); });
+    (PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token])).then(function (info) {
+      PN.info = info; b.innerHTML = '';
+      var lista = info.catalogo.filter(function (q) { return (q.grupos || []).indexOf(grupo) > -1; });
+      if (!lista.length) { b.appendChild(el('div', 'empty', 'Nenhum relatório deste grupo liberado para você.')); return; }
+      var c = el('div', 'card'); b.appendChild(c); c.appendChild(el('div', 'hint', 'Escolha um relatório. Todos têm os mesmos filtros (período e empresa), indicadores, tabela com total e "Baixar planilha".'));
+      lista.forEach(function (q) {
+        var r = el('div', 'prow'); r.tabIndex = 0; r.setAttribute('role', 'button'); var ic = el('div', 'pimg'); ic.innerHTML = svgIco(ICO_VIEW[q.area === 'Financeiro' ? 'dre' : q.area === 'Estoque' ? 'saldo' : q.area === 'Ordem de Serviço' ? 'os' : 'dash'] || 'grafico'); r.appendChild(ic);
+        var t = el('div', 'pinfo'); t.appendChild(el('div', 'pn', q.nome)); t.appendChild(el('div', 'hint', REL_DESC[q.id] || q.area)); r.appendChild(t); r.appendChild(el('span', 'pr', '›'));
+        var abre = function () { relatorioAbrir(view, q); }; r.onclick = abre; r.onkeydown = function (e) { if (e.key === 'Enter') abre(); }; c.appendChild(r);
+      });
     }).catch(function (e) { b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); });
+  }
+  function relatorioAbrir(view, q) {
+    var grupo = REL_G[view], b = $('rlCorpo'); b.innerHTML = '';
+    $('rlTit').textContent = '📊 Relatórios · ' + grupo;
+    var pg = el('div', 'pgrid'); b.appendChild(pg);
+    var fil = el('aside', 'pfil'); pg.appendChild(fil); fil.appendChild(el('h3', '', 'Filtros'));
+    var main = el('div'); pg.appendChild(main);
+    var top = el('div', 'ptopo'); main.appendChild(top); top.appendChild(el('h1', '', q.nome));
+    var tb = el('div', 'tbtns'); top.appendChild(tb);
+    var vt = btn(tb, '← Relatórios', 'ghost', function () { relatoriosGrupo(view); });
+    var bf = el('button', 'lnk bfil', 'Filtros ▾'); bf.type = 'button'; bf.onclick = function () { fil.classList.toggle('on'); }; tb.appendChild(bf);
+    var info = el('div', 'hint'); info.style.margin = '0 0 10px'; main.appendChild(info);
+    var kp = el('div', 'kpis'); main.appendChild(kp);
+    var corpo = el('div'); main.appendChild(corpo); corpo.appendChild(el('div', 'empty', 'Carregando…'));
+    // filtros
+    var empW = el('div'); fil.appendChild(empW);
+    fil.appendChild(el('label', '', 'Período'));
+    var sg = el('div', 'seg'); fil.appendChild(sg);
+    var de = inp('date'), ate = inp('date'); de.id = 'rlxDe'; ate.id = 'rlxAte';
+    var ld = el('label', '', 'De'); ld.htmlFor = 'rlxDe'; fil.appendChild(ld); fil.appendChild(de);
+    var la = el('label', '', 'Até'); la.htmlFor = 'rlxAte'; fil.appendChild(la); fil.appendChild(ate);
+    var lb = el('label', '', 'Buscar na tabela'); lb.htmlFor = 'rlxBusca'; fil.appendChild(lb); var bu = inp('text', 'Ex.: nome do produto'); bu.id = 'rlxBusca'; bu.value = RLX.busca; fil.appendChild(bu);
+    var lim = btn(fil, 'Limpar filtros', 'ghost', function () { RLX = { per: 'mes', de: '', ate: '', emp: '', busca: '' }; relatorioAbrir(view, q); }); lim.style.marginTop = '14px';
+    var D = null;
+    var desenhar = function () {
+      var R = relMontar(D.quadros[q.id]); kp.innerHTML = ''; corpo.innerHTML = '';
+      if (R.erro) { corpo.appendChild(el('div', 'msg err show', R.erro)); return; }
+      R.kpis.slice(0, 6).forEach(function (k) { kpi(kp, k[0], k[1], k[2]); });
+      var w = semAc(bu.value.trim()).split(/\s+/).filter(Boolean), ls = R.linhas.filter(function (l) { if (!w.length) return true; var t = semAc(l.join(' ')); return w.every(function (x) { return t.indexOf(x) > -1; }); });
+      if (R.cab.length) tabela(corpo, q.nome + ' (' + ls.length + ')', R.cab, R.total && !w.length ? ls.concat([R.total]) : ls, q.nome + '-' + D.de + '-a-' + D.ate);
+      else if (!R.kpis.length) corpo.appendChild(el('div', 'empty', 'Nada para mostrar no período.'));
+      else corpo.appendChild(el('div', 'hint', 'Este relatório é um resumo em números: os indicadores acima já são o resultado.'));
+    };
+    var carregar = function () {
+      var p = relPeriodo(); de.value = p.de; ate.value = p.ate;
+      corpo.innerHTML = ''; corpo.appendChild(el('div', 'empty', 'Carregando…'));
+      call('painelDados', [S.token, { de: p.de, ate: p.ate, empresa: RLX.emp || '', ids: [q.id] }]).then(function (d) {
+        D = d; empW.innerHTML = ''; var se = selEmpresa(empW, d, RLX.emp, function (v) { RLX.emp = v; carregar(); }); if (se) { var le = el('label', '', 'Empresa'); empW.insertBefore(le, se); }
+        info.textContent = 'De ' + isoBR(d.de) + ' a ' + isoBR(d.ate) + ' · ' + (d.empresaNome || '') + (q.grupos && q.grupos.length > 1 ? ' · também em ' + q.grupos.filter(function (x) { return x !== grupo; }).join(', ') : '');
+        desenhar();
+      }).catch(function (e) { corpo.innerHTML = ''; corpo.appendChild(el('div', 'msg err show', String(e))); });
+    };
+    seg(sg, ['Hoje', 'Semana', 'Mês', 'Ano'], RLX.de ? '' : { hoje: 'Hoje', semana: 'Semana', mes: 'Mês', ano: 'Ano' }[RLX.per], function (v) { RLX.per = { Hoje: 'hoje', Semana: 'semana', 'Mês': 'mes', Ano: 'ano' }[v]; RLX.de = RLX.ate = ''; carregar(); });
+    var mudouData = function () { if (de.value && ate.value && de.value <= ate.value) { RLX.de = de.value; RLX.ate = ate.value; Array.prototype.forEach.call(sg.querySelectorAll('button'), function (x) { x.classList.remove('on'); x.setAttribute('aria-pressed', 'false'); }); carregar(); } };
+    de.onchange = mudouData; ate.onchange = mudouData;
+    bu.oninput = function () { RLX.busca = bu.value; if (D) desenhar(); };
+    carregar();
   }
   // =========================================================
   //  PROMOÇÕES E CUPONS (Leva 6 ampliada)
