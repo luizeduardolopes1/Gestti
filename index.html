@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Io2nhLvEmSgB2eUQKHEDx4vBfPHqiYkaZbsTAAdLnwY=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-y1sadMmjYPSY4dZlQyFO2XMI67QD+Vf1cTbFOp8pYWc=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -17000,6 +17000,37 @@
         .catch(function (e) { b.disabled = false; m.className = 'msg err show'; m.textContent = e; });
     };
   }
+  /** Leva 7 · 1.12: layout padrão (como Modelos de documento) por cima das telas de configuração que editam vários itens:
+   *  primeiro a lista (ícone, nome, detalhe, ›); tocar abre só aquele item, com "← Todos". Os botões da tela (Salvar, + Novo) continuam os mesmos. */
+  function listaPadrao(box, opt) {
+    opt = opt || {}; if (box._lpObs) box._lpObs.disconnect(); // a tela foi refeita do zero: o observador antigo sai
+    var ui = el('div', 'lpad'); box.insertBefore(ui, box.firstChild);
+    var foco = -1, nAnt = -1, obs = null, SEL = opt.sel || '.card';
+    var cards = function () { return Array.prototype.filter.call(box.querySelectorAll(SEL), function (c) { return !ui.contains(c) && !(c.parentElement && c.parentElement.closest(SEL)); }); };
+    var nome = function (c, i) { var h = c.querySelector('h2,h3'), x = c.querySelector('input[type=text],input:not([type])'); return (opt.nome && opt.nome(c, i)) || (h && h.textContent.trim()) || (x && x.value.trim()) || 'Item ' + (i + 1); };
+    var det = function (c, i) { if (opt.det) return opt.det(c, i); var s2 = c.querySelector('select'); return s2 && s2.selectedOptions[0] ? s2.selectedOptions[0].textContent : ''; };
+    var aplicar = function () {
+      if (obs) obs.disconnect();
+      if (ui.parentNode !== box) box.insertBefore(ui, box.firstChild); // a tela pode ter se redesenhado inteira
+      var L = cards(); if (nAnt >= 0 && L.length > nAnt) foco = L.length - 1; nAnt = L.length; if (foco >= L.length) foco = -1;
+      ui.innerHTML = '';
+      if (foco < 0) {
+        L.forEach(function (c) { c.style.display = 'none'; });
+        var cc = el('div', 'card'), tab = el('div', 'ptab fmtab'), h = el('div', 'prow h'); ['', opt.col1 || 'Nome', opt.col2 || '', ''].forEach(function (x) { h.appendChild(el('div', '', x)); }); tab.appendChild(h);
+        L.forEach(function (c, i) { var r = el('div', 'prow'); r.tabIndex = 0; r.setAttribute('role', 'button'); var ic = el('div', 'pimg'); ic.innerHTML = svgIco(opt.ico || 'lista'); r.appendChild(ic); var n = el('div'); n.appendChild(el('div', 'pnome', nome(c, i))); r.appendChild(n); r.appendChild(el('div', 'psub', det(c, i))); r.appendChild(el('div', 'chev', '›'));
+          var abre = function () { foco = i; aplicar(); window.scrollTo(0, 0); }; r.onclick = abre; r.onkeydown = function (e) { if (e.key === 'Enter') abre(); }; tab.appendChild(r); });
+        if (!L.length) cc.appendChild(el('div', 'empty', opt.vazio || 'Nenhum item ainda.')); else cc.appendChild(tab);
+        ui.appendChild(cc);
+      } else {
+        L.forEach(function (c, i) { c.style.display = i === foco ? '' : 'none'; });
+        var vt = el('button', 'lnk', '← ' + (opt.voltar || 'Todos')); vt.type = 'button'; vt.onclick = function () { foco = -1; aplicar(); }; ui.appendChild(vt);
+        ui.appendChild(el('h3', 'fmtit', nome(L[foco], foco)));
+      }
+      obs = obs || new MutationObserver(function () { aplicar(); }); box._lpObs = obs;
+      obs.observe(box, { childList: true, subtree: true });
+    };
+    aplicar();
+  }
   /** Leva 7 · 1.12: cada configuração no grupo dela (ícone obrigatório em todo grupo). */
   var CFG_GRUPOS = [['Geral', 'engrenagem'], ['Equipe', 'pessoas'], ['Suprimentos', 'caixa'], ['Vendas', 'sacola'], ['Financeiro', 'carteira'], ['Ordem de Serviço', 'ferramenta'], ['Documentos', 'pasta'], ['Entregas e Pedidos online', 'caminhao']];
   var CFG_GRUPO_DE = { conta: 'Geral', empresa: 'Geral', login: 'Geral', empresas: 'Geral', fiscal: 'Geral', suporte: 'Geral', func: 'Equipe', acesso: 'Equipe', seguranca: 'Equipe',
@@ -17069,7 +17100,7 @@
     else if (ab === 'categorias') cfgCatFin(box);
     else if (ab === 'reservas') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
-      call('estoqueReservasDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgReservas(box, d); cfgSemEstoque(box); })
+      call('estoqueReservasDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgReservas(box, d); cfgSemEstoque(box); listaPadrao(box, { ico: 'caixa', col1: 'Configuração', voltar: 'Estoque e Reservas', det: function () { return ''; } }); })
         .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
     }
     else if (ab === 'transfrede') {
@@ -17079,7 +17110,7 @@
     }
     else if (ab === 'checklists') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
-      call('checklistsDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgChecklists(box, d); })
+      call('checklistsDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgChecklists(box, d); listaPadrao(box, { ico: 'lista', col1: 'Checklist', col2: 'Itens', voltar: 'Todos os checklists', vazio: 'Nenhum checklist ainda.', det: function (c) { var n = c.querySelectorAll('.ed-et').length; return n ? n + ' item(ns)' : ''; } }); })
         .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
     }
     else if (ab === 'manutcentral') cfgManutCentral(box);
@@ -17090,15 +17121,15 @@
     else if (ab === 'obrigatorios') cfgObrigatorios(box);
     else if (ab === 'modelosmsg') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
-      call('modelosMsgDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; MSGM = d; cfgModelosMsg(box, JSON.parse(JSON.stringify(d))); })
+      call('modelosMsgDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; MSGM = d; cfgModelosMsg(box, JSON.parse(JSON.stringify(d))); listaPadrao(box, { ico: 'recibo', col1: 'Modelo', voltar: 'Todos os modelos', nome: function (c, i) { return i === 0 ? 'Garantia mostrada nas mensagens' : ''; }, det: function (c, i) { if (i === 0) { var g = c.querySelector('input'); return g ? g.value : ''; } return c.querySelector('input[type=checkbox]:checked') ? 'Padrão' : ''; } }); })
         .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
     }
     else if (ab === 'naturezas') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
-      call('naturezasDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgNaturezas(box, d); })
+      call('naturezasDados', [S.token]).then(function (d) { if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgNaturezas(box, d); listaPadrao(box, { ico: 'caminhao', col1: 'Natureza', col2: 'Tipo', voltar: 'Todas as naturezas', vazio: 'Nenhuma natureza.' }); })
         .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', e)); });
     }
-    else if (ab === 'osaux') { box.appendChild(el('div', 'empty', 'Carregando…')); garantirOS(function () { if (CFG.aba === 'osaux' && box.isConnected) renderOsAux(box); }); }
+    else if (ab === 'osaux') { box.appendChild(el('div', 'empty', 'Carregando…')); garantirOS(function () { if (CFG.aba === 'osaux' && box.isConnected) { renderOsAux(box); listaPadrao(box, { ico: 'ferramenta', col1: 'Configuração', voltar: 'Ordem de Serviço', det: function () { return ''; } }); } }); }
     else if (ab === 'caixa') {
       box.appendChild(el('div', 'empty', 'Carregando…'));
       call('caixaDados', [S.token]).then(function (d) { S.cx = d; if (CFG.aba !== ab || !box.isConnected) return; box.innerHTML = ''; cfgCaixa(box, d); })
@@ -17383,51 +17414,65 @@
       : 'Organize em grupos e subgrupos (ex.: Acessórios › Capas). Filtrar por um grupo mostra também os produtos dos subgrupos. "12x no cartão" e "Permitir reserva" valem para o grupo e todos os subgrupos dele (salvam na hora).'));
     var lst = el('div'); lst.style.marginTop = '12px'; c.appendChild(lst);
     var m = el('div', 'msg err');
-    function linha(item, sub, arr, i) {
-      var r = el('div', 'catrow' + (sub ? ' sub' : '')), ip = inp('text', sub ? R.phs : R.ph); ip.maxLength = 40; ip.value = item.nome;
-      ip.oninput = function () { item.nome = ip.value; };
-      var q = item.orig ? qtd(item.orig, !sub) : 0;
-      r.appendChild(ip); r.appendChild(el('div', 'n', item.orig ? q + ' produto' + (q === 1 ? '' : 's') : 'novo'));
-      if (tipo === 'grupo' && !sub && item.orig) {
-        var op = (d.opcoes || {})[item.orig] || {};
-        [['cartao', '12x no cartão', 'Mostra o valor em 12x na página Produtos'], ['reserva', 'Permitir reserva', 'Produtos com serial deste grupo podem ser reservados']].forEach(function (o) {
-          var lb = el('label', 'lnk'); lb.title = o[2]; lb.style.cssText = 'display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:pointer;font-size:12.5px';
-          var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!op[o[0]]; lb.appendChild(cb); lb.appendChild(document.createTextNode(o[1]));
-          cb.onchange = function () {
-            cb.disabled = true; var nv = { cartao: !!op.cartao, reserva: !!op.reserva }; nv[o[0]] = cb.checked;
-            call('grupoOpcoesSalvar', [S.token, item.orig, nv]).then(function (oo) { d.opcoes = oo; op = oo[item.orig] || {}; S.u.grupoOpcoes = oo; cb.disabled = false; S.ac = null; })
-              .catch(function (e) { cb.checked = !cb.checked; cb.disabled = false; m.textContent = e; m.classList.add('show'); });
-          };
-          r.appendChild(lb);
-        });
-      }
-      if (!sub) {
-        var as = el('button', 'lnk', '+ ' + R.Sub); as.type = 'button';
-        as.onclick = function () { item.filhos.push({ nome: '', orig: '' }); desenhar(); var g = lst.children[i].querySelectorAll('input'); g[g.length - 1].focus(); };
-        r.appendChild(as);
-      }
-      var del = el('button', 'lnk', 'Excluir'); del.type = 'button'; del.style.color = 'var(--err)';
-      del.onclick = function () {
-        var pesa = q || (!sub && item.filhos.length);
-        if (pesa && !del.dataset.conf) { del.dataset.conf = '1'; del.textContent = !sub && item.filhos.length ? 'Confirmar? (exclui também ' + item.filhos.length + (item.filhos.length === 1 ? ' sub)' : ' subs)') : 'Confirmar?'; return; }
-        arr.splice(i, 1); desenhar();
-      };
-      r.appendChild(del);
-      return r;
+    // Leva 7 · 1.12: mesmo layout de Categorias financeiras (plano numerado; tocar abre a página do item)
+    var PGI = null; // { item, sub, arr, i, pai }
+    function opcoesGrupo(box2, item) {
+      if (tipo !== 'grupo' || !item.orig) return;
+      var op = (d.opcoes || {})[item.orig] || {};
+      [['cartao', '12x no cartão', 'Mostra o valor em 12x na página Produtos'], ['reserva', 'Permitir reserva', 'Produtos com serial deste grupo podem ser reservados']].forEach(function (o) {
+        var lb = el('label', 'ckl'), cb = el('input'); cb.type = 'checkbox'; cb.checked = !!op[o[0]]; lb.appendChild(cb); lb.appendChild(document.createTextNode(' ' + o[1] + ' ')); lb.appendChild(el('small', 'hint', o[2]));
+        cb.onchange = function () {
+          cb.disabled = true; var nv = { cartao: !!op.cartao, reserva: !!op.reserva }; nv[o[0]] = cb.checked;
+          call('grupoOpcoesSalvar', [S.token, item.orig, nv]).then(function (oo) { d.opcoes = oo; op = oo[item.orig] || {}; S.u.grupoOpcoes = oo; cb.disabled = false; S.ac = null; })
+            .catch(function (e) { cb.checked = !cb.checked; cb.disabled = false; m.textContent = e; m.classList.add('show'); });
+        };
+        box2.appendChild(lb);
+      });
+      box2.appendChild(el('div', 'hint', 'Estas duas opções salvam na hora e valem para o grupo e todos os subgrupos dele.'));
+    }
+    function pagina() {
+      lst.innerHTML = ''; var P2 = PGI, item = P2.item;
+      var vt = el('button', 'lnk', '← Todos os ' + R.tit); vt.type = 'button'; vt.onclick = function () { PGI = null; desenhar(); }; lst.appendChild(vt);
+      lst.appendChild(el('h3', 'fmtit', item.nome || (P2.sub ? R.Sub + ' novo' : R.novo.replace('+ ', ''))));
+      if (P2.sub) lst.appendChild(el('div', 'hint', 'Dentro de: ' + (P2.pai.nome || '?')));
+      var ip = inp('text', P2.sub ? R.phs : R.ph); ip.maxLength = 40; ip.value = item.nome; ip.oninput = function () { item.nome = ip.value; }; campo(lst, 'Nome', ip, true);
+      var q = item.orig ? qtd(item.orig, !P2.sub) : 0;
+      lst.appendChild(el('div', 'hint', item.orig ? q + ' produto' + (q === 1 ? '' : 's') + (P2.sub ? '' : ' (com os subgrupos)') : 'Ainda não salvo.'));
+      if (!P2.sub) opcoesGrupo(lst, item);
+      var ac = el('div', 'acoes'); lst.appendChild(ac);
+      btn(ac, 'Pronto', '', function () { PGI = null; desenhar(); });
+      if (!P2.sub) btn(ac, '+ ' + R.Sub + ' aqui dentro', 'ghost', function () { item.filhos.push({ nome: '', orig: '' }); PGI = { item: item.filhos[item.filhos.length - 1], sub: true, arr: item.filhos, i: item.filhos.length - 1, pai: item }; pagina(); });
+      var del = btn(ac, 'Excluir', 'ghost', function () {
+        var pesa = q || (!P2.sub && item.filhos.length);
+        if (pesa && !del.dataset.conf) { del.dataset.conf = '1'; del.textContent = !P2.sub && item.filhos.length ? 'Confirmar? (exclui também ' + item.filhos.length + (item.filhos.length === 1 ? ' sub)' : ' subs)') : 'Confirmar?'; return; }
+        P2.arr.splice(P2.i, 1); PGI = null; desenhar();
+      }); del.style.color = 'var(--err)';
+      lst.appendChild(el('div', 'hint', 'A mudança só vale depois de "Salvar ' + R.tit + '".'));
+      ip.focus();
     }
     function desenhar() {
+      if (PGI) return pagina();
       lst.innerHTML = '';
-      if (!T.length) lst.appendChild(el('div', 'hint', 'Nenhum cadastrado ainda.'));
+      var top = el('div', 'cftop'); lst.appendChild(top); top.appendChild(el('div', 'hint', 'Toque em um ' + (tipo === 'tag' ? 'item' : 'grupo ou subgrupo') + ' para ver e alterar.'));
+      var nb = el('button', 'btn', R.novo); nb.type = 'button'; nb.onclick = function () { T.push({ nome: '', orig: '', filhos: [] }); PGI = { item: T[T.length - 1], sub: false, arr: T, i: T.length - 1 }; pagina(); }; top.appendChild(nb);
+      var gd = el('div', 'cfplano'); gd.style.gridTemplateColumns = '1fr'; lst.appendChild(gd); var col = el('div', 'cfcol'); gd.appendChild(col);
+      col.appendChild(el('div', 'cfcolt', (tipo === 'tag' ? 'TAGS' : 'GRUPOS DE PRODUTOS') + ' (' + T.length + ')'));
+      if (!T.length) col.appendChild(el('div', 'cfvaz', 'Nenhum cadastrado ainda.'));
       T.forEach(function (p, i) {
-        var g = el('div', 'catgrp'); g.appendChild(linha(p, false, T, i));
-        p.filhos.forEach(function (f, j) { g.appendChild(linha(f, true, p.filhos, j)); });
-        lst.appendChild(g);
+        var h = el('div', 'cfg'), hb = el('button', 'cfr'); hb.type = 'button'; hb.style.cssText = 'flex:1;font-weight:800;padding:0;border:0;background:none';
+        var qg = p.orig ? qtd(p.orig, true) : 0; hb.appendChild(el('span', 'cfn', (i + 1) + ' - ' + (p.nome || '(sem nome)').toUpperCase() + ' (' + qg + ')')); if (!p.orig) hb.appendChild(el('span', 'bdg', 'novo')); hb.appendChild(el('span', 'chev', '›'));
+        hb.onclick = function () { PGI = { item: p, sub: false, arr: T, i: i }; pagina(); }; h.appendChild(hb);
+        var ad = el('button', 'cfadd', '+'); ad.type = 'button'; ad.title = 'Novo ' + R.Sub.toLowerCase() + ' em ' + p.nome; ad.setAttribute('aria-label', ad.title); ad.onclick = function () { p.filhos.push({ nome: '', orig: '' }); PGI = { item: p.filhos[p.filhos.length - 1], sub: true, arr: p.filhos, i: p.filhos.length - 1, pai: p }; pagina(); }; h.appendChild(ad);
+        col.appendChild(h);
+        if (!p.filhos.length) col.appendChild(el('div', 'cfvaz', 'Nenhum ' + R.Sub.toLowerCase()));
+        p.filhos.forEach(function (f, k) {
+          var r = el('button', 'cfr'); r.type = 'button'; var qf = f.orig ? qtd(f.orig, false) : 0;
+          r.appendChild(el('span', 'cfn', (i + 1) + '.' + (k + 1) + ' - ' + (f.nome || '(sem nome)'))); if (!f.orig) r.appendChild(el('span', 'bdg', 'novo')); r.appendChild(el('small', '', qf + ' produto' + (qf === 1 ? '' : 's'))); r.appendChild(el('span', 'chev', '›'));
+          r.onclick = function () { PGI = { item: f, sub: true, arr: p.filhos, i: k, pai: p }; pagina(); }; col.appendChild(r);
+        });
       });
     }
     desenhar();
-    var add = el('button', 'lnk', R.novo); add.type = 'button';
-    add.onclick = function () { T.push({ nome: '', orig: '', filhos: [] }); desenhar(); var ins = lst.querySelectorAll('.catgrp:last-child input'); ins[0].focus(); };
-    c.appendChild(add);
     c.appendChild(m);
     var sv = el('button', 'btn', 'Salvar ' + R.tit); sv.type = 'button'; sv.style.marginTop = '12px'; c.appendChild(sv);
     c.appendChild(el('div', 'hint', 'Renomear muda em todos os produtos que usam. Excluir tira dos produtos (o produto continua cadastrado). Excluir um principal exclui os subs dele.'));
@@ -17501,6 +17546,10 @@
     box.appendChild(add); box.appendChild(m);
     var sv = el('button', 'btn', 'Salvar grupos'); sv.type = 'button'; sv.style.marginTop = '10px'; box.appendChild(sv);
     box.appendChild(el('div', 'hint', 'Renomear um grupo leva os funcionários junto. Dica: use "Duplicar" para criar um grupo parecido com um que já existe.'));
+    // Leva 7 · 1.12: lista → página do grupo (padrão de Modelos de documento)
+    listaPadrao(box, { sel: '.gcard', ico: 'pessoas', col1: 'Grupo', col2: 'Funcionários', voltar: 'Todos os grupos', vazio: 'Nenhum grupo ainda.',
+      nome: function (c) { var x = c.querySelector('.gh input'); return (x && x.value.trim()) || 'Grupo novo'; },
+      det: function (c) { var x = c.querySelector('.hint'); return x ? x.textContent.split(' · ')[0] : ''; } });
     sv.onclick = function () {
       m.classList.remove('show');
       var nomes = G.map(function (g) { return g.nome.trim().toLowerCase(); });
