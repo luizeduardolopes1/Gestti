@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-CaQ/W/C/XYI3ZQS04N3sSJQGiMSCnfzMaXLKaspVYMA=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ro54oRn7d/UcJhWfBMOkOAkfvvp51SoFDj1zv8XRycg=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://drive.google.com https://*.googleusercontent.com https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -35,6 +35,7 @@
   #faixas>div{color:#fff;font:700 12.5px system-ui,sans-serif;text-align:center;padding:6px 10px;display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap}
   #faixas a{color:#fff;text-decoration:underline}
   #faixas .fx-at{background:#B54708;font-size:13.5px;padding:8px 12px}
+  #faixas .fx-sup{background:#0E7490}#faixas .fx-bloq{background:#B42318}
   #faixas .fx-demo{background:#6B4BD6}#faixas .fx-teste{background:#ea580c}#faixas .fx-conta{background:#334155}
   body{padding-top:var(--fx,0px)}
   #atuPg{position:fixed;inset:0;z-index:100000;background:radial-gradient(ellipse at 50% 0%,#1E2E58,#0F1B2D 70%);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:14px;font-family:system-ui,sans-serif}
@@ -720,6 +721,21 @@
   .empmenu{position:fixed;z-index:80;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.22);padding:6px;min-width:240px;max-width:calc(100vw - 32px)}
   .empmenu button{display:flex;width:100%;align-items:center;gap:8px;background:none;border:0;border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;color:inherit;text-align:left;cursor:pointer}
   .empmenu button:hover{background:var(--bg)}.empmenu button.on{font-weight:700;color:var(--brand)}.empmenu .sep{border-top:1px solid var(--line);margin:4px 0}
+  .ltotp{display:grid;gap:6px;margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft2)}.ltotpqr{justify-self:center;background:#fff;padding:8px;border-radius:8px}.ltotpqr svg{width:180px;height:180px}
+  #lCod{font:600 22px ui-monospace,Menlo,monospace;letter-spacing:6px;text-align:center}
+  /* Leva 7 · 3.4: Gestti Central */
+  .ctfil{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}.ctfil select,.ctfil input{width:auto;min-width:160px}
+  .ctacoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+  .ctdet{display:grid;gap:8px;margin-top:12px}.ctdet h3.ch,.card h3.ch{margin:8px 0 2px}
+  .ctat{display:block;width:100%;text-align:left;font:inherit;background:none;border:0;border-bottom:1px solid var(--line);padding:9px 2px;color:var(--ink);cursor:pointer}.ctat:hover{background:var(--soft)}
+  .ctmods{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+  .ctmod{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;background:var(--card)}
+  .ctmod input[type=checkbox],.ctck input[type=checkbox],.ajresp input[type=checkbox]{-webkit-appearance:checkbox;appearance:auto;width:18px;height:18px;min-height:0;padding:0;margin-top:2px;flex:none;accent-color:var(--accent)}.ctmod span{display:grid;gap:2px}.ctmod small{color:var(--muted);font-size:12.5px}.ctmod.on{border-color:var(--brand);background:var(--soft)}.ctmod.sempre{opacity:.85}
+  .ctpassos{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0 0 12px;padding:0}.ctpassos li{font-size:13px;font-weight:600;padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--muted)}
+  .ctpassos li.on{background:var(--brand);color:#fff}.ctpassos li.feito{color:var(--ok)}
+  .ctemps{display:grid;gap:10px}.ctfis{border:1px dashed var(--line);border-radius:10px;padding:8px 10px}.ctfis summary{cursor:pointer;font-weight:600}
+  .ctrev{display:grid;gap:6px}.ctsenha{font:600 15px ui-monospace,Menlo,monospace;background:var(--soft);border-radius:10px;padding:12px;display:grid;gap:4px;overflow-wrap:anywhere}
+  .ctlista{display:grid;gap:10px}.ctitem{border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:4px}.ctck{display:flex;gap:6px;align-items:center;font-weight:400}
   /* Leva 7 · 3.3: Ajuda */
   .ajmenu .ajit{display:grid;gap:1px}.ajmenu .ajit small{display:block;padding:0;color:var(--muted);font-size:12.5px;font-weight:400}
   .ajabas{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
@@ -1143,6 +1159,7 @@
         <input id="lUser" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="usuário.sistema (ex.: luiz.grupo)">
         <label for="lPass">Senha</label>
         <div class="pwbox"><input id="lPass" type="password" autocomplete="current-password" maxlength="40" placeholder="Senha"></div>
+        <div id="lTotp" class="ltotp hide" role="group" aria-labelledby="lTotpTit"><b id="lTotpTit">Código do Google Authenticator</b><div id="lTotpQR" class="ltotpqr hide"></div><div class="hint" id="lTotpTxt"></div><input id="lCod" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6 números" aria-label="Código do Authenticator"></div>
         <button type="button" class="lgesqueci" id="lgEsqBtn">Esqueci minha senha</button>
         <button class="btn" id="lBtn" type="button">Entrar</button>
         <a class="lnk" id="lgPontoBtn" href="ponto.html" style="margin-top:12px;display:inline-block">⏱ Bater o ponto (app Gestti Ponto)</a>
@@ -1710,6 +1727,7 @@
     <div id="peCorpo"></div>
   </section>
 
+  <section id="vCentral" class="hide"><div class="ptopo"><h1 id="gcTit">Gestti Central</h1></div><div id="gcCorpo"></div></section>
   <section id="vAjuda" class="hide"><div class="ptopo"><h1 id="ajTit">Ajuda</h1></div><div id="ajCorpo"></div></section>
   <section id="vConfig" class="hide">
     <div class="ptopo"><h1>Configurações</h1></div>
@@ -2060,6 +2078,13 @@
   })();
   function apiDe(amb) { return SUPA + '/functions/v1/' + AMBS[amb].fn; }
   var API = SRV === 'sb' ? apiDe(AMB) : APPS;
+  // Leva 7 · 3.8: suporte Gestti entrando pela Central: #suporte=<chave de uso único>&c=<conta>. A sessão fica só nesta aba (não troca o login salvo).
+  var SUPORTE_IN = (function () {
+    var h = /^#suporte=(ST[a-f0-9]{30,50})&c=([a-z0-9-]{2,40})$/.exec(location.hash);
+    if (!h) return null;
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { location.hash = ''; }
+    return { tok: h[1], conta: h[2] };
+  })();
   // sessão vinda do outro ambiente (login "usuario.sistema" feito lá): #sessao=<token>&c=<conta>&u=<usuario>
   (function () {
     var h = /^#sessao=([^&]+)&c=([a-z0-9-]{2,40})(?:&u=([^&]*))?$/.exec(location.hash);
@@ -2124,6 +2149,18 @@
   var CORES = ['Preto','Branco','Azul','Azul-claro','Azul-profundo','Verde','Verde-acinzentado','Rosa','Roxo','Lavanda','Vermelho','Amarelo','Laranja','Laranja-cósmico','Dourado','Prata','Grafite','Meia-noite','Estelar','Sálvia','Titânio Natural','Titânio Preto','Titânio Branco','Titânio Azul','Titânio Deserto','Ultramarino','Cinza','Bege','Outra'];
   var CONSULTA_URL = 'https://www.consultaserialaparelho.com.br/public-web/homeSiga?token=20260618';
   var VIEWS = [
+    // Leva 7 · 3.4: Gestti Central (só a conta da Central vê)
+    { id: 'cinicio', sec: 'vCentral', nome: 'Início', perm: 'cinicio:v', menu: 'Gestti Central', desc: 'Indicadores da carteira, saúde dos sistemas e o que precisa de atenção' },
+    { id: 'csistemas', sec: 'vCentral', nome: 'Sistemas', perm: 'csistemas:v', menu: 'Gestti Central', desc: 'Clientes, módulos, empresas, bloquear, liberar e cancelar' },
+    { id: 'cnovo', sec: 'vCentral', nome: 'Novo sistema', perm: 'csistemas:c', menu: 'Gestti Central', desc: 'Passo a passo: contratante, empresas, módulos, plano e acesso' },
+    { id: 'cchamados', sec: 'vCentral', nome: 'Chamados', perm: 'cchamados:v', menu: 'Gestti Central', desc: 'Chamados de todos os sistemas, com prazo e conversa' },
+    { id: 'csugestoes', sec: 'vCentral', nome: 'Sugestões', perm: 'csugestoes:v', menu: 'Gestti Central', desc: 'Ideias dos clientes e a situação de cada uma' },
+    { id: 'csuporte', sec: 'vCentral', nome: 'Usuários de suporte', perm: 'csuporte:v', menu: 'Gestti Central', desc: 'Quem liberou o suporte, implantação e entrar como suporte' },
+    { id: 'cfaturas', sec: 'vCentral', nome: 'Faturas e cobrança', perm: 'cfaturas:v', menu: 'Gestti Central', desc: 'Mensalidades do mês, atrasos e regras de cobrança' },
+    { id: 'cavisos', sec: 'vCentral', nome: 'Avisos e novidades', perm: 'cavisos:v', menu: 'Gestti Central', desc: 'Faixa de aviso, novidades da versão e atualização com contagem' },
+    { id: 'centrada', sec: 'vCentral', nome: 'Tela de entrada', perm: 'centrada:v', menu: 'Gestti Central', desc: 'Contatos do login de todos os sistemas e WhatsApp do suporte' },
+    { id: 'cfaq', sec: 'vCentral', nome: 'Perguntas frequentes', perm: 'cfaq:v', menu: 'Gestti Central', desc: 'Respostas que aparecem na Ajuda dos clientes' },
+    { id: 'cregistro', sec: 'vCentral', nome: 'Registro', perm: 'cregistro:v', menu: 'Gestti Central', desc: 'Tudo o que a equipe fez na Central' },
     // Leva 6: Portal da Parceira (só o login de parceira vê; Financeiro só o responsável)
     { id: 'pinicio', sec: 'vPortal', nome: 'Início', perm: 'parceira', desc: 'A receber, aparelhos do mês e pendências' },
     { id: 'pnova', sec: 'vCompraCel', nome: 'Nova compra', perm: 'parc_nova', desc: 'Comprar um aparelho: cliente, fotos, consulta de IMEI e contrato' },
@@ -4281,8 +4318,8 @@
     var b = escuro ? '#FFFFFF' : '#0F1B2D', a = escuro ? '#7D97FF' : '#2F5BFF', s = escuro ? '#0F1B2D' : '#FFFFFF';
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
-  var ICO_MENU = { 'Entregas': 'moto', 'Pedidos online': 'globo', 'Promoções e Cupons': 'promo', 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'contato', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas', 'Cadastro': 'pasta', 'Folha': 'relogio', 'Gestão': 'camadas', 'Compra de Celulares': 'celcompra' };
-  var ICO_VIEW = { entregas: 'moto', entacerto: 'carteira', pedonline: 'globo', pedsep: 'scanner', pedconf: 'conferir', promocoes: 'promo', cupons: 'cupom', cupomind: 'contato', pedidos: 'pedido', 'rel-faturamento': 'grafico', 'rel-os': 'grafico', 'rel-suprimento': 'grafico', 'rel-financeiro': 'grafico', 'rel-metas': 'grafico', 'rel-crm': 'grafico', encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
+  var ICO_MENU = { 'Gestti Central': 'escudo', 'Entregas': 'moto', 'Pedidos online': 'globo', 'Promoções e Cupons': 'promo', 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'contato', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas', 'Cadastro': 'pasta', 'Folha': 'relogio', 'Gestão': 'camadas', 'Compra de Celulares': 'celcompra' };
+  var ICO_VIEW = { cinicio: 'casa', csistemas: 'camadas', cnovo: 'mais', cchamados: 'suporte', csugestoes: 'estrela', csuporte: 'usuario', cfaturas: 'recibo', cavisos: 'sino', centrada: 'contato', cfaq: 'busca', cregistro: 'lista', entregas: 'moto', entacerto: 'carteira', pedonline: 'globo', pedsep: 'scanner', pedconf: 'conferir', promocoes: 'promo', cupons: 'cupom', cupomind: 'contato', pedidos: 'pedido', 'rel-faturamento': 'grafico', 'rel-os': 'grafico', 'rel-suprimento': 'grafico', 'rel-financeiro': 'grafico', 'rel-metas': 'grafico', 'rel-crm': 'grafico', encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista', proposta: 'recibo', finest: 'moedas',
                    compracel: 'quadro', ccnova: 'mais', cclista: 'lista', ccparc: 'aperto', pinicio: 'casa', pnova: 'mais', paparelhos: 'celular', pfin: 'carteira', ptab: 'etiqueta', pcli: 'pessoas', pav: 'sino', ploja: 'loja', metrel: 'grafico', rhdash: 'grafico', ponto: 'engrenagem', rhfunc: 'usuario', rhferiados: 'calendario', rhjornada: 'relogio', rhescalas: 'escala',
@@ -4578,24 +4615,99 @@
   call('contatoLogin', []).then(function (c) { LS.set('contatos', JSON.stringify(c)); desenharContatos(c); }).catch(function () {});
 
   // ---------- configuração dos contatos (gerente) ----------
-  function cfgContatos(box) {
-    var c = el('div', 'card'); box.appendChild(c);
-    c.appendChild(el('div', 'hint', 'Estes contatos aparecem no rodapé da tela de entrada ("fale com a gente!"). Deixe em branco o que não quiser mostrar.'));
-    var cur = {}; try { cur = JSON.parse(LS.get('contatos', '{}')); } catch (e) {}
-    var g = grade(c, 2);
-    var ig = campo(g[0], 'Instagram (@ da conta)', inp('text', 'Ex.: gestti'), true); ig.value = cur.instagram || '';
-    var su = campo(g[1], 'Suporte (celular, e-mail ou link https)', inp('text', 'Ex.: 22999990000'), true); su.value = cur.suporte || ''; su.maxLength = 200;
-    var te = campo(g[0], 'Telefone para ligação (com DDD)', inp('tel', 'Ex.: 2225550000')); te.value = cur.telefone || '';
-    var wp = campo(g[1], 'Celular de vendas (com DDD)', inp('tel', 'Ex.: 22999990000')); wp.value = cur.whatsapp || '';
-    var m = el('div', 'msg'); c.appendChild(m);
-    var b = el('button', 'btn', 'Salvar contatos'); b.type = 'button'; b.style.cssText = 'width:auto;margin-top:12px;padding:11px 20px'; c.appendChild(b);
-    b.onclick = function () {
-      b.disabled = true; m.className = 'msg';
-      call('contatoLoginSalvar', [S.token, { instagram: ig.value, suporte: su.value, telefone: te.value, whatsapp: wp.value }]).then(function (r) {
-        LS.set('contatos', JSON.stringify(r)); desenharContatos(r); b.disabled = false; m.className = 'msg ok show'; m.textContent = '✓ Contatos salvos.';
-      }).catch(function (e) { b.disabled = false; m.className = 'msg err show'; m.textContent = e; });
-    };
+  // ---------- Leva 7 · 3.7: Configurações › Fiscal (por empresa; sem emissão ainda) ----------
+  function cfgFiscal(box) {
+    var c = el('div', 'card'); box.appendChild(c); c.appendChild(el('div', 'hint', 'Carregando…'));
+    call('fiscalCfg', [S.token]).then(function (r) {
+      c.textContent = ''; var F = r.cfg;
+      c.appendChild(el('div', 'hint', 'Empresa: ' + r.empresa + '. A emissão de NF-e e NFC-e chega numa próxima versão; deixe tudo pronto aqui.'));
+      var g = grade(c, 3);
+      var rg = el('select'); r.regimes.forEach(function (x) { var o = el('option', '', x.nome + ' (CRT ' + x.crt + ')'); o.value = x.id; rg.appendChild(o); }); rg.value = F.regime; campo(g[0], 'Regime tributário', rg);
+      var am = el('select'); [['homologacao', 'Homologação (testes)'], ['producao', 'Produção']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; am.appendChild(op); }); am.value = F.ambiente; campo(g[1], 'Ambiente SEFAZ', am);
+      var cn = campo(g[2], 'CNAE principal', el('input')); cn.value = F.cnae || ''; cn.inputMode = 'numeric';
+      var g2 = grade(c, 2);
+      var ie = campo(g2[0], 'Inscrição estadual', el('input')); ie.value = F.ie || '';
+      var im = campo(g2[1], 'Inscrição municipal', el('input')); im.value = F.im || '';
+      c.appendChild(el('h3', 'ch', 'Numeração'));
+      var g3 = grade(c, 4);
+      var ns = campo(g3[0], 'Série NF-e', el('input')); ns.value = F.nfe.serie === null ? '' : F.nfe.serie; ns.inputMode = 'numeric';
+      var nn = campo(g3[1], 'Próximo nº NF-e', el('input')); nn.value = F.nfe.numero === null ? '' : F.nfe.numero; nn.inputMode = 'numeric';
+      var cs = campo(g3[2], 'Série NFC-e', el('input')); cs.value = F.nfce.serie === null ? '' : F.nfce.serie; cs.inputMode = 'numeric';
+      var cnn = campo(g3[3], 'Próximo nº NFC-e', el('input')); cnn.value = F.nfce.numero === null ? '' : F.nfce.numero; cnn.inputMode = 'numeric';
+      var ci = campo(c, 'ID do CSC (NFC-e)', el('input')); ci.value = F.nfce.cscId || ''; ci.inputMode = 'numeric'; ci.maxLength = 6;
+      c.appendChild(el('h3', 'ch', 'Naturezas de operação'));
+      var nat = (F.naturezas || []).map(function (x) { return { nome: x.nome, cfopDentro: x.cfopDentro, cfopFora: x.cfopFora }; });
+      var nl = el('div', 'ctlista'); c.appendChild(nl);
+      var desNat = function () {
+        nl.textContent = '';
+        nat.forEach(function (x, i) {
+          var row = el('div', 'g3'), a = el('input'), b = el('input'), d = el('input');
+          a.value = x.nome; b.value = x.cfopDentro; d.value = x.cfopFora; a.setAttribute('aria-label', 'Natureza'); b.setAttribute('aria-label', 'CFOP dentro do estado'); d.setAttribute('aria-label', 'CFOP fora do estado');
+          b.placeholder = 'CFOP no estado'; d.placeholder = 'CFOP fora'; b.inputMode = d.inputMode = 'numeric';
+          a.oninput = function () { x.nome = a.value; }; b.oninput = function () { x.cfopDentro = b.value; }; d.oninput = function () { x.cfopFora = d.value; };
+          row.appendChild(a); row.appendChild(b); var w = el('div', 'tbacoes'); w.appendChild(d); btn(w, '✕', 'ghost', function () { nat.splice(i, 1); desNat(); }); row.appendChild(w); nl.appendChild(row);
+        });
+        btn(nl, '+ Natureza', 'ghost', function () { nat.push({ nome: '', cfopDentro: '', cfopFora: '' }); desNat(); });
+      };
+      desNat();
+      var m = el('div', 'msg'); c.appendChild(m);
+      btn(c, 'Salvar configuração fiscal', '', function () {
+        m.className = 'msg';
+        call('fiscalSalvar', [S.token, { regime: rg.value, ambiente: am.value, cnae: cn.value, ie: ie.value, im: im.value, nfe: { serie: ns.value, numero: nn.value }, nfce: { serie: cs.value, numero: cnn.value, cscId: ci.value }, naturezas: nat }])
+          .then(function () { m.className = 'msg ok show'; m.textContent = '✓ Configuração fiscal salva.'; }).catch(function (e) { m.className = 'msg err show'; m.textContent = e; });
+      });
+      // certificado e CSC: vão cifrados para o servidor, não voltam para a tela
+      var k = el('div', 'card'); box.appendChild(k); k.appendChild(el('h2', '', 'Certificado digital A1 e CSC'));
+      k.appendChild(el('div', 'hint', 'O arquivo .pfx, a senha e o CSC são guardados criptografados só no servidor do Gestti. Ninguém consegue ver de volta, nem a equipe Gestti; para trocar, é só enviar de novo.'));
+      if (F.cert) k.appendChild(el('div', 'bdg ok', '✓ ' + F.cert.arquivo + ' · enviado em ' + dataBR(F.cert.enviadoEm) + ' por ' + F.cert.por + (F.cert.validade ? ' · válido até ' + isoBR(F.cert.validade) : '')));
+      if (F.csc) k.appendChild(el('div', 'bdg ok', '✓ CSC enviado em ' + dataBR(F.csc.enviadoEm)));
+      var g4 = grade(k, 3);
+      var arq = el('input'); arq.type = 'file'; arq.accept = '.pfx,.p12,application/x-pkcs12'; campo(g4[0], 'Arquivo do certificado (.pfx)', arq);
+      var sn = el('input'); sn.type = 'password'; sn.autocomplete = 'new-password'; campo(g4[1], 'Senha do certificado', sn);
+      var vl = el('input'); vl.type = 'date'; campo(g4[2], 'Validade (opcional)', vl);
+      var csc = campo(k, 'CSC da NFC-e (código do contribuinte)', el('input')); csc.type = 'password'; csc.autocomplete = 'off';
+      var m2 = el('div', 'msg'); k.appendChild(m2);
+      btn(k, 'Enviar com segurança', '', function (ev) {
+        var b = ev.currentTarget; m2.className = 'msg';
+        var f = arq.files && arq.files[0];
+        var envia = function (b64) {
+          b.disabled = true;
+          call('fiscalSegredoEnviar', [S.token, { b64: b64 || '', nome: f ? f.name : '', senha: sn.value, validade: vl.value, csc: csc.value }])
+            .then(function () { sn.value = ''; csc.value = ''; arq.value = ''; box.textContent = ''; cfgFiscal(box); }).catch(function (e) { b.disabled = false; m2.className = 'msg err show'; m2.textContent = e; });
+        };
+        if (!f) return envia('');
+        if (f.size > 20000) { m2.className = 'msg err show'; m2.textContent = 'O .pfx tem até 20 KB. Confira o arquivo.'; return; }
+        var rd = new FileReader(); rd.onload = function () { envia(String(rd.result).split(',')[1] || ''); }; rd.readAsDataURL(f);
+      });
+    }).catch(function (e) { c.textContent = ''; c.appendChild(el('div', 'msg err show', String(e))); });
   }
+  // ---------- Leva 7 · 3.8: Configurações › Suporte ----------
+  function cfgSuporte(box) {
+    var c = el('div', 'card'); box.appendChild(c); c.appendChild(el('div', 'hint', 'Carregando…'));
+    call('suporteCfg', [S.token]).then(function (r) { desenharSuporte(box, c, r); }).catch(function (e) { c.textContent = ''; c.appendChild(el('div', 'msg err show', String(e))); });
+  }
+  function desenharSuporte(box, c, r) {
+    c.textContent = '';
+    c.appendChild(el('div', 'hint', 'O suporte Gestti só entra no seu sistema quando você libera, pelo tempo que escolher. Ele não vê nem troca senhas, e tudo o que fizer fica no Histórico como "Suporte Gestti".'));
+    if (r.implantacao) c.appendChild(el('div', 'bdg inf', '🛟 Suporte da implantação liberado até ' + r.implantacao.ate));
+    var m = el('div', 'msg'); 
+    if (r.ate) {
+      c.appendChild(el('div', 'bdg ok', '✓ Liberado até ' + r.ateTxt + ' · ' + r.motivo + (r.por ? ' (' + r.por + ')' : '')));
+      c.appendChild(m);
+      btn(c, 'Encerrar agora', 'danger', function () { call('suporteEncerrar', [S.token]).then(function (x) { desenharSuporte(box, c, x); }).catch(function (e) { m.className = 'msg err show'; m.textContent = e; }); });
+    } else {
+      var g = grade(c, 2);
+      var h = el('select'); r.horas.forEach(function (x) { var o = el('option', '', x === 168 ? '7 dias' : x + ' horas'); o.value = x; h.appendChild(o); }); campo(g[0], 'Liberar por', h);
+      var mo = campo(g[1], 'Motivo (o suporte vê)', el('input')); mo.placeholder = 'ex.: chamado 000123, dúvida no DRE';
+      c.appendChild(m);
+      btn(c, 'Liberar o suporte', '', function () { m.className = 'msg'; call('suporteLiberar', [S.token, Number(h.value), mo.value]).then(function (x) { desenharSuporte(box, c, x); }).catch(function (e) { m.className = 'msg err show'; m.textContent = e; }); });
+    }
+    c.appendChild(el('h3', 'ch', 'O que o suporte fez'));
+    if (!r.registro.length) c.appendChild(el('div', 'vazio', 'Nada ainda.'));
+    else { var w = el('div', 'tbwrap'), t = el('table', 't'); w.appendChild(t); c.appendChild(w); var hd = el('tr'); ['Quando', 'Quem', 'O quê', 'Detalhe'].forEach(function (x) { hd.appendChild(el('th', '', x)); }); t.appendChild(hd);
+      r.registro.forEach(function (e) { var tr = el('tr'); [e.dataTxt, e.quem, e.tipo, e.texto].forEach(function (x) { tr.appendChild(el('td', '', x || '—')); }); t.appendChild(tr); }); }
+  }
+
 
   // =========================================================
   //  R$ EM TODOS OS CAMPOS DE PREÇO
@@ -4672,23 +4784,12 @@
     });
     var cp = el('div', 'card'); box.appendChild(cp); cp.appendChild(el('div', 'empty', 'Carregando compartilhamento…'));
     call('compartDados', [S.token]).then(function (r) { desenharCompart(cp, r); }).catch(function (e) { cp.innerHTML = ''; cp.appendChild(el('div', 'empty', String(e))); });
+    // Leva 7 · 3.6: empresa nova só pela Gestti Central (entra no plano e nos módulos)
     var n = el('div', 'card'); box.appendChild(n);
     n.appendChild(el('h2', '', 'Nova empresa'));
-    var nm = campo(n, 'Nome da empresa', inp('text', 'Ex.: Find Cell Comércio'), true);
-    n.appendChild(el('div', 'hint', 'A nova empresa já nasce com as configurações desta: formas de pagamento, maquininhas e taxas, categorias financeiras, caixas e bancos (com saldo zero), grupos de produtos e tags, precificação, tabelas de preço dos usados, termos de garantia e quadro de manutenção. Produtos, estoque, clientes, vendas, OS, contas e histórico começam vazios. Ela começa com uma loja com o nome da empresa — renomeie ou crie outras em Depósitos (lojas) depois de entrar nela.'));
-    var mm = el('div', 'msg err'); n.appendChild(mm);
-    var ok = el('button', 'btn', 'Criar empresa'); ok.type = 'button'; ok.style.marginTop = '10px'; n.appendChild(ok);
-    ok.onclick = function () {
-      mm.classList.remove('show');
-      var nome = nm.value.trim();
-      if (nome.length < 2) { mm.textContent = 'Informe o nome da empresa.'; mm.classList.add('show'); return; }
-      ok.disabled = true; ok.textContent = 'Criando… (pode levar até 1 minuto)';
-      call('empresaCriar', [S.token, { nome: nome }]).then(function (r) {
-        atualizarEmpPerfil();
-        desenharEmpresas(box, r, 'Empresa "' + nome + '" criada. Você já tem acesso a ela: troque pelo botão da empresa no topo. Para liberar outros funcionários, abra Funcionários e escolha a loja deles nessa empresa.');
-        window.scrollTo(0, 0);
-      }).catch(function (e) { ok.disabled = false; ok.textContent = 'Criar empresa'; mm.textContent = e; mm.classList.add('show'); });
-    };
+    n.appendChild(el('div', 'hint', 'Para adicionar uma empresa ao seu sistema, fale com o Gestti: ela entra no seu plano já com os dados, os módulos e, se precisar, a configuração fiscal.'));
+    var ok = el('button', 'btn', 'Pedir pela Ajuda'); ok.type = 'button'; ok.style.marginTop = '10px'; n.appendChild(ok);
+    ok.onclick = function () { AJ.modo = 'abrir'; ir('ajuda'); };
   }
   function desenharCompart(c, r, okTxt) {
     c.innerHTML = '';
@@ -6631,6 +6732,13 @@
   // ---------- login ----------
   function iniciar() {
     if (/[?&]ponto=tablet\b/.test(location.search)) { telaTablet(); return; }
+    if (SUPORTE_IN) {
+      telaLogin(false); show('vLogin', false); show('vCarregando', true);
+      CONTA = SUPORTE_IN.conta; S.semGuardar = true;
+      call('suporteEntrar', [SUPORTE_IN.tok]).then(function (d) { S.token = d.token; abrirApp(d); })
+        .catch(function (e) { show('vCarregando', false); telaLogin(true); show('vLogin', true); msg('loginMsg', e); });
+      return;
+    }
     $('lUser').value = LS.get('usuario', '');
     if (!S.token) { telaLogin(true); show('vLogin', true); return; }
     telaLogin(false); show('vLogin', false); show('vCarregando', true);
@@ -6656,9 +6764,9 @@
   }
   /** Entra no sistema certo. Mesmo ambiente: entra aqui (trocando de conta se for outra). Outro ambiente: entra lá e abre o site dele
    *  já logado (só a sessão vai no endereço; a senha não). Resolve com {d, trocou} ou {fora: true}. */
-  function entrarSistema(txt, acao, senha) {
+  function entrarSistema(txt, acao, senha, codigo) {
     return resolverSistema(txt).then(function (R) {
-      var args = acao === 'entrar' ? [R.nome, senha, R.sistema || ''] : [R.nome, senha];
+      var args = acao === 'entrar' ? [R.nome, senha, R.sistema || '', codigo || ''] : [R.nome, senha];
       if (R.amb !== AMB) {
         return postEm(R.amb, { acao: acao, args: args, c: R.conta }).then(function (d) {
           lsRaw('gestti_ultimo_amb', R.amb);
@@ -6681,16 +6789,31 @@
     if (!u || !p) return msg('loginMsg', 'Informe usuário e senha.');
     if (SRV === 'sb' && !/\.[a-z0-9][a-z0-9-]{1,39}$/i.test(u)) return msg('loginMsg', 'Digite o login completo, com o nome do sistema no final (ex.: ' + (u.split('.')[0] || 'luiz') + '.grupo).');
     msg('loginMsg', ''); var b = this; b.disabled = true; b.innerHTML = '<span class="spin"></span>Entrando…';
-    entrarSistema(u, 'entrar', p).then(function (x) {
+    entrarSistema(u, 'entrar', p, $('lTotp').classList.contains('hide') ? '' : $('lCod').value.trim()).then(function (x) {
       if (x.fora) return;
-      var d = x.d;
+      var d = x.d; show('lTotp', false); $('lCod').value = '';
       b.disabled = false; b.textContent = 'Entrar';
       S.token = d.token; LS.set('token', d.token); LS.set('usuario', u); $('lPass').value = '';
       if (x.trocou) return recarregarNaConta();
       S.senhaInicial = p;
       if (!d.trocarSenha && d.empresa && d.empresa.lista && d.empresa.lista.length > 1) escolherEmpresa(d); else abrirApp(d);
-    }).catch(function (e) { b.disabled = false; b.textContent = 'Entrar'; msg('loginMsg', e); });
+    }).catch(function (e) { b.disabled = false; b.textContent = 'Entrar'; if (totpEtapa(String(e))) return; msg('loginMsg', e); });
   };
+  /** Leva 7 · 3.4: a Gestti Central pede o código do Authenticator; no 1º acesso mostra o QR para cadastrar. Erro "TOTP|modo|…". */
+  function totpEtapa(e) {
+    var m = /^(?:Error: )?TOTP\|(pedir|cadastrar)\|(.*)$/.exec(e); if (!m) return false;
+    show('lTotp', true); $('lCod').value = ''; var qr = $('lTotpQR'), tx = $('lTotpTxt');
+    if (m[1] === 'cadastrar') {
+      var p = m[2].split('|'), uri = p[0], seg = (/secret=([A-Z2-7]+)/.exec(uri) || [])[1] || '';
+      qr.classList.remove('hide'); qr.textContent = 'Carregando o QR…';
+      garantirQR(function () { qr.innerHTML = svgQR(uri, 46); });
+      tx.textContent = 'Primeiro acesso: abra o Google Authenticator, toque em + › Ler código QR e aponte para o código acima (ou digite a chave ' + seg.replace(/(.{4})/g, '$1 ').trim() + '). Depois digite os 6 números.';
+      msg('loginMsg', p[1] || '');
+    } else { qr.classList.add('hide'); qr.textContent = ''; tx.textContent = 'Abra o Google Authenticator e digite os 6 números de "Gestti Central".'; msg('loginMsg', m[2] && !/^Digite/.test(m[2]) ? m[2] : ''); }
+    setTimeout(function () { $('lCod').focus(); }, 50);
+    return true;
+  }
+  $('lCod').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('lBtn').click(); });
   $('lPass').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('lBtn').click(); });
   // "Bater o ponto" na tela de entrada abre o app Gestti Ponto (ponto.html)
   $('lpVoltar').onclick = function () { show('lgPonto', false); show('lgEntrar', true); };
@@ -6747,6 +6870,7 @@
   $('eselVoltar').onclick = function () { var t = S.token; ESEL.d = null; sairLocal(''); call('sair', [t]).catch(function () {}); };
 
   function sairLocal(motivo) {
+    if (S.semGuardar) { S.token = ''; location.replace(location.pathname); return; } // aba do suporte: não mexe no login guardado neste aparelho
     if (motivo) { limparDaPessoa(); }
     S.token = ''; S.u = null; S.disp = null; S.venda = null; S.manut = null; S.novos = null; S.prec = null;
     LS.del('token'); LS.del('loja'); LS.del('hist');
@@ -6773,7 +6897,7 @@
   function soParceira() { var l = (S.u && S.u.perms) || []; return l.indexOf('parceira') > -1 && l.every(function (x) { return x === 'parceira' || x === 'parceira_dono' || x.indexOf('parc_') === 0; }); }
   function pode(p) { return !!(S.u && ((p === '**' && !soParceira()) || (p === '*' && !S.u.soPonto && !soParceira()) || (S.u.perms || []).indexOf(p) > -1)); }
   // Leva 6 ampliada: telas da grade (tela × ação). Tela da grade aparece se a pessoa tem qualquer caixinha nela.
-  var GRADE_TELA = { entacerto: 'entregas', pedsep: 'pedonline', pedconf: 'pedonline', cupomind: 'cupons', ccnova: 'compracel', cclista: 'compracel', 'rel-metas': 'metrel', 'rel-crm': 'crm' };
+  var GRADE_TELA = { cnovo: 'csistemas', entacerto: 'entregas', pedsep: 'pedonline', pedconf: 'pedonline', cupomind: 'cupons', ccnova: 'compracel', cclista: 'compracel', 'rel-metas': 'metrel', 'rel-crm': 'crm' };
   function temGrade() { return !!(S.u && (S.u.perms || []).some(function (k) { return k.indexOf(':') > 0; })); }
   function podeTela(id, a) {
     var t = GRADE_TELA[id] || id, ps = (S.u && S.u.perms) || [];
@@ -6781,7 +6905,7 @@
     for (var i = 0; i < ps.length; i++) if (ps[i].indexOf(t + ':') === 0) return true;
     return false;
   }
-  var TELAS_GRADE = ['entregas', 'entacerto', 'pedonline', 'pedsep', 'pedconf', 'rel-faturamento', 'rel-os', 'rel-suprimento', 'rel-financeiro', 'rel-metas', 'rel-crm', 'promocoes', 'cupons', 'pedidos', 'dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
+  var TELAS_GRADE = ['cinicio', 'csistemas', 'cnovo', 'cchamados', 'csugestoes', 'csuporte', 'cfaturas', 'cavisos', 'centrada', 'cfaq', 'cregistro', 'entregas', 'entacerto', 'pedonline', 'pedsep', 'pedconf', 'rel-faturamento', 'rel-os', 'rel-suprimento', 'rel-financeiro', 'rel-metas', 'rel-crm', 'promocoes', 'cupons', 'pedidos', 'dash', 'crm', 'pdv', 'vendas', 'caixa', 'encomendas', 'reservas', 'os', 'oslista', 'osnova', 'osaux', 'osimei', 'acess', 'cadastro', 'disp', 'manut', 'estoque', 'saldo', 'finest',
     'compras', 'checkin', 'transf', 'balanco', 'etiquetas', 'compracel', 'ccnova', 'cclista', 'ccparc', 'novos', 'venda', 'pagar', 'receber', 'bancos', 'cred', 'dre', 'conferencia', 'metas', 'comissoes', 'metrel',
     'aval', 'cartao', 'compra', 'proposta'];
   /** Leva 6 ampliada: botões de criar somem para quem não tem a caixinha "Criar" daquela tela. */
@@ -6792,7 +6916,18 @@
     Object.keys(BOTOES_GRADE).forEach(function (bid) { var b = $(bid); if (!b) return; var ok = (S.u.perms || []).indexOf(BOTOES_GRADE[bid]) > -1; if (!ok) b.style.display = 'none'; else if (b.style.display === 'none') b.style.display = ''; });
   }
   var VIEWS_PORTAL = ['pinicio', 'pnova', 'paparelhos', 'pfin', 'ptab', 'pcli', 'pav', 'ploja'];
+  // Leva 7 · 3.5: módulos desligados somem do menu (o servidor também recusa)
+  var MENU_MOD = { 'RH': 'rh', 'Faturamento': 'vendas', 'Metas': 'vendas', 'Ordem de Serviço': 'os', 'Entregas': 'entregas', 'Pedidos online': 'online', 'Promoções e Cupons': 'promo', 'Financeiro': 'fin' };
+  var VIEW_MOD = { cred: 'crm', 'rel-crm': 'crm', compras: 'compras', checkin: 'compras', pedidos: 'compras', compracel: 'usados', ccnova: 'usados', cclista: 'usados', manut: 'usados', ccparc: 'parceiras', aval: 'usados', compra: 'usados', venda: 'usados', cartao: 'vendas', proposta: 'vendas' };
+  function modViewOk(v) {
+    if (CT_VIEWS.indexOf(v.id) > -1) return !!(S.u && S.u.central);
+    var M = S.u && S.u.modulos, mod = VIEW_MOD[v.id] || MENU_MOD[v.menu];
+    if (M && mod && M.indexOf(mod) < 0) return false;
+    return ((S.u && S.u.telasOff) || []).indexOf(GRADE_TELA[v.id] || v.id) < 0;
+  }
   function viewVisivel(v) {
+    if (!modViewOk(v)) return false;
+    if (v.id === 'cnovo') return podeTela('csistemas', 'c');
     // portal da parceira: só para o login de parceira (o gerente tem a permissão antiga "Loja parceira", mas não usa o portal)
     if (VIEWS_PORTAL.indexOf(v.id) > -1) return soParceira() && pode(v.perm);
     if (soParceira() || !temGrade() || TELAS_GRADE.indexOf(v.id) < 0) return (pode(v.perm) || (v.permOu && pode(v.permOu))) && !(v.perm2 && !pode(v.perm2));
@@ -6860,6 +6995,20 @@
   }
   /** No modo "ver como", esconde os botões que lançam algo (o servidor também recusa). */
   function soOlhar(box) { if (!box || !S.u || !S.u.verComo) return; Array.prototype.forEach.call(box.querySelectorAll('button'), function (b) { if (/nova compra|assinar|salvar|enviar|criar|adicionar|cadastrar|excluir|confirmar|responder|aceitar|recusar|instalar|lançar/i.test(b.textContent)) b.classList.add('hide'); }); }
+  /** Leva 7: avisos da Gestti Central, sistema em só consulta e sessão do suporte. */
+  function faixasGestti(d) {
+    ['sup', 'bloq'].forEach(faixaTirar); Array.prototype.forEach.call(document.querySelectorAll('[id^="fx-gst"]'), function (x) { x.remove(); }); faixasMedir();
+    if (d.suporte) faixaPor('sup', 'fx-sup', function (f) { f.textContent = '🛟 ' + d.suporte.nome + ' · acesso liberado até ' + d.suporte.ate + ' · tudo fica no Histórico'; });
+    if (d.bloqueio) faixaPor('bloq', 'fx-bloq', function (f) { f.textContent = '🔒 Sistema em modo consulta' + (d.bloqueio.motivo ? ': ' + d.bloqueio.motivo : '') + '. Dá para ver tudo, mas não lançar. Fale com o Gestti pela Ajuda.'; });
+    (d.avisosGestti || []).forEach(function (a) {
+      var vis = []; try { vis = JSON.parse(LS.get('avisosVistos', '[]')); } catch (e) {}
+      if (vis.indexOf(a.id) > -1) return;
+      faixaPor('gst' + a.id, a.tipo === 'alerta' ? 'fx-bloq' : 'fx-conta', function (f) {
+        f.appendChild(document.createTextNode('📣 ' + a.texto + ' '));
+        var x = document.createElement('a'); x.href = '#'; x.textContent = 'ok, entendi'; x.onclick = function (e) { e.preventDefault(); vis.push(a.id); LS.set('avisosVistos', JSON.stringify(vis.slice(-50))); faixaTirar('gst' + a.id); }; f.appendChild(x);
+      });
+    });
+  }
   function faixaVerComo(d) {
     if (!d || !d.verComo) { faixaTirar('vc'); return; }
     faixaPor('vc', 'fx-conta', function (f) {
@@ -6871,7 +7020,7 @@
   }
   function abrirApp(d) {
     if (APP_PARC && !d.trocarSenha && !perfilDeParceira(d) && !d.verComo) { S.u = d; escolherVerComo(d); return; }
-    faixaVerComo(d);
+    faixaVerComo(d); faixasGestti(d);
     S.u = d;
     // permissões "virtuais" do RH: ver (gerente/supervisor) e completo (quem gerencia a equipe)
     var pm = d.perms = (d.perms || []).filter(function (x) { return x !== 'rhv' && x !== 'rhc'; });
@@ -6965,7 +7114,7 @@
     if (id !== 'cadastro' && S.cadEdit) limparCadastro();
     S.view = id; if (id !== 'pessoa' && id !== 'prod' && id !== 'ctrlest' && id !== 'ajuda') LS.set('view', id); msg('topMsg', ''); document.body.classList.add('wide'); fecharDrawer();
     var secs = {}; VIEWS.forEach(function (v) { secs[v.sec] = secs[v.sec] || v.id === id; }); Object.keys(secs).forEach(function (k) { show(k, secs[k]); });
-    show('vConfig', id === 'config'); show('vAjuda', id === 'ajuda'); if (id === 'ajuda') ajudaDesenhar(); show('vPessoa', id === 'pessoa'); show('vProd', id === 'prod'); show('vCtrl', id === 'ctrlest'); fecharTags();
+    show('vConfig', id === 'config'); show('vAjuda', id === 'ajuda'); if (id === 'ajuda') ajudaDesenhar(); if (CT_VIEWS.indexOf(id) > -1) centralDesenhar(id); show('vPessoa', id === 'pessoa'); show('vProd', id === 'prod'); show('vCtrl', id === 'ctrlest'); fecharTags();
     botoesPorGrade();
     if (id !== 'ctrlest') CT = null;
     if (id === 'ctrlest') carregarControle();
@@ -17461,6 +17610,463 @@
   function fecharModalUsuario() { if (MOD_SUJO && !confirm('Descartar o que você preencheu?')) return; fecharModal(); }
   function abrirModal() { if (PG) fecharPagina(); MOD_SUJO = false; $('fModal').onclick = function (e) { if (e.target === $('fModal')) fecharModalUsuario(); }; $('fModal').classList.remove('hide'); document.body.style.overflow = 'hidden'; $('fSheet').scrollTop = 0; }
   // =============================================================
+  //  GESTTI CENTRAL (Leva 7 · 3.4) — telas da equipe Gestti (só na conta da Central)
+  // =============================================================
+  var CT_VIEWS = ['cinicio', 'csistemas', 'cnovo', 'cchamados', 'csugestoes', 'csuporte', 'cfaturas', 'cavisos', 'centrada', 'cfaq', 'cregistro'];
+  var GC = { sis: null, chFiltro: 'Abertos', chAberto: null, sisAberto: null, comp: '', novo: null };
+  var CT_TIT = { cinicio: 'Início', csistemas: 'Sistemas', cnovo: 'Novo sistema', cchamados: 'Chamados', csugestoes: 'Sugestões', csuporte: 'Usuários de suporte', cfaturas: 'Faturas e cobrança', cavisos: 'Avisos e novidades', centrada: 'Tela de entrada', cfaq: 'Perguntas frequentes', cregistro: 'Registro da Central' };
+  function ctTabela(box, cab, linhas, vazio) {
+    if (!linhas.length) { box.appendChild(el('div', 'vazio', vazio || 'Nada para mostrar.')); return null; }
+    var w = el('div', 'tbwrap'), t = el('table', 't'), h = el('tr'); cab.forEach(function (x) { h.appendChild(el('th', '', x)); }); t.appendChild(h);
+    linhas.forEach(function (l) { var r = el('tr'); l.forEach(function (v) { var td = el('td'); if (v && v.nodeType) td.appendChild(v); else td.textContent = v === null || v === undefined || v === '' ? '—' : String(v); r.appendChild(td); }); t.appendChild(r); });
+    w.appendChild(t); box.appendChild(w); return t;
+  }
+  function ctBdg(t, cls) { return el('span', 'bdg ' + (cls || ''), t); }
+  function ctSitBdg(s) { return ctBdg(s, { 'Em dia': 'ok', 'Em teste': 'inf', 'Só consulta': 'warn', Bloqueado: 'err', Cancelado: 'off' }[s] || ''); }
+  function ctErro(box, e) { box.textContent = ''; box.appendChild(el('div', 'msg show', String(e))); }
+  function ctMsg(box) { var m = el('div', 'msg'); box.appendChild(m); return { el: m, erro: function (e) { m.className = 'msg err show'; m.textContent = String(e); }, ok: function (t) { m.className = 'msg ok show'; m.textContent = t; }, limpar: function () { m.className = 'msg'; m.textContent = ''; } }; }
+  function centralDesenhar(id) {
+    $('gcTit').textContent = CT_TIT[id] || 'Gestti Central';
+    var c = $('gcCorpo'); c.textContent = ''; c.appendChild(el('div', 'hint', 'Carregando…'));
+    var f = { cinicio: ctInicio, csistemas: ctSistemas, cnovo: ctNovo, cchamados: ctChamados, csugestoes: ctSugestoes, csuporte: ctSuporte, cfaturas: ctFaturas, cavisos: ctAvisos, centrada: ctEntrada, cfaq: ctFaq, cregistro: ctRegistro }[id];
+    if (f) f(c);
+  }
+  // ---------- Início ----------
+  function ctInicio(c) {
+    call('centralResumo', [S.token]).then(function (r) {
+      c.textContent = '';
+      var k = el('div', 'kpis'); c.appendChild(k);
+      kpi(k, 'Sistemas ativos', String(r.kpis.sistemas), r.kpis.emTeste ? r.kpis.emTeste + ' em teste' : '');
+      kpi(k, 'Receita mensal', brl(r.kpis.receita));
+      kpi(k, 'Faturas em atraso', String(r.kpis.faturasAtraso), '', r.kpis.faturasAtraso ? 'down' : '');
+      kpi(k, 'Chamados abertos', String(r.kpis.chamados), r.kpis.atrasados ? r.kpis.atrasados + ' atrasado(s)' : 'nenhum atrasado', r.kpis.atrasados ? 'down' : '');
+      kpi(k, 'Nota do suporte', r.kpis.nota ? String(r.kpis.nota).replace('.', ',') + ' ★' : '—');
+      kpi(k, 'Sugestões novas', String(r.kpis.sugestoes));
+      var g = el('div', 'g2'); c.appendChild(g);
+      var s1 = el('div', 'card'); g.appendChild(s1); s1.appendChild(el('h2', '', 'Saúde dos sistemas'));
+      ctTabela(s1, ['Sistema', 'Último acesso', 'Usaram (7 dias)', 'Alertas (24 h)', 'Situação'], r.saude.map(function (x) { return [x.login + ' · ' + x.nome, x.ultimoTxt, String(x.ativos7 || 0), ctBdg(String(x.alertas || 0), x.alertas ? 'warn' : 'ok'), ctSitBdg(x.situacao)]; }), 'Nenhum sistema ainda.');
+      var s2 = el('div', 'card'); g.appendChild(s2); s2.appendChild(el('h2', '', 'Precisa de atenção'));
+      if (!r.atencao.length) s2.appendChild(el('div', 'vazio', 'Tudo em dia.'));
+      r.atencao.forEach(function (a) { var p = el('button', 'ctat', ({ chamado: '⚠ ', teste: '⏳ ', suporte: '🛟 ', saude: '💤 ' }[a.tipo] || '• ') + a.texto); p.type = 'button'; p.onclick = function () { if (a.tipo === 'chamado') { GC.chAberto = a.conta + '/' + a.id; GC.chFiltro = 'Todos'; ir('cchamados'); } else if (a.tipo === 'suporte') ir('csuporte'); else { GC.sisAberto = a.conta; ir('csistemas'); } }; s2.appendChild(p); });
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  // ---------- Sistemas ----------
+  function ctSistemas(c) {
+    call('centralSistemas', [S.token]).then(function (r) {
+      GC.sis = r; c.textContent = '';
+      var top = el('div', 'tbacoes'); c.appendChild(top);
+      var fl = el('div', 'ctfil'); top.appendChild(fl);
+      var sit = el('select'); ['Todos', 'Em dia', 'Em teste', 'Só consulta', 'Bloqueado', 'Cancelado'].forEach(function (x) { sit.appendChild(el('option', '', x)); }); sit.setAttribute('aria-label', 'Situação');
+      var bs = el('input'); bs.type = 'search'; bs.placeholder = 'Buscar nome, login, CNPJ'; bs.setAttribute('aria-label', 'Buscar sistema');
+      fl.appendChild(sit); fl.appendChild(bs);
+      if (podeTela('csistemas', 'c')) btn(top, '+ Novo sistema', 'pri', function () { GC.novo = null; ir('cnovo'); });
+      var lst = el('div'); c.appendChild(lst);
+      var det = el('div'); c.appendChild(det);
+      var desenhar = function () {
+        lst.textContent = '';
+        var q = bs.value.trim().toLowerCase();
+        var l = r.sistemas.filter(function (s) { return (sit.value === 'Todos' || s.situacao === sit.value) && (!q || (s.login + ' ' + s.nome + ' ' + (s.contratante.nome || '') + ' ' + (s.contratante.doc || '')).toLowerCase().indexOf(q) > -1); });
+        ctTabela(lst, ['Sistema', 'Cliente', 'Empresas', 'Módulos', 'Mensalidade', 'Situação', 'Chamados', ''], l.map(function (s) {
+          var b = el('button', 'btn mini', 'Abrir'); b.type = 'button'; b.onclick = function () { GC.sisAberto = s.conta; ctSistemaDet(det, s, r); det.scrollIntoView({ behavior: 'smooth' }); };
+          return [s.login, s.nome + (s.contratante.nome ? ' · ' + s.contratante.nome : ''), String(s.saude.empresas || 1) + ' de ' + s.empresasMax, s.modulos ? s.modulos.length + ' de ' + r.modulos.length : 'todos', brl(s.mensalidade), ctSitBdg(s.situacao), s.chamadosAbertos ? ctBdg(String(s.chamadosAbertos), 'warn') : '0', b];
+        }), 'Nenhum sistema neste filtro.');
+      };
+      sit.onchange = desenhar; bs.oninput = desenhar; desenhar();
+      if (GC.sisAberto) { var s0 = r.sistemas.filter(function (s) { return s.conta === GC.sisAberto; })[0]; if (s0) ctSistemaDet(det, s0, r); }
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  /** Caixas dos módulos com dependências: ligar um liga o que ele precisa; desligar avisa quem depende. */
+  function ctModulos(box, cat, sel, onMuda) {
+    var porId = {}; cat.forEach(function (m) { porId[m.id] = m; });
+    var on = {}; (sel || cat.map(function (m) { return m.id; })).forEach(function (id) { on[id] = true; });
+    var precisa = function (id, acc) { (porId[id].precisa || []).forEach(function (q) { if (!acc[q]) { acc[q] = true; precisa(q, acc); } }); return acc; };
+    var g = el('div', 'ctmods'); box.appendChild(g);
+    var aviso = el('div', 'hint'); box.appendChild(aviso);
+    var desenhar = function () {
+      g.textContent = '';
+      cat.forEach(function (m) {
+        var lb = el('label', 'ctmod' + (m.tipo === 'sempre' ? ' sempre' : '') + (on[m.id] ? ' on' : ''));
+        var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!on[m.id] || m.tipo === 'sempre'; cb.disabled = m.tipo === 'sempre';
+        cb.onchange = function () {
+          aviso.textContent = '';
+          if (cb.checked) { on[m.id] = true; Object.keys(precisa(m.id, {})).forEach(function (q) { on[q] = true; }); }
+          else { var dep = cat.filter(function (x) { return on[x.id] && (x.precisa || []).indexOf(m.id) > -1; }); if (dep.length) { cb.checked = true; aviso.textContent = 'Não dá para tirar ' + m.nome + ': ' + dep.map(function (x) { return x.nome; }).join(', ') + ' precisa dele.'; return; } delete on[m.id]; }
+          desenhar(); onMuda(Object.keys(on).filter(function (k) { return on[k]; }));
+        };
+        lb.appendChild(cb); var t = el('span'); t.appendChild(el('b', '', m.nome)); t.appendChild(el('small', '', m.tipo === 'sempre' ? 'Sempre incluído' : (m.precisa.length ? 'Precisa de: ' + m.precisa.map(function (q) { return porId[q].nome; }).join(', ') : m.desc))); lb.appendChild(t);
+        g.appendChild(lb);
+      });
+    };
+    desenhar(); onMuda(Object.keys(on));
+  }
+  function ctSistemaDet(det, s, r) {
+    det.textContent = '';
+    var card = el('div', 'card ctdet'); det.appendChild(card);
+    var hd = el('div', 'tbacoes'); card.appendChild(hd); var ht = el('h2', '', s.login + ' · ' + s.nome); hd.appendChild(ht); hd.appendChild(ctSitBdg(s.situacao));
+    var m = ctMsg(card);
+    if (s.bloqueio) card.appendChild(el('div', 'hint', (s.bloqueio.modo === 'leitura' ? 'Só consulta' : 'Bloqueado') + ' desde ' + dataBR(s.bloqueio.em) + ' por ' + s.bloqueio.por + ': ' + s.bloqueio.motivo));
+    if (s.cancelado) card.appendChild(el('div', 'hint', 'Cancelado em ' + dataBR(s.cancelado.em) + ' (' + s.cancelado.motivo + '). Dados guardados até ' + dataBR(s.cancelado.guardarAte) + '.'));
+    card.appendChild(el('h3', 'ch', 'Contratante'));
+    var g = grade(card, 2), C = s.contratante || {};
+    var cn = campo(g[0], 'Responsável', el('input')); cn.value = C.nome || '';
+    var cd = campo(g[1], 'CPF ou CNPJ', el('input')); cd.value = C.doc || ''; cd.inputMode = 'numeric';
+    var g2 = grade(card, 2);
+    var cw = campo(g2[0], 'WhatsApp', el('input')); cw.value = C.whats ? fmtFone(C.whats) : ''; cw.inputMode = 'tel';
+    var ce = campo(g2[1], 'E-mail das faturas', el('input')); ce.value = C.email || ''; ce.type = 'email';
+    card.appendChild(el('h3', 'ch', 'Plano e cobrança'));
+    var g3 = grade(card, 4);
+    var vm = inpValor(s.mensalidade); campo(g3[0], 'Mensalidade', vm);
+    var vd = campo(g3[1], 'Dia do vencimento', el('input')); vd.type = 'number'; vd.min = 1; vd.max = 28; vd.value = s.vencDia;
+    var vt = campo(g3[2], 'Teste até', el('input')); vt.type = 'date'; vt.value = s.testeAte || '';
+    var ve = campo(g3[3], 'Empresas no plano', el('input')); ve.type = 'number'; ve.min = 1; ve.max = 50; ve.value = s.empresasMax;
+    card.appendChild(el('h3', 'ch', 'Módulos'));
+    var mods = null; ctModulos(card, r.modulos, s.modulos, function (l) { mods = l; });
+    var ob = campo(card, 'Observações internas', el('textarea')); ob.rows = 2; ob.value = s.obs || '';
+    var ac = el('div', 'ctacoes'); card.appendChild(ac);
+    var recarregar = function (t) { GC.sisAberto = s.conta; m.ok(t); setTimeout(function () { ir('csistemas'); }, 600); };
+    if (podeTela('csistemas', 'e')) btn(ac, 'Salvar', 'pri', function () {
+      m.limpar();
+      call('centralSistemaSalvar', [S.token, s.conta, { contratante: { nome: cn.value, doc: cd.value, whats: cw.value, email: ce.value }, mensalidade: vm.input.value, vencDia: vd.value, testeAte: vt.value, empresasMax: ve.value, modulos: mods, obs: ob.value }])
+        .then(function () { recarregar('Salvo. Os módulos valem no próximo acesso de cada pessoa.'); }).catch(m.erro);
+    });
+    if (pode('central_bloquear') && !s.cancelado) {
+      if (s.situacao === 'Bloqueado' || s.situacao === 'Só consulta') btn(ac, 'Liberar', 'ok', function () { call('centralBloquear', [S.token, s.conta, 'liberar', '']).then(function () { recarregar('Sistema liberado.'); }).catch(m.erro); });
+      if (s.situacao !== 'Só consulta') btn(ac, 'Só consulta', 'ghost', function () { var mt = prompt('Motivo (o cliente vê):', 'Fatura em atraso'); if (mt === null) return; call('centralBloquear', [S.token, s.conta, 'leitura', mt]).then(function () { recarregar('Agora o sistema só deixa consultar.'); }).catch(m.erro); });
+      if (s.situacao !== 'Bloqueado') btn(ac, 'Bloquear', 'danger', function () { var mt = prompt('Motivo do bloqueio total (ninguém entra):', ''); if (mt === null) return; call('centralBloquear', [S.token, s.conta, 'total', mt]).then(function () { recarregar('Sistema bloqueado.'); }).catch(m.erro); });
+    }
+    if (podeTela('csistemas', 'e')) btn(ac, '⬇ Exportar dados', 'ghost', function (ev) {
+      var b = ev.currentTarget; b.disabled = true;
+      call('centralExportar', [S.token, s.conta]).then(function (x) {
+        if (!x || !x.exportacao) throw 'A exportação não veio. Tente de novo.';
+        var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(x.exportacao, null, 1)], { type: 'application/json' })); a.download = 'gestti-' + s.login + '-' + hojeISOcli() + '.json';
+        document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500); m.ok('Exportação baixada (JSON com todas as planilhas).');
+      }).catch(m.erro).then(function () { b.disabled = false; });
+    });
+    if (podeTela('csistemas', 'e') && !s.cancelado) btn(ac, '+ Empresa', 'ghost', function () { ctEmpresaNova(card, s); });
+    if (podeTela('csistemas', 'x') && !s.cancelado) btn(ac, 'Cancelar sistema', 'danger', function () {
+      var mt = prompt('Motivo do cancelamento. O sistema é bloqueado e os dados ficam guardados por 90 dias para exportação.', ''); if (mt === null) return;
+      call('centralCancelar', [S.token, s.conta, mt]).then(function (x) { recarregar('Cancelado. Dados guardados até ' + x.guardarAte + '.'); }).catch(m.erro);
+    });
+  }
+  function ctEmpresaNova(card, s) {
+    var b = el('div', 'card'); card.appendChild(b); b.appendChild(el('h3', 'ch', 'Adicionar empresa em ' + s.login));
+    var g = grade(b, 3);
+    var fa = campo(g[0], 'Nome fantasia', el('input')), cn = campo(g[1], 'CNPJ', el('input')), lj = campo(g[2], 'Nome do depósito/loja', el('input')); lj.value = 'Loja'; cn.inputMode = 'numeric';
+    var m = ctMsg(b);
+    btn(b, 'Adicionar', 'pri', function () { m.limpar(); call('centralEmpresaAdicionar', [S.token, s.conta, { fantasia: fa.value, cnpj: cn.value, loja: lj.value }]).then(function () { m.ok('Empresa adicionada. Ela aparece para o cliente no próximo acesso.'); }).catch(m.erro); });
+  }
+  // ---------- Novo sistema (passo a passo) ----------
+  var CT_PASSOS = ['Contratante', 'Empresas', 'Módulos', 'Plano e cobrança', 'Acesso e suporte', 'Revisar e criar'];
+  function ctNovo(c) {
+    var carregar = GC.sis ? Promise.resolve(GC.sis) : call('centralSistemas', [S.token]).then(function (r) { GC.sis = r; return r; });
+    carregar.then(function (r) {
+      if (!GC.novo) GC.novo = { passo: 0, d: { login: '', contratante: {}, empresas: [{ loja: 'Loja' }], modulos: null, porEmpresa: false, modulosPorEmpresa: {}, teste: true, testeAte: '', mensalidade: '', vencDia: 10, empresasMax: 1, adminNome: '', suporteImplantacao: true } };
+      ctNovoPasso(c, r);
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  function ctNovoPasso(c, r) {
+    var N = GC.novo, d = N.d; c.textContent = '';
+    var pr = el('ol', 'ctpassos'); c.appendChild(pr);
+    CT_PASSOS.forEach(function (p, i) { var li = el('li', i === N.passo ? 'on' : i < N.passo ? 'feito' : '', (i + 1) + '. ' + p); if (i === N.passo) li.setAttribute('aria-current', 'step'); pr.appendChild(li); });
+    var card = el('div', 'card'); c.appendChild(card);
+    var m = ctMsg(card);
+    var ler = null;
+    if (N.passo === 0) {
+      var g = grade(card, 2);
+      var lg = campo(g[0], 'Nome do sistema (login)', el('input')); lg.value = d.login; lg.placeholder = 'ex.: celularmais'; lg.autocapitalize = 'none';
+      var dica = el('div', 'hint', 'Os logins ficam usuario.' + (d.login || 'sistema') + '. Só letras minúsculas, números e hífen.'); g[1].appendChild(dica);
+      lg.oninput = function () { lg.value = lg.value.toLowerCase().replace(/[^a-z0-9-]/g, ''); dica.textContent = 'Os logins ficam usuario.' + (lg.value || 'sistema') + '.'; };
+      var g2 = grade(card, 2), C = d.contratante;
+      var cn = campo(g2[0], 'Responsável (contratante)', el('input')); cn.value = C.nome || '';
+      var cd = campo(g2[1], 'CPF ou CNPJ do contratante', el('input')); cd.value = C.doc || ''; cd.inputMode = 'numeric';
+      var g3 = grade(card, 2);
+      var cw = campo(g3[0], 'WhatsApp', el('input')); cw.value = C.whats || ''; cw.inputMode = 'tel';
+      var ce = campo(g3[1], 'E-mail das faturas', el('input')); ce.value = C.email || ''; ce.type = 'email';
+      ler = function () { d.login = lg.value.trim(); d.contratante = { nome: cn.value.trim(), doc: soDig(cd.value), whats: soDig(cw.value), email: ce.value.trim() };
+        if (!/^[a-z0-9][a-z0-9-]{1,30}$/.test(d.login)) return 'Nome do sistema: de 2 a 31 letras minúsculas, números ou hífen.';
+        if (r.sistemas.some(function (s) { return s.login === d.login; })) return 'Já existe um sistema com esse nome.';
+        if (d.contratante.nome.length < 3) return 'Informe o responsável.'; return ''; };
+    } else if (N.passo === 1) {
+      var lst = el('div', 'ctemps'); card.appendChild(lst);
+      var desenharEmps = function () {
+        lst.textContent = '';
+        d.empresas.forEach(function (e, i) {
+          var b = el('div', 'card'); lst.appendChild(b);
+          var hd = el('div', 'tbacoes'); b.appendChild(hd); hd.appendChild(el('h3', 'ch', 'Empresa ' + (i + 1)));
+          if (i > 0) { btn(hd, 'Copiar dados da empresa 1', 'ghost', function () { var e1 = d.empresas[0]; ['razao', 'cnpj', 'rua', 'numero', 'bairro', 'cidadeNome', 'uf', 'cep', 'fone', 'whats', 'email'].forEach(function (k) { if (!e[k]) e[k] = e1[k]; }); if (!e.fiscal && e1.fiscal) e.fiscal = JSON.parse(JSON.stringify(e1.fiscal)); desenharEmps(); }); btn(hd, 'Tirar', 'danger', function () { d.empresas.splice(i, 1); desenharEmps(); }); }
+          var inp = function (cx, rot, k, tipo) { var x = campo(cx, rot, el('input')); x.value = e[k] || ''; if (tipo) x.inputMode = tipo; x.oninput = function () { e[k] = x.value; }; return x; };
+          var a = grade(b, 3); var cnpj = inp(a[0], 'CNPJ', 'cnpj', 'numeric'); inp(a[1], 'Nome fantasia', 'fantasia'); inp(a[2], 'Razão social', 'razao');
+          var bb = el('div', 'tbacoes'); b.appendChild(bb);
+          btn(bb, '🔎 Buscar na Receita', 'ghost', function () {
+            var k = soDig(cnpj.value); if (k.length !== 14) { m.erro('Digite o CNPJ com 14 números.'); return; }
+            fetch('https://brasilapi.com.br/api/cnpj/v1/' + k, { credentials: 'omit' }).then(function (x) { if (!x.ok) throw 'CNPJ não encontrado na Receita.'; return x.json(); }).then(function (j) {
+              e.cnpj = k; e.razao = j.razao_social || e.razao; e.fantasia = j.nome_fantasia || e.fantasia || j.razao_social; e.rua = [j.descricao_tipo_de_logradouro, j.logradouro].filter(Boolean).join(' ') || e.rua; e.numero = j.numero || e.numero;
+              e.bairro = j.bairro || e.bairro; e.cidadeNome = j.municipio || e.cidadeNome; e.uf = j.uf || e.uf; e.cep = j.cep || e.cep; e.fone = soDig(j.ddd_telefone_1) || e.fone; e.email = (j.email || e.email || '').toLowerCase(); desenharEmps();
+            }).catch(function (er) { m.erro(er); });
+          });
+          var b2 = grade(b, 4); var cep = inp(b2[0], 'CEP', 'cep', 'numeric'); inp(b2[1], 'Rua', 'rua'); inp(b2[2], 'Número', 'numero'); inp(b2[3], 'Bairro', 'bairro');
+          cep.onblur = function () { var k = soDig(cep.value); if (k.length !== 8) return; fetch('https://viacep.com.br/ws/' + k + '/json/', { credentials: 'omit' }).then(function (x) { return x.json(); }).then(function (j) { if (!j || j.erro) return; e.rua = e.rua || j.logradouro; e.bairro = e.bairro || j.bairro; e.cidadeNome = j.localidade; e.uf = j.uf; desenharEmps(); }).catch(function () {}); };
+          var b3 = grade(b, 4); inp(b3[0], 'Cidade', 'cidadeNome'); inp(b3[1], 'UF', 'uf'); inp(b3[2], 'Telefone', 'fone', 'tel'); inp(b3[3], 'E-mail', 'email');
+          var b4 = grade(b, 2); inp(b4[0], 'Nome do depósito/loja inicial', 'loja'); inp(b4[1], 'Inscrição estadual', 'ie');
+          var fd = el('details', 'ctfis'); b.appendChild(fd); fd.appendChild(el('summary', '', 'Fiscal (opcional) · o certificado A1 é enviado depois em Configurações › Fiscal do cliente'));
+          if (!e.fiscal) e.fiscal = null;
+          var F = e.fiscal || {}; var f1 = grade(fd, 3);
+          var rg = el('select'); [['', 'Sem configurar agora'], ['simples', 'Simples Nacional'], ['simples_excesso', 'Simples · excesso de sublimite'], ['normal', 'Regime Normal'], ['mei', 'MEI']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; rg.appendChild(op); }); rg.value = F.regime || ''; campo(f1[0], 'Regime tributário', rg);
+          var am = el('select'); [['homologacao', 'Homologação (testes)'], ['producao', 'Produção']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; am.appendChild(op); }); am.value = F.ambiente || 'homologacao'; campo(f1[1], 'Ambiente SEFAZ', am);
+          var sn = campo(f1[2], 'Série NFC-e / NF-e', el('input')); sn.value = F.series || '1 / 1';
+          var lerF = function () { e.fiscal = rg.value ? { regime: rg.value, ambiente: am.value, nfce: { serie: (sn.value.split('/')[0] || '').trim(), numero: 1 }, nfe: { serie: (sn.value.split('/')[1] || '').trim(), numero: 1 }, series: sn.value } : null; };
+          rg.onchange = lerF; am.onchange = lerF; sn.oninput = lerF;
+        });
+        btn(lst, '+ Outra empresa', 'ghost', function () { d.empresas.push({ loja: 'Loja' }); desenharEmps(); });
+      };
+      desenharEmps();
+      ler = function () { for (var i = 0; i < d.empresas.length; i++) { var e = d.empresas[i]; if (!(e.fantasia || e.razao)) return 'Empresa ' + (i + 1) + ': informe o nome fantasia ou a razão social.'; } d.empresasMax = Math.max(d.empresasMax || 1, d.empresas.length); return ''; };
+    } else if (N.passo === 2) {
+      var sg = el('div', 'seg'); card.appendChild(sg);
+      seg(sg, ['Iguais para todas as empresas', 'Por empresa'], d.porEmpresa ? 'Por empresa' : 'Iguais para todas as empresas', function (v) { d.porEmpresa = v === 'Por empresa'; ctNovoPasso(c, r); });
+      if (!d.porEmpresa || d.empresas.length < 2) { ctModulos(card, r.modulos, d.modulos, function (l) { d.modulos = l; }); }
+      else d.empresas.forEach(function (e, i) { var k = 'E' + (i + 1); card.appendChild(el('h3', 'ch', 'Empresa ' + (i + 1) + ' · ' + (e.fantasia || e.razao))); ctModulos(card, r.modulos, d.modulosPorEmpresa[k] || d.modulos, function (l) { d.modulosPorEmpresa[k] = l; }); });
+      ler = function () { if (d.porEmpresa) { var u = {}; Object.keys(d.modulosPorEmpresa).forEach(function (k) { d.modulosPorEmpresa[k].forEach(function (x) { u[x] = true; }); }); d.modulos = Object.keys(u); } return ''; };
+    } else if (N.passo === 3) {
+      var sg2 = el('div', 'seg'); card.appendChild(sg2);
+      seg(sg2, ['Começa em teste', 'Já começa pagando'], d.teste ? 'Começa em teste' : 'Já começa pagando', function (v) { d.teste = v === 'Começa em teste'; });
+      var p = grade(card, 4);
+      var ta = campo(p[0], 'Teste até', el('input')); ta.type = 'date'; ta.value = d.testeAte || '';
+      var mv = inpValor(d.mensalidade); campo(p[1], 'Mensalidade', mv);
+      var dv = campo(p[2], 'Dia do vencimento', el('input')); dv.type = 'number'; dv.min = 1; dv.max = 28; dv.value = d.vencDia;
+      var em = campo(p[3], 'Empresas no plano', el('input')); em.type = 'number'; em.min = d.empresas.length; em.max = 50; em.value = d.empresasMax;
+      card.appendChild(el('div', 'hint', 'Sem data, o teste vale 30 dias. A fatura do mês é gerada em Faturas e cobrança e cai no Contas a receber da Central.'));
+      ler = function () { d.testeAte = ta.value; d.mensalidade = mv.input.value; d.vencDia = dv.value; d.empresasMax = em.value; if (num(d.mensalidade) === null && d.mensalidade !== '') return 'Mensalidade inválida.'; if (d.mensalidade === '') d.mensalidade = '0'; return ''; };
+    } else if (N.passo === 4) {
+      var an = campo(card, 'Nome do administrador do cliente', el('input')); an.value = d.adminNome || d.contratante.nome || '';
+      card.appendChild(el('div', 'hint', 'O login dele será admin.' + d.login + ', com senha provisória (vale 72 horas; ele troca no 1º acesso).'));
+      var lb = el('label', 'ctck'); var ck = el('input'); ck.type = 'checkbox'; ck.checked = d.suporteImplantacao !== false; lb.appendChild(ck); lb.appendChild(document.createTextNode(' Liberar o suporte da implantação (login suporte.' + d.login + ', até concluir, no máximo 30 dias)')); card.appendChild(lb);
+      ler = function () { d.adminNome = an.value.trim(); d.suporteImplantacao = ck.checked; return ''; };
+    } else {
+      var res = el('div', 'ctrev'); card.appendChild(res);
+      var linha = function (k, v) { var x = el('div'); x.appendChild(el('b', '', k + ': ')); x.appendChild(document.createTextNode(v)); res.appendChild(x); };
+      linha('Sistema', d.login + ' (logins usuario.' + d.login + ')'); linha('Contratante', d.contratante.nome + (d.contratante.whats ? ' · ' + fmtFone(d.contratante.whats) : ''));
+      linha('Empresas', d.empresas.map(function (e) { return (e.fantasia || e.razao) + (e.cnpj ? ' (' + e.cnpj + ')' : '') + (e.fiscal ? ' · fiscal' : ''); }).join('; '));
+      linha('Módulos', (d.modulos || []).length ? d.modulos.length + ' escolhidos' + (d.porEmpresa ? ' (por empresa)' : '') : 'todos');
+      linha('Plano', (d.teste ? 'Teste' + (d.testeAte ? ' até ' + isoBR(d.testeAte) : ' de 30 dias') + ' · depois ' : '') + brl(num(d.mensalidade) || 0) + ' por mês, vence dia ' + d.vencDia + ' · ' + d.empresasMax + ' empresa(s)');
+      linha('Administrador', (d.adminNome || d.contratante.nome) + ' · admin.' + d.login); linha('Suporte da implantação', d.suporteImplantacao ? 'Liberado' : 'Não');
+    }
+    var nav = el('div', 'ctacoes'); card.appendChild(nav);
+    if (N.passo > 0) btn(nav, '← Voltar', 'ghost', function () { if (ler) ler(); N.passo--; ctNovoPasso(c, r); });
+    if (N.passo < CT_PASSOS.length - 1) btn(nav, 'Continuar →', 'pri', function () { var e = ler ? ler() : ''; if (e) { m.erro(e); return; } N.passo++; ctNovoPasso(c, r); });
+    else {
+      var cr = btn(nav, 'Criar sistema', 'pri', function () {
+        m.limpar(); cr.disabled = true; cr.textContent = 'Criando…';
+        var env = { login: d.login, contratante: d.contratante, empresas: d.empresas, modulos: d.modulos, modulosPorEmpresa: d.porEmpresa ? d.modulosPorEmpresa : null, mensalidade: d.mensalidade, vencDia: d.vencDia, teste: d.teste, testeAte: d.testeAte, empresasMax: d.empresasMax, adminNome: d.adminNome, suporteImplantacao: d.suporteImplantacao };
+        call('centralNovoSistema', [S.token, env]).then(function (x) { GC.novo = null; GC.sis = null; ctNovoPronto(c, x, d); }).catch(function (e) { cr.disabled = false; cr.textContent = 'Criar sistema'; m.erro(e); });
+      });
+    }
+  }
+  function ctNovoPronto(c, x, d) {
+    c.textContent = '';
+    var card = el('div', 'card'); c.appendChild(card);
+    card.appendChild(el('h2', '', '✅ Sistema ' + x.login + ' criado'));
+    card.appendChild(el('p', '', 'Anote agora: a senha provisória só aparece esta vez.'));
+    var bx = el('div', 'ctsenha'); card.appendChild(bx);
+    bx.appendChild(el('div', '', 'Endereço: ' + location.origin + location.pathname.replace(/[^\/]*$/, '').replace(/demo\/$/, '')));
+    bx.appendChild(el('div', '', 'Login: ' + x.adminLogin)); bx.appendChild(el('div', '', 'Senha provisória: ' + x.senha));
+    var txt = 'Olá! Seu Gestti está pronto.\nEndereço: ' + location.origin + location.pathname.replace(/[^\/]*$/, '').replace(/demo\/$/, '') + '\nLogin: ' + x.adminLogin + '\nSenha provisória: ' + x.senha + '\n(Vale 72 horas; no primeiro acesso você cria a sua senha.)';
+    var ac = el('div', 'ctacoes'); card.appendChild(ac);
+    btn(ac, 'Copiar', 'ghost', function (ev) { try { navigator.clipboard.writeText(txt); ev.currentTarget.textContent = 'Copiado ✓'; } catch (e) {} });
+    if (d.contratante.whats) btn(ac, 'Enviar no WhatsApp', 'pri', function () { window.open('https://wa.me/55' + soDig(d.contratante.whats) + '?text=' + encodeURIComponent(txt), '_blank', 'noopener'); });
+    btn(ac, 'Ver sistemas', 'ghost', function () { ir('csistemas'); });
+  }
+  // ---------- Chamados ----------
+  function ctChamados(c) {
+    call('centralChamados', [S.token]).then(function (l) {
+      c.textContent = '';
+      var ab = function (x) { return x.situacao === 'Aberto' || x.situacao === 'Em andamento'; };
+      var F = { Abertos: l.filter(ab), Atrasados: l.filter(function (x) { return ab(x) && x.atrasado; }), 'Resolvidos aguardando cliente': l.filter(function (x) { return x.situacao === 'Resolvido'; }), Fechados: l.filter(function (x) { return x.situacao === 'Fechado'; }), Todos: l };
+      var top = el('div', 'ctfil'); c.appendChild(top);
+      var sf = el('select'); Object.keys(F).forEach(function (k) { var o = el('option', '', k + ' (' + F[k].length + ')'); o.value = k; sf.appendChild(o); }); sf.value = GC.chFiltro; sf.setAttribute('aria-label', 'Situação');
+      var resp = el('select'); var rs = {}; l.forEach(function (x) { if (x.responsavel) rs[x.responsavel] = 1; }); [''].concat(Object.keys(rs)).forEach(function (k) { var o = el('option', '', k || 'Todos os responsáveis'); o.value = k; resp.appendChild(o); }); resp.setAttribute('aria-label', 'Responsável');
+      top.appendChild(sf); top.appendChild(resp); btn(top, '↻', 'ghost', function () { ir('cchamados'); });
+      var lst = el('div'), det = el('div'); c.appendChild(lst); c.appendChild(det);
+      var desenhar = function () {
+        GC.chFiltro = sf.value; lst.textContent = '';
+        var v = F[sf.value].filter(function (x) { return !resp.value || x.responsavel === resp.value; });
+        ctTabela(lst, ['Nº', 'Sistema', 'Prioridade', 'Abertura', 'Previsão', 'Assunto', 'Responsável', 'Status', ''], v.map(function (x) {
+          var b = el('button', 'btn mini', 'Abrir'); b.type = 'button'; b.onclick = function () { GC.chAberto = x.conta + '/' + x.id; ctChamadoDet(det, x); det.scrollIntoView({ behavior: 'smooth' }); };
+          return [x.n ? String(x.n).padStart(6, '0') : '—', x.sistema, x.prioridade + (x.prioridade !== x.prioridadeCliente ? ' (cliente: ' + x.prioridadeCliente + ')' : ''), x.abertura, x.atrasado ? ctBdg(x.previsao + ' (atrasado)', 'err') : x.previsao, x.assunto, x.responsavel, ajSitBdg(x), b];
+        }), 'Nenhum chamado neste filtro.');
+      };
+      sf.onchange = desenhar; resp.onchange = desenhar; desenhar();
+      if (GC.chAberto) { var x0 = l.filter(function (x) { return x.conta + '/' + x.id === GC.chAberto; })[0]; if (x0) ctChamadoDet(det, x0); }
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  function ctChamadoDet(det, x) {
+    det.textContent = '';
+    var card = el('div', 'card ctdet'); det.appendChild(card);
+    var hd = el('div', 'tbacoes'); card.appendChild(hd);
+    hd.appendChild(el('h2', '', (x.n ? String(x.n).padStart(6, '0') + ' · ' : '') + x.assunto)); hd.appendChild(ajSitBdg(x));
+    var m = ctMsg(card);
+    var acao = function (d) { m.limpar(); return call('centralChamadoAcao', [S.token, x.conta, x.id, d]).then(function () { GC.chAberto = x.conta + '/' + x.id; ir('cchamados'); }).catch(m.erro); };
+    var dt = el('div', 'ajdt'); card.appendChild(dt);
+    [['Sistema', x.sistema], ['Empresa', (x.empresa.nome || '') + (x.empresa.cnpj ? ' · ' + fmtDocBR(x.empresa.cnpj) : '')], ['Contato', (x.autor.nome || '') + ' · ' + (x.autor.login || '')], ['WhatsApp', x.autor.whats ? fmtFone(x.autor.whats) : '—']]
+      .forEach(function (k) { var s = el('span'); s.appendChild(el('b', '', k[0] + ': ')); s.appendChild(document.createTextNode(k[1])); dt.appendChild(s); });
+    var ac = el('div', 'ctacoes'); card.appendChild(ac);
+    if (podeTela('cchamados', 'e')) {
+      var pr = el('select'); ['Baixa', 'Média', 'Alta', 'Urgente'].forEach(function (p) { pr.appendChild(el('option', '', p)); }); pr.value = x.prioridade; pr.setAttribute('aria-label', 'Prioridade'); ac.appendChild(pr);
+      pr.onchange = function () { acao({ acao: 'prioridade', prioridade: pr.value }); };
+      if (x.situacao !== 'Fechado') btn(ac, 'Assumir', 'ghost', function () { acao({ acao: 'assumir' }); });
+      if (x.situacao === 'Aberto' || x.situacao === 'Em andamento') btn(ac, 'Marcar resolvido', 'ok', function () { acao({ acao: 'resolver', texto: tx.value }); });
+      if (x.situacao === 'Fechado' || x.situacao === 'Resolvido') btn(ac, 'Reabrir', 'ghost', function () { acao({ acao: 'reabrir' }); });
+      if (x.autor.whats) btn(ac, '💬 WhatsApp', 'ghost', function () { window.open('https://wa.me/55' + soDig(x.autor.whats) + '?text=' + encodeURIComponent('Olá, ' + (x.autor.nome || '') + '! Aqui é do suporte Gestti, sobre o chamado ' + String(x.n || '').padStart(6, '0') + ' (' + x.assunto + ').'), '_blank', 'noopener'); });
+    }
+    card.appendChild(el('b', '', 'Descrição:')); card.appendChild(el('p', 'ajpre', x.descricao));
+    var anx = function (bx, l) { if (!l || !l.length) return; var rw = el('div', 'ctacoes'); l.forEach(function (a) { btn(rw, '📎 ' + a.nome, 'ghost', function (ev) { var b = ev.currentTarget; b.disabled = true; call('centralAnexo', [S.token, x.conta, x.id, a.id]).then(function (r) { if (r && r.url) window.open(r.url, '_blank', 'noopener'); }).catch(m.erro).then(function () { b.disabled = false; }); }); }); bx.appendChild(rw); };
+    anx(card, x.anexos);
+    var cv = el('div', 'ajconv'); card.appendChild(cv);
+    x.conversa.forEach(function (k) { var b = el('div', 'ajbal' + (k.de === 'suporte' ? ' eu' : '')); b.appendChild(el('p', 'ajpre', k.texto)); b.appendChild(el('small', '', (k.de === 'suporte' ? k.nome + ' · Suporte' : k.nome) + ' · ' + k.quando)); anx(b, k.anexos); cv.appendChild(b); });
+    if (x.avaliacao) card.appendChild(el('div', 'hint', 'Avaliação do cliente: ' + '★★★★★'.slice(0, x.avaliacao.nota) + (x.avaliacao.comentario ? ' · ' + x.avaliacao.comentario : '')));
+    var tx = el('textarea'); tx.rows = 3; tx.placeholder = 'Responder ao cliente…'; tx.setAttribute('aria-label', 'Resposta ao cliente');
+    if (podeTela('cchamados', 'e') && x.situacao !== 'Fechado') {
+      card.appendChild(tx);
+      var fa = el('input'); fa.type = 'file'; fa.multiple = true; fa.accept = 'image/*,application/pdf,.txt'; fa.setAttribute('aria-label', 'Anexos da resposta'); card.appendChild(fa);
+      var ra = el('div', 'ctacoes'); card.appendChild(ra);
+      btn(ra, 'Enviar resposta', 'pri', function (ev) { var b = ev.currentTarget; b.disabled = true; ajAnexos(fa).then(function (axs) { return acao({ acao: 'responder', texto: tx.value, anexos: axs }); }).catch(m.erro).then(function () { b.disabled = false; }); });
+    }
+    var it = campo(card, 'Referência interna (só a equipe vê)', el('input')); it.value = x.interno || ''; it.placeholder = 'ex.: GESTTI-109880';
+    if (podeTela('cchamados', 'e')) it.onchange = function () { acao({ acao: 'interno', texto: it.value }); }; else it.readOnly = true;
+  }
+  // ---------- Sugestões ----------
+  function ctSugestoes(c) {
+    call('centralSugestoes', [S.token]).then(function (r) {
+      c.textContent = '';
+      ctTabela(c, ['Nº', 'Data', 'Sistema', 'Quem', 'Sugestão', 'Situação', 'Resposta para o cliente', ''], r.lista.map(function (x) {
+        var st = el('select'); r.situacoes.forEach(function (s) { st.appendChild(el('option', '', s)); }); st.value = x.situacao; st.setAttribute('aria-label', 'Situação');
+        var rp = el('input'); rp.value = x.resposta; rp.placeholder = 'opcional'; rp.setAttribute('aria-label', 'Resposta');
+        var ok = el('button', 'btn mini', 'Salvar'); ok.type = 'button';
+        ok.onclick = function () { ok.disabled = true; call('centralSugestaoSalvar', [S.token, x.conta, x.id, { situacao: st.value, resposta: rp.value }]).then(function () { ok.textContent = 'Salvo ✓'; }).catch(function (e) { alert(String(e)); }).then(function () { ok.disabled = false; }); };
+        if (!podeTela('csugestoes', 'e')) { st.disabled = true; rp.readOnly = true; ok.disabled = true; }
+        var tx = el('span', 'ajquebra', x.texto);
+        return [x.n ? String(x.n) : '—', x.quando, x.sistema, x.autor.nome || '', tx, st, rp, ok];
+      }), 'Nenhuma sugestão ainda.');
+      c.appendChild(el('div', 'hint', 'Quem sugeriu vê a situação e a resposta em Ajuda › Enviar sugestão.'));
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  // ---------- Usuários de suporte ----------
+  function ctSuporte(c) {
+    call('centralSuporteLista', [S.token]).then(function (l) {
+      c.textContent = '';
+      c.appendChild(el('div', 'hint', 'Entrar como suporte usa o seu login da Central (com o Authenticator). Só funciona enquanto o cliente deixar (Configurações › Suporte) ou durante a implantação. Tudo o que o suporte faz aparece no Histórico do cliente como "Suporte Gestti".'));
+      ctTabela(c, ['Login', 'Sistema', 'Liberado', 'Motivo', 'Última entrada', ''], l.map(function (x) {
+        var ac = el('span', 'ctacoes');
+        if (x.pode && pode('central_suporte')) btn(ac, 'Entrar', 'pri', function (ev) { var b = ev.currentTarget; b.disabled = true; call('centralSuporteEntrar', [S.token, x.conta]).then(function (r) { window.open(r.url, '_blank', 'noopener'); }).catch(function (e) { alert(String(e)); }).then(function () { b.disabled = false; }); });
+        if (x.implantacao && podeTela('csuporte', 'e')) btn(ac, 'Implantação concluída', 'ok', function () { call('centralImplantacao', [S.token, x.conta, true]).then(function () { ir('csuporte'); }).catch(function (e) { alert(String(e)); }); });
+        if (!x.implantacao && podeTela('csuporte', 'e')) btn(ac, 'Implantação (30 dias)', 'ghost', function () { if (confirm('Liberar o suporte da implantação em ' + x.sistema + ' por 30 dias?')) call('centralImplantacao', [S.token, x.conta, false]).then(function () { ir('csuporte'); }).catch(function (e) { alert(String(e)); }); });
+        return [x.login, x.sistema, x.implantacao ? 'Implantação até ' + x.implantacao : x.liberadoAte ? 'Até ' + x.liberadoAte + (x.liberadoPor ? ' (' + x.liberadoPor + ')' : '') : ctBdg('Não liberado', 'off'), x.motivo, x.ultima, ac];
+      }), 'Nenhum sistema.');
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  // ---------- Faturas ----------
+  function ctFaturas(c) {
+    if (!GC.comp) GC.comp = hojeISOcli().slice(0, 7);
+    call('centralFaturas', [S.token, GC.comp]).then(function (r) {
+      c.textContent = '';
+      var top = el('div', 'ctfil'); c.appendChild(top);
+      var mes = el('input'); mes.type = 'month'; mes.value = r.comp; mes.setAttribute('aria-label', 'Mês'); top.appendChild(mes); mes.onchange = function () { GC.comp = mes.value; ctFaturas(c); };
+      if (podeTela('cfaturas', 'c')) btn(top, 'Gerar faturas do mês', 'pri', function (ev) { var b = ev.currentTarget; b.disabled = true; call('centralFaturasGerar', [S.token, r.comp]).then(function (x) { alert(x.geradas ? x.geradas + ' fatura(s) gerada(s) no Contas a receber.' : 'Nenhuma fatura nova: todas já existem ou os sistemas estão em teste.'); ctFaturas(c); }).catch(function (e) { b.disabled = false; alert(String(e)); }); });
+      btn(top, 'Dar baixa em Contas a receber', 'ghost', function () { ir('receber'); });
+      var k = el('div', 'kpis'); c.appendChild(k);
+      kpi(k, 'A receber (mês)', brl(r.kpis.aReceber)); kpi(k, 'Recebido (mês)', brl(r.kpis.recebido)); kpi(k, 'Em atraso (total)', brl(r.kpis.atraso), '', r.kpis.atraso ? 'down' : '');
+      ctTabela(c, ['Sistema', 'Contratante', 'Mensalidade', 'Fatura', 'Vencimento', 'Situação', ''], r.linhas.map(function (x) {
+        var ac = el('span', 'ctacoes'), fx = x.fatura;
+        if (x.contratante.whats && fx && fx.situacao !== 'Paga') btn(ac, 'Cobrar no WhatsApp', 'ghost', function () { window.open('https://wa.me/55' + soDig(x.contratante.whats) + '?text=' + encodeURIComponent('Olá, ' + (x.contratante.nome || '') + '! A mensalidade do Gestti (' + x.login + ') de ' + r.comp.slice(5) + '/' + r.comp.slice(0, 4) + ', de ' + brl(fx.valor) + ', venceu em ' + fx.vencTxt + '. Pode nos enviar o comprovante?'), '_blank', 'noopener'); });
+        if (x.sugestao === 'bloquear' && pode('central_bloquear')) btn(ac, 'Só consulta', 'danger', function () { var mt = prompt('Motivo (o cliente vê):', 'Mensalidade em atraso há ' + x.atrasoDias + ' dias'); if (mt === null) return; call('centralBloquear', [S.token, x.conta, 'leitura', mt]).then(function () { ctFaturas(c); }).catch(function (e) { alert(String(e)); }); });
+        return [x.login, x.contratante.nome || x.nome, brl(x.mensalidade), fx ? fx.id : '—', fx ? fx.vencTxt : '—', fx ? ctBdg(fx.situacao + (fx.dias ? ' · ' + fx.dias + ' dias' : ''), fx.situacao === 'Paga' ? 'ok' : fx.situacao === 'Atrasada' ? 'err' : 'warn') : ctBdg(x.situacaoSistema === 'Em teste' ? 'Em teste' : 'Sem fatura', 'off'), ac];
+      }), 'Nenhum sistema.');
+      var rg = el('div', 'card'); c.appendChild(rg); rg.appendChild(el('h3', 'ch', 'Regras de cobrança'));
+      var g = grade(rg, 3);
+      var av = campo(g[0], 'Avisar com atraso de (dias)', el('input')); av.type = 'number'; av.value = r.cobranca.avisoDias;
+      var bl = campo(g[1], 'Sugerir só consulta após (dias)', el('input')); bl.type = 'number'; bl.value = r.cobranca.bloqueioDias;
+      var mo = campo(g[2], 'Bloqueio', el('select')); mo.appendChild(el('option', '', 'Manual (eu confirmo)')); mo.appendChild(el('option', '', 'Automático · ao conectar o banco (em breve)')); mo.options[1].disabled = true;
+      var m = ctMsg(rg);
+      if (podeTela('cfaturas', 'e')) btn(rg, 'Salvar regras', 'pri', function () { m.limpar(); call('centralGlobalSalvar', [S.token, 'cobranca', { avisoDias: av.value, bloqueioDias: bl.value }]).then(function () { m.ok('Regras salvas.'); }).catch(m.erro); });
+      rg.appendChild(el('div', 'hint', 'Ao conectar um banco (Asaas, Mercado Pago ou Stripe), a baixa e o bloqueio passam a ser automáticos.'));
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  // ---------- Avisos, novidades e atualização ----------
+  function ctLista(box, titulo, itens, campos, novo, salvar) {
+    var card = el('div', 'card'); box.appendChild(card); card.appendChild(el('h3', 'ch', titulo));
+    var lst = el('div', 'ctlista'); card.appendChild(lst);
+    var m = ctMsg(card);
+    var desenhar = function () {
+      lst.textContent = '';
+      if (!itens.length) lst.appendChild(el('div', 'vazio', 'Nada ainda.'));
+      itens.forEach(function (it, i) {
+        var b = el('div', 'ctitem'); lst.appendChild(b);
+        campos.forEach(function (cp) {
+          var x;
+          if (cp.tipo === 'texto') { x = el('textarea'); x.rows = 3; } else if (cp.tipo === 'select') { x = el('select'); cp.ops.forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; x.appendChild(op); }); } else { x = el('input'); if (cp.tipo) x.type = cp.tipo; }
+          x.value = it[cp.k] || ''; x.oninput = x.onchange = function () { it[cp.k] = x.value; };
+          campo(b, cp.rot, x);
+        });
+        btn(b, 'Tirar', 'danger', function () { itens.splice(i, 1); desenhar(); });
+      });
+    };
+    desenhar();
+    var ac = el('div', 'ctacoes'); card.appendChild(ac);
+    btn(ac, '+ Adicionar', 'ghost', function () { itens.unshift(novo()); desenhar(); });
+    btn(ac, 'Salvar', 'pri', function () { m.limpar(); salvar(itens).then(function () { m.ok('Salvo para todos os sistemas.'); }).catch(m.erro); });
+  }
+  function ctAvisos(c) {
+    call('centralGlobal', [S.token]).then(function (g) {
+      c.textContent = '';
+      var hoje = hojeISOcli();
+      ctLista(c, 'Avisos para os sistemas (faixa no topo)', g.avisos.slice(), [{ k: 'texto', rot: 'Mensagem' }, { k: 'de', rot: 'Mostrar de', tipo: 'date' }, { k: 'ate', rot: 'até', tipo: 'date' }, { k: 'tipo', rot: 'Tipo', tipo: 'select', ops: [['info', 'Informação'], ['alerta', 'Alerta']] }, { k: 'paraTxt', rot: 'Só para estes sistemas (logins separados por vírgula; vazio = todos)' }],
+        function () { return { texto: '', de: hoje, ate: hoje, tipo: 'info', paraTxt: '' }; },
+        function (l) { return call('centralGlobalSalvar', [S.token, 'avisos', l.map(function (a) { var para = String(a.paraTxt || (a.para || []).join(',')).split(',').map(function (x) { return x.trim().toLowerCase(); }).filter(String); return { id: a.id, texto: a.texto, de: a.de, ate: a.ate, tipo: a.tipo, para: para }; })]); });
+      ctLista(c, 'Novidades da versão (Ajuda › Novidades)', g.novidades.slice(), [{ k: 'versao', rot: 'Versão' }, { k: 'data', rot: 'Data (texto)' }, { k: 'texto', rot: 'O que mudou', tipo: 'texto' }],
+        function () { return { versao: '', data: '', texto: '' }; }, function (l) { return call('centralGlobalSalvar', [S.token, 'novidades', l]); });
+      if (pode('central_atualizar')) {
+        var at = el('div', 'card'); c.appendChild(at); at.appendChild(el('h3', 'ch', 'Atualização com contagem (' + (AMB === 'homolog' ? 'demonstração' : 'todos os sistemas') + ')'));
+        at.appendChild(el('div', 'hint', 'Todos veem a faixa "Atualização em X:XX". Na hora, os sistemas param de aceitar lançamentos até você encerrar.'));
+        var mi = el('select'); [1, 2, 5, 10, 15].forEach(function (n) { var o = el('option', '', 'Avisar com ' + n + ' minuto' + (n > 1 ? 's' : '')); o.value = n; mi.appendChild(o); }); mi.value = 5; at.appendChild(mi);
+        var ma = ctMsg(at); var ac = el('div', 'ctacoes'); at.appendChild(ac);
+        btn(ac, 'Iniciar aviso de atualização', 'danger', function () { if (!confirm('Iniciar a contagem para todos os sistemas?')) return; call('centralAtualizacao', [S.token, Number(mi.value)]).then(function () { ma.ok('Contagem iniciada.'); }).catch(ma.erro); });
+        btn(ac, 'Encerrar atualização', 'ok', function () { call('centralAtualizacao', [S.token, 0]).then(function () { ma.ok('Atualização encerrada: os sistemas voltam sozinhos.'); }).catch(ma.erro); });
+      }
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  function ctEntrada(c) {
+    call('centralGlobal', [S.token]).then(function (g) {
+      c.textContent = '';
+      var card = el('div', 'card'); c.appendChild(card);
+      card.appendChild(el('div', 'hint', 'Contatos do rodapé "fale com a gente!" da tela de login de todos os sistemas.'));
+      var E = g.entrada || {}, gr = grade(card, 2), gr2 = grade(card, 2);
+      var ig = campo(gr[0], 'Instagram (@)', el('input')); ig.value = E.instagram || '';
+      var su = campo(gr[1], 'Suporte (link https, e-mail ou telefone)', el('input')); su.value = E.suporte || '';
+      var te = campo(gr2[0], 'Telefone de vendas', el('input')); te.value = E.telefone ? fmtFone(E.telefone) : ''; te.inputMode = 'tel';
+      var wa = campo(gr2[1], 'WhatsApp de vendas', el('input')); wa.value = E.whatsapp ? fmtFone(E.whatsapp) : ''; wa.inputMode = 'tel';
+      var m = ctMsg(card), ok = podeTela('centrada', 'e');
+      if (ok) btn(card, 'Salvar para todos os sistemas', 'pri', function () { m.limpar(); call('centralGlobalSalvar', [S.token, 'entrada', { instagram: ig.value, suporte: su.value, telefone: te.value, whatsapp: wa.value }]).then(function () { m.ok('Salvo. Aparece na tela de login de todos.'); }).catch(m.erro); });
+      var c2 = el('div', 'card'); c.appendChild(c2); c2.appendChild(el('h3', 'ch', 'Suporte online (botão da Ajuda)'));
+      var sw = campo(c2, 'WhatsApp do suporte online', el('input')); sw.value = fmtFone(g.suporteWhats); sw.inputMode = 'tel';
+      var m2 = ctMsg(c2);
+      if (ok) btn(c2, 'Salvar', 'pri', function () { m2.limpar(); call('centralGlobalSalvar', [S.token, 'suporteWhats', sw.value]).then(function () { m2.ok('Salvo.'); }).catch(m2.erro); });
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  function ctFaq(c) {
+    call('centralGlobal', [S.token]).then(function (g) {
+      c.textContent = '';
+      c.appendChild(el('div', 'hint', 'Na Ajuda do cliente, antes de abrir chamado, aparecem as perguntas parecidas com o que ele escreveu.'));
+      ctLista(c, 'Perguntas frequentes', g.faq.slice(), [{ k: 'pergunta', rot: 'Pergunta' }, { k: 'area', rot: 'Área (ex.: Vendas e PDV)' }, { k: 'resposta', rot: 'Resposta', tipo: 'texto' }],
+        function () { return { pergunta: '', area: '', resposta: '' }; }, function (l) { return call('centralGlobalSalvar', [S.token, 'faq', l]); });
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  function ctRegistro(c) {
+    call('centralRegistro', [S.token]).then(function (l) {
+      c.textContent = '';
+      ctTabela(c, ['Quando', 'Quem', 'O quê', 'Detalhe'], l.map(function (e) { return [e.dataTxt || '', e.quem || '', e.tipo || '', e.texto || '']; }), 'Nada registrado ainda.');
+    }).catch(function (e) { ctErro(c, e); });
+  }
+  // =============================================================
   //  AJUDA (Leva 7 · 3.3): botão "?" ao lado da engrenagem
   // =============================================================
   var AJ = { modo: 'chamados', info: null, lista: null, sug: null, filtro: 'Todos', aberto: null };
@@ -18081,7 +18687,9 @@
     if (pode('equipe') || /^(Gerente|Supervisor)$/.test(S.u.perfil || '')) l.push(['assloja', 'Assinatura da loja', 'Assinatura eletrônica da empresa que entra sozinha nos contratos']);
     if (pode('equipe') || pode('crm')) l.push(['obrigatorios', 'Cadastro de pessoas: obrigatórios', 'Campos obrigatórios para pessoa física e jurídica']);
     if (pode('equipe')) l.push(['seguranca', 'Segurança', S.u.alertasSeg ? '⚠ ' + S.u.alertasSeg + ' login(s) bloqueado(s) nas últimas 24 h' : 'Senhas erradas, bloqueios, acessos negados e links inválidos']);
-    if (pode('equipe')) l.push(['empresa', 'Dados da empresa', 'Nome, CNPJ, endereço (busca pelo CEP) e logo da impressão'], ['login', 'Tela de entrada', 'Contatos do rodapé "fale com a gente!"']);
+    if (pode('equipe')) l.push(['empresa', 'Dados da empresa', 'Nome, CNPJ, endereço (busca pelo CEP) e logo da impressão']);
+    // Leva 7: a tela de entrada passou para a Gestti Central; Fiscal e Suporte entram aqui
+    if (pode('equipe') && !S.u.central) l.push(['fiscal', 'Fiscal', 'Regime, certificado A1, séries e naturezas de operação (por empresa)'], ['suporte', 'Suporte', 'Liberar o acesso do suporte Gestti e ver tudo o que ele fez']);
     return l;
   }
   function desenharCfg() {
@@ -18117,7 +18725,8 @@
     if (ab === 'conta') { cfgTema(box); cfgSenha(box); }
     else if (ab === 'empresa') cfgEmpresa(box);
     else if (ab === 'empresas') cfgEmpresas(box);
-    else if (ab === 'login') cfgContatos(box);
+    else if (ab === 'fiscal') cfgFiscal(box);
+    else if (ab === 'suporte') cfgSuporte(box);
     else if (ab === 'seguranca') cfgSeguranca(box);
     else if (ab === 'depositos') cfgDepositos(box);
     else if (ab === 'categorias') cfgCatFin(box);
