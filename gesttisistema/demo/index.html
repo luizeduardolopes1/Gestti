@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-dsPLin0rR8vnwohu2pULZs58IqnLlrsgwtcPJ0SWAZg=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Cei5j6awKbH8yppORWeM7Q9fO9AG3wTYGi91Twu+Z2k=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -197,6 +197,15 @@
   .trow{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;background:var(--card);margin-bottom:6px;cursor:pointer;font-weight:700;font-size:14.5px;color:var(--ink)}
   .trow.sub{margin-left:24px;font-weight:500}
   .trow input{width:20px;height:20px;padding:0;margin:0;appearance:auto;-webkit-appearance:checkbox;accent-color:#1F3864;flex:0 0 auto}
+  .fbent{background:#137A3C!important;border-color:#137A3C!important;color:#fff!important}.fbsai{background:#B42318!important;border-color:#B42318!important;color:#fff!important}
+  .fbch{display:flex;justify-content:space-between;align-items:center;margin:2px 0 2px}.fbch b{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .fbcl{display:flex;flex-direction:column;gap:4px;margin:6px 0 10px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+  .fbci{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;cursor:pointer;font-size:13.5px}.fbci.on{background:var(--soft)}.fbci.off{opacity:.55}.fbci input{width:18px;height:18px;margin:0;flex:none;padding:0;-webkit-appearance:checkbox;appearance:auto;accent-color:var(--brand)}
+  .fbsg{width:30px;height:30px;border-radius:8px;background:var(--brand);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none}
+  .fbcn{flex:1;min-width:0}.fbcn b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fbcn small{display:block;color:var(--muted);font-size:11.5px}.fbcs{font-size:13px;white-space:nowrap}.fbcs.neg{color:var(--err)}
+  .fbac h4{margin:16px 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}.fbac button{display:block;width:100%;text-align:left;border:0;border-top:1px solid var(--line);background:none;color:var(--ink);padding:10px 4px;font:inherit;font-size:14px;cursor:pointer}.fbac button:hover{color:var(--brand)}
+  .fbtop{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between}.fbsd{font-size:30px;font-weight:800}.fbsd.neg{color:var(--err)}.fbmes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;flex:1 1 340px;max-width:520px}.fbmes small{display:block;color:var(--muted);font-size:12px}.fbmes b.e{color:var(--ok,#137A3C)}.fbmes b.s{color:var(--err)}
+  table.fbext tr.fbdia td{background:var(--soft);font-size:12.5px}table.fbext tr.fbdia span{float:right;color:var(--muted)}
   .fbcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:12px}
   .fbc{background:var(--card);border-radius:14px;box-shadow:0 1px 3px rgba(16,32,56,.08);padding:14px;cursor:pointer;border:1.5px solid transparent;text-align:left;font:inherit;color:var(--ink)}
   .fbc:hover,.fbc:focus-visible{border-color:var(--accent);outline:none}
@@ -1358,7 +1367,7 @@
   <!-- CAIXAS E BANCOS -->
   <section id="vBancos" class="hide">
     <div class="crumb">Financeiro</div>
-    <div class="ptopo"><h1>Caixas e Bancos</h1><div class="tbtns"><button type="button" class="btn ghost" id="fbConta">+ Nova conta</button><button type="button" class="btn" id="fbLanc">+ Lançamento</button></div></div>
+    <div class="ptopo"><h1>Caixas e Bancos</h1><div class="tbtns"><button type="button" class="btn fbent" id="fbEnt">+ Entrada</button><button type="button" class="btn fbsai" id="fbSai">− Saída</button><button type="button" class="btn ghost" id="fbTra">⇄ Transferir</button></div></div>
     <div id="fbAviso"></div>
     <div id="fbResumo"></div>
     <div id="fbCorpo"><div class="empty">Carregando…</div></div>
@@ -7173,7 +7182,7 @@
     'compras', 'checkin', 'transf', 'balanco', 'etiquetas', 'compracel', 'ccnova', 'cclista', 'ccparc', 'novos', 'venda', 'pagar', 'receber', 'bancos', 'cred', 'dre', 'conferencia', 'metas', 'comissoes', 'metrel',
     'aval', 'cartao', 'compra', 'proposta'];
   /** Leva 6 ampliada: botões de criar somem para quem não tem a caixinha "Criar" daquela tela. */
-  var BOTOES_GRADE = { egNova: 'entregas:c', poNovo: 'pedonline:c', crNovo: 'crm:c', fbConta: 'bancos:c', fbLanc: 'bancos:c', rcNovo: 'receber:c', pgNovo: 'pagar:c', cdAvulso: 'cred:c', acNovo: 'acess:c', enNova: 'encomendas:c',
+  var BOTOES_GRADE = { egNova: 'entregas:c', poNovo: 'pedonline:c', crNovo: 'crm:c', fbEnt: 'bancos:c', fbSai: 'bancos:c', fbTra: 'bancos:c', rcNovo: 'receber:c', pgNovo: 'pagar:c', cdAvulso: 'cred:c', acNovo: 'acess:c', enNova: 'encomendas:c',
     ppNovaBtn: 'proposta:c', prNova: 'promocoes:c', pcNovo: 'pedidos:c', cpNova: 'compras:c', osNova: 'osnova:c', vdNovaBtn: 'pdv:c', dNovo: 'cadastro:c', dNovoP: 'cadastro:c' };
   function botoesPorGrade() {
     if (!temGrade() || soParceira()) return;
@@ -9176,34 +9185,123 @@
   }
   function aposFin(d) { S.fin = d; S.u.formas = d.formas.filter(function (f) { return f.ativa && f.uso !== 'pagar'; }); if ($('vBancos') && !$('vBancos').classList.contains('hide')) renderFin(); }
   function nomeConta(id) { var c = S.fin && S.fin.contas.filter(function (x) { return x.id === id; })[0]; return c ? c.nome : id; }
-  $('fbConta').onclick = function () { formConta(null); };
-  $('fbLanc').onclick = function () { formLanc(null, 'Entrada'); };
+  // Leva 9 · B7: Caixas e Bancos no modelo B — contas, resumo e ações no painel da direita; entrada/saída/transferir em cima
+  var FB = { sel: {}, filtro: 'mes' };
+  var fbUmaConta = function () { var ks = Object.keys(FB.sel).filter(function (k) { return FB.sel[k]; }); return ks.length === 1 ? (S.fin.contas.filter(function (c) { return c.id === ks[0]; })[0] || null) : null; };
+  $('fbEnt').onclick = function () { formLanc(fbUmaConta(), 'Entrada'); };
+  $('fbSai').onclick = function () { formLanc(fbUmaConta(), 'Saída'); };
+  $('fbTra').onclick = function () { formLanc(fbUmaConta(), 'Transferência'); };
   function renderFin() {
     var D = S.fin; if (!D) return;
     var box = $('fbCorpo'); box.innerHTML = '';
     var ativas = D.contas.filter(function (c) { return c.ativa; }), tot = soma(ativas, function (c) { return c.saldo; });
-    var rsF = $('fbResumo'); rsF.innerHTML = ''; var k = el('div', 'kpis'); rsF.appendChild(k);
-    kpi(k, 'Saldo total', brl(tot), ativas.length + ' conta' + (ativas.length === 1 ? '' : 's') + ' ativa' + (ativas.length === 1 ? '' : 's'), tot < 0 ? 'down' : '');
+    Object.keys(FB.sel).forEach(function (k) { if (!ativas.some(function (c) { return c.id === k; })) delete FB.sel[k]; });
+    var marcadas = ativas.filter(function (c) { return FB.sel[c.id]; }), filtro = marcadas.length ? marcadas : ativas, ids = filtro.map(function (c) { return c.id; });
+    var ini = new Date(); ini.setDate(1); ini.setHours(0, 0, 0, 0);
+    // ---- painel da direita: contas (filtro), resumo e ações
+    var rsF = $('fbResumo'); rsF.innerHTML = '';
+    var hc = el('div', 'fbch'); hc.appendChild(el('b', '', 'Contas')); if (marcadas.length) { var lp = el('button', 'lnk', 'Limpar'); lp.type = 'button'; lp.onclick = function () { FB.sel = {}; renderFin(); }; hc.appendChild(lp); } rsF.appendChild(hc);
+    rsF.appendChild(el('div', 'hint', 'Marque uma ou mais para filtrar.'));
+    var lc = el('div', 'fbcl'); rsF.appendChild(lc);
+    D.contas.slice().sort(function (a, b) { return (b.ativa - a.ativa) || a.nome.localeCompare(b.nome); }).forEach(function (c) {
+      if (!c.ativa && !FB.inativas) return;
+      var lb = el('label', 'fbci' + (FB.sel[c.id] ? ' on' : '') + (c.ativa ? '' : ' off')), cb = el('input'); cb.type = 'checkbox'; cb.checked = !!FB.sel[c.id]; cb.disabled = !c.ativa;
+      cb.onchange = function () { FB.sel[c.id] = cb.checked; renderFin(); };
+      var sg = el('span', 'fbsg', (c.nome || '?').replace(/[^A-Za-zÀ-ú0-9 ]/g, '').split(' ').filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase());
+      var nm = el('span', 'fbcn'); nm.appendChild(el('b', '', c.nome)); nm.appendChild(el('small', '', c.tipo + (c.loja ? ' · ' + c.loja : '') + (c.ativa ? '' : ' · inativa')));
+      lb.appendChild(cb); lb.appendChild(sg); lb.appendChild(nm); lb.appendChild(el('b', 'fbcs' + (c.saldo < 0 ? ' neg' : ''), brl(c.saldo))); lc.appendChild(lb);
+    });
+    if (D.contas.some(function (c) { return !c.ativa; })) { var vi2 = el('button', 'lnk', FB.inativas ? 'Esconder contas inativas' : 'Mostrar contas inativas'); vi2.type = 'button'; vi2.onclick = function () { FB.inativas = !FB.inativas; renderFin(); }; rsF.appendChild(vi2); }
+    var k = el('div', 'kpis'); rsF.appendChild(k);
+    kpi(k, 'Saldo total (todas as contas)', brl(tot), ativas.length + ' conta' + (ativas.length === 1 ? '' : 's') + ' ativa' + (ativas.length === 1 ? '' : 's'), tot < 0 ? 'down' : '');
+    if (D.aReceber) kpi(k, 'A receber (cartões)', brl(D.aReceber), 'já vendido, cai nas próximas datas');
     kpi(k, 'Contas a pagar em aberto', brl(D.aPagar.total), D.aPagar.qtd + ' lançamento' + (D.aPagar.qtd === 1 ? '' : 's'));
     kpi(k, 'Vencidas', brl(D.aPagar.vencido), D.aPagar.vencido ? 'pague ou renegocie' : 'nada vencido', D.aPagar.vencido ? 'down' : 'up');
-    if (D.aReceber) kpi(k, 'A receber (cartões)', brl(D.aReceber), 'já vendido, cai nas próximas datas');
     kpi(k, 'Saldo previsto', brl(tot + (D.aReceber || 0) - D.aPagar.total), 'com o que vai cair e depois de pagar tudo', tot + (D.aReceber || 0) - D.aPagar.total < 0 ? 'down' : '');
-    var ini = new Date(); ini.setDate(1); ini.setHours(0, 0, 0, 0);
-    var cards = el('div', 'fbcards'); box.appendChild(cards);
-    D.contas.slice().sort(function (a, b) { return (b.ativa - a.ativa) || a.nome.localeCompare(b.nome); }).forEach(function (c) {
-      var b = el('button', 'fbc' + (c.ativa ? '' : ' off')); b.type = 'button';
-      b.appendChild(el('div', 'tp', c.tipo + (c.loja ? ' · ' + c.loja : '') + (c.ativa ? '' : ' · inativa')));
-      b.appendChild(el('div', 'nm', c.nome));
-      b.appendChild(el('div', 'sd' + (c.saldo < 0 ? ' neg' : ''), brl(c.saldo)));
-      if (c.aReceber) b.appendChild(el('div', 'mv', 'A receber: ' + brl(c.aReceber)));
-      var evm = D.eventos.filter(function (e) { return e.conta === c.id && e.d >= ini.getTime(); });
-      b.appendChild(el('div', 'mv', 'No mês: +' + brl(soma(evm, function (e) { return e.valor > 0 ? e.valor : 0; })) + ' · −' + brl(Math.abs(soma(evm, function (e) { return e.valor < 0 ? e.valor : 0; })))));
-      b.onclick = function () { abrirConta(c); };
-      cards.appendChild(b);
-    });
-    var ult = D.eventos.slice(0, 300);
-    tabela(box, 'Últimas movimentações e a receber', ['Data', 'Conta', 'Descrição', 'Origem', 'Valor'], ult.map(function (e) { return [dataBR(e.d) + (e.futuro ? ' (previsto)' : ''), nomeConta(e.conta), e.desc, e.origem, (e.valor < 0 ? '-' : '') + brl(Math.abs(e.valor))]; }), 'movimentacoes');
+    var ac = el('div', 'fbac'); rsF.appendChild(ac); ac.appendChild(el('h4', '', 'Ações'));
+    var um = fbUmaConta(), pc = podeTela('bancos', 'c');
+    var bt = function (txt, fn, dica) { var b = el('button', '', txt); b.type = 'button'; if (dica) b.title = dica; b.onclick = fn; ac.appendChild(b); return b; };
+    bt('Conferir com o extrato do banco', function () { fbConferir(um); }, 'Suba o arquivo OFX do banco e veja o que bate');
+    if (pc) bt(um ? 'Editar conta · ' + um.nome : 'Editar conta (marque uma)', function () { if (um) formConta(um); else msg('topMsg', 'Marque uma conta na lista para editar.'); });
+    if (pc) bt('+ Nova conta', function () { formConta(null); });
+    // ---- meio: saldo das contas marcadas e extrato por dia
+    var evAll = D.eventos.filter(function (e) { return ids.indexOf(e.conta) > -1; });
+    var evm = evAll.filter(function (e) { return e.d >= ini.getTime() && !e.futuro; });
+    var sAtual = soma(filtro, function (c) { return c.saldo; }), ent = soma(evm, function (e) { return e.valor > 0 ? e.valor : 0; }), sai = Math.abs(soma(evm, function (e) { return e.valor < 0 ? e.valor : 0; }));
+    var top = el('div', 'card fbtop'); box.appendChild(top);
+    var t1 = el('div'); t1.appendChild(el('div', 'hint', marcadas.length ? (marcadas.length === 1 ? marcadas[0].nome : 'Saldo das ' + marcadas.length + ' contas marcadas') : 'Saldo de todas as contas')); t1.appendChild(el('div', 'fbsd' + (sAtual < 0 ? ' neg' : ''), brl(sAtual))); top.appendChild(t1);
+    var t2 = el('div', 'fbmes');
+    [['Início do mês', brl(sAtual - ent + sai), ''], ['Entradas no mês', brl(ent), 'e'], ['Saídas no mês', brl(sai), 's']].forEach(function (x) { var d2 = el('div'); d2.appendChild(el('small', '', x[0])); d2.appendChild(el('b', x[2], x[1])); t2.appendChild(d2); });
+    top.appendChild(t2);
+    var ce = el('div', 'card'); box.appendChild(ce);
+    var hd = el('div', 'tbacoes'); hd.appendChild(el('h2', '', 'Extrato')); ce.appendChild(hd);
+    var chips = el('div', 'chips'); hd.appendChild(chips);
+    [['mes', 'Este mês'], ['30', 'Últimos 30 dias'], ['ent', 'Entradas'], ['sai', 'Saídas'], ['prev', 'Previstos'], ['tudo', 'Tudo']].forEach(function (o) { var b = el('button', 'chip' + (FB.filtro === o[0] ? ' on' : ''), o[1]); b.type = 'button'; b.onclick = function () { FB.filtro = o[0]; renderFin(); }; chips.appendChild(b); });
+    var lim = FB.filtro === 'mes' ? ini.getTime() : FB.filtro === '30' ? Date.now() - 30 * 864e5 : 0;
+    var L = evAll.filter(function (e) { if (FB.filtro === 'prev') return e.futuro; if (e.futuro && FB.filtro !== 'tudo') return false; if (lim && e.d < lim) return false; if (FB.filtro === 'ent') return e.valor > 0; if (FB.filtro === 'sai') return e.valor < 0; return true; }).slice(0, 400);
+    if (!L.length) { ce.appendChild(el('div', 'empty', 'Nenhum lançamento nas contas marcadas com esse filtro.')); }
+    else {
+      // saldo corrido: parte do saldo atual e volta no tempo pelos lançamentos realizados
+      var corr = sAtual, porDia = {}, ordem = [];
+      evAll.filter(function (e) { return !e.futuro; }).forEach(function (e) { var dk = dataBR(e.d).slice(0, 10); if (!(dk in porDia)) { porDia[dk] = corr; ordem.push(dk); } corr -= e.valor; });
+      var w = el('div', 'tbwrap'), tb = el('table', 'ext fbext'), h = el('tr'); ['Descrição', 'Conta', 'Origem', 'Valor'].forEach(function (x) { h.appendChild(el('th', '', x)); }); tb.appendChild(h); w.appendChild(tb); ce.appendChild(w);
+      var diaAnt = '';
+      L.forEach(function (e) {
+        var dk = dataBR(e.d).slice(0, 10);
+        if (dk !== diaAnt) { diaAnt = dk; var trd = el('tr', 'fbdia'), td = el('td'); td.colSpan = 4; td.appendChild(el('b', '', dk)); if (!e.futuro && porDia[dk] !== undefined) td.appendChild(el('span', '', 'saldo no fim do dia ' + brl(porDia[dk]))); else if (e.futuro) td.appendChild(el('span', '', 'previsto')); trd.appendChild(td); tb.appendChild(trd); }
+        var tr = el('tr'); tr.appendChild(el('td', '', e.desc)); tr.appendChild(el('td', '', nomeConta(e.conta))); tr.appendChild(el('td', '', e.origem));
+        tr.appendChild(el('td', 'v ' + (e.valor >= 0 ? 'e' : 's'), (e.valor >= 0 ? '+ ' : '− ') + brl(Math.abs(e.valor)))); tb.appendChild(tr);
+      });
+    }
     box.appendChild(el('div', 'hint', 'Entradas das vendas: o valor de cada forma de pagamento entra na conta configurada em engrenagem › Formas de pagamento/recebimento (no cartão, entra o valor líquido, sem a taxa da maquininha). Saídas: contas a pagar marcadas como pagas e lançamentos manuais.'));
+  }
+  /** Conferir com o extrato do banco: lê o OFX (ou CSV data;descrição;valor) e compara com os lançamentos da conta. */
+  function fbConferir(c) {
+    var D = S.fin, ativas = D.contas.filter(function (x) { return x.ativa; });
+    var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Conferir com o extrato do banco'));
+    var k = el('div', 'card'); sh.appendChild(k);
+    k.appendChild(el('div', 'hint', 'Baixe o extrato no site ou app do banco em OFX (ou planilha CSV com data;descrição;valor) e escolha o arquivo. O sistema mostra o que bate, o que está no banco e falta lançar, e o que foi lançado aqui e não aparece no banco.'));
+    var g = grade(k, 2), co = el('select'); ativas.forEach(function (x) { var o = el('option', '', x.nome); o.value = x.id; co.appendChild(o); }); if (c) co.value = c.id; campo(g[0], 'Conta', co, true);
+    var fi = el('input'); fi.type = 'file'; fi.accept = '.ofx,.csv,.txt'; campo(g[1], 'Arquivo do extrato', fi, true);
+    var res = el('div'); k.appendChild(res);
+    var ler = function (txt) {
+      var L = [];
+      if (/<STMTTRN>/i.test(txt)) {
+        txt.split(/<STMTTRN>/i).slice(1).forEach(function (b) {
+          var tag = function (n) { var m = new RegExp('<' + n + '>([^<\\r\\n]*)', 'i').exec(b); return m ? m[1].trim() : ''; };
+          var dt = tag('DTPOSTED'), v = parseFloat(tag('TRNAMT').replace(',', '.'));
+          if (/^\d{8}/.test(dt) && !isNaN(v)) L.push({ iso: dt.slice(0, 4) + '-' + dt.slice(4, 6) + '-' + dt.slice(6, 8), valor: Math.round(v * 100) / 100, desc: tag('MEMO') || tag('NAME') });
+        });
+      } else {
+        txt.split(/\r?\n/).forEach(function (ln) { var p = ln.split(/;|\t/); if (p.length < 3) return; var m = /(\d{2})\/(\d{2})\/(\d{4})/.exec(p[0]); var v = num(p[p.length - 1]); if (m && v) L.push({ iso: m[3] + '-' + m[2] + '-' + m[1], valor: Math.round(v * 100) / 100, desc: p.slice(1, -1).join(' ').trim() }); });
+      }
+      return L;
+    };
+    var comparar = function (B) {
+      res.innerHTML = '';
+      if (!B.length) { res.appendChild(el('div', 'msg err show', 'Não encontrei lançamentos no arquivo. Use o extrato em OFX (ou CSV com data;descrição;valor).')); return; }
+      var de = B.reduce(function (a, x) { return x.iso < a ? x.iso : a; }, B[0].iso), ate = B.reduce(function (a, x) { return x.iso > a ? x.iso : a; }, B[0].iso);
+      var msD = msIso(de), msA = msIso(ate) + 864e5 - 1;
+      var S0 = D.eventos.filter(function (e) { return e.conta === co.value && !e.futuro && e.d >= msD - 2 * 864e5 && e.d <= msA + 2 * 864e5; }).map(function (e) { return { e: e, usado: false }; });
+      var ok = [], soBanco = [];
+      B.forEach(function (b) {
+        var mb = msIso(b.iso), par = S0.filter(function (s) { return !s.usado && Math.abs(s.e.valor - b.valor) < 0.01 && Math.abs(s.e.d - mb) <= 3 * 864e5; })[0];
+        if (par) { par.usado = true; ok.push([b, par.e]); } else soBanco.push(b);
+      });
+      var soSist = S0.filter(function (s) { return !s.usado && s.e.d >= msD && s.e.d <= msA; }).map(function (s) { return s.e; });
+      var kp = el('div', 'kpis'); res.appendChild(kp);
+      kpi(kp, 'Batem', String(ok.length), isoBR(de) + ' a ' + isoBR(ate), 'up'); kpi(kp, 'Só no banco', String(soBanco.length), soBanco.length ? 'falta lançar aqui' : 'nada faltando', soBanco.length ? 'down' : 'up'); kpi(kp, 'Só no sistema', String(soSist.length), soSist.length ? 'confira se foi lançado certo' : 'tudo apareceu no banco', soSist.length ? 'down' : 'up');
+      var sec = function (tt, linhas, fn) { if (!linhas.length) return; res.appendChild(el('h3', 'ch', tt)); var tb = el('table', 'ext'); linhas.forEach(function (l) { tb.appendChild(fn(l)); }); res.appendChild(tb); };
+      sec('No banco e não lançado no sistema', soBanco, function (b) { var tr = el('tr'), td = el('td'); td.appendChild(document.createTextNode(b.desc || '—')); td.appendChild(el('small', '', isoBR(b.iso))); tr.appendChild(td); tr.appendChild(el('td', 'v ' + (b.valor >= 0 ? 'e' : 's'), (b.valor >= 0 ? '+ ' : '− ') + brl(Math.abs(b.valor))));
+        var ta = el('td'); if (podeTela('bancos', 'c')) { var lb = el('button', 'lnk', 'Lançar'); lb.type = 'button'; lb.onclick = function () { var cc = D.contas.filter(function (x) { return x.id === co.value; })[0]; formLanc(cc, b.valor >= 0 ? 'Entrada' : 'Saída', { valor: Math.abs(b.valor), data: b.iso, desc: b.desc }); }; ta.appendChild(lb); } tr.appendChild(ta); return tr; });
+      sec('Lançado no sistema e não aparece no banco', soSist, function (e) { var tr = el('tr'), td = el('td'); td.appendChild(document.createTextNode(e.desc)); td.appendChild(el('small', '', dataBR(e.d) + ' · ' + e.origem)); tr.appendChild(td); tr.appendChild(el('td', 'v ' + (e.valor >= 0 ? 'e' : 's'), (e.valor >= 0 ? '+ ' : '− ') + brl(Math.abs(e.valor)))); return tr; });
+      sec('Batem', ok, function (p) { var tr = el('tr'), td = el('td'); td.appendChild(document.createTextNode('✓ ' + p[1].desc)); td.appendChild(el('small', '', isoBR(p[0].iso) + ' · banco: ' + (p[0].desc || '—'))); tr.appendChild(td); tr.appendChild(el('td', 'v ' + (p[0].valor >= 0 ? 'e' : 's'), brl(Math.abs(p[0].valor)))); return tr; });
+    };
+    var B0 = null;
+    fi.onchange = function () { var f = fi.files[0]; if (!f) return; if (f.size > 3 * 1024 * 1024) { res.innerHTML = ''; res.appendChild(el('div', 'msg err show', 'Arquivo grande demais (máximo 3 MB).')); return; } var rd = new FileReader(); rd.onload = function () { B0 = ler(String(rd.result || '')); comparar(B0); }; rd.readAsText(f, /\.ofx$/i.test(f.name) ? 'windows-1252' : 'utf-8'); };
+    co.onchange = function () { if (B0) comparar(B0); };
+    var ac = el('div', 'acoes'), fc = el('button', 'btn ghost', 'Fechar'); fc.type = 'button'; fc.onclick = fecharModal; ac.appendChild(fc); k.appendChild(ac);
+    abrirPagina();
   }
   function abrirConta(c) {
     var bd = abrirDw(c.nome, c.tipo + ' · saldo ' + brl(c.saldo));
@@ -9248,7 +9346,7 @@
     };
     abrirPagina(); nome.focus();
   }
-  function formLanc(c, tipo) {
+  function formLanc(c, tipo, pre) {
     if (!S.fin) return carregarFin(true);
     var sh = $('fSheet'); sh.innerHTML = ''; sh.appendChild(el('h2', 'tt', 'Lançamento em caixa/banco'));
     var k = el('div', 'card'), T = tipo;
@@ -9259,6 +9357,7 @@
     var lr = el('div', 'row'), a1 = el('div'), a2 = el('div'); lr.appendChild(a1); lr.appendChild(a2); k.appendChild(lr);
     var vi = inpValor(''); campo(a1, 'Valor *', vi); var dt = inpData(isoHoje()); campo(a2, 'Data', dt);
     var ds = campo(k, 'Descrição', inp('text', 'Ex.: troco inicial do caixa')); ds.maxLength = 120;
+    if (pre) { if (pre.valor) vi.input.value = nfmt(pre.valor); if (pre.data) dt.value = pre.data; if (pre.desc) ds.value = String(pre.desc).slice(0, 120); }
     var ctw = el('div'); k.appendChild(ctw); var ct = el('select'); campo(ctw, 'Categoria * (define a linha do DRE)', ct);
     function ajustar() { ctw.classList.toggle('hide', T === 'Transferência'); if (ct._t !== T) { opts(ct, ((S.fin.categorias || {})[T === 'Entrada' ? 'receber' : 'pagar']) || [], '', '— escolha a categoria —'); ct._t = T; } dsw.classList.toggle('hide', T !== 'Transferência'); lco.previousSibling.textContent = T === 'Transferência' ? 'Da conta' : 'Conta'; if (T === 'Transferência' && de.value === co.value) { var o2 = contas.filter(function (x) { return x.id !== co.value; })[0]; if (o2) de.value = o2.id; } }
     seg(sg, ['Entrada', 'Saída', 'Transferência'], T, function (v) { T = v; ajustar(); }); co.onchange = ajustar; ajustar();
