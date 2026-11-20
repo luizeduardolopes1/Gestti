@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Cei5j6awKbH8yppORWeM7Q9fO9AG3wTYGi91Twu+Z2k=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Xlsae7FfYM0lPLC/p4fXBgL/DEbkTaapG9loiA7eF1I=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -1807,8 +1807,9 @@
     <div class="ptopo"><h1 id="cTit">Novo produto usado</h1><button type="button" class="btn ghost" id="cVoltar">← Voltar para Produtos Usados</button></div>
     <form id="form" novalidate>
       <div class="msg err" id="formMsg"></div>
-      <div class="card pecard">
+      <div class="card pecard comcapa">
         <h2>Produto</h2>
+        <button type="button" class="prcapa" id="cCapa" aria-label="Ver e trocar as imagens"></button>
         <div class="hint" id="eu" style="margin-top:0"></div>
         <div class="g2"><div>
           <label for="modelo">Modelo <span class="req">*</span></label>
@@ -3143,7 +3144,7 @@
     $('cCancelar').textContent = on && !podeEd ? 'Voltar' : 'Cancelar';
     Array.prototype.forEach.call(form.querySelectorAll('input,textarea,select,#classif button,#tipo button,#cGrupo button,#cTags button'), function (i) { if (i.id === 'cPu' || i.id === 'cObsSI' || i.id === 'cQtd' || i.id === 'cCond') return; i.disabled = !!on && !podeEd; });
     var ev = $('cEdAviso'); if (ev) ev.remove();
-    var fw = $('cFotosW'); fw.innerHTML = ''; S.cadFotos = fotosForm(fw, on && x && x.linha ? { tipo: 'aparelho', linha: x.linha, imei: x.imei } : null, on && x ? x.fotos : [], on && x ? function (l) { x.fotos = l; S.disp = null; } : null);
+    var fw = $('cFotosW'); fw.innerHTML = ''; S.cadFotos = fotosForm(fw, on && x && x.linha ? { tipo: 'aparelho', linha: x.linha, imei: x.imei } : null, on && x ? x.fotos : [], on && x ? function (l) { x.fotos = l; S.disp = null; } : null, capaUsado);
     $('eu').classList.toggle('hide', !!on);
     if (on) {
       var av = el('div', 'hint', podeEd ? 'Alterando o cadastro de ' + x.modelo + ' (IMEI ' + x.imei + '). A alteração fica registrada no Histórico. Preço unitário e observação do saldo inicial ficam no Controle de Estoque.' : (x.status === 'Em trânsito' ? 'Aparelho em trânsito: dá para alterar depois que for recebido.' : 'Você pode ver o cadastro, mas não tem permissão para alterar.'));
@@ -3973,6 +3974,12 @@
     des();
   }
   /** Fotos dentro do formulário de cadastro. Edição (ref): envia na hora. Novo: guarda e envia depois de salvar (enviarPara). */
+  /** Leva 9: seminovo no mesmo modelo do produto — foto principal grande ao lado dos dados; miniaturas em "Imagens". */
+  function capaUsado(u) {
+    var capa = $('cCapa'); if (!capa) return; capa.innerHTML = '';
+    if (u) { var ci = el('img'); ci.alt = 'Foto principal'; ci.src = u; capa.appendChild(ci); } else { capa.appendChild(el('span', 'prcapav', '＋')); capa.appendChild(el('span', '', 'Adicionar imagens')); }
+    capa.onclick = function () { var w = $('cFotosW'); if (w) w.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  }
   function fotosForm(box, ref, fotos, mudou, onCapa) {
     var c = el('div', 'card pecard'); c.appendChild(el('h2', '', 'Imagens')); box.appendChild(c);
     if (ref) { galeriaFotos(c, ref, fotos, true, function (l) { if (mudou) mudou(l); if (onCapa) onCapa(l[0] ? fotoUrl(l[0], 600) : ''); }); if (onCapa) onCapa(soFotosSB(fotos)[0] ? fotoUrl(soFotosSB(fotos)[0], 600) : ''); return { enviarPara: function () { return Promise.resolve(); }, qtd: function () { return 0; } }; }
@@ -12768,7 +12775,7 @@
   // =========================================================
   function montarCadastro(d) {
     $('eu').textContent = 'Cadastrando como ' + d.nome + ' (' + d.id + ')';
-    if (!S.cadEdit && $('cFotosW') && !$('cFotosW').children.length) S.cadFotos = fotosForm($('cFotosW'), null, []);
+    if (!S.cadEdit && $('cFotosW') && !$('cFotosW').children.length) S.cadFotos = fotosForm($('cFotosW'), null, [], null, capaUsado);
     var lojaPad = LS.get('loja', ''); if ((d.lojas || []).indexOf(lojaPad) < 0) lojaPad = d.loja;
     opts($('loja'), d.lojas, $('loja').value || lojaPad, 'Selecione…'); lojaHint();
     var dlm = $('modeloList'); dlm.innerHTML = ''; (d.modelos || []).forEach(function (m2) { if (/^\(/.test(m2)) return; var o = el('option'); o.value = m2; dlm.appendChild(o); });
@@ -12972,7 +12979,7 @@
     var lp = LS.get('loja', ''); if ((S.u.lojas || []).indexOf(lp) > -1) $('loja').value = lp; else $('loja').value = S.u.loja || ''; lojaHint();
     show('ckArea', false); $('ckAbrir').textContent = 'Fazer checklist';
     S.classificacao = ''; S.tipo = ''; S.ck = {}; resetConsulta(); S.imeiConsultado = ''; show('cBox', false); montarCkCadastro(); montarCatCadastro();
-    if (!S.cadEdit) { $('cFotosW').innerHTML = ''; S.cadFotos = fotosForm($('cFotosW'), null, []); }
+    if (!S.cadEdit) { $('cFotosW').innerHTML = ''; S.cadFotos = fotosForm($('cFotosW'), null, [], null, capaUsado); }
     Array.prototype.forEach.call(document.querySelectorAll('#classif button,#tipo button,.chip'), function (c) { c.classList.remove('on'); });
     imeiStatus('', ''); show('sucesso', false); show('form', true); window.scrollTo(0, 0);
     if (S.cadEdit) { S.cadEdit = null; modoEdicaoCad(false); seg($('classif'), S.u.classificacoes || [], '', function (v) { S.classificacao = v; }); seg($('tipo'), S.u.tipos || [], '', function (v) { S.tipo = v; }); }
