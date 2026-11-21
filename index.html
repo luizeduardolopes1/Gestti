@@ -2,24 +2,25 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-tBIQFCvOUoU8AkaGs8U5GPPACQC9b9ZT2154+T398pU=' 'sha256-4tQkVcePUmOMLT7mm4eLgMxxMmqV8a/jKqvTxv4CxAw=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8d19NtgQPJvd98v6yMldqFSUI/j5m5XMEn9wkZxlCuw=' 'sha256-KNhguLAtHhZGaPtNwnCwsi7wp/YJ7JKs/aXjnbbjSPQ=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Gestti · Sistema de gestão</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1B2D'/%3E%3Cg transform='translate(10 10) scale(.69)'%3E%3Crect x='4' y='36' width='24' height='24' rx='7' fill='white'/%3E%3Crect x='34' y='36' width='24' height='24' rx='7' fill='white'/%3E%3Crect x='4' y='6' width='24' height='24' rx='7' fill='white'/%3E%3Crect x='38' y='2' width='24' height='24' rx='7' fill='%237D97FF'/%3E%3C/g%3E%3C/svg%3E">
 <meta name="description" content="Estoque, vendas, ordem de serviço, financeiro, loja virtual, entregas e ponto eletrônico num sistema só. Teste grátis por 30 dias.">
 <meta name="theme-color" content="#0F1B2D">
 <script>
-  // Endereços antigos: links de assinatura, entrega, loja virtual, liberação e os apps apontavam para /Gestti/?… — o sistema agora fica em gesttisistema/.
+  // Endereços antigos: links de assinatura, entrega, loja virtual, liberação e os apps apontavam para /Gestti/?… — o sistema agora fica em login/.
   // Quem já entrou no sistema neste aparelho também vai direto (a página de apresentação continua em /Gestti/#site).
   (function () {
     var q = location.search, h = location.hash;
     var soCampanha = /^\?((utm_[a-z]+|fbclid|gclid)=[^&]*&?)+$/i.test(q);
     var para = '';
-    if ((q && !soCampanha) || /^#sessao=/.test(h)) para = 'gesttisistema/';
+    if ((q && !soCampanha) || /^#sessao=/.test(h)) para = 'login/';
     else if (h !== '#site') {
       try {
-        if (localStorage.getItem('gestti_ultimo_amb') === 'homolog' && localStorage.getItem('th_token')) para = 'gesttisistema/demo/';
-        else if (localStorage.getItem('tc_token')) para = 'gesttisistema/';
+        if (localStorage.getItem('gestti_ultimo_amb') === 'homolog' && localStorage.getItem('th_token')) para = 'https://demo.gesttisistemas.com.br/';
+        else if (localStorage.getItem('tc_token')) para = 'login/';
       } catch (e) {}
     }
     if (para) location.replace(para + (soCampanha ? '' : q) + (h === '#site' ? '' : h));
@@ -123,7 +124,7 @@
   <a class="marca" href="#topo" aria-label="Gestti, início"><svg><use href="#logo"/></svg>gestti</a>
   <a class="l" href="#plataforma">Plataforma</a><a class="l" href="#para-quem">Para quem</a><a class="l" href="#ponto">Ponto</a><a class="l" href="#entregas">Entregas</a><a class="l" href="#contato">Contato</a>
   <span class="sp"></span>
-  <a class="btn sm" href="gesttisistema/">Entrar</a><a class="btn sm pri" href="#contato">Testar grátis</a>
+  <a class="btn sm" href="login/">Entrar</a><a class="btn sm pri" href="#contato">Testar grátis</a>
 </div></nav>
 
 <main id="topo">
@@ -133,7 +134,7 @@
     <h1>Estoque, vendas, serviços e financeiro, <em>tudo conectado</em>.</h1>
     <p class="lead">Do pedido de compra ao cliente satisfeito, e com o ponto da equipe junto: a sua empresa inteira num lugar só, no computador e no celular.</p>
     <ul class="chips"><li>Estoque</li><li>PDV e vendas</li><li>Ordem de serviço</li><li>Financeiro</li><li>Loja virtual</li><li>Entregas</li><li>Ponto eletrônico</li></ul>
-    <div class="acoes"><a class="btn pri" href="#contato">Testar grátis por 30 dias</a><a class="btn" href="https://wa.me/5522998405334" target="_blank" rel="noopener">💬 Falar no WhatsApp</a></div>
+    <div class="acoes"><a class="btn pri" href="#contato">Testar grátis por 30 dias</a><a class="btn" href="https://wa.me/5522999453121" target="_blank" rel="noopener">💬 Falar no WhatsApp</a></div>
     <span class="muted" style="font-size:13.5px">Sem cartão de crédito · a gente configura junto com você</span>
   </div>
   <div class="app" aria-hidden="true"><div class="tt"><i></i><i></i><i></i>&nbsp; gestti · Dashboard</div><div class="c">
@@ -252,7 +253,7 @@
     <span class="eb">Fale com a gente</span>
     <h2>Vamos conversar?</h2>
     <p class="muted">Escolha como prefere: a gente responde no mesmo dia.</p>
-    <a class="btn" href="https://wa.me/5522998405334" target="_blank" rel="noopener">💬 Chamar no WhatsApp · (22) 99840-5334</a>
+    <a class="btn" href="https://wa.me/5522999453121" target="_blank" rel="noopener">💬 Chamar no WhatsApp · (22) 99945-3121</a>
     <button class="btn" type="button" id="ligar">📞 Receber uma ligação</button>
     <span class="muted" style="font-size:13.5px">Já é cliente? Use o botão Ajuda dentro do sistema.</span>
   </div>
@@ -293,10 +294,10 @@
   <div class="cols">
     <div style="display:grid;gap:8px;align-content:start"><span class="marca"><svg><use href="#logo"/></svg>gestti</span><p>Sistema de gestão completo para empresas de todas as áreas.</p></div>
     <div><b>Plataforma</b><a href="#plataforma">Estoque e financeiro</a><a href="#plataforma">Vendas e PDV</a><a href="#plataforma">Ordem de serviço</a><a href="#entregas">Entregas</a><a href="#ponto">Ponto eletrônico</a></div>
-    <div><b>Ajuda</b><a href="gesttisistema/">Entrar no sistema</a><a href="#contato">Falar com a gente</a><a href="https://wa.me/5522998405334" target="_blank" rel="noopener">WhatsApp</a></div>
+    <div><b>Ajuda</b><a href="login/">Entrar no sistema</a><a href="#contato">Falar com a gente</a><a href="https://wa.me/5522999453121" target="_blank" rel="noopener">WhatsApp</a></div>
     <div><b>Legal</b><a href="privacidade.html">Política de privacidade</a><a href="termos.html">Termos de uso</a><a href="cookies.html">Política de cookies</a></div>
   </div>
-  <div class="base"><span>© 2026 Gestti · <span class="preencher">[razão social]</span> · CNPJ <span class="preencher">[número]</span> · <span class="preencher">[cidade/UF]</span></span><span>WhatsApp (22) 99840-5334</span></div>
+  <div class="base"><span>© 2026 Gestti · <span class="preencher">[razão social]</span> · CNPJ <span class="preencher">[número]</span> · <span class="preencher">[cidade/UF]</span></span><span>WhatsApp (22) 99945-3121</span></div>
 </div></footer>
 
 <div class="cookie" id="cookie" hidden role="region" aria-label="Aviso de cookies">
@@ -323,7 +324,7 @@
     setInterval(function () { k = (k + 1) % pts.length; mt.style.left = pts[k][0] + '%'; mt.style.top = pts[k][1] + '%'; }, 1500);
   }
   // contato: monta a mensagem e abre o WhatsApp (nada é enviado para servidor nenhum)
-  var WA = 'https://wa.me/5522998405334?text=';
+  var WA = 'https://wa.me/5522999453121?text=';
   function abrirWA(txt) { window.open(WA + encodeURIComponent(txt), '_blank', 'noopener'); }
   var f = document.getElementById('form'), erro = document.getElementById('erro');
   f.addEventListener('submit', function (e) {

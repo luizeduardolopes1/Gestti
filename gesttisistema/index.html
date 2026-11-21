@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-wU2pxCLqBW39wDt3MVeMNzfzrvcw+isdbxjCHXacjow=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-nyD27iMk+u60R65Lk0t9ouY713WnHgwd2H6mbLsde+s=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -2239,7 +2239,7 @@
   // Leva 12: no domínio próprio, lojas e demo moram em endereços diferentes (gesttisistemas.com.br/gesttisistema/ e demo.gesttisistemas.com.br/)
   var DOMINIO = /(^|\.)gesttisistemas\.com\.br$/.test(location.hostname);
   function siteDe(amb) {
-    if (DOMINIO) return amb === 'homolog' ? 'https://demo.gesttisistemas.com.br/' : 'https://gesttisistemas.com.br/gesttisistema/';
+    if (DOMINIO) return amb === 'homolog' ? 'https://demo.gesttisistemas.com.br/' : 'https://gesttisistemas.com.br/login/';
     return location.origin + RAIZ + (amb === 'homolog' ? 'demo/' : '');
   }
   function lsRaw(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
@@ -19522,7 +19522,7 @@
     setTimeout(function () { document.addEventListener('click', fecharMenuAjuda, { once: true }); }, 0);
     if (!AJ.info) ajCarregarInfo();
   }
-  function ajWhats() { return soDig((AJ.info && AJ.info.suporteWhats) || '22998405334'); }
+  function ajWhats() { return soDig((AJ.info && AJ.info.suporteWhats) || '22999453121'); }
   function ajAberto(c) { return c.situacao === 'Aberto' || c.situacao === 'Em andamento'; }
   function ajCarregarInfo() { return call('ajudaInfo', [S.token]).then(function (r) { AJ.info = r; return r; }); }
   function ajLerArq(f) { return new Promise(function (res, rej) { if (f.size > 5 * 1048576) { rej(f.name + ' passa de 5 MB'); return; } var r = new FileReader(); r.onload = function () { res({ nome: f.name, b64: String(r.result).split(',')[1] || '' }); }; r.onerror = function () { rej('Não consegui ler ' + f.name); }; r.readAsDataURL(f); }); }
