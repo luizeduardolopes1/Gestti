@@ -2,13 +2,13 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Azjmq45POueFzNZTZNGb6U+mL6uDIpxMih65unULcik=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Yz6jlnYvQ2w6keGWodcZH0la8aeHoD6s9LSnbwUErAQ=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Gestti">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1B2D'/%3E%3Cg transform='translate(10 10) scale(.69)'%3E%3Crect x='4' y='36' width='24' height='24' rx='7' fill='white'/%3E%3Crect x='34' y='36' width='24' height='24' rx='7' fill='white'/%3E%3Crect x='4' y='6' width='24' height='24' rx='7' fill='white'/%3E%3Crect x='38' y='2' width='24' height='24' rx='7' fill='%237D97FF'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Ccircle cx='120' cy='120' r='120' fill='%23fff'/%3E%3Crect x='60' y='64' width='52' height='52' rx='12' fill='%23101A2C'/%3E%3Crect x='60' y='130' width='52' height='52' rx='12' fill='%23101A2C'/%3E%3Crect x='126' y='130' width='52' height='52' rx='12' fill='%23101A2C'/%3E%3Crect x='134' y='55' width='52' height='52' rx='12' fill='%232D5CFF'/%3E%3Cpath d='M147 94L172 69M156 68H173V85' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@700&display=swap">
 <meta name="robots" content="noindex"><title>Gestti | Tudo na palma da sua mão!</title>
@@ -2329,6 +2329,8 @@
   var CORES = ['Preto','Branco','Azul','Azul-claro','Azul-profundo','Verde','Verde-acinzentado','Rosa','Roxo','Lavanda','Vermelho','Amarelo','Laranja','Laranja-cósmico','Dourado','Prata','Grafite','Meia-noite','Estelar','Sálvia','Titânio Natural','Titânio Preto','Titânio Branco','Titânio Azul','Titânio Deserto','Ultramarino','Cinza','Bege','Outra'];
   var CONSULTA_URL = 'https://www.consultaserialaparelho.com.br/public-web/homeSiga?token=20260618';
   var VIEWS = [
+    // Leva 12: Dashboard no topo do menu (acima da Gestti Central)
+    { id: 'dash', sec: 'vPainel', nome: 'Dashboard', perm: 'dashboard' },
     // Leva 7 · 3.4: Gestti Central (só a conta da Central vê)
     { id: 'cinicio', sec: 'vCentral', nome: 'Início', perm: 'cinicio:v', menu: 'Gestti Central', desc: 'Indicadores da carteira, saúde dos sistemas e o que precisa de atenção' },
     { id: 'csistemas', sec: 'vCentral', nome: 'Sistemas', perm: 'csistemas:v', menu: 'Gestti Central', desc: 'Clientes, módulos, empresas, bloquear, liberar e cancelar' },
@@ -2350,7 +2352,6 @@
     { id: 'pcli', sec: 'vPortal', nome: 'Meus clientes', perm: 'parc_cli', desc: 'Vendedores que você cadastrou' },
     { id: 'pav', sec: 'vPortal', nome: 'Avisos', perm: 'parceira', desc: 'Aparelhos conferidos, recusados e pagamentos' },
     { id: 'ploja', sec: 'vPortal', nome: 'Minha loja', perm: 'parc_loja', desc: 'Dados, chave PIX e equipe' },
-    { id: 'dash', sec: 'vPainel', nome: 'Dashboard', perm: 'dashboard' },
     { id: 'iapend', sec: 'vL8', nome: 'Pendentes da IA', perm: 'financeiro', permOu: 'editar_acessorios', desc: 'O que a IA leu (Telegram ou Enviar para a IA) esperando revisão' },
     { id: 'cadastro', sec: 'vCadastro', nome: 'Cadastro', perm: 'cadastro' },
     { id: 'tpainel', sec: 'vL8', nome: 'Painel de tarefas', perm: '**', menu: 'Tarefas', desc: 'Recentes, favoritas, documentos, listas e por responsável' },
