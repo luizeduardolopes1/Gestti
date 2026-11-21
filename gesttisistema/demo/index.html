@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-NqgKEYrleEwzXvm1utkWDzF3oHRzDEpu9B/sQnlM75Q=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Azjmq45POueFzNZTZNGb6U+mL6uDIpxMih65unULcik=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -2297,12 +2297,13 @@
     });
   }
   var CONTA_OFICIAL = AMBC.conta;
-  if (AMB === 'producao' && CONTA !== CONTA_OFICIAL) {
-    // conta de testes (ou de outro cliente): faixa fixa no topo para ninguém lançar venda real no lugar errado
+  // Leva 12: com a Central e os sistemas de clientes, conta diferente da padrão é normal; a faixa fica só para as contas de testes
+  if (AMB === 'producao' && CONTA !== CONTA_OFICIAL && /^teste/.test(CONTA)) {
+    // conta de testes: faixa fixa no topo para ninguém lançar venda real no lugar errado
     window.addEventListener('DOMContentLoaded', function () {
-      var teste = /^teste/.test(CONTA);
-      faixaPor('conta', teste ? 'fx-teste' : 'fx-conta', function (f) {
-        f.appendChild(document.createTextNode(teste ? '⚠ AMBIENTE DE TESTES — nada lançado aqui vale para a loja' : 'Conta: ' + CONTA));
+      var teste = true;
+      faixaPor('conta', 'fx-teste', function (f) {
+        f.appendChild(document.createTextNode('⚠ AMBIENTE DE TESTES — nada lançado aqui vale para a loja'));
         var a = document.createElement('a'); a.href = '?c=' + CONTA_OFICIAL; a.textContent = 'sair dos testes'; f.appendChild(document.createTextNode(' · ')); f.appendChild(a);
       });
       if (teste) document.title = '[TESTE] ' + document.title;
@@ -5690,13 +5691,13 @@
   function linhaDre(d, id) { return d.linhas.filter(function (l) { return l.id === id; })[0] || { total: 0 }; }
   function renderDre() {
     var d = S.dre, corpo = $('drCorpo'); corpo.innerHTML = '';
-    $('drSub').textContent = isoBR(d.de) + ' a ' + isoBR(d.ate) + ' · ' + (d.consolidado ? 'consolidado: ' + d.empresas.join(' + ') : (d.empresaNome && S.u.empresa && S.u.empresa.lista.length > 1 ? d.empresaNome + ' · ' : '') + (d.loja || 'todas as lojas'));
+    $('drSub').textContent = isoBR(d.de) + ' a ' + isoBR(d.ate) + ' · ' + (d.consolidado ? 'consolidado: ' + d.empresas.join(' + ') : (d.empresaNome && S.u.empresa && S.u.empresa.lista.length > 1 ? d.empresaNome + ' · ' : '') + (d.loja || (S.u && S.u.central ? 'toda a empresa' : 'todas as lojas')));
     var k = rpQuadros();
     var rl = d.receitaLiquida, lb = linhaDre(d, 'lucro_bruto').total, liq = d.liquido;
     kpi(k, 'Receita líquida', brl(rl), 'vendas + OS − deduções');
     kpi(k, 'Lucro bruto', brl(lb), rl ? 'margem ' + pctRL(lb, d) : '', lb < 0 ? 'neg' : '');
     kpi(k, liq >= 0 ? 'Lucro líquido' : 'Prejuízo', brl(liq), rl ? 'margem ' + pctRL(liq, d) : '', liq < 0 ? 'neg' : 'pos');
-    var av = el('div', 'drres ' + (liq >= 0 ? 'pos' : 'neg'), liq > 0 ? 'A loja deu LUCRO no período.' : liq < 0 ? 'A loja deu PREJUÍZO no período: as despesas foram maiores que o que sobrou das vendas.' : 'Sem resultado no período.');
+    var av = el('div', 'drres ' + (liq >= 0 ? 'pos' : 'neg'), liq > 0 ? (S.u && S.u.central ? 'A empresa' : 'A loja') + ' deu LUCRO no período.' : liq < 0 ? (S.u && S.u.central ? 'A empresa' : 'A loja') + ' deu PREJUÍZO no período: as despesas foram maiores que o que sobrou das vendas.' : 'Sem resultado no período.');
     corpo.appendChild(av);
     if (d.qtdSemCusto) corpo.appendChild(el('div', 'hint drav', '⚠ ' + d.qtdSemCusto + ' item(ns) vendido(s) sem custo cadastrado: o lucro pode estar maior que o real. Ex.: ' + d.semCusto.slice(0, 3).join('; ') + '.'));
     if (d.loja) corpo.appendChild(el('div', 'hint drav', 'Filtrando um depósito: contas lançadas como "Geral (todas)" não entram. Veja "Todos os depósitos" para o resultado completo.'));
@@ -6108,7 +6109,7 @@
         kpi(k, 'Banco de horas', hm(pos + neg), hm(pos) + ' a favor · ' + hm(neg) + ' devendo');
         if (X.custos) kpi(k, 'Custo previsto da folha', brl(Object.keys(X.custos).reduce(function (a, e) { return a + X.custos[e]; }, 0)), 'salários dos ativos');
         var g1 = el('div', 'rhdg'); corpo.appendChild(g1);
-        var cA = cartao('Agora nas lojas', P.length + ' funcionário(s)'); cA.classList.add('rhdw'); g1.appendChild(cA);
+        var cA = cartao(S.u && S.u.central ? 'Agora na empresa' : 'Agora nas lojas', P.length + ' funcionário(s)'); cA.classList.add('rhdw'); g1.appendChild(cA);
         P.slice().sort(function (a, b) { return ORD[a.status] - ORD[b.status]; }).forEach(function (p) {
           var r = el('div', 'rhdl'); r.tabIndex = 0; r.setAttribute('role', 'button');
           var nm = el('div'); nm.appendChild(el('b', '', p.nome)); nm.appendChild(el('small', '', ' ' + [p.cargo, todas ? p.empresa : ''].filter(Boolean).join(' · ')));
@@ -7751,7 +7752,7 @@
   var MENU_MOD = { 'Oficina': 'oficina', 'Construção': 'construcao', 'Distribuição': 'distribuicao', 'Restaurante': 'restaurante', 'Supermercado': 'mercado', 'Farmácia': 'farmacia', 'Posto': 'posto', 'Tarefas': 'tarefas', 'RH': 'rh', 'Faturamento': 'vendas', 'Metas': 'vendas', 'Ordem de Serviço': 'os', 'Entregas': 'entregas', 'Pedidos online': 'online', 'Promoções e Cupons': 'promo', 'Financeiro': 'fin' };
   var VIEW_MOD = { cred: 'crm', 'rel-crm': 'crm', compras: 'compras', checkin: 'compras', pedidos: 'compras', compracel: 'usados', ccnova: 'usados', cclista: 'usados', manut: 'usados', ccparc: 'parceiras', aval: 'usados', compra: 'usados', venda: 'usados', cartao: 'vendas', proposta: 'vendas' };
   // Leva 9 · C1: na Gestti Central não aparece o que é das lojas (ficam Financeiro, Ativo, Empréstimos, Indicadores, RH, Tarefas e a equipe)
-  var CENTRAL_FORA = ['baixas', 'conferencia', 'vales', 'lotes', 'lotesf'];
+  var CENTRAL_FORA = ['baixas', 'conferencia', 'vales', 'lotes', 'lotesf', 'rhrel-ocorr']; // Leva 12: comparativo entre lojas não serve à Central
   function centralFora(id) { return !!(S.u && S.u.central) && (CENTRAL_FORA.indexOf(id) > -1 || /^rl-(vales|inadimp)-/.test(id)); }
   function modViewOk(v) {
     if (CT_VIEWS.indexOf(v.id) > -1) return !!(S.u && S.u.central);
@@ -11990,6 +11991,8 @@
   var PN_PADRAO = [{ nome: 'Visão geral', q: ['ind', 'diaSem', 'formas', 'rankProd', 'metas', 'osDia', 'osConv', 'tickets', 'devol', 'margemVend', 'vendasAno'] },
     { nome: 'Financeiro', q: ['resumoFin', 'compPagar', 'compReceber', 'saldoContas', 'calendario', 'fluxoPrev', 'fluxoReal', 'despCat', 'efic', 'inadimp', 'vales', 'pxrPagar', 'pxrReceber', 'anualReceb', 'anualPag'] },
     { nome: 'Estoque', q: ['cobertura', 'giro', 'negativo', 'abc', 'parado', 'usados', 'parceiras'] }];
+  // Leva 12: a Gestti Central abre o painel no financeiro (não tem vendas de balcão nem estoque)
+  var PN_PADRAO_CENTRAL = [{ nome: 'Financeiro', q: ['resumoFin', 'saldoContas', 'compReceber', 'compPagar', 'calendario', 'fluxoPrev', 'fluxoReal', 'despCat', 'efic', 'pxrReceber', 'pxrPagar', 'anualReceb', 'anualPag'] }];
   /** Período do painel. per: hoje/semana/mes/ano/datas; off = quantos períodos para trás (‹) a partir do atual. */
   function pnPeriodo(per, off) {
     per = per || PN.per; off = off === undefined ? (PN.off || 0) : off; var h = isoHoje(), z = function (n) { return ('0' + n).slice(-2); };
@@ -12022,7 +12025,7 @@
     Promise.all([PN.info ? Promise.resolve(PN.info) : call('painelLayout', [S.token]), call('painelDados', [S.token, { de: p.de, ate: p.ate, empresa: PN.emp || '' }])]).then(function (r) {
       PN.info = r[0]; PN.dados = r[1];
       var ok = PN.info.catalogo.map(function (q) { return q.id; });
-      PN.layout = (PN.info.layout || PN_PADRAO).map(function (a) { return { nome: a.nome, q: (a.q || []).filter(function (id) { return ok.indexOf(id) > -1; }), sz: a.sz || {}, opt: a.opt || {} }; });
+      PN.layout = (PN.info.layout || (S.u && S.u.central ? PN_PADRAO_CENTRAL : PN_PADRAO)).map(function (a) { return { nome: a.nome, q: (a.q || []).filter(function (id) { return ok.indexOf(id) > -1; }), sz: a.sz || {}, opt: a.opt || {} }; });
       if (!PN.layout.length) PN.layout = [{ nome: 'Painel', q: [], sz: {}, opt: {} }];
       painelDesenhar();
     }).catch(function (e) { b.innerHTML = ''; b.appendChild(el('div', 'empty', String(e))); });
