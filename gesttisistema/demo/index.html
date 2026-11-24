@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-EWWi/83LJ1whiAqXqd9nfNQvcxIvXfyh3TlJyfmj9PM=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-u9yBjUeHvdLtiAHMYACR1B1Z8nzBqabf2rHr7Wau4FY=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -1136,6 +1136,7 @@
   .ctgrid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px;align-items:start}
   @media (max-width:900px){.ctgrid{grid-template-columns:1fr}.ctgrid .ctlado{order:-1}}
   .ctwrap{overflow-x:auto}.cttab{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
+  .cttab tr.exc td{color:var(--muted)}.cttab tr.exc td.n,.cttab tr.exc td.og,.cttab tr.exc td:first-child{text-decoration:line-through}.cttab tr.exc td.e,.cttab tr.exc td.s{color:var(--muted)}.cttab .ctexc{font-size:12px;padding:2px 0;color:var(--err)}
   .cttab th{font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);text-align:left;padding:8px;border-bottom:2px solid var(--line);white-space:nowrap}
   .cttab td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}.cttab td small{display:block;color:var(--muted);font-size:11.5px}
   .cttab .n{text-align:right;white-space:nowrap}.cttab td.e{color:var(--ok);font-weight:700}.cttab td.s{color:var(--err);font-weight:700}.cttab td.ob{min-width:220px;max-width:340px}.cttab td:first-child{white-space:nowrap}.cttab td.og{white-space:nowrap;color:var(--muted)}
@@ -2823,6 +2824,21 @@
       .catch(function (e) { box.innerHTML = ''; box.appendChild(el('div', 'empty', String(e))); });
   }
   function curtoLoja(l) { return String(l || '').replace(/^.*\| /, ''); }
+  // 24/11/2026: excluir lançamento manual de estoque do produto (permissão "Excluir lançamento de estoque"); fica riscado com o motivo
+  function excluirMovProduto(d, l) {
+    var q = l.entrada ? '+' + l.entrada : '−' + l.saida;
+    var bd = abrirDw('Excluir lançamento de estoque', d.item.nome);
+    kvCard(bd, [['Lançamento', l.origem], ['Data', String(l.dataMov || '').slice(0, 16)], ['Depósito', l.deposito], ['Quantidade', q], ['Observação', l.obs]]);
+    bd.appendChild(el('div', 'hint', 'O estoque volta ao que era antes deste lançamento' + (/^Transferência/.test(l.origem) ? ' (a saída e a entrada da transferência são excluídas juntas)' : '') + '. A linha continua no extrato, riscada, com quem excluiu e o motivo.'));
+    var mo = el('textarea'); mo.rows = 2; mo.maxLength = 200; mo.placeholder = 'Ex.: digitei 50 em vez de 5'; campo(bd, 'Motivo', mo);
+    var m = el('div', 'msg err'); bd.appendChild(m);
+    var b = btn(bd, 'Excluir lançamento', 'danger', function () {
+      b.disabled = true; m.classList.remove('show');
+      call('acMovExcluir', [S.token, d.item.id, { linha: l.mov, data: l.dataMov, delta: l.delta, motivo: mo.value, filtro: CT.filtro }]).then(function (r) {
+        fecharDrawer(); avisoTopo('Lançamento excluído · estoque ajustado'); if (CT && S.view === 'ctrlest') { CT.d = r; desenharControle(); }
+      }).catch(function (e) { b.disabled = false; m.textContent = e; m.classList.add('show'); });
+    });
+  }
   function desenharControle() {
     var d = CT.d, box = $('ctCorpo'); box.innerHTML = '';
     var cab = el('div', 'card ctcab');
@@ -2849,15 +2865,18 @@
     else {
       var t = el('table', 'cttab'), th = el('tr');
       var cols = ['Data', 'Entrada', 'Saída', 'Preço de venda'].concat(d.ver ? ['Preço de compra', 'Preço de custo'] : []).concat(['Observação', 'Origem']);
-      cols.forEach(function (k, i) { th.appendChild(el('th', i > 0 && i < cols.length - 2 ? 'n' : '', k)); }); t.appendChild(th);
+      cols.forEach(function (k, i) { th.appendChild(el('th', i > 0 && i < cols.length - 2 ? 'n' : '', k)); });
+      t.appendChild(th);
       d.linhas.forEach(function (l) {
-        var tr = el('tr'), d0 = el('td'); d0.appendChild(document.createTextNode(String(l.data || '').slice(0, 16))); d0.appendChild(el('small', '', [curtoLoja(l.deposito), l.por].filter(Boolean).join(' · '))); tr.appendChild(d0);
-        tr.appendChild(el('td', 'n e', l.entrada ? '+' + l.entrada : ''));
-        tr.appendChild(el('td', 'n s', l.saida ? '−' + l.saida : ''));
+        var tr = el('tr', l.excluido ? 'exc' : ''), d0 = el('td'); d0.appendChild(document.createTextNode(String(l.data || '').slice(0, 16))); d0.appendChild(el('small', '', [curtoLoja(l.deposito), l.por].filter(Boolean).join(' · '))); tr.appendChild(d0);
+        if (l.excluivel) { var bx = el('button', 'lnk ctexc', 'Excluir'); bx.type = 'button'; bx.onclick = function () { excluirMovProduto(d, l); }; d0.appendChild(bx); }
+        var ve = l.excluido ? l.mostraE : l.entrada, vs = l.excluido ? l.mostraS : l.saida; // excluído: mostra o que era, riscado (não conta nos totais)
+        tr.appendChild(el('td', 'n e', ve ? '+' + ve : ''));
+        tr.appendChild(el('td', 'n s', vs ? '−' + vs : ''));
         tr.appendChild(el('td', 'n', l.precoVenda ? brl(l.precoVenda) : ''));
         if (d.ver) { tr.appendChild(el('td', 'n', l.precoCompra != null ? brl(l.precoCompra) : '')); tr.appendChild(el('td', 'n', l.precoCusto != null ? brl(l.precoCusto) : '')); }
         tr.appendChild(el('td', 'ob', l.obs || ''));
-        tr.appendChild(el('td', 'og', l.origem || ''));
+        tr.appendChild(el('td', 'og', (l.excluido ? 'Excluído · ' : '') + (l.origem || '')));
         t.appendChild(tr);
       });
       tc.appendChild(t);
