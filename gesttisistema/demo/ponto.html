@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-uSY39BPVSlTV5OwBhCDkjvh/QB0DxAwD7Wd7taCi5GQ=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-aWhNJRQasnXoWTLAC2McCF4hEEz19blzheKS4dMOLIg=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -11,6 +11,9 @@
 <link rel="icon" href="../ponto-icone-192.png">
 <link rel="apple-touch-icon" href="../ponto-icone-192.png">
 <style>
+  #atuFx{position:sticky;top:0;z-index:50;background:#B26A00;color:#fff;text-align:center;font-size:14px;font-weight:600;padding:8px 12px}
+  #atuPg{position:fixed;inset:0;z-index:100;background:#0F1B2D;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:10px}
+  #atuPg h1{font-size:22px;margin:0}#atuPg p{max-width:420px;margin:0;color:#cfd8ea}#atuPg small{color:#9AA6B8}
   :root{--bg:#F3F5F9;--card:#fff;--tx:#0F1B2D;--mut:#5B6577;--line:#E3E7EE;--brand:#2F5BFF;--ok:#1B9E4B;--err:#D93025;--warn:#B26A00;--soft:#EEF2FF}
   @media (prefers-color-scheme:dark){:root{--bg:#0B1220;--card:#131C2E;--tx:#EEF2F8;--mut:#9AA6B8;--line:#24304A;--soft:#1A2540}}
   *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
@@ -95,6 +98,7 @@
       .then(function (r) { return r.json(); }, function () { throw 'Sem internet. Confira a conexão e tente de novo.'; })
       .then(function (j) {
         if (j && j.ok) return j.dados;
+        if (j && j.atualizando) { avisoBloq(); clearTimeout(AV.tmr); AV.tmr = setTimeout(verAviso, 15000); }
         var e = String((j && j.erro) || 'Erro no servidor.').replace(/^(Exception|Error):\s*/, '');
         if (/Sessão expirada|acesso está desativado|Entre de novo/i.test(e)) { sair(e); }
         throw e;
@@ -376,6 +380,36 @@
       });
     }).catch(function (e) { t.innerHTML = ''; var c = el('div', 'card'); t.appendChild(c); alerta(c, e); });
   }
+
+  // aviso de atualização (igual ao sistema): faixa com a contagem e, na hora, tela que trava o ponto e volta sozinha
+  var AV = { ini: 0, dif: 0, bloq: false, tmr: null, tick: null };
+  function avisoTirar() { var f = $('atuFx'); if (f) f.remove(); var c = $('atuPg'); if (c) c.remove(); clearInterval(AV.tick); AV.tick = null; }
+  function avisoBloq() {
+    var f = $('atuFx'); if (f) f.remove(); clearInterval(AV.tick); AV.tick = null; AV.bloq = true;
+    if ($('atuPg')) return;
+    var c = el('div'); c.id = 'atuPg'; c.setAttribute('role', 'alertdialog'); c.setAttribute('aria-label', 'Sistema em atualização');
+    c.appendChild(el('h1', '', 'Estamos atualizando o Gestti'));
+    c.appendChild(el('p', '', 'Costuma levar poucos minutos. Enquanto isso o ponto não pode ser batido; as batidas já feitas estão guardadas. Bata assim que esta tela sumir.'));
+    c.appendChild(el('small', '', 'Esta página volta sozinha. Não precisa recarregar.'));
+    document.body.appendChild(c);
+  }
+  function avisoContar() {
+    var f = $('atuFx'); if (!f) { f = el('div'); f.id = 'atuFx'; f.setAttribute('role', 'status'); document.body.insertBefore(f, document.body.firstChild); }
+    var pinta = function () { var r = Math.max(0, AV.ini - (Date.now() + AV.dif)), m = Math.floor(r / 60000), sg = Math.floor(r / 1000) % 60; f.textContent = '⏱ Atualização do Gestti em ' + m + ':' + ('0' + sg).slice(-2) + ' · bata o ponto agora se precisar'; if (r <= 0) { clearInterval(AV.tick); AV.tick = null; verAviso(); } };
+    pinta(); clearInterval(AV.tick); AV.tick = setInterval(pinta, 1000);
+  }
+  function verAviso() {
+    fetch(API, { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ acao: 'statusSistema' }) })
+      .then(function (r) { return r.json(); }).then(function (j) {
+        var prox = 60000;
+        if (j && j.atualizando) { avisoBloq(); prox = 15000; }
+        else if (j && j.ok && j.dados && j.dados.aviso) { AV.ini = j.dados.aviso.inicio; AV.dif = j.dados.agora - Date.now(); if (AV.ini <= j.dados.agora) { avisoBloq(); prox = 15000; } else { avisoContar(); prox = 20000; } }
+        else if (j && j.ok) { if (AV.bloq) { location.reload(); return; } avisoTirar(); }
+        clearTimeout(AV.tmr); AV.tmr = setTimeout(verAviso, prox);
+      }).catch(function () { clearTimeout(AV.tmr); AV.tmr = setTimeout(verAviso, 60000); });
+  }
+  verAviso();
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) verAviso(); });
 
   [].forEach.call(document.querySelectorAll('#abas button'), function (b) { b.onclick = function () { abrir(b.dataset.a); }; });
   $('hSair').onclick = function () { sair(''); };
