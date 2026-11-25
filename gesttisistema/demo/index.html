@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-bbx6g9e7sKxHMY7FNSF7KB65DnIdi0512G/PbqYs3wI=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data: https://wcrfhxijeoxgklyqkhko.supabase.co; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-fNyw38yPRzTCc66fxVGAsJ56uVdqYQXA+LlUc2yBdCk=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data: https://wcrfhxijeoxgklyqkhko.supabase.co; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -24517,6 +24517,7 @@
   };
   function gcListaRecarregar() {
     if (!GCR.ui) return;
+    if (!GCR.abaIni) { GCR.abaIni = 1; if (pode('equipe') || pode('crm_todas')) GCR.filtro.aba = 'todas'; }
     call('gcConversasDados', [S.token, GCR.filtro]).then(gcListaDesenhar).catch(function (e) { GCR.ui.lista.innerHTML = ''; GCR.ui.lista.appendChild(el('div', 'empty', String(e))); });
   }
   function gcListaDesenhar(d) {
@@ -24536,7 +24537,13 @@
     A.forEach(function (a) { var x = el('button', 'gcaba' + (GCR.filtro.aba === a[0] ? ' on' : ''), a[1] + (a[2] ? ' ' + a[2] : '')); x.type = 'button'; x.setAttribute('role', 'tab'); x.setAttribute('aria-selected', GCR.filtro.aba === a[0] ? 'true' : 'false'); x.onclick = function () { GCR.filtro.aba = a[0]; gcListaRecarregar(); }; abas.appendChild(x); });
     if (GCR.filtro.aba === 'atendente') { var sa = l8Sel([['', 'Todos os atendentes']].concat(d.atendentes.map(function (p) { return [p.id, p.nome + (p.online ? ' · online' : '')]; })), GCR.filtro.atendente); sa.onchange = function () { GCR.filtro.atendente = sa.value; gcListaRecarregar(); }; top.appendChild(sa); }
     var ul = el('ul', 'gcitens'); L.appendChild(ul);
-    if (!d.lista.length) ul.appendChild(el('li', 'empty', GCR.filtro.aba === 'minhas' ? 'Nenhuma conversa com você agora.' : 'Nada por aqui.'));
+    if (!d.lista.length) {
+      var vz = el('li', 'empty'); ul.appendChild(vz);
+      if (GCR.filtro.aba === 'minhas' && (d.cont.agente || d.cont.fila || d.cont.comentarios)) {
+        vz.appendChild(el('div', '', 'Nenhuma conversa com você agora.'));
+        [['agente', d.cont.agente, 'com o agente'], ['fila', d.cont.fila, 'na fila'], ['comentarios', d.cont.comentarios, 'comentário(s)']].forEach(function (x) { if (x[1]) { var b = el('button', 'btn ghost mini', 'Ver ' + x[1] + ' ' + x[2]); b.type = 'button'; b.style.margin = '6px 4px 0'; b.onclick = function () { GCR.filtro.aba = x[0]; gcListaRecarregar(); }; vz.appendChild(b); } });
+      } else vz.textContent = GCR.filtro.aba === 'minhas' ? 'Nenhuma conversa com você agora.' : 'Nada por aqui.';
+    }
     d.lista.forEach(function (c) {
       var li = el('li', 'gcit' + (GCR.sel === c.id ? ' on' : '')); li.tabIndex = 0; li.setAttribute('role', 'button');
       li.appendChild(el('div', 'gcav', c.ini));
@@ -24816,6 +24823,7 @@
         var n = inp('text', 'Nome da etapa'); n.value = e.nome; n.oninput = function () { e.nome = n.value; }; r.appendChild(n);
         var cor = el('input'); cor.type = 'color'; cor.value = e.cor || '#2F5BFF'; cor.oninput = function () { e.cor = cor.value; }; cor.setAttribute('aria-label', 'Cor'); r.appendChild(cor);
         var pr = inp('number', 'dias'); pr.value = e.parado || 3; pr.min = 1; pr.title = 'Dias para considerar parado'; pr.oninput = function () { e.parado = pr.value; }; r.appendChild(pr);
+        r.appendChild(gcChk('Follow-up da Analice', e.follow === undefined ? /or[cç]amento|negocia|reserv/i.test(e.nome || '') : !!e.follow, function (v) { e.follow = v; }));
         var w = el('div', 'gcob'); ob.forEach(function (o) { w.appendChild(gcChk(o[1], (e.obrig || []).indexOf(o[0]) > -1, function (v) { e.obrig = (e.obrig || []).filter(function (x) { return x !== o[0]; }); if (v) e.obrig.push(o[0]); })); }); r.appendChild(w);
         if (i > 0) btn(r, '↑', 'ghost mini', function () { E.splice(i - 1, 0, E.splice(i, 1)[0]); des(); });
         btn(r, '✕', 'ghost mini', function () { E.splice(i, 1); des(); });
@@ -25050,23 +25058,26 @@
       var rg = gcSec(esq, 'Regras e jeito de falar'), g3 = el('div', 'gc3'); rg.appendChild(g3);
       var nm = campo(g3, 'Nome do agente', inp('text', 'Tec')); nm.value = A.nome; nm.disabled = !pc;
       var tm = campo(g3, 'Tom', l8Sel([['proximo', 'Próximo e direto, com emoji leve'], ['formal', 'Formal']], A.tom)); tm.disabled = !pc;
-      var sz = campo(g3, 'Quando responde sozinho', l8Sel([['sempre', 'Sempre (1ª mensagem e follow-up)'], ['fora', 'Só fora do expediente']], A.sozinho)); sz.disabled = !pc;
+      var sz = campo(g3, 'Quando responde sozinho', l8Sel([['demora', 'Fora do horário ou quando a equipe demorar'], ['sempre', 'Sempre (1ª mensagem e follow-up)'], ['fora', 'Só fora do expediente']], A.sozinho)); sz.disabled = !pc;
+      var dm = campo(g3, 'Equipe demorou (minutos)', inp('number', '5')); dm.value = A.demoraMin || 5; dm.disabled = !pc;
       var fu = campo(g3, 'Follow-up (horas)', inp('text', '23, 72')); fu.value = (A.follow || []).join(', '); fu.disabled = !pc;
       var nu = campo(rg, 'Nunca faz', inp('text', 'dar desconto, prometer prazo…')); nu.maxLength = 300; nu.value = A.nunca; nu.disabled = !pc;
       var gl = campo(rg, 'Link da avaliação no Google (pós-venda)', inp('url', 'https://g.page/r/…')); gl.maxLength = 300; gl.value = A.googleLink || ''; gl.disabled = !pc;
       var fm = campo(rg, 'Modelo da Meta para follow-up depois de 24 h (opcional)', inp('text', 'nome do modelo aprovado')); fm.maxLength = 80; fm.value = A.followModelo ? A.followModelo.nome : ''; fm.disabled = !pc;
       var idw = el('div', 'gc3'); rg.appendChild(el('div', 'gcbt', 'Como ele se apresenta em cada loja')); rg.appendChild(idw); var ids = {};
       d.empresas.forEach(function (e) { ids[e.id] = campo(idw, e.nome, l8Sel([['assistente', 'Como assistente virtual'], ['pessoa', 'Como pessoa da equipe (nunca mente se perguntarem)']], (A.identidade || {})[e.id] || 'assistente')); ids[e.id].disabled = !pc; });
-      if (pc) btn(rg, 'Salvar regras', '', function () { var idn = {}; Object.keys(ids).forEach(function (k) { idn[k] = ids[k].value; }); salvar({ nome: nm.value, tom: tm.value, sozinho: sz.value, follow: fu.value.split(',').map(function (x) { return parseInt(x, 10); }).filter(function (x) { return x > 0; }), nunca: nu.value, googleLink: gl.value, followModelo: fm.value ? { nome: fm.value } : null, identidade: idn }); });
+      if (pc) btn(rg, 'Salvar regras', '', function () { var idn = {}; Object.keys(ids).forEach(function (k) { idn[k] = ids[k].value; }); salvar({ nome: nm.value, tom: tm.value, sozinho: sz.value, demoraMin: dm.value, follow: fu.value.split(',').map(function (x) { return parseInt(x, 10); }).filter(function (x) { return x > 0; }), nunca: nu.value, googleLink: gl.value, followModelo: fm.value ? { nome: fm.value } : null, identidade: idn }); });
       // testar / treinar conversando
-      var te = gcSec(dir, 'Testar e treinar conversando', 'Escreva como se fosse o cliente. Se ele errar, toque em "Corrigir e ensinar".'), chat = el('div', 'gcteste'); te.appendChild(chat);
+      var te = gcSec(dir, 'Testar e treinar conversando', 'Escreva como se fosse o cliente. Se ele errar, toque em "Corrigir e ensinar".');
+      if (d.empresas.length > 1) { var stl = l8Sel(d.empresas.map(function (e) { return [e.id, 'Como cliente da ' + e.nome]; }), GCR.testeLoja || d.empresas[0].id); stl.onchange = function () { GCR.testeLoja = stl.value; GCR.teste = []; L8_PAGINAS.gcagente(); }; te.appendChild(stl); GCR.testeLoja = stl.value; }
+      var chat = el('div', 'gcteste'); te.appendChild(chat);
       var H = GCR.teste || (GCR.teste = []);
       var des = function () { chat.innerHTML = ''; H.forEach(function (m, i) { var x = el('div', 'gcm ' + (m.de === 'cliente' ? 'in' : 'out ag')); if (m.ferr && m.ferr.length) x.appendChild(el('div', 'gcma', '✦ consultou: ' + m.ferr.join(', '))); x.appendChild(el('div', 'gcmt', m.texto)); if (m.de === 'agente' && pc) { var c = el('button', 'lnk', 'Corrigir e ensinar'); c.type = 'button'; c.onclick = function () { gcQaForm({ p: (H[i - 1] || {}).texto || '', r: m.texto }); }; x.appendChild(c); } chat.appendChild(x); }); chat.scrollTop = chat.scrollHeight; };
       des();
       var ti = inp('text', 'Escreva como se fosse o cliente…'); ti.maxLength = 1500; ti.setAttribute('aria-label', 'Mensagem de teste'); te.appendChild(ti);
       var ac2 = el('div', 'acoes'); te.appendChild(ac2);
       var bt = btn(ac2, 'Mandar', '', function () { if (!ti.value.trim()) return; H.push({ de: 'cliente', texto: ti.value.trim() }); ti.value = ''; des(); bt.disabled = true; bt.textContent = 'Pensando…';
-        call('gcAgenteTestar', [S.token, H]).then(function (r) { bt.disabled = false; bt.textContent = 'Mandar'; var t2 = r.teste || {}; if (t2.erro) { H.push({ de: 'agente', texto: '⚠ ' + t2.erro }); } else H.push({ de: 'agente', texto: t2.resposta || '(sem resposta)', ferr: t2.ferramentas }); des(); }).catch(function (e) { bt.disabled = false; bt.textContent = 'Mandar'; avisoTopo(String(e), 'err'); }); });
+        call('gcAgenteTestar', [S.token, H, GCR.testeLoja || '']).then(function (r) { bt.disabled = false; bt.textContent = 'Mandar'; var t2 = r.teste || {}; if (t2.erro) { H.push({ de: 'agente', texto: '⚠ ' + t2.erro }); } else H.push({ de: 'agente', texto: t2.resposta || '(sem resposta)', ferr: t2.ferramentas }); des(); }).catch(function (e) { bt.disabled = false; bt.textContent = 'Mandar'; avisoTopo(String(e), 'err'); }); });
       ti.onkeydown = function (e) { if (e.key === 'Enter') bt.click(); };
       btn(ac2, 'Limpar', 'ghost', function () { GCR.teste = []; L8_PAGINAS.gcagente(); });
       var rv = gcSec(dir, 'Revisar respostas', d.revisao.hoje + ' resposta(s) hoje · ' + d.revisao.marcadas.length + ' para revisar');
@@ -25175,6 +25186,7 @@
     var mo = campo(g, 'Quem recebe', l8Sel([['rodizio', 'Rodízio: uma para cada atendente, na vez (só online)'], ['fila', 'Fila: quem pegar primeiro'], ['vendedor', 'Sempre o vendedor do cliente (senão, rodízio)']], L.dist.modo));
     var ve = campo(g, 'O que cada atendente vê', l8Sel([['loja', 'Tudo da loja'], ['proprias', 'Só as próprias conversas e clientes']], L.dist.ver));
     var me = campo(g, 'Meta de 1ª resposta (minutos)', inp('number', '10')); me.value = cfg.meta;
+    var dv = s.appendChild(gcChk('Quando a Analice responder porque o atendente demorou, passar a conversa para o próximo do rodízio', L.dist.devolver !== false, function () {}));
     s.appendChild(el('div', 'gcbt', 'Quem entra no rodízio (vazio = todos da loja)')); var pw = el('div', 'gcchips'), P = {}; s.appendChild(pw);
     d.equipe.forEach(function (p) { P[p.id] = gcChk(p.nome, L.dist.pessoas.indexOf(p.id) > -1, function () {}); pw.appendChild(P[p.id]); });
     s.appendChild(el('div', 'gcbt', 'Horário de atendimento')); var hw = el('div', 'gchor'), Hh = {}; s.appendChild(hw);
@@ -25182,6 +25194,7 @@
     var c2 = gcSec(b, 'Instagram: comentários e Direct'), g2 = el('div', 'gc3'); c2.appendChild(g2);
     var cm = campo(g2, 'Comentários e menções vão para', l8Sel([['conversas', 'Mesma regra das conversas'], ['pessoa', 'Uma pessoa fixa (a primeira marcada)'], ['rodizio', 'Rodízio entre as marcadas']], cfg.comentarios.modo || 'conversas'));
     var dm = campo(g2, 'Direct vai para', l8Sel([['agente', 'Agente descobre a loja › fila da loja'], ['pessoa', 'Pessoa fixa (a primeira marcada)']], cfg.direct.modo || 'agente'));
+    var ce = campo(g2, 'Central (recebe quem não tem loja definida)', l8Sel([['', '—']].concat(d.equipe.map(function (p) { return [p.id, p.nome]; })), cfg.direct.central || ''));
     var cw = el('div', 'gcchips'), CP = {}; c2.appendChild(cw); d.equipe.forEach(function (p) { CP[p.id] = gcChk(p.nome, (cfg.comentarios.pessoas || []).indexOf(p.id) > -1, function () {}); cw.appendChild(CP[p.id]); });
     var cag = c2.appendChild(gcChk('O agente responde os comentários', cfg.comentarios.agente !== false, function () {}));
     var am = gcSec(b, 'Mensagens automáticas', 'Use {cliente}, {atendente}, {loja} e {horario}. "Minha versão" vale só quando você atende.'), g3 = el('div', 'gc3'), M = {}; am.appendChild(g3);
@@ -25191,11 +25204,11 @@
     btn(acs, 'Salvar distribuição e mensagens', '', function () {
       var hor = {}; Object.keys(Hh).forEach(function (i) { if (Hh[i][0].checked) hor[i] = [Hh[i][1].value, Hh[i][2].value]; });
       var lojas = {}; lojas[lj] = { autoMsg: { por: {} } }; lojas[lj].autoMsg.por[S.u.id] = { assumir: minha.value };
-      if (pc) { lojas[lj].dist = { modo: mo.value, ver: ve.value, pessoas: Object.keys(P).filter(function (k) { return P[k].querySelector('input').checked; }) }; lojas[lj].horario = hor; ['assumir', 'fora', 'concluir'].forEach(function (k) { lojas[lj].autoMsg[k] = M[k].value; }); }
-      var dd = { lojas: lojas }; if (pc) { dd.meta = me.value; dd.comentarios = { modo: cm.value, pessoas: Object.keys(CP).filter(function (k) { return CP[k].querySelector('input').checked; }), agente: cag.querySelector('input').checked }; dd.direct = { modo: dm.value, pessoas: dd.comentarios.pessoas }; }
+      if (pc) { lojas[lj].dist = { modo: mo.value, ver: ve.value, devolver: dv.querySelector('input').checked, pessoas: Object.keys(P).filter(function (k) { return P[k].querySelector('input').checked; }) }; lojas[lj].horario = hor; ['assumir', 'fora', 'concluir'].forEach(function (k) { lojas[lj].autoMsg[k] = M[k].value; }); }
+      var dd = { lojas: lojas }; if (pc) { dd.meta = me.value; dd.comentarios = { modo: cm.value, pessoas: Object.keys(CP).filter(function (k) { return CP[k].querySelector('input').checked; }), agente: cag.querySelector('input').checked }; dd.direct = { modo: dm.value, pessoas: dd.comentarios.pessoas, central: ce.value }; }
       call('gcConfigSalvar', [S.token, dd]).then(function () { avisoTopo('Configuração salva'); }).catch(function (e) { avisoTopo(String(e), 'err'); });
     });
-    if (!pc) [mo, ve, me, cm, dm].forEach(function (x) { x.disabled = true; });
+    if (!pc) [mo, ve, me, cm, dm, ce].forEach(function (x) { x.disabled = true; });
   }
 
   // ---------- desempenho ----------
