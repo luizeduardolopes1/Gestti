@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-s0jvUEpkDRDBB4xYLRUnW656e9y+oTYoM1EDjDfIj10=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data: https://wcrfhxijeoxgklyqkhko.supabase.co; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-3gBnguEvn1vfEmUh2Cwd2RsziSl/z4KarIeuE7CfAG4=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data: https://wcrfhxijeoxgklyqkhko.supabase.co; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -960,6 +960,24 @@
   .impl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin:6px 0}.impl b{min-width:180px}.impl select{max-width:200px}
   .nfgrade{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px;align-items:start}@media(max-width:1000px){.nfgrade{grid-template-columns:1fr}}.nfdir{display:flex;flex-direction:column;gap:12px}.nfdir .btn{margin:4px 0}.nfchave{font-family:ui-monospace,monospace;font-size:13px;background:var(--bg,#F3F5F9);padding:8px;border-radius:8px;word-break:break-all;margin:8px 0}.nferro{border-color:#F1B5AE!important;background:#FEF3F2!important}.nftot{font-size:22px;font-weight:800}
   .ntzgrade{display:grid;grid-template-columns:300px minmax(0,1fr);gap:12px;align-items:start}@media(max-width:900px){.ntzgrade{grid-template-columns:1fr}}.ntzlista{display:flex;flex-direction:column;gap:2px;max-height:75vh;overflow:auto}.ntzit{display:flex;flex-direction:column;text-align:left;border:0;background:none;padding:8px 10px;border-radius:10px;font:inherit;cursor:pointer;color:var(--ink)}.ntzit small{color:var(--muted)}.ntzit.on{background:#EEF2FF}.ntzregra{border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}
+  /* Leva 21: editor de cartaz A4 (página inteira) */
+  .czp{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}.czop{flex:1 1 280px;max-width:340px;display:flex;flex-direction:column;gap:16px;font-size:13.5px}.czmeio{flex:999 1 460px;min-width:0;display:flex;flex-direction:column;align-items:center;gap:12px}.czia{flex:1 1 290px;max-width:380px;display:flex;flex-direction:column;gap:10px;font-size:13.5px}
+  @media(max-width:1100px){.czop,.czia{max-width:none}}@media(max-width:900px){.czmeio{order:-1}}
+  .czsec{display:flex;flex-direction:column;gap:6px}.czsec h3{margin:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.czsec>label{font-weight:600;font-size:13px;margin:2px 0 0}.czsec select,.czsec input[type=text]{width:100%}
+  .czchips{display:flex;gap:6px;flex-wrap:wrap}.czchips .btn{margin:0}.czchips .btn.on{border-color:var(--brand);background:#EEF2FF;color:#1E40C8}.czmeia .btn{flex:1}.czquinto .btn{flex:1;font-size:14px}
+  .czlinha{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.czcentro{justify-content:center}.czflex{flex:1;min-width:0}
+  .czlay{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.czlb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font:inherit;font-size:12px;font-weight:600;cursor:pointer;min-height:64px}.czlb.on{border-color:var(--brand);background:#EEF2FF;color:#1E40C8}
+  .czli{display:block;width:22px;height:28px;border:1px solid #C5CEDD;border-radius:3px;background:#fff}.czli.l-classico{border-top:5px solid var(--c)}.czli.l-avista{border-top:3px solid var(--c);box-shadow:inset 0 -9px 0 #0F1B2D}.czli.l-moderno{border-top:3px solid var(--c);background:linear-gradient(#fff 40%,#DDE3EC 40% 70%,#fff 70%)}.czli.l-lateral{border-left:6px solid var(--c)}.czli.l-seminovo{border-top:5px solid var(--c);box-shadow:inset 5px 5px 0 -2px #0F1B2D}.czli.l-gondola{height:14px;border-top:2px solid var(--c)}
+  .czgal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.czgi{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer;min-width:0}.czgi:hover{border-color:var(--brand)}
+  .czgm{container-type:size;width:44px;height:44px;display:flex;align-items:center;justify-content:center}.czgm.grande{width:84px;height:84px}.czgm img{max-width:100%;max-height:100%;object-fit:contain}.czgn{font-size:10.5px;line-height:1.15;text-align:center;overflow:hidden;max-height:2.3em;word-break:break-word}
+  .czselbox{border:1px solid #D7E0FF;background:#F5F7FF;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;color:#0F1B2D}.czrng{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:8px;font-size:12.5px}.czrng input[type=range]{-webkit-appearance:auto;appearance:auto;padding:0;border:0;height:24px;background:none;box-shadow:none;width:100%;min-height:0;accent-color:var(--brand)}
+  .czvistas{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px}.czvb{height:34px;border:0;border-radius:9px;padding:0 14px;font:inherit;font-weight:600;background:transparent;color:var(--ink);cursor:pointer}.czvb.on{background:var(--brand);color:#fff}
+  .czprev{width:100%;display:flex;justify-content:center}.czed{position:relative;max-width:100%;box-shadow:0 10px 30px rgba(15,27,45,.18);touch-action:none;user-select:none;-webkit-user-select:none}.czsombra{box-shadow:0 10px 30px rgba(15,27,45,.18)}.czprevrod{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}.czlista{width:100%;align-self:stretch}
+  .cziatop{display:flex;align-items:center;gap:10px}.cziaic{width:34px;height:34px;border-radius:10px;background:#EEF2FF;color:#2F5BFF;display:grid;place-items:center;flex:none}.cziaic svg{width:18px;height:18px}.czianao{border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--muted);line-height:1.5}
+  .czconv{display:flex;flex-direction:column;gap:8px;max-height:460px;overflow:auto;padding-right:2px}.czmsg{font-size:13.5px;font-weight:400;max-width:92%;border-radius:14px;padding:9px 12px;line-height:1.45;display:flex;flex-direction:column;gap:8px}.czmsg.czeu{align-self:flex-end;background:#2F5BFF;color:#fff;border-bottom-right-radius:4px}.czmsg.czdela{align-self:flex-start;background:var(--soft);color:var(--ink);border-bottom-left-radius:4px}
+  .czsug{display:flex;flex-wrap:wrap;gap:6px}.czsb{height:30px;border:1px solid #D7E0FF;background:#F5F7FF;color:#1D3FCC;border-radius:99px;padding:0 10px;font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+  .czmanda{display:flex;gap:6px;align-items:flex-end}.czmanda textarea{flex:1;min-width:0;resize:vertical}.czmanda .btn{margin:0}
+  .czvers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.czver{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer}.czver.on{border-color:var(--brand)}.czvered{display:flex;flex-direction:column;gap:4px}
   .rjgrade{display:grid;grid-template-columns:minmax(260px,1fr) minmax(0,2fr);gap:14px;align-items:start}@media(max-width:900px){.rjgrade{grid-template-columns:1fr}}.rjatal{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
   .mdtab{display:flex;flex-direction:column;gap:6px;margin:10px 0;overflow-x:auto}.mdl{display:grid;grid-template-columns:54px minmax(220px,2fr) 120px 150px 60px 70px;gap:10px;align-items:center;min-width:640px}.mdl input[type=text],.mdl input[type=number]{margin:0}.mdl input[type=checkbox]{-webkit-appearance:checkbox!important;appearance:auto!important;border-radius:3px;width:20px;height:20px;min-height:0;padding:0;margin:0;accent-color:var(--brand)}.mdcab{font-size:12.5px;color:var(--muted);font-weight:700}.mdl.off{opacity:.55}.mdord{display:flex;gap:4px}.mduso{margin:8px 0}.mdusot{display:flex;justify-content:space-between;gap:10px;font-size:14px}.mdbar{height:8px;background:var(--line,#E6EAF0);border-radius:6px;margin-top:4px}.mdbar>div{height:8px;border-radius:6px;background:var(--brand)}
   .sbnav .sbg.tem{color:#fff}
@@ -2509,6 +2527,7 @@
     { id: 'checkin', sec: 'vCheckin', nome: 'Recebimento (check-in)', perm: 'receber', permOu: 'compras', menu: 'Suprimento', desc: 'Conferir a mercadoria da compra e dar entrada no estoque' },
     { id: 'balanco', sec: 'vBalanco', nome: 'Balanço', perm: 'balanco', permOu: 'finalizar_balanco', menu: 'Suprimento', desc: 'Inventário: contagem às cegas, revisão e ajuste' },
     { id: 'etiquetas', sec: 'vEtiquetas', nome: 'Etiquetas', perm: 'acessorios', permOu: 'produtos', menu: 'Suprimento', desc: 'Imprimir etiquetas, modelos e impressoras' },
+    { id: 'cartaz', sec: 'vL8', nome: 'Editor de cartaz', perm: 'acessorios', permOu: 'produtos', menu: 'Suprimento', desc: 'Cartazes A4: layouts, selos, 1 a 8 por folha, modelos salvos e IA' },
     { id: 'compras', sec: 'vCompras', nome: 'Entrada de Compras', perm: 'compras', menu: 'Suprimento', desc: 'Lançar nota de compra (XML da NF-e ou manual)' },
     { id: 'promocoes', sec: 'vPromo', nome: 'Promoções e cupons', perm: 'editar_acessorios', menu: 'Promoções e Cupons', desc: 'Tudo o que está no ar, agendado ou encerrado: filtrar, editar, duplicar e encerrar' },
     { id: 'cupons', sec: 'vCupons', nome: 'Cupons', perm: 'editar_acessorios', menu: 'Promoções e Cupons', desc: 'Cupom genérico (um código para todos) ou em lote (um por cliente)' },
@@ -3639,10 +3658,10 @@
     }
     var fila = etqFila();
     ETQ.tabs.innerHTML = '';
-    abas.forEach(function (a) { var n = a[0] === 'fila' ? ' (' + fila.length + ')' : a[0] === 'cartazes' ? (CARTAZ.itens.length ? ' (' + CARTAZ.itens.length + ')' : '') : a[0] === 'modelos' ? ' (' + D.modelos.length + ')' : ' (' + D.perfis.length + ')'; var b = el('button', a[0] === ETQ.aba ? 'on' : '', a[1] + n); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', a[0] === ETQ.aba ? 'true' : 'false'); b.onclick = function () { ETQ.aba = a[0]; desenharEtiquetas(); }; ETQ.tabs.appendChild(b); });
+    abas.forEach(function (a) { var n = a[0] === 'fila' ? ' (' + fila.length + ')' : a[0] === 'cartazes' ? (CARTAZ.itens.length ? ' (' + CARTAZ.itens.length + ')' : '') : a[0] === 'modelos' ? ' (' + D.modelos.length + ')' : ' (' + D.perfis.length + ')'; var b = el('button', a[0] === ETQ.aba ? 'on' : '', a[1] + n); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', a[0] === ETQ.aba ? 'true' : 'false'); b.onclick = function () { if (a[0] === 'cartazes') { ir('cartaz'); return; } ETQ.aba = a[0]; desenharEtiquetas(); }; ETQ.tabs.appendChild(b); });
     F.aside.style.display = ETQ.aba === 'fila' ? '' : 'none'; F.aside.parentNode.style.gridTemplateColumns = ETQ.aba === 'fila' ? '' : 'minmax(0,1fr)'; F.dir.querySelector('.fbar').style.display = ETQ.aba === 'fila' ? '' : 'none';
     var cp = F.lista; cp.innerHTML = ''; F.cont.textContent = '';
-    if (ETQ.aba === 'fila') etqTelaFila(cp, D, F); else if (ETQ.aba === 'cartazes') cartazTela(cp); else if (ETQ.aba === 'modelos') etqTelaModelos(cp, D); else etqTelaPerfis(cp, D);
+    if (ETQ.aba === 'fila') etqTelaFila(cp, D, F); else if (ETQ.aba === 'cartazes') { ETQ.aba = 'fila'; ir('cartaz'); return; } else if (ETQ.aba === 'modelos') etqTelaModelos(cp, D); else etqTelaPerfis(cp, D);
   }
   function etqTelaFila(box, D, F) {
     var tudo = etqFila(), FV = (F && F.V) || {}, fq = semAc(FV.q || '');
@@ -4924,7 +4943,7 @@
     return '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="34" y="36" width="24" height="24" rx="7" fill="' + b + '"/><rect x="4" y="6" width="24" height="24" rx="7" fill="' + b + '"/><rect x="38" y="2" width="24" height="24" rx="7" fill="' + a + '"/><path d="M45 19l10-10M48 9h7v7" fill="none" stroke="' + s + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   }
   var ICO_MENU = { 'Gestti CRM': 'whatsapp', 'Nota fiscal': 'recibo', 'Contabilidade': 'livro', 'Contas a Receber': 'carteira', 'Contas a Pagar': 'recibo', 'Oficina': 'ferramenta', 'Construção': 'escada', 'Distribuição': 'caminhao', 'Restaurante': 'sacola', 'Supermercado': 'loja', 'Farmácia': 'escudo', 'Posto': 'moedas', 'Tarefas': 'conferir', 'Gestti Central': 'escudo', 'Entregas': 'moto', 'Pedidos online': 'globo', 'Promoções e Cupons': 'promo', 'Relatórios': 'grafico', 'Suprimento': 'caixa', 'Faturamento': 'recibo', 'Ordem de Serviço': 'ferramenta', 'Financeiro': 'carteira', 'Metas': 'alvo', 'Tabela de Preços': 'etiqueta', 'CRM': 'contato', 'Produtos Usados': 'celular', 'Cadastro de Auxiliares': 'conta', 'Ferramentas': 'calc', 'RH': 'pessoas', 'Cadastro': 'pasta', 'Folha': 'relogio', 'Gestão': 'camadas', 'Compra de Celulares': 'celcompra' };
-  var ICO_VIEW = { gcpainel: 'grafico', gcconversas: 'whatsapp', gcfunil: 'quadro', gccliente: 'contato', gcautomacoes: 'engrenagem', gccampanhas: 'promo', gcposvenda: 'estrela', gcagente: 'robo', gccanais: 'globo', gcdesempenho: 'alvo', integracoes: 'aperto', atendimento: 'suporte', devolucoes: 'caixa', garantiasforn: 'ferramenta', notas: 'recibo', notanova: 'mais', naturezasfis: 'lista', fiscalcfg: 'engrenagem', certificado: 'escudo', canais: 'globo', lojaeditor: 'sacola', relfin: 'grafico', caixaent: 'entrada', chat: 'pessoas', agenda: 'calendario', reunioes: 'quadro', reajuste: 'promo', embalagens: 'caixa', ficha: 'celular', contab: 'livro', contabplano: 'lista', contabregras: 'engrenagem', contabdiario: 'livro', contabrazao: 'conferir', contabbalancete: 'grafico', contabbalanco: 'carteira', contabfech: 'cadeado', iapend: 'robo', conciliacao: 'conferir', veiculos: 'caminhao', revisoes: 'calendario', obras: 'casa', calcmat: 'calc', pedvend: 'pedido', tabpreco: 'etiqueta', rotas: 'globo', mesas: 'quadro', cozinha: 'relogio', adicionais: 'mais', lotes: 'calendario', balanca: 'scanner', medicamentos: 'busca', receitas: 'recibo', lotesf: 'calendario', turnos: 'relogio', tanques: 'cofre', bombas: 'engrenagem', tpainel: 'grafico', tarefas: 'conferir', tproj: 'quadro', thoras: 'relogio', baixas: 'alerta', imobilizado: 'casa', emprestimos: 'banco', indicadores: 'grafico', cinicio: 'casa', csistemas: 'camadas', cnovo: 'mais', cchamados: 'suporte', csugestoes: 'estrela', csuporte: 'usuario', cfaturas: 'recibo', cavisos: 'sino', centrada: 'contato', cfaq: 'busca', cregistro: 'lista', entregas: 'moto', entacerto: 'carteira', entmotos: 'moto', pedonline: 'globo', pedsep: 'scanner', pedconf: 'conferir', promocoes: 'promo', cupons: 'cupom', cupomind: 'contato', pedidos: 'pedido', 'rel-faturamento': 'grafico', 'rel-os': 'grafico', 'rel-suprimento': 'grafico', 'rel-financeiro': 'grafico', 'rel-metas': 'grafico', 'rel-crm': 'grafico', encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
+  var ICO_VIEW = { cartaz: 'promo', gcpainel: 'grafico', gcconversas: 'whatsapp', gcfunil: 'quadro', gccliente: 'contato', gcautomacoes: 'engrenagem', gccampanhas: 'promo', gcposvenda: 'estrela', gcagente: 'robo', gccanais: 'globo', gcdesempenho: 'alvo', integracoes: 'aperto', atendimento: 'suporte', devolucoes: 'caixa', garantiasforn: 'ferramenta', notas: 'recibo', notanova: 'mais', naturezasfis: 'lista', fiscalcfg: 'engrenagem', certificado: 'escudo', canais: 'globo', lojaeditor: 'sacola', relfin: 'grafico', caixaent: 'entrada', chat: 'pessoas', agenda: 'calendario', reunioes: 'quadro', reajuste: 'promo', embalagens: 'caixa', ficha: 'celular', contab: 'livro', contabplano: 'lista', contabregras: 'engrenagem', contabdiario: 'livro', contabrazao: 'conferir', contabbalancete: 'grafico', contabbalanco: 'carteira', contabfech: 'cadeado', iapend: 'robo', conciliacao: 'conferir', veiculos: 'caminhao', revisoes: 'calendario', obras: 'casa', calcmat: 'calc', pedvend: 'pedido', tabpreco: 'etiqueta', rotas: 'globo', mesas: 'quadro', cozinha: 'relogio', adicionais: 'mais', lotes: 'calendario', balanca: 'scanner', medicamentos: 'busca', receitas: 'recibo', lotesf: 'calendario', turnos: 'relogio', tanques: 'cofre', bombas: 'engrenagem', tpainel: 'grafico', tarefas: 'conferir', tproj: 'quadro', thoras: 'relogio', baixas: 'alerta', imobilizado: 'casa', emprestimos: 'banco', indicadores: 'grafico', cinicio: 'casa', csistemas: 'camadas', cnovo: 'mais', cchamados: 'suporte', csugestoes: 'estrela', csuporte: 'usuario', cfaturas: 'recibo', cavisos: 'sino', centrada: 'contato', cfaq: 'busca', cregistro: 'lista', entregas: 'moto', entacerto: 'carteira', entmotos: 'moto', pedonline: 'globo', pedsep: 'scanner', pedconf: 'conferir', promocoes: 'promo', cupons: 'cupom', cupomind: 'contato', pedidos: 'pedido', 'rel-faturamento': 'grafico', 'rel-os': 'grafico', 'rel-suprimento': 'grafico', 'rel-financeiro': 'grafico', 'rel-metas': 'grafico', 'rel-crm': 'grafico', encomendas: 'caixa', reservas: 'lista', receber: 'entrada', dre: 'dre', osnova: 'mais', osaux: 'escudo', dash: 'grafico', cadastro: 'mais', disp: 'celular', manut: 'ferramenta', vendas: 'sacola', pdv: 'scanner', caixa: 'cofre', acess: 'caixa', os: 'quadro', oslista: 'lista', osimei: 'busca',
                    estoque: 'camadas', compras: 'caminhao', novos: 'etiqueta', aval: 'celularok', cartao: 'cartao', compra: 'calc', venda: 'etiqueta', crm: 'pessoas', bancos: 'banco', pagar: 'conta',
                    cred: 'calendario', conferencia: 'escudo', metas: 'alvo', comissoes: 'moedas', saldo: 'camadas', transf: 'caminhao', etiquetas: 'etiqueta', checkin: 'caminhao', balanco: 'lista', proposta: 'recibo', finest: 'moedas',
                    compracel: 'quadro', ccnova: 'mais', cclista: 'lista', ccparc: 'aperto', pinicio: 'casa', pnova: 'mais', paparelhos: 'celular', pfin: 'carteira', ptab: 'etiqueta', pcli: 'pessoas', pav: 'sino', ploja: 'loja', metrel: 'grafico', rhdash: 'grafico', ponto: 'engrenagem', rhfunc: 'usuario', rhferiados: 'calendario', rhjornada: 'relogio', rhescalas: 'escala',
@@ -21383,13 +21402,25 @@
       });
     }).catch(function (e) { bd.innerHTML = ''; bd.appendChild(el('div', 'empty', String(e))); });
   }
-  /** Leva 16: cartaz A4 a partir da seleção (a página de cartazes fica em Etiquetas › Cartazes A4). */
-  function cartazAbrir(o) { CARTAZ.itens = (o || []).map(function (x) { return x.tipo === 'produto' ? { tipo: 'produto', id: x.p.id } : { tipo: 'aparelho', linha: x.a.linha, imei: x.a.imei }; }); ETQ.aba = 'cartazes'; ir('etiquetas'); }
+  /** Leva 16/21: cartaz A4 a partir da seleção (abre o editor de cartaz em página inteira). */
+  function cartazAbrir(o) { CARTAZ.itens = (o || []).map(function (x) { return x.tipo === 'produto' ? { tipo: 'produto', id: x.p.id } : { tipo: 'aparelho', linha: x.a.linha, imei: x.a.imei }; }); ir('cartaz'); }
   var CARTAZ = { itens: [] };
-  // ---------- Leva 16: cartazes A4 (1, 2 ou 4 por folha) ----------
-  var CARTAZ_PAD = { porFolha: 1, titulo: 'OFERTA', cor: '#D92D20', cor2: '#0F1B2D', ficha: true, bateria: true, rodape: true, rodapeTxt: 'Preços válidos enquanto durar o estoque.', selo: '', seloPos: 'dir', parcelas: 0, lembrar: true };
-  function cartazCfg() { var c = LS.get('cartazCfg', null); return Object.assign({}, CARTAZ_PAD, c && typeof c === 'object' ? c : {}); }
-  var SELOS = [['', 'Nenhum'], ['black', 'Black Friday'], ['semana', 'Ofertas da semana'], ['queima', 'Queima de estoque'], ['lanc', 'Lançamento'], ['maes', 'Dia das Mães'], ['natal', 'Natal']];
+  // ---------- Leva 21: editor de cartaz A4 (página inteira): layouts, 1–8 por folha, em pé/deitada, preço, selos arrastáveis, modelos e IA ----------
+  var CZ_PAD = { layout: 'classico', porFolha: 1, orient: 'pe', destaque: 'parc', total: 'lado', riscado: false, ficha: true, foto: false, qr: false, bateria: true, rodape: true,
+    cor: '#D92D20', cor2: '#0F1B2D', titulo: 'OFERTA', frase: 'SEM JUROS NO CARTÃO', rodapeTxt: 'Preços válidos enquanto durar o estoque.', parcelas: 0, selos: [] };
+  var CZ_LAYOUTS = [['classico', 'Clássico'], ['avista', 'À vista'], ['moderno', 'Moderno'], ['lateral', 'Faixa lateral'], ['seminovo', 'Seminovo'], ['gondola', 'Gôndola']];
+  var CZ_PRONTOS = { black: ['Black Friday', 'circulo', '#0F1B2D', '#FDB022', 'BLACK', 'FRIDAY', ''], semana: ['Oferta da semana', 'circulo', '#D92D20', '#FFFFFF', 'OFERTA', 'DA SEMANA', ''],
+    queima: ['Queima de estoque', 'explosao', '#F79009', '#0F1B2D', 'QUEIMA DE', 'ESTOQUE', ''], lanc: ['Lançamento', 'circulo', '#2F5BFF', '#FFFFFF', 'LANÇA-', 'MENTO', ''],
+    maes: ['Dia das Mães', 'circulo', '#DB2777', '#FFFFFF', 'DIA DAS', 'MÃES', ''], natal: ['Natal', 'circulo', '#137A3C', '#FDB022', 'FELIZ', 'NATAL', ''],
+    garantia: ['Garantia', 'escudo', '#137A3C', '#FFFFFF', '', 'GARANTIA', ''], pix: ['Desconto no Pix', 'etiqueta', '#0E9F6E', '#FFFFFF', 'DESCONTO', 'NO PIX', ''] };
+  var CZ_FOLHA_DICA = { 1: '1 por folha: cartaz grande com a ficha técnica completa.', 2: '2 por folha: meia folha, ficha resumida ao lado do preço.', 4: '4 por folha: bom para aparelhos de entrada e acessórios.', 6: '6 por folha: só nome, preço e selo.', 8: '8 por folha: preço de gôndola para acessórios.' };
+  var CZ_ICONES = { estrela: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>', raio: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>', coracao: '<path d="M12 20s-7-4.4-9-8.5C1.6 8.4 3.5 5 6.8 5c2 0 3.4 1.1 5.2 3 1.8-1.9 3.2-3 5.2-3 3.3 0 5.2 3.4 3.8 6.5-2 4.1-9 8.5-9 8.5z"/>',
+    presente: '<path d="M4 11h16v9H4zM3 7h18v4H3zM12 7v13M12 7c-2-3-6-3-6-.5S10 7 12 7zm0 0c2-3 6-3 6-.5S14 7 12 7z"/>', porcento: '<path d="M19 5L5 19M7 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm10 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>',
+    fogo: '<path d="M12 22c4 0 7-2.8 7-7 0-4.5-4-7-4-11-3 2-5 5-5 8-1-1-2-2-2-4-2 2-3 4.5-3 7 0 4.2 3 7 7 7z"/>', check: '<path d="M4 12l5 5L20 6"/>' };
+  var CZ = { d: null, cfg: null, prod: 0, vista: 'cartaz', folha: 0, sel: -1, msgs: [], modelo: '', A: {}, M: {}, F: {}, busy: false, desfazer: null };
+  function czCfgLimpa(c) { var o = Object.assign({}, CZ_PAD, c && typeof c === 'object' ? c : {}); o.selos = (Array.isArray(o.selos) ? o.selos : []).slice(0, 3).map(function (s) { return Object.assign({}, s); }); return o; }
+  function czGrade(n, o) { return (o === 'deitada' ? { 1: [1, 1], 2: [2, 1], 4: [2, 2], 6: [3, 2], 8: [4, 2] } : { 1: [1, 1], 2: [1, 2], 4: [2, 2], 6: [2, 3], 8: [2, 4] })[n] || [1, 1]; }
+  function czMM(n, o) { var W = o === 'deitada' ? 297 : 210, H = o === 'deitada' ? 210 : 297, g = czGrade(n, o); return [W / g[0], H / g[1]]; }
   function cartazTaxas() { return (S.u.taxas || []).map(function (t) { var n = parseInt(String(t.nome).replace(/\D/g, ''), 10); return n > 1 && t.taxa >= 0 && t.taxa < 0.9 ? { n: n, taxa: t.taxa } : null; }).filter(Boolean).sort(function (a, b) { return a.n - b.n; }); }
   /** Preço à vista, parcela e total a prazo (pela taxa do cartão da loja na quantidade de parcelas escolhida). */
   function cartazPrecos(preco, parcelas) {
@@ -21398,130 +21429,376 @@
     if (!t) return { vista: preco, n: 1, parc: preco, prazo: preco };
     var prazo = Math.round(preco / (1 - t.taxa) * 100) / 100; return { vista: preco, n: t.n, parc: Math.round(prazo / t.n * 100) / 100, prazo: prazo };
   }
-  function cartazTela(cp) {
-    var cfg = cartazCfg(), salvar = function () { if (cfg.lembrar) LS.set('cartazCfg', cfg); };
-    var g = el('div', 'rjgrade'); cp.appendChild(g);
-    var esq = el('div', 'card'), dir = el('div', 'card'); g.appendChild(esq); g.appendChild(dir);
-    esq.appendChild(el('h3', 'ch', 'Produtos do cartaz'));
-    var bu = inp('text', 'Nome, código, IMEI ou bipe o código de barras'); bu.setAttribute('aria-label', 'Buscar produto'); esq.appendChild(bu);
-    var achados = el('div', 'cartbusca'); esq.appendChild(achados);
-    var lista = el('div'); esq.appendChild(lista);
-    var A = {}, M = {}, F = {};
-    var nomeIt = function (it) { if (it.tipo === 'produto') { var p = M[it.id]; return p ? p.nome : 'Produto'; } var a = A[it.linha + '|' + it.imei]; return a ? a.modelo + ' · ' + String(a.cor || '').toUpperCase() : 'Aparelho'; };
-    var precoIt = function (it) { if (it.tipo === 'produto') { var p = M[it.id]; return p && p.preco; } var a = A[it.linha + '|' + it.imei]; return a && (a.preco || a.precoAparelho); };
-    function desLista() {
-      lista.innerHTML = '';
-      if (!CARTAZ.itens.length) { lista.appendChild(el('div', 'empty', 'Busque acima ou marque produtos em Suprimento › Produtos e toque em "Imprimir cartaz A4".')); return; }
-      l8Tabela(lista, ['Produto', 'À vista', 'Parcelado', 'Cópias', ''], CARTAZ.itens.map(function (it, i) {
-        var pr = cartazPrecos(precoIt(it), cfg.parcelas), cp2 = inp('number', '1'); cp2.min = 1; cp2.max = 20; cp2.value = it.copias || 1; cp2.style.width = '64px'; cp2.setAttribute('aria-label', 'Cópias'); cp2.oninput = function () { it.copias = Math.max(1, Math.min(20, parseInt(cp2.value, 10) || 1)); };
-        var tr = el('button', 'lnk', 'Tirar'); tr.type = 'button'; tr.onclick = function () { CARTAZ.itens.splice(i, 1); desLista(); };
-        return [nomeIt(it) + (it.tipo === 'aparelho' ? ' (seminovo)' : ''), pr ? brl(pr.vista) : el('span', 'bdg err', 'sem preço'), pr && pr.n > 1 ? pr.n + 'x ' + brl(pr.parc) : '—', cp2, tr];
-      }));
+  function cartazNum(v) { var s = (Math.round(v * 100) / 100).toFixed(2).split('.'); return { int: s[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.'), cent: ',' + s[1] }; }
+  function czBRL(v) { var n = cartazNum(v); return n.int + n.cent; }
+  /** Cartaz A4: o tamanho de tudo é relativo ao próprio cartaz (cqmin), então a mesma peça serve para a prévia e para a impressão. */
+  var CZ_CSS = '.cz{container-type:size;position:relative;overflow:hidden;background:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0F1B2D;display:flex;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;--g:19cqmin;outline:1px dashed #C5CEDD;outline-offset:-1px}.cz *{box-sizing:border-box}' +
+    '.cz.dei{--g:17cqmin}.cz.comp{--g:15cqmin}.cz.comp.dei{--g:17cqmin}' +
+    '.cz-lado{width:15cqmin;flex:none;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:5cqmin 0}.cz-lado .t{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:900;font-size:8cqmin;white-space:nowrap;overflow:hidden;max-height:60cqh}.cz-lado .lg{writing-mode:vertical-rl;transform:rotate(180deg);background:#fff;color:#24324A;border-radius:1.5cqmin;padding:2cqmin 1cqmin;font-weight:800;font-size:3.2cqmin;max-height:35cqh;overflow:hidden}' +
+    '.cz-main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column}.cz-fx{display:flex;align-items:center;justify-content:space-between;gap:3cqmin;padding:0 5cqmin;height:15cqmin;flex:none;color:#fff}.cz.cheia .cz-fx{height:12cqmin}.cz.comp .cz-fx{height:11cqmin}' +
+    '.cz-fx .t{font-weight:900;letter-spacing:-.03em;line-height:1;font-size:8.5cqmin;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.cz.comp .cz-fx .t{font-size:5.5cqmin}.cz-lg{background:#fff;color:#24324A;border-radius:1.5cqmin;padding:1cqmin 2.4cqmin;font-weight:800;font-size:3.8cqmin;flex:none;max-width:45%;display:flex;align-items:center;overflow:hidden;white-space:nowrap}.cz-lg img{max-height:9cqmin;max-width:100%;object-fit:contain}.cz.comp .cz-lg{font-size:3cqmin}.cz.comp .cz-lg img{max-height:7cqmin}.cz-gl{height:2.4cqmin;flex:none}' +
+    '.cz-corpo{flex:1;min-height:0;display:flex;flex-direction:column;gap:3.6cqmin;padding:5cqmin}.cz.comp .cz-corpo{gap:2.5cqmin;padding:3.5cqmin}.cz.dei .cz-corpo{flex-direction:row;align-items:center}.cz-a,.cz-b{display:flex;flex-direction:column;min-width:0;flex:none}.cz-a{gap:1.8cqmin}.cz-b{gap:2.4cqmin}.cz.dei .cz-a{flex:1 1 0}.cz.dei .cz-b{flex:1.15 1 0}' +
+    '.cz-semi{display:flex;align-items:center;gap:2cqmin;flex-wrap:wrap;font-size:3.2cqmin;font-weight:600}.cz-tag{color:#fff;border-radius:1cqmin;padding:.6cqmin 1.8cqmin;font-weight:800;letter-spacing:.06em}.cz.L-seminovo .cz-tag{font-size:4cqmin}' +
+    '.cz-nome{font-size:7cqmin;font-weight:800;line-height:1.05;letter-spacing:-.02em;overflow-wrap:anywhere;max-height:16cqmin;overflow:hidden}.cz.comp .cz-nome{font-size:5cqmin;max-height:11cqmin}.cz.L-moderno .cz-nome{font-size:6.4cqmin}.cz-sub{font-size:3.6cqmin;color:#5B6577;font-weight:500}' +
+    '.cz-foto{height:22cqmin;background:#F3F5F9;border-radius:3cqmin;display:flex;align-items:center;justify-content:center;overflow:hidden}.cz.L-moderno .cz-foto{height:34cqmin}.cz.dei .cz-foto{height:30cqmin}.cz-foto img{max-width:100%;max-height:100%;object-fit:contain}' +
+    '.cz-fh{font-size:2.8cqmin;font-weight:800;letter-spacing:.1em;color:#5B6577}.cz-ficha{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.8cqmin 2.4cqmin}.cz.dei .cz-ficha{grid-template-columns:repeat(2,minmax(0,1fr))}.cz-fi{display:flex;flex-direction:column;border-left:.6cqmin solid #DDE3EC;padding-left:1.6cqmin;min-width:0}.cz-fi small{font-size:2.6cqmin;color:#5B6577;font-weight:600}.cz-fi b{font-size:3.4cqmin;overflow-wrap:anywhere}.cz-dest{font-size:3cqmin;color:#24324A}' +
+    '.cz-cx{border:.7cqmin solid;border-radius:3cqmin;padding:3.6cqmin;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.2cqmin}.cz.comp .cz-cx{padding:2.4cqmin}.cz.cheia .cz-cx{border-width:0;color:#fff}' +
+    '.cz-de{font-size:3.8cqmin;font-weight:600;opacity:.85}.cz.comp .cz-de{font-size:3cqmin}.cz-rot{font-size:3.2cqmin;font-weight:800;letter-spacing:.1em;opacity:.85}.cz.comp .cz-rot{font-size:2.6cqmin}' +
+    '.cz-pv{display:flex;align-items:flex-start;justify-content:center;gap:1.2cqmin;line-height:.9}.cz-pv .g{font-size:var(--g);font-weight:900;letter-spacing:-.06em}.cz-pv .m{font-size:calc(var(--g) * .4);font-weight:800;margin-top:1cqmin}.cz-pv .p{font-size:calc(var(--g) * .26);font-weight:700;margin-top:1.4cqmin}' +
+    '.cz-sob{font-size:4cqmin;font-weight:700}.cz.comp .cz-sob{font-size:3.2cqmin}.cz-pill{border-radius:99px;padding:.8cqmin 3cqmin;font-weight:800;font-size:3cqmin;letter-spacing:.04em}.cz.comp .cz-pill{font-size:2.4cqmin}' +
+    '.cz-ex{display:grid;gap:2cqmin}.cz-ex>div{display:flex;flex-direction:column;align-items:center;text-align:center}.cz-ex span{font-size:2.8cqmin;font-weight:800;letter-spacing:.06em;color:#5B6577}.cz-ex b{font-size:5.6cqmin;font-weight:900}.cz.comp .cz-ex b{font-size:4.6cqmin}.cz-ex small{font-size:2.6cqmin;color:#5B6577}' +
+    '.cz-qr{display:flex;align-items:center;gap:2.4cqmin;font-size:3cqmin;font-weight:600;color:#24324A}.cz-qr svg{width:14cqmin;height:14cqmin;flex:none}' +
+    '.cz-rod{color:#fff;display:flex;justify-content:space-between;gap:3cqmin;padding:1.8cqmin 5cqmin;font-size:2.8cqmin;font-weight:600;flex:none}.cz.comp .cz-rod{font-size:2.4cqmin}' +
+    '.cz-selo{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;touch-action:none}.cz-selo img{width:100%;height:100%;object-fit:contain;pointer-events:none}.cz-selo.on{outline:.5cqmin dashed #2F5BFF;outline-offset:1.6cqmin}.czed .cz-selo{cursor:grab}' +
+    '.cz-sv{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.02;font-weight:900;color:#fff;overflow:hidden;padding:6%}.cz-sv b{display:block;white-space:nowrap}.cz-sv svg{flex:none;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;margin-bottom:2%}' +
+    '.cz-sv.f-circulo{border-radius:50%}.cz-sv.f-explosao{clip-path:polygon(50% 0%,61% 15%,79% 10%,79% 28%,96% 35%,86% 50%,96% 65%,79% 72%,79% 90%,61% 85%,50% 100%,39% 85%,21% 90%,21% 72%,4% 65%,14% 50%,4% 35%,21% 28%,21% 10%,39% 15%);padding:18%}.cz-sv.f-fita{clip-path:polygon(0 18%,100% 18%,91% 50%,100% 82%,0 82%,9% 50%);padding:0 14%}.cz-sv.f-etiqueta{height:62%;border-radius:10% 50% 50% 10% / 18% 50% 50% 18%}.cz-sv.f-escudo{clip-path:polygon(50% 0,100% 12%,100% 55%,50% 100%,0 55%,0 12%);padding:12% 12% 24%}' +
+    '.cz-sv.b-simples.f-circulo,.cz-sv.b-simples.f-etiqueta{box-shadow:0 0 0 .8cqmin #fff,0 0 0 1.4cqmin var(--sc)}.cz-sv.b-dupla::after,.cz-sv.b-tracejada::after{content:"";position:absolute;inset:6%;border:.5cqmin solid currentColor;border-radius:inherit;pointer-events:none}.cz-sv.b-tracejada::after{border-style:dashed}.cz-sv.f-explosao::after,.cz-sv.f-fita::after,.cz-sv.f-escudo::after{display:none}' +
+    '.czf{display:grid;background:#fff;overflow:hidden}.czf>.cz{min-width:0;min-height:0}';
+  function czCssGarantir() { if (document.getElementById('czcss')) return; var s = document.createElement('style'); s.id = 'czcss'; s.textContent = CZ_CSS; document.head.appendChild(s); }
+  /** Selo desenhado (pronto, da loja ou criado pela IA): forma, cores, borda, ícone e até 3 linhas de texto. */
+  function czSeloVetor(v, tam) {
+    var d = el('div', 'cz-sv f-' + (v.forma || 'circulo') + ' b-' + (v.borda || 'simples')); d.style.background = v.cor || '#D92D20'; d.style.setProperty('--sc', v.cor || '#D92D20');
+    if (v.icone && CZ_ICONES[v.icone]) { var ic = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); ic.setAttribute('viewBox', '0 0 24 24'); ic.setAttribute('aria-hidden', 'true'); ic.style.width = ic.style.height = (tam * 0.2).toFixed(2) + 'cqmin'; ic.style.color = v.cor2 || '#fff'; ic.innerHTML = CZ_ICONES[v.icone]; d.appendChild(ic); }
+    [['a', 0.15, '#FFFFFF'], ['b', 0.21, v.cor2 || '#FFFFFF'], ['c', 0.13, '#FFFFFF']].forEach(function (x) { if (!v[x[0]]) return; var b = el('b', '', v[x[0]]), apertada = /explosao|escudo|fita/.test(v.forma || ''); b.style.fontSize = Math.min(tam * x[1], tam * (apertada ? 1 : 1.2) / Math.max(1, String(v[x[0]]).length)).toFixed(2) + 'cqmin'; b.style.color = x[2]; d.appendChild(b); });
+    if (v.rot) d.style.transform = 'rotate(' + v.rot + 'deg)';
+    return d;
+  }
+  function czSeloDef(ref) {
+    if (/^p:/.test(ref)) { var p = CZ_PRONTOS[ref.slice(2)]; return p ? { nome: p[0], tipo: 'vetor', v: { forma: p[1], cor: p[2], cor2: p[3], borda: 'simples', icone: 'nenhum', a: p[4], b: p[5], c: p[6] } } : null; }
+    return ((CZ.d && CZ.d.selos) || []).filter(function (s) { return s.id === ref; })[0] || null;
+  }
+  function czSeloNo(s, i, ed) {
+    var def = czSeloDef(s.ref); if (!def) return null;
+    var w = el('div', 'cz-selo' + (ed && CZ.sel === i ? ' on' : '')); w.style.left = s.x + '%'; w.style.top = s.y + '%'; w.style.width = w.style.height = s.s + 'cqmin';
+    w.style.transform = 'translate(-50%,-50%) rotate(' + (s.rot || 0) + 'deg)';
+    if (def.tipo === 'img') { var im = el('img'); im.src = fotoUrl(def.foto, 600); im.alt = ''; w.appendChild(im); } else w.appendChild(czSeloVetor(def.v, s.s));
+    if (ed) { w.dataset.i = i; w.setAttribute('role', 'button'); w.setAttribute('aria-label', 'Selo ' + def.nome + ': arraste para mudar de lugar'); w.tabIndex = 0; }
+    return w;
+  }
+  /** Um cartaz pronto (DOM). c = dados do produto; o = { n (por folha), dei (cartaz deitado), ed (editor) }. */
+  function czCartaz(c, cfg, o) {
+    var L = cfg.layout, comp = o.n >= 6 || L === 'gondola', cheia = L === 'avista', emp = empresaDe(lojaUser()) || {}, logo = emp.logo || '', loja = emp.fantasia || emp.razao || '';
+    var k = el('div', 'cz L-' + L + (comp ? ' comp' : '') + (o.dei ? ' dei' : '') + (cheia ? ' cheia' : ''));
+    var logoNo = function (cls) { var s = el('span', cls); if (logo) { var im = el('img'); im.src = logo; im.alt = ''; s.appendChild(im); } else s.textContent = loja; return s; };
+    if (L === 'lateral') { var ld = el('div', 'cz-lado'); ld.style.background = cfg.cor; ld.appendChild(el('span', 't', cfg.titulo)); if (!logo && loja) ld.appendChild(el('span', 'lg', loja)); k.appendChild(ld); }
+    var mn = el('div', 'cz-main'); k.appendChild(mn);
+    if (L !== 'lateral' && L !== 'gondola') { var fx = el('div', 'cz-fx'); fx.style.background = cfg.cor; fx.appendChild(el('span', 't', cfg.titulo)); if (logo || loja) fx.appendChild(logoNo('cz-lg')); mn.appendChild(fx); }
+    if (L === 'gondola') { var gl = el('div', 'cz-gl'); gl.style.background = cfg.cor; mn.appendChild(gl); }
+    var corpo = el('div', 'cz-corpo'), a = el('div', 'cz-a'), b = el('div', 'cz-b'); corpo.appendChild(a); corpo.appendChild(b); mn.appendChild(corpo);
+    if (c.semi && cfg.bateria && !comp) { var sm = el('div', 'cz-semi'), tg = el('span', 'cz-tag', 'SEMINOVO'); tg.style.background = cfg.cor2; sm.appendChild(tg); sm.appendChild(el('span', '', [c.bat !== '' && c.bat !== undefined && c.bat !== null ? 'Bateria ' + c.bat + '%' : '', c.gar].filter(Boolean).join(' · '))); a.appendChild(sm); }
+    a.appendChild(el('div', 'cz-nome', c.nome)); if (c.sub && (!comp || o.dei)) a.appendChild(el('div', 'cz-sub', c.sub));
+    if ((cfg.foto || L === 'moderno') && !comp && c.foto) { var ft = el('div', 'cz-foto'), fi = el('img'); fi.src = c.foto; fi.alt = ''; ft.appendChild(fi); a.appendChild(ft); }
+    var P = c.precos, temParc = P.n > 1, destParc = cfg.destaque !== 'vista' && temParc, corP = cheia ? '#FFFFFF' : cfg.cor2;
+    var cx = el('div', 'cz-cx'); cx.style.borderColor = cfg.cor2; cx.style.color = corP; if (cheia) cx.style.background = cfg.cor2; b.appendChild(cx);
+    if (cfg.riscado && c.de > P.vista) { var de = el('div', 'cz-de', 'De '), s0 = el('s', '', 'R$ ' + czBRL(c.de)); de.appendChild(s0); de.appendChild(document.createTextNode(' por')); cx.appendChild(de); }
+    var linha = function (partes) { var pv = el('div', 'cz-pv'); partes.forEach(function (x) { pv.appendChild(el('span', x[0], x[1])); }); cx.appendChild(pv); };
+    var pill = function (t) { var p0 = el('span', 'cz-pill', t); p0.style.background = cheia ? '#FFFFFF' : cfg.cor2; p0.style.color = cheia ? cfg.cor2 : '#FFFFFF'; cx.appendChild(p0); };
+    if (destParc) {
+      cx.appendChild(el('div', 'cz-rot', 'PARCELADO EM')); var np = cartazNum(P.parc); linha([['m', P.n + 'x'], ['p', 'R$'], ['g', np.int], ['m', np.cent]]);
+      if (cfg.total === 'baixo') cx.appendChild(el('div', 'cz-sob', 'Total R$ ' + czBRL(P.prazo)));
+      pill(cfg.frase);
+    } else {
+      cx.appendChild(el('div', 'cz-rot', 'À VISTA')); var nv = cartazNum(P.vista); linha([['p', 'R$'], ['g', nv.int], ['m', nv.cent]]);
+      pill('NO PIX OU DINHEIRO');
+      if (temParc) cx.appendChild(el('div', 'cz-sob', 'ou ' + P.n + 'x de R$ ' + czBRL(P.parc) + ' no cartão'));
+      if (temParc && cfg.total === 'baixo') cx.appendChild(el('div', 'cz-sob', 'Total a prazo R$ ' + czBRL(P.prazo)));
     }
+    var ex = destParc ? (cfg.total === 'lado' ? [['À VISTA', P.vista, 'no Pix ou dinheiro'], ['TOTAL A PRAZO', P.prazo, 'em até ' + P.n + 'x no cartão']] : [['À VISTA', P.vista, 'no Pix ou dinheiro']])
+      : (temParc && cfg.total === 'lado' ? [['TOTAL A PRAZO', P.prazo, 'em até ' + P.n + 'x no cartão']] : []);
+    if (ex.length) { var eb = el('div', 'cz-ex'); eb.style.gridTemplateColumns = 'repeat(' + ex.length + ',minmax(0,1fr))'; ex.forEach(function (x) { var d0 = el('div'); d0.appendChild(el('span', '', x[0])); var bb = el('b', '', 'R$ ' + czBRL(x[1])); bb.style.color = cfg.cor2; d0.appendChild(bb); if (!comp) d0.appendChild(el('small', '', x[2])); eb.appendChild(d0); }); b.appendChild(eb); }
+    if (cfg.qr && !comp && CZ.d && CZ.d.vitrine) { var q = el('div', 'cz-qr'), qs = el('span'); qs.innerHTML = svgQR(CZ.d.vitrine, 30); q.appendChild(qs); q.appendChild(el('span', '', 'Aponte a câmera e veja na nossa loja virtual')); b.appendChild(q); }
+    var fic = cfg.ficha && !comp ? (c.ficha || []).slice(0, o.dei ? 4 : 6) : [];
+    if (fic.length) {
+      var fb = el('div', ''); fb.style.cssText = 'display:flex;flex-direction:column;gap:1.6cqmin'; fb.appendChild(el('span', 'cz-fh', 'FICHA TÉCNICA'));
+      var gr = el('div', 'cz-ficha'); fic.forEach(function (f) { var it = el('div', 'cz-fi'); it.appendChild(el('small', '', f.n)); it.appendChild(el('b', '', f.v)); gr.appendChild(it); }); fb.appendChild(gr);
+      if (o.n === 1 && !o.dei && c.dest) fb.appendChild(el('div', 'cz-dest', c.dest));
+      (o.dei ? a : corpo).appendChild(fb);
+    }
+    if (cfg.rodape && L !== 'gondola' && (cfg.rodapeTxt || c.cod)) { var rd = el('div', 'cz-rod'); rd.style.background = cfg.cor; rd.appendChild(el('span', '', cfg.rodapeTxt || '')); if (c.cod) rd.appendChild(el('b', '', c.cod)); mn.appendChild(rd); }
+    (cfg.selos || []).forEach(function (s, i) { var sn = czSeloNo(s, i, o.ed); if (sn) k.appendChild(sn); });
+    return k;
+  }
+  /** Folhas A4 prontas: lista de cartazes (já com as cópias) em grupos de n. */
+  function czFolhas(lista, cfg) {
+    var n = cfg.porFolha, g = czGrade(n, cfg.orient), mm = czMM(n, cfg.orient), dei = mm[0] > mm[1] * 1.15, out = [];
+    for (var i = 0; i < lista.length; i += n) {
+      var f = el('div', 'czf'); f.style.gridTemplateColumns = 'repeat(' + g[0] + ',minmax(0,1fr))'; f.style.gridTemplateRows = 'repeat(' + g[1] + ',minmax(0,1fr))';
+      lista.slice(i, i + n).forEach(function (c) { f.appendChild(czCartaz(c, cfg, { n: n, dei: dei })); });
+      out.push(f);
+    }
+    return out;
+  }
+  // ---- dados dos produtos do cartaz ----
+  function czPreco(it) { if (it.tipo === 'produto') { var p = CZ.M[it.id]; return p && p.preco; } var a = CZ.A[it.linha + '|' + it.imei]; return a && (a.preco || a.precoAparelho); }
+  function czNome(it) { if (it.tipo === 'produto') { var p = CZ.M[it.id]; return p ? p.nome : 'Produto'; } var a = CZ.A[it.linha + '|' + it.imei]; return a ? a.modelo : 'Aparelho'; }
+  function czDado(it) {
+    var a = it.tipo === 'aparelho' ? CZ.A[it.linha + '|' + it.imei] : null, p = it.tipo === 'produto' ? CZ.M[it.id] : null;
+    if (!a && !p) return null;
+    var pr = cartazPrecos(czPreco(it), CZ.cfg.parcelas); if (!pr) return null;
+    var fotos = a ? a.fotos : (p.fotos || (p.ficha && p.ficha.fotos)), F = a ? CZ.F[a.modelo] : null;
+    return { nome: a ? a.modelo : p.nome, sub: a ? [String(a.cor || '').toUpperCase(), a.classif].filter(Boolean).join(' · ') : (p.grupo || '').split(' › ').pop(), semi: !!a, bat: a ? a.bateria : '', gar: a ? 'Garantia 90 dias' : '',
+      cod: a ? 'IMEI final ' + String(a.imei).slice(-4) : (p.sku || p.codigo || ''), precos: pr, de: Number(it.de) || 0, foto: fotos && fotos.length ? fotoUrl(fotos[0], 900) : '',
+      ficha: F ? F.campos.filter(function (c) { return c.v && c.cartaz !== false; }) : [], dest: F ? F.destaques : '' };
+  }
+  function czExemplo() { return { nome: 'Seu produto aqui', sub: 'Busque abaixo ou marque produtos em Suprimento › Produtos', semi: false, bat: '', gar: '', cod: '', precos: cartazPrecos(1999, CZ.cfg.parcelas) || { vista: 1999, n: 1, parc: 1999, prazo: 1999 }, de: 2299, foto: '', ficha: [], dest: '' }; }
+  function czFichas() {
+    var mods = CARTAZ.itens.filter(function (it) { return it.tipo === 'aparelho' && CZ.A[it.linha + '|' + it.imei]; }).map(function (it) { return CZ.A[it.linha + '|' + it.imei].modelo; }).filter(function (m, i, l) { return l.indexOf(m) === i && !CZ.F[m]; });
+    if (!mods.length) return;
+    Promise.all(mods.map(function (mo) { return call('fichaModelo', [S.token, mo]).then(function (d) { CZ.F[mo] = d; }).catch(function () { CZ.F[mo] = { campos: [] }; }); })).then(function () { czPrev(); });
+  }
+  function czGuardarLocal() { try { LS.set('cartazCfg2', CZ.cfg); } catch (e) {} }
+  // ---- página ----
+  L8_PAGINAS.cartaz = function () {
+    l8Carregando(); czCssGarantir(); garantirQR(function () {});
+    if (!CZ.cfg) CZ.cfg = czCfgLimpa(LS.get('cartazCfg2', null));
+    l8Acao('Salvar modelo', function () { czModeloSalvar(); });
+    l8Acao('Imprimir', function () { czImprimir(); }, 'ok');
+    var fim = function () { (S.ac ? S.ac.produtos : []).forEach(function (p) { CZ.M[p.id] = p; }); (S.disp || []).forEach(function (a) { CZ.A[a.linha + '|' + a.imei] = a; }); czMontar(); czFichas(); };
+    call('cartazDados', [S.token]).then(function (d) { CZ.d = d; garantirAc(function () { if (S.disp) fim(); else call('disponiveis', [S.token]).then(function (x) { S.disp = x.lista || x; fim(); }).catch(fim); }); }).catch(l8Erro);
+  };
+  function czMontar() {
+    var b = l8Corpo(); b.className = 'czcorpo';
+    var g = el('div', 'czp'); b.appendChild(g);
+    CZ.ops = el('aside', 'czop card'); CZ.ops.setAttribute('aria-label', 'Opções do cartaz'); g.appendChild(CZ.ops);
+    var meio = el('section', 'czmeio'); g.appendChild(meio);
+    CZ.iaBox = el('aside', 'czia card'); CZ.iaBox.setAttribute('aria-label', 'Montar com IA'); g.appendChild(CZ.iaBox);
+    var tabs = el('div', 'czvistas'); tabs.setAttribute('role', 'tablist'); meio.appendChild(tabs); CZ.tabs = tabs;
+    CZ.prevBox = el('div', 'czprev'); meio.appendChild(CZ.prevBox);
+    CZ.prevRod = el('div', 'czprevrod'); meio.appendChild(CZ.prevRod);
+    CZ.lista = el('div', 'card czlista'); meio.appendChild(CZ.lista);
+    czOps(); czPrev(); czLista(); czIA();
+  }
+  function czTroca(o, soPrev) { Object.assign(CZ.cfg, o); czGuardarLocal(); if (!soPrev) czOps(); czPrev(); }
+  function czChips(box, lista, atual, fn, cls) {
+    var w = el('div', 'czchips' + (cls ? ' ' + cls : '')); box.appendChild(w);
+    lista.forEach(function (x) { var b0 = el('button', 'btn ghost mini' + (atual === x[0] ? ' on' : ''), x[1]); b0.type = 'button'; b0.setAttribute('aria-pressed', atual === x[0] ? 'true' : 'false'); b0.onclick = function () { fn(x[0]); }; w.appendChild(b0); });
+    return w;
+  }
+  function czSec(t) { var s = el('section', 'czsec'); s.appendChild(el('h3', '', t)); CZ.ops.appendChild(s); return s; }
+  /** Redesenha sem a página pular (guarda a rolagem de quem rola). */
+  function czFixo(fn) { var l = [], n = CZ.ops; while (n) { if (n.scrollTop) l.push([n, n.scrollTop]); n = n.parentElement; } var sy = window.scrollY; fn(); l.forEach(function (x) { x[0].scrollTop = x[1]; }); if (window.scrollY !== sy) window.scrollTo(window.scrollX, sy); }
+  function czOps() { czFixo(czOps0); }
+  function czOps0() {
+    var o = CZ.ops, c = CZ.cfg; o.innerHTML = '';
+    // modelo salvo
+    var sm = czSec('Modelo'), sel = el('select'); sel.setAttribute('aria-label', 'Modelo salvo');
+    var o0 = el('option', '', '— escolhas atuais —'); o0.value = ''; sel.appendChild(o0);
+    (CZ.d.modelos || []).forEach(function (m) { var op = el('option', '', m.nome); op.value = m.id; sel.appendChild(op); }); sel.value = CZ.modelo;
+    sel.onchange = function () { CZ.modelo = sel.value; var m = (CZ.d.modelos || []).filter(function (x) { return x.id === sel.value; })[0]; if (m) { CZ.cfg = czCfgLimpa(m.cfg); CZ.sel = -1; czGuardarLocal(); } czOps(); czPrev(); czLista(); };
+    sm.appendChild(sel);
+    if (CZ.modelo) { var mb = el('div', 'czlinha'); sm.appendChild(mb); btn(mb, 'Atualizar modelo', 'ghost mini', function () { czModeloSalvar(CZ.modelo); }); btn(mb, 'Apagar', 'ghost mini', function () { czModeloApagar(CZ.modelo); }); }
+    // layout
+    var sl = czSec('Layout'), lw = el('div', 'czlay'); sl.appendChild(lw);
+    CZ_LAYOUTS.forEach(function (x) { var b0 = el('button', 'czlb' + (c.layout === x[0] ? ' on' : '')); b0.type = 'button'; b0.setAttribute('aria-pressed', c.layout === x[0] ? 'true' : 'false'); var ic = el('span', 'czli l-' + x[0]); ic.style.setProperty('--c', c.cor); b0.appendChild(ic); b0.appendChild(el('span', '', x[1]));
+      b0.onclick = function () { var n = { layout: x[0] }; if (x[0] === 'avista') n.destaque = 'vista'; if (x[0] === 'moderno') n.foto = true; if (x[0] === 'gondola' && c.porFolha < 6) n.porFolha = 8; czTroca(n); }; lw.appendChild(b0); });
+    // folha
+    var sf = czSec('Folha A4');
+    czChips(sf, [['pe', 'Em pé'], ['deitada', 'Deitada']], c.orient, function (v) { czTroca({ orient: v }); }, 'czmeia');
+    sf.appendChild(el('label', '', 'Cartazes por folha'));
+    czChips(sf, [[1, '1'], [2, '2'], [4, '4'], [6, '6'], [8, '8']], c.porFolha, function (v) { czTroca({ porFolha: v }); }, 'czquinto');
+    sf.appendChild(el('div', 'hint', CZ_FOLHA_DICA[c.porFolha]));
+    // preço
+    var sp = czSec('Preço');
+    sp.appendChild(el('label', '', 'O que fica grande'));
+    czChips(sp, [['parc', 'Parcelado'], ['vista', 'À vista']], c.destaque, function (v) { czTroca({ destaque: v }); }, 'czmeia');
+    sp.appendChild(el('label', '', 'Valor total'));
+    czChips(sp, [['lado', 'Ao lado'], ['baixo', 'Embaixo das parcelas'], ['nao', 'Não mostrar']], c.total, function (v) { czTroca({ total: v }); });
+    var tx = cartazTaxas(), spa = el('select'); spa.setAttribute('aria-label', 'Parcelas');
+    var oo = el('option', '', 'Maior parcelamento até 12x'); oo.value = '0'; spa.appendChild(oo); tx.forEach(function (t) { var op = el('option', '', 'Até ' + t.n + 'x'); op.value = String(t.n); spa.appendChild(op); }); spa.value = String(c.parcelas || 0);
+    spa.onchange = function () { CZ.cfg.parcelas = parseInt(spa.value, 10) || 0; czGuardarLocal(); czPrev(); czLista(); }; campo(sp, 'Parcelas no cartão (Calculadora de Cartão da loja)', spa);
+    var chk = function (box, txt, k, dica, desab) { var l = el('label', 'chk'), i0 = el('input'); i0.type = 'checkbox'; i0.checked = !!c[k]; i0.disabled = !!desab; i0.onchange = function () { var n = {}; n[k] = i0.checked; czTroca(n); if (k === 'riscado') czLista(); }; l.appendChild(i0); l.appendChild(document.createTextNode(' ' + txt)); box.appendChild(l); if (dica) box.appendChild(el('div', 'hint', dica)); };
+    chk(sp, 'Preço antigo riscado ("De R$ … por")', 'riscado', c.riscado ? 'Preencha o "De R$" de cada produto na lista, embaixo da prévia.' : '');
+    var fr = inp('text', 'SEM JUROS NO CARTÃO'); fr.maxLength = 30; fr.value = c.frase; fr.oninput = function () { CZ.cfg.frase = fr.value; czGuardarLocal(); czPrev(); }; campo(sp, 'Frase do cartão', fr);
+    // selos
+    var ss = czSec('Selos'); ss.appendChild(el('div', 'hint', 'Toque para pôr no cartaz (até 3). Depois arraste na prévia para onde quiser.'));
+    var gw = el('div', 'czgal'); ss.appendChild(gw);
+    var junta = Object.keys(CZ_PRONTOS).map(function (k) { return 'p:' + k; }).concat((CZ.d.selos || []).map(function (s) { return s.id; }));
+    junta.forEach(function (ref) { var def = czSeloDef(ref); if (!def) return; var b0 = el('button', 'czgi'); b0.type = 'button'; b0.title = def.nome; b0.setAttribute('aria-label', 'Pôr o selo ' + def.nome);
+      var mini = el('span', 'czgm'); if (def.tipo === 'img') { var im = el('img'); im.src = fotoUrl(def.foto, 300); im.alt = ''; mini.appendChild(im); } else mini.appendChild(czSeloVetor(def.v, 100)); b0.appendChild(mini); b0.appendChild(el('span', 'czgn', def.nome));
+      b0.onclick = function () { if (CZ.cfg.selos.length >= 3) { avisoTopo('Até 3 selos por cartaz. Tire um antes.', 'erro'); return; } CZ.cfg.selos.push({ ref: ref, x: 50, y: 45, s: 24, rot: 0 }); CZ.sel = CZ.cfg.selos.length - 1; czGuardarLocal(); czOps(); czPrev(); }; gw.appendChild(b0); });
+    var up = el('input'); up.type = 'file'; up.accept = 'image/png,image/jpeg,image/webp'; up.className = 'hide'; ss.appendChild(up);
+    btn(ss, '+ Enviar selo da loja', 'ghost mini', function () { up.click(); });
+    up.onchange = function () { var f0 = up.files && up.files[0]; up.value = ''; czSeloEnviar(f0, function (s) { if (CZ.cfg.selos.length < 3) { CZ.cfg.selos.push({ ref: s.id, x: 50, y: 45, s: 24, rot: 0 }); CZ.sel = CZ.cfg.selos.length - 1; czGuardarLocal(); } czOps(); czPrev(); }); };
+    var velhos = LS.get('cartazImgs', []); if (Array.isArray(velhos) && velhos.length) { var vb = el('div', 'hint'); vb.appendChild(document.createTextNode(velhos.length + ' selo(s) guardado(s) só neste computador. ')); var lk = el('button', 'lnk', 'Mandar para a galeria da loja'); lk.type = 'button'; lk.onclick = function () { czMigrarVelhos(velhos); }; vb.appendChild(lk); ss.appendChild(vb); }
+    var s = CZ.cfg.selos[CZ.sel];
+    if (s) {
+      var def = czSeloDef(s.ref) || { nome: 'Selo' }, bx = el('div', 'czselbox'); ss.appendChild(bx); bx.appendChild(el('b', '', 'Selo selecionado: ' + def.nome));
+      var rng = function (t, k, mi, ma) { var l = el('label', 'czrng'); l.appendChild(el('span', '', t)); var r = el('input'); r.type = 'range'; r.min = mi; r.max = ma; r.value = s[k]; r.oninput = function () { s[k] = Number(r.value); czGuardarLocal(); czPrev(); }; l.appendChild(r); bx.appendChild(l); };
+      rng('Tamanho', 's', 10, 50); rng('Girar', 'rot', -30, 30);
+      var lb = el('div', 'czlinha'); bx.appendChild(lb);
+      btn(lb, 'Tirar do cartaz', 'ghost mini', function () { CZ.cfg.selos.splice(CZ.sel, 1); CZ.sel = -1; czGuardarLocal(); czOps(); czPrev(); });
+      if (/^CS/.test(s.ref)) btn(lb, 'Apagar da galeria', 'ghost mini', function () { czSeloApagar(s.ref); });
+    }
+    // mostrar
+    var sw = czSec('Mostrar no cartaz');
+    chk(sw, 'Ficha técnica dos celulares', 'ficha'); chk(sw, 'Foto do produto (quando tiver)', 'foto');
+    chk(sw, 'QR Code da loja virtual', 'qr', CZ.d.vitrine ? '' : 'Publique a loja virtual para usar o QR Code.', !CZ.d.vitrine);
+    chk(sw, 'Bateria e garantia dos seminovos', 'bateria'); chk(sw, 'Mensagem no rodapé', 'rodape');
+    if (c.rodape) { var rt = inp('text', 'Mensagem do rodapé'); rt.maxLength = 120; rt.value = c.rodapeTxt; rt.setAttribute('aria-label', 'Mensagem do rodapé'); rt.oninput = function () { CZ.cfg.rodapeTxt = rt.value; czGuardarLocal(); czPrev(); }; sw.appendChild(rt); }
+    // cores e título
+    var sc = czSec('Cores e título');
+    var ti = inp('text', 'OFERTA'); ti.maxLength = 24; ti.value = c.titulo; ti.oninput = function () { CZ.cfg.titulo = ti.value; czGuardarLocal(); czPrev(); }; campo(sc, 'Título da faixa', ti);
+    var cores = function (rot, k, pal) { sc.appendChild(el('label', '', rot)); var w = el('div', 'cartcores'); sc.appendChild(w);
+      pal.forEach(function (h) { var b0 = el('button', 'cartcor' + (c[k] === h ? ' on' : '')); b0.type = 'button'; b0.style.background = h; b0.setAttribute('aria-label', 'Cor ' + h); b0.setAttribute('aria-pressed', c[k] === h ? 'true' : 'false'); b0.onclick = function () { var n = {}; n[k] = h; czTroca(n); }; w.appendChild(b0); });
+      var oc = el('input'); oc.type = 'color'; oc.value = c[k]; oc.setAttribute('aria-label', 'Outra cor'); oc.oninput = function () { CZ.cfg[k] = oc.value.toUpperCase(); czGuardarLocal(); czPrev(); }; w.appendChild(oc); };
+    cores('Cor da faixa', 'cor', ['#D92D20', '#F79009', '#137A3C', '#2F5BFF', '#6B21A8', '#0F1B2D']);
+    cores('Cor dos preços', 'cor2', ['#0F1B2D', '#D92D20', '#2F5BFF', '#137A3C']);
+  }
+  function czItensValidos() { return CARTAZ.itens.filter(function (it) { return czDado(it); }); }
+  function czPrev() {
+    if (!CZ.prevBox) return;
+    var c = CZ.cfg, box = CZ.prevBox; box.innerHTML = ''; CZ.tabs.innerHTML = ''; CZ.prevRod.innerHTML = '';
+    [['cartaz', 'Este cartaz'], ['folha', 'Folha inteira']].forEach(function (v) { var b0 = el('button', 'czvb' + (CZ.vista === v[0] ? ' on' : ''), v[1]); b0.type = 'button'; b0.setAttribute('role', 'tab'); b0.setAttribute('aria-selected', CZ.vista === v[0] ? 'true' : 'false'); b0.onclick = function () { CZ.vista = v[0]; czPrev(); }; CZ.tabs.appendChild(b0); });
+    var its = czItensValidos(), dados = its.map(czDado);
+    if (CZ.prod >= dados.length) CZ.prod = Math.max(0, dados.length - 1);
+    var mm = czMM(c.porFolha, c.orient), dei = mm[0] > mm[1] * 1.15;
+    if (CZ.vista === 'cartaz') {
+      var esc = Math.min(520 / mm[0], 640 / mm[1]), w = el('div', 'czed'); w.style.width = Math.round(mm[0] * esc) + 'px'; w.style.aspectRatio = mm[0] + ' / ' + mm[1]; box.appendChild(w);
+      var cz = czCartaz(dados[CZ.prod] || czExemplo(), c, { n: c.porFolha, dei: dei, ed: true }); cz.style.width = '100%'; cz.style.height = '100%'; w.appendChild(cz);
+      czArrastar(w);
+      CZ.prevRod.appendChild(el('div', 'hint', 'Arraste os selos com o mouse ou o dedo. Toque num selo para mudar tamanho e giro.'));
+      if (dados.length > 1) { var nv = el('div', 'czlinha czcentro'); btn(nv, '‹', 'ghost mini', function () { CZ.prod = (CZ.prod + dados.length - 1) % dados.length; czPrev(); }).setAttribute('aria-label', 'Produto anterior');
+        nv.appendChild(el('span', '', dados[CZ.prod].nome + ' · ' + (CZ.prod + 1) + ' de ' + dados.length)); btn(nv, '›', 'ghost mini', function () { CZ.prod = (CZ.prod + 1) % dados.length; czPrev(); }).setAttribute('aria-label', 'Próximo produto'); CZ.prevRod.appendChild(nv); }
+    } else {
+      var lista = czListaImpressao(its), folhas = czFolhas(lista.length ? lista : [czExemplo()], c), W = c.orient === 'deitada' ? 297 : 210, H = c.orient === 'deitada' ? 210 : 297, e2 = Math.min(520 / W, 640 / H);
+      if (CZ.folha >= folhas.length) CZ.folha = 0;
+      var fw = folhas[CZ.folha]; fw.style.width = Math.round(W * e2) + 'px'; fw.style.maxWidth = '100%'; fw.style.aspectRatio = W + ' / ' + H; fw.classList.add('czsombra'); box.appendChild(fw);
+      var nf = el('div', 'czlinha czcentro'); CZ.prevRod.appendChild(nf);
+      if (folhas.length > 1) btn(nf, '‹', 'ghost mini', function () { CZ.folha = (CZ.folha + folhas.length - 1) % folhas.length; czPrev(); }).setAttribute('aria-label', 'Folha anterior');
+      nf.appendChild(el('span', '', lista.length + ' cartaz(es), ' + c.porFolha + ' por folha: folha ' + (CZ.folha + 1) + ' de ' + folhas.length));
+      if (folhas.length > 1) btn(nf, '›', 'ghost mini', function () { CZ.folha = (CZ.folha + 1) % folhas.length; czPrev(); }).setAttribute('aria-label', 'Próxima folha');
+    }
+  }
+  function czListaImpressao(its) { return its.reduce(function (l, it) { var d = czDado(it); for (var i = 0; i < (it.copias || 1); i++) l.push(d); return l; }, []); }
+  /** Arrastar selos na prévia (mouse e dedo). */
+  function czArrastar(w) {
+    var ar = null;
+    w.onpointerdown = function (e) { var t = e.target.closest ? e.target.closest('.cz-selo') : null; if (!t || t.dataset.i === undefined) return; e.preventDefault(); ar = { i: Number(t.dataset.i), no: t }; try { w.setPointerCapture(e.pointerId); } catch (er) {} if (CZ.sel !== ar.i) { CZ.sel = ar.i; w.querySelectorAll('.cz-selo').forEach(function (x) { x.classList.toggle('on', x === t); }); czOps(); } };
+    w.onpointermove = function (e) { if (!ar) return; var r = w.getBoundingClientRect(), s = CZ.cfg.selos[ar.i]; if (!s) return; s.x = Math.round(Math.max(3, Math.min(97, (e.clientX - r.left) / r.width * 100))); s.y = Math.round(Math.max(3, Math.min(97, (e.clientY - r.top) / r.height * 100))); ar.no.style.left = s.x + '%'; ar.no.style.top = s.y + '%'; };
+    w.onpointerup = w.onpointercancel = function () { if (ar) { ar = null; czGuardarLocal(); } };
+    w.onkeydown = function (e) { var t = e.target; if (!t.dataset || t.dataset.i === undefined) return; var s = CZ.cfg.selos[Number(t.dataset.i)], d = { ArrowLeft: [-2, 0], ArrowRight: [2, 0], ArrowUp: [0, -2], ArrowDown: [0, 2] }[e.key]; if (!s || !d) return; e.preventDefault(); s.x = Math.max(3, Math.min(97, s.x + d[0])); s.y = Math.max(3, Math.min(97, s.y + d[1])); t.style.left = s.x + '%'; t.style.top = s.y + '%'; czGuardarLocal(); };
+  }
+  function czLista() {
+    var box = CZ.lista; if (!box) return; box.innerHTML = '';
+    box.appendChild(el('h3', 'ch', 'Produtos do cartaz (' + CARTAZ.itens.length + ')'));
+    var bu = inp('text', 'Nome, código, IMEI ou bipe o código de barras'); bu.setAttribute('aria-label', 'Buscar produto'); box.appendChild(bu);
+    var achados = el('div', 'cartbusca'); box.appendChild(achados);
     bu.oninput = function () {
       achados.innerHTML = ''; var q = semAc(bu.value.trim()); if (q.length < 2) return;
       var ps = (S.ac ? S.ac.produtos : []).filter(function (p) { return p.formato !== 'variacoes' && semAc(p.nome + ' ' + p.sku + ' ' + p.codigo).indexOf(q) > -1; }).slice(0, 6).map(function (p) { return { tipo: 'produto', id: p.id, t: p.nome }; });
       var as = (S.disp || []).filter(function (a) { return semAc(a.modelo + ' ' + a.imei + ' ' + (a.cor || '')).indexOf(q) > -1; }).slice(0, 6).map(function (a) { return { tipo: 'aparelho', linha: a.linha, imei: a.imei, t: nomeProduto(a) }; });
-      ps.concat(as).forEach(function (x) { var b0 = el('button', 'lnk', '+ ' + x.t); b0.type = 'button'; b0.onclick = function () { CARTAZ.itens.push(x.tipo === 'produto' ? { tipo: 'produto', id: x.id } : { tipo: 'aparelho', linha: x.linha, imei: x.imei }); bu.value = ''; achados.innerHTML = ''; desLista(); }; achados.appendChild(b0); });
+      ps.concat(as).forEach(function (x) { var b0 = el('button', 'lnk', '+ ' + x.t); b0.type = 'button'; b0.onclick = function () { CARTAZ.itens.push(x.tipo === 'produto' ? { tipo: 'produto', id: x.id } : { tipo: 'aparelho', linha: x.linha, imei: x.imei }); czFichas(); czLista(); czPrev(); }; achados.appendChild(b0); });
       if (!achados.children.length) achados.appendChild(el('div', 'hint', 'Nada encontrado.'));
     };
-    var carregar = function () {
-      (S.ac ? S.ac.produtos : []).forEach(function (p) { M[p.id] = p; }); (S.disp || []).forEach(function (a) { A[a.linha + '|' + a.imei] = a; }); desLista();
-    };
-    garantirAc(function () { if (S.disp) carregar(); else call('disponiveis', [S.token]).then(function (d) { S.disp = d.lista || d; carregar(); }).catch(carregar); });
-    // opções
-    dir.appendChild(el('h3', 'ch', 'Como imprimir'));
-    var pf = el('div', 'cartchips'); dir.appendChild(el('label', '', 'Cartazes por folha A4')); dir.appendChild(pf);
-    var pfTxt = el('div', 'hint'); dir.appendChild(pfTxt);
-    var desPf = function () { pf.innerHTML = ''; [1, 2, 4].forEach(function (n) { var b0 = el('button', 'btn ghost mini' + (cfg.porFolha === n ? ' on' : ''), n + ' por folha'); b0.type = 'button'; b0.setAttribute('aria-pressed', cfg.porFolha === n ? 'true' : 'false'); b0.onclick = function () { cfg.porFolha = n; salvar(); desPf(); }; pf.appendChild(b0); });
-      pfTxt.textContent = { 1: '1 por folha: cartaz grande, com a ficha técnica completa. Bom para celulares.', 2: '2 por folha: meia folha, com 4 linhas da ficha técnica.', 4: '4 por folha: bom para acessórios. Sem ficha técnica.' }[cfg.porFolha]; };
-    desPf();
-    var ti = inp('text', 'OFERTA'); ti.maxLength = 24; ti.value = cfg.titulo; ti.oninput = function () { cfg.titulo = ti.value; salvar(); }; campo(dir, 'Título da faixa', ti);
-    var cores = function (rot, chave, pal) {
-      dir.appendChild(el('label', '', rot)); var w = el('div', 'cartcores'); dir.appendChild(w);
-      var des = function () { w.innerHTML = ''; pal.forEach(function (h) { var b0 = el('button', 'cartcor' + (cfg[chave] === h ? ' on' : '')); b0.type = 'button'; b0.style.background = h; b0.setAttribute('aria-label', 'Cor ' + h); b0.onclick = function () { cfg[chave] = h; salvar(); des(); }; w.appendChild(b0); });
-        var o = el('input'); o.type = 'color'; o.value = cfg[chave]; o.setAttribute('aria-label', 'Outra cor'); o.oninput = function () { cfg[chave] = o.value; salvar(); }; w.appendChild(o); };
-      des();
-    };
-    cores('Cor da faixa', 'cor', ['#D92D20', '#F79009', '#FDB022', '#137A3C', '#2F5BFF', '#0F1B2D']);
-    cores('Cor dos preços e da ficha', 'cor2', ['#0F1B2D', '#D92D20', '#2F5BFF', '#137A3C']);
-    var tx = cartazTaxas(), sp = el('select'); sp.setAttribute('aria-label', 'Parcelas');
-    var o0 = el('option', '', 'Maior parcelamento até 12x'); o0.value = '0'; sp.appendChild(o0); tx.forEach(function (t) { var o = el('option', '', 'Até ' + t.n + 'x'); o.value = String(t.n); sp.appendChild(o); }); sp.value = String(cfg.parcelas || 0);
-    sp.onchange = function () { cfg.parcelas = parseInt(sp.value, 10) || 0; salvar(); desLista(); }; campo(dir, 'Parcelas no cartão (pela Calculadora de Cartão da loja)', sp);
-    dir.appendChild(el('label', '', 'Selo ou imagem no cartaz'));
-    var sw = el('div', 'cartchips'); dir.appendChild(sw);
-    var imgs = LS.get('cartazImgs', []); if (!Array.isArray(imgs)) imgs = [];
-    var desSelo = function () { sw.innerHTML = ''; SELOS.concat(imgs.map(function (x, i) { return ['img' + i, 'Minha imagem ' + (i + 1)]; })).forEach(function (x) { var b0 = el('button', 'btn ghost mini' + (cfg.selo === x[0] ? ' on' : ''), x[1]); b0.type = 'button'; b0.onclick = function () { cfg.selo = x[0]; salvar(); desSelo(); }; sw.appendChild(b0); }); };
-    desSelo();
-    var up = el('input'); up.type = 'file'; up.accept = 'image/png,image/jpeg,image/webp'; up.className = 'hide';
-    var bup = el('button', 'btn ghost', 'Enviar minha imagem (PNG sem fundo)'); bup.type = 'button'; bup.onclick = function () { up.click(); }; dir.appendChild(bup); dir.appendChild(up);
-    dir.appendChild(el('div', 'hint', 'Imagem com fundo liso também serve: o sistema tira o fundo sozinho. Fica salva neste computador para usar de novo (até 6).'));
-    up.onchange = function () { var f0 = up.files && up.files[0]; up.value = ''; if (!f0) return; if (f0.size > 8e6) { msg('topMsg', 'Imagem grande demais (máximo 8 MB).'); return; }
-      seloSemFundo(f0, function (url) { if (!url) { msg('topMsg', 'Não consegui ler a imagem.'); return; } imgs.unshift(url); imgs = imgs.slice(0, 6); LS.set('cartazImgs', imgs); cfg.selo = 'img0'; salvar(); desSelo(); }); };
-    var spos = el('select'); [['dir', 'Canto de cima, à direita'], ['esq', 'Canto de cima, à esquerda'], ['preco', 'Ao lado do preço']].forEach(function (x) { var o = el('option', '', x[1]); o.value = x[0]; spos.appendChild(o); }); spos.value = cfg.seloPos; spos.onchange = function () { cfg.seloPos = spos.value; salvar(); }; campo(dir, 'Posição do selo', spos);
-    var chk = function (txt, chave, depois) { var l = el('label', 'chk'), c = el('input'); c.type = 'checkbox'; c.checked = !!cfg[chave]; c.onchange = function () { cfg[chave] = c.checked; salvar(); if (depois) depois(); }; l.appendChild(c); l.appendChild(document.createTextNode(' ' + txt)); dir.appendChild(l); return c; };
-    chk('Mostrar a ficha técnica nos celulares', 'ficha'); chk('Mostrar bateria e garantia nos seminovos', 'bateria');
-    var rt = inp('text', 'Mensagem do rodapé'); rt.maxLength = 120; rt.value = cfg.rodapeTxt; rt.oninput = function () { cfg.rodapeTxt = rt.value; salvar(); };
-    chk('Mostrar mensagem no rodapé', 'rodape', function () { rt.style.display = cfg.rodape ? '' : 'none'; }); dir.appendChild(rt); rt.style.display = cfg.rodape ? '' : 'none';
-    var lem = el('label', 'chk'), cl = el('input'); cl.type = 'checkbox'; cl.checked = cfg.lembrar !== false; cl.onchange = function () { cfg.lembrar = cl.checked; if (cl.checked) LS.set('cartazCfg', cfg); else LS.set('cartazCfg', null); }; lem.appendChild(cl); lem.appendChild(document.createTextNode(' Lembrar estas escolhas')); dir.appendChild(lem);
-    var bi = el('button', 'btn ok', 'Imprimir cartazes'); bi.type = 'button'; dir.appendChild(bi);
-    bi.onclick = function () {
-      if (!CARTAZ.itens.length) { msg('topMsg', 'Coloque pelo menos um produto.'); return; }
-      var its = CARTAZ.itens.filter(function (it) { return precoIt(it) > 0; });
-      if (its.length < CARTAZ.itens.length) avisoTopo((CARTAZ.itens.length - its.length) + ' produto(s) sem preço ficaram de fora.', 'erro');
-      if (!its.length) return;
-      var modelos = cfg.ficha && cfg.porFolha < 4 ? its.filter(function (it) { return it.tipo === 'aparelho' && A[it.linha + '|' + it.imei]; }).map(function (it) { return A[it.linha + '|' + it.imei].modelo; }).filter(function (m, i, l) { return l.indexOf(m) === i; }) : [];
-      bi.disabled = true;
-      Promise.all(modelos.map(function (mo) { return call('fichaModelo', [S.token, mo]).then(function (d) { F[mo] = d; }).catch(function () {}); })).then(function () {
-        bi.disabled = false;
-        cartazImprimir(its.reduce(function (l, it) { for (var i = 0; i < (it.copias || 1); i++) l.push(it); return l; }, []).map(function (it) {
-          var a = it.tipo === 'aparelho' ? A[it.linha + '|' + it.imei] : null, p = it.tipo === 'produto' ? M[it.id] : null;
-          return { nome: a ? a.modelo : p.nome, sub: a ? [String(a.cor || '').toUpperCase(), a.classif].filter(Boolean).join(' · ') : (p.grupo || '').split(' › ').pop(), semi: !!a, bat: a && a.bateria, gar: a ? 'Garantia 90 dias' : '',
-            cod: a ? 'IMEI final ' + String(a.imei).slice(-4) : (p.sku || p.codigo || ''), precos: cartazPrecos(precoIt(it), cfg.parcelas), ficha: a && F[a.modelo] ? F[a.modelo].campos.filter(function (c) { return c.v && c.cartaz !== false; }) : [], dest: a && F[a.modelo] ? F[a.modelo].destaques : '' };
-        }), cfg, imgs);
-      });
-    };
+    if (!CARTAZ.itens.length) { box.appendChild(el('div', 'empty', 'Busque acima ou marque produtos em Suprimento › Produtos e toque em "Imprimir cartaz A4".')); return; }
+    var cab = ['Produto', 'À vista', 'Parcelado'].concat(CZ.cfg.riscado ? ['De R$'] : []).concat(['Cópias', '']);
+    l8Tabela(box, cab, CARTAZ.itens.map(function (it, i) {
+      var pr = cartazPrecos(czPreco(it), CZ.cfg.parcelas), cp2 = inp('number', '1'); cp2.min = 1; cp2.max = 20; cp2.value = it.copias || 1; cp2.style.width = '64px'; cp2.setAttribute('aria-label', 'Cópias'); cp2.onclick = function (e) { e.stopPropagation(); }; cp2.oninput = function () { it.copias = Math.max(1, Math.min(20, parseInt(cp2.value, 10) || 1)); if (CZ.vista === 'folha') czPrev(); };
+      var tr = el('button', 'lnk', 'Tirar'); tr.type = 'button'; tr.onclick = function (e) { e.stopPropagation(); CARTAZ.itens.splice(i, 1); czLista(); czPrev(); };
+      var linha = [czNome(it) + (it.tipo === 'aparelho' ? ' (seminovo)' : ''), pr ? brl(pr.vista) : el('span', 'bdg err', 'sem preço'), pr && pr.n > 1 ? pr.n + 'x ' + brl(pr.parc) : '—'];
+      if (CZ.cfg.riscado) { var de = inp('text', '0,00'); de.inputMode = 'decimal'; de.style.width = '90px'; de.setAttribute('aria-label', 'Preço de (antigo)'); de.value = it.de ? String(it.de).replace('.', ',') : ''; de.onclick = function (e) { e.stopPropagation(); }; de.oninput = function () { var n = parseFloat(de.value.replace(/\./g, '').replace(',', '.')); it.de = n > 0 ? Math.round(n * 100) / 100 : 0; czPrev(); }; linha.push(de); }
+      return linha.concat([cp2, tr]);
+    }), function (i) { var vs = czItensValidos(), k = vs.indexOf(CARTAZ.itens[i]); if (k > -1) { CZ.prod = k; CZ.vista = 'cartaz'; czPrev(); } });
+    var sem = CARTAZ.itens.length - czItensValidos().length; if (sem) box.appendChild(el('div', 'hint', sem + ' produto(s) sem preço ficam fora da impressão.'));
   }
-  function cartazNum(v) { var s = (Math.round(v * 100) / 100).toFixed(2).split('.'); return { int: s[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.'), cent: ',' + s[1] }; }
-  /** Monta as folhas e manda imprimir. */
-  function cartazImprimir(lista, cfg, imgs) {
-    var w = el('div', 'cpag'), n = cfg.porFolha, emp = empresaDe(lojaUser()) || {}, logo = emp.logo || '';
-    var folha = null;
-    lista.forEach(function (c, i) {
-      if (i % n === 0) { folha = el('div', 'cfolha f' + n); w.appendChild(folha); }
-      var k = el('div', 'cart'); folha.appendChild(k);
-      var fx = el('div', 'cfx'); fx.style.background = cfg.cor; fx.appendChild(el('span', 'ctit', cfg.titulo || 'OFERTA'));
-      var lg = el('span', 'clogo'); if (logo) { var im = el('img'); im.src = logo; im.alt = ''; lg.appendChild(im); } else lg.textContent = emp.fantasia || emp.razao || ''; fx.appendChild(lg); k.appendChild(fx);
-      var cp = el('div', 'ccorpo'); k.appendChild(cp);
-      if (c.semi && cfg.bateria) { var sm = el('div', 'csemi'); var tg = el('span', 'ctag', 'SEMINOVO'); tg.style.background = cfg.cor2; sm.appendChild(tg); sm.appendChild(el('span', '', [c.bat ? 'Bateria ' + c.bat + '%' : '', c.gar].filter(Boolean).join(' · '))); cp.appendChild(sm); }
-      cp.appendChild(el('div', 'cnome', c.nome)); if (c.sub) cp.appendChild(el('div', 'csub', c.sub));
-      var P = c.precos, bx = el('div', 'cparc'); bx.style.borderColor = cfg.cor2;
-      if (P.n > 1) { bx.appendChild(el('div', 'crot', 'PARCELADO EM R$')); var pl = el('div', 'cpv'); pl.style.color = cfg.cor2; pl.appendChild(el('span', 'cn', P.n + 'x')); var pn = cartazNum(P.parc), sv = el('span', 'cv', pn.int); sv.appendChild(el('small', '', pn.cent)); pl.appendChild(sv); bx.appendChild(pl); var sj = el('span', 'csj', 'SEM JUROS NO CARTÃO'); sj.style.background = cfg.cor2; bx.appendChild(sj); }
-      else { bx.appendChild(el('div', 'crot', 'POR APENAS R$')); var pl2 = el('div', 'cpv'); pl2.style.color = cfg.cor2; var pv = cartazNum(P.vista), sv2 = el('span', 'cv', pv.int); sv2.appendChild(el('small', '', pv.cent)); pl2.appendChild(sv2); bx.appendChild(pl2); }
-      cp.appendChild(bx);
-      if (P.n > 1) { var dp = el('div', 'cduas'); [['À VISTA R$', P.vista, 'no Pix ou dinheiro'], ['TOTAL A PRAZO R$', P.prazo, 'em até ' + P.n + 'x no cartão']].forEach(function (x) { var d0 = el('div'); d0.appendChild(el('div', 'crot', x[0])); var nn = cartazNum(x[1]), vv = el('div', 'cvv', nn.int); vv.appendChild(el('small', '', nn.cent)); d0.appendChild(vv); if (n === 1) d0.appendChild(el('div', 'cmin', x[2])); dp.appendChild(d0); }); cp.appendChild(dp); }
-      if (cfg.ficha && n < 4 && c.ficha.length) {
-        var fi = el('div', 'cficha'); fi.appendChild(el('div', 'cfh', 'FICHA TÉCNICA')); var gr = el('div', 'cfg');
-        c.ficha.slice(0, n === 1 ? 10 : 4).forEach(function (f) { var it = el('div', 'cfi'), ic = el('span', 'cfic'); ic.style.color = cfg.cor2; ic.innerHTML = fichaSvg(f.ic); it.appendChild(ic); var t = el('span'); t.appendChild(el('small', '', f.n)); t.appendChild(el('b', '', f.v)); it.appendChild(t); gr.appendChild(it); });
-        fi.appendChild(gr); if (n === 1 && c.dest) fi.appendChild(el('div', 'cdest', c.dest)); cp.appendChild(fi);
-      }
-      if (cfg.selo) { var se = el('div', 'cselo ' + (cfg.seloPos || 'dir'));
-        if (/^img\d$/.test(cfg.selo)) { var si = el('img'); si.src = imgs[+cfg.selo.slice(3)] || ''; si.alt = ''; se.appendChild(si); se.classList.add('cimg'); }
-        else { var tt = { black: ['BLACK', 'FRIDAY'], semana: ['OFERTAS', 'DA SEMANA'], queima: ['QUEIMA DE', 'ESTOQUE'], lanc: ['LANÇA-', 'MENTO'], maes: ['DIA DAS', 'MÃES'], natal: ['FELIZ', 'NATAL'] }[cfg.selo] || ['', '']; se.appendChild(el('b', '', tt[0])); se.appendChild(el('b', 'c2', tt[1])); }
-        k.appendChild(se); }
-      if (cfg.rodape && cfg.rodapeTxt) { var rd = el('div', 'crod'); rd.style.background = cfg.cor; rd.appendChild(el('span', '', cfg.rodapeTxt)); if (c.cod) rd.appendChild(el('b', '', c.cod)); k.appendChild(rd); }
+  function czImprimir() {
+    var its = czItensValidos(); if (!its.length) { avisoTopo('Coloque pelo menos um produto com preço.', 'erro'); return; }
+    var c = CZ.cfg, folhas = czFolhas(czListaImpressao(its), c), w = el('div'), W = c.orient === 'deitada' ? 297 : 210, H = c.orient === 'deitada' ? 210 : 297;
+    folhas.forEach(function (f) { f.style.width = W + 'mm'; f.style.height = H + 'mm'; f.style.pageBreakAfter = 'always'; w.appendChild(f); });
+    imprimirHTML('Cartazes', w, '@page{size:A4 ' + (c.orient === 'deitada' ? 'landscape' : 'portrait') + ';margin:0}body{margin:0!important}' + CZ_CSS + '.cz{outline:1px dashed #ccc}');
+  }
+  // ---- modelos e galeria ----
+  function czCfgEnvio() { var c = Object.assign({}, CZ.cfg); c.selos = CZ.cfg.selos.map(function (s) { return { ref: s.ref, x: s.x, y: s.y, s: s.s, rot: s.rot || 0 }; }); return c; }
+  function czModeloSalvar(id) {
+    var m = id ? (CZ.d.modelos || []).filter(function (x) { return x.id === id; })[0] : null;
+    var F = l8Form(m ? 'Atualizar modelo' : 'Salvar como modelo', 'Guarda o layout, as cores, os selos e as opções de preço. Vale para todas as lojas. Os produtos e os preços não ficam presos ao modelo.');
+    var nm = inp('text', 'Ex.: Black Friday celulares'); nm.maxLength = 40; nm.value = m ? m.nome : ''; campo(F.c, 'Nome do modelo', nm, true);
+    F.ok(m ? 'Atualizar' : 'Salvar', function () { return call('cartazModeloSalvar', [S.token, { id: m ? m.id : '', nome: nm.value, cfg: czCfgEnvio() }]).then(function (r) { CZ.d.modelos = (CZ.d.modelos || []).filter(function (x) { return x.id !== r.id; }).concat([r]); CZ.modelo = r.id; fecharModal(); avisoTopo('Modelo "' + r.nome + '" salvo.'); czOps(); }); });
+  }
+  function czModeloApagar(id) {
+    var m = (CZ.d.modelos || []).filter(function (x) { return x.id === id; })[0]; if (!m || !confirm('Apagar o modelo "' + m.nome + '"? As escolhas atuais continuam na tela.')) return;
+    call('cartazModeloApagar', [S.token, id]).then(function () { CZ.d.modelos = CZ.d.modelos.filter(function (x) { return x.id !== id; }); CZ.modelo = ''; czOps(); }).catch(function (e) { avisoTopo(String(e.message || e), 'erro'); });
+  }
+  function czSeloEnviar(f0, depois) {
+    if (!f0) return; if (f0.size > 8e6) { avisoTopo('Imagem grande demais (máximo 8 MB).', 'erro'); return; }
+    seloSemFundo(f0, function (url) {
+      if (!url) { avisoTopo('Não consegui ler a imagem.', 'erro'); return; }
+      call('cartazSeloSalvar', [S.token, { nome: String(f0.name || 'Selo da loja').replace(/\.[a-z0-9]+$/i, '').slice(0, 40), img: url }]).then(function (s) { CZ.d.selos = (CZ.d.selos || []).concat([s]); depois(s, url); }).catch(function (e) { avisoTopo(String(e.message || e), 'erro'); });
     });
-    imprimirHTML('Cartazes', w, '@page{size:A4;margin:0}body{margin:0!important}.cfolha{width:210mm;height:297mm;display:grid;box-sizing:border-box;page-break-after:always;overflow:hidden}.cfolha.f1{grid-template:1fr/1fr}.cfolha.f2{grid-template:1fr 1fr/1fr}.cfolha.f4{grid-template:1fr 1fr/1fr 1fr}' +
-      '.cart{position:relative;display:flex;flex-direction:column;overflow:hidden;border:1px dashed #bbb;font-family:Inter,system-ui,sans-serif;color:#0F1B2D}.cfx{display:flex;align-items:center;justify-content:space-between;padding:0 6%;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
-      '.f1 .cfx{height:30mm}.f2 .cfx{height:18mm}.f4 .cfx{height:14mm}.ctit{font-weight:900;letter-spacing:-.5px}.f1 .ctit{font-size:40pt}.f2 .ctit{font-size:26pt}.f4 .ctit{font-size:16pt}.clogo{background:#fff;border-radius:3mm;display:flex;align-items:center;justify-content:center;color:#24324A;font-weight:700;font-size:10pt;padding:1.5mm 3mm;max-width:45%}.clogo img{max-height:18mm;max-width:100%;object-fit:contain}.f4 .clogo img{max-height:8mm}' +
-      '.ccorpo{flex:1;padding:4% 6%;display:flex;flex-direction:column;gap:3mm}.csemi{display:flex;gap:3mm;align-items:center;font-size:11pt;color:#3B4658;font-weight:600}.ctag{color:#fff;border-radius:1.5mm;padding:1mm 2.5mm;font-weight:800;font-size:10pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
-      '.cnome{font-weight:900;line-height:1.05;text-transform:uppercase}.f1 .cnome{font-size:34pt}.f2 .cnome{font-size:22pt}.f4 .cnome{font-size:14pt}.csub{color:#3B4658}.f1 .csub{font-size:15pt}.f4 .csub{font-size:9pt}' +
-      '.cparc{border:2.5px solid;border-radius:4mm;padding:3mm 5mm;display:flex;flex-direction:column;gap:1mm}.crot{font-size:10pt;font-weight:700;color:#3B4658}.f4 .crot{font-size:7pt}.cpv{display:flex;align-items:baseline;gap:3mm;font-weight:900}.cn{font-size:30pt}.cv{font-size:68pt;letter-spacing:-2px;line-height:1}.cv small,.cvv small{font-size:.5em}.f2 .cn{font-size:20pt}.f2 .cv{font-size:44pt}.f4 .cn{font-size:12pt}.f4 .cv{font-size:26pt}' +
-      '.csj{align-self:flex-start;color:#fff;border-radius:99px;padding:1mm 4mm;font-weight:800;font-size:11pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}.f4 .csj{font-size:7pt}.cduas{display:grid;grid-template-columns:1fr 1fr;gap:3mm}.cvv{font-weight:900;font-size:32pt;letter-spacing:-1px}.f2 .cvv{font-size:22pt}.f4 .cvv{font-size:14pt}.cmin{font-size:9pt;color:#3B4658}' +
-      '.cficha{background:#F3F5F9;border-radius:4mm;padding:3mm 4mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}.cfh{font-weight:800;font-size:12pt;margin-bottom:2mm}.cfg{display:grid;grid-template-columns:1fr 1fr;gap:2mm 5mm}.cfi{display:flex;gap:2.5mm;align-items:center;border-bottom:1px solid #D5DCE6;padding-bottom:1.5mm}.cfi small{display:block;font-size:8pt;color:#3B4658;font-weight:700}.cfi b{font-size:11pt}.f2 .cfi b{font-size:9pt}.cfic{display:flex;background:#fff;border-radius:2mm;padding:1mm}.cdest{font-size:10pt;margin-top:2mm;color:#24324A}' +
-      '.crod{display:flex;justify-content:space-between;gap:3mm;color:#fff;padding:2.5mm 6%;font-size:9pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}.f4 .crod{font-size:6.5pt}' +
-      '.cselo{position:absolute;width:34mm;height:34mm;border-radius:50%;background:#111;color:#fff;border:3px solid #FDB022;transform:rotate(12deg);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;-webkit-print-color-adjust:exact;print-color-adjust:exact}.cselo b{font-size:12pt}.cselo .c2{color:#FDB022}.f4 .cselo{width:18mm;height:18mm}.f4 .cselo b{font-size:6.5pt}' +
-      '.cselo.dir{top:34mm;right:6mm}.cselo.esq{top:34mm;left:6mm}.cselo.preco{top:50%;right:6mm}.f2 .cselo.dir,.f2 .cselo.esq{top:20mm}.f4 .cselo.dir,.f4 .cselo.esq{top:15mm}.cselo.cimg{background:none;border:0;transform:none;width:38mm;height:38mm}.cselo.cimg img{max-width:100%;max-height:100%;object-fit:contain}');
+  }
+  function czSeloApagar(id) {
+    var def = czSeloDef(id); if (!def || !confirm('Apagar o selo "' + def.nome + '" da galeria da loja? Ele sai também dos modelos que o usam.')) return;
+    call('cartazSeloApagar', [S.token, id]).then(function () { CZ.d.selos = CZ.d.selos.filter(function (x) { return x.id !== id; }); CZ.cfg.selos = CZ.cfg.selos.filter(function (s) { return s.ref !== id; }); CZ.sel = -1; czGuardarLocal(); czOps(); czPrev(); }).catch(function (e) { avisoTopo(String(e.message || e), 'erro'); });
+  }
+  function czMigrarVelhos(l) {
+    var n = 0; Promise.all(l.slice(0, 6).map(function (url, i) { return call('cartazSeloSalvar', [S.token, { nome: 'Minha imagem ' + (i + 1), img: url }]).then(function (s) { CZ.d.selos = (CZ.d.selos || []).concat([s]); n++; }).catch(function () {}); }))
+      .then(function () { if (n) LS.set('cartazImgs', []); avisoTopo(n + ' selo(s) na galeria da loja.'); czOps(); });
+  }
+  // ---- IA ----
+  function czProdutosIA() { return czItensValidos().slice(0, 12).map(function (it) { var d = czDado(it); return { nome: d.nome, semi: d.semi, vista: d.precos.vista, n: d.precos.n, parc: d.precos.parc }; }); }
+  function czIA() {
+    var box = CZ.iaBox, ia = CZ.d.ia || {}; box.innerHTML = '';
+    var top = el('div', 'cziatop'); box.appendChild(top);
+    var ic = el('span', 'cziaic'); ic.innerHTML = svgIco('robo'); top.appendChild(ic);
+    var tt = el('div', 'czflex'); tt.appendChild(el('b', '', 'Montar com IA')); tt.appendChild(el('div', 'hint', 'Peça do seu jeito. A IA mexe nas opções; você confere.')); top.appendChild(tt);
+    if (ia.gerir) btn(top, 'Configurar', 'ghost mini', czIACfg);
+    if (!ia.pode) { box.appendChild(el('div', 'czianao', ia.ligada === false ? 'A IA do cartaz está desligada. Todas as opções da esquerda continuam funcionando.' + (ia.gerir ? ' Para ligar, toque em Configurar.' : ' O dono ou o gerente pode ligar.') : 'A IA do cartaz não está liberada para você nesta loja. As opções da esquerda continuam funcionando.')); return; }
+    var conv = el('div', 'czconv'); box.appendChild(conv); CZ.conv = conv;
+    if (!CZ.msgs.length) CZ.msgs.push({ ia: true, t: 'Oi! Me diga como quer o cartaz. Ex.: "Black Friday para esses celulares, à vista bem grande, sem o total, 2 por folha". Também posso posicionar um selo da loja ou criar um selo parecido com uma foto.' });
+    CZ.msgs.forEach(function (m) { conv.appendChild(czMsgNo(m)); });
+    setTimeout(function () { conv.scrollTop = conv.scrollHeight; }, 0);
+    var sug = el('div', 'czsug'); box.appendChild(sug);
+    ['Destacar o à vista', 'Total embaixo das parcelas', '4 por folha', 'Cartaz de Black Friday'].forEach(function (t) { var b0 = el('button', 'czsb', t); b0.type = 'button'; b0.onclick = function () { czIAPedir({ modo: 'ajustar', texto: t }, t); }; sug.appendChild(b0); });
+    var fs = el('input'); fs.type = 'file'; fs.accept = 'image/png,image/jpeg,image/webp'; fs.className = 'hide'; box.appendChild(fs);
+    var fp = el('input'); fp.type = 'file'; fp.accept = 'image/png,image/jpeg,image/webp'; fp.className = 'hide'; box.appendChild(fp);
+    var la = el('div', 'czlinha'); box.appendChild(la);
+    btn(la, 'Enviar selo para a IA posicionar', 'ghost mini', function () { fs.click(); });
+    btn(la, 'Criar selo parecido com uma foto', 'ghost mini', function () { fp.click(); });
+    fs.onchange = function () { var f0 = fs.files && fs.files[0]; fs.value = ''; if (!f0) return;
+      czSeloEnviar(f0, function (s, url) { czIAPedir({ modo: 'posicionar', seloId: s.id, seloImg: url, texto: ta.value.trim() }, 'Coloca esse selo da loja ("' + s.nome + '") onde não atrapalhe o preço.' + (ta.value.trim() ? ' ' + ta.value.trim() : '')); ta.value = ''; }); };
+    fp.onchange = function () { var f0 = fp.files && fp.files[0]; fp.value = ''; if (!f0) return;
+      l8Arquivo(f0).then(function (url) { czIAPedir({ modo: 'parecido', foto: url, texto: ta.value.trim() }, 'Cria um selo parecido com esta foto.' + (ta.value.trim() ? ' ' + ta.value.trim() : '')); ta.value = ''; }).catch(function (e) { avisoTopo(String(e.message || e), 'erro'); }); };
+    var fo = el('div', 'czmanda'); box.appendChild(fo);
+    var ta = el('textarea'); ta.rows = 2; ta.maxLength = 600; ta.placeholder = 'Ex.: deixa o vermelho mais escuro e tira a ficha'; ta.setAttribute('aria-label', 'Mensagem para a IA'); fo.appendChild(ta);
+    var env = btn(fo, 'Enviar', 'ok', function () { var t = ta.value.trim(); if (!t) return; ta.value = ''; czIAPedir({ modo: 'ajustar', texto: t }, t); });
+    ta.onkeydown = function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); env.click(); } };
+    box.appendChild(el('div', 'hint', 'A IA vê só o nome e o preço dos produtos, o que você escreve e o selo que você enviar. Preços e parcelas vêm sempre da Calculadora de Cartão. Hoje: ' + (ia.usados || 0) + ' de ' + ia.limite + ' pedidos da loja.'));
+  }
+  function czMsgNo(m) {
+    var d = el('div', 'czmsg ' + (m.ia ? 'czdela' : 'czeu')); d.appendChild(el('div', '', m.t));
+    if (m.versoes) { var vw = el('div', 'czvers'); d.appendChild(vw); m.versoes.forEach(function (v, i) { var b0 = el('button', 'czver' + (m.esc === i ? ' on' : '')); b0.type = 'button'; b0.setAttribute('aria-pressed', m.esc === i ? 'true' : 'false'); var mini = el('span', 'czgm grande'); mini.appendChild(czSeloVetor(v, 100)); b0.appendChild(mini); b0.appendChild(el('span', 'czgn', v.nome)); b0.onclick = function () { m.esc = i; czIA(); }; vw.appendChild(b0); });
+      if (m.esc !== undefined && m.versoes[m.esc]) { var v = m.versoes[m.esc], fm = el('div', 'czvered'); d.appendChild(fm);
+        [['a', 'Linha de cima'], ['b', 'Destaque'], ['c', 'Linha de baixo']].forEach(function (x) { var i0 = inp('text', ''); i0.maxLength = 14; i0.value = v[x[0]] || ''; i0.oninput = function () { v[x[0]] = i0.value; }; campo(fm, x[1], i0); });
+        btn(fm, 'Guardar na galeria e usar', 'ok', function () { call('cartazSeloSalvar', [S.token, { tipo: 'vetor', nome: (v.b || v.a || 'Selo') + ' (IA)', v: v }]).then(function (s) { CZ.d.selos = (CZ.d.selos || []).concat([s]); if (CZ.cfg.selos.length < 3) { CZ.cfg.selos.push({ ref: s.id, x: 82, y: 26, s: 24, rot: v.rot || 0 }); CZ.sel = CZ.cfg.selos.length - 1; } czGuardarLocal(); m.versoes = null; m.t += ' Guardei na galeria e coloquei no cartaz.'; czOps(); czPrev(); czIA(); }).catch(function (e) { avisoTopo(String(e.message || e), 'erro'); }); }); } }
+    if (m.acoes) { var ac = el('div', 'czlinha'); d.appendChild(ac); m.acoes.forEach(function (a) { btn(ac, a[0], 'ghost mini', a[1]); }); }
+    return d;
+  }
+  function czIAPedir(q, mostrar) {
+    if (CZ.busy) return; CZ.busy = true;
+    CZ.msgs.push({ t: mostrar }); var esp = { ia: true, t: 'Pensando…' }; CZ.msgs.push(esp); czIA();
+    q.cfg = czCfgEnvio(); q.produtos = czProdutosIA();
+    call('cartazIA', [S.token, q]).then(function (r) {
+      CZ.busy = false; CZ.d.ia.usados = (CZ.d.ia.usados || 0) + 1;
+      if (r.erro) { esp.t = r.erro; czIA(); return; }
+      esp.t = r.resposta || 'Pronto.';
+      if (r.versoes) { esp.versoes = r.versoes; esp.esc = 0; }
+      if (r.cfg) {
+        var antes = JSON.parse(JSON.stringify(CZ.cfg)); CZ.cfg = czCfgLimpa(r.cfg); CZ.sel = -1; CZ.modelo = ''; czGuardarLocal();
+        esp.acoes = [['Desfazer', function () { CZ.cfg = czCfgLimpa(antes); czGuardarLocal(); esp.acoes = null; esp.t += ' (desfeito)'; czOps(); czPrev(); czIA(); }], ['Salvar como modelo', function () { czModeloSalvar(); }]];
+        czOps(); czPrev(); czLista();
+      }
+      czIA();
+    }).catch(function (e) { CZ.busy = false; esp.t = String(e && e.message || e); czIA(); });
+  }
+  function czIACfg() {
+    var c = (CZ.d.ia && CZ.d.ia.cfg) || { ligada: true, quem: 'todos', limite: 50, lojasOff: [] };
+    var F = l8Form('IA do cartaz', 'Quem liga e desliga: dono e gerente. Desligada, o editor funciona igual, só sem a conversa.');
+    var lg = el('label', 'chk'), ck = el('input'); ck.type = 'checkbox'; ck.checked = c.ligada !== false; lg.appendChild(ck); lg.appendChild(document.createTextNode(' Montar cartaz com IA ligado')); F.c.appendChild(lg);
+    var qm = l8Sel([['todos', 'Todos que imprimem cartaz'], ['gerentes', 'Só dono e gerente']], c.quem); campo(F.c, 'Quem pode usar', qm);
+    var li = inp('number', '50'); li.min = 1; li.max = 500; li.value = c.limite; campo(F.c, 'Limite de pedidos por dia, por loja', li);
+    F.c.appendChild(el('label', '', 'Desligar só nestas lojas'));
+    var marc = {}; (CZ.d.ia.lojas || []).forEach(function (l) { var w = el('label', 'chk'), x = el('input'); x.type = 'checkbox'; x.checked = c.lojasOff.indexOf(l) > -1; marc[l] = x; w.appendChild(x); w.appendChild(document.createTextNode(' ' + lojaNome(l))); F.c.appendChild(w); });
+    F.ok('Salvar', function () { return call('cartazIACfgSalvar', [S.token, { ligada: ck.checked, quem: qm.value, limite: li.value, lojasOff: Object.keys(marc).filter(function (l) { return marc[l].checked; }) }]).then(function () { fecharModal(); return call('cartazDados', [S.token]).then(function (d) { CZ.d = d; czOps(); czIA(); }); }); });
   }
   /** Tira o fundo liso da imagem do selo (cor das bordas vira transparente) e devolve um PNG até 500 px. */
   function seloSemFundo(file, cb) {
