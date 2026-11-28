@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-rQ0rfZzxvpFABqYp6NUzFfO0jAwBModiqcCAZdGjGuc=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data: https://wcrfhxijeoxgklyqkhko.supabase.co; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Jf07LKgE877GLYBItvRfoBbywJItYt0E9t3838aoG64=' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://wcrfhxijeoxgklyqkhko.supabase.co https://*.tile.openstreetmap.org https://cdnjs.cloudflare.com; connect-src 'self' https://wcrfhxijeoxgklyqkhko.supabase.co https://brasilapi.com.br https://viacep.com.br https://nominatim.openstreetmap.org https://cdn.jsdelivr.net; media-src 'self' blob: data: https://wcrfhxijeoxgklyqkhko.supabase.co; worker-src 'self' blob:; frame-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1B2D">
@@ -1407,6 +1407,245 @@
   body.gcpub{margin:0;background:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}.gcpw{display:flex;flex-direction:column;height:100vh}.gcph2{background:#0F1B2D;color:#fff;padding:14px 16px;display:flex;flex-direction:column}.gcph2 small{color:#C3CDE0}
   .gcpm{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#F3F5F9}.gcpb{max-width:80%;padding:8px 11px;border-radius:14px;font-size:0.875rem;background:#fff;border:1px solid #E3E7EE;white-space:pre-wrap}.gcpb.eu{align-self:flex-end;background:#2F5BFF;color:#fff;border:0}.gcpb small{display:block;font-size:0.75rem;opacity:.7}
   .gcpf{display:flex;gap:6px;padding:10px;border-top:1px solid #E3E7EE;flex-wrap:wrap}.gcpf input{flex:1;min-width:120px;height:42px;border:1px solid #D5DBE5;border-radius:10px;padding:0 12px;font:inherit}.gcpf button{height:42px;border:0;border-radius:10px;background:#2F5BFF;color:#fff;padding:0 16px;font:inherit;font-weight:700}.gcpe{color:#b3261e;font-size:0.8125rem}
+  /* ---------- Leva 22: visual novo do Gestti CRM (protótipo aprovado 28/11) ---------- */
+  :root{--gc-ag:#1E40C8;--gc-agbg:#EEF2FF;--gc-chat:#EEF1F6;--gc-out:#2445D6;--gc-outx:#DCE4FF;--gc-sel:#EEF2FF}
+  :root[data-tema="escuro"]{--gc-ag:#A9C3FF;--gc-agbg:#1D2B45;--gc-chat:#10161e;--gc-out:#2d4f8c;--gc-outx:#C9D7FF;--gc-sel:#1D2B45}
+  #vL8:has(#l8Corpo.gcfull)>.ptopo{display:none}
+  .gcintro{margin:-4px 0 14px;color:var(--muted);font-size:0.875rem}
+  .gctg{display:inline-flex;align-items:center;gap:5px;font-size:0.75rem;font-weight:700;border-radius:6px;padding:2px 8px;white-space:nowrap;line-height:1.4}
+  .gctg i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+  .gctg.ok{color:var(--ok);background:var(--ok-bg)}.gctg.ag{color:var(--gc-ag);background:var(--gc-agbg)}.gctg.wa{color:var(--warn);background:var(--warn-bg)}.gctg.rd{color:var(--err);background:var(--err-bg)}.gctg.nt{color:var(--muted);background:var(--soft)}
+  .gcsw{display:inline-flex;align-items:center;gap:8px;border:0;background:none;font:inherit;font-size:0.8438rem;font-weight:600;color:var(--ink);cursor:pointer;min-height:36px;padding:0;text-align:left}
+  .gcsw i{width:44px;height:26px;border-radius:13px;background:#B9C2D0;position:relative;flex:none;transition:background .15s}
+  .gcsw i::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .gcsw[aria-checked="true"] i{background:var(--ok)}.gcsw[aria-checked="true"] i::after{transform:translateX(18px)}
+  :root[data-tema="escuro"] .gcsw[aria-checked="true"] i{background:#1f8a4c}
+  .gcib{width:36px;height:36px;border:0;background:transparent;border-radius:9px;display:inline-grid;place-items:center;color:var(--ink);cursor:pointer;flex:none;position:relative;padding:0}
+  .gcib svg{width:19px;height:19px}.gcib:hover{background:var(--soft)}.gcib.on{background:var(--ink);color:var(--card)}
+  .gcibn{position:absolute;top:2px;right:2px;min-width:15px;height:15px;border-radius:8px;background:var(--accent);color:#fff;font-size:0.625rem;font-weight:800;display:grid;place-items:center;padding:0 3px}
+  .gcsech{display:flex;align-items:center;gap:10px;margin-bottom:8px}.gcsech .ch{margin:0;flex:1}.gcsech .lnk{min-height:32px}.gcsechs{margin:18px 0 10px;flex-wrap:wrap}.gcsechs .ch{flex:none}
+  .gckpi{border:1px solid var(--line);box-shadow:none}.gckpi.clk{cursor:pointer}.gckpi.clk:hover{border-color:#B9C6DA}.gckpi.alerta{box-shadow:inset 0 0 0 1.5px #F3B7B2}:root[data-tema="escuro"] .gckpi.alerta{box-shadow:inset 0 0 0 1.5px #6b2a26}
+  .gckpi4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .gcbr{flex:1;height:8px;border-radius:4px;background:var(--soft);overflow:hidden;display:block;min-width:40px}.gcbr i{display:block;height:100%;border-radius:4px;background:var(--accent)}
+  .gcbar .gcbr{height:10px}
+  .gcmes{display:flex;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px}.gcmes b{font-size:0.875rem;padding:0 6px;white-space:nowrap}.gcmes button{width:40px;height:40px;border:0;background:none;font:inherit;font-size:1.125rem;color:var(--ink);cursor:pointer}
+  .gcinfo{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:0.8438rem;color:var(--muted);margin-top:12px}.gcinfo>span:first-child{color:var(--accent);flex:none}.gcinfo svg{width:20px;height:20px}
+  .gcconvvz{margin:auto;padding:40px 20px;display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center;color:var(--muted);font-size:0.875rem;max-width:420px}.gcconvvz b{color:var(--ink);font-size:1rem}
+  .gcfil{width:auto!important;height:36px;min-height:36px;padding:0 30px 0 12px;border-radius:18px;border:1px solid var(--line);background-color:var(--card);font:inherit;font-size:0.8438rem;font-weight:600;color:var(--ink);cursor:pointer}
+  .gcfilg{height:40px;border-radius:10px}.gctg2[aria-pressed="true"]{border-color:var(--accent);background:var(--gc-sel);color:var(--gc-ag)}
+  .gcfils{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}.gcfesp{flex:1}.gcfres{font-size:0.875rem;color:var(--muted)}.gcfres b{color:var(--ink)}
+  .gcseg{display:inline-flex;background:var(--soft);border-radius:10px;padding:3px}.gcseg button{height:34px;padding:0 14px;border:0;border-radius:8px;background:none;font:inherit;font-size:0.8438rem;font-weight:700;color:var(--muted);cursor:pointer}.gcseg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(16,24,40,.12)}
+  .gctabs{border-bottom:0;gap:4px;margin-bottom:14px}.gctab{border:0;border-radius:18px;height:36px;padding:0 14px;font-weight:700;color:var(--muted);border-bottom:0}.gctab.on{background:var(--ink);color:var(--card);border-bottom:0}
+  /* painel */
+  .gcpain{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:12px;align-items:start}.gcpaind{display:flex;flex-direction:column;gap:12px}.gcpaind>.card,.gcpain>.card{margin:0}
+  @media (max-width:900px){.gcpain{grid-template-columns:1fr}}
+  .gchoje{gap:2px}.gchoje li{padding:0;background:none;border-radius:0}.gchoje li.gcvazio{padding:14px 4px;color:var(--muted)}
+  .gchi{width:100%;display:flex;align-items:center;gap:12px;padding:10px 8px;border:0;background:none;border-radius:10px;text-align:left;font:inherit;color:var(--ink);cursor:pointer}.gchi:hover{background:var(--soft2)}
+  .gchic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}.gchic svg{width:18px;height:18px}.gchic.rd{background:var(--err-bg);color:var(--err)}.gchic.wa{background:var(--warn-bg);color:var(--warn)}.gchic.pk{background:#FDE1EC;color:#A3134C}
+  .gchit{flex:1;min-width:0;display:flex;flex-direction:column}.gchit b{font-size:0.9062rem}.gchit small{font-size:0.8125rem;color:var(--muted)}
+  .gchiv{border:1px solid var(--line);border-radius:9px;padding:6px 12px;font-size:0.8125rem;font-weight:700;flex:none}
+  .gchrod{display:flex;flex-wrap:wrap;gap:6px 18px;border-top:1px solid var(--line);margin-top:8px;padding-top:10px;font-size:0.8438rem;color:var(--muted)}
+  .gccanl{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:0.875rem}.gccanl>span:nth-child(2){flex:1}
+  .gccq{width:28px;height:28px;border-radius:8px;color:#fff;display:grid;place-items:center;font-weight:800;font-size:0.8125rem;flex:none}
+  /* conversas: as três colunas cabem na tela; cada uma rola sozinha */
+  .gcgrade{grid-template-columns:340px minmax(0,1fr) 316px;gap:12px;background:none;box-shadow:none;border-radius:0;overflow:visible;height:calc(100dvh - var(--hh) - 40px);min-height:520px}
+  .gcgrade.semlado{grid-template-columns:340px minmax(0,1fr)}
+  .gcgrade>section,.gcgrade>aside{background:var(--card);border:1px solid var(--line);border-radius:14px;min-height:0;overflow:hidden}
+  .gclista{border-right:1px solid var(--line)}
+  .gclt{padding:14px 14px 10px;gap:10px;border-bottom:1px solid var(--line)}
+  .gclth{display:flex;align-items:center;gap:4px}.gclth h2{margin:0;font-size:1.25rem;flex:1;color:var(--ink)}.gclth h2 small{font-size:0.9375rem;color:var(--muted);font-weight:600}
+  .gcbusca{display:flex;gap:6px}.gcbq{flex:1;min-width:0;height:40px;display:flex;align-items:center;gap:8px;padding:0 12px;background:var(--soft);border-radius:10px;color:var(--muted);margin:0}
+  .gcbq svg{width:17px;height:17px;flex:none}.gcbq input{flex:1;min-width:0;border:0!important;background:transparent!important;padding:0!important;height:auto;box-shadow:none!important;font-size:0.875rem;color:var(--ink)}
+  .gcbusca .gcib{width:40px;height:40px;background:var(--soft)}.gcbusca .gcib.on{background:var(--ink);color:var(--card)}
+  .gcfpain{display:flex;flex-direction:column;gap:8px;padding:10px;background:var(--soft2);border:1px solid var(--line);border-radius:10px}.gcfpain[hidden]{display:none}
+  .gcexchips{display:flex;flex-wrap:wrap;gap:6px}.gcexc{height:32px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);font:inherit;font-size:0.7812rem;font-weight:600;color:var(--ink);cursor:pointer}.gcexc[aria-pressed="true"]{border-color:var(--accent);background:var(--gc-sel);color:var(--gc-ag)}
+  .gcabas{flex-wrap:nowrap;overflow-x:auto;gap:4px;margin:0 -4px;padding:0 4px 2px;scrollbar-width:none}.gcabas::-webkit-scrollbar{display:none}
+  .gcaba{flex:none;border:0;background:transparent;border-radius:8px;height:32px;padding:0 11px;font-size:0.8125rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}.gcaba.on{background:var(--ink);color:var(--card)}
+  .gcabn{min-width:18px;height:18px;padding:0 5px;border-radius:9px;font-size:0.7188rem;display:inline-grid;place-items:center;background:var(--line);color:var(--ink)}.gcaba.on .gcabn{background:var(--card);color:var(--ink)}
+  .gcitens{padding:6px}.gcit{border-bottom:0;border-radius:11px;padding:11px 10px;gap:11px;align-items:flex-start}.gcit.on{background:var(--gc-sel);box-shadow:none}
+  .gcit .gcav{width:44px;height:44px;font-size:0.875rem}.gcitl b{font-size:0.9375rem;font-weight:600}.gcit.nl .gcitl b{font-weight:800}.gcitl small{font-size:0.75rem}.gcit.nl .gcitl small{color:var(--gc-ag);font-weight:700}
+  .gcitp{display:flex;align-items:center;gap:8px;margin-top:2px}.gcitt{flex:1;min-width:0;font-size:0.8438rem}.gcit.nl .gcitt{color:var(--ink);font-weight:600}
+  .gcnl{margin-left:auto;min-width:20px;height:20px;background:var(--accent);font-size:0.75rem;flex:none}
+  :root[data-tema="escuro"] .gcnl{color:#0e131a}
+  .gcitb{margin-top:5px;gap:6px;font-size:0.75rem}.gcitb small{color:var(--muted)}
+  .gctag{background:var(--soft);color:var(--muted);border-radius:6px;padding:1px 7px;font-size:0.75rem;font-weight:600}
+  .gcvz{padding:34px 18px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;color:var(--muted);font-size:0.8438rem}.gcvz b{color:var(--ink);font-size:0.9375rem}
+  .gcitens.compacto .gcit{padding:8px 10px}.gcitens.compacto .gcav{width:34px;height:34px}
+  .gcav{font-weight:800}.gcav.g{width:40px;height:40px}.gcav.gg{width:64px;height:64px;font-size:1.375rem}.gcav.p2{width:32px;height:32px;font-size:0.75rem}
+  .gcconv{background:var(--card);display:flex;flex-direction:column}
+  .gcch{height:64px;flex:none;flex-wrap:nowrap;padding:0 12px 0 14px;gap:10px;background:var(--card)}
+  .gcchi{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;border:0;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--ink)}
+  .gcchi b{font-size:1rem;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gcchi span{font-size:0.8125rem;color:var(--muted);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gchac{margin-left:0;flex-wrap:nowrap;gap:6px}
+  .gchac .gcsw{border:1px solid var(--line);border-radius:99px;padding:0 12px 0 6px;height:36px;font-size:0.8125rem;font-weight:700}.gchac .gcsw i{width:34px;height:20px}.gchac .gcsw i::after{width:14px;height:14px}.gchac .gcsw[aria-checked="true"] i::after{transform:translateX(14px)}
+  .gchac .gcsw[aria-checked="true"]{border-color:#BFD0FF;background:var(--gc-agbg);color:var(--gc-ag)}.gchac .gcsw[aria-checked="true"] i{background:var(--accent)}
+  .gchb{height:36px;padding:0 12px;border:1px solid var(--line);background:var(--card);border-radius:9px;font:inherit;font-size:0.8125rem;font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
+  .gchb svg{width:16px;height:16px}.gchb>span:first-child{display:inline-grid}.gchb.soic{width:36px;padding:0;justify-content:center}.gchb.soic .gchbt{display:none}
+  .gchb[aria-pressed="true"]{border-color:var(--accent);background:var(--gc-sel);color:var(--gc-ag)}.gchb.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+  :root[data-tema="escuro"] .gchb.ok{background:#1f8a4c;border-color:#1f8a4c}
+  .gcmais,.gcvolta,.gcmaisb,.gcladox{display:none!important}
+  .gcmsgs{max-height:none;min-height:0;background:var(--gc-chat);padding:18px 22px;gap:6px}
+  .gcdia{align-self:center;font-size:0.75rem;font-weight:700;color:var(--muted);background:var(--card);border-radius:99px;padding:4px 12px;margin:6px 0}
+  .gcsis{background:none;color:var(--muted);font-size:0.7812rem;margin:4px 0}
+  .gcm{max-width:62%;border:0;border-radius:16px 16px 16px 4px;padding:8px 12px 6px;font-size:0.9062rem;line-height:1.45;box-shadow:0 1px 1px rgba(16,24,40,.06);background:var(--card)}
+  .gcm.out{background:var(--gc-out);color:#fff;border-radius:16px 16px 4px 16px}.gcm.out .gcma{color:var(--gc-outx)}.gcm.out .gcmh{color:var(--gc-outx)}.gcm.out a{color:#fff}
+  .gcm.ag{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 1.5px #BFD0FF}.gcm.ag .gcma{color:var(--gc-ag)}.gcm.ag .gcmh{color:var(--muted)}
+  :root[data-tema="escuro"] .gcm.ag{box-shadow:inset 0 0 0 1.5px #34508a}
+  .gcm.nota{align-self:stretch;max-width:none;margin:4px 40px;background:var(--nota);border:1px solid #EFD48A;border-radius:12px;color:var(--ink)}.gcm.nota .gcma{color:var(--warn)}
+  :root[data-tema="escuro"] .gcm.nota{border-color:#5c4a1a}
+  .gcma{font-size:0.75rem}.gcmh{display:flex;justify-content:flex-end;gap:6px;font-size:0.7188rem;margin-top:2px}.gcst{font-weight:700}.gcst.lida{color:var(--gc-ag)}.gcm.out .gcst.lida{color:#fff}.gcst.err{color:var(--err)}.gcm.out .gcst.err{color:#FFD7D3}
+  /* caixa de resposta */
+  .gccomp{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"avs avs" "cab cab" "ta ta" "tools env";gap:8px;padding:10px 14px 12px;border-top:1px solid var(--line)}
+  .gccomp.nota{background:var(--nota)}
+  .gcavs{grid-area:avs;display:flex;flex-direction:column;gap:6px}.gcavs:empty{display:none}
+  .gcassu{display:flex;align-items:center;gap:10px;font-size:0.8125rem;color:var(--muted);background:var(--soft);border-radius:10px;padding:6px 6px 6px 12px}.gcassu span{flex:1}
+  .gcjan{font-size:0.8125rem;background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:9px 12px}
+  .gccab{grid-area:cab;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .gcmodo,.gcdir{display:flex;gap:4px}.gcmodo button,.gcdir button{height:32px;padding:0 11px;border-radius:8px;border:0;background:transparent;font:inherit;font-size:0.8125rem;font-weight:700;color:var(--muted);cursor:pointer}
+  .gcmodo button.on{background:var(--ink);color:var(--card)}.gccomp.nota .gcmodo button.on{background:#F5D77A;color:#3D2E00}
+  .gcdir{margin-left:auto}.gcdir button{border:1.5px solid var(--line)}.gcdir button.on{border-color:var(--accent);background:var(--gc-sel);color:var(--gc-ag)}.gcdir[hidden]{display:none}
+  .gctaw{grid-area:ta;position:relative;display:flex;flex-direction:column;gap:6px}
+  .gctaw textarea{width:100%;resize:none;min-height:64px;border-radius:12px;font-size:0.9375rem;line-height:1.4;padding:10px 12px}
+  .gccomp.nota textarea{background:#FFF6DB;border-color:#EFD48A}:root[data-tema="escuro"] .gccomp.nota textarea{background:#2b2410;border-color:#5c4a1a}
+  .gcsvpop{position:absolute;left:0;bottom:calc(100% + 6px);width:min(440px,100%);background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(16,24,40,.16);padding:6px;display:flex;flex-direction:column;gap:2px;z-index:5}.gcsvpop[hidden]{display:none}.gcsvpop .gcbt{padding:4px 8px;margin:0}
+  .gcsvo{text-align:left;border:0;background:none;border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:2px;font:inherit;color:var(--ink);cursor:pointer}.gcsvo b{color:var(--gc-ag);font-size:0.8438rem}.gcsvo span{font-size:0.8125rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gcsvo.on,.gcsvo:hover{background:var(--gc-sel)}
+  .gcsvrp{display:flex;gap:16px;padding:4px 8px;border-top:1px solid var(--line);margin-top:2px}
+  .gctools{grid-area:tools;display:flex;align-items:center;gap:4px;min-width:0}.gctools .gcib.on{background:var(--gc-sel);color:var(--gc-ag)}
+  .gcsug{height:36px;padding:0 12px;border:0;background:var(--gc-agbg);color:var(--gc-ag);border-radius:9px;font:inherit;font-size:0.8125rem;font-weight:700;display:inline-flex;align-items:center;gap:6px;cursor:pointer;margin-left:4px}.gcsug svg{width:15px;height:15px}
+  .gcdica{flex:1;text-align:right;font-size:0.75rem;color:var(--muted);padding-right:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gcenv{grid-area:env;height:40px;padding:0 16px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-size:0.875rem;font-weight:700;display:inline-flex;align-items:center;gap:6px;flex-direction:row-reverse;cursor:pointer}.gcenv svg{width:18px;height:18px}.gcenv:disabled{opacity:.55}
+  :root[data-tema="escuro"] .gcenv{background:#2d4f8c}.gccomp.nota .gcenv{background:#F5D77A;color:#3D2E00}
+  .gcmaisb{grid-area:mais}
+  /* ficha do cliente (lado) */
+  .gclado{padding:0;gap:0;font-size:0.8438rem;overflow:auto;border-left:1px solid var(--line)}
+  .gcltop{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;padding:18px 16px 14px;border-bottom:1px solid var(--line)}.gcltop .gcln{font-size:1.0625rem;margin-top:4px}.gcltop .gcchips{justify-content:center;margin:4px 0 0}
+  .gcchip.mais{border:1px dashed #A9B8E8;background:none;color:var(--gc-ag);font:inherit;font-size:0.7812rem;font-weight:600;cursor:pointer;min-height:28px}.gcchip.ag{background:var(--gc-agbg);color:var(--gc-ag)}
+  .gcls{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px}.gcls .gcbt{margin:0 0 2px}
+  .gcngl{display:flex;gap:8px;justify-content:space-between}.gcls .lnk{align-self:flex-start;min-height:32px}.hint.r{color:var(--err)}
+  .gcnovo{height:40px;border:1px dashed #A9B8E8;background:var(--soft2);color:var(--gc-ag);border-radius:10px;font:inherit;font-size:0.8438rem;font-weight:700;cursor:pointer}
+  .gcgi{display:flex;gap:10px;align-items:flex-start}.gcgi i{width:8px;height:8px;border-radius:50%;margin-top:6px;flex:none}.gcgi span{display:flex;flex-direction:column}.gcgi b{font-weight:600}.gcgi small{color:var(--muted);font-size:0.7812rem}
+  .gcfaz{min-height:40px;border:0;background:none;border-radius:9px;display:flex;align-items:center;gap:10px;padding:0 4px;font:inherit;font-size:0.875rem;font-weight:600;color:var(--ink);text-align:left;cursor:pointer}.gcfaz:hover{background:var(--soft2)}
+  .gcfaz>span:first-child{width:28px;height:28px;border-radius:8px;background:var(--gc-agbg);color:var(--gc-ag);display:grid;place-items:center;flex:none}.gcfaz svg{width:16px;height:16px}.gcfaz>span:nth-child(2){flex:1}.gcfaz em{font-style:normal;color:var(--muted)}
+  .gcdet{padding:2px 16px;border-bottom:1px solid var(--line)}.gcdet>summary{min-height:40px;display:flex;align-items:center;gap:4px;font-size:0.7188rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;cursor:pointer;list-style:none}.gcdet>summary::-webkit-details-marker{display:none}.gcdet>summary::after{content:'›';margin-left:auto;font-size:1rem;transition:transform .15s}.gcdet[open]>summary::after{transform:rotate(90deg)}.gcdet[open]{padding-bottom:12px}
+  .gcdetw{color:var(--warn);text-transform:none;letter-spacing:0;font-weight:600}
+  .gclado .gc360{width:calc(100% - 32px)!important;margin:12px 16px 16px}
+  @media (max-width:1100px){.gcgrade,.gcgrade.semlado{grid-template-columns:300px minmax(0,1fr)}.gcgrade .gclado,.gcgrade.semlado .gclado{display:none}
+    .gcgrade.ficha .gclado{display:flex;flex-direction:column;position:fixed;top:0;right:0;bottom:0;width:min(380px,100%);z-index:70;border-radius:0;box-shadow:0 0 0 100vmax rgba(15,27,45,.45)}
+    .gcgrade.ficha .gcladox{display:inline-grid!important;position:absolute;top:10px;right:10px;background:var(--soft);border-radius:50%;width:44px;height:44px}}
+  @media (max-width:760px){
+    .gcgrade,.gcgrade.semlado{grid-template-columns:1fr;height:calc(100dvh - var(--hh) - 16px);min-height:0}
+    .gcgrade>.gcconv{display:none}.gcgrade.aberta>.gclista{display:none}.gcgrade.aberta>.gcconv{display:flex}
+    .gcgrade>section{border-radius:12px}
+    .gcvolta{display:inline-grid!important;width:44px;height:44px;color:var(--accent)}
+    .gcch{padding:0 4px;gap:6px}.gcch .gcav.g{width:38px;height:38px}
+    .gcmais{display:inline-grid!important;width:44px;height:44px}
+    .gchac{display:none;position:absolute;right:10px;top:60px;z-index:30;flex-direction:column;align-items:stretch;background:var(--card);border-radius:14px;box-shadow:0 14px 40px rgba(16,24,40,.25);padding:6px;width:240px}
+    .gcconv{position:relative}.gchac.abre{display:flex}
+    .gchac .gchb,.gchac .gchb.soic{width:auto;height:48px;border:0;justify-content:flex-start;padding:0 12px;font-size:0.9375rem;background:none;color:var(--ink)}.gchac .gchb.soic .gchbt{display:inline}.gchac .gchb.ok{color:var(--ok);background:none}
+    .gchac .gcsw{border:0;height:48px;padding:0 12px;font-size:0.9375rem;background:none}
+    .gcmsgs{padding:12px}.gcm{max-width:84%}.gcm.nota{margin:4px 0}
+    .gccomp{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"avs avs avs" "cab cab cab" "tools tools tools" "mais ta env";align-items:end;padding:8px}
+    .gcmaisb{display:inline-grid!important;width:44px;height:44px;border-radius:50%;background:var(--soft)}.gccomp.maisab .gcmaisb{background:var(--ink);color:var(--card)}
+    .gctools{display:none;flex-wrap:wrap}.gccomp.maisab .gctools{display:flex}.gctools .gcib{width:44px;height:44px}.gcdica{display:none}
+    .gctaw textarea{min-height:44px;border-radius:22px;padding:10px 14px}
+    .gcenv{width:44px;height:44px;padding:0;border-radius:50%;justify-content:center}.gcenv span{display:none}
+    .gcgrade.ficha .gclado{top:auto;left:0;width:100%;height:88dvh;border-radius:22px 22px 0 0}
+  }
+  /* funil */
+  .gckb{grid-auto-columns:minmax(250px,1fr);gap:12px}
+  .gccol{background:var(--kan);border-top:0;border-radius:14px;padding:8px;gap:8px}
+  .gccolh{padding:4px 4px 2px}.gccoln{display:flex;align-items:center;gap:8px}.gccoln i{width:10px;height:10px;border-radius:50%;flex:none}.gccoln b{flex:1;font-size:0.9062rem}
+  .gccolq{font-size:0.7812rem;font-weight:700;background:var(--card);border-radius:10px;padding:1px 8px}.gccolh small{padding-left:18px;font-size:0.8125rem;color:var(--muted)}
+  .gccard{border:0;border-radius:12px;padding:12px;gap:5px;box-shadow:0 1px 2px rgba(16,24,40,.08);font-size:0.8125rem}.gccard.parado{box-shadow:inset 0 0 0 1.5px #F0C27A;border:0}
+  .gccdt{display:flex;gap:6px;align-items:flex-start}.gccdt b{flex:1;font-size:0.875rem;line-height:1.3}
+  .gccv{font-size:0.9375rem}.gcprox{display:flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;font-size:0.8125rem}.gcprox svg{width:14px;height:14px}.gcprox.r{color:var(--err)}.gcprox.w{color:var(--warn)}
+  .gccdr{display:flex;align-items:center;gap:6px;border-top:1px solid var(--soft);padding-top:8px;margin-top:2px;font-size:0.7812rem;color:var(--muted)}.gccdr span:nth-child(2){flex:1;color:var(--ink)}
+  .gccda{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:0.625rem;font-weight:800;background:var(--soft);color:var(--muted);flex:none}
+  .gccdm{display:none;gap:8px;margin-top:6px}.gccdm .btn{flex:1}
+  .gccoladd{min-height:36px;border:1px dashed #B9C3D3;background:transparent;border-radius:10px;font:inherit;font-size:0.8125rem;font-weight:600;color:var(--muted);cursor:pointer}
+  .gcetabs{display:none}
+  @media (max-width:760px){
+    .gcetabs{display:flex;gap:6px;overflow-x:auto;margin:0 -12px 10px;padding:0 12px;scrollbar-width:none}.gcetabs::-webkit-scrollbar{display:none}
+    .gcetabs button{flex:none;height:36px;padding:0 12px;border-radius:18px;border:0;background:var(--card);font:inherit;font-size:0.8438rem;font-weight:700;color:var(--muted)}.gcetabs button.on{background:var(--ink);color:var(--card)}
+    .gckb{display:block}.gccol{display:none;background:none;padding:0}.gccol.on{display:flex}.gccdm{display:flex}.gccard{padding:14px}
+  }
+  /* contatos e cliente 360 */
+  .gcctg{display:grid;grid-template-columns:380px minmax(0,1fr);gap:12px;height:calc(100dvh - var(--hh) - 40px);min-height:520px}
+  .gcctg>.card{margin:0;padding:0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+  .gcctl>.gclth{padding:14px 14px 10px}.gcctl>.gcbusca{padding:0 14px 10px}.gcctl>.gcfils{padding:0 14px;margin-bottom:10px}
+  .gcsugb{margin:0 10px 6px;padding:8px 8px 8px 12px;background:var(--nota);border:1px solid #EFD48A;border-radius:10px;display:flex;align-items:center;gap:10px;font-size:0.8125rem}.gcsugb span{flex:1}
+  :root[data-tema="escuro"] .gcsugb{border-color:#5c4a1a}
+  .gcctli{list-style:none;margin:0;padding:6px;overflow:auto;flex:1;border-top:1px solid var(--line)}
+  .gcctit{width:100%;display:flex;gap:12px;align-items:center;padding:10px;border:0;background:none;border-radius:11px;font:inherit;text-align:left;color:var(--ink);cursor:pointer}.gcctit:hover{background:var(--soft2)}.gcctit.on{background:var(--gc-sel)}
+  .gcctit .gcav{width:40px;height:40px}.gcctm{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.gcctl1{display:flex;gap:8px}.gcctl1 b{flex:1;font-size:0.9062rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gcctl1 small{font-size:0.75rem;color:var(--muted)}.gcctl2{font-size:0.8125rem;color:var(--muted)}.gcctl3{display:flex;gap:4px;flex-wrap:wrap}
+  .gc360h{display:flex;align-items:center;gap:14px;padding:18px 20px;border-bottom:1px solid var(--line)}.gc360i{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.gc360i h2{margin:0;font-size:1.3125rem;color:var(--ink)}.gc360i .gcchips{margin:2px 0 0}
+  .gc360a{display:flex;gap:8px}
+  .gc360n{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid var(--line)}.gc360n div{padding:12px 20px;display:flex;flex-direction:column}.gc360n div+div{border-left:1px solid var(--line)}.gc360n small{font-size:0.7812rem;color:var(--muted)}.gc360n b{font-size:1.25rem}
+  .gc360c{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 340px;overflow:hidden}.gc360t{padding:16px 20px;overflow:auto}.gc360l{border-left:1px solid var(--line);overflow:auto}
+  .gctl{gap:14px;margin-top:10px}.gctl li{display:flex;gap:12px;padding:0;border-left:0!important;font-size:0.875rem}.gctl li>div{display:flex;flex-direction:column;gap:2px}.gctl li small{font-size:0.7812rem}.gctl li.clk:hover b{text-decoration:underline}
+  .gctli{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:0.75rem;font-weight:800;flex:none}.gctli.ag{background:var(--gc-agbg);color:var(--gc-ag)}.gctli.wa{background:var(--warn-bg);color:var(--warn)}.gctli.nt{background:var(--soft);color:var(--muted)}
+  .gcngb{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;text-align:left;font:inherit;display:flex;flex-direction:column;gap:2px;color:var(--ink);cursor:pointer}
+  .gcmo{display:flex;flex-direction:column;align-items:flex-start;gap:2px}.gcmo .lnk{min-height:34px;color:var(--ink);font-weight:500}.gcmo .lnk.r{color:var(--err);font-weight:600}
+  .gc360l .gcsw{font-weight:500;font-size:0.875rem;justify-content:space-between;width:100%;flex-direction:row-reverse}
+  @media (max-width:1100px){.gc360c{grid-template-columns:1fr;overflow:auto}.gc360t,.gc360l{overflow:visible}.gc360l{border-left:0;border-top:1px solid var(--line)}}
+  @media (max-width:760px){.gcctg{grid-template-columns:1fr;height:auto;min-height:0}.gcctg>.gcctr{display:none}.gcctg.aberta>.gcctl{display:none}.gcctg.aberta>.gcctr{display:flex}.gcctl .gcctli{max-height:none}
+    .gc360h{flex-wrap:wrap;justify-content:center;text-align:center;position:relative;padding-top:52px}.gc360h .gcvolta{position:absolute;top:4px;left:4px}.gc360i{flex-basis:100%;align-items:center}.gc360i .gcchips{justify-content:center}.gc360a{flex-basis:100%}.gc360a .btn{flex:1}
+    .gc360n{grid-template-columns:repeat(2,minmax(0,1fr))}.gc360n div:nth-child(3){border-left:0}.gc360n div:nth-child(n+3){border-top:1px solid var(--line)}}
+  /* automações */
+  .gcregras{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:0.8438rem;color:var(--muted);margin-bottom:14px}.gcregi{color:var(--ok);display:inline-grid}.gcregi svg{width:18px;height:18px}
+  .gcaut{display:flex;align-items:center;gap:14px;padding:12px 2px;border-top:1px solid var(--soft)}.gcaut.off .gcautm b{color:var(--muted)}
+  .gcautm{flex:1;min-width:0;border:0;background:none;padding:0;font:inherit;text-align:left;display:flex;flex-direction:column;gap:6px;color:var(--ink);cursor:pointer}.gcautm:disabled{cursor:default;opacity:1}.gcautm b{font-size:0.9375rem}
+  .gcfluxo{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.gcpq{font-size:0.7812rem;font-weight:600;color:var(--muted);background:var(--soft);border-radius:7px;padding:4px 9px}.gcpq.q{background:var(--gc-agbg);color:var(--gc-ag)}.gcpqs{color:var(--muted);font-size:0.8125rem}
+  .gcautq{font-size:0.8125rem;color:var(--muted);white-space:nowrap}.gcautq b{color:var(--ink);font-size:0.9375rem}
+  .gcmods{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}.gcmodc{margin:0;padding:14px;display:flex;flex-direction:column;gap:6px}.gcmodh{display:flex;gap:6px;align-items:flex-start}.gcmodh b{flex:1;font-size:0.9062rem}.gcmodc .btn{align-self:flex-start;margin-top:auto}
+  @media (max-width:600px){.gcaut{flex-wrap:wrap}.gcautm{flex-basis:100%}}
+  /* campanhas */
+  .gccps{padding:0;overflow:hidden}.gccp{display:grid;grid-template-columns:minmax(0,2.2fr) 120px minmax(0,1.4fr) 90px 80px 100px 96px;gap:14px;align-items:center;padding:13px 18px;border-top:1px solid var(--soft);font-size:0.875rem}
+  .gccph{border-top:0;font-size:0.7188rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding-bottom:8px}.gccph span:nth-child(n+4){text-align:right}
+  .gccp .n{text-align:right;font-variant-numeric:tabular-nums}.gccpn{display:flex;flex-direction:column;gap:2px;min-width:0}.gccpn small,.gccpe small{color:var(--muted);font-size:0.7812rem}.gccpe{display:flex;flex-direction:column;gap:4px}
+  .btn.gcrd{color:var(--err)!important}
+  @media (max-width:900px){.gccph{display:none}.gccp{grid-template-columns:1fr auto;gap:6px 12px}.gccp .n{text-align:left}.gccpe{grid-column:1/-1}}
+  /* pós-venda */
+  .gcnpsb{display:flex;height:8px;border-radius:4px;overflow:hidden;margin-top:8px}.gcnpsb span{display:block;height:100%}
+  .gcnpsi{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:12px;margin-bottom:6px}.gcnpsi.aberto{background:var(--err-bg);border:1px solid #F3C9C5}
+  :root[data-tema="escuro"] .gcnpsi.aberto{border-color:#6b2a26}
+  .gcnn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:800;flex:none}.gcnn.r{background:var(--err);color:#fff}.gcnn.g{background:var(--ok-bg);color:var(--ok)}.gcnn.w{background:var(--warn-bg);color:var(--warn)}
+  .gcnpst{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;font-size:0.875rem}.gcnpsa{color:var(--err);font-weight:700;font-size:0.7812rem}
+  .gcnl2{display:grid;grid-template-columns:minmax(0,1fr) 80px 160px;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--soft);font-size:0.875rem}.gcnl2.h{border-top:0;font-size:0.7188rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.gcnl2.loja{font-weight:700}.gcnl2:not(.loja):not(.h) span:first-child{padding-left:16px;color:var(--muted)}.gcnl2 .n{text-align:right}
+  .gcnlb{display:flex;align-items:center;gap:8px}.gcnlb b{width:28px;text-align:right}
+  .gcregua{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap}.gcrq{flex:1 1 150px;border:0;background:var(--soft2);border-radius:10px}.gcrq small{color:var(--gc-ag);text-transform:uppercase;letter-spacing:.03em}.gcrqs{align-self:center;color:var(--muted)}
+  /* agente */
+  .gcagtop{gap:14px}.gcagav{border-radius:16px;background:var(--accent)}
+  .gcagst div{border-left:1px solid var(--line);padding-left:16px}
+  .gcol{list-style:none;padding:0;counter-reset:p;gap:12px}.gcol li{counter-increment:p;display:flex;gap:12px;align-items:flex-start}.gcol li::before{content:counter(p);width:28px;height:28px;border-radius:50%;background:var(--gc-agbg);color:var(--gc-ag);font-weight:800;font-size:0.8125rem;display:grid;place-items:center;flex:none}
+  .gcrev{display:flex;align-items:center;gap:12px;background:var(--nota);border:1px solid #EFD48A;border-radius:14px;padding:12px 16px;margin-bottom:12px;font-size:0.875rem}.gcrev span{flex:1}
+  :root[data-tema="escuro"] .gcrev{border-color:#5c4a1a}
+  .gcteste{background:var(--gc-chat);border-radius:12px;padding:12px;min-height:180px}.gcteste .gcm.in{align-self:flex-start}.gcteste .gcm.out{align-self:flex-end}
+  /* canais */
+  .gccr{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--soft)}.gccr:first-of-type{border-top:0}.gccrt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.gccrt b{font-size:0.9375rem}.gccrt small{color:var(--muted);font-size:0.8125rem}
+  .gcadds{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+  .gcaddc{margin:0;padding:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;border:1px solid var(--line)}button.gcaddc:hover{border-color:var(--accent)}.gcaddc b{font-size:0.875rem}.gcaddc.off{background:var(--soft2);cursor:default}
+  .gcp4{background:var(--card)}.gcp4 small{letter-spacing:.04em}
+  @media (max-width:600px){.gccr{flex-wrap:wrap}.gccrt{flex-basis:calc(100% - 60px)}}
+  /* desempenho */
+  .gcdes{padding-bottom:6px}.gcdesw{overflow-x:auto}
+  .gcdl{display:grid;grid-template-columns:minmax(160px,1.6fr) 80px 96px 96px minmax(130px,1.2fr) 90px 120px 56px minmax(150px,1.4fr);gap:14px;align-items:center;padding:11px 4px;border-top:1px solid var(--soft);font-size:0.875rem;min-width:1040px}
+  .gcdl.h{border-top:0;font-size:0.7188rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding-bottom:6px}.gcdl.h span:nth-child(2),.gcdl.h span:nth-child(3),.gcdl.h span:nth-child(4),.gcdl.h span:nth-child(6),.gcdl.h span:nth-child(7),.gcdl.h span:nth-child(8){text-align:right}
+  .gcdl .n{text-align:right;display:flex;flex-direction:column;align-items:flex-end}.gcdl .n.r{color:var(--err);font-weight:700}.gcdl .n.g{color:var(--ok);font-weight:700}.gcdl .n small{font-size:0.75rem;color:var(--muted)}
+  .gcdln{display:flex;align-items:center;gap:10px;min-width:0}.gcdln b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gcdlb{display:flex;align-items:center;gap:8px}.gcdlb b{width:40px;font-size:0.8125rem}.gcdlb small{font-size:0.7812rem;color:var(--muted);white-space:nowrap}
+  .gcdlm{display:flex;flex-direction:column;gap:4px}.gcdlm small{font-size:0.7812rem;color:var(--muted)}.gcdlm small.g{color:var(--ok);font-weight:700}.gcdlm .gcbr{flex:none}
+  .gccus{display:grid;grid-template-columns:160px minmax(0,1fr) 170px 190px;gap:14px;align-items:center;padding:8px 0;border-top:1px solid var(--soft);font-size:0.875rem}.gccus:first-of-type{border-top:0}
+  @media (max-width:900px){.gccus{grid-template-columns:1fr;gap:4px}}
+  .gcconv{container-type:inline-size}.gcchi{min-width:110px}.gcsw,.gcsug,.gchb{white-space:nowrap}
+  @media (min-width:761px){@container (max-width:700px){.gchac .gcsw{padding:0 4px}.gchac .gcsw span{display:none}.gchb:not(.ok){width:36px;padding:0;justify-content:center}.gchb:not(.ok) .gchbt{display:none}.gcdica{display:none}}
+    @container (max-width:520px){.gchb.ok .gchbt{display:none}.gchb.ok{width:36px;padding:0;justify-content:center}.gcsug span{display:none}}}
+  .gcit.on .gctag{background:var(--card)}
+  button.gcfil{padding:0 12px}
+  .gclth h2{text-transform:none;letter-spacing:0}.gcfil{background-color:var(--card)}
+  .gclado .gc360{font-size:0.875rem;min-height:40px;height:auto}
+  .gcol li{display:block;position:relative;padding-left:40px;min-height:28px}.gcol li::before{position:absolute;left:0;top:-3px}
+  @media (max-width:760px){.gcsodesk{display:none!important}.gcaba,.gcmodo button,.gcdir button,.gcexc,.gcseg button{height:40px}.gcib{width:44px;height:44px}.gcbusca .gcib{width:44px;height:44px}.gcbq{height:44px}}
   /* Revisão de acessibilidade e toque (diretrizes da Apple): área mínima de toque, foco, reação ao apertar, "reduzir movimento" */
   .lnk{min-height:28px}
   html input[type=checkbox],html input[type=radio]{width:20px!important;height:20px!important;flex-basis:20px!important}
@@ -4897,6 +5136,8 @@
   //  GESTTI: ÍCONES, MENU LATERAL (FIXO / MÓVEL)
   // =========================================================
   var ICO = {
+    filtro: '<path d="M4 6h16M7 12h10M10 18h4"/>', marcador: '<path d="M6 3h12v18l-6-4-6 4V3Z"/>', clipe: '<path d="m20 11-8.5 8.5a5 5 0 0 1-7-7L13 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L14 7"/>', enviar: '<path d="M5 12h13M12 5l7 7-7 7"/>', voltar: '<path d="m15 5-7 7 7 7"/>',
+    painel: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/>', transferir: '<path d="M4 12h13M13 6l6 6-6 6"/>', reticencias: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>', fechar: '<path d="M6 6l12 12M18 6 6 18"/>', brilho: '<path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3Z"/>',
     livro: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7M8 11h7"/>',
     cadeado: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4M12 15v2"/>',
     robo: '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9 17h6"/><circle cx="12" cy="3" r="1"/>', faisca: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>',
@@ -21185,7 +21426,7 @@
     $('l8Tit').textContent = v ? v.nome : ''; $('l8Acoes').innerHTML = ''; $('l8Corpo').innerHTML = ''; $('l8Corpo').className = '';
     try { L8_PAGINAS[id](); } catch (e) { l8Erro(e); }
   }
-  function l8Corpo() { var b = $('l8Corpo'); b.innerHTML = ''; return b; }
+  function l8Corpo() { var b = $('l8Corpo'); b.innerHTML = ''; b.classList.remove('gcfull'); return b; }
   function l8Carregando() { var b = l8Corpo(); b.appendChild(el('div', 'empty', 'Carregando…')); return b; }
   function l8Erro(e) { var b = l8Corpo(); b.appendChild(el('div', 'empty', String(e && e.message || e))); }
   function l8Acao(t, fn, cls) { return btn($('l8Acoes'), t, cls || '', fn); }
@@ -24855,104 +25096,161 @@
   function gcBip() { try { var A = window.AudioContext || window.webkitAudioContext; if (!A) return; var c = new A(), o = c.createOscillator(), g = c.createGain(); o.frequency.value = 880; g.gain.value = 0.05; o.connect(g); g.connect(c.destination); o.start(); setTimeout(function () { o.stop(); c.close(); }, 160); } catch (e) {} }
 
   // ---------- painel ----------
+  // ---------- Leva 22: visual novo do CRM (protótipo aprovado em 28/11/2026) ----------
+  var GC_AV_COR = [['#C9D7FF', '#1D3FCC'], ['#D8F0E0', '#0B6B36'], ['#FDE1EC', '#A3134C'], ['#FFE7CC', '#8A4B00'], ['#E6E1FF', '#4B2BB8'], ['#D6EEF3', '#0B5D6E']];
+  var GC_ETAPA_COR = ['#8792A3', '#2445D6', '#C26A00', '#7A3EC8', '#137A3A', '#0B5D6E', '#A3134C'];
+  function gcCorDe(t) { var h = 0; String(t || '').split('').forEach(function (c) { h = (h * 31 + c.charCodeAt(0)) >>> 0; }); return GC_AV_COR[h % GC_AV_COR.length]; }
+  function gcIntro(b, t) { var p = el('p', 'gcintro', t); b.appendChild(p); return p; }
+  /** Chave liga/desliga acessível (role=switch). fn(novoValor, botão). */
+  function gcSw(rot, on, fn) { var s = el('button', 'gcsw'); s.type = 'button'; s.setAttribute('role', 'switch'); s.setAttribute('aria-checked', on ? 'true' : 'false'); s.appendChild(el('i')); if (rot) s.appendChild(el('span', '', rot)); s.onclick = function () { on = !on; s.setAttribute('aria-checked', on ? 'true' : 'false'); fn(on, s); }; return s; }
+  /** Etiqueta colorida: ok (verde), ag (azul), wa (laranja), rd (vermelho), nt (cinza). */
+  function gcTag(t, cor, ponto) { var s = el('span', 'gctg ' + (cor || 'nt')); if (ponto) s.appendChild(el('i')); s.appendChild(document.createTextNode(t)); return s; }
+  function gcIcoBtn(ic, rot, fn, cls) { var b = el('button', 'gcib' + (cls ? ' ' + cls : '')); b.type = 'button'; b.title = rot; b.setAttribute('aria-label', rot); b.innerHTML = svgIco(ic); if (fn) b.onclick = fn; return b; }
+  function gcHa(ms) { if (!ms) return ''; var m = Math.round((Date.now() - ms) / 60000); return m < 1 ? 'agora' : m < 60 ? 'há ' + m + ' min' : m < 1440 ? 'há ' + Math.round(m / 60) + ' h' : 'há ' + Math.round(m / 1440) + ' dia(s)'; }
+  function gcSaudacao() { var h = new Date().getHours(), n = String((S.u && S.u.nome) || '').split(' ')[0]; return (h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite') + (n ? ', ' + n : ''); }
+  function gcKpiB(box, rot, val, sub, cls, fn) { var k = gcKpi(box, rot, val, sub, cls); if (cls === 'r') k.classList.add('alerta'); if (fn) { k.classList.add('clk'); k.tabIndex = 0; k.setAttribute('role', 'button'); k.onclick = fn; k.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } }; } return k; }
+  function gcSecH(box, tit, cls) { var c = el('section', 'card gcsec' + (cls ? ' ' + cls : '')); var h = el('div', 'gcsech'); h.appendChild(el('h3', 'ch', tit)); c.appendChild(h); box.appendChild(c); c.cab = h; return c; }
+  /** Mês com setas ‹ › (pós-venda e desempenho). */
+  function gcMesNav(mes, fn) {
+    var w = el('div', 'gcmes'), p = String(mes).split('-').map(Number), muda = function (dlt) { var d = new Date(p[0], p[1] - 1 + dlt, 1); fn(d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2)); };
+    var a = el('button', '', '‹'); a.type = 'button'; a.setAttribute('aria-label', 'Mês anterior'); a.onclick = function () { muda(-1); }; w.appendChild(a);
+    var mt = new Date(p[0], p[1] - 1, 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }); w.appendChild(el('b', '', mt.charAt(0).toUpperCase() + mt.slice(1)));
+    var z = el('button', '', '›'); z.type = 'button'; z.setAttribute('aria-label', 'Próximo mês'); z.onclick = function () { muda(1); }; w.appendChild(z);
+    return w;
+  }
+  function gcBarra(pct, cor) { var t = el('span', 'gcbr'), i = el('i'); i.style.width = Math.max(0, Math.min(100, pct || 0)) + '%'; if (cor) i.style.background = cor; t.appendChild(i); return t; }
+
   L8_PAGINAS.gcpainel = function () {
     l8Carregando();
     call('gcPainelDados', [S.token]).then(function (d) {
-      var b = l8Corpo(); $('l8Acoes').innerHTML = ''; l8Acao('Abrir conversas', function () { ir('gcconversas'); });
+      var b = l8Corpo(), K = d.kpi; $('l8Acoes').innerHTML = ''; $('l8Tit').textContent = gcSaudacao();
+      l8Acao('Abrir conversas' + (K.fila ? ' · ' + K.fila + ' esperando' : ''), function () { ir('gcconversas'); });
+      var dt = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }); gcIntro(b, dt.charAt(0).toUpperCase() + dt.slice(1) + ' · Painel do CRM');
       if (!d.canais) { var on = gcSec(b, 'Comece por aqui', 'Ligue o WhatsApp, o Instagram e os outros canais da loja para as conversas chegarem aqui.'); btn(on, 'Ligar os canais', '', function () { ir('gccanais'); }); }
-      var k = el('div', 'gckpis'); b.appendChild(k); var K = d.kpi;
-      gcKpi(k, 'Conversas abertas', String(K.abertas), K.fila + ' na fila · ' + K.agente + ' com o agente');
-      gcKpi(k, '1ª resposta da equipe', gcMin(K.primeira), 'meta: ' + K.meta + ' min' + (K.agentePrimeiraSeg !== null ? ' · agente: ' + K.agentePrimeiraSeg + ' s' : ''), K.primeira !== null && K.primeira > K.meta ? 'r' : '');
-      gcKpi(k, 'Negócios abertos', String(K.negAbertos), brl(K.negValor));
-      gcKpi(k, 'Ganhos no mês', String(K.ganhos), brl(K.ganhosValor), 'g');
-      gcKpi(k, 'NPS do mês', K.nps === null ? '—' : String(K.nps), 'pós-venda');
-      var g2 = el('div', 'gc2'); b.appendChild(g2);
-      var f = gcSec(g2, 'Funil · ' + d.funil.nome); var mx = Math.max.apply(null, d.funil.etapas.map(function (e) { return e.qtd; }).concat([1]));
-      d.funil.etapas.forEach(function (e) { var r = el('div', 'gcbar'); r.appendChild(el('span', 'gcbarn', e.nome)); var t = el('span', 'gcbart'), i = el('i'); i.style.width = Math.round(e.qtd / mx * 100) + '%'; t.appendChild(i); r.appendChild(t); r.appendChild(el('b', '', e.qtd + ' · ' + brl(e.total))); f.appendChild(r); });
-      btn(f, 'Abrir o funil', 'ghost mini', function () { ir('gcfunil'); });
-      var h = gcSec(g2, 'O que fazer hoje'), ul = el('ul', 'gchoje'); h.appendChild(ul);
-      var li = function (t, cls, fn) { var x = el('li', cls || '', t); if (fn) { x.classList.add('clk'); x.onclick = fn; } ul.appendChild(x); };
-      d.hoje.parados.forEach(function (n) { li((n.proxAtrasada ? 'Atividade atrasada: ' : 'Parado há ' + n.dias + ' dias: ') + n.titulo + ' · ' + n.contatoNome, 'r', function () { gcNegocioAbrir(n); }); });
-      d.hoje.aniversarios.forEach(function (c) { li('🎂 Aniversário: ' + c.nome, '', function () { gcContatoAbrir(c.id); }); });
-      if (d.hoje.follows) li(d.hoje.follows + ' follow-up(s) do agente hoje');
-      if (d.hoje.garantias) li(d.hoje.garantias + ' garantia(s) vencendo (automação disparada)');
-      if (d.hoje.meses18) li(d.hoje.meses18 + ' aparelho(s) completaram o tempo de troca');
-      if (!ul.children.length) li('Tudo em dia por aqui. 👏');
-      var c = gcSec(b, 'Conversas abertas por canal'), w = el('div', 'gcchips'); c.appendChild(w);
-      d.porCanal.forEach(function (x) { w.appendChild(el('span', 'gcchip', x.canal + ': ' + x.qtd)); }); if (!d.porCanal.length) w.appendChild(el('span', 'hint', 'Nenhuma conversa aberta.'));
+      var k = el('div', 'gckpis'); b.appendChild(k);
+      gcKpiB(k, 'Conversas abertas', String(K.abertas), K.fila + ' na fila · ' + K.agente + ' com o agente', '', function () { ir('gcconversas'); });
+      gcKpiB(k, '1ª resposta da equipe', gcMin(K.primeira), 'meta ' + K.meta + ' min' + (K.agentePrimeiraSeg !== null ? ' · agente: ' + K.agentePrimeiraSeg + ' s' : ''), K.primeira !== null && K.primeira > K.meta ? 'r' : '', function () { ir('gcdesempenho'); });
+      gcKpiB(k, 'Negócios abertos', String(K.negAbertos), brl(K.negValor) + ' em negociação', '', function () { ir('gcfunil'); });
+      gcKpiB(k, 'Ganhos no mês', String(K.ganhos), brl(K.ganhosValor) + ' vendidos pelo CRM', 'g', function () { ir('gcfunil'); });
+      gcKpiB(k, 'NPS do mês', K.nps === null ? '—' : String(K.nps), 'pós-venda', '', function () { ir('gcposvenda'); });
+      var g2 = el('div', 'gcpain'); b.appendChild(g2);
+      var h = gcSecH(g2, 'O que fazer hoje', 'gchojes'), atr = d.hoje.parados.filter(function (n) { return n.proxAtrasada; }).length;
+      if (atr) h.cab.appendChild(gcTag(atr + (atr > 1 ? ' atrasadas' : ' atrasada'), 'rd'));
+      var ul = el('ul', 'gchoje'); h.appendChild(ul);
+      var li = function (ic, cor, tit, sub, rot, fn) { var x = el('li'), bt = el('button', 'gchi'); bt.type = 'button'; var i = el('span', 'gchic ' + cor); i.innerHTML = svgIco(ic); bt.appendChild(i); var t = el('span', 'gchit'); t.appendChild(el('b', '', tit)); if (sub) t.appendChild(el('small', '', sub)); bt.appendChild(t); if (rot) bt.appendChild(el('span', 'gchiv', rot)); bt.onclick = fn; x.appendChild(bt); ul.appendChild(x); };
+      d.hoje.parados.forEach(function (n) {
+        if (n.proxAtrasada) li('relogio', 'rd', (n.prox && n.prox.texto) || 'Atividade atrasada', 'Atrasada · ' + n.titulo + ' · ' + n.contatoNome, 'Abrir', function () { gcNegocioAbrir(n); });
+        else li('alerta', 'wa', 'Parado há ' + n.dias + ' dias: ' + n.titulo, n.contatoNome, 'Abrir', function () { gcNegocioAbrir(n); });
+      });
+      d.hoje.aniversarios.forEach(function (c) { li('estrela', 'pk', 'Aniversário: ' + c.nome, 'Veja se aceita ofertas antes de mandar algo', 'Ver', function () { gcContatoAbrir(c.id); }); });
+      if (!ul.children.length) ul.appendChild(el('li', 'gcvazio', 'Tudo em dia por aqui.'));
+      var ex = [d.hoje.follows ? d.hoje.follows + ' follow-up(s) do agente hoje' : '', d.hoje.garantias ? d.hoje.garantias + ' garantia(s) vencendo (automação disparada)' : '', d.hoje.meses18 ? d.hoje.meses18 + ' aparelho(s) no tempo de troca' : ''].filter(Boolean);
+      if (ex.length) { var rd = el('div', 'gchrod'); ex.forEach(function (t) { rd.appendChild(el('span', '', t)); }); h.appendChild(rd); }
+      var dir = el('div', 'gcpaind'); g2.appendChild(dir);
+      var f = gcSecH(dir, 'Funil · ' + d.funil.nome), bl = el('button', 'lnk', 'Abrir o funil ›'); bl.type = 'button'; bl.onclick = function () { ir('gcfunil'); }; f.cab.appendChild(bl);
+      var mx = Math.max.apply(null, d.funil.etapas.map(function (e) { return e.qtd; }).concat([1]));
+      d.funil.etapas.forEach(function (e, i) { var r = el('div', 'gcbar'); r.appendChild(el('span', 'gcbarn', e.nome)); r.appendChild(gcBarra(Math.round(e.qtd / mx * 100), GC_ETAPA_COR[i % GC_ETAPA_COR.length])); r.appendChild(el('b', '', e.qtd + ' · ' + brl(e.total))); f.appendChild(r); });
+      var c = gcSecH(dir, 'Conversas abertas por canal');
+      d.porCanal.forEach(function (x) { var r = el('div', 'gccanl'); var q = el('span', 'gccq', GC_LETRA_CANAL[x.tipo] || '•'); q.style.background = GC_COR_CANAL[x.tipo] || '#5B6577'; q.setAttribute('aria-hidden', 'true'); r.appendChild(q); r.appendChild(el('span', '', x.canal)); r.appendChild(el('b', '', String(x.qtd))); c.appendChild(r); });
+      if (!d.porCanal.length) c.appendChild(el('div', 'hint', 'Nenhuma conversa aberta.'));
     }).catch(l8Erro);
   };
 
   // ---------- conversas ----------
   L8_PAGINAS.gcconversas = function () {
-    var b = l8Corpo(); b.classList.add('gcfull');
-    l8Acao('Mensagens salvas', gcSalvasGerir, 'ghost');
-    if ('Notification' in window && Notification.permission === 'default') l8Acao('Avisar no navegador', function () { try { Notification.requestPermission(); } catch (e) {} }, 'ghost');
+    var b = l8Corpo(); b.classList.add('gcfull'); $('l8Acoes').innerHTML = '';
     var g = el('div', 'gcgrade'); b.appendChild(g);
     GCR.ui = { lista: el('section', 'gclista'), conv: el('section', 'gcconv'), lado: el('aside', 'gclado') };
     GCR.ui.lista.setAttribute('aria-label', 'Lista de conversas'); GCR.ui.conv.setAttribute('aria-label', 'Conversa'); GCR.ui.lado.setAttribute('aria-label', 'Cliente');
     g.appendChild(GCR.ui.lista); g.appendChild(GCR.ui.conv); g.appendChild(GCR.ui.lado);
     GCR.ui.grade = g; if (!gcExibir().painel) g.classList.add('semlado');
     gcListaRecarregar();
-    if (GCR.sel) gcConvAbrir(GCR.sel); else { GCR.ui.conv.appendChild(el('div', 'empty', 'Escolha uma conversa.')); }
+    if (GCR.sel) { g.classList.add('aberta'); gcConvAbrir(GCR.sel); } else gcConvVazia();
     clearInterval(GCR.tmr);
     GCR.tmr = setInterval(function () { if (S.view !== 'gcconversas') { clearInterval(GCR.tmr); return; } if (!document.hidden && GCR.sel) gcConvAtualizar(); }, 7000);
   };
-  var GC_EXIBIR = [['foto', 'Foto do contato'], ['etiquetas', 'Etiquetas'], ['loja', 'Loja'], ['canal', 'Canal'], ['previa', 'Prévia da mensagem'], ['painel', 'Painel do cliente'], ['compacto', 'Modo compacto']];
+  function gcConvVazia() {
+    var C = GCR.ui.conv; C.innerHTML = ''; GCR.ui.msgs = null; var v = el('div', 'gcconvvz'); v.appendChild(el('b', '', 'Escolha uma conversa'));
+    v.appendChild(el('span', '', 'As mensagens do WhatsApp, do Instagram e dos outros canais aparecem aqui.')); C.appendChild(v);
+    GCR.ui.lado.innerHTML = ''; if (GCR.ui.grade) GCR.ui.grade.classList.remove('aberta', 'ficha');
+  }
+  /** Tela estreita (celular/tablet): a ficha do cliente abre por cima em vez de ficar ao lado. */
+  function gcEstreita() { return window.innerWidth <= 1100; }
+  function gcFicha(abrir) {
+    var g = GCR.ui && GCR.ui.grade; if (!g) return;
+    if (gcEstreita()) { g.classList.toggle('ficha', abrir === undefined ? !g.classList.contains('ficha') : abrir); return; }
+    var o = Object.assign({}, gcExibir()); o.painel = abrir === undefined ? !o.painel : abrir; gcExibirGravar(o); g.classList.toggle('semlado', !o.painel);
+    var bp = GCR.ui.conv.querySelector('[data-painel]'); if (bp) bp.setAttribute('aria-pressed', o.painel ? 'true' : 'false');
+  }
+  var GC_EXIBIR = [['foto', 'Foto'], ['etiquetas', 'Etiquetas'], ['loja', 'Loja'], ['canal', 'Canal'], ['previa', 'Prévia'], ['painel', 'Painel do cliente'], ['compacto', 'Compacto']];
   function gcExibir() { if (GCR.exibir) return GCR.exibir; var o = { foto: true, etiquetas: true, loja: true, canal: true, previa: true, painel: true, compacto: false }; try { var x = JSON.parse(localStorage.getItem('gc_exibir') || '{}'); Object.keys(o).forEach(function (k) { if (typeof x[k] === 'boolean') o[k] = x[k]; }); } catch (e) {} return (GCR.exibir = o); }
   function gcExibirGravar(o) { GCR.exibir = o; try { localStorage.setItem('gc_exibir', JSON.stringify(o)); } catch (e) {} }
-  /** Avatar com a foto do WhatsApp (QR) ou Instagram quando houver; senão as iniciais. A bolinha mostra o canal. */
+  /** Avatar com a foto do WhatsApp (QR) ou Instagram quando houver; senão as iniciais numa cor fixa por nome. A bolinha mostra o canal. */
   function gcAvatar(nome, ini, foto, tipo, cls) {
-    var a = el('div', 'gcav' + (cls ? ' ' + cls : '')); a.setAttribute('aria-hidden', 'true');
-    if (foto && /^https:\/\//.test(foto)) { var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.referrerPolicy = 'no-referrer'; im.src = foto; im.onerror = function () { im.remove(); a.textContent = ini || '?'; if (tipo) a.appendChild(gcAvCanal(tipo)); }; a.appendChild(im); }
-    else a.textContent = ini || String(nome || '?').charAt(0).toUpperCase();
+    var a = el('div', 'gcav' + (cls ? ' ' + cls : '')), cor = gcCorDe(nome); a.setAttribute('aria-hidden', 'true'); a.style.background = cor[0]; a.style.color = cor[1];
+    if (foto && /^https:\/\//.test(foto)) { var im = el('img'); im.alt = ''; im.loading = 'lazy'; im.referrerPolicy = 'no-referrer'; im.src = foto; im.onerror = function () { im.remove(); a.insertBefore(document.createTextNode(ini || '?'), a.firstChild); }; a.appendChild(im); }
+    else a.appendChild(document.createTextNode(ini || String(nome || '?').charAt(0).toUpperCase()));
     if (tipo) a.appendChild(gcAvCanal(tipo));
     return a;
   }
   function gcAvCanal(tipo) { var d = el('span', 'gcavc', GC_LETRA_CANAL[tipo] || '•'); d.style.background = GC_COR_CANAL[tipo] || '#5B6577'; return d; }
-  var GC_LETRA_CANAL = { wa: 'W', waqr: 'W', ig: 'I', fb: 'f', tg: 'T', email: '@', site: '•' };
+  var GC_LETRA_CANAL = { wa: 'W', waqr: 'W', ig: 'I', fb: 'f', tg: 'T', email: '@', site: 'S' };
+  var GC_SIT_TAG = { agente: ['Com o agente', 'ag'], fila: ['Na fila', 'wa'], atendendo: ['Atendendo', 'ok'], concluida: ['Concluída', 'nt'] };
+  function gcSitTag(c) { var s = GC_SIT_TAG[c.situacao] || [c.situacaoNome || c.situacao || '—', 'nt']; return gcTag(c.situacao === 'atendendo' ? (c.resp && c.resp === S.u.id ? 'Com você' : String(c.respNome || 'Atendendo').split(' ')[0]) : s[0], s[1], true); }
   function gcListaRecarregar() {
     if (!GCR.ui) return;
     if (!GCR.abaIni) { GCR.abaIni = 1; if (pode('equipe') || pode('crm_todas')) GCR.filtro.aba = 'todas'; }
     call('gcConversasDados', [S.token, GCR.filtro]).then(gcListaDesenhar).catch(function (e) { GCR.ui.lista.innerHTML = ''; GCR.ui.lista.appendChild(el('div', 'empty', String(e))); });
   }
   function gcListaDesenhar(d) {
-    GCR.lista = d; var L = GCR.ui.lista; L.innerHTML = '';
+    GCR.lista = d; var L = GCR.ui.lista, foco = document.activeElement && document.activeElement.getAttribute('aria-label') === 'Buscar conversa'; L.innerHTML = '';
     var top = el('div', 'gclt'); L.appendChild(top);
-    var fl = el('div', 'gcfl'); top.appendChild(fl);
+    var hd = el('div', 'gclth'); top.appendChild(hd); hd.appendChild(el('h2', '', 'Conversas'));
+    hd.appendChild(gcIcoBtn('marcador', 'Mensagens salvas', gcSalvasGerir));
+    if ('Notification' in window && Notification.permission === 'default') hd.appendChild(gcIcoBtn('sino', 'Avisar no navegador quando chegar mensagem', function () { try { Promise.resolve(Notification.requestPermission()).then(function () { gcListaDesenhar(GCR.lista); }); } catch (e) {} }));
+    var X = gcExibir(), nf = (GCR.filtro.empresa ? 1 : 0) + (GCR.filtro.canal ? 1 : 0);
+    var lb = el('div', 'gcbusca'); top.appendChild(lb);
+    var lab = el('label', 'gcbq'); lb.appendChild(lab); var lic = el('span'); lic.innerHTML = svgIco('busca'); lab.appendChild(lic);
+    var bq = el('input'); bq.type = 'search'; bq.placeholder = 'Buscar nome, telefone ou mensagem'; bq.value = GCR.filtro.busca; bq.setAttribute('aria-label', 'Buscar conversa'); lab.appendChild(bq);
+    var tq = 0; bq.oninput = function () { clearTimeout(tq); tq = setTimeout(function () { GCR.filtro.busca = bq.value; gcListaRecarregar(); }, 350); };
+    if (foco) { bq.focus(); try { bq.setSelectionRange(bq.value.length, bq.value.length); } catch (e) {} }
+    var bf = gcIcoBtn('filtro', nf ? 'Filtros (' + nf + ' ligado' + (nf > 1 ? 's' : '') + ')' : 'Filtros', null, GCR.filtrosAb ? 'on' : ''); bf.setAttribute('aria-expanded', GCR.filtrosAb ? 'true' : 'false'); if (nf) bf.appendChild(el('span', 'gcibn', String(nf))); lb.appendChild(bf);
+    var pf = el('div', 'gcfpain'); pf.hidden = !GCR.filtrosAb; top.appendChild(pf);
+    bf.onclick = function () { GCR.filtrosAb = !GCR.filtrosAb; pf.hidden = !GCR.filtrosAb; bf.classList.toggle('on', !!GCR.filtrosAb); bf.setAttribute('aria-expanded', GCR.filtrosAb ? 'true' : 'false'); };
+    var fl = el('div', 'gcfl'); pf.appendChild(fl);
     var sE = l8Sel([['', 'Todas as lojas']].concat(d.empresas.map(function (e) { return [e.id, e.nome]; })), GCR.filtro.empresa); sE.setAttribute('aria-label', 'Loja');
     var sC = l8Sel([['', 'Todos os canais']].concat(Object.keys(d.tipos).map(function (k) { return [k, d.tipos[k]]; })), GCR.filtro.canal); sC.setAttribute('aria-label', 'Canal');
     sE.onchange = function () { GCR.filtro.empresa = sE.value; gcListaRecarregar(); }; sC.onchange = function () { GCR.filtro.canal = sC.value; gcListaRecarregar(); };
     fl.appendChild(sE); fl.appendChild(sC);
-    var X = gcExibir(), ex = el('details', 'gcexib'), exs = el('summary', 'gcaba', 'Exibir ▾'); exs.title = 'Escolher o que aparece na lista'; ex.appendChild(exs); var exb = el('div', 'gcexibm'); ex.appendChild(exb);
-    GC_EXIBIR.forEach(function (x) { exb.appendChild(gcChk(x[1], X[x[0]], function (v) { var o = Object.assign({}, gcExibir()); o[x[0]] = v; gcExibirGravar(o); if (x[0] === 'painel') GCR.ui.grade.classList.toggle('semlado', !v); else gcListaDesenhar(GCR.lista); })); });
-    if (d.podeTodas) top.appendChild(el('div', 'hint', 'Visão geral: você vê todas as lojas, canais e atendentes.'));
-    var bq = el('input'); bq.type = 'search'; bq.placeholder = 'Buscar nome, telefone ou mensagem'; bq.value = GCR.filtro.busca; bq.setAttribute('aria-label', 'Buscar conversa'); top.appendChild(bq);
-    var tq = 0; bq.oninput = function () { clearTimeout(tq); tq = setTimeout(function () { GCR.filtro.busca = bq.value; gcListaRecarregar(); }, 350); };
-    var abas = el('div', 'gcabas'); abas.setAttribute('role', 'tablist'); top.appendChild(abas);
-    var A = [['minhas', 'Minhas', d.cont.minhas], ['fila', 'Fila', d.cont.fila], ['agente', 'Com o agente', d.cont.agente], ['comentarios', 'Comentários', d.cont.comentarios], ['todas', 'Todas', null]];
+    pf.appendChild(el('span', 'gcbt', 'Mostrar na lista')); var exb = el('div', 'gcexchips'); pf.appendChild(exb);
+    GC_EXIBIR.forEach(function (x) { var k = el('button', 'gcexc', x[1]); k.type = 'button'; k.setAttribute('aria-pressed', X[x[0]] ? 'true' : 'false');
+      k.onclick = function () { var o = Object.assign({}, gcExibir()); o[x[0]] = !o[x[0]]; gcExibirGravar(o); k.setAttribute('aria-pressed', o[x[0]] ? 'true' : 'false'); if (x[0] === 'painel') GCR.ui.grade.classList.toggle('semlado', !o.painel); else gcListaDesenhar(GCR.lista); }; exb.appendChild(k); });
+    if (d.podeTodas) pf.appendChild(el('div', 'hint', 'Visão geral: você vê todas as lojas, canais e atendentes.'));
+    var abas = el('div', 'gcabas'); abas.setAttribute('role', 'tablist'); abas.setAttribute('aria-label', 'Quais conversas'); top.appendChild(abas);
+    var A = [['minhas', 'Minhas', d.cont.minhas], ['fila', 'Na fila', d.cont.fila], ['agente', 'Com o agente', d.cont.agente], ['comentarios', 'Comentários', d.cont.comentarios], ['todas', 'Todas', null]];
     if (d.podeTodas) A.push(['atendente', 'Por atendente', null]);
-    A.forEach(function (a) { var x = el('button', 'gcaba' + (GCR.filtro.aba === a[0] ? ' on' : ''), a[1] + (a[2] ? ' ' + a[2] : '')); x.type = 'button'; x.setAttribute('role', 'tab'); x.setAttribute('aria-selected', GCR.filtro.aba === a[0] ? 'true' : 'false'); x.onclick = function () { GCR.filtro.aba = a[0]; gcListaRecarregar(); }; abas.appendChild(x); });
-    abas.appendChild(ex);
-    if (GCR.filtro.aba === 'atendente') { var sa = l8Sel([['', 'Todos os atendentes']].concat(d.atendentes.map(function (p) { return [p.id, p.nome + (p.online ? ' · online' : '')]; })), GCR.filtro.atendente); sa.onchange = function () { GCR.filtro.atendente = sa.value; gcListaRecarregar(); }; top.appendChild(sa); }
+    A.forEach(function (a) { var on = GCR.filtro.aba === a[0], x = el('button', 'gcaba' + (on ? ' on' : ''), a[1]); x.type = 'button'; x.setAttribute('role', 'tab'); x.setAttribute('aria-selected', on ? 'true' : 'false'); if (a[2]) x.appendChild(el('span', 'gcabn', String(a[2]))); x.onclick = function () { GCR.filtro.aba = a[0]; gcListaRecarregar(); }; abas.appendChild(x); if (on) setTimeout(function () { abas.scrollLeft = Math.max(0, x.offsetLeft - 8); }, 0); });
+    if (GCR.filtro.aba === 'atendente') { var sa = l8Sel([['', 'Todos os atendentes']].concat(d.atendentes.map(function (p) { return [p.id, p.nome + (p.online ? ' · online' : '')]; })), GCR.filtro.atendente); sa.setAttribute('aria-label', 'Atendente'); sa.onchange = function () { GCR.filtro.atendente = sa.value; gcListaRecarregar(); }; top.appendChild(sa); }
     var ul = el('ul', 'gcitens' + (X.compacto ? ' compacto' : '')); L.appendChild(ul);
     if (!d.lista.length) {
-      var vz = el('li', 'empty'); ul.appendChild(vz);
+      var vz = el('li', 'gcvz'); ul.appendChild(vz);
       if (GCR.filtro.aba === 'minhas' && (d.cont.agente || d.cont.fila || d.cont.comentarios)) {
-        vz.appendChild(el('div', '', 'Nenhuma conversa com você agora.'));
-        [['agente', d.cont.agente, 'com o agente'], ['fila', d.cont.fila, 'na fila'], ['comentarios', d.cont.comentarios, 'comentário(s)']].forEach(function (x) { if (x[1]) { var b = el('button', 'btn ghost mini', 'Ver ' + x[1] + ' ' + x[2]); b.type = 'button'; b.style.margin = '6px 4px 0'; b.onclick = function () { GCR.filtro.aba = x[0]; gcListaRecarregar(); }; vz.appendChild(b); } });
-      } else vz.textContent = GCR.filtro.aba === 'minhas' ? 'Nenhuma conversa com você agora.' : 'Nada por aqui.';
+        vz.appendChild(el('b', '', 'Nenhuma conversa com você agora'));
+        [['agente', d.cont.agente, 'com o agente'], ['fila', d.cont.fila, 'na fila'], ['comentarios', d.cont.comentarios, 'comentário(s)']].forEach(function (x) { if (x[1]) btn(vz, 'Ver ' + x[1] + ' ' + x[2], 'ghost mini', function () { GCR.filtro.aba = x[0]; gcListaRecarregar(); }); });
+      } else if (GCR.filtro.aba === 'comentarios') { vz.appendChild(el('b', '', 'Nenhum comentário agora')); vz.appendChild(el('span', '', 'Comentários de posts e anúncios do Instagram aparecem aqui.')); }
+      else vz.appendChild(el('b', '', GCR.filtro.aba === 'minhas' ? 'Nenhuma conversa com você agora' : 'Nada por aqui'));
+      if (GCR.filtro.aba !== 'todas') btn(vz, 'Ver todas as conversas', 'ghost mini', function () { GCR.filtro.aba = 'todas'; gcListaRecarregar(); });
     }
     d.lista.forEach(function (c) {
-      var li = el('li', 'gcit' + (GCR.sel === c.id ? ' on' : '')); li.tabIndex = 0; li.setAttribute('role', 'button');
-      if (X.foto) li.appendChild(gcAvatar(c.nome, c.ini, c.foto, X.canal ? c.canalTipo : ''));
+      var li = el('li', 'gcit' + (GCR.sel === c.id ? ' on' : '') + (c.naoLidas ? ' nl' : '')); li.tabIndex = 0; li.setAttribute('role', 'button'); if (GCR.sel === c.id) li.setAttribute('aria-current', 'true');
+      if (X.foto) li.appendChild(gcAvatar(c.nome, c.ini, c.foto || c.fotoCam, X.canal ? c.canalTipo : ''));
       var m = el('div', 'gcitm'), l1 = el('div', 'gcitl'); l1.appendChild(el('b', '', c.nome)); l1.appendChild(el('small', '', c.hora)); m.appendChild(l1);
-      if (X.previa && !X.compacto) m.appendChild(el('div', 'gcitt', (c.ultDir === 'out' ? '↩ ' : '') + c.ultTexto));
-      var l3 = el('div', 'gcitb'); if (X.canal && !X.foto) l3.appendChild(gcCanalBdg(c.canalTipo, c.canalNome)); l3.appendChild(el('span', 'bdg ' + (GC_SIT_CLS[c.situacao] || 'off'), c.situacao === 'atendendo' ? (c.respNome || 'Atendendo').split(' ')[0] : c.situacaoNome));
-      if (c.tipo === 'comentario') l3.appendChild(el('span', 'bdg off', 'comentário')); if (X.loja && c.empresaNome && GCR.filtro.empresa === '') l3.appendChild(el('small', '', c.empresaNome.replace(/^.*\| /, '')));
-      if (X.etiquetas) (c.tags || []).slice(0, 3).forEach(function (t) { l3.appendChild(el('span', 'gctag', t)); });
-      if (c.naoLidas) l3.appendChild(el('span', 'gcnl', String(c.naoLidas))); m.appendChild(l3); li.appendChild(m);
-      li.onclick = function () { GCR.sel = c.id; gcListaDesenhar(GCR.lista); gcConvAbrir(c.id); }; li.onkeydown = function (e) { if (e.key === 'Enter') li.onclick(); };
+      if (X.previa && !X.compacto) { var l2 = el('div', 'gcitp'); l2.appendChild(el('span', 'gcitt', (c.ultDir === 'out' ? 'Loja: ' : '') + c.ultTexto)); if (c.naoLidas) l2.appendChild(el('span', 'gcnl', String(c.naoLidas))); m.appendChild(l2); }
+      var l3 = el('div', 'gcitb'); if (X.canal && !X.foto) l3.appendChild(gcCanalBdg(c.canalTipo, c.canalNome)); l3.appendChild(gcSitTag(c));
+      if (c.tipo === 'comentario') l3.appendChild(gcTag('comentário', 'nt')); if (X.loja && c.empresaNome && GCR.filtro.empresa === '') l3.appendChild(el('small', '', c.empresaNome.replace(/^.*\| /, '')));
+      if (X.etiquetas && !X.compacto) (c.tags || []).slice(0, 3).forEach(function (t) { l3.appendChild(el('span', 'gctag', t)); });
+      if (c.naoLidas && (!X.previa || X.compacto)) l3.appendChild(el('span', 'gcnl', String(c.naoLidas))); m.appendChild(l3); li.appendChild(m);
+      li.onclick = function () { GCR.sel = c.id; GCR.ui.grade.classList.add('aberta'); gcListaDesenhar(GCR.lista); gcConvAbrir(c.id); }; li.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); li.onclick(); } };
       ul.appendChild(li);
     });
   }
@@ -24971,91 +25269,145 @@
   }
   function gcConvDesenhar(d) {
     var C = GCR.ui.conv, cv = d.conversa, ct = d.contato || {}; C.innerHTML = '';
-    var h = el('div', 'gcch'), hi = el('div'); h.appendChild(gcAvatar(cv.nome, cv.ini, ct.foto || cv.foto, cv.canalTipo, 'g')); hi.appendChild(el('b', '', cv.nome)); hi.appendChild(el('div', 'hint', cv.canalNome + ' · ' + cv.empresaNome + (ct.fone ? ' · ' + ct.fone : ct.user ? ' · @' + ct.user : '') + (cv.respNome ? ' · com ' + cv.respNome : ''))); h.appendChild(hi);
-    var ac = el('div', 'gchac'); h.appendChild(ac);
-    ac.appendChild(gcChk('Agente neste contato', !cv.agenteOff, function (v) { call('gcAgenteContato', [S.token, cv.contato, v]).then(function () { avisoTopo(v ? 'Agente religado para este cliente' : 'Agente desligado: ele não manda nada para este cliente'); gcConvAbrir(cv.id); }).catch(function (e) { gcErro(C, e); }); }));
-    if (cv.situacao !== 'atendendo' || (cv.resp !== S.u.id)) btn(ac, 'Assumir', 'ghost mini', function () { call('gcAssumir', [S.token, cv.id]).then(function () { gcConvAbrir(cv.id); gcListaRecarregar(); }).catch(function (e) { gcErro(C, e); }); });
-    btn(ac, 'Transferir ▾', 'ghost mini', function () { gcTransferir(d); });
-    btn(ac, 'Etiquetas', 'ghost mini', function () { gcEtiquetasForm(d); });
-    var bp = btn(ac, '◧ Cliente', 'ghost mini', function () { var o = Object.assign({}, gcExibir()); o.painel = !o.painel; gcExibirGravar(o); GCR.ui.grade.classList.toggle('semlado', !o.painel); bp.setAttribute('aria-pressed', o.painel ? 'true' : 'false'); }); bp.title = 'Mostrar ou esconder o painel do cliente'; bp.setAttribute('aria-pressed', gcExibir().painel ? 'true' : 'false');
-    if (cv.situacao !== 'concluida') btn(ac, 'Concluir', 'ok mini', function () { call('gcConcluir', [S.token, cv.id]).then(function () { avisoTopo('Atendimento concluído'); GCR.sel = ''; gcListaRecarregar(); C.innerHTML = ''; C.appendChild(el('div', 'empty', 'Escolha uma conversa.')); GCR.ui.lado.innerHTML = ''; }).catch(function (e) { gcErro(C, e); }); });
-    C.appendChild(h);
-    if (cv.tipo === 'comentario' && d.comentario) C.appendChild(el('div', 'gcaviso', 'Comentário em post do Instagram. "Responder" publica no comentário; marque "no Direct" para mandar em particular.'));
-    if (cv.janela !== null && cv.janela <= 0) C.appendChild(el('div', 'gcaviso w', 'Passou de 24 h desde a última mensagem do cliente: no WhatsApp oficial só dá para mandar um modelo aprovado pela Meta.'));
+    var assumir = function () { call('gcAssumir', [S.token, cv.id]).then(function () { gcConvAbrir(cv.id); gcListaRecarregar(); }).catch(function (e) { gcErro(C, e); }); };
+    var h = el('div', 'gcch'); C.appendChild(h);
+    h.appendChild(gcIcoBtn('voltar', 'Voltar para a lista', function () { GCR.ui.grade.classList.remove('aberta', 'ficha'); }, 'gcvolta'));
+    h.appendChild(gcAvatar(cv.nome, cv.ini, ct.foto || cv.foto || cv.fotoCam, cv.canalTipo, 'g'));
+    var hi = el('button', 'gcchi'); hi.type = 'button'; hi.title = 'Ver os dados do cliente'; hi.onclick = function () { gcFicha(true); };
+    hi.appendChild(el('b', '', cv.nome)); hi.appendChild(el('span', '', [cv.canalNome, cv.empresaNome, ct.fone || (ct.user ? '@' + ct.user : '')].filter(Boolean).join(' · '))); h.appendChild(hi);
+    var ac = el('div', 'gchac'), mb = gcIcoBtn('reticencias', 'Mais ações', null, 'gcmais'); mb.setAttribute('aria-expanded', 'false'); h.appendChild(mb); h.appendChild(ac);
+    mb.onclick = function () { var a = ac.classList.toggle('abre'); mb.setAttribute('aria-expanded', a ? 'true' : 'false'); };
+    var sw = gcSw(cv.agenteOff ? 'Agente desligado' : 'Agente ligado', !cv.agenteOff, function (v, s) { s.lastChild.textContent = v ? 'Agente ligado' : 'Agente desligado'; call('gcAgenteContato', [S.token, cv.contato, v]).then(function () { avisoTopo(v ? 'Agente religado para este cliente' : 'Agente desligado: ele não manda nada para este cliente'); }).catch(function (e) { gcErro(C, e); gcConvAbrir(cv.id); }); });
+    sw.title = 'Quando ligado, o agente de IA pode responder este cliente'; ac.appendChild(sw);
+    var bt = function (ic, t, fn, cls) { var x = el('button', 'gchb' + (cls ? ' ' + cls : '')); x.type = 'button'; x.title = t; x.setAttribute('aria-label', t); var i = el('span'); i.innerHTML = svgIco(ic); x.appendChild(i); x.appendChild(el('span', 'gchbt', t)); x.onclick = function () { ac.classList.remove('abre'); mb.setAttribute('aria-expanded', 'false'); fn(); }; ac.appendChild(x); return x; };
+    if (cv.situacao !== 'atendendo' || cv.resp !== S.u.id) bt('usuario', 'Assumir', assumir);
+    bt('transferir', 'Transferir', function () { gcTransferir(d); });
+    bt('etiqueta', 'Etiquetas', function () { gcEtiquetasForm(d); }, 'soic');
+    var bp = bt('painel', 'Painel do cliente', function () { gcFicha(); }, 'soic'); bp.setAttribute('data-painel', '1'); bp.setAttribute('aria-pressed', gcExibir().painel ? 'true' : 'false');
+    if (cv.situacao !== 'concluida') bt('conferir', 'Concluir', function () { call('gcConcluir', [S.token, cv.id]).then(function () { avisoTopo('Atendimento concluído'); GCR.sel = ''; gcListaRecarregar(); gcConvVazia(); }).catch(function (e) { gcErro(C, e); }); }, 'ok');
     GCR.ui.msgs = el('div', 'gcmsgs'); C.appendChild(GCR.ui.msgs); gcMsgsDesenhar(d);
-    gcCompositor(C, d);
+    gcCompositor(C, d, assumir); GCR.ui.msgs.scrollTop = GCR.ui.msgs.scrollHeight;
   }
+  function gcDiaTxt(ms) { var d = new Date(ms), h = new Date(), o = new Date(); o.setDate(o.getDate() - 1); return d.toDateString() === h.toDateString() ? 'Hoje' : d.toDateString() === o.toDateString() ? 'Ontem' : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: d.getFullYear() === h.getFullYear() ? undefined : 'numeric' }); }
+  var GC_ST = { lida: '✓✓ lida', entregue: '✓✓', enviada: '✓', erro: '⚠ não foi' };
   function gcMsgsDesenhar(d) {
-    var M = GCR.ui.msgs; if (!M) return; var fim = M.scrollHeight - M.scrollTop - M.clientHeight < 80; M.innerHTML = '';
+    var M = GCR.ui.msgs; if (!M) return; var fim = M.scrollHeight - M.scrollTop - M.clientHeight < 80, dia = ''; M.innerHTML = '';
     (d.mensagens || []).forEach(function (m) {
+      var dd = m.ms ? new Date(m.ms).toDateString() : ''; if (dd && dd !== dia) { dia = dd; M.appendChild(el('div', 'gcdia', gcDiaTxt(m.ms))); }
       if (m.dir === 'sis') { M.appendChild(el('div', 'gcsis', m.texto + ' · ' + gcHora(m.ms))); return; }
-      var x = el('div', 'gcm ' + (m.dir === 'in' ? 'in' : m.dir === 'nota' ? 'nota' : 'out') + (/agente/i.test(m.autor || '') ? ' ag' : ''));
-      if (m.dir !== 'in') x.appendChild(el('div', 'gcma', (m.dir === 'nota' ? '🔒 Nota interna · ' : /agente/i.test(m.autor) ? '✦ ' : '') + (m.autor || '')));
+      var ag = /agente/i.test(m.autor || ''), x = el('div', 'gcm ' + (m.dir === 'in' ? 'in' : m.dir === 'nota' ? 'nota' : 'out') + (ag && m.dir !== 'in' ? ' ag' : ''));
+      if (m.dir === 'nota') x.appendChild(el('div', 'gcma', 'Nota interna de ' + (m.autor || 'equipe') + ' · o cliente não vê'));
+      else if (m.dir !== 'in') x.appendChild(el('div', 'gcma', (ag ? '✦ ' : '') + (m.autor || '')));
       if (m.url && /^image/.test(m.mime || '')) { var im = el('img', 'gcimg'); im.src = m.url; im.alt = 'Foto'; im.loading = 'lazy'; x.appendChild(im); }
       else if (m.url && /^audio/.test(m.mime || '')) { var au = el('audio'); au.controls = true; au.src = m.url; x.appendChild(au); }
       else if (m.url) { var a = el('a', '', '📎 Abrir arquivo'); a.href = m.url; a.target = '_blank'; a.rel = 'noopener'; x.appendChild(a); }
       if (m.dados && m.dados.fotos && m.dados.fotos.length) { var fw = el('div', 'gcfotos'); m.dados.fotos.forEach(function (f) { var i2 = el('img'); i2.src = fotoUrl(f, 200); i2.alt = 'Foto do produto'; fw.appendChild(i2); }); x.appendChild(fw); }
       if (m.texto) x.appendChild(el('div', 'gcmt', m.texto));
-      x.appendChild(el('div', 'gcmh', gcHora(m.ms) + (m.status ? ' · ' + m.status : '') + (m.dados && m.dados.erro ? ' · ⚠ ' + m.dados.erro : '')));
-      M.appendChild(x);
+      var hh = el('div', 'gcmh', gcHora(m.ms)); if (m.status) hh.appendChild(el('span', 'gcst' + (m.status === 'lida' ? ' lida' : m.status === 'erro' ? ' err' : ''), GC_ST[m.status] || m.status)); if (m.dados && m.dados.erro) hh.appendChild(el('span', 'gcst err', '⚠ ' + m.dados.erro));
+      x.appendChild(hh); M.appendChild(x);
     });
     if (!(d.mensagens || []).length) M.appendChild(el('div', 'empty', 'Sem mensagens ainda.'));
     if (fim || !M.dataset.ok) { M.scrollTop = M.scrollHeight; M.dataset.ok = '1'; }
   }
-  function gcCompositor(C, d) {
-    var cv = d.conversa, f = el('div', 'gccomp'); C.appendChild(f);
-    var sv = el('div', 'gcsalvas'); f.appendChild(sv);
-    if (d.loja !== false) { var bp = el('button', 'gcsv', '📷 Enviar produto'); bp.type = 'button'; bp.onclick = function () { gcProdutoEscolher(cv, 'enviar'); }; sv.appendChild(bp); } // Gestti Gestão: sem estoque
-    var bs = el('button', 'gcsv', '✦ Sugerir resposta'); bs.type = 'button'; sv.appendChild(bs);
-    (d.salvas || []).slice(0, 8).forEach(function (s) { var x = el('button', 'gcsv', '/' + s.atalho); x.type = 'button'; x.title = s.texto; x.onclick = function () { ta.value = s.texto; ta.focus(); GCR.salvaSel = s; }; sv.appendChild(x); });
-    var nb = el('button', 'gcsv mais', '+ Nova'); nb.type = 'button'; nb.onclick = function () { gcSalvaForm(null); }; sv.appendChild(nb);
-    var lin = el('div', 'gccl'); f.appendChild(lin);
-    var ta = el('textarea'); ta.rows = 2; ta.maxLength = 4000; ta.placeholder = 'Escreva… ( / para mensagens salvas )'; ta.setAttribute('aria-label', 'Mensagem'); lin.appendChild(ta);
-    var col = el('div', 'gcclb'); lin.appendChild(col);
-    var nota = gcChk('Nota interna', false, function () {}), dir = cv.tipo === 'comentario' ? gcChk('no Direct', false, function () {}) : null;
-    col.appendChild(nota); if (dir) col.appendChild(dir);
-    var arq = el('input'); arq.type = 'file'; arq.accept = 'image/*,application/pdf,audio/*'; arq.style.display = 'none'; f.appendChild(arq);
-    var ba = el('button', 'btn ghost mini', '📎'); ba.type = 'button'; ba.title = 'Anexar foto, PDF ou áudio'; ba.setAttribute('aria-label', 'Anexar arquivo'); ba.onclick = function () { arq.click(); }; col.appendChild(ba);
-    var be = btn(col, 'Enviar', '', null);
-    var ARQ = null; arq.onchange = function () { var fi = arq.files[0]; if (!fi) return; if (fi.size > 15 * 1048576) { gcErro(f, 'Arquivo maior que 15 MB.'); return; } var r = new FileReader(); r.onload = function () { ARQ = { url: r.result, nome: fi.name }; ba.textContent = '📎 1'; }; r.readAsDataURL(fi); };
-    if (cv.janela !== null && cv.janela <= 0 && (d.modelos || []).length) {
-      var sm = l8Sel([['', 'Escolha um modelo aprovado…']].concat(d.modelos.map(function (m) { return [m.nome, m.nome + ' (' + m.categoria + ')']; }))); f.insertBefore(sm, lin);
-      sm.onchange = function () { var m = d.modelos.filter(function (x) { return x.nome === sm.value; })[0]; ta.value = m ? m.texto : ''; ta.placeholder = m && m.vars ? 'Variáveis separadas por | (ex.: Mariana|OS 0438)' : ''; };
-      be.onclick = function () { var m = d.modelos.filter(function (x) { return x.nome === sm.value; })[0]; if (!m) { gcErro(f, 'Escolha o modelo.'); return; } var vars = m.vars ? String(ta.value).split('|').map(function (v) { return v.trim(); }) : []; enviar({ modelo: { nome: m.nome, vars: vars }, texto: m.texto }); };
-    } else be.onclick = function () { enviar({ texto: ta.value, nota: nota.querySelector('input').checked, comentarioPublico: dir ? !dir.querySelector('input').checked : true, midia: ARQ ? ARQ.url : '', midiaNome: ARQ ? ARQ.nome : '', fotos: GCR.salvaSel && GCR.salvaSel.texto === ta.value ? GCR.salvaSel.fotos : [] }); };
-    function enviar(p) {
-      be.disabled = true;
-      call('gcEnviar', [S.token, cv.id, p]).then(function (r) { be.disabled = false; ta.value = ''; ARQ = null; ba.textContent = '📎'; GCR.salvaSel = null; if (r && r.erroEnvio) gcErro(f, 'O canal recusou: ' + r.erroEnvio); if (cv.resp !== S.u.id && !p.nota) gcConvAbrir(cv.id); else gcConvAtualizar(); })
-        .catch(function (e) { be.disabled = false; gcErro(f, e); });
+  /** Caixa de resposta: abas Responder / Nota interna, "/" abre as mensagens salvas, ferramentas embaixo (no celular, atrás do "+"). */
+  function gcCompositor(C, d, assumir) {
+    var cv = d.conversa, f = el('div', 'gccomp'), jan = cv.janela !== null && cv.janela <= 0, modo = 'resp'; C.appendChild(f);
+    var avs = el('div', 'gcavs'); f.appendChild(avs);
+    var outro = cv.situacao === 'atendendo' && cv.resp && cv.resp !== S.u.id;
+    if (cv.situacao === 'agente' || cv.situacao === 'fila' || outro) {
+      var av = el('div', 'gcassu'); av.appendChild(el('span', '', cv.situacao === 'fila' ? 'Na fila da loja: ninguém pegou ainda. Ao enviar, a conversa passa para você.' : cv.situacao === 'agente' ? 'O agente está atendendo. Ao enviar, a conversa passa para você.' : 'Com ' + (cv.respNome || 'outro atendente') + '. Para responder, peça para transferir ou assuma.'));
+      btn(av, 'Assumir agora', 'ghost mini', assumir); avs.appendChild(av);
     }
-    ta.onkeydown = function (e) { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); be.click(); } };
-    ta.oninput = function () { var v = ta.value; if (/^\/[a-z0-9-]{2,}$/.test(v)) { var s = (d.salvas || []).filter(function (x) { return '/' + x.atalho === v; })[0]; if (s) { ta.value = s.texto; GCR.salvaSel = s; } } };
-    bs.onclick = function () { bs.disabled = true; bs.textContent = '✦ Pensando…'; call('gcAgenteSugerir', [S.token, cv.id]).then(function (r) { bs.disabled = false; bs.textContent = '✦ Sugerir resposta'; var t = r.teste || {}; if (t.erro) { gcErro(f, t.erro); return; } ta.value = t.resposta || ''; ta.focus(); }).catch(function (e) { bs.disabled = false; bs.textContent = '✦ Sugerir resposta'; gcErro(f, e); }); };
+    if (jan) avs.appendChild(el('div', 'gcjan', 'O cliente não escreve há mais de 24 h. No WhatsApp oficial a Meta só deixa mandar um modelo aprovado; quando ele responder, a conversa volta ao normal.'));
+    var ab = el('div', 'gccab'); f.appendChild(ab); var tl = el('div', 'gcmodo'); tl.setAttribute('role', 'tablist'); tl.setAttribute('aria-label', 'Tipo de mensagem'); ab.appendChild(tl);
+    var tR = el('button', 'on', 'Responder'), tN = el('button', '', 'Nota interna'); [tR, tN].forEach(function (x) { x.type = 'button'; x.setAttribute('role', 'tab'); tl.appendChild(x); });
+    var dir = null; if (cv.tipo === 'comentario') { dir = el('div', 'gcdir'); dir.setAttribute('role', 'radiogroup'); dir.setAttribute('aria-label', 'Onde responder'); ab.appendChild(dir);
+      [['pub', 'No comentário (todos veem)'], ['dm', 'No Direct (particular)']].forEach(function (x, i) { var r = el('button', i ? '' : 'on', x[1]); r.type = 'button'; r.setAttribute('role', 'radio'); r.setAttribute('aria-checked', i ? 'false' : 'true'); r.dataset.v = x[0]; r.onclick = function () { [].forEach.call(dir.children, function (y) { y.classList.toggle('on', y === r); y.setAttribute('aria-checked', y === r ? 'true' : 'false'); }); }; dir.appendChild(r); }); }
+    var tw = el('div', 'gctaw'); f.appendChild(tw);
+    var sm = null; if (jan && (d.modelos || []).length) { sm = l8Sel([['', 'Escolha um modelo aprovado…']].concat(d.modelos.map(function (m) { return [m.nome, m.nome + ' (' + m.categoria + ')']; }))); sm.setAttribute('aria-label', 'Modelo aprovado'); tw.appendChild(sm); }
+    var pop = el('div', 'gcsvpop'); pop.hidden = true; pop.setAttribute('role', 'listbox'); pop.setAttribute('aria-label', 'Mensagens salvas'); tw.appendChild(pop);
+    var ta = el('textarea'); ta.rows = 2; ta.maxLength = 4000; ta.setAttribute('aria-label', 'Mensagem'); tw.appendChild(ta);
+    var ph = function () { ta.placeholder = modo === 'nota' ? 'Nota para a equipe (o cliente não vê)…' : sm ? 'Variáveis separadas por | (ex.: Mariana|OS 0438)' : 'Escreva para ' + String(cv.nome || '').split(' ')[0] + '…' + (window.innerWidth > 760 ? '  (digite / para mensagens salvas)' : ''); }; ph();
+    var mais = gcIcoBtn('mais', 'Anexar, produto, mensagens salvas e sugestão', null, 'gcmaisb'); mais.setAttribute('aria-expanded', 'false'); f.appendChild(mais);
+    mais.onclick = function () { var a = f.classList.toggle('maisab'); mais.setAttribute('aria-expanded', a ? 'true' : 'false'); };
+    var tools = el('div', 'gctools'); f.appendChild(tools);
+    var arq = el('input'); arq.type = 'file'; arq.accept = 'image/*,application/pdf,audio/*'; arq.style.display = 'none'; f.appendChild(arq);
+    var ba = gcIcoBtn('clipe', 'Anexar foto, PDF ou áudio', function () { arq.click(); }); tools.appendChild(ba);
+    if (d.loja !== false) tools.appendChild(gcIcoBtn('celular', 'Enviar produto do estoque', function () { gcProdutoEscolher(cv, 'enviar'); })); // Gestti Gestão: sem estoque
+    tools.appendChild(gcIcoBtn('marcador', 'Mensagens salvas (ou digite /)', function () { ta.value = '/'; ta.focus(); abrePop(); }));
+    var bs = el('button', 'gcsug'); bs.type = 'button'; bs.innerHTML = svgIco('brilho'); bs.appendChild(el('span', '', 'Sugerir resposta')); tools.appendChild(bs);
+    tools.appendChild(el('span', 'gcdica', 'Enter envia · Shift+Enter pula linha'));
+    var be = el('button', 'gcenv'); be.type = 'button'; be.innerHTML = svgIco('enviar'); var bel = el('span', '', 'Enviar'); be.appendChild(bel); be.setAttribute('aria-label', 'Enviar mensagem'); f.appendChild(be);
+    var setModo = function (m) { modo = m; tR.classList.toggle('on', m === 'resp'); tN.classList.toggle('on', m === 'nota'); tR.setAttribute('aria-selected', m === 'resp' ? 'true' : 'false'); tN.setAttribute('aria-selected', m === 'nota' ? 'true' : 'false'); f.classList.toggle('nota', m === 'nota'); bel.textContent = m === 'nota' ? 'Salvar nota' : 'Enviar'; be.setAttribute('aria-label', m === 'nota' ? 'Salvar nota interna' : 'Enviar mensagem'); if (sm) sm.hidden = m === 'nota'; if (dir) dir.hidden = m === 'nota'; ph(); };
+    tR.onclick = function () { setModo('resp'); }; tN.onclick = function () { setModo('nota'); }; setModo('resp');
+    var ARQ = null; arq.onchange = function () { var fi = arq.files[0]; if (!fi) return; if (fi.size > 15 * 1048576) { gcErro(f, 'Arquivo maior que 15 MB.'); return; } var r = new FileReader(); r.onload = function () { ARQ = { url: r.result, nome: fi.name }; ba.classList.add('on'); ba.title = 'Anexado: ' + fi.name; ba.setAttribute('aria-label', 'Anexado: ' + fi.name + '. Trocar arquivo'); }; r.readAsDataURL(fi); };
+    if (sm) sm.onchange = function () { var m = d.modelos.filter(function (x) { return x.nome === sm.value; })[0]; ta.value = m ? m.texto : ''; };
+    // mensagens salvas: "/" + começo do atalho
+    var sel = 0, achadas = [];
+    var fechaPop = function () { pop.hidden = true; achadas = []; };
+    var usa = function (s) { ta.value = s.texto; GCR.salvaSel = s; fechaPop(); ta.focus(); };
+    var abrePop = function () {
+      var v = ta.value; if (!/^\/[a-z0-9-]*$/i.test(v)) { fechaPop(); return; }
+      var q = v.slice(1).toLowerCase(); achadas = (d.salvas || []).filter(function (s) { return String(s.atalho).toLowerCase().indexOf(q) === 0; }).slice(0, 6); sel = 0; pop.innerHTML = '';
+      pop.appendChild(el('div', 'gcbt', achadas.length ? 'Mensagens salvas' : 'Nenhuma mensagem salva com "' + v + '"'));
+      achadas.forEach(function (s, i) { var o = el('button', 'gcsvo' + (i === sel ? ' on' : '')); o.type = 'button'; o.setAttribute('role', 'option'); o.setAttribute('aria-selected', i === sel ? 'true' : 'false'); o.appendChild(el('b', '', '/' + s.atalho)); o.appendChild(el('span', '', s.texto.slice(0, 90) + (s.midia ? ' · com arquivo' : ''))); o.onmousedown = function (e) { e.preventDefault(); }; o.onclick = function () { usa(s); }; pop.appendChild(o); });
+      var rp = el('div', 'gcsvrp'); var n1 = el('button', 'lnk', '+ Nova mensagem salva'); n1.type = 'button'; n1.onclick = function () { fechaPop(); gcSalvaForm(null); }; var n2 = el('button', 'lnk', 'Ver todas'); n2.type = 'button'; n2.onclick = function () { fechaPop(); gcSalvasGerir(); }; rp.appendChild(n1); rp.appendChild(n2); pop.appendChild(rp);
+      pop.hidden = false;
+    };
+    var marca = function () { [].forEach.call(pop.querySelectorAll('.gcsvo'), function (o, i) { o.classList.toggle('on', i === sel); o.setAttribute('aria-selected', i === sel ? 'true' : 'false'); }); };
+    ta.oninput = function () { abrePop(); };
+    ta.onblur = function () { setTimeout(fechaPop, 150); };
+    var enviar = function (p) {
+      be.disabled = true;
+      call('gcEnviar', [S.token, cv.id, p]).then(function (r) { be.disabled = false; ta.value = ''; ARQ = null; ba.classList.remove('on'); ba.title = 'Anexar foto, PDF ou áudio'; ba.setAttribute('aria-label', 'Anexar foto, PDF ou áudio'); GCR.salvaSel = null; if (r && r.erroEnvio) gcErro(f, 'O canal recusou: ' + r.erroEnvio); if (cv.resp !== S.u.id && !p.nota) gcConvAbrir(cv.id); else gcConvAtualizar(); })
+        .catch(function (e) { be.disabled = false; gcErro(f, e); });
+    };
+    be.onclick = function () {
+      if (modo === 'nota') { if (!ta.value.trim()) return; enviar({ texto: ta.value, nota: true }); return; }
+      if (sm) { var m = d.modelos.filter(function (x) { return x.nome === sm.value; })[0]; if (!m) { gcErro(f, 'Escolha o modelo.'); return; } var vars = m.vars ? String(ta.value).split('|').map(function (v) { return v.trim(); }) : []; enviar({ modelo: { nome: m.nome, vars: vars }, texto: m.texto }); return; }
+      if (!ta.value.trim() && !ARQ) return;
+      enviar({ texto: ta.value, nota: false, comentarioPublico: dir ? dir.querySelector('.on').dataset.v === 'pub' : true, midia: ARQ ? ARQ.url : '', midiaNome: ARQ ? ARQ.nome : '', fotos: GCR.salvaSel && GCR.salvaSel.texto === ta.value ? GCR.salvaSel.fotos : [] });
+    };
+    ta.onkeydown = function (e) {
+      if (!pop.hidden && achadas.length) {
+        if (e.key === 'ArrowDown') { e.preventDefault(); sel = (sel + 1) % achadas.length; marca(); return; }
+        if (e.key === 'ArrowUp') { e.preventDefault(); sel = (sel + achadas.length - 1) % achadas.length; marca(); return; }
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); usa(achadas[sel]); return; }
+      }
+      if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); fechaPop(); return; }
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); be.click(); }
+    };
+    bs.onclick = function () { bs.disabled = true; bs.lastChild.textContent = 'Pensando…'; call('gcAgenteSugerir', [S.token, cv.id]).then(function (r) { bs.disabled = false; bs.lastChild.textContent = 'Sugerir resposta'; var t = r.teste || {}; if (t.erro) { gcErro(f, t.erro); return; } setModo('resp'); ta.value = t.resposta || ''; ta.focus(); }).catch(function (e) { bs.disabled = false; bs.lastChild.textContent = 'Sugerir resposta'; gcErro(f, e); }); };
   }
   function gcLadoDesenhar(d) {
     var L = GCR.ui.lado; L.innerHTML = ''; var ct = d.contato || {}, g = d.gestti || {}, cv = d.conversa;
-    L.appendChild(el('b', 'gcln', ct.nome || cv.nome)); L.appendChild(el('div', 'hint', [ct.fone, ct.email, ct.criado ? 'desde ' + ct.criado.slice(3, 10) : '', ct.aniversario ? 'aniversário ' + ct.aniversario.slice(8, 10) + '/' + ct.aniversario.slice(5, 7) : ''].filter(Boolean).join(' · ')));
-    if ((ct.tags || []).length) { var tg = el('div', 'gcchips'); ct.tags.forEach(function (t) { tg.appendChild(el('span', 'gcchip', t)); }); L.appendChild(tg); }
+    L.appendChild(gcIcoBtn('fechar', 'Fechar a ficha', function () { GCR.ui.grade.classList.remove('ficha'); }, 'gcladox'));
+    var tp = el('div', 'gcltop'); L.appendChild(tp); tp.appendChild(gcAvatar(ct.nome || cv.nome, cv.ini, ct.foto || cv.foto || cv.fotoCam, '', 'gg'));
+    tp.appendChild(el('b', 'gcln', ct.nome || cv.nome));
+    tp.appendChild(el('div', 'hint', [ct.fone, ct.email, ct.criado ? 'desde ' + ct.criado.slice(3, 10) : '', ct.aniversario ? 'aniversário ' + ct.aniversario.slice(8, 10) + '/' + ct.aniversario.slice(5, 7) : ''].filter(Boolean).join(' · ')));
+    var tg = el('div', 'gcchips'); (ct.tags || []).forEach(function (t) { tg.appendChild(el('span', 'gcchip', t)); }); var te = el('button', 'gcchip mais', '+ etiqueta'); te.type = 'button'; te.onclick = function () { gcEtiquetasForm(d); }; tg.appendChild(te); tp.appendChild(tg);
     if (d.sugestao) { var sg = el('div', 'gcbox w'); sg.appendChild(el('b', '', 'Parece ser ' + d.sugestao.nome)); sg.appendChild(el('div', 'hint', 'Mesmo nome de um contato que já existe.')); var aw = el('div', 'acoes'); sg.appendChild(aw);
       btn(aw, 'É a mesma pessoa', 'mini', function () { call('gcContatosJuntar', [S.token, d.sugestao.id, ct.id]).then(function () { avisoTopo('Contatos juntados'); gcConvAbrir(cv.id); }).catch(function (e) { gcErro(L, e); }); });
       btn(aw, 'Não é', 'ghost mini', function () { call('gcSugestaoRecusar', [S.token, ct.id]).then(function () { sg.remove(); }); }); L.appendChild(sg); }
-    gcVinculosBox(L, ct, function () { gcConvAbrir(cv.id); }, true);
-    var ng = el('div', 'gcbox'); L.appendChild(ng); ng.appendChild(el('div', 'gcbt', 'Negócio'));
-    if (d.negocio) { var n = d.negocio; ng.appendChild(el('b', '', n.titulo)); ng.appendChild(el('div', 'hint', n.funilNome + ' · ' + n.etapaNome + (n.valor ? ' · ' + brl(n.valor) : ''))); if (n.prox) ng.appendChild(el('div', 'hint' + (n.proxAtrasada ? ' r' : ''), 'Próxima: ' + n.prox.texto)); btn(ng, 'Abrir negócio', 'ghost mini', function () { gcNegocioAbrir(n); }); }
-    else btn(ng, '+ Criar negócio', 'ghost mini', function () { gcNegocioForm({ contato: ct.id, contatoNome: ct.nome, conv: cv.id, empresa: cv.empresa }); });
-    if (g.ligado) { var gb = el('div', 'gcbox'); L.appendChild(gb); gb.appendChild(el('div', 'gcbt', 'No Gestti')); var ul = el('ul', 'gcul'); gb.appendChild(ul);
-      if (g.compras) ul.appendChild(el('li', '', g.compras + ' compra(s) · ' + brl(g.total))); (g.itens || []).slice(0, 3).forEach(function (i) { ul.appendChild(el('li', '', String(i.data || '').slice(0, 10).split('-').reverse().join('/') + ' · ' + i.nome)); });
-      (g.os || []).slice(0, 3).forEach(function (o) { ul.appendChild(el('li', '', 'OS ' + o.id + ' · ' + o.status + (o.garantiaAte ? ' · garantia até ' + String(o.garantiaAte).split('-').reverse().join('/') : ''))); });
-      if (g.cred) ul.appendChild(el('li', '', g.cred)); if (!ul.children.length) ul.appendChild(el('li', 'hint', 'Nada no Gestti com este telefone.')); }
-    var cs = el('div', 'gcbox'); L.appendChild(cs); cs.appendChild(el('div', 'gcbt', 'Permissões (LGPD)')); var co = ct.consent || {};
-    cs.appendChild(el('div', '', 'Avisos de compra/OS: ' + (co.avisos === false ? 'não' : 'sim'))); cs.appendChild(el('div', '', 'Ofertas e aniversário: ' + (co.ofertas === true ? 'sim' : co.ofertas === false ? 'não' : 'ainda não perguntado') + (co.em ? ' · ' + co.em.slice(0, 10) : ''))); if (co.origem) cs.appendChild(el('div', 'hint', co.origem));
-    var ac = el('div', 'gclac'); L.appendChild(ac);
+    var sec = function (t) { var s = el('div', 'gcls'); s.appendChild(el('div', 'gcbt', t)); L.appendChild(s); return s; };
+    var ng = sec('Negócio');
+    if (d.negocio) { var n = d.negocio, r1 = el('div', 'gcngl'); r1.appendChild(el('b', '', n.titulo)); if (n.valor) r1.appendChild(el('b', '', brl(n.valor))); ng.appendChild(r1); ng.appendChild(el('div', 'hint', n.funilNome + ' · ' + n.etapaNome)); if (n.prox) ng.appendChild(el('div', 'hint' + (n.proxAtrasada ? ' r' : ''), (n.proxAtrasada ? 'Atrasada: ' : 'Próxima: ') + n.prox.texto)); var on = el('button', 'lnk', 'Abrir negócio ›'); on.type = 'button'; on.onclick = function () { gcNegocioAbrir(n); }; ng.appendChild(on); }
+    else { var cn = el('button', 'gcnovo', '+ Criar negócio'); cn.type = 'button'; cn.onclick = function () { gcNegocioForm({ contato: ct.id, contatoNome: ct.nome, conv: cv.id, empresa: cv.empresa }); }; ng.appendChild(cn); }
+    if (g.ligado) { var gb = sec('No Gestti'), it = function (a, b2, cor) { var r = el('div', 'gcgi'); var p = el('i'); p.style.background = cor; r.appendChild(p); var t = el('span'); t.appendChild(el('b', '', a)); if (b2) t.appendChild(el('small', '', b2)); r.appendChild(t); gb.appendChild(r); };
+      if (g.compras) it(g.compras + ' compra(s) · ' + brl(g.total), (g.itens || []).slice(0, 2).map(function (i) { return String(i.data || '').slice(0, 10).split('-').reverse().join('/') + ' · ' + i.nome; }).join(' · '), '#2445D6');
+      (g.os || []).slice(0, 3).forEach(function (o) { it('OS ' + o.id + ' · ' + o.status, o.garantiaAte ? 'garantia até ' + String(o.garantiaAte).split('-').reverse().join('/') : '', '#137A3A'); });
+      if (g.cred) it(g.cred, '', '#9C5700'); if (!gb.querySelector('.gcgi')) gb.appendChild(el('div', 'hint', 'Nada no Gestti com este telefone.')); }
     if (d.loja !== false) { // partes de loja (na Gestti Gestão o CRM vende o sistema)
-      btn(ac, 'Montar proposta', 'ghost mini', function () { gcAbrirProposta(d); });
-      btn(ac, 'Reservar (sinal + termo)', 'ghost mini', function () { gcProdutoEscolher(cv, 'reservar'); });
-      btn(ac, 'Avaliar o aparelho do cliente', 'ghost mini', function () { gcAvaliacaoForm(d); });
+      var fa = sec('Fazer agora'), ac = function (ic, t, fn) { var x = el('button', 'gcfaz'); x.type = 'button'; var i = el('span'); i.innerHTML = svgIco(ic); x.appendChild(i); x.appendChild(el('span', '', t)); x.appendChild(el('em', '', '›')); x.onclick = fn; fa.appendChild(x); };
+      ac('recibo', 'Montar proposta', function () { gcAbrirProposta(d); });
+      ac('calendario', 'Reservar com sinal e termo', function () { gcProdutoEscolher(cv, 'reservar'); });
+      ac('celular', 'Avaliar o aparelho do cliente', function () { gcAvaliacaoForm(d); });
     }
-    btn(ac, 'Abrir cliente 360 ›', 'lnk', function () { gcContatoAbrir(ct.id); });
+    var vd = el('details', 'gcdet'); vd.appendChild(el('summary', '', 'Vínculos')); L.appendChild(vd); gcVinculosBox(vd, ct, function () { gcConvAbrir(cv.id); }, true);
+    var co = ct.consent || {}, pd = el('details', 'gcdet'), ps = el('summary', '', 'Permissões (LGPD)'); pd.appendChild(ps); L.appendChild(pd);
+    if (co.ofertas !== true && co.ofertas !== false) ps.appendChild(el('span', 'gcdetw', ' · ofertas não perguntado'));
+    pd.appendChild(el('div', '', 'Avisos de compra e OS: ' + (co.avisos === false ? 'não' : 'sim'))); pd.appendChild(el('div', '', 'Ofertas e aniversário: ' + (co.ofertas === true ? 'sim' : co.ofertas === false ? 'não' : 'ainda não perguntado') + (co.em ? ' · ' + co.em.slice(0, 10) : ''))); if (co.origem) pd.appendChild(el('div', 'hint', co.origem));
+    btn(L, 'Abrir cliente 360 ›', 'ghost gc360', function () { gcContatoAbrir(ct.id); });
   }
   function gcTransferir(d) {
     var F = l8Form('Transferir conversa', d.conversa.nome), cv = d.conversa;
@@ -25135,43 +25487,58 @@
     call('gcFunisDados', [S.token, Object.assign({ funil: GCR.funil.funil }, GCR.funil.f)]).then(gcFunilDesenhar).catch(l8Erro);
   };
   function gcFunilDesenhar(d) {
-    GCR.funilD = d; var b = l8Corpo(); $('l8Acoes').innerHTML = '';
+    GCR.funilD = d; var b = l8Corpo(), A = $('l8Acoes'); A.innerHTML = '';
     if (!d.funil) { b.appendChild(el('div', 'empty', 'Nenhum funil.')); return; }
     GCR.funil.funil = d.funil.id; try { gcFunisMenu(); } catch (e) {}
-    var sf = l8Sel(d.funis.map(function (x) { return [x.id, x.nome]; }), d.funil.id); sf.setAttribute('aria-label', 'Funil'); sf.style.width = 'auto'; sf.onchange = function () { GCR.funil.funil = sf.value; L8_PAGINAS.gcfunil(); }; $('l8Acoes').appendChild(sf);
-    if (d.podeConfig) { l8Acao('+ Novo funil', function () { gcFunilForm(null); }, 'ghost'); l8Acao('Personalizar etapas', function () { gcFunilForm(d.funil); }, 'ghost'); }
-    l8Acao(GCR.funil.vis === 'kanban' ? 'Lista' : 'Quadro', function () { GCR.funil.vis = GCR.funil.vis === 'kanban' ? 'lista' : 'kanban'; gcFunilDesenhar(d); }, 'ghost');
+    $('l8Tit').textContent = 'Funil de vendas';
+    if (d.funis.length > 1) { var sf = l8Sel(d.funis.map(function (x) { return [x.id, 'Funil: ' + x.nome]; }), d.funil.id); sf.setAttribute('aria-label', 'Funil'); sf.className = 'gcfil gcfilg'; sf.onchange = function () { GCR.funil.funil = sf.value; L8_PAGINAS.gcfunil(); }; A.appendChild(sf); }
+    var vis = GCR.funil.vis === 'lista' ? 'lista' : 'kanban', seg = el('div', 'gcseg'); seg.setAttribute('role', 'radiogroup'); seg.setAttribute('aria-label', 'Ver como'); A.appendChild(seg);
+    [['kanban', 'Quadro'], ['lista', 'Lista']].forEach(function (x) { var s = el('button', vis === x[0] ? 'on' : '', x[1]); s.type = 'button'; s.setAttribute('role', 'radio'); s.setAttribute('aria-checked', vis === x[0] ? 'true' : 'false'); s.onclick = function () { GCR.funil.vis = x[0]; gcFunilDesenhar(d); }; seg.appendChild(s); });
+    if (d.podeConfig) { l8Acao('Personalizar etapas', function () { gcFunilForm(d.funil); }, 'ghost gcsodesk'); l8Acao('+ Novo funil', function () { gcFunilForm(null); }, 'ghost gcsodesk'); }
     l8Acao('+ Negócio', function () { gcNegocioForm({ funil: d.funil.id }); });
-    var fl = el('div', 'gcchips'); b.appendChild(fl);
-    var mk = function (k, ops) { var s = l8Sel(ops, GCR.funil.f[k] || ops[0][0]); s.style.width = 'auto'; s.onchange = function () { GCR.funil.f[k] = s.value; L8_PAGINAS.gcfunil(); }; fl.appendChild(s); };
-    mk('resp', [['', 'Responsável: todos']].concat(d.equipe.map(function (p) { return [p.id, p.nome]; })));
-    mk('empresa', [['', 'Loja: todas']].concat(d.empresas.map(function (e) { return [e.id, e.nome]; })));
-    mk('origem', [['', 'Origem: todas']].concat(d.origens.map(function (o) { return [o, o]; })));
-    mk('situacao', [['aberto', 'Abertos'], ['ganho', 'Ganhos'], ['perdido', 'Perdidos']]);
-    if (d.parados) fl.appendChild(el('span', 'gcchip r', d.parados + ' parado(s)'));
-    fl.appendChild(el('span', 'gcchip', 'Previsão: ' + brl(d.previsao)));
-    if (GCR.funil.vis === 'lista') {
-      l8Tabela(b, ['Negócio', 'Cliente', 'Etapa', 'Valor', 'Responsável', 'Próxima', 'Dias'], d.negocios.map(function (n) { return [n.titulo, n.contatoNome, n.etapaNome, brl(n.valor), n.respNome || (n.agente ? 'Agente' : '—'), n.prox ? n.prox.texto : '—', String(n.dias)]; }), function (i) { gcNegocioAbrir(d.negocios[i]); }, 'Nenhum negócio.');
+    gcIntro(b, d.funil.nome + ': arraste o cartão para mudar de etapa. "Ganhou" com o Gestti ligado abre o PDV com o cliente; "Perdeu" pede o motivo e o cliente volta numa reativação em 30 dias (se permitir ofertas).');
+    var fl = el('div', 'gcfils'); b.appendChild(fl);
+    var mk = function (k, ops, rot) { var s = l8Sel(ops, GCR.funil.f[k] || ops[0][0]); s.className = 'gcfil'; s.setAttribute('aria-label', rot); s.onchange = function () { GCR.funil.f[k] = s.value; L8_PAGINAS.gcfunil(); }; fl.appendChild(s); };
+    mk('situacao', [['aberto', 'Abertos'], ['ganho', 'Ganhos'], ['perdido', 'Perdidos']], 'Situação');
+    mk('resp', [['', 'Responsável: todos']].concat(d.equipe.map(function (p) { return [p.id, p.nome]; })), 'Responsável');
+    mk('empresa', [['', 'Loja: todas']].concat(d.empresas.map(function (e) { return [e.id, e.nome]; })), 'Loja');
+    mk('origem', [['', 'Origem: todas']].concat(d.origens.map(function (o) { return [o, o]; })), 'Origem');
+    fl.appendChild(el('span', 'gcfesp'));
+    var rs = el('span', 'gcfres'); rs.appendChild(el('b', '', d.negocios.length + (d.negocios.length === 1 ? ' negócio' : ' negócios'))); rs.appendChild(document.createTextNode(' · previsão ')); rs.appendChild(el('b', '', brl(d.previsao))); fl.appendChild(rs);
+    if (d.parados) fl.appendChild(gcTag(d.parados + (d.parados > 1 ? ' parados' : ' parado'), 'rd'));
+    if (vis === 'lista') {
+      l8Tabela(b, ['Negócio', 'Cliente', 'Etapa', 'Valor', 'Responsável', 'Próxima', 'Dias'], d.negocios.map(function (n) { return [n.titulo, n.contatoNome, n.etapaNome, brl(n.valor), n.respNome || (n.agente ? 'Agente' : '—'), n.prox ? (n.proxAtrasada ? 'Atrasada: ' : '') + n.prox.texto : '—', String(n.dias)]; }), function (i) { gcNegocioAbrir(d.negocios[i]); }, 'Nenhum negócio.');
       return;
     }
+    // no celular: uma etapa por vez, escolhida nas abas
+    var ix = Math.min(GCR.funil.etapaCel || 0, d.etapas.length - 1), et = el('div', 'gcetabs'); et.setAttribute('role', 'tablist'); et.setAttribute('aria-label', 'Etapas'); b.appendChild(et);
     var kb = el('div', 'gckb'); b.appendChild(kb);
-    d.etapas.forEach(function (e) {
-      var col = el('section', 'gccol'); col.style.borderTopColor = e.cor; kb.appendChild(col);
-      var hd = el('div', 'gccolh'); hd.appendChild(el('b', '', e.nome)); hd.appendChild(el('small', '', e.qtd + ' · ' + brl(e.total))); col.appendChild(hd);
+    d.etapas.forEach(function (e, i) {
+      var t = el('button', i === ix ? 'on' : '', e.nome + ' ' + e.qtd); t.type = 'button'; t.setAttribute('role', 'tab'); t.setAttribute('aria-selected', i === ix ? 'true' : 'false'); t.onclick = function () { GCR.funil.etapaCel = i; gcFunilDesenhar(d); }; et.appendChild(t);
+      var col = el('section', 'gccol' + (i === ix ? ' on' : '')); col.setAttribute('aria-label', e.nome); kb.appendChild(col);
+      var hd = el('div', 'gccolh'), l1 = el('div', 'gccoln'), dot = el('i'); dot.style.background = e.cor || GC_ETAPA_COR[i % GC_ETAPA_COR.length]; l1.appendChild(dot); l1.appendChild(el('b', '', e.nome)); l1.appendChild(el('span', 'gccolq', String(e.qtd))); hd.appendChild(l1); hd.appendChild(el('small', '', brl(e.total))); col.appendChild(hd);
       col.ondragover = function (ev) { ev.preventDefault(); col.classList.add('dz'); }; col.ondragleave = function () { col.classList.remove('dz'); };
       col.ondrop = function (ev) { ev.preventDefault(); col.classList.remove('dz'); var id = ev.dataTransfer.getData('text/plain'); if (id) gcMover(id, e.id); };
       d.negocios.filter(function (n) { return n.etapa === e.id; }).forEach(function (n) {
-        var c = el('article', 'gccard' + (n.parado ? ' parado' : '')); c.draggable = true; c.tabIndex = 0;
+        var c = el('article', 'gccard' + (n.parado ? ' parado' : '')); c.draggable = true; c.tabIndex = 0; c.setAttribute('aria-label', n.titulo + ', ' + n.contatoNome);
         c.ondragstart = function (ev) { ev.dataTransfer.setData('text/plain', n.id); };
-        c.appendChild(el('b', '', n.titulo)); c.appendChild(el('div', 'hint', n.contatoNome + (n.origem ? ' · ' + n.origem : '')));
+        var t1 = el('div', 'gccdt'); t1.appendChild(el('b', '', n.titulo)); if (n.parado) t1.appendChild(gcTag('parado', 'wa')); c.appendChild(t1);
+        c.appendChild(el('div', 'hint', n.contatoNome + (n.origem ? ' · ' + n.origem : '')));
         c.appendChild(el('div', 'gccv', n.valor ? brl(n.valor) : 'R$ —'));
-        c.appendChild(el('div', 'gcprox' + (n.proxAtrasada || !n.prox ? ' r' : ''), n.prox ? (n.proxAtrasada ? 'Atrasada: ' : '') + n.prox.texto : 'Sem próxima atividade'));
-        c.appendChild(el('small', '', (n.respNome || (n.agente ? '✦ Agente' : 'sem responsável')) + ' · ' + n.dias + ' dia(s)'));
-        c.onclick = function () { gcNegocioAbrir(n); }; c.onkeydown = function (ev) { if (ev.key === 'Enter') gcNegocioAbrir(n); };
+        var px = el('div', 'gcprox' + (n.proxAtrasada ? ' r' : !n.prox ? ' w' : '')); var pi = el('span'); pi.innerHTML = svgIco('relogio'); px.appendChild(pi); px.appendChild(document.createTextNode(n.prox ? (n.proxAtrasada ? 'Atrasada: ' : '') + n.prox.texto : 'Sem próxima atividade')); c.appendChild(px);
+        var rp = el('div', 'gccdr'), rn = n.respNome || (n.agente ? 'Agente' : ''), av = el('span', 'gccda', rn ? (n.agente && !n.respNome ? '✦' : rn.split(' ').map(function (p) { return p.charAt(0); }).join('').slice(0, 2).toUpperCase()) : '?'); if (rn) { var cr = gcCorDe(rn); av.style.background = cr[0]; av.style.color = cr[1]; }
+        rp.appendChild(av); rp.appendChild(el('span', '', rn || 'sem responsável')); rp.appendChild(el('small', '', n.dias + (n.dias === 1 ? ' dia' : ' dias'))); c.appendChild(rp);
+        var mv = el('div', 'gccdm'); btn(mv, 'Mover etapa', 'ghost mini', function (ev) { ev.stopPropagation(); gcMoverForm(n, d); }); if (n.conv) btn(mv, 'Conversa', 'mini', function (ev) { ev.stopPropagation(); GCR.sel = n.conv; ir('gcconversas'); }); c.appendChild(mv);
+        c.onclick = function () { gcNegocioAbrir(n); }; c.onkeydown = function (ev) { if (ev.key === 'Enter' && ev.target === c) gcNegocioAbrir(n); };
         col.appendChild(c);
       });
+      var nv = el('button', 'gccoladd', '+ Negócio aqui'); nv.type = 'button'; nv.onclick = function () { gcNegocioForm({ funil: d.funil.id, etapa: e.id }); }; col.appendChild(nv);
     });
-    var rg = el('div', 'hint gcrod', 'Arraste o cartão para mudar de etapa. "Ganhou" com o Gestti ligado abre o PDV com o cliente; "Perdeu" pede o motivo e o cliente volta numa reativação em 30 dias (se permitir ofertas).'); b.appendChild(rg);
+  }
+  /** Mudar de etapa sem arrastar (celular e teclado). */
+  function gcMoverForm(n, d) {
+    var F = l8Form('Mover para outra etapa', n.titulo + ' · ' + n.contatoNome), s = campo(F.c, 'Etapa', l8Sel(d.etapas.map(function (e) { return [e.id, e.nome]; }), n.etapa), true);
+    F.ok('Mover', function () { fecharModal(); gcMover(n.id, s.value); });
   }
   function gcMover(id, etapa) { call('gcNegocioMover', [S.token, id, etapa]).then(function () { L8_PAGINAS.gcfunil(); }).catch(function (e) { avisoTopo(String(e), 'err'); L8_PAGINAS.gcfunil(); }); }
   function gcNegocioAbrir(n) { gcNegocioForm(n); }
@@ -25249,44 +25616,75 @@
 
   // ---------- contatos e cliente 360 ----------
   L8_PAGINAS.gccliente = function () {
-    if (GCR.contato) { var id = GCR.contato; GCR.contato = ''; gcContatoDesenhar(id); return; }
-    var b = l8Carregando(); $('l8Acoes').innerHTML = ''; l8Acao('+ Contato', function () { gcContatoForm(null); });
+    var id0 = GCR.contato || GCR.ctSel || ''; GCR.contato = '';
+    l8Carregando(); $('l8Acoes').innerHTML = '';
     var q = GCR.cq || {};
     call('gcContatosLista', [S.token, q]).then(function (d) {
-      b = l8Corpo(); var fl = el('div', 'gcchips'); b.appendChild(fl);
-      var bq = inp('search', 'Buscar nome, telefone ou e-mail'); bq.value = q.busca || ''; fl.appendChild(bq); var t = 0; bq.oninput = function () { clearTimeout(t); t = setTimeout(function () { GCR.cq = Object.assign({}, q, { busca: bq.value }); L8_PAGINAS.gccliente(); }, 400); };
-      var st = l8Sel([['', 'Todas as etiquetas']].concat(d.tags.map(function (x) { return [x, x]; })), q.tag || ''); st.onchange = function () { GCR.cq = Object.assign({}, q, { tag: st.value }); L8_PAGINAS.gccliente(); }; fl.appendChild(st);
-      fl.appendChild(gcChk('Só quem aceita ofertas', q.ofertas, function (v) { GCR.cq = Object.assign({}, q, { ofertas: v }); L8_PAGINAS.gccliente(); }));
-      var sgw = el('div'); b.appendChild(sgw); gcSugestoesBox(sgw, function () { L8_PAGINAS.gccliente(); });
-      l8Tabela(b, ['Nome', 'Telefone', 'Etiquetas', 'Ofertas', 'Último contato'], d.contatos.map(function (c) { return [c.nome, c.fone || '—', c.tags.join(', '), c.ofertas ? 'sim' : '—', c.ult]; }), function (i) { gcContatoDesenhar(d.contatos[i].id); }, 'Nenhum contato ainda. Eles aparecem sozinhos quando alguém manda mensagem ou compra.');
+      var b = l8Corpo(); b.classList.add('gcfull');
+      var g = el('div', 'gcctg' + (id0 ? ' aberta' : '')); b.appendChild(g);
+      var L = el('section', 'card gcctl'), R = el('section', 'card gcctr'); L.setAttribute('aria-label', 'Lista de contatos'); R.setAttribute('aria-label', 'Cliente 360'); g.appendChild(L); g.appendChild(R);
+      var hd = el('div', 'gclth'); L.appendChild(hd); var h2 = el('h2', '', 'Contatos '); h2.appendChild(el('small', '', String(d.contatos.length))); hd.appendChild(h2); btn(hd, '+ Contato', 'mini', function () { gcContatoForm(null); });
+      var bl = el('div', 'gcbusca'); L.appendChild(bl); var lab = el('label', 'gcbq'); bl.appendChild(lab); var lic = el('span'); lic.innerHTML = svgIco('busca'); lab.appendChild(lic);
+      var bq = el('input'); bq.type = 'search'; bq.placeholder = 'Buscar nome, telefone ou e-mail'; bq.setAttribute('aria-label', 'Buscar contato'); bq.value = q.busca || ''; lab.appendChild(bq);
+      var t = 0; bq.oninput = function () { clearTimeout(t); t = setTimeout(function () { GCR.cq = Object.assign({}, q, { busca: bq.value }); GCR.ctFoco = 1; L8_PAGINAS.gccliente(); }, 400); };
+      if (GCR.ctFoco) { GCR.ctFoco = 0; bq.focus(); try { bq.setSelectionRange(bq.value.length, bq.value.length); } catch (e) {} }
+      var fl = el('div', 'gcfils'); L.appendChild(fl);
+      var st = l8Sel([['', 'Todas as etiquetas']].concat(d.tags.map(function (x) { return [x, x]; })), q.tag || ''); st.className = 'gcfil'; st.setAttribute('aria-label', 'Etiqueta'); st.onchange = function () { GCR.cq = Object.assign({}, q, { tag: st.value }); L8_PAGINAS.gccliente(); }; fl.appendChild(st);
+      var of = el('button', 'gcfil gctg2', 'Só quem aceita ofertas'); of.type = 'button'; of.setAttribute('aria-pressed', q.ofertas ? 'true' : 'false'); of.onclick = function () { GCR.cq = Object.assign({}, q, { ofertas: !q.ofertas }); L8_PAGINAS.gccliente(); }; fl.appendChild(of);
+      var sgw = el('div'); L.appendChild(sgw);
+      call('gcSugestoesJuntar', [S.token]).then(function (r) { if (!r.sugestoes.length) return; var bn = el('div', 'gcsugb'); bn.appendChild(el('span', '', r.sugestoes.length + (r.sugestoes.length > 1 ? ' pares de contatos parecem' : ' par de contatos parece') + ' ser a mesma pessoa.')); btn(bn, 'Revisar', 'mini', function () { var F = l8Form('Contatos parecidos', 'O sistema só sugere: quem confirma é você.'); gcSugestoesBox(F.c, function () { fecharModal(); L8_PAGINAS.gccliente(); }); }); sgw.appendChild(bn); }).catch(function () {});
+      var ul = el('ul', 'gcctli'); L.appendChild(ul);
+      if (!d.contatos.length) ul.appendChild(el('li', 'gcvz', 'Nenhum contato ainda. Eles aparecem sozinhos quando alguém manda mensagem ou compra.'));
+      d.contatos.forEach(function (c) {
+        var li = el('li'), bt = el('button', 'gcctit' + (c.id === id0 ? ' on' : '')); bt.type = 'button'; bt.dataset.id = c.id; if (c.id === id0) bt.setAttribute('aria-current', 'true');
+        var ini = String(c.nome || '?').replace(/^@/, '').split(' ').map(function (p) { return p.charAt(0); }).join('').slice(0, 2).toUpperCase();
+        bt.appendChild(gcAvatar(c.nome, ini, '', ''));
+        var m = el('span', 'gcctm'), l1 = el('span', 'gcctl1'); l1.appendChild(el('b', '', c.nome)); l1.appendChild(el('small', '', c.ult)); m.appendChild(l1);
+        m.appendChild(el('span', 'gcctl2', [c.fone || c.origem || '', c.ofertas ? 'aceita ofertas' : ''].filter(Boolean).join(' · ') || '—'));
+        if (c.tags.length) { var tg = el('span', 'gcctl3'); c.tags.slice(0, 3).forEach(function (x) { tg.appendChild(el('span', 'gctag', x)); }); m.appendChild(tg); }
+        bt.appendChild(m); bt.onclick = function () { gcContatoDesenhar(c.id); }; li.appendChild(bt); ul.appendChild(li);
+      });
+      if (id0) gcContatoDesenhar(id0); else { var v = el('div', 'gcconvvz'); v.appendChild(el('b', '', 'Escolha um contato')); v.appendChild(el('span', '', 'A ficha mostra conversas, compras, OS, negócios e permissões juntos.')); R.appendChild(v); }
     }).catch(l8Erro);
   };
   function gcContatoAbrir(id) { GCR.contato = id; if (S.view === 'gccliente') L8_PAGINAS.gccliente(); else ir('gccliente'); }
+  var GC_TL_IC = { conversa: ['C', 'ag'], compra: ['$', 'nt'], negocio: ['N', 'ag'], nps: ['★', 'wa'], os: ['OS', 'nt'] };
   function gcContatoDesenhar(id) {
-    l8Carregando();
+    GCR.ctSel = id; var R = document.querySelector('#l8Corpo .gcctr');
+    if (!R || S.view !== 'gccliente') { GCR.contato = id; if (S.view === 'gccliente') L8_PAGINAS.gccliente(); else ir('gccliente'); return; }
+    var G = R.parentNode; G.classList.add('aberta'); [].forEach.call(G.querySelectorAll('.gcctit'), function (x) { var on = x.dataset.id === id; x.classList.toggle('on', on); if (on) x.setAttribute('aria-current', 'true'); else x.removeAttribute('aria-current'); });
+    R.innerHTML = ''; R.appendChild(el('div', 'empty', 'Carregando…'));
     call('gcContatoDados', [S.token, id]).then(function (d) {
-      var b = l8Corpo(), ct = d.contato; $('l8Acoes').innerHTML = ''; $('l8Tit').textContent = ct.nome;
-      l8Acao('← Contatos', function () { L8_PAGINAS.gccliente(); }, 'ghost');
-      if (d.conversas.length) l8Acao('Abrir conversa', function () { GCR.sel = d.conversas[0].id; ir('gcconversas'); });
-      l8Acao('Editar', function () { gcContatoForm(ct); }, 'ghost');
-      var g = el('div', 'gc2'); b.appendChild(g);
-      var a = gcSec(g, 'Linha do tempo'); var ul = el('ul', 'gctl'); a.appendChild(ul);
-      d.linha.forEach(function (x) { var li = el('li', 'gctl-' + x.tipo); li.appendChild(el('small', '', x.quando)); li.appendChild(el('div', '', x.t)); if (x.conv) { li.classList.add('clk'); li.onclick = function () { GCR.sel = x.conv; ir('gcconversas'); }; } ul.appendChild(li); });
+      if (GCR.ctSel !== id) return; var ct = d.contato; R.innerHTML = '';
+      var hd = el('div', 'gc360h'); R.appendChild(hd);
+      hd.appendChild(gcIcoBtn('voltar', 'Voltar para os contatos', function () { G.classList.remove('aberta'); GCR.ctSel = ''; }, 'gcvolta'));
+      var ini = String(ct.nome || '?').replace(/^@/, '').split(' ').map(function (p) { return p.charAt(0); }).join('').slice(0, 2).toUpperCase();
+      hd.appendChild(gcAvatar(ct.nome, ini, ct.foto, '', 'gg'));
+      var hi = el('div', 'gc360i'); hd.appendChild(hi); hi.appendChild(el('h2', '', ct.nome));
+      hi.appendChild(el('span', 'hint', [ct.fone, ct.email, ct.user ? '@' + ct.user : ''].filter(Boolean).join(' · ') || 'Sem telefone'));
+      var tg = el('div', 'gcchips'); (ct.tags || []).forEach(function (x) { tg.appendChild(el('span', 'gcchip', x)); }); d.segmentos.forEach(function (s) { tg.appendChild(el('span', 'gcchip ag', s)); }); if (tg.children.length) hi.appendChild(tg);
+      var ha = el('div', 'gc360a'); hd.appendChild(ha); btn(ha, 'Editar', 'ghost', function () { gcContatoForm(ct); }); if (d.conversas.length) btn(ha, 'Abrir conversa', '', function () { GCR.sel = d.conversas[0].id; ir('gcconversas'); });
+      var nums = el('div', 'gc360n'); R.appendChild(nums);
+      [['Compras', String(d.rfm.compras)], ['Total gasto', brl(d.rfm.total)], ['Último NPS', d.rfm.nps === null || d.rfm.nps === undefined ? '—' : String(d.rfm.nps)], ['Negócios abertos', String(d.negocios.filter(function (x) { return x.situacao === 'aberto'; }).length)]].forEach(function (x) { var c = el('div'); c.appendChild(el('small', '', x[0])); c.appendChild(el('b', '', x[1])); nums.appendChild(c); });
+      var cp = el('div', 'gc360c'); R.appendChild(cp);
+      var tl = el('div', 'gc360t'); cp.appendChild(tl); tl.appendChild(el('div', 'gcbt', 'Linha do tempo')); var ul = el('ul', 'gctl'); tl.appendChild(ul);
+      d.linha.forEach(function (x) { var k = GC_TL_IC[x.tipo] || ['•', 'nt'], li = el('li'); li.appendChild(el('span', 'gctli ' + k[1], k[0])); var t = el('div'); t.appendChild(el('b', '', x.t)); t.appendChild(el('small', '', x.quando + (x.conv ? ' · abrir conversa ›' : ''))); li.appendChild(t); if (x.conv) { li.classList.add('clk'); li.tabIndex = 0; li.setAttribute('role', 'button'); li.onclick = function () { GCR.sel = x.conv; ir('gcconversas'); }; li.onkeydown = function (e) { if (e.key === 'Enter') li.onclick(); }; } ul.appendChild(li); });
       if (!d.linha.length) ul.appendChild(el('li', 'hint', 'Nada ainda.'));
-      var lado = el('div'); g.appendChild(lado);
-      var r = gcSec(lado, 'Resumo'); r.appendChild(el('div', '', [ct.fone, ct.email, ct.user ? '@' + ct.user : ''].filter(Boolean).join(' · ') || 'Sem telefone')); r.appendChild(el('div', 'hint', d.rfm.compras + ' compra(s) · ' + brl(d.rfm.total) + (d.rfm.nps !== null ? ' · último NPS ' + d.rfm.nps : '')));
-      if (d.segmentos.length) { var w = el('div', 'gcchips'); d.segmentos.forEach(function (s) { w.appendChild(el('span', 'gcchip', s)); }); r.appendChild(w); }
-      gcVinculosBox(gcSec(lado, 'Vínculos', 'Tudo que é desta pessoa: as conversas de todos os canais e o cadastro do Gestti aparecem juntos.'), ct, function () { gcContatoDesenhar(ct.id); }, false);
-      var p = gcSec(lado, 'Permissões (LGPD)'), co = ct.consent || {};
-      p.appendChild(gcChk('Avisos de compra, OS e garantia', co.avisos !== false, function (v) { call('gcContatoSalvar', [S.token, { id: ct.id, nome: ct.nome, consent: { avisos: v, ofertas: co.ofertas } }]).then(function () { co.avisos = v; avisoTopo('Permissão anotada'); }); }));
-      p.appendChild(gcChk('Ofertas e aniversário', co.ofertas === true, function (v) { call('gcContatoSalvar', [S.token, { id: ct.id, nome: ct.nome, consent: { avisos: co.avisos !== false, ofertas: v } }]).then(function () { co.ofertas = v; avisoTopo('Permissão anotada'); }); }));
+      var lado = el('aside', 'gc360l'); cp.appendChild(lado);
+      var n = el('div', 'gcls'); lado.appendChild(n); n.appendChild(el('div', 'gcbt', 'Negócios'));
+      d.negocios.forEach(function (x) { var it = el('button', 'gcngb'); it.type = 'button'; it.appendChild(el('b', '', x.titulo)); it.appendChild(el('span', 'hint', x.funilNome + ' · ' + (x.situacao === 'aberto' ? x.etapaNome : x.situacao) + (x.valor ? ' · ' + brl(x.valor) : ''))); it.onclick = function () { gcNegocioForm(x); }; n.appendChild(it); });
+      var nn = el('button', 'lnk', '+ Negócio'); nn.type = 'button'; nn.onclick = function () { gcNegocioForm({ contato: ct.id, contatoNome: ct.nome }); }; n.appendChild(nn);
+      var p = el('div', 'gcls'), co = ct.consent || {}; lado.appendChild(p); p.appendChild(el('div', 'gcbt', 'Permissões (LGPD)'));
+      p.appendChild(gcSw('Avisos de compra, OS e garantia', co.avisos !== false, function (v) { call('gcContatoSalvar', [S.token, { id: ct.id, nome: ct.nome, consent: { avisos: v, ofertas: co.ofertas } }]).then(function () { co.avisos = v; avisoTopo('Permissão anotada'); }).catch(function (e) { avisoTopo(String(e), 'err'); }); }));
+      p.appendChild(gcSw('Ofertas e aniversário', co.ofertas === true, function (v) { call('gcContatoSalvar', [S.token, { id: ct.id, nome: ct.nome, consent: { avisos: co.avisos !== false, ofertas: v } }]).then(function () { co.ofertas = v; avisoTopo('Permissão anotada'); }).catch(function (e) { avisoTopo(String(e), 'err'); }); }));
       if (co.origem) p.appendChild(el('div', 'hint', co.origem + (co.em ? ' · ' + co.em : '')));
-      var n = gcSec(lado, 'Negócios'); d.negocios.forEach(function (x) { var it = el('div', 'gcbox clk'); it.appendChild(el('b', '', x.titulo)); it.appendChild(el('div', 'hint', x.funilNome + ' · ' + (x.situacao === 'aberto' ? x.etapaNome : x.situacao) + (x.valor ? ' · ' + brl(x.valor) : ''))); it.onclick = function () { gcNegocioForm(x); }; n.appendChild(it); });
-      btn(n, '+ Negócio', 'ghost mini', function () { gcNegocioForm({ contato: ct.id, contatoNome: ct.nome }); });
-      var o = gcSec(lado, 'Mais'); btn(o, ct.agenteOff ? 'Religar o agente para este cliente' : 'Desligar o agente para este cliente', 'ghost mini', function () { call('gcAgenteContato', [S.token, ct.id, !!ct.agenteOff]).then(function () { gcContatoDesenhar(ct.id); }); });
-      btn(o, 'Sou eu (receber testes de campanha)', 'ghost mini', function () { call('gcContatoSalvar', [S.token, { id: ct.id, nome: ct.nome, souEu: true }]).then(function () { avisoTopo('Pronto: os testes de campanha vêm para este contato'); }); });
-      if (gcConfig()) btn(o, 'Apagar os dados (pedido do cliente · LGPD)', 'ghost mini', function () { if (confirm('Apagar ' + ct.nome + ' e as conversas do CRM? Vendas e OS continuam no Gestti (são prova de compra).')) call('gcContatoApagar', [S.token, ct.id]).then(function () { avisoTopo('Dados apagados'); L8_PAGINAS.gccliente(); }).catch(function (e) { avisoTopo(String(e), 'err'); }); });
-    }).catch(l8Erro);
+      var vb = el('div', 'gcls'); lado.appendChild(vb); vb.appendChild(el('div', 'gcbt', 'Vínculos')); gcVinculosBox(vb, ct, function () { gcContatoDesenhar(ct.id); }, false);
+      var mo = el('details', 'gcdet'); mo.appendChild(el('summary', '', 'Mais opções')); lado.appendChild(mo); var mw = el('div', 'gcmo'); mo.appendChild(mw);
+      var op = function (t, fn, cls) { var x = el('button', 'lnk' + (cls ? ' ' + cls : ''), t); x.type = 'button'; x.onclick = fn; mw.appendChild(x); };
+      op(ct.agenteOff ? 'Religar o agente para este cliente' : 'Desligar o agente para este cliente', function () { call('gcAgenteContato', [S.token, ct.id, !!ct.agenteOff]).then(function () { gcContatoDesenhar(ct.id); }); });
+      op('Sou eu (receber testes de campanha)', function () { call('gcContatoSalvar', [S.token, { id: ct.id, nome: ct.nome, souEu: true }]).then(function () { avisoTopo('Pronto: os testes de campanha vêm para este contato'); }); });
+      if (gcConfig()) op('Apagar os dados (pedido do cliente · LGPD)', function () { if (confirm('Apagar ' + ct.nome + ' e as conversas do CRM? Vendas e OS continuam no Gestti (são prova de compra).')) call('gcContatoApagar', [S.token, ct.id]).then(function () { avisoTopo('Dados apagados'); GCR.ctSel = ''; L8_PAGINAS.gccliente(); }).catch(function (e) { avisoTopo(String(e), 'err'); }); }, 'r');
+    }).catch(function (e) { R.innerHTML = ''; R.appendChild(el('div', 'empty', String(e))); });
   }
   /** Vínculos do contato: canais (WhatsApp, Instagram…) e o cadastro do Gestti. Separar um canal cria outro contato com as conversas dele. */
   function gcVinculosBox(box, ct, depois, curto) {
@@ -25339,22 +25737,37 @@
   }
 
   // ---------- automações ----------
+  var GC_PASSO_TXT = { esperar: 'esperar', mensagem: 'mensagem', botoes: 'mensagem com botões', avisar: 'avisar a equipe', tarefa: 'tarefa', etiqueta: 'etiqueta', mover: 'mover no funil', nps: 'pesquisa NPS', google: 'pedir avaliação no Google', condicao: 'condição', consent: 'pedir permissão', transferir: 'transferir', agente: 'agente', cupom: 'cupom' };
+  function gcPassoTxt(p) { if (p.t === 'esperar') { var d = Number(p.dias) || 0, h = Number(p.horas) || 0; return 'esperar ' + (d ? d + (d > 1 ? ' dias' : ' dia') : '') + (d && h ? ' e ' : '') + (h ? h + ' h' : '') + (!d && !h ? '' : ''); } return GC_PASSO_TXT[p.t] || p.t || 'passo'; }
   L8_PAGINAS.gcautomacoes = function () {
     l8Carregando();
     call('gcAutomacoesDados', [S.token, GCR.autFunil || '']).then(function (d) {
       GCR.autD = d; var b = l8Corpo(); $('l8Acoes').innerHTML = '';
-      var sf = l8Sel([['', 'Todos os funis']].concat(d.funis.map(function (f) { return [f.id, f.nome]; })), GCR.autFunil || ''); sf.style.width = 'auto'; sf.onchange = function () { GCR.autFunil = sf.value; L8_PAGINAS.gcautomacoes(); }; $('l8Acoes').appendChild(sf);
+      var sf = l8Sel([['', 'Todos os funis']].concat(d.funis.map(function (f) { return [f.id, f.nome]; })), GCR.autFunil || ''); sf.className = 'gcfil gcfilg'; sf.setAttribute('aria-label', 'Funil'); sf.onchange = function () { GCR.autFunil = sf.value; L8_PAGINAS.gcautomacoes(); }; $('l8Acoes').appendChild(sf);
       if (d.podeConfig) l8Acao('+ Nova automação', function () { gcAutoForm(null); });
-      var g = el('div', 'gc2'); b.appendChild(g);
-      var m = gcSec(g, 'Modelos prontos do ramo', 'Os marcados com "Gestti" usam vendas, aparelhos, OS e crediário: só aparecem com o sistema ligado.');
-      d.modelos.forEach(function (x) { var r = el('div', 'gcmod'); var t = el('div'); t.appendChild(el('b', '', x.nome)); t.appendChild(el('span', 'bdg ' + (x.origem === 'Gestti' ? 'ia' : 'off'), x.origem)); t.appendChild(el('div', 'hint', x.gatilhoNome)); r.appendChild(t);
-        if (d.podeConfig) btn(r, x.usado ? 'Usar de novo' : 'Usar', x.usado ? 'ghost mini' : 'mini', function () { call('gcAutomacaoDoModelo', [S.token, x.id, GCR.autFunil || '']).then(function (r2) { avisoTopo('Automação criada a partir do modelo'); GCR.autD = r2; L8_PAGINAS.gcautomacoes(); }).catch(function (e) { avisoTopo(String(e), 'err'); }); });
-        m.appendChild(r); });
-      var a = gcSec(g, 'Automações da loja');
-      if (!d.automacoes.length) a.appendChild(el('div', 'empty', 'Nenhuma ainda: use um modelo pronto ao lado ou crie uma nova.'));
-      d.automacoes.forEach(function (x) { var r = el('div', 'gcmod'); var t = el('div', 'clk'); t.appendChild(el('b', '', x.nome)); t.appendChild(el('div', 'hint', x.gatilhoNome + ' · ' + x.passos.length + ' passo(s)' + (x.funil ? ' · funil ' + ((d.funis.filter(function (f) { return f.id === x.funil; })[0] || {}).nome || '') : '') + ' · ' + x.mes + ' este mês')); t.onclick = function () { if (d.podeConfig) gcAutoForm(x); }; r.appendChild(t);
-        if (d.podeConfig) r.appendChild(gcChk(x.ligada ? 'Ligada' : 'Desligada', x.ligada, function (v) { call('gcAutomacaoLigar', [S.token, x.id, v]).then(function () { L8_PAGINAS.gcautomacoes(); }); })); a.appendChild(r); });
-      var rg = el('div', 'gcchips'); d.regras.forEach(function (x) { rg.appendChild(el('span', 'gcchip', x)); }); b.appendChild(rg);
+      gcIntro(b, 'Mensagens que o sistema manda sozinho, na hora certa.');
+      if (d.regras.length) { var rg = el('div', 'gcregras'); var ri = el('span', 'gcregi'); ri.innerHTML = svgIco('escudo'); rg.appendChild(ri); rg.appendChild(el('span', '', 'Sempre valem:')); d.regras.forEach(function (x) { rg.appendChild(gcTag(x, 'ok')); }); b.appendChild(rg); }
+      var lig = d.automacoes.filter(function (x) { return x.ligada; }).length, tot = d.automacoes.reduce(function (s, x) { return s + (Number(x.mes) || 0); }, 0);
+      var a = gcSecH(b, 'Da loja'); if (d.automacoes.length) a.cab.appendChild(el('span', 'hint', lig + (lig === 1 ? ' ligada' : ' ligadas') + ' · ' + tot + ' mensagens este mês'));
+      if (!d.automacoes.length) a.appendChild(el('div', 'empty', 'Nenhuma ainda: use um modelo pronto abaixo ou crie uma nova.'));
+      d.automacoes.forEach(function (x) {
+        var r = el('div', 'gcaut' + (x.ligada ? '' : ' off')), t = el('button', 'gcautm'); t.type = 'button'; t.disabled = !d.podeConfig; t.onclick = function () { gcAutoForm(x); };
+        t.appendChild(el('b', '', x.nome)); var fl = el('span', 'gcfluxo'); fl.appendChild(el('span', 'gcpq q', 'Quando: ' + x.gatilhoNome));
+        (x.passos || []).slice(0, 5).forEach(function (p) { fl.appendChild(el('span', 'gcpqs', '›')); fl.appendChild(el('span', 'gcpq', gcPassoTxt(p))); }); if ((x.passos || []).length > 5) fl.appendChild(el('span', 'gcpqs', '+' + (x.passos.length - 5)));
+        if (x.funil) fl.appendChild(el('span', 'hint', ' · funil ' + ((d.funis.filter(function (f) { return f.id === x.funil; })[0] || {}).nome || ''))); t.appendChild(fl); r.appendChild(t);
+        var m = el('span', 'gcautq'); m.appendChild(el('b', '', String(x.mes || 0))); m.appendChild(document.createTextNode(' este mês')); r.appendChild(m);
+        if (d.podeConfig) { var sw = gcSw('', x.ligada, function (v) { call('gcAutomacaoLigar', [S.token, x.id, v]).then(function () { L8_PAGINAS.gcautomacoes(); }).catch(function (e) { avisoTopo(String(e), 'err'); L8_PAGINAS.gcautomacoes(); }); }); sw.setAttribute('aria-label', x.nome + (x.ligada ? ' (ligada)' : ' (desligada)')); r.appendChild(sw); }
+        else r.appendChild(gcTag(x.ligada ? 'Ligada' : 'Desligada', x.ligada ? 'ok' : 'nt'));
+        a.appendChild(r);
+      });
+      var mh = el('div', 'gcsech gcsechs'); b.appendChild(mh); mh.appendChild(el('h3', 'ch', 'Modelos prontos do ramo')); mh.appendChild(el('span', 'hint', 'Os marcados com "Gestti" usam vendas, aparelhos, OS e crediário: só aparecem com o sistema ligado.'));
+      var gm = el('div', 'gcmods'); b.appendChild(gm);
+      d.modelos.forEach(function (x) {
+        var c = el('div', 'card gcmodc'), h = el('div', 'gcmodh'); h.appendChild(el('b', '', x.nome)); h.appendChild(gcTag(x.origem, x.origem === 'Gestti' ? 'ag' : 'nt')); c.appendChild(h); c.appendChild(el('span', 'hint', 'Quando: ' + x.gatilhoNome));
+        if (x.usado) { var u = el('div', 'gcmodu'); u.appendChild(gcTag('Em uso', 'ok', true)); c.appendChild(u); }
+        if (d.podeConfig) btn(c, x.usado ? 'Usar de novo' : 'Usar este modelo', x.usado ? 'lnk' : 'ghost mini', function () { call('gcAutomacaoDoModelo', [S.token, x.id, GCR.autFunil || '']).then(function () { avisoTopo('Automação criada a partir do modelo'); L8_PAGINAS.gcautomacoes(); }).catch(function (e) { avisoTopo(String(e), 'err'); }); });
+        gm.appendChild(c);
+      });
     }).catch(l8Erro);
   };
   function gcAutoForm(a, depois) {
@@ -25463,12 +25876,30 @@
   }
 
   // ---------- campanhas ----------
+  var GC_CAMP_COR = { Agendada: 'wa', Enviando: 'ag', Concluída: 'ok', Cancelada: 'nt' };
   L8_PAGINAS.gccampanhas = function () {
     l8Carregando();
     call('gcCampanhasDados', [S.token]).then(function (d) {
       GCR.campD = d; var b = l8Corpo(); $('l8Acoes').innerHTML = ''; if (d.podeConfig) l8Acao('+ Nova campanha', function () { gcCampanhaForm(); });
-      l8Tabela(b, ['Campanha', 'Situação', 'Quando', 'Enviadas', 'Respostas', 'Vendas', 'Custo estimado'], d.campanhas.map(function (c) { return [c.nome, c.situacao, c.quando, c.enviados + '/' + c.total, String(c.respostas), String(c.vendas), brl(c.custo)]; }), function (i) { var c = d.campanhas[i]; if (c.situacao === 'Agendada' && d.podeConfig && confirm('Cancelar a campanha ' + c.nome + '?')) call('gcCampanhaCancelar', [S.token, c.id]).then(function () { L8_PAGINAS.gccampanhas(); }); }, 'Nenhuma campanha ainda.');
-      b.appendChild(el('div', 'hint', 'Só recebe quem permitiu ofertas. O valor é cobrado pela Meta direto na conta da loja; o Gestti não cobra por mensagem. No QR Code o envio é lento (máx. 300 por dia por número).'));
+      gcIntro(b, 'Uma mensagem para muitos clientes de uma vez.');
+      var C = d.campanhas, soma = function (k) { return C.reduce(function (s, c) { return s + (Number(c[k]) || 0); }, 0); }, env = soma('enviados'), resp = soma('respostas');
+      if (C.length) { var k = el('div', 'gckpis'); b.appendChild(k);
+        gcKpi(k, 'Mensagens enviadas', String(env), C.length + (C.length > 1 ? ' campanhas' : ' campanha'));
+        gcKpi(k, 'Responderam', String(resp), env ? (Math.round(resp / env * 1000) / 10).toString().replace('.', ',') + '% de quem recebeu' : '—');
+        gcKpi(k, 'Vendas que vieram delas', String(soma('vendas')), 'marcadas pelo CRM', 'g');
+        gcKpi(k, 'Custo estimado', brl(soma('custo')), 'cobrado pela Meta na conta da loja'); }
+      var s = el('section', 'card gccps'); b.appendChild(s);
+      if (!C.length) { var v = el('div', 'gcconvvz'); v.appendChild(el('b', '', 'Nenhuma campanha ainda')); v.appendChild(el('span', '', 'Escolha o público (etiqueta, compras, OS…), escreva a mensagem e agende. Só vai para quem aceita ofertas.')); if (d.podeConfig) btn(v, '+ Nova campanha', '', function () { gcCampanhaForm(); }); s.appendChild(v); }
+      else { var hd = el('div', 'gccp gccph'); ['Campanha', 'Situação', 'Envio', 'Respostas', 'Vendas', 'Custo', ''].forEach(function (t) { hd.appendChild(el('span', '', t)); }); s.appendChild(hd); }
+      C.forEach(function (c) {
+        var r = el('div', 'gccp'), n = el('span', 'gccpn'); n.appendChild(el('b', '', c.nome)); n.appendChild(el('small', '', c.quando)); r.appendChild(n);
+        var st = el('span'); st.appendChild(gcTag(c.situacao, GC_CAMP_COR[c.situacao] || 'nt')); r.appendChild(st);
+        var e = el('span', 'gccpe'); if (c.situacao === 'Agendada') e.appendChild(el('small', '', 'vai para ' + c.total + (c.total === 1 ? ' pessoa' : ' pessoas'))); else if (c.situacao === 'Cancelada' && !c.enviados) e.appendChild(el('small', '', 'nada enviado')); else { e.appendChild(gcBarra(c.total ? c.enviados / c.total * 100 : 0, c.situacao === 'Concluída' ? 'var(--ok)' : '')); e.appendChild(el('small', '', c.enviados + ' de ' + c.total)); } r.appendChild(e);
+        r.appendChild(el('span', 'n', '' + c.respostas)); r.appendChild(el('span', 'n', '' + c.vendas)); r.appendChild(el('span', 'n', brl(c.custo)));
+        var ac = el('span', 'n'); if (c.situacao === 'Agendada' && d.podeConfig) btn(ac, 'Cancelar', 'ghost mini gcrd', function () { if (confirm('Cancelar a campanha ' + c.nome + '?')) call('gcCampanhaCancelar', [S.token, c.id]).then(function () { L8_PAGINAS.gccampanhas(); }).catch(function (e2) { avisoTopo(String(e2), 'err'); }); }); r.appendChild(ac);
+        s.appendChild(r);
+      });
+      var info = el('div', 'gcinfo'); var ii = el('span'); ii.innerHTML = svgIco('alerta'); info.appendChild(ii); info.appendChild(el('span', '', 'Só recebe quem permitiu ofertas. O valor é cobrado pela Meta direto na conta da loja; o Gestti não cobra por mensagem. No QR Code o envio é mais lento: no máximo 300 por dia por número.')); b.appendChild(info);
     }).catch(l8Erro);
   };
   function gcCampanhaForm() {
@@ -25516,20 +25947,29 @@
   L8_PAGINAS.gcposvenda = function () {
     l8Carregando();
     call('gcPosVendaDados', [S.token, GCR.npsMes || '']).then(function (d) {
-      $('l8Acoes').innerHTML = ''; var b = l8Corpo(), mi = el('input'); mi.type = 'month'; mi.value = d.mes; mi.onchange = function () { GCR.npsMes = mi.value; L8_PAGINAS.gcposvenda(); }; mi.setAttribute('aria-label', 'Mês'); $('l8Acoes').appendChild(mi);
-      var k = el('div', 'gckpis'); b.appendChild(k);
-      gcKpi(k, 'NPS do mês', d.nps === null ? '—' : String(d.nps), d.npsAnterior !== null && d.nps !== null ? (d.nps - d.npsAnterior >= 0 ? '+' : '') + (d.nps - d.npsAnterior) + ' sobre o mês anterior' : '');
+      $('l8Acoes').innerHTML = ''; var b = l8Corpo(); $('l8Acoes').appendChild(gcMesNav(d.mes, function (m) { GCR.npsMes = m; L8_PAGINAS.gcposvenda(); }));
+      gcIntro(b, 'O que os clientes acharam depois de comprar.');
+      var k = el('div', 'gckpis gckpi4'); b.appendChild(k);
+      var dif = d.npsAnterior !== null && d.nps !== null ? d.nps - d.npsAnterior : null;
+      var kn = gcKpi(k, 'NPS do mês', d.nps === null ? '—' : String(d.nps), dif === null ? 'sem comparação com o mês anterior' : (dif >= 0 ? '▲ ' + dif : '▼ ' + Math.abs(dif)) + ' sobre o mês anterior', dif !== null && dif < 0 ? 'r' : '');
+      if (d.dist) { var db = el('div', 'gcnpsb'), neu = Math.max(0, 100 - d.dist.pro - d.dist.det); [[d.dist.det, 'var(--err)'], [neu, '#E8A33B'], [d.dist.pro, 'var(--ok)']].forEach(function (x) { var s = el('span'); s.style.width = x[0] + '%'; s.style.background = x[1]; db.appendChild(s); }); kn.appendChild(db); kn.appendChild(el('div', 'gcks', d.dist.pro + '% nota 9–10 · ' + neu + '% nota 7–8 · ' + d.dist.det + '% nota 0–6')); }
       gcKpi(k, 'Taxa de resposta', d.taxa === null ? '—' : d.taxa + '%', d.respostas + ' de ' + d.enviadas + ' pesquisas');
-      gcKpi(k, 'Detratores abertos', String(d.detratores), 'tarefa com o gerente', d.detratores ? 'r' : '');
-      gcKpi(k, 'Avaliações no Google', '+' + d.google, d.googleLink ? 'pedidas aos promotores' : 'coloque o link em Agente › Regras');
+      gcKpiB(k, 'Insatisfeitos sem resposta', String(d.detratores), 'tarefa com o gerente' + (d.detratores ? ' · ver ›' : ''), d.detratores ? 'r' : '', d.detratores ? function () { var c = document.querySelector('.gcnpsc'); if (c) c.scrollIntoView({ behavior: movSuave(), block: 'start' }); } : null);
+      gcKpi(k, 'Avaliações no Google', '+' + d.google, d.googleLink ? 'pedidas a quem deu 9 ou 10' : 'coloque o link em Agente › Quando ela atende');
       var g = el('div', 'gc2'); b.appendChild(g);
-      var t = gcSec(g, 'NPS por loja e vendedor'); l8Tabela(t, ['Loja / vendedor', 'Respostas', 'NPS'], d.linhas.map(function (l) { var n = el('span', l.loja ? 'gcb' : 'gcind', l.nome); return [n, String(l.respostas), l.nps === null ? '—' : String(l.nps)]; }), null, 'Sem respostas neste mês.');
-      var c = gcSec(g, 'Comentários recentes');
-      d.comentarios.forEach(function (x) { var r = el('div', 'gcbox' + (x.aberto ? ' r' : '')); var h = el('div'); h.appendChild(el('b', 'gcnota n' + (x.nota <= 6 ? 'r' : x.nota >= 9 ? 'g' : 'w'), String(x.nota))); h.appendChild(document.createTextNode(' · ' + x.nome + ' · ' + x.loja)); r.appendChild(h); r.appendChild(el('div', 'hint', '"' + x.comentario + '"'));
-        if (x.aberto) btn(r, 'Resolvido', 'ghost mini', function () { var o = prompt('O que foi feito? (opcional)') || ''; call('gcNpsResolver', [S.token, x.id, o]).then(function () { L8_PAGINAS.gcposvenda(); }).catch(function (e) { avisoTopo(String(e), 'err'); }); }); c.appendChild(r); });
+      var c = gcSecH(g, 'Comentários dos clientes', 'gcnpsc'), cm = d.comentarios.slice().sort(function (a, z) { return (z.aberto ? 1 : 0) - (a.aberto ? 1 : 0); });
+      cm.forEach(function (x) { var r = el('div', 'gcnpsi' + (x.aberto ? ' aberto' : '')); r.appendChild(el('span', 'gcnn ' + (x.nota <= 6 ? 'r' : x.nota >= 9 ? 'g' : 'w'), String(x.nota)));
+        var t = el('div', 'gcnpst'); t.appendChild(el('b', '', x.nome + ' · ' + x.loja)); t.appendChild(el('div', '', '"' + x.comentario + '"')); if (x.aberto) t.appendChild(el('small', 'gcnpsa', 'Aguardando resposta da loja')); r.appendChild(t);
+        if (x.aberto) btn(r, 'Resolvido', 'ghost mini', function () { var o = prompt('O que foi feito? (opcional)') || ''; call('gcNpsResolver', [S.token, x.id, o]).then(function () { L8_PAGINAS.gcposvenda(); }).catch(function (e) { avisoTopo(String(e), 'err'); }); });
+        c.appendChild(r); });
       if (!d.comentarios.length) c.appendChild(el('div', 'empty', 'Nenhum comentário ainda.'));
-      var rg = gcSec(b, 'Régua de relacionamento depois da compra', 'Automações ligadas que falam com o cliente depois da compra. Edite em Automações.'), w = el('div', 'gcregua'); rg.appendChild(w);
-      d.regua.forEach(function (x) { var i = el('div', 'gcrq'); i.appendChild(el('small', '', x.gatilho)); i.appendChild(el('b', '', x.nome)); i.appendChild(el('div', 'hint', x.mes + ' este mês')); w.appendChild(i); });
+      var t = gcSecH(g, 'NPS por loja e vendedor');
+      if (!d.linhas.length) t.appendChild(el('div', 'empty', 'Sem respostas neste mês.'));
+      else { var hd = el('div', 'gcnl2 h'); ['Quem', 'Respostas', 'NPS'].forEach(function (x) { hd.appendChild(el('span', '', x)); }); t.appendChild(hd); }
+      d.linhas.forEach(function (l) { var r = el('div', 'gcnl2' + (l.loja ? ' loja' : '')); r.appendChild(el('span', '', l.nome)); r.appendChild(el('span', 'n', String(l.respostas))); var nb = el('span', 'gcnlb'); var v = l.nps === null ? 0 : l.nps; nb.appendChild(gcBarra(Math.max(0, v), v >= 70 ? 'var(--ok)' : v >= 30 ? '#E8A33B' : 'var(--err)')); nb.appendChild(el('b', '', l.nps === null ? '—' : String(l.nps))); r.appendChild(nb); t.appendChild(r); });
+      var rg = gcSecH(b, 'Depois da compra, o cliente recebe'), ed = el('button', 'lnk', 'Editar em Automações ›'); ed.type = 'button'; ed.onclick = function () { ir('gcautomacoes'); }; rg.cab.appendChild(ed);
+      var w = el('div', 'gcregua'); rg.appendChild(w);
+      d.regua.forEach(function (x, i) { if (i) w.appendChild(el('span', 'gcrqs', '›')); var q = el('div', 'gcrq'); q.appendChild(el('small', '', x.gatilho)); q.appendChild(el('b', '', x.nome)); q.appendChild(el('div', 'hint', x.mes + ' este mês')); w.appendChild(q); });
       if (!d.regua.length) btn(rg, 'Ligar os modelos prontos', 'ghost mini', function () { ir('gcautomacoes'); });
     }).catch(l8Erro);
   };
@@ -25549,17 +25989,18 @@
       var nomeAg = A.nome || 'Assistente', gastoMes = d.empresas.reduce(function (s, e) { return s + ((e.gasto || {}).brl || 0); }, 0), nEns = d.base.length + d.docs.length + d.exemplos.length;
       // cabeçalho: quem é, como está e números do dia (o liga/desliga fica só aqui)
       var top = el('section', 'gcagtop'); b.appendChild(top);
-      top.appendChild(el('div', 'gcagav', nomeAg.charAt(0).toUpperCase()));
-      var ti0 = el('div', 'gcagi'); top.appendChild(ti0); var nl = el('div', 'gcagn', nomeAg + ' '); nl.appendChild(el('span', 'bdg ' + (A.ligado ? 'ok' : 'off'), A.ligado ? 'Ligada' : 'Desligada')); ti0.appendChild(nl);
+      top.appendChild(el('div', 'gcagav', '✦'));
+      var ti0 = el('div', 'gcagi'); top.appendChild(ti0); var nl = el('div', 'gcagn', nomeAg + ' '); nl.appendChild(gcTag(A.ligado ? 'Ligada' : 'Desligada', A.ligado ? 'ok' : 'nt')); ti0.appendChild(nl);
       ti0.appendChild(el('div', 'hint', (A.sozinho === 'demora' ? 'Responde fora do horário e quando a equipe demora ' + (A.demoraMin || 5) + ' min' : A.sozinho === 'fora' ? 'Responde só fora do horário' : 'Responde sempre') + ' · ' + nEns + ' coisa(s) ensinada(s)'));
       var st = el('div', 'gcagst'); top.appendChild(st);
       [[String(d.revisao.hoje), 'respostas hoje'], [String(d.revisao.marcadas.length), 'para revisar'], [brl(gastoMes), 'no mês']].forEach(function (x) { var q = el('div'); q.appendChild(el('b', '', x[0])); q.appendChild(document.createTextNode(x[1])); st.appendChild(q); });
-      if (pc) btn(top, A.ligado ? 'Desligar' : 'Ligar', A.ligado ? 'ghost' : '', function () { salvar({ ligado: !A.ligado }).then(function () { L8_PAGINAS.gcagente(); }); });
+      if (pc) { var swA = gcSw('', !!A.ligado, function (v) { salvar({ ligado: v }).then(function () { L8_PAGINAS.gcagente(); }); }); swA.setAttribute('aria-label', nomeAg + ' ligada'); top.appendChild(swA); }
       // abas
       var aba = GCR.agAba || 'geral', nav = el('div', 'gctabs'); nav.setAttribute('role', 'tablist'); nav.setAttribute('aria-label', 'Partes do agente'); b.appendChild(nav);
-      GC_AG_ABAS.forEach(function (x) { var t = el('button', 'gctab' + (x[0] === aba ? ' on' : ''), x[1]); t.type = 'button'; t.setAttribute('role', 'tab'); t.setAttribute('aria-selected', x[0] === aba ? 'true' : 'false'); t.onclick = function () { GCR.agAba = x[0]; L8_PAGINAS.gcagente(); }; nav.appendChild(t); });
+      GC_AG_ABAS.forEach(function (x) { var t = el('button', 'gctab' + (x[0] === aba ? ' on' : ''), x[1] + (x[0] === 'ensinar' && d.revisao.marcadas.length ? ' · ' + d.revisao.marcadas.length + ' para revisar' : '')); t.type = 'button'; t.setAttribute('role', 'tab'); t.setAttribute('aria-selected', x[0] === aba ? 'true' : 'false'); t.onclick = function () { GCR.agAba = x[0]; L8_PAGINAS.gcagente(); }; nav.appendChild(t); });
       var corpo = el('div'); b.appendChild(corpo);
       if (aba === 'geral') {
+        if (d.revisao.marcadas.length) { var rv0 = el('div', 'gcrev'); rv0.appendChild(el('span', '', d.revisao.marcadas.length + (d.revisao.marcadas.length > 1 ? ' respostas para revisar' : ' resposta para revisar') + ': perguntas em que ' + nomeAg + ' ficou em dúvida ou passou por não saber.')); btn(rv0, 'Revisar agora', 'ghost mini', function () { GCR.agAba = 'ensinar'; L8_PAGINAS.gcagente(); }); corpo.appendChild(rv0); }
         var g = el('div', 'gcag'); corpo.appendChild(g); var esq = el('div'), dir = el('aside'); g.appendChild(esq); g.appendChild(dir);
         var h = gcSec(esq, 'Como ' + nomeAg + ' trabalha'), ol = el('ol', 'gcol'); h.appendChild(ol);
         [['Primeira mensagem', 'responde em segundos, entende o que o cliente quer e já consulta estoque, preço ou OS.'], ['Passa para o atendente', 'quando o cliente quer fechar, pede desconto, troca com avaliação, reclama ou pede uma pessoa. Vai com um resumo e o negócio já criado no funil.'], ['O atendente termina', 'a conversa. ' + nomeAg + ' fica só sugerindo respostas (✦ Sugerir resposta).'], ['Follow-up', 'se o cliente parar de responder, retoma sozinha e devolve ao atendente se o cliente voltar.'], ['Áudio', 'não ouve áudio: avisa que recebeu e passa para um atendente.']].filter(function (x) { return d.loja !== false || x[0] !== 'Primeira mensagem'; }).concat(d.loja === false ? [['Primeira mensagem', 'responde, entende o negócio da pessoa e cria a oportunidade no funil (preço e contratação ficam com a equipe).']] : []).forEach(function (x) { var li = el('li'); li.appendChild(el('b', '', x[0] + ': ')); li.appendChild(document.createTextNode(x[1])); ol.appendChild(li); });
@@ -25683,7 +26124,7 @@
     waqr: [], site: [] };
   var GC_CAN_TIPOS = [['wa', 'WhatsApp', 'Oficial (Meta) ou QR Code', '#25D366', 'W', '+ Adicionar outro número'], ['ig', 'Instagram', 'Direct, comentários e marcações', 'linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)', 'I', '+ Adicionar outra conta'],
     ['fb', 'Messenger', 'Página do Facebook', '#0866FF', 'f', '+ Conectar página'], ['email', 'E-mail', 'E-mails viram conversas', '#5B6577', '✉', '+ Adicionar caixa'], ['tg', 'Telegram', 'Robô da loja', '#229ED9', 'T', '+ Conectar robô'], ['site', 'Chat do site', 'Loja virtual ou qualquer site', '#2F5BFF', '💬', '+ Novo chat']];
-  var GC_CAN_ABAS = [['canais', '1. Canais'], ['dist', '2. Quem recebe'], ['ig', '3. Instagram'], ['msgs', '4. Mensagens automáticas']];
+  var GC_CAN_ABAS = [['canais', 'Canais'], ['dist', 'Quem recebe'], ['ig', 'Instagram'], ['msgs', 'Mensagens automáticas']];
   L8_PAGINAS.gccanais = function () {
     l8Carregando();
     call('gcCanaisDados', [S.token]).then(function (d) {
@@ -25698,21 +26139,26 @@
   };
   function gcIcoCanal(cor, letra, cls) { var s = el('span', 'gccanic' + (cls ? ' ' + cls : ''), letra); s.style.background = cor; s.setAttribute('aria-hidden', 'true'); return s; }
   function gcCanaisCartoes(b, d, lj, pc) {
-    var g = el('div', 'gccang'); b.appendChild(g);
-    GC_CAN_TIPOS.forEach(function (T) {
-      var contas = d.canais.filter(function (k) { return (T[0] === 'wa' ? (k.tipo === 'wa' || k.tipo === 'waqr') : k.tipo === T[0]) && (k.empresa === lj || ((T[0] === 'ig' || T[0] === 'fb') && k.empresa === '*')); });
-      var art = el('article', 'gccanal' + (contas.length ? ' on' : '')); g.appendChild(art);
-      var hh = el('div', 'gccanh'); hh.appendChild(gcIcoCanal(T[3], T[4])); var ht = el('div'); ht.appendChild(el('b', '', T[1])); ht.appendChild(el('div', 'hint', T[2])); hh.appendChild(ht); art.appendChild(hh);
-      if (!contas.length) art.appendChild(el('div', 'gcconta off', 'Nenhuma conta conectada'));
-      contas.forEach(function (c) {
-        var ok = /conectad|ligad|ok/i.test(c.situacao), r = el('button', 'gcconta'); r.type = 'button'; r.title = 'Ver detalhes de ' + c.apelido;
-        var dot = el('span', 'gcdot ' + (c.tipo === 'waqr' && ok ? 'w' : ok ? 'g' : '')); r.appendChild(dot);
-        var cn = el('span', 'gccn'); cn.appendChild(el('span', '', (c.tipo === 'wa' ? 'Oficial · ' : c.tipo === 'waqr' ? 'QR Code · ' : '') + (c.numero || c.apelido || c.tipoNome) + (c.empresa === '*' ? ' (todas as lojas)' : '')));
-        cn.appendChild(el('small', '', c.situacao + (c.tipo === 'waqr' ? ' · risco de bloqueio' : ''))); r.appendChild(cn); r.onclick = function () { gcCanalDetalhe(c, pc); }; art.appendChild(r);
-      });
-      if (pc) btn(art, T[5], 'ghost mini gcadd', function () { gcCanalNovo(T[0], lj, sl_nome(d, lj)); });
+    var cons = d.canais.filter(function (k) { return k.empresa === lj || ((k.tipo === 'ig' || k.tipo === 'fb') && k.empresa === '*'); });
+    var s = gcSecH(b, 'Conectados nesta loja');
+    if (!cons.length) s.appendChild(el('div', 'empty', 'Nenhum canal conectado ainda. Escolha um abaixo para começar.'));
+    cons.forEach(function (c) {
+      var T = GC_CAN_TIPOS.filter(function (t) { return t[0] === (c.tipo === 'waqr' ? 'wa' : c.tipo); })[0] || [c.tipo, c.tipoNome, '', '#5B6577', '•'];
+      var ok = /conectad|ligad|ok/i.test(c.situacao) && !/não|nao|desconect/i.test(c.situacao), falta = !ok && /teste a conex/i.test(c.situacao), r = el('div', 'gccr'); r.appendChild(gcIcoCanal(T[3], T[4], T[0] === 'ml' ? 'esc' : ''));
+      var t = el('div', 'gccrt'); t.appendChild(el('b', '', (c.tipo === 'wa' ? 'WhatsApp oficial · ' : c.tipo === 'waqr' ? 'WhatsApp QR Code · ' : T[1] + ' · ') + (c.numero || (c.apelido && c.apelido !== T[1] ? c.apelido : '') || '').replace(/^$/, 'conta conectada') + (c.empresa === '*' ? ' (todas as lojas)' : '')));
+      t.appendChild(el('small', '', c.situacao + (c.ultMs ? ' · última mensagem ' + gcHa(c.ultMs) : '') + (c.tipo === 'waqr' ? ' · risco de bloqueio' : ''))); r.appendChild(t);
+      r.appendChild(gcTag(ok ? 'Funcionando' : falta ? 'Falta testar' : 'Parado', ok ? 'ok' : falta ? 'wa' : 'rd', true));
+      btn(r, 'Detalhes', ok ? 'ghost mini' : 'mini', function () { gcCanalDetalhe(c, pc); });
+      s.appendChild(r);
     });
-    var ml2 = el('article', 'gccanal'); g.appendChild(ml2); var mh = el('div', 'gccanh'); mh.appendChild(gcIcoCanal('#FFE600', 'M', 'esc')); var mt = el('div'); mt.appendChild(el('b', '', 'Mercado Livre e marketplaces')); mt.appendChild(el('div', 'hint', 'Liberado depois do CNPJ do Gestti.')); mh.appendChild(mt); ml2.appendChild(mh); ml2.appendChild(el('span', 'bdg off', 'Em espera'));
+    var ah = el('div', 'gcsech gcsechs'); b.appendChild(ah); ah.appendChild(el('h3', 'ch', 'Adicionar canal'));
+    var g = el('div', 'gcadds'); b.appendChild(g);
+    GC_CAN_TIPOS.forEach(function (T) {
+      var tem = cons.some(function (k) { return (T[0] === 'wa' ? (k.tipo === 'wa' || k.tipo === 'waqr') : k.tipo === T[0]); });
+      var c = el(pc ? 'button' : 'div', 'card gcaddc'); if (pc) { c.type = 'button'; c.onclick = function () { gcCanalNovo(T[0], lj, sl_nome(d, lj)); }; }
+      c.appendChild(gcIcoCanal(T[3], T[4])); c.appendChild(el('b', '', (tem ? 'Outro ' : '') + (tem && T[0] === 'wa' ? 'WhatsApp' : tem ? T[1] : T[1]))); c.appendChild(el('span', 'hint', T[2])); g.appendChild(c);
+    });
+    var ml = el('div', 'card gcaddc off'); ml.appendChild(gcIcoCanal('#FFE600', 'M', 'esc')); ml.appendChild(el('b', '', 'Mercado Livre e marketplaces')); ml.appendChild(el('span', 'hint', 'Em espera: liberado depois do CNPJ do Gestti.')); g.appendChild(ml);
   }
   function sl_nome(d, lj) { var e = d.empresas.filter(function (x) { return x.id === lj; })[0]; return e ? e.nome : ''; }
   /** Nova conexão. WhatsApp: escolher oficial (recomendado) ou QR Code (com o aviso de risco). */
@@ -25832,17 +26278,38 @@
   L8_PAGINAS.gcdesempenho = function () {
     l8Carregando();
     call('gcDesempenhoDados', [S.token, GCR.desMes || '']).then(function (d) {
-      $('l8Acoes').innerHTML = ''; var b = l8Corpo(), mi = el('input'); mi.type = 'month'; mi.value = d.mes; mi.setAttribute('aria-label', 'Mês'); mi.onchange = function () { GCR.desMes = mi.value; L8_PAGINAS.gcdesempenho(); }; $('l8Acoes').appendChild(mi);
+      $('l8Acoes').innerHTML = ''; var b = l8Corpo(); $('l8Acoes').appendChild(gcMesNav(d.mes, function (m) { GCR.desMes = m; L8_PAGINAS.gcdesempenho(); }));
       if (pode('equipe') || pode('liberar')) l8Acao('Metas da equipe', function () { gcMetasForm(d); }, 'ghost');
-      var k = el('div', 'gckpis'); b.appendChild(k);
+      gcIntro(b, 'Como a equipe e o agente atenderam no mês.');
+      var L = d.linhas, conv = L.reduce(function (s, l) { return s + (l.primeira !== null && l.primeira !== undefined ? l.conversas : 0); }, 0);
+      var prim = conv ? Math.round(L.reduce(function (s, l) { return s + (l.primeira !== null && l.primeira !== undefined ? l.primeira * l.conversas : 0); }, 0) / conv * 10) / 10 : null;
+      var k = el('div', 'gckpis gckpi4'); b.appendChild(k);
+      gcKpi(k, '1ª resposta da equipe', gcMin(prim), 'meta ' + d.meta + ' min · só no horário de atendimento', prim !== null && prim > d.meta ? 'r' : '');
       gcKpi(k, 'Agente · 1ª resposta', d.agente.primeiraSeg === null ? '—' : d.agente.primeiraSeg + ' s', d.agente.respostas + ' resposta(s) · passou ' + d.agente.passou + ' para a equipe');
-      gcKpi(k, 'Meta de 1ª resposta', d.meta + ' min', 'só conta o horário de atendimento');
-      gcKpi(k, 'Esperando na fila', String(d.semRespostaFila), 'acima da meta', d.semRespostaFila ? 'r' : '');
-      l8Tabela(b, ['Atendente', 'Conversas', '1ª resposta', 'Tempo médio', 'Dentro da meta', 'Sem resposta', 'Negócios ganhos', 'Valor', 'NPS', 'Meta'], d.linhas.map(function (l) {
-        return [l.nome, String(l.conversas), gcMin(l.primeira), gcMin(l.media), l.dentroMeta === null ? '—' : l.dentroMeta + '%', String(l.semResposta), String(l.ganhos), brl(l.valor), l.nps === null ? '—' : String(l.nps), l.meta ? [l.meta.vendas ? Math.round(l.valor / l.meta.vendas * 100) + '% de ' + brl(l.meta.vendas) : '', l.meta.conversas ? l.conversas + '/' + l.meta.conversas + ' conversas' : ''].filter(Boolean).join(' · ') : '—'];
-      }), null, 'Ainda sem atendimentos neste mês.');
-      var g = gcSec(b, 'Custo do mês (aproximado)'); d.gasto.forEach(function (x) { g.appendChild(el('div', '', x.empresa + ': agente ' + brl(x.brl) + ' (' + x.respostas + ' respostas) · Meta ' + brl(x.meta) + (x.limite ? ' · limite ' + brl(x.limite) : ' · sem limite'))); }); if (!d.gasto.length) g.appendChild(el('div', 'hint', 'Nada gasto ainda.'));
-      b.appendChild(el('div', 'hint', 'A comissão continua no Gestti (Metas › Comissões).'));
+      gcKpiB(k, 'Esperando na fila', String(d.semRespostaFila), 'acima da meta de ' + d.meta + ' min', d.semRespostaFila ? 'r' : '', d.semRespostaFila ? function () { GCR.filtro.aba = 'fila'; ir('gcconversas'); } : null);
+      gcKpi(k, 'Vendido pelo CRM', brl(L.reduce(function (s, l) { return s + (Number(l.valor) || 0); }, 0)), L.reduce(function (s, l) { return s + (Number(l.ganhos) || 0); }, 0) + ' negócio(s) ganho(s)', 'g');
+      var s = gcSecH(b, 'Atendentes', 'gcdes');
+      if (!L.length) s.appendChild(el('div', 'empty', 'Ainda sem atendimentos neste mês.'));
+      else {
+        var sc = el('div', 'gcdesw'); s.appendChild(sc);
+        var hd = el('div', 'gcdl h'); ['Atendente', 'Conversas', '1ª resposta', 'Tempo médio', 'Dentro da meta', 'Sem resposta', 'Vendido', 'NPS', 'Meta do mês'].forEach(function (t) { hd.appendChild(el('span', '', t)); }); sc.appendChild(hd);
+        L.forEach(function (l) {
+          var r = el('div', 'gcdl'), nm = el('span', 'gcdln'), ini = String(l.nome || '?').split(' ').map(function (p) { return p.charAt(0); }).join('').slice(0, 2).toUpperCase(); nm.appendChild(gcAvatar(l.nome, ini, '', '', 'p2')); nm.appendChild(el('b', '', l.nome)); r.appendChild(nm);
+          r.appendChild(el('span', 'n', String(l.conversas)));
+          r.appendChild(el('span', 'n ' + (l.primeira === null || l.primeira === undefined ? '' : l.primeira > d.meta ? 'r' : 'g'), gcMin(l.primeira)));
+          r.appendChild(el('span', 'n', gcMin(l.media)));
+          var dm = el('span', 'gcdlb'); if (l.dentroMeta === null) dm.appendChild(el('small', '', '—')); else { dm.appendChild(gcBarra(l.dentroMeta, l.dentroMeta >= 85 ? 'var(--ok)' : l.dentroMeta >= 65 ? '#E8A33B' : 'var(--err)')); dm.appendChild(el('b', '', l.dentroMeta + '%')); } r.appendChild(dm);
+          r.appendChild(el('span', 'n' + (l.semResposta ? ' r' : ''), String(l.semResposta)));
+          var vd = el('span', 'n'); vd.appendChild(el('b', '', brl(l.valor))); vd.appendChild(el('small', '', l.ganhos + (l.ganhos === 1 ? ' ganho' : ' ganhos'))); r.appendChild(vd);
+          r.appendChild(el('span', 'n', l.nps === null ? '—' : String(l.nps)));
+          var mt = el('span', 'gcdlm'); if (l.meta && (l.meta.vendas || l.meta.conversas)) { var pc = l.meta.vendas ? Math.round(l.valor / l.meta.vendas * 100) : Math.round(l.conversas / l.meta.conversas * 100); mt.appendChild(gcBarra(pc, pc >= 100 ? 'var(--ok)' : '')); mt.appendChild(el('small', pc >= 100 ? 'g' : '', l.meta.vendas ? pc + '% de ' + brl(l.meta.vendas) + (pc >= 100 ? ' ✓' : '') : l.conversas + '/' + l.meta.conversas + ' conversas')); } else mt.appendChild(el('small', '', 'sem meta')); r.appendChild(mt);
+          sc.appendChild(r);
+        });
+      }
+      var g = gcSecH(b, 'Custo do mês (aproximado)');
+      d.gasto.forEach(function (x) { var r = el('div', 'gccus'); r.appendChild(el('b', '', x.empresa)); var bb = el('span', 'gcdlb'); bb.appendChild(gcBarra(x.limite ? x.brl / x.limite * 100 : 0, x.limite && x.brl >= x.limite ? 'var(--err)' : '')); bb.appendChild(el('small', '', x.limite ? brl(x.brl) + ' de ' + brl(x.limite) : brl(x.brl) + ' · sem limite')); r.appendChild(bb); r.appendChild(el('span', '', 'Agente: ' + x.respostas + ' respostas')); r.appendChild(el('span', '', 'Meta (WhatsApp): ' + brl(x.meta))); g.appendChild(r); });
+      if (!d.gasto.length) g.appendChild(el('div', 'hint', 'Nada gasto ainda.'));
+      g.appendChild(el('div', 'hint', 'A comissão continua no Gestti (Metas › Comissões).'));
     }).catch(l8Erro);
   };
   function gcMetasForm(d) {
